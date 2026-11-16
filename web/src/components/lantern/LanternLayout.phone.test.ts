@@ -4,7 +4,8 @@ import { flushPromises, mount, type VueWrapper } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import LanternLayout from './LanternLayout.vue'
 import { startedHoldStore } from '@/testing/holdGame'
-import { useGameStore } from '@/stores/useGameStore'
+import { useGameStore, type Turn } from '@/stores/useGameStore'
+import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
 
 /**
  * Which screen the test pretends to be: `upright` is a tablet (or a narrow mouse
@@ -241,5 +242,95 @@ describe('LanternLayout: the stage on a phone', () => {
     expect(w.find('.lq-story-drawer').exists()).toBe(true)
     expect(w.find('.lq-header').exists()).toBe(false)
     expect(w.find('.lq-stage-picture').exists()).toBe(true)
+  })
+})
+
+/** The one column on a narrow stage, laid out by hand (jsdom has no layout). */
+describe('LanternLayout: a new line said in the one column', () => {
+  let w: VueWrapper
+  /** The story pane's height, and where the newest line starts in its content. */
+  const PANE = 300
+  const LINE_TOP = 250
+
+  beforeEach(async () => {
+    setActivePinia(createPinia())
+    screen('upright')
+    await startedHoldStore()
+    w = mount(LanternLayout, { attachTo: document.body })
+    await w.vm.$nextTick()
+  })
+  afterEach(() => {
+    w.unmount()
+    vi.unstubAllGlobals()
+    vi.restoreAllMocks()
+  })
+
+  const pane = (): HTMLElement =>
+    document.querySelector('section[aria-label="Story"]') as HTMLElement
+
+  /** Lay the pane out, `PANE` tall, with the newest spoken line at `LINE_TOP` in its content, `height` tall. */
+  function layOut(height: number): void {
+    const el = pane()
+    let top = 0
+    Object.defineProperty(el, 'clientHeight', {
+      configurable: true,
+      value: PANE,
+    })
+    Object.defineProperty(el, 'scrollHeight', {
+      configurable: true,
+      value: LINE_TOP + height,
+    })
+    Object.defineProperty(el, 'scrollTop', {
+      configurable: true,
+      get: () => top,
+      set: (value: number) => {
+        top = value
+      },
+    })
+    vi.spyOn(Element.prototype, 'getBoundingClientRect').mockImplementation(
+      function (this: Element): DOMRect {
+        if (this === el) return { top: 0, bottom: PANE } as DOMRect
+        if (this.matches('[data-testid="speech-line"]'))
+          return {
+            top: LINE_TOP - top,
+            bottom: LINE_TOP + height - top,
+          } as DOMRect
+        return { top: 0, bottom: 0, height: 0 } as DOMRect
+      },
+    )
+  }
+
+  /** Grandmother says a line `height` tall in a new turn, shown at once. */
+  async function sayLine(height: number): Promise<void> {
+    const game = useGameStore()
+    const said: Turn = {
+      id: 9_999,
+      command: 'talk to grandmother',
+      text: '[character_name]Grandmother[/character_name]\n[dialogue]There you are.[/dialogue]',
+      room: game.roomName,
+      description: null,
+      gained: [],
+      lost: [],
+      arrival: null,
+      addressed: 'Grandmother',
+    }
+    layOut(height)
+    game.turns = [...game.turns, said]
+    const speech = useStageSpeechStore()
+    speech.observe(said)
+    speech.revealAll()
+    await flushPromises()
+  }
+
+  it('pushes the story up so the whole line shows', async () => {
+    expect(w.find('.lq-one-column').exists()).toBe(true)
+    await sayLine(200)
+    expect(w.findAll('[data-testid="speech-line"]').length).toBeGreaterThan(0)
+    expect(pane().scrollTop).toBe(LINE_TOP + 200 - PANE)
+  })
+
+  it('stops a line taller than the pane at its top, so it is read from its start', async () => {
+    await sayLine(500)
+    expect(pane().scrollTop).toBe(LINE_TOP)
   })
 })

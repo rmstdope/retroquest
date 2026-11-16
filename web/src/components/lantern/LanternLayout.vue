@@ -158,7 +158,8 @@ import type { SaveSlot } from '@/types/bridge'
  * page, with the tabs on top (and ☰ in the corner) and the same sheet folded into the bar,
  * which also folds when an answer does not fit beside it.
  * A new turn opens at its start, with a "More below" pill while the story
- * goes on below the visible part.
+ * goes on below the visible part; in the one column each line said after
+ * comes whole into view, pushing the older lines up (rq-r7ct).
  * After the last act, Finish the game asks to save (FinishDialog), then
  * only the end screen shows; the act's music keeps playing under it.
  * A player's command, and the arrival that opens an act, is narrated when the
@@ -1549,6 +1550,34 @@ watch(
       !dockOpen.value &&
       document.activeElement === document.body
     if ((away || folds || lost) && !game.showModal) focusActions()
+  },
+  { flush: 'post' },
+)
+
+// A new line said in the one column comes whole into view, pushing the older
+// lines up (rq-r7ct): never so far that its own top leaves, and never back.
+// So the lines fading away above it never move what still shows. A story
+// being read is moved by its follow instead.
+watch(
+  () => speech.visible.at(-1)?.key,
+  async () => {
+    await nextTick()
+    const story = storyEl.value
+    if (!column.value || storyHeld.value || !story) return
+    const rows = story.querySelectorAll<HTMLElement>(
+      '[data-testid="speech-line"]',
+    )
+    const newest = rows[rows.length - 1]
+    if (!newest) return
+    const style = getComputedStyle(story)
+    const pane = story.getBoundingClientRect()
+    const line = newest.getBoundingClientRect()
+    const below =
+      line.bottom - (pane.bottom - (parseFloat(style.paddingBottom) || 0))
+    const room = line.top - (pane.top + (parseFloat(style.paddingTop) || 0))
+    const by = Math.min(below, room)
+    if (by > 0) moveStory(story.scrollTop + by, false)
+    updateMoreBelow()
   },
   { flush: 'post' },
 )
