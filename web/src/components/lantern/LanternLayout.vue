@@ -2394,6 +2394,7 @@ watch(
           :style="{
             ...(phoneStage ? { '--lq-plate-h': `${plateHeight}px` } : {}),
             '--lq-belt-h': `${beltHeight}px`,
+            '--lq-actions-h': `${actionsHeight}px`,
           }"
           @click.capture="onPanelPress"
         >
@@ -2403,7 +2404,6 @@ watch(
             ref="stageEl"
             class="lq-stage"
             :style="{
-              '--lq-actions-h': `${actionsHeight}px`,
               '--lq-stage-buttons-w': `${stageButtonsWidth}px`,
               '--lq-belt-bottom': `${beltBottom}px`,
               '--lq-belt-left': `${beltLeft}px`,
@@ -2498,15 +2498,16 @@ watch(
               :key="`drawer-${stageKey}`"
               @close="closeDrawer"
             />
-            <StoryDrawer
-              v-else-if="drawerTab === 'story'"
-              :key="`story-${stageKey}`"
-              :phone="phoneStage"
-              @click="onNameClick"
-              @keydown="onNameKeydown"
-              @close="closeDrawer"
-            />
           </div>
+          <!-- Beside the stage, not in it: the stage keeps its layers to itself, so a drawer inside it lay under the belt and under everything drawn over the stage (the words, Hide and Show, the bar, the room's title). -->
+          <StoryDrawer
+            v-if="staged && drawerTab === 'story'"
+            :key="`story-${stageKey}`"
+            :phone="phoneStage"
+            @click="onNameClick"
+            @keydown="onNameKeydown"
+            @close="closeDrawer"
+          />
           <!-- The caption of the picture pointed at: over the words, above the belt and the Hide or Show button. -->
           <div
             v-if="beltCaption"
