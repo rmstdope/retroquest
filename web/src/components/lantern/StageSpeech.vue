@@ -23,10 +23,9 @@ import SpeechPortrait from './SpeechPortrait.vue'
  * the layout): it says when it is being read aloud, and how long it takes to
  * read, which a line never read aloud waits first; the lines still showing
  * stay where they are. When the room is full the oldest leaves at the top,
- * under a soft fade. A line taller than the room
- * never loses its top: the thread scrolls so the newest line shows from its
- * speaker down, its end faded at the bottom (the story band has every word).
- * The conversation is kept by `useStageSpeechStore`. This is the laptop
+ * under a soft fade. A line taller than the room never loses its top: the
+ * thread scrolls so the newest line shows from its speaker down, its end
+ * faded at the bottom (the story band has every word). The conversation is kept by `useStageSpeechStore`. This is the laptop
  * stage with a side each for the narrator and for speech; a phone and a narrow
  * window tell speech in the one column with the cards (`ColumnTurn`). There is
  * no control here: the one Hide of the layout clears both sides, and `away`

@@ -220,6 +220,7 @@ test('on a phone the lines rest at the foot of the column and a two-line name cl
 test('a line fading away leaves the lines still showing where they are', async ({
   page,
 }): Promise<void> => {
+  test.setTimeout(60_000)
   await page.setViewportSize({ width: 1440, height: 900 })
   await page.goto('/')
   await page.getByRole('button', { name: 'Start', exact: true }).click()
@@ -227,7 +228,7 @@ test('a line fading away leaves the lines still showing where they are', async (
   await enter(page, 'talk to voice')
   await enter(page, 'talk to grandmother')
   const lines = page.getByTestId('speech-line')
-  await expect(lines).toHaveCount(4, { timeout: 30_000 })
+  await expect(lines).toHaveCount(4, { timeout: 20_000 })
 
   /** How far the newest line's foot is above the foot of the thread's room. */
   const lift = (): Promise<number> =>
@@ -239,12 +240,21 @@ test('a line fading away leaves the lines still showing where they are', async (
         parseFloat(getComputedStyle(thread).paddingBottom)
       return Math.round(foot - newest.getBoundingClientRect().bottom)
     })
+  /** The top of the newest line on the screen. */
+  const top = (): Promise<number> =>
+    lines.last().evaluate((el) => Math.round(el.getBoundingClientRect().top))
+
+  // The older lines have faded away by now: the rest still rest at the foot.
+  await expect(lines.first()).toHaveAttribute('data-fade', 'gone')
   expect(await lift()).toBe(0)
 
-  // Once the oldest line has faded away, the newest still rests at the foot.
-  await expect(lines.first()).toHaveAttribute('data-fade', 'gone', {
-    timeout: 30_000,
+  // The line above the newest fades away; the newest stays where it is.
+  await expect(lines.nth(2)).not.toHaveAttribute('data-fade', 'gone')
+  const before = await top()
+  await expect(lines.nth(2)).toHaveAttribute('data-fade', 'gone', {
+    timeout: 20_000,
   })
   await expect(lines.last()).not.toHaveAttribute('data-fade', 'gone')
+  expect(await top()).toBe(before)
   expect(await lift()).toBe(0)
 })
