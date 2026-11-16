@@ -1400,6 +1400,86 @@
     "width": 1920,
     "height": 1080
   },
+  "item-ancient-amulet": {
+    "file": "item-ancient-amulet.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-apple": {
+    "file": "item-apple.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-armor": {
+    "file": "item-armor.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-bread": {
+    "file": "item-bread.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-broken-shovel": {
+    "file": "item-broken-shovel.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-bucket": {
+    "file": "item-bucket.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-coin": {
+    "file": "item-coin.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-dull-knife": {
+    "file": "item-dull-knife.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-egg": {
+    "file": "item-egg.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-extended-magnetic-fishing-rod": {
+    "file": "item-extended-magnetic-fishing-rod.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-faded-photograph": {
+    "file": "item-faded-photograph.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-feather": {
+    "file": "item-feather.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-fish": {
+    "file": "item-fish.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-fresh-bread": {
+    "file": "item-fresh-bread.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-fresh-carrot": {
+    "file": "item-fresh-carrot.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-horseshoe": {
+    "file": "item-horseshoe.png",
+    "width": 256,
+    "height": 256
+  },
   "portrait-elior": {
     "file": "portrait-elior.png",
     "width": 480,

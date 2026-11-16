@@ -1172,6 +1172,14 @@
       "text": "In the midst of the forest, a meadow opens round a small stream that runs over smooth stones and ends up in a small pond. Wildflowers grow thick to the water's edge. Under the sound of the water there are other sounds, almost voices, and they stop when you listen for them.",
       "gameWas": "A meadow opens round a small stream that runs over smooth stones. Wildflowers grow thick to the water's edge. Under the sound of the water there are other sounds, almost voices, and they stop when you listen for them."
     },
+    "item-broken-shovel": {
+      "text": "A rusty spade with the wooden handle broken in half and a completely broken blade. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border.",
+      "gameWas": "A rusty shovel with a snapped wooden handle and a dented blade. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+    },
+    "item-fishing-rod": {
+      "text": "A short, bending wooden fishing rod with a line and a small hook. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border.",
+      "gameWas": "A long, bending wooden fishing rod with a reel of line and a small hook. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+    },
     "portrait-mira": {
       "text": "A face portrait of a village female healer in middle age, with a calm, steady gaze that rests on you a moment longer than is comfortable, and a sprig of dried sage tucked behind one ear.",
       "gameWas": "A face portrait of a village healer in middle age, with a calm, steady gaze that rests on you a moment longer than is comfortable, and a sprig of dried sage tucked behind one ear."
