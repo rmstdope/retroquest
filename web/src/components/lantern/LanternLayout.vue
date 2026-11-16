@@ -1622,6 +1622,15 @@ function keepAtFoot(): void {
   if (story.scrollTop < foot - 1) moveStory(foot, false)
 }
 
+/**
+ * A line has left sight (or come back): once the column has drawn the change
+ * (a run's name stepping down), keep the story at its foot before the next
+ * frame, so what still shows never moves, not even for a frame.
+ */
+function lineSightChanged(): void {
+  void nextTick(keepAtFoot)
+}
+
 /** The story scrolled: what is below, and whether it is still at its foot. */
 function onStoryScroll(): void {
   updateMoreBelow()
@@ -2630,7 +2639,11 @@ watch(
               @pointerdown.passive="endLanding"
             >
               <h2 class="lq-sr-only">Story</h2>
-              <div ref="contentEl" class="lq-paper-content">
+              <div
+                ref="contentEl"
+                class="lq-paper-content"
+                @lq-line-sight="lineSightChanged"
+              >
                 <template v-for="turn in storyTurns" :key="turn.id">
                   <ColumnTurn v-if="column" :turn="turn" :data-turn="turn.id" />
                   <StoryTurn

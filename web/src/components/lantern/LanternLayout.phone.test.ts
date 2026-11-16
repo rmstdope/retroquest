@@ -6,6 +6,7 @@ import LanternLayout from './LanternLayout.vue'
 import { startedHoldStore } from '@/testing/holdGame'
 import { useGameStore, type Turn } from '@/stores/useGameStore'
 import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
+import { LINE_SIGHT_EVENT } from '@/composables/useFadeOnceRead'
 
 /**
  * Which screen the test pretends to be: `upright` is a tablet (or a narrow mouse
@@ -362,6 +363,16 @@ describe('LanternLayout: a new line said in the one column', () => {
     await sayLine(200)
     grown = 20
     for (const callback of resized) callback()
+    await flushPromises()
+    expect(pane().scrollTop).toBe(LINE_TOP + 200 + 20 - PANE)
+  })
+
+  it('keeps the column at its foot as soon as a line leaves sight, before the next frame', async () => {
+    await sayLine(200)
+    grown = 20
+    document
+      .querySelector('[data-testid="speech-line"]')!
+      .dispatchEvent(new Event(LINE_SIGHT_EVENT, { bubbles: true }))
     await flushPromises()
     expect(pane().scrollTop).toBe(LINE_TOP + 200 + 20 - PANE)
   })
