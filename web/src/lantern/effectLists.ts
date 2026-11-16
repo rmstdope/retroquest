@@ -18,6 +18,16 @@ export interface EffectEntry {
   loops?: true
 }
 
+/** The effect the title page plays when its ring moves to another choice. */
+export const TITLE_MOVE_EFFECT = 'title-move'
+/** The effect the title page plays when a choice is made. */
+export const TITLE_CHOOSE_EFFECT = 'title-choose'
+/** The effects the interface plays itself; no scene of the mix lists them. */
+export const UI_EFFECT_IDS: readonly string[] = [
+  TITLE_MOVE_EFFECT,
+  TITLE_CHOOSE_EFFECT,
+]
+
 /** Every clip of the game, in the order the studio lists them. */
 export const GAME_EFFECTS: readonly EffectEntry[] = [
   {
@@ -346,6 +356,18 @@ export const GAME_EFFECTS: readonly EffectEntry[] = [
       'tree, slow and peaceful, faint golden shimmer',
     seconds: 20,
     loops: true,
+  },
+  {
+    id: TITLE_MOVE_EFFECT,
+    text:
+      'a tiny soft glass ting, like a fingernail on a lantern pane, ' +
+      'very short',
+    seconds: 1,
+  },
+  {
+    id: TITLE_CHOOSE_EFFECT,
+    text: 'a warm brass lantern latch clicking shut, short',
+    seconds: 1,
   },
 ]
 

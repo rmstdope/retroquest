@@ -10,7 +10,7 @@ import type { AmbientClipSource } from './ambience'
 import { loadChosenManifest, type ChosenManifest } from './chosenMusic'
 
 /** Where the studio's chosen effect takes live, as a URL path. */
-const GENERATED_EFFECTS_PATH = '/audio/soundeffects/generated/'
+export const GENERATED_EFFECTS_PATH = '/audio/soundeffects/generated/'
 
 /** Fetches the manifest of chosen effect takes; one that cannot be read means none were made. */
 export function loadChosenEffects(): Promise<ChosenManifest> {
