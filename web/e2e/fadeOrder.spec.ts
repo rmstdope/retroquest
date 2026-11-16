@@ -75,7 +75,7 @@ function watchFades(
 
 for (const [name, width, height] of [
   ['the laptop stage', 1440, 900],
-  ['a phone (rq-r7ct)', 390, 844],
+  ...[1, 2, 3, 4, 5].map((n) => [`a phone (rq-r7ct) #${n}`, 390, 844] as const),
 ] as const)
   test(`on ${name} a line fading away never moves the lines still showing`, async ({
     page,
@@ -85,6 +85,37 @@ for (const [name, width, height] of [
     await page.goto('/')
     await page.getByRole('button', { name: 'Start', exact: true }).click()
     await page.locator('.lq-chapter-button').click()
+    if (width < 500)
+      await page.evaluate(() => {
+        const w = window as unknown as { trace: string[] }
+        w.trace = []
+        let last = ''
+        const t0 = performance.now()
+        const tick = (): void => {
+          const st = document.querySelector<HTMLElement>('.lq-cards .lq-story')
+          if (st) {
+            const r = (e: Element | null | undefined): string => {
+              const b = e?.getBoundingClientRect()
+              return b ? `${Math.round(b.top)}-${Math.round(b.bottom)}` : '?'
+            }
+            const now =
+              `st=${st.scrollTop} max=${st.scrollHeight - st.clientHeight} | ` +
+              Array.from(
+                st.querySelectorAll<HTMLElement>('.lq-column-turn > *'),
+              )
+                .map(
+                  (e) =>
+                    `${e.className.split(' ').slice(0, 3).join('.')}:${e.dataset.fade ?? ''}:${r(e)}:${r(e.querySelector('.lq-line'))}`,
+                )
+                .join(' ')
+            if (now !== last)
+              w.trace.push(`${Math.round(performance.now() - t0)} ${now}`)
+            last = now
+          }
+          requestAnimationFrame(() => setTimeout(tick, 0))
+        }
+        tick()
+      })
     await enter(page, 'talk to voice')
     await enter(page, 'talk to grandmother')
     // Every line of the talk at once: short ones would be read before long ones above them.
@@ -101,5 +132,12 @@ for (const [name, width, height] of [
     expect(watched).toBeGreaterThan(1)
     expect(left).toBe(0)
     // Within a pixel: a line's top may round differently as the page settles.
+    if (moved > 1 && width < 500)
+      console.log(
+        'TRACE\n' +
+          (await page.evaluate(() =>
+            (window as unknown as { trace: string[] }).trace.join('\n'),
+          )),
+      )
     expect(moved).toBeLessThanOrEqual(1)
   })
