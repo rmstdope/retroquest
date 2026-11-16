@@ -1,0 +1,58 @@
+<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Settings ring whole</title><style>
+:root{--bg:#10151a;--surface:#161d24;--raised:#1c242c;--line:#26313b;--line2:#34404b;--fg:#ece6d6;--prose:#d9d3c3;--muted:#a39d8e;--accent:#ffa914;--onAccent:#1a1408;--accentText:#ffb836;--accentSoft:#36270a;--ring:#f3e9cf;--failure:#e8896b}
+*{box-sizing:border-box}body{margin:0;background:#0a0d10;color:var(--fg);font-family:Inter,system-ui,sans-serif;padding:24px}
+h1{font:600 20px Georgia,serif;margin:0 0 4px}h2.s{font:600 17px Georgia,serif;margin:26px 0 4px}p.cap{color:var(--muted);margin:0 0 14px;max-width:880px;font-size:14px;line-height:1.5}
+.row{display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start}.lbl{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin:0 0 6px}
+.dlg{position:relative;width:440px;background:var(--surface);border:1px solid var(--line2);border-radius:16px;padding:18px 20px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.dlg.wide{width:560px}.dlg.ph{width:300px;padding:14px}
+.eb{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}.dlg h3{font:600 22px Georgia,serif;margin:2px 0 12px}
+.x{position:absolute;right:14px;top:14px;width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:18px}
+.grp{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:14px 0 4px}
+.srow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 6px;border-radius:8px}
+.srow b{font-weight:500;font-size:14px;display:block}.srow small{color:var(--muted);font-size:12px}
+.seg{display:flex;border:1px solid var(--line);border-radius:8px;overflow:visible}.seg span{padding:5px 10px;font-size:12px;border-radius:7px}.seg .on{background:var(--accentSoft);color:var(--accentText)}
+.sw{width:40px;height:22px;border-radius:11px;background:var(--line2);position:relative;flex:none}.sw.on{background:var(--accent)}.sw:after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff}.sw.on:after{left:21px}
+.vol{display:flex;align-items:center;gap:10px;padding:4px 6px 8px;border-radius:8px}.vol small{color:var(--muted);font-size:12px;width:48px}.track{flex:1;height:4px;border-radius:2px;background:var(--line2);position:relative}.track i{position:absolute;left:0;top:0;bottom:0;background:var(--accent);border-radius:2px}.track b{position:absolute;top:-6px;width:16px;height:16px;border-radius:50%;background:#fff;margin-left:-8px}.vol .n{font-size:12px;width:24px;text-align:right}
+.ring{outline:3px solid var(--ring);outline-offset:3px}
+.soft{background:var(--accentSoft)!important}
+.slots{display:grid;grid-template-columns:1fr 1fr;gap:8px}.ph .slots{grid-template-columns:1fr}
+.slot{position:relative;border:1px solid var(--line2);border-radius:12px;background:var(--raised);padding:10px 12px;display:flex;gap:10px;align-items:center;min-height:62px}
+.slot.empty{border-style:dashed;background:transparent;color:var(--muted);font-size:13px}
+.badge{width:30px;height:30px;border-radius:8px;background:var(--line);display:flex;align-items:center;justify-content:center;font-size:13px;flex:none}.badge.q{background:var(--accentSoft);color:var(--accentText)}
+.slot .r{font-size:14px}.slot .m{font-size:12px;color:var(--muted)}
+.ask{margin-top:-4px;border:1px solid var(--accent);border-top:none;border-radius:0 0 12px 12px;background:var(--accentSoft);padding:8px 12px;font-size:13px}
+.ask .b{display:flex;gap:8px;margin-top:6px}.ask .b span{padding:6px 12px;border-radius:8px;border:1px solid var(--line2);background:var(--raised);font-size:13px}.ask .b .ok{background:var(--accent);color:var(--onAccent);border-color:var(--accent);font-weight:600}
+.foot{font-size:12px;color:var(--muted);margin-top:12px}
+.keys{display:flex;gap:14px;justify-content:flex-end;margin-top:14px;padding-top:10px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
+kbd{display:inline-block;min-width:20px;padding:1px 6px;border:1px solid var(--line2);border-bottom-width:2px;border-radius:5px;font:11px Inter,sans-serif;color:var(--fg);text-align:center;margin-right:4px}
+.arrow{position:absolute;font:700 18px Inter;color:var(--ring);text-shadow:0 0 6px #000}
+.num{position:absolute;right:8px;top:6px;width:20px;height:20px;border-radius:50%;background:var(--ring);color:#111;font:700 11px Inter;display:flex;align-items:center;justify-content:center}
+.help{font:14px/1.55 Georgia,serif;color:var(--prose);max-height:220px;overflow:hidden;position:relative}.help:after{content:'';position:absolute;left:0;right:0;bottom:0;height:40px;background:linear-gradient(transparent,var(--surface))}
+.note{margin-top:16px;font-size:13px;color:var(--muted);max-width:880px;line-height:1.5}
+.btns{display:flex;flex-wrap:wrap;gap:8px}.btns span{flex:1 1 110px;min-height:42px;display:flex;align-items:center;justify-content:center;border-radius:10px;border:1px solid var(--line);background:var(--raised);font-size:14px}.btns .pri{background:var(--accent);color:var(--onAccent);border-color:var(--accent);font-weight:600}
+.scroll{height:300px;overflow:hidden;position:relative;margin:0 -20px;padding:0 20px}
+.inner{position:absolute;left:20px;right:20px}
+.clipfoot{position:absolute;left:0;right:0;bottom:0;height:0;border-top:1px dashed #e8896b55}
+.ring.in{outline-offset:-3px}
+.tag{font-size:11px;color:var(--muted);margin-top:6px}
+</style>
+<h1>Settings: the ring at the foot of the list — Option A</h1><p class="cap">Ring on the last row, Always show what's here, reached with ↓.</p><div class="row">
+<div><p class="lbl">Today — ring cut off</p><div class="dlg"><div class="eb">Game</div><h3>Settings</h3><span class="x">✕</span><div class="scroll"><div class="inner" style="bottom:-6px">
+<div class="grp">Sound</div>
+<div class="srow"><span><b>Narration</b><small>The story and every character read aloud</small></span></div>
+<div class="vol"><small>Volume</small><span class="track"><i style="width:60%"></i><b style="left:60%"></b></span><span class="n">60</span></div>
+<div class="grp">Playing</div>
+<div class="srow"><span><b>Start with</b><small>You can switch any time</small></span><span class="seg"><span class="on">Story</span><span>Picture</span></span></div>
+<div class="srow"><span><b>Reduce motion</b><small>No shake, slide-in or moving pictures</small></span><span class="sw"></span></div>
+<div class="srow ring"><span><b>Always show what's here</b><small>Marks and names stay on the picture in every room.</small></span><span class="sw on"></span></div>
+</div></div><div class="keys" style="margin-top:0"><span><kbd>↑</kbd><kbd>↓</kbd>move</span><span><kbd>←</kbd><kbd>→</kbd>change</span><span><kbd>Esc</kbd>back</span></div></div><p class="tag">The list stops with the row flush on its lower edge, so the ring's bottom and its gap are cut by the edge above the key line.</p></div>
+<div><p class="lbl">Option A — the list scrolls a little further</p><div class="dlg"><div class="eb">Game</div><h3>Settings</h3><span class="x">✕</span><div class="scroll"><div class="inner" style="bottom:8px">
+<div class="grp">Sound</div>
+<div class="srow"><span><b>Narration</b><small>The story and every character read aloud</small></span></div>
+<div class="vol"><small>Volume</small><span class="track"><i style="width:60%"></i><b style="left:60%"></b></span><span class="n">60</span></div>
+<div class="grp">Playing</div>
+<div class="srow"><span><b>Start with</b><small>You can switch any time</small></span><span class="seg"><span class="on">Story</span><span>Picture</span></span></div>
+<div class="srow"><span><b>Reduce motion</b><small>No shake, slide-in or moving pictures</small></span><span class="sw"></span></div>
+<div class="srow ring"><span><b>Always show what's here</b><small>Marks and names stay on the picture in every room.</small></span><span class="sw on"></span></div>
+</div></div><div class="keys" style="margin-top:0"><span><kbd>↑</kbd><kbd>↓</kbd>move</span><span><kbd>←</kbd><kbd>→</kbd>change</span><span><kbd>Esc</kbd>back</span></div></div><p class="tag">The ring is unchanged. When ↑ ↓ bring a row to the top or foot, the list stops a few pixels early, leaving the whole ring and a little room inside the edge. Same at the top row.</p></div>
+</div>
