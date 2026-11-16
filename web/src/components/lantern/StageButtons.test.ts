@@ -30,11 +30,33 @@ describe('StageButtons', () => {
     w?.unmount()
   })
 
-  it('has the three buttons in order, then the round ☰, the Bag and Spells being the belt of pictures', () => {
+  it('has Hint first, then the three buttons in order, then the round ☰, the Bag and Spells being the belt of pictures', () => {
     const labels = mountButtons()
       .findAll('button.lq-stage-btn')
       .map((b) => b.text())
-    expect(labels).toEqual(['Quests · 0', '⟲ Story so far', '🧭 Map', '☰'])
+    expect(labels).toEqual([
+      '💡 Hint',
+      'Quests · 0',
+      '⟲ Story so far',
+      '🧭 Map',
+      '☰',
+    ])
+  })
+
+  it('sends hint from the first button, a round 💡 when compact', async () => {
+    const game = useGameStore()
+    const submit = vi.spyOn(game, 'submitCommand').mockImplementation(() => {})
+    const full = mountButtons().get('[data-button="hint"]')
+    await full.trigger('click')
+    expect(submit).toHaveBeenCalledWith('hint')
+    w?.unmount()
+    w = mount(StageButtons, {
+      props: { drawer: null, compact: true },
+      attachTo: document.body,
+    })
+    const round = w.get('[data-button="hint"]')
+    expect(round.text()).toBe('💡')
+    expect(round.attributes('aria-label')).toBe('Hint')
   })
 
   it('asks for the menu from ☰, which is named Menu', async () => {

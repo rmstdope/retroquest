@@ -2,89 +2,44 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
-import DockBar from './DockBar.vue'
+import HintButton from './HintButton.vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
 import { useArrivalStore } from '@/stores/useArrivalStore'
 
-describe('DockBar', () => {
+describe('HintButton', () => {
   let submit: ReturnType<typeof vi.fn<(command: string) => void>>
 
   beforeEach(() => {
     setActivePinia(createPinia())
     const game = useGameStore()
     game.acceptInput = true
-    game.exits = { north: "Mira's Hut", secret_passage: 'Hidden Library' }
     submit = vi.fn<(command: string) => void>()
     vi.spyOn(game, 'submitCommand').mockImplementation(submit)
   })
 
-  it('offers the exits as small arrow buttons', async () => {
-    const w = mount(DockBar)
-    const north = w.get(`button[aria-label="Go north to Mira's Hut"]`)
+  it('reads "💡 Hint" and sends hint', async () => {
+    const w = mount(HintButton)
 
-    expect(north.text()).toBe('↑')
-    await north.trigger('click')
-    expect(submit).toHaveBeenCalledWith('go north')
-    expect(
-      w
-        .find('button[aria-label="Go Secret Passage to Hidden Library"]')
-        .exists(),
-    ).toBe(true)
-  })
-
-  it('opens the actions', async () => {
-    const w = mount(DockBar)
-
-    await w.get('button.lq-dock-open').trigger('click')
-
-    expect(w.get('button.lq-dock-open').text()).toBe('Actions ▴')
-    expect(w.emitted('open')).toEqual([['actions']])
-  })
-
-  it('opens straight into typing', async () => {
-    const w = mount(DockBar)
-
-    await w.get('button[aria-label="Type a command"]').trigger('click')
-
-    expect(w.emitted('open')).toEqual([['type']])
-  })
-
-  it('disables the exits while the game is not accepting input', () => {
-    useGameStore().acceptInput = false
-
-    expect(
-      mount(DockBar).get('button[aria-label^="Go north"]').attributes(),
-    ).toHaveProperty('disabled')
-  })
-
-  it('can put focus on the Actions button', () => {
-    const w = mount(DockBar, { attachTo: document.body })
-
-    ;(w.vm as unknown as { focus: () => void }).focus()
-
-    expect(document.activeElement).toBe(w.get('button.lq-dock-open').element)
-    w.unmount()
-  })
-
-  it('ends with a Hint button that sends hint', async () => {
-    const w = mount(DockBar)
-    const hint = w.findAll('button').at(-1)
-
-    expect(hint?.text()).toBe('💡 Hint')
-    expect(hint?.attributes('aria-label')).toBe('Hint')
-    await hint?.trigger('click')
+    expect(w.text()).toBe('💡 Hint')
+    expect(w.attributes('aria-label')).toBe('Hint')
+    await w.trigger('click')
     expect(submit).toHaveBeenCalledWith('hint')
+  })
+
+  it('is the round 💡 alone when compact', () => {
+    const w = mount(HintButton, { props: { compact: true } })
+
+    expect(w.text()).toBe('💡')
+    expect(w.attributes('aria-label')).toBe('Hint')
   })
 
   it('dims Hint while the game is not accepting input', async () => {
     useGameStore().acceptInput = false
-    const w = mount(DockBar)
+    const w = mount(HintButton)
 
-    expect(w.get('button.lq-dock-hint').attributes('aria-disabled')).toBe(
-      'true',
-    )
-    await w.get('button.lq-dock-hint').trigger('click')
+    expect(w.get('button').attributes('aria-disabled')).toBe('true')
+    await w.get('button').trigger('click')
     expect(submit).not.toHaveBeenCalled()
   })
 
@@ -98,7 +53,7 @@ describe('DockBar', () => {
       play: () => Promise.resolve(),
       pause: () => {},
     }))
-    const w = mount(DockBar)
+    const w = mount(HintButton)
     narration.begin(
       1,
       [
@@ -120,7 +75,7 @@ describe('DockBar', () => {
       'act1',
     )
     await w.vm.$nextTick()
-    const hint = w.get('button.lq-dock-hint')
+    const hint = w.get('button')
 
     expect(hint.attributes('aria-disabled')).toBe('true')
     await hint.trigger('click')
@@ -141,7 +96,7 @@ describe('DockBar', () => {
       play: () => Promise.resolve(),
       pause: () => {},
     }))
-    const w = mount(DockBar)
+    const w = mount(HintButton)
     narration.begin(
       1,
       [
@@ -177,7 +132,7 @@ describe('DockBar', () => {
     await w.vm.$nextTick()
     expect(narration.isNarrating).toBe(true)
     expect(arrival.active).toBe(true)
-    const hint = w.get('button.lq-dock-hint')
+    const hint = w.get('button')
 
     expect(hint.attributes('aria-disabled')).toBe('false')
     await hint.trigger('click')

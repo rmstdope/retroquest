@@ -2,11 +2,12 @@
 import { computed, nextTick, onUnmounted, ref, watch } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
 import CompassPanel from './CompassPanel.vue'
+import HintButton from './HintButton.vue'
 
 /**
  * The buttons in the stage's top-right corner: Quests (with its count and
  * today's amber dot while something is new) opens the journal drawer,
- * "⟲ Story so far" opens the story drawer, and "🧭 Map" opens the map of the
+ * "⟲ Story so far" opens the story drawer, "💡 Hint" (the round 💡 when `compact`) comes first in the row and sends `hint`, and "🧭 Map" opens the map of the
  * ways out beneath it. (The Bag and Spells are the belt of pictures at the
  * picture's foot.) They are controlled by the layout, which lets only one of
  * the three be open (`drawer`), and press-only: nothing opens on
@@ -78,6 +79,12 @@ defineExpose({ focusButton })
 <template>
   <div ref="root" class="lq-buttons" :class="{ 'lq-compact': compact }">
     <div class="lq-button-row">
+      <HintButton
+        class="lq-stage-btn"
+        data-lq-obstacle="panel"
+        data-button="hint"
+        :compact="compact"
+      />
       <button
         v-for="button in journalButtons"
         :key="button.tab"
@@ -155,6 +162,10 @@ defineExpose({ focusButton })
   flex-wrap: wrap;
   justify-content: flex-end;
   gap: 8px;
+}
+.lq-stage-btn.lq-busy {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 .lq-stage-btn {
   position: relative;

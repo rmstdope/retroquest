@@ -67,10 +67,10 @@ describe('SettingsDialog from the keyboard', () => {
     expect(ringed()).toBe('theme')
   })
 
-  it('goes round 8 stops (9 with full screen), skipping the headings', async () => {
+  it('goes round 7 stops (8 with full screen), skipping the headings', async () => {
     await open()
     const seen = [ringed()]
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < 6; i++) {
       press('ArrowDown')
       seen.push(ringed())
     }
@@ -80,7 +80,6 @@ describe('SettingsDialog from the keyboard', () => {
       'musicVolume',
       'effectsVolume',
       'narrationVolume',
-      'startMode',
       'reduceMotion',
       'alwaysShowNames',
     ])
@@ -88,7 +87,7 @@ describe('SettingsDialog from the keyboard', () => {
     expect(ringed()).toBe('theme')
     press('ArrowUp')
     expect(ringed()).toBe('alwaysShowNames')
-    expect(sounds.move).toHaveBeenCalledTimes(9)
+    expect(sounds.move).toHaveBeenCalledTimes(8)
   })
 
   it('has a Full screen stop between Text size and Music volume where it works', async () => {
@@ -117,17 +116,6 @@ describe('SettingsDialog from the keyboard', () => {
     const before = settings.textSize
     press('ArrowRight')
     expect(settings.textSize).not.toBe(before)
-  })
-
-  it('Start with changes on its row', async () => {
-    await open()
-    const settings = useSettingsStore()
-    for (let i = 0; i < 5; i++) press('ArrowDown')
-    expect(ringed()).toBe('startMode')
-    press('ArrowRight')
-    expect(settings.startMode).toBe('type')
-    press('ArrowRight')
-    expect(sounds.move).toHaveBeenCalledTimes(6)
   })
 
   it('a volume moves by 5 and stops at 0 and 100, and rings at the new loudness', async () => {

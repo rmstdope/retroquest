@@ -1,10 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import {
-  useSettingsStore,
-  type StartMode,
-  type ThemeSetting,
-} from '@/stores/useSettingsStore'
+import { useSettingsStore, type ThemeSetting } from '@/stores/useSettingsStore'
 import { useMenuRing } from '@/composables/useMenuRing'
 import { useReducedMotion } from '@/composables/useReducedMotion'
 import { useFullscreen } from '@/composables/useFullscreen'
@@ -44,10 +40,6 @@ const THEMES: Array<{ value: ThemeSetting; label: string }> = [
   { value: 'device', label: 'Device' },
   { value: 'light', label: 'Light' },
   { value: 'dark', label: 'Dark' },
-]
-const STARTS: Array<{ value: StartMode; label: string }> = [
-  { value: 'actions', label: 'Actions' },
-  { value: 'type', label: 'Type' },
 ]
 
 const ring = useMenuRing('[data-stop]', undefined, true)
@@ -98,7 +90,6 @@ function snapshot(): string {
   return [
     settings.theme,
     settings.textSize,
-    settings.startMode,
     settings.musicVolume,
     settings.effectsVolume,
     settings.narrationVolume,
@@ -119,12 +110,6 @@ function change(kind: string, step: 1 | -1): void {
     settings.textSize = along(
       LANTERN_TEXT_SIZES.map((s) => s.value),
       settings.textSize,
-      step,
-    )
-  else if (kind === 'startMode')
-    settings.startMode = along(
-      STARTS.map((s) => s.value),
-      settings.startMode,
       step,
     )
   else if (kind === 'musicVolume')
@@ -344,29 +329,6 @@ function volume(event: Event): number {
 
       <section class="lq-group" aria-labelledby="lq-set-play">
         <h3 id="lq-set-play" class="lq-group-title">Playing</h3>
-        <div
-          class="lq-row lq-stop"
-          data-ring="within"
-          data-stop="startMode"
-          tabindex="-1"
-        >
-          <span class="lq-row-text"
-            ><span class="lq-row-label">Start with</span
-            ><span class="lq-note">You can switch any time</span></span
-          >
-          <div class="lq-seg" role="group" aria-label="Start with">
-            <button
-              v-for="s in STARTS"
-              :key="s.value"
-              type="button"
-              class="lq-seg-btn"
-              :aria-pressed="settings.startMode === s.value ? 'true' : 'false'"
-              @click="pick(() => (settings.startMode = s.value))"
-            >
-              {{ s.label }}
-            </button>
-          </div>
-        </div>
         <div
           class="lq-row lq-stop"
           data-ring="within"
