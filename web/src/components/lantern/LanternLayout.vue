@@ -2493,15 +2493,15 @@ watch(
               class="lq-hand-strip"
               @cancel="cancelHand"
             />
-            <JournalDrawer
-              v-if="drawerTab === 'quests'"
-              :key="`drawer-${stageKey}`"
-              @close="closeDrawer"
-            />
           </div>
-          <!-- Beside the stage, not in it: the stage keeps its layers to itself, so a drawer inside it lay under the belt and under everything drawn over the stage (the words, Hide and Show, the bar, the room's title). -->
+          <!-- The drawers lie beside the stage, not in it: the stage keeps its layers to itself, so a drawer inside it lay under the belt and under everything drawn over the stage (the words, Hide and Show, the bar, the room's title). -->
+          <JournalDrawer
+            v-if="staged && drawerTab === 'quests'"
+            :key="`drawer-${stageKey}`"
+            @close="closeDrawer"
+          />
           <StoryDrawer
-            v-if="staged && drawerTab === 'story'"
+            v-else-if="staged && drawerTab === 'story'"
             :key="`story-${stageKey}`"
             :phone="phoneStage"
             @click="onNameClick"
@@ -2885,8 +2885,9 @@ watch(
   padding: 16px;
 }
 /* The stage: the room's picture fills the play area, the story band and the
-   actions sit along its bottom. The stage itself is behind them (it makes no
-   stacking context of its own, so the drawer in it rises above them). */
+   actions sit along its bottom. The stage keeps its layers to itself (its own
+   stacking context, below), so it lies behind them all; the drawers lie
+   beside it, over them. */
 .lq-staged {
   position: relative;
   max-width: none;

@@ -50,7 +50,8 @@ function onKeydown(event: KeyboardEvent): void {
 .lq-drawer {
   position: absolute;
   /* Under the buttons, so the lit one stays in sight and can be pressed again;
-     above the action row, so every action stays in reach. */
+     above the action row, so every action stays in reach. It lies beside the
+     stage, over everything drawn on the picture (the belt, Hide and Show). */
   top: 76px;
   right: 0;
   bottom: var(--lq-actions-h, 0px);

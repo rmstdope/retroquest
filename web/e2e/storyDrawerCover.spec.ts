@@ -1,9 +1,10 @@
 /**
- * The open Story so far drawer (rq-q3x4): nothing from the stage is drawn over
- * it. On a tall screen (a phone-sized window, 390 × 844) the drawer covers the
- * whole stage, so the belt of pictures, the Hide / Show what's here buttons,
- * the folded Actions bar and the room's title must all lie under it; on a
- * laptop the belt must not lie over its foot.
+ * The open drawers of the stage (rq-q3x4): nothing from the stage is drawn
+ * over them. On a tall screen (a phone-sized window, 390 × 844) the Story so
+ * far drawer covers the whole stage, so the belt of pictures, the Hide / Show
+ * what's here buttons, the folded Actions bar and the room's title must all lie
+ * under it; on a laptop neither it nor the Quests drawer has the belt or
+ * Hide / Show what's here over its foot.
  */
 import { test, expect, type Page } from './fixtures'
 
@@ -51,12 +52,12 @@ async function command(page: Page, text: string): Promise<void> {
 }
 
 /**
- * The elements drawn on top at points spread over the drawer's open area that
- * do not belong to the drawer (described by tag and class).
+ * The elements drawn on top at points spread over the open drawer named by
+ * `selector` that do not belong to the drawer (described by tag and class).
  */
-async function coveringDrawer(page: Page): Promise<string[]> {
-  return page.evaluate(() => {
-    const drawer = document.querySelector('.lq-story-drawer')
+async function coveringDrawer(page: Page, selector: string): Promise<string[]> {
+  return page.evaluate((selector) => {
+    const drawer = document.querySelector(selector)
     if (!drawer) return ['no drawer']
     const box = drawer.getBoundingClientRect()
     const found = new Set<string>()
@@ -69,22 +70,24 @@ async function coveringDrawer(page: Page): Promise<string[]> {
           )
       }
     return [...found]
-  })
+  }, selector)
 }
 
-/** Play a few turns, so the story has lines and the words are up, and open the Story so far drawer. */
-async function openDrawerAfterPlaying(page: Page): Promise<void> {
+/** Play a few turns, so the story has lines and the words are up. */
+async function playTurns(page: Page): Promise<void> {
   await command(page, 'look')
   await command(page, 'look')
-  await page
-    .getByRole('button', { name: /Story so far/ })
-    .first()
-    .click()
-  const drawer = page.getByRole('complementary', {
-    name: 'Story so far drawer',
-  })
+}
+
+/** Press the stage button named `button` and wait for the drawer called `name` to finish sliding in. */
+async function openDrawer(
+  page: Page,
+  button: RegExp,
+  name: string,
+): Promise<void> {
+  await page.getByRole('button', { name: button }).first().click()
+  const drawer = page.getByRole('complementary', { name })
   await expect(drawer).toBeVisible()
-  // Let the drawer finish sliding in.
   await expect
     .poll(() => drawer.evaluate((el) => getComputedStyle(el).transform))
     .toBe('none')
@@ -99,8 +102,18 @@ for (const size of [
   }): Promise<void> => {
     await page.setViewportSize(size)
     await openGame(page)
-    await openDrawerAfterPlaying(page)
-    await page.screenshot({ path: `test-results/drawer-${size.width}.png` })
-    expect(await coveringDrawer(page)).toEqual([])
+    await playTurns(page)
+    await openDrawer(page, /Story so far/, 'Story so far drawer')
+    expect(await coveringDrawer(page, '.lq-story-drawer')).toEqual([])
   })
 }
+
+test('at 1280×800 nothing from the stage covers the open Quests drawer', async ({
+  page,
+}): Promise<void> => {
+  await page.setViewportSize({ width: 1280, height: 800 })
+  await openGame(page)
+  await playTurns(page)
+  await openDrawer(page, /^Quests/, 'Journal drawer')
+  expect(await coveringDrawer(page, '.lq-drawer')).toEqual([])
+})
