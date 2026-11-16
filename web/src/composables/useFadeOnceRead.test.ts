@@ -3,11 +3,14 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { ref } from 'vue'
 import { mount, type VueWrapper } from '@vue/test-utils'
 import { defineComponent, h, type Ref } from 'vue'
-import { LINE_SIGHT_EVENT, useFadeOnceRead } from './useFadeOnceRead'
+import { useFadeOnceRead } from './useFadeOnceRead'
+import type { FadeLedger } from '@/lantern/lineFade'
 
 describe('useFadeOnceRead', () => {
   let root: HTMLElement
   let live: Readonly<Ref<number>>
+  let ledger: FadeLedger
+  let ids = 0
   let w: VueWrapper
   /** Whether the lines are held (the words hidden). */
   let held: Ref<boolean>
@@ -18,6 +21,7 @@ describe('useFadeOnceRead', () => {
   ): HTMLElement {
     const el = document.createElement('p')
     el.className = 'lq-line'
+    el.dataset.lineId = `l${ids++}`
     if (opts.reading) el.classList.add('lq-speaking')
     if (opts.readMs !== undefined) el.dataset.readMs = String(opts.readMs)
     ;(opts.column ?? root).appendChild(el)
@@ -50,12 +54,14 @@ describe('useFadeOnceRead', () => {
     held = ref(false)
     const Host = defineComponent({
       setup() {
-        live = useFadeOnceRead(
+        const fading = useFadeOnceRead(
           container,
           '.lq-line',
           () => held.value,
           '.lq-column',
-        ).live
+        )
+        live = fading.live
+        ledger = fading.ledger
         return () => h('i')
       },
     })
@@ -251,40 +257,44 @@ describe('useFadeOnceRead', () => {
     expect([older.dataset.fade, newer.dataset.fade]).toEqual(['gone', 'gone'])
   })
 
-  it('says when each line leaves sight, also one held back by the line above it', async () => {
+  it('keeps each line’s state in the ledger, also one held back by the line above it', async () => {
     const older = line()
     const newer = line()
     await settle()
-    const said: string[] = []
-    root.addEventListener(LINE_SIGHT_EVENT, (event) => {
-      if (event.target instanceof HTMLElement)
-        said.push(
-          `${event.target === older ? 'older' : 'newer'} ${event.target.dataset.fade}`,
-        )
-    })
+    const id = (el: HTMLElement): string => el.dataset.lineId ?? ''
+    expect(ledger.states[id(newer)]).toBe('away')
     fadeEnds(newer)
-    expect(said).toEqual(['newer spent'])
+    expect(ledger.states[id(newer)]).toBe('spent')
+    expect(ledger.outOfSight(id(newer))).toBe(true)
     // The top line's fade has run with nothing above it: spent, then gone at once.
     fadeEnds(older)
-    expect(said).toEqual([
-      'newer spent',
-      'older spent',
-      'older gone',
-      'newer gone',
+    expect([ledger.states[id(older)], ledger.states[id(newer)]]).toEqual([
+      'gone',
+      'gone',
     ])
   })
 
-  it('says when a line out of sight comes back, read aloud again', async () => {
+  it('brings a line out of sight back into the ledger, read aloud again', async () => {
     const older = line()
     const newer = line()
     await settle()
     fadeEnds(newer)
-    let said = 0
-    root.addEventListener(LINE_SIGHT_EVENT, () => said++)
+    const before = ledger.version.value
     newer.classList.add('lq-speaking')
     await settle()
     expect(newer.dataset.fade).toBe('live')
-    expect(said).toBe(1)
+    expect(ledger.outOfSight(newer.dataset.lineId ?? '')).toBe(false)
+    expect(ledger.version.value).toBe(before + 1)
     expect(older.dataset.fade).toBe('away')
+  })
+
+  it('drops a line taken off the stage from the ledger', async () => {
+    const a = line()
+    await settle()
+    const id = a.dataset.lineId ?? ''
+    expect(id in ledger.states).toBe(true)
+    a.remove()
+    await settle()
+    expect(id in ledger.states).toBe(false)
   })
 })

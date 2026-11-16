@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
+import { computed, inject, nextTick, onBeforeUnmount, ref, watch } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
 import { continuesRun, readingPauseMs, runHeads } from '@/lantern/stageSpeech'
+import { createFadeLedger, FADE_LEDGER, speechLineId } from '@/lantern/lineFade'
 import { renderMarkup } from '@/utils/theme'
 import { useReadAlong } from '@/composables/useReadAlong'
 import type { StageLine } from '@/stores/useStageSpeechStore'
@@ -39,6 +40,8 @@ defineProps<{ away?: boolean }>()
 const game = useGameStore()
 const speech = useStageSpeechStore()
 const narration = useNarrationStore()
+/** Which lines have faded out of sight, kept by `useFadeOnceRead` in the layout. */
+const fade = inject(FADE_LEDGER, createFadeLedger, true)
 
 /** The turn being narrated among the conversation's lines (0 for none). */
 const readTurn = computed(
@@ -62,16 +65,13 @@ function lineHtml(line: StageLine): string {
 /** Index of the first line still showing at the top of the thread (0 when nothing is laid out). */
 const firstShowing = ref(0)
 
-/** The lines whose fade has run (spent or gone), by key: out of sight, so never a head. */
-const outOfSight = ref<number[]>([])
-
 /** Which lines head a run, so carry its name and portrait. */
 const heads = computed(() =>
   runHeads(
     speech.visible,
     firstShowing.value,
     speech.visible.flatMap((line, index) =>
-      outOfSight.value.includes(line.key) ? [index] : [],
+      fade.outOfSight(speechLineId(line.key)) ? [index] : [],
     ),
   ),
 )
@@ -110,26 +110,20 @@ function findFirstShowing(): void {
   const pad = parseFloat(getComputedStyle(el).paddingTop) || 0
   const rows = Array.from(el.children)
   const at = rows.findIndex(
-    (row) =>
+    (row, index) =>
       row instanceof HTMLElement &&
-      row.dataset.fade !== 'spent' &&
+      !fade.outOfSight(speechLineId(speech.visible[index]?.key ?? -1)) &&
       row.offsetTop >= el.scrollTop + pad,
   )
   // A thread cut through every row (one very tall line) heads its newest.
   firstShowing.value = at === -1 ? Math.max(0, rows.length - 1) : at
 }
 
-/** A line has left sight, or come back: its run's name and portrait go to the first of its lines in sight. */
-function sightChanged(): void {
-  const rows = Array.from(thread.value?.children ?? [])
-  outOfSight.value = rows.flatMap((row) =>
-    row instanceof HTMLElement &&
-    (row.dataset.fade === 'spent' || row.dataset.fade === 'gone')
-      ? [Number(row.dataset.key)]
-      : [],
-  )
-  findFirstShowing()
-}
+// A line has left sight, or come back: its run's name and portrait go to the first of its lines in sight, and so may the one at the top.
+watch(
+  () => fade.version.value,
+  () => void nextTick(findFirstShowing),
+)
 
 // A new line, or a thread made shorter by the paper growing, pins it again.
 watch(
@@ -172,7 +166,6 @@ function hurry(): void {
         class="lq-thread"
         aria-hidden="true"
         @scroll.passive="findFirstShowing"
-        @lq-line-sight="sightChanged"
       >
         <!-- eslint-disable vue/no-v-html -->
         <div
@@ -187,6 +180,7 @@ function hurry(): void {
             },
           ]"
           :data-key="line.key"
+          :data-line-id="speechLineId(line.key)"
           :data-read-ms="readingPauseMs(line.markup)"
           data-testid="speech-line"
         >

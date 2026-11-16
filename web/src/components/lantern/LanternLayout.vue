@@ -1,5 +1,13 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
+import {
+  computed,
+  nextTick,
+  onMounted,
+  onUnmounted,
+  provide,
+  ref,
+  watch,
+} from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { renderMarkup } from '@/utils/theme'
 import { useSettingsStore } from '@/stores/useSettingsStore'
@@ -42,6 +50,7 @@ import {
   FADING_LINES,
   useFadeOnceRead,
 } from '@/composables/useFadeOnceRead'
+import { FADE_LEDGER } from '@/lantern/lineFade'
 import { useNarrationPaper } from '@/composables/useNarrationPaper'
 import {
   SHORT_QUERY,
@@ -1332,6 +1341,8 @@ const fading = useFadeOnceRead(
   () => paper.hidden.value,
   FADING_COLUMNS,
 )
+// The columns read which lines are out of sight from it, never from the DOM.
+provide(FADE_LEDGER, fading.ledger)
 /**
  * Whether the story is being told: a change of scene, a talk still to change
  * it, words still coming, the narrator reading, or a room's words on the
@@ -1637,14 +1648,11 @@ function keepAtFoot(): void {
   if (top !== null && Math.abs(top - story.scrollTop) > 1) moveStory(top, false)
 }
 
-/**
- * A line has left sight (or come back): once the column has drawn the change
- * (a run's name stepping down), keep the story at its foot before the next
- * frame, so what still shows never moves, not even for a frame.
- */
-function lineSightChanged(): void {
-  void nextTick(keepAtFoot)
-}
+// A line has left sight (or come back, or taken its room away): once the
+// columns have drawn the change (a run's name stepping down), keep the story
+// at its foot before the next frame, so what still shows never moves, not even
+// for a frame.
+watch(() => fading.ledger.version.value, keepAtFoot, { flush: 'post' })
 
 /** The story scrolled: what is below, and whether it is still at its foot. */
 function onStoryScroll(): void {
@@ -2654,11 +2662,7 @@ watch(
               @pointerdown.passive="endLanding"
             >
               <h2 class="lq-sr-only">Story</h2>
-              <div
-                ref="contentEl"
-                class="lq-paper-content"
-                @lq-line-sight="lineSightChanged"
-              >
+              <div ref="contentEl" class="lq-paper-content">
                 <template v-for="turn in storyTurns" :key="turn.id">
                   <ColumnTurn v-if="column" :turn="turn" :data-turn="turn.id" />
                   <StoryTurn

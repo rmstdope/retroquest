@@ -5,7 +5,11 @@ import { createPinia, setActivePinia } from 'pinia'
 import { ref } from 'vue'
 import ColumnTurn from './ColumnTurn.vue'
 import { FOLLOW_EVENT } from '@/composables/useStoryFollow'
-import { LINE_SIGHT_EVENT } from '@/composables/useFadeOnceRead'
+import {
+  createFadeLedger,
+  FADE_LEDGER,
+  type FadeState,
+} from '@/lantern/lineFade'
 import type { Turn } from '@/stores/useGameStore'
 import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
@@ -86,13 +90,17 @@ describe('ColumnTurn', () => {
     expect(w.findAll('[data-testid="portrait"]')).toHaveLength(2)
   })
 
-  for (const mark of ['gone', 'spent'])
+  for (const mark of ['gone', 'spent'] as FadeState[])
     it(`steps the name and portrait down to the next line of the run when its first line is ${mark}`, async () => {
       const t = turn(`${say('Mira', 'One.')}\n${say('Mira', 'Two.')}`)
       const speech = useStageSpeechStore()
       speech.observe(t)
       speech.revealAll()
-      const w = mount(ColumnTurn, { props: { turn: t } })
+      const ledger = createFadeLedger()
+      const w = mount(ColumnTurn, {
+        props: { turn: t },
+        global: { provide: { [FADE_LEDGER as symbol]: ledger } },
+      })
       const rows = (): HTMLElement[] =>
         w
           .findAll('[data-testid="speech-line"]')
@@ -102,11 +110,10 @@ describe('ColumnTurn', () => {
         false,
       ])
       // The fade (run by the layout) has taken the first line away.
-      rows()[0].dataset.fade = mark
-      rows()[0].dispatchEvent(new Event(LINE_SIGHT_EVENT, { bubbles: true }))
+      ledger.set(rows()[0].dataset.lineId ?? '', mark)
       await w.vm.$nextTick()
       expect(rows().map((r) => !!r.querySelector('.lq-line-name'))).toEqual([
-        true,
+        false,
         true,
       ])
       expect(rows()[1].querySelector('[data-testid="portrait"]')).not.toBeNull()

@@ -7,7 +7,6 @@ import LanternLayout from './LanternLayout.vue'
 import { startedHoldStore } from '@/testing/holdGame'
 import { useGameStore, type Turn } from '@/stores/useGameStore'
 import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
-import { LINE_SIGHT_EVENT } from '@/composables/useFadeOnceRead'
 import { useNarrationStore } from '@/stores/useNarrationStore'
 
 /**
@@ -379,9 +378,14 @@ describe('LanternLayout: a new line said in the one column', () => {
   it('keeps the column at its foot as soon as a line leaves sight, before the next frame', async () => {
     await sayLine(200)
     grown = 20
-    document
-      .querySelector('[data-testid="speech-line"]')!
-      .dispatchEvent(new Event(LINE_SIGHT_EVENT, { bubbles: true }))
+    // The line's fade runs out: it leaves sight, which the layout hears from the fade's ledger.
+    const row = document.querySelector<HTMLElement>(
+      '[data-testid="speech-line"]',
+    )!
+    row.dataset.fade = 'away'
+    const ended = new Event('animationend', { bubbles: true })
+    Object.defineProperty(ended, 'animationName', { value: 'lq-fade-away' })
+    row.dispatchEvent(ended)
     await flushPromises()
     expect(pane().scrollTop).toBe(LINE_TOP + 200 + 20 - PANE)
   })
