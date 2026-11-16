@@ -1153,7 +1153,10 @@ onMounted(() => {
     storyResize.observe(storyEl.value)
     // The turns also settle after a crossing; a reading's new paragraphs must not jump the follow.
     if (contentEl.value) {
-      contentResize = new ResizeObserver(() => resizeLanding.reland())
+      contentResize = new ResizeObserver(() => {
+        resizeLanding.reland()
+        keepAtFoot()
+      })
       contentResize.observe(contentEl.value)
     }
   }
@@ -1537,6 +1540,8 @@ watch(
         false,
       )
     else latest?.scrollIntoView?.({ block: 'start' })
+    // Opened at its start, the story no longer rests at its foot.
+    noteFoot()
     // Every answer is read on the picture: the phone's sheet folds after each turn.
     const folds =
       !laptop.value &&
@@ -1590,7 +1595,37 @@ async function showNewestLine(): Promise<void> {
     story.scrollTop + line.top - (pane.top + paddingTop),
   )
   if (top > story.scrollTop) moveStory(top, false)
+  noteFoot()
   updateMoreBelow()
+}
+
+/** Whether the story rests at its foot, so stays there as its content changes size (`keepAtFoot`). */
+let atFoot = false
+
+/** Note whether the story is at its foot: the player scrolling back leaves it. */
+function noteFoot(): void {
+  const story = storyEl.value
+  atFoot =
+    !!story && story.scrollTop >= story.scrollHeight - story.clientHeight - 1
+}
+
+/**
+ * Keep the one column at its foot while its content changes size above the
+ * newest line (a run's name stepping down to its next line takes room), so
+ * the lines still showing stay where they are.
+ */
+function keepAtFoot(): void {
+  const story = storyEl.value
+  if (!atFoot || !column.value || storyHeld.value || !story) return
+  if (section.value !== 'story') return
+  const foot = story.scrollHeight - story.clientHeight
+  if (story.scrollTop < foot - 1) moveStory(foot, false)
+}
+
+/** The story scrolled: what is below, and whether it is still at its foot. */
+function onStoryScroll(): void {
+  updateMoreBelow()
+  noteFoot()
 }
 /** The key of the newest line last brought into view (`showNewestLine`). */
 let lineShown: number | undefined
@@ -2589,7 +2624,7 @@ watch(
               aria-label="Story"
               @click="onStoryClick"
               @keydown="onStoryKeydown"
-              @scroll.passive="updateMoreBelow"
+              @scroll.passive="onStoryScroll"
               @wheel.passive="endLanding"
               @touchstart.passive="endLanding"
               @pointerdown.passive="endLanding"

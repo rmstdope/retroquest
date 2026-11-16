@@ -251,10 +251,26 @@ describe('LanternLayout: a new line said in the one column', () => {
   /** The story pane's height, and where the newest line starts in its content. */
   const PANE = 300
   const LINE_TOP = 250
+  /** Room the content gains after the line is shown (a name stepping down above it). */
+  let grown = 0
+  /** The layout's resize observers, called by hand. */
+  let resized: (() => void)[] = []
 
   beforeEach(async () => {
     setActivePinia(createPinia())
     screen('upright')
+    grown = 0
+    resized = []
+    vi.stubGlobal(
+      'ResizeObserver',
+      class {
+        constructor(callback: () => void) {
+          resized.push(callback)
+        }
+        observe(): void {}
+        disconnect(): void {}
+      },
+    )
     await startedHoldStore()
     w = mount(LanternLayout, { attachTo: document.body })
     await w.vm.$nextTick()
@@ -278,7 +294,7 @@ describe('LanternLayout: a new line said in the one column', () => {
     })
     Object.defineProperty(el, 'scrollHeight', {
       configurable: true,
-      value: LINE_TOP + height + below,
+      get: () => LINE_TOP + height + below + grown,
     })
     Object.defineProperty(el, 'scrollTop', {
       configurable: true,
@@ -340,6 +356,24 @@ describe('LanternLayout: a new line said in the one column', () => {
   it('shows the room kept below the newest line too, so the column rests at its foot', async () => {
     await sayLine(200, true, 20)
     expect(pane().scrollTop).toBe(LINE_TOP + 200 + 20 - PANE)
+  })
+
+  it('keeps the column at its foot when the content above the newest line grows', async () => {
+    await sayLine(200)
+    grown = 20
+    for (const callback of resized) callback()
+    await flushPromises()
+    expect(pane().scrollTop).toBe(LINE_TOP + 200 + 20 - PANE)
+  })
+
+  it('leaves a player who scrolled back where they are when the content grows', async () => {
+    await sayLine(200)
+    pane().scrollTop = 0
+    pane().dispatchEvent(new Event('scroll'))
+    grown = 20
+    for (const callback of resized) callback()
+    await flushPromises()
+    expect(pane().scrollTop).toBe(0)
   })
 
   it('stops a line taller than the pane at its top, so it is read from its start', async () => {
