@@ -26,8 +26,6 @@ function press(over: Partial<HurryKeyPress>): HurryKeyPress {
     scene: false,
     arrival: false,
     narrating: false,
-    canHide: false,
-    canShow: false,
     ...over,
   }
 }
@@ -37,7 +35,7 @@ const SPACE = ' '
 describe('decideHurryKey during a change of scene', () => {
   const scene = { scene: true }
 
-  it('skips the scene on Enter, Space or Escape aimed at nothing', () => {
+  it('skips the scene on Enter or Space aimed at nothing, and leaves Escape alone', () => {
     expect(decideHurryKey(press({ ...scene, key: 'Enter' }))).toEqual({
       action: 'skip-scene',
       consume: true,
@@ -48,11 +46,7 @@ describe('decideHurryKey during a change of scene', () => {
       consume: true,
       swallowSpaceUp: true,
     })
-    expect(decideHurryKey(press({ ...scene, key: 'Escape' }))).toEqual({
-      action: 'skip-scene',
-      consume: true,
-      swallowSpaceUp: false,
-    })
+    expect(decideHurryKey(press({ ...scene, key: 'Escape' }))).toBeNull()
   })
 
   it('takes Enter and Space from the folded Actions, swallowing only the Space release', () => {
@@ -77,14 +71,11 @@ describe('decideHurryKey during a change of scene', () => {
     ).toMatchObject({ action: 'skip-scene', consume: true })
   })
 
-  it('leaves Enter and Space to a field or a control, but takes Escape', () => {
+  it('leaves Enter and Space to a field or a control', () => {
     expect(decideHurryKey(press({ ...scene, inField: true }))).toBeNull()
     expect(
       decideHurryKey(press({ ...scene, onControl: true, key: SPACE })),
     ).toBeNull()
-    expect(
-      decideHurryKey(press({ ...scene, onControl: true, key: 'Escape' })),
-    ).toMatchObject({ action: 'skip-scene' })
   })
 
   it('takes Enter and Space from a button in the actions panel, swallowing only the Space release', () => {
@@ -113,52 +104,8 @@ describe('decideHurryKey during a change of scene', () => {
 })
 
 describe('decideHurryKey with nothing narrated', () => {
-  it('hides the words on Escape when they may be hidden, without consuming it', () => {
-    expect(decideHurryKey(press({ key: 'Escape', canHide: true }))).toEqual({
-      action: 'hide-words',
-      consume: false,
-      swallowSpaceUp: false,
-    })
-    expect(
-      decideHurryKey(press({ key: 'Escape', canHide: true, modified: true })),
-    ).toMatchObject({ action: 'hide-words' })
-  })
-
-  it('does not hide when it may not, or when something else took Escape', () => {
+  it('leaves Escape to the menu: it hides and shows nothing', () => {
     expect(decideHurryKey(press({ key: 'Escape' }))).toBeNull()
-    expect(
-      decideHurryKey(press({ key: 'Escape', canHide: true, handled: true })),
-    ).toBeNull()
-    expect(
-      decideHurryKey(press({ key: 'Escape', canHide: true, dialogOpen: true })),
-    ).toBeNull()
-  })
-
-  it('shows the hidden words again on a second Escape, mirroring Show', () => {
-    expect(decideHurryKey(press({ key: 'Escape', canShow: true }))).toEqual({
-      action: 'show-words',
-      consume: false,
-      swallowSpaceUp: false,
-    })
-    expect(
-      decideHurryKey(press({ key: 'Escape', canShow: true, onControl: true })),
-    ).toMatchObject({ action: 'show-words' })
-  })
-
-  it('leaves the Escape that would show the words to a field, a dialog or whoever took it', () => {
-    expect(
-      decideHurryKey(press({ key: 'Escape', canShow: true, inField: true })),
-    ).toBeNull()
-    expect(
-      decideHurryKey(press({ key: 'Escape', canShow: true, handled: true })),
-    ).toBeNull()
-    expect(
-      decideHurryKey(press({ key: 'Escape', canShow: true, dialogOpen: true })),
-    ).toBeNull()
-    // A held key does not flip the words back and forth.
-    expect(
-      decideHurryKey(press({ key: 'Escape', canShow: true, repeat: true })),
-    ).toBeNull()
   })
 
   it('leaves Enter and Space alone', () => {
@@ -237,17 +184,13 @@ describe('decideHurryKey during an arrival', () => {
     ).toEqual({ action: 'swallow', consume: true, swallowSpaceUp: false })
   })
 
-  it('clears on Escape', () => {
-    expect(decideHurryKey(press({ ...arrival, key: 'Escape' }))).toEqual({
-      action: 'arrival-clear',
-      consume: true,
-      swallowSpaceUp: false,
-    })
+  it('leaves Escape alone', () => {
+    expect(decideHurryKey(press({ ...arrival, key: 'Escape' }))).toBeNull()
   })
 })
 
 describe('decideHurryKey while the story is narrated', () => {
-  const narrating = { narrating: true, canHide: true }
+  const narrating = { narrating: true }
 
   it('hurries on Enter or Space aimed at nothing, swallowing no release', () => {
     expect(decideHurryKey(press({ ...narrating, key: 'Enter' }))).toEqual({
@@ -345,18 +288,11 @@ describe('decideHurryKey while the story is narrated', () => {
     ).toBeNull()
   })
 
-  it('lets an open word list close on Escape, and skips on any other Escape', () => {
-    expect(
-      decideHurryKey(
-        press({ ...narrating, inField: true, inOpenList: true, key: 'Escape' }),
-      ),
-    ).toBeNull()
-    expect(
-      decideHurryKey(press({ ...narrating, inField: true, key: 'Escape' })),
-    ).toEqual({ action: 'skip-all', consume: true, swallowSpaceUp: false })
+  it('leaves Escape alone: it no longer skips the narration', () => {
+    expect(decideHurryKey(press({ ...narrating, key: 'Escape' }))).toBeNull()
     expect(
       decideHurryKey(press({ ...narrating, onControl: true, key: 'Escape' })),
-    ).toMatchObject({ action: 'skip-all' })
+    ).toBeNull()
   })
 
   it('leaves the key alone under a dialog, a modifier or other keys', () => {
@@ -398,14 +334,6 @@ describe('HurryKeys, which keeps the pause after a telling', () => {
     expect(keys.decide(aimed(onVerb))).toBeNull()
     expect(keys.decide(aimed({ arrival: true }))?.action).toBe('arrival-next')
     now = 10
-    expect(keys.decide(aimed(onVerb))?.action).toBe('swallow')
-  })
-
-  it('starts the pause after an arrival is cleared with the narration skipped', () => {
-    const keys = new HurryKeys(() => 0)
-    expect(keys.decide(aimed({ arrival: true, key: 'Escape' }))?.action).toBe(
-      'arrival-clear',
-    )
     expect(keys.decide(aimed(onVerb))?.action).toBe('swallow')
   })
 

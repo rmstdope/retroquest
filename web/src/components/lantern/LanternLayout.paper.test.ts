@@ -496,56 +496,15 @@ describe('the narration paper', () => {
     expect(paper().hasAttribute('inert')).toBe(false)
   })
 
-  it('hides both sides with Escape when nothing is narrated, and leaves focus alone', async () => {
+  it('does not hide or show the words on Escape (N does)', async () => {
     await mountTalking()
-    const box = document.createElement('input')
-    document.body.appendChild(box)
-    box.focus()
-    press('Escape', box)
-    await nextTick()
-    expect(tab()).not.toBeNull()
-    expect(speechZone().hasAttribute('inert')).toBe(true)
-    expect(document.activeElement).toBe(box)
-    // Already hidden: nothing more happens.
-    press('Escape', box)
-    await nextTick()
-    expect(tab()).not.toBeNull()
-    box.remove()
-  })
-
-  it('shows the words again on a second Escape when focus is not in a field', async () => {
-    await mountWith([turn(1, 'Only the narrator.')])
-    press('Escape')
-    await nextTick()
-    expect(tab()).not.toBeNull()
-    expect(hideButton()).toBeNull()
     press('Escape')
     await nextTick()
     expect(tab()).toBeNull()
-    expect(hideButton()).not.toBeNull()
-    expect(paper().hasAttribute('inert')).toBe(false)
-    // A held Escape hides once and goes no further: no flicker.
-    const held = (): void => {
-      document.body.dispatchEvent(
-        new KeyboardEvent('keydown', {
-          key: 'Escape',
-          repeat: true,
-          bubbles: true,
-          cancelable: true,
-        }),
-      )
-    }
-    press('Escape')
-    await nextTick()
-    held()
-    await nextTick()
-    held()
-    held()
-    await nextTick()
-    expect(tab()).not.toBeNull()
+    expect(speechZone().hasAttribute('inert')).toBe(false)
   })
 
-  it('hides narrator cards with Escape from the real command box before stepping back', async () => {
+  it('steps back from the real command box on Escape without hiding the words', async () => {
     await mountWith([turn(1, 'Only the narrator.')])
     game.acceptInput = true
     await nextTick()
@@ -560,33 +519,16 @@ describe('the narration paper', () => {
     box.value = 'xyz'
     box.dispatchEvent(new Event('input', { bubbles: true }))
     await nextTick()
-    // The open word list closes first (text kept); then the words hide.
+    // The open word list closes first (text kept).
     expect(box.getAttribute('aria-expanded')).toBe('true')
     press('Escape', box)
     await nextTick()
     expect(tab()).toBeNull()
-    press('Escape', box)
-    await nextTick()
-    await nextTick()
-    expect(tab()).not.toBeNull()
-    expect(document.activeElement).toBe(box)
-    expect(box.value).toBe('xyz')
-    // A held key goes no further than the Hide: a repeat takes no step.
-    box.dispatchEvent(
-      new KeyboardEvent('keydown', {
-        key: 'Escape',
-        repeat: true,
-        bubbles: true,
-        cancelable: true,
-      }),
-    )
-    await nextTick()
-    expect(box.value).toBe('xyz')
-    // Hidden: the box's own steps, one per press.
+    // The box's own steps, one per press.
     press('Escape', box)
     await nextTick()
     expect(box.value).toBe('')
-    expect(tab()).not.toBeNull()
+    expect(tab()).toBeNull()
     expect(document.activeElement).toBe(box)
     press('Escape', box)
     await nextTick()
@@ -594,7 +536,7 @@ describe('the narration paper', () => {
     expect(document.querySelector('input[aria-label="Command"]')).toBeNull()
   })
 
-  it('only skips on Escape while the narrator speaks, hiding nothing', async () => {
+  it('does not skip the narrator on Escape, and hides nothing', async () => {
     await mountTalking()
     const narration = useNarrationStore()
     narration.setAudioFactory(() => ({
@@ -628,13 +570,9 @@ describe('the narration paper', () => {
     expect(narration.isNarrating).toBe(true)
     press('Escape')
     await nextTick()
-    expect(narration.isNarrating).toBe(false)
+    expect(narration.isNarrating).toBe(true)
     expect(tab()).toBeNull()
     expect(speechZone().hasAttribute('inert')).toBe(false)
-    // With nothing narrated, the next Escape hides.
-    press('Escape')
-    await nextTick()
-    expect(tab()).not.toBeNull()
   })
 
   it('hurries a narrated look one block with a click on the picture', async () => {

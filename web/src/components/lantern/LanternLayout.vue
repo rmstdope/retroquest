@@ -1069,8 +1069,6 @@ function onNarrationKey(event: KeyboardEvent): void {
     // News held while the lines before it are read takes the keys as if it were up.
     arrival: arrival.active || arrival.holding,
     narrating: narration.isNarrating,
-    canHide: staged.value && wordsVisible.value && !paper.hidden.value,
-    canShow: showTab.value,
   })
   // Enter or Space that goes on takes its step now; held, it skips the rest.
   // Aimed at a field or a button it keeps its own press, unless the story took it.
@@ -1098,26 +1096,13 @@ function onNarrationKey(event: KeyboardEvent): void {
     case 'skip-scene':
       presentation.continueScene()
       break
-    case 'hide-words':
-      setWordsHidden(true)
-      break
-    case 'show-words':
-      setWordsHidden(false)
-      break
     case 'arrival-next':
       arrival.next()
       break
     case 'swallow':
       break
-    case 'arrival-clear':
-      arrival.clear()
-      narration.skipAll()
-      break
     case 'hurry':
       narration.hurry()
-      break
-    case 'skip-all':
-      narration.skipAll()
       break
   }
 }
@@ -2551,7 +2536,6 @@ watch(
             :class="{ 'lq-sheet': !laptop, 'lq-sheet-over': sheeted }"
             :foldable="!laptop"
             :stage="laptop"
-            :words-showing="showHide"
             @click.capture="clearShownArrival"
             @input="clearShownArrival"
             @fold="fold"

@@ -4,7 +4,6 @@ import { useGameStore } from '@/stores/useGameStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
 import { useArrivalStore } from '@/stores/useArrivalStore'
-import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
 import { useCommandCompletion } from '@/composables/useCommandCompletion'
 import { displayName } from '@/lantern/displayName'
 import { exitArrow } from '@/lantern/exitArrow'
@@ -35,15 +34,12 @@ import {
 const props = defineProps<{
   foldable?: boolean
   stage?: boolean
-  /** The laptop's Hide is on the picture: words showing, not hidden, no arrival. */
-  wordsShowing?: boolean
 }>()
 const emit = defineEmits<{ fold: [] }>()
 const game = useGameStore()
 const settings = useSettingsStore()
 const narration = useNarrationStore()
 const arrival = useArrivalStore()
-const speech = useStageSpeechStore()
 
 const mode = ref(settings.startMode)
 const verb = ref<Verb | null>(null)
@@ -368,11 +364,9 @@ function putAway(event: KeyboardEvent): void {
 
 /**
  * Escape in the command box takes one step back per press: close the word list
- * (the text stays), then clear the text, then leave the box for the verbs. An
- * Escape that already has a job (the narrator, an arrival, or words on the
- * laptop's picture for the layout to hide; on a phone a speech) or a box that
- * takes no input is left alone. Every step but the list's own is consumed here
- * so the layout does not also act.
+ * (the text stays), then clear the text, then leave the box for the verbs. A
+ * box that takes no input is left alone. Every step but the list's own is
+ * consumed here so the layout does not also open the menu.
  */
 function onTypedEscape(event: KeyboardEvent): void {
   if (completion.open.value) {
@@ -380,13 +374,7 @@ function onTypedEscape(event: KeyboardEvent): void {
     completion.close()
     return
   }
-  if (
-    !game.acceptInput ||
-    narration.isNarrating ||
-    arrival.active ||
-    (props.stage ? props.wordsShowing : speech.visible.length)
-  )
-    return
+  if (!game.acceptInput) return
   event.preventDefault()
   // A held key takes one step only, not all of them.
   if (event.repeat) return

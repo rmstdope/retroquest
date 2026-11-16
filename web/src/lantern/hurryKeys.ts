@@ -1,8 +1,8 @@
 /**
  * Who owns a key that may hurry the story.
  *
- * Enter, Space and Escape can hurry a change of scene, go on an arrival on the
- * picture, hurry the narration, or hide or show the words on the stage, and the same
+ * Enter and Space can hurry a change of scene, go on an arrival on the
+ * picture or hurry the narration, and the same
  * keys also belong to the command box, buttons, word lists and dialogs. This
  * module is the one place that decides, from the game's mode, the key and
  * what it is aimed at, which of them gets the press, and whether the release
@@ -75,22 +75,10 @@ export interface HurryKeyPress {
   arrival: boolean
   /** The narrator is reading. */
   narrating: boolean
-  /** The stage's words are shown and may be hidden. */
-  canHide: boolean
-  /** The stage's words are hidden and may be shown again. */
-  canShow: boolean
 }
 
 /** What a taken key does. */
-export type HurryKeyAction =
-  | 'skip-scene'
-  | 'hide-words'
-  | 'show-words'
-  | 'arrival-next'
-  | 'arrival-clear'
-  | 'hurry'
-  | 'skip-all'
-  | 'swallow'
+export type HurryKeyAction = 'skip-scene' | 'arrival-next' | 'hurry' | 'swallow'
 
 /** The answer for a key the story takes. */
 export interface HurryKeyDecision {
@@ -120,7 +108,7 @@ function take(
 }
 
 /**
- * During a change of scene, Enter, Space or Escape brings the new room up at
+ * During a change of scene, Enter or Space brings the new room up at
  * once. Fields and controls keep their own Enter and Space, except an empty
  * command box, the folded bar's Actions (which stays folded) and a button in
  * the actions panel, where focus sits on its own (after Begin, it is on Look).
@@ -130,43 +118,17 @@ function sceneKey(press: HurryKeyPress): HurryKeyDecision | null {
     !press.scene ||
     (press.handled && !press.emptyBoxEnter) ||
     press.modified ||
-    !(goesOn(press.key) || press.key === 'Escape') ||
+    !goesOn(press.key) ||
     press.dialogOpen
   )
     return null
   if (
-    press.key === 'Escape' ||
     press.emptyBoxEnter ||
     press.onFoldedActions ||
     press.onActionButton ||
     !(press.inField || press.onControl)
   )
     return take('skip-scene', press.key === ' ')
-  return null
-}
-
-/**
- * Escape (unless a drawer, the map or a menu took it first) does what Hide
- * does on the stage, when nothing is being narrated (while it is, Escape only
- * skips); once the words are hidden, a second Escape does what Show does,
- * except in a field, where the command box keeps its own steps back (clear
- * the text, then leave the box). A held key takes no step, so the words do
- * not flicker. The key is not consumed.
- */
-function hideKey(press: HurryKeyPress): HurryKeyDecision | null {
-  if (
-    press.key !== 'Escape' ||
-    press.repeat ||
-    press.handled ||
-    press.narrating ||
-    press.arrival ||
-    press.dialogOpen
-  )
-    return null
-  if (press.canHide)
-    return { action: 'hide-words', consume: false, swallowSpaceUp: false }
-  if (press.canShow && !press.inField)
-    return { action: 'show-words', consume: false, swallowSpaceUp: false }
   return null
 }
 
@@ -186,26 +148,22 @@ function arrivalKey(press: HurryKeyPress): HurryKeyDecision | null {
 }
 
 /**
- * While the narrator reads (and for Escape on an arrival): a field keeps
- * Space and Enter, and an open word list takes Escape to close itself; any
- * other Escape skips, text kept. A button, link or summary presses on Space
- * or Enter, except Space on the folded bar's Actions or a button in the
- * actions panel, and Enter on a button there that sends a command: that is
- * the hurry the hint invites, so the sheet stays folded, the verb is not sent
- * again and a Space's release is swallowed. Enter on any other button stays
- * its own press.
+ * While the narrator reads: a field keeps Space and Enter. A button, link or
+ * summary presses on Space or Enter, except Space on the folded bar's Actions
+ * or a button in the actions panel, and Enter on a button there that sends a
+ * command: that is the hurry the hint invites, so the sheet stays folded, the
+ * verb is not sent again and a Space's release is swallowed. Enter on any
+ * other button stays its own press. (Holding the key skips the telling; that
+ * is the hold's.)
  */
 function narrationKey(press: HurryKeyPress): HurryKeyDecision | null {
-  const hurries = goesOn(press.key)
-  if (press.inField && (hurries || press.inOpenList)) return null
+  if (press.inField) return null
   const takenFromButton =
     press.key === ' '
       ? press.onActionButton || press.onFoldedActions
       : press.onCommandButton
-  if (hurries && !takenFromButton && press.onControl) return null
-  const swallowSpaceUp = press.key === ' ' && takenFromButton
-  if (press.arrival) return take('arrival-clear', swallowSpaceUp)
-  return take(hurries ? 'hurry' : 'skip-all', swallowSpaceUp)
+  if (!takenFromButton && press.onControl) return null
+  return take('hurry', press.key === ' ' && takenFromButton)
 }
 
 /**
@@ -236,8 +194,6 @@ function pauseKey(press: HurryKeyPress): HurryKeyDecision | null {
 export function decideHurryKey(press: HurryKeyPress): HurryKeyDecision | null {
   const scene = sceneKey(press)
   if (scene) return scene
-  const hide = hideKey(press)
-  if (hide) return hide
   const pause = pauseKey(press)
   if (pause) return pause
   if (!(press.narrating || press.arrival)) return null
@@ -245,9 +201,9 @@ export function decideHurryKey(press: HurryKeyPress): HurryKeyDecision | null {
   // arrival an empty box still lets that Enter go on.
   if (press.handled && !(press.arrival && press.emptyBoxEnter)) return null
   if (press.modified) return null
-  if (!goesOn(press.key) && press.key !== 'Escape') return null
+  if (!goesOn(press.key)) return null
   if (press.dialogOpen) return null
-  if (press.arrival && goesOn(press.key)) return arrivalKey(press)
+  if (press.arrival) return arrivalKey(press)
   return narrationKey(press)
 }
 
@@ -270,7 +226,6 @@ export function aimOf(
 /** The actions of a taken key that go on an arrival or hurry the narration, which start the pause after a telling. */
 const GOES_ON_ACTIONS: readonly HurryKeyAction[] = [
   'arrival-next',
-  'arrival-clear',
   'hurry',
   'swallow',
 ]

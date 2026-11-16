@@ -1063,7 +1063,7 @@ describe('LanternLayout', () => {
       expect(w.find('[data-testid="speech-line"]').exists()).toBe(false)
     })
 
-    it('lets Escape close an open drawer first and hide the words next', async () => {
+    it('lets Escape close an open drawer and leaves the words alone', async () => {
       const w = mountLayout()
       await say(w, WORDS, 'Grandmother')
       await w.get('[data-button="quests"]').trigger('click')
@@ -1077,8 +1077,8 @@ describe('LanternLayout', () => {
       await w.vm.$nextTick()
       expect(
         w.get('[data-testid="speech-zone"]').attributes('inert'),
-      ).toBeDefined()
-      expect(w.find('.lq-paper-tab').exists()).toBe(true)
+      ).toBeUndefined()
+      expect(w.find('.lq-paper-tab').exists()).toBe(false)
     })
   })
 
@@ -2058,7 +2058,7 @@ describe('LanternLayout', () => {
       expect(useNarrationStore().speaking(1)).not.toBeNull()
     })
 
-    it('hurries with Space or Enter and skips with Escape, outside fields and menus', async () => {
+    it('hurries with Space or Enter, and Escape does not skip, outside fields and menus', async () => {
       const w = await ready()
       await say(narratedTurn(1))
       document.body.dispatchEvent(
@@ -2081,28 +2081,7 @@ describe('LanternLayout', () => {
       document.body.dispatchEvent(
         new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }),
       )
-      expect(useNarrationStore().isNarrating).toBe(false)
-      await vi.advanceTimersByTimeAsync(0)
-      expect(texts(w)).toHaveLength(4)
-    })
-
-    it('skips with Escape in the command box when no word list is open, keeping the text', async () => {
-      const w = await ready()
-      await say(narratedTurn(1))
-      const field = document.createElement('input')
-      field.setAttribute('aria-expanded', 'false')
-      field.value = 'talk to'
-      document.body.appendChild(field)
-      field.focus()
-      field.dispatchEvent(
-        new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }),
-      )
-      expect(useNarrationStore().isNarrating).toBe(false)
-      await vi.advanceTimersByTimeAsync(0)
-      expect(texts(w)).toHaveLength(2)
-      expect(field.value).toBe('talk to')
-      expect(document.activeElement).toBe(field)
-      field.remove()
+      expect(useNarrationStore().isNarrating).toBe(true)
     })
 
     it('leaves Space and Enter to a focused button: it is pressed and the voice goes on', async () => {
