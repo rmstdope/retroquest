@@ -5,7 +5,14 @@
  * when it appears. Checked on the opening chapter page, on the first room's
  * description and on a plain narrated paragraph, on desktop and on a phone.
  */
-import { test, expect, type Locator, type Page, skipTelling } from './fixtures'
+import {
+  test,
+  expect,
+  type Locator,
+  type Page,
+  skipTelling,
+  enterCommand,
+} from './fixtures'
 
 /** Where the rule is, what may clip it, and where the words start. */
 interface RuleGeometry {
@@ -72,13 +79,7 @@ async function openChapter(page: Page): Promise<void> {
 /** Close the chapter page and type one command, on desktop or phone. */
 async function type(page: Page, command: string): Promise<void> {
   await page.locator('.lq-chapter-button').click()
-  await page
-    .getByRole('button', { name: /^Type( a command)?$/ })
-    .first()
-    .click()
-  const input = page.getByLabel('Command', { exact: true })
-  await input.fill(command)
-  await input.press('Enter')
+  await enterCommand(page, command)
 }
 
 for (const width of [1280, 360]) {
@@ -105,13 +106,7 @@ for (const width of [1280, 360]) {
       await skipTelling(page)
       await expect(told).toHaveCount(0)
       // A first visit is told in the middle, not on the card: look tells it there.
-      const input = page.getByLabel('Command', { exact: true })
-      await page
-        .getByRole('button', { name: /^Type( a command)?$/ })
-        .first()
-        .click()
-      await input.fill('look')
-      await input.press('Enter')
+      await enterCommand(page, 'look')
       const arrival = page.getByTestId('turn').last().locator('.lq-arrival')
       await expectRuleBesideText(arrival)
     })

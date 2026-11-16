@@ -4,7 +4,14 @@
  * Escape do the same, and on a small sideways phone every name stays inside
  * the picture.
  */
-import { test, expect, type Page, skipTelling } from './fixtures'
+import {
+  test,
+  expect,
+  enterCommand,
+  type Page,
+  skipTelling,
+  closeTypingBox,
+} from './fixtures'
 
 /** A placed area, in fractions of the picture. */
 interface AreaFractions {
@@ -57,13 +64,8 @@ async function toTheCottage(
   for (let turn = 0; turn < 8 && (await arrival.isVisible()); turn++)
     await page.keyboard.press('Enter')
   // The voice wakes Elior in his cottage.
-  await page
-    .getByRole('region', { name: /^Action/ })
-    .getByRole('button', { name: /^(Type|Type a command)$/ })
-    .click()
-  const input = page.getByLabel('Command', { exact: true })
-  await input.fill('say hello to voice')
-  await input.press('Enter')
+  await enterCommand(page, 'say hello to voice')
+  await closeTypingBox(page)
   // The waking is told in the middle of the dark first; Enter brings the cottage up.
   await page.getByTestId('scene-interlude').waitFor()
   await page.keyboard.press('Enter')
@@ -73,7 +75,7 @@ async function toTheCottage(
   await told.waitFor()
   await skipTelling(page)
   await expect(told).toHaveCount(0)
-  await expect(page.locator('.lq-room-name')).toHaveText("Elior's Cottage")
+  await expect(page.locator('.lq-name-text')).toHaveText("Elior's Cottage")
 }
 
 test('the button and S show and take away the marks and names on a laptop', async ({
@@ -115,9 +117,9 @@ test('the name follows the mouse over a thing, and no name shows over nothing', 
 
 test.describe('at the edges of a laptop picture (rq-5hs1)', () => {
   /**
-   * On a 1428×650 laptop the 16:9 picture is trimmed to the stage under the
-   * header and the action bar lies over the stage's foot: the bread runs under
-   * the bar, the grandmother's middle is behind it and her name has to move
+   * On a 1842×580 laptop the 16:9 picture is trimmed to the stage and its foot
+   * cuts through the things at the bottom: the bread runs under
+   * the foot, the grandmother's middle is behind it and her name has to move
    * away from the bread's, and the hearth hugs the left edge.
    */
   const AT_THE_EDGES: Record<string, AreaFractions> = {
@@ -137,13 +139,16 @@ test.describe('at the edges of a laptop picture (rq-5hs1)', () => {
     })
   }
 
-  test('the name of what the pointer is over, just above the bar, goes above the pointer', async ({
+  test('the name of what the pointer is over, just above the picture foot, goes above the pointer', async ({
     page,
   }): Promise<void> => {
-    await page.setViewportSize({ width: 1428, height: 650 })
+    await page.setViewportSize({ width: 1842, height: 580 })
     await toTheCottage(page, AT_THE_EDGES)
-    const bar = await page.locator('.lq-composer').boundingBox()
+    // The belt covers the very foot of the picture while it is up.
+    await page.getByRole('button', { name: 'Put the belt away' }).click()
     const stage = await page.locator('.lq-stage').boundingBox()
+    // No bar below the picture now: its foot is the floor.
+    const bar = { y: stage!.y + stage!.height }
     await page.mouse.move(stage!.x + 0.115 * stage!.width, bar!.y - 15)
     const name = page.locator('[data-area-pointer]')
     await expect(name).toHaveText('Bread')
@@ -154,16 +159,17 @@ test.describe('at the edges of a laptop picture (rq-5hs1)', () => {
   test('every mark and name stays on the visible picture with the drift at its peak', async ({
     page,
   }): Promise<void> => {
-    await page.setViewportSize({ width: 1428, height: 650 })
+    await page.setViewportSize({ width: 1842, height: 580 })
     await toTheCottage(page, AT_THE_EDGES)
-    // The belt covers the very foot of the picture while it is up (belt.spec.ts); put away, the action row is the floor.
+    // The belt covers the very foot of the picture while it is up (belt.spec.ts); put away, the picture's foot is the floor.
     await page.getByRole('button', { name: 'Put the belt away' }).click()
     await holdDriftAtPeak(page)
     await page.getByRole('button', { name: /Show what's here/ }).click()
     const marks = page.locator('[data-area-mark]')
     await expect(marks).toHaveCount(3)
-    const bar = await page.locator('.lq-composer').boundingBox()
     const stage = await page.locator('.lq-stage').boundingBox()
+    // No bar below the picture now: its foot is the floor.
+    const bar = { y: stage!.y + stage!.height }
     const spots = [
       ...(await marks.all()),
       ...(await page.locator('[data-area-name]').all()),
@@ -280,15 +286,9 @@ test.describe('a dot under the faded edge of a card (rq-riv9)', () => {
     grandmother: 'Grandmother',
   }
 
-  /** Type one command into the action bar. */
+  /** Type one command into the typing box. */
   async function command(page: Page, text: string): Promise<void> {
-    const type = page
-      .getByRole('region', { name: /^Action/ })
-      .getByRole('button', { name: /^(Type|Type a command)$/ })
-    if (await type.isVisible()) await type.click()
-    const input = page.getByLabel('Command', { exact: true })
-    await input.fill(text)
-    await input.press('Enter')
+    await enterCommand(page, text)
   }
 
   /**

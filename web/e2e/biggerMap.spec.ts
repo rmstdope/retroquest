@@ -3,24 +3,13 @@
  * button; its window shows the visited places, and pressing one walks Elior
  * there, step by step, leaving an arrival per step. A phone has no button.
  */
-import { test, expect, type Page } from './fixtures'
+import { test, expect, type Page, enterCommand as enter } from './fixtures'
 
 /** Open the game and close the opening chapter page. */
 async function start(page: Page): Promise<void> {
   await page.goto('/')
   await page.getByRole('button', { name: 'Start', exact: true }).click()
   await page.locator('.lq-chapter-button').click()
-}
-
-/** Type a command (the laptop's actions have a Type button). */
-async function enter(page: Page, command: string): Promise<void> {
-  const input = page.getByLabel('Command', { exact: true })
-  const type = page
-    .getByRole('region', { name: 'Actions' })
-    .getByRole('button', { name: 'Type', exact: true })
-  if (await type.isVisible()) await type.click()
-  await input.fill(command)
-  await input.press('Enter')
 }
 
 /** Play the opening of Act I up to the cottage door, where the map has a way out south. */
@@ -47,7 +36,7 @@ async function wake(page: Page): Promise<void> {
 /** The name the plate gives the place the player is in. */
 async function placeName(page: Page): Promise<string> {
   const plate = page.getByRole('region', { name: 'Current location' })
-  return (await plate.getByRole('heading').innerText()).trim()
+  return (await plate.locator('.lq-name-text').innerText()).trim()
 }
 
 test('a laptop walks to a visited place from the bigger map', async ({

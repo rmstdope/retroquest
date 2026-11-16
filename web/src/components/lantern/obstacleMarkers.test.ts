@@ -13,7 +13,7 @@ const DECLARED: Array<[file: string, cls: string, kind: string]> = [
   ['LanternLayout.vue', 'lq-words-hide', 'panel'],
   ['LanternLayout.vue', 'lq-paper-tab', 'panel'],
   ['LanternLayout.vue', 'lq-show-names', 'panel'],
-  ['LanternLayout.vue', 'lq-composer', 'keep-clear'],
+  ['LanternLayout.vue', 'lq-stage-box', 'keep-clear'],
   ['StageButtons.vue', 'lq-stage-btn', 'panel'],
   ['StageButtons.vue', 'lq-map-pop', 'panel'],
   ['ArrivalOnPicture.vue', 'lq-arrival-card', 'words'],

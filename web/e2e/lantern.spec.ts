@@ -1,4 +1,4 @@
-import { test, expect, type Page, skipTelling } from './fixtures'
+import { test, expect, enterCommand, type Page, skipTelling } from './fixtures'
 
 /** Wait for the game to start (the act chunks load after the page's load event). */
 async function waitForGame(page: Page) {
@@ -56,9 +56,89 @@ test.describe('Lantern UI (the default)', () => {
     await expect(page.getByRole('banner')).toHaveCount(0)
     await expect(page.getByText('RetroQuest', { exact: true })).toHaveCount(0)
     await expect(page.getByText('bustles with life')).toBeVisible()
-    await expect(
-      page.getByRole('button', { name: 'Look', exact: true }),
-    ).toBeEnabled()
+    await expect(page.locator('.lq-name-btn')).toBeEnabled()
+    await expect(page.locator('.lq-composer, .lq-dock')).toHaveCount(0)
+  })
+
+  test('has no action bar: the room name fans out Look, Search and Rest, and F1 brings up the typing box', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1280, height: 800 })
+    await page.goto('/')
+    await page.getByRole('button', { name: 'Start', exact: true }).click()
+    await page.locator('.lq-chapter-button').click()
+    await page
+      .getByTestId('arrival-on-picture')
+      .click({ position: { x: 200, y: 300 } })
+    await expect(page.locator('.lq-composer, .lq-dock')).toHaveCount(0)
+    await expect(page.getByRole('region', { name: 'Actions' })).toHaveCount(0)
+    await expect(page.getByLabel('Command')).toHaveCount(0)
+
+    const turns = (): Promise<number> =>
+      page.evaluate(
+        () =>
+          (
+            document.querySelector('#app') as unknown as {
+              __vue_app__: {
+                config: {
+                  globalProperties: {
+                    $pinia: { state: { value: { game: { turns: unknown[] } } } }
+                  }
+                }
+              }
+            }
+          ).__vue_app__.config.globalProperties.$pinia.state.value.game.turns
+            .length,
+      )
+
+    // The room's name fans out three pills; Look sends and folds them.
+    const name = page.locator('.lq-name-btn')
+    await expect(name).toContainText('▾')
+    await name.click()
+    await expect(name).toContainText('▴')
+    await expect(page.locator('.lq-pill')).toHaveText([
+      '👁 Look',
+      '🔍 Search',
+      '💤 Rest',
+    ])
+    const before = await turns()
+    await page.locator('.lq-pill', { hasText: 'Look' }).click()
+    await expect.poll(turns).toBe(before + 1)
+    await expect(page.locator('.lq-pill')).toHaveCount(0)
+
+    // F1 shows the box and takes the cursor; Enter sends and the box stays; F1 hides it.
+    await page.keyboard.press('F1')
+    const input = page.getByLabel('Command')
+    await expect(input).toBeFocused()
+    await input.fill('look')
+    await input.press('Enter')
+    await expect.poll(turns).toBe(before + 2)
+    await expect(input).toBeVisible()
+    await expect(input).toHaveValue('')
+    await page.keyboard.press('F1')
+    await expect(input).toHaveCount(0)
+  })
+
+  test.describe('on a phone (touch)', () => {
+    test.use({ hasTouch: true, isMobile: true })
+    test('a phone has no typing box: F1 does nothing', async ({ page }) => {
+      await page.setViewportSize({ width: 390, height: 844 })
+      await page.goto('/')
+      await injectMockState(page)
+      await page.keyboard.press('F1')
+      await expect(page.getByLabel('Command')).toHaveCount(0)
+      await expect(page.locator('.lq-composer, .lq-dock')).toHaveCount(0)
+    })
+  })
+
+  test('a narrow mouse window gets the box too: only a phone has none', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 900, height: 800 })
+    await page.goto('/')
+    await injectMockState(page)
+    await page.keyboard.press('F1')
+    await expect(page.getByLabel('Command')).toBeVisible()
   })
 
   test('uses the Lantern colours', async ({ page }) => {
@@ -71,35 +151,6 @@ test.describe('Lantern UI (the default)', () => {
         .trim(),
     )
     expect(['#ffa914', '#f29e00']).toContain(accent)
-  })
-
-  test('the command box stays on screen with a long story', async ({
-    page,
-  }) => {
-    await page.setViewportSize({ width: 390, height: 844 })
-    await page.goto('/')
-    await injectMockState(page)
-    await page.getByRole('button', { name: 'Actions ▴' }).click()
-    await page.evaluate(() => {
-      /* eslint-disable @typescript-eslint/no-explicit-any */
-      const app = (document.querySelector('#app') as any).__vue_app__
-      const store = app.config.globalProperties.$pinia.state.value.game
-      store.turns = Array.from({ length: 20 }, (_, i) => ({
-        id: i + 1,
-        command: 'look',
-        text: 'A long answer about the village square. '.repeat(8),
-        room: 'Village Square',
-        roomChanged: false,
-        gained: [],
-        lost: [],
-      }))
-      /* eslint-enable @typescript-eslint/no-explicit-any */
-    })
-
-    // The answer folded the sheet into the bar, which stays in reach.
-    await expect(
-      page.getByRole('region', { name: 'Action bar' }),
-    ).toBeInViewport()
   })
 
   test('is the only UI, also for old ?ui= links', async ({ page }) => {
@@ -226,81 +277,11 @@ test.describe('Lantern UI (the default)', () => {
     expect(layout.pageHeight).toBeLessThanOrEqual(layout.viewport)
     expect(layout.scrollY).toBe(0)
     expect(layout.bodyBg).toBe(layout.rootBg)
-    await expect(page.getByRole('region', { name: 'Actions' })).toBeInViewport()
+    // No action bar below the words: the foot of the page is the story's.
+    await expect(page.locator('.lq-composer, .lq-dock')).toHaveCount(0)
   })
 
-  test('builds a command with the action composer', async ({ page }) => {
-    // The classic composer is the phone's (the laptop's is the stage's row).
-    await page.setViewportSize({ width: 900, height: 800 })
-    await page.goto('/')
-    await injectMockState(page)
-    await page.evaluate(() => {
-      /* eslint-disable @typescript-eslint/no-explicit-any */
-      const app = (document.querySelector('#app') as any).__vue_app__
-      const store = app.config.globalProperties.$pinia.state.value.game
-      store.items = ['old key', 'old chest']
-      store.characters = ['mira']
-      store.exits = { north: "Mira's Hut" }
-      /* eslint-enable @typescript-eslint/no-explicit-any */
-    })
-    await page.getByRole('button', { name: 'Actions ▴' }).click()
-
-    const actions = page.getByRole('region', { name: 'Actions' })
-    await expect(
-      actions.getByRole('button', { name: "Go north to Mira's Hut" }),
-    ).toBeVisible()
-
-    // A complete action is performed at once: the builder closes, no Do it.
-    await actions.getByRole('button', { name: 'Take', exact: true }).click()
-    await expect(
-      actions.getByRole('button', { name: 'Do it', exact: true }),
-    ).toHaveCount(0)
-    await actions.getByRole('button', { name: 'Old Key', exact: true }).click()
-    await expect(page.getByTestId('preview')).toHaveCount(0)
-
-    // The real game answered the take and redrew the room's items (the game
-    // opens in a dream that holds nothing), so put the mock items back.
-    await page.evaluate(() => {
-      /* eslint-disable @typescript-eslint/no-explicit-any */
-      const app = (document.querySelector('#app') as any).__vue_app__
-      const store = app.config.globalProperties.$pinia.state.value.game
-      store.items = ['lantern']
-      /* eslint-enable @typescript-eslint/no-explicit-any */
-    })
-
-    // Use with takes two things and is performed on the second tap (no Do it).
-    await actions.getByRole('button', { name: 'Use with', exact: true }).click()
-    await actions.getByRole('button', { name: 'Lantern', exact: true }).click()
-    await expect(page.getByTestId('preview')).toHaveText('use lantern …')
-    await expect(
-      actions.getByRole('button', { name: 'Do it', exact: true }),
-    ).toHaveCount(0)
-    await actions.getByRole('button', { name: 'Cancel', exact: true }).click()
-
-    await actions.getByRole('button', { name: 'Type', exact: true }).click()
-    await expect(page.getByLabel('Command')).toBeVisible()
-  })
-
-  test('highlights the selected input mode', async ({ page }) => {
-    // The classic composer is the phone's (the laptop's is the stage's row).
-    await page.setViewportSize({ width: 900, height: 800 })
-    await page.goto('/')
-    await injectMockState(page)
-    await page.getByRole('button', { name: 'Actions ▴' }).click()
-    const actions = page.getByRole('region', { name: 'Actions' })
-    const background = (name: string) =>
-      actions
-        .getByRole('button', { name, exact: true })
-        .evaluate((el) => getComputedStyle(el).backgroundColor)
-
-    const selected = await background('Actions')
-    const other = await background('Type')
-
-    expect(selected).not.toBe(other)
-    expect(other).toBe('rgba(0, 0, 0, 0)')
-  })
-
-  test('shows the word list while typing in Type mode', async ({ page }) => {
+  test('shows the word list while typing in the F1 box', async ({ page }) => {
     await page.goto('/')
     await injectMockState(page)
     await page.evaluate(() => {
@@ -310,8 +291,7 @@ test.describe('Lantern UI (the default)', () => {
       store.completionTree = { take: { bucket: null, bread: null }, look: null }
       /* eslint-enable @typescript-eslint/no-explicit-any */
     })
-    const actions = page.getByRole('region', { name: 'Actions' })
-    await actions.getByRole('button', { name: 'Type', exact: true }).click()
+    await page.keyboard.press('F1')
     const input = page.getByLabel('Command')
 
     await input.fill('lo')
@@ -342,193 +322,6 @@ test.describe('Lantern UI (the default)', () => {
 
     await input.fill('xyz')
     await expect(page.getByRole('listbox')).toHaveText('No match for “xyz”')
-  })
-
-  // A desktop window narrower than 1024px gets the folding sheet, whose own
-  // scrolling once clipped the list (rq-mvd).
-  test('shows the word list above the folding sheet in a narrow window', async ({
-    page,
-  }) => {
-    await page.setViewportSize({ width: 900, height: 800 })
-    await page.goto('/')
-    await injectMockState(page)
-    await page.evaluate(() => {
-      /* eslint-disable @typescript-eslint/no-explicit-any */
-      const app = (document.querySelector('#app') as any).__vue_app__
-      const store = app.config.globalProperties.$pinia.state.value.game
-      store.completionTree = {
-        take: { bucket: null, bread: null, broom: null, bell: null },
-        look: null,
-      }
-      /* eslint-enable @typescript-eslint/no-explicit-any */
-    })
-    await page.getByRole('button', { name: 'Actions ▴' }).click()
-    await page
-      .getByRole('region', { name: 'Actions' })
-      .getByRole('button', { name: 'Type', exact: true })
-      .click()
-    const input = page.getByLabel('Command')
-
-    await input.fill('take b')
-    const list = page.getByRole('listbox', { name: 'Matching words' })
-    await expect(list.getByRole('option')).toHaveText([
-      'bucket',
-      'bread',
-      'broom',
-      'bell',
-    ])
-    // Each option is what a click at its centre hits: not clipped by, or
-    // hidden under, another part of the page.
-    for (const option of await list.getByRole('option').all()) {
-      const onTop = await option.evaluate((el) => {
-        const box = el.getBoundingClientRect()
-        const hit = document.elementFromPoint(
-          box.left + box.width / 2,
-          box.top + box.height / 2,
-        )
-        return hit !== null && el.contains(hit)
-      })
-      expect(onTop, `${await option.textContent()} is on top`).toBe(true)
-    }
-    await input.press('ArrowDown')
-    await expect(list.getByRole('option', { selected: true })).toHaveText(
-      'bread',
-    )
-    await input.press('Enter')
-    await expect(input).toHaveValue('take bread ')
-    await expect(list).toHaveCount(0)
-  })
-
-  // On the phone's sheet the list once opened over the sheet's top row, so a
-  // tap aimed at Hint (or the Actions/Type switch) picked a word (rq-k8p5).
-  // Tall phones get the sheet over the stage, short ones the inline sheet.
-  for (const size of [
-    { width: 500, height: 800 },
-    { width: 800, height: 400 },
-  ]) {
-    test(`keeps the sheet top row pressable while the word list shows at ${size.width}×${size.height}`, async ({
-      page,
-    }) => {
-      await page.setViewportSize(size)
-      await page.goto('/')
-      await injectMockState(page)
-      await page.evaluate(() => {
-        /* eslint-disable @typescript-eslint/no-explicit-any */
-        const app = (document.querySelector('#app') as any).__vue_app__
-        const store = app.config.globalProperties.$pinia.state.value.game
-        store.completionTree = {
-          take: { bucket: null, bread: null },
-          look: null,
-        }
-        /* eslint-enable @typescript-eslint/no-explicit-any */
-      })
-      await page.getByRole('button', { name: 'Actions ▴' }).click()
-      const actions = page.getByRole('region', { name: 'Actions' })
-      await actions.getByRole('button', { name: 'Type', exact: true }).click()
-      const input = page.getByLabel('Command')
-
-      await input.fill('take b')
-      const list = page.getByRole('listbox', { name: 'Matching words' })
-      await expect(list.getByRole('option')).toHaveText(['bucket', 'bread'])
-      // The list's words, and the top row's buttons, are each what a tap at
-      // their centre hits.
-      const onTop = [
-        ...(await list.getByRole('option').all()),
-        actions.getByRole('button', { name: 'Actions', exact: true }),
-        actions.getByRole('button', { name: 'Type', exact: true }),
-        actions.getByRole('button', { name: 'Hint' }),
-      ]
-      for (const target of onTop) {
-        const hit = await target.evaluate((el) => {
-          const box = el.getBoundingClientRect()
-          const top = document.elementFromPoint(
-            box.left + box.width / 2,
-            box.top + box.height / 2,
-          )
-          return top !== null && el.contains(top)
-        })
-        expect(hit, `${await target.textContent()} is on top`).toBe(true)
-      }
-
-      // A tap on Hint gives one hint turn and leaves the typed words alone.
-      const turnCount = (): Promise<number> =>
-        page.evaluate(() => {
-          /* eslint-disable @typescript-eslint/no-explicit-any */
-          const app = (document.querySelector('#app') as any).__vue_app__
-          return app.config.globalProperties.$pinia.state.value.game.turns
-            .length
-          /* eslint-enable @typescript-eslint/no-explicit-any */
-        })
-      const before = await turnCount()
-      await actions.getByRole('button', { name: 'Hint' }).click()
-      await expect.poll(turnCount).toBe(before + 1)
-      await expect(input).toHaveValue('take b')
-    })
-  }
-
-  // The Esc mark on Actions shows only while the command box has focus; a
-  // press on the switch once blurred the box, the mark went and the switch
-  // narrowed under the pointer, so the click missed (rq-nq8t).
-  test('acts on the first click on the narrow switch while typing', async ({
-    page,
-  }) => {
-    await page.setViewportSize({ width: 900, height: 800 })
-    await page.goto('/')
-    await injectMockState(page)
-    await page.getByRole('button', { name: 'Actions ▴' }).click()
-    const actions = page.getByRole('region', { name: 'Actions' })
-    const actionsButton = actions.getByRole('button', {
-      name: 'Actions',
-      exact: true,
-    })
-    const typeButton = actions.getByRole('button', {
-      name: 'Type',
-      exact: true,
-    })
-    const input = page.getByLabel('Command')
-
-    await typeButton.click()
-    await input.pressSequentially('lo')
-    // Escape puts the word list (which covers the switch) away first.
-    await input.press('Escape')
-    await expect(page.getByRole('listbox')).toHaveCount(0)
-    // Type again: the box keeps the cursor, and typing goes on in it.
-    await typeButton.click()
-    await expect(input).toBeFocused()
-    await page.keyboard.type('ok')
-    await expect(input).toHaveValue('look')
-    await input.press('Escape')
-
-    // The Esc mark is part of Actions: a click on it switches to Actions.
-    await actions.locator('.lq-esc').click()
-    await expect(actionsButton).toHaveAttribute('aria-pressed', 'true')
-    await expect(input).toHaveCount(0)
-    // Focus goes on to the verbs, not left on the switch.
-    await expect(actions.locator('.lq-verbs .lq-verb').first()).toBeFocused()
-  })
-
-  // The stage's Actions button carries the same Esc mark while the command
-  // box has focus; a press on it once blurred the box, the mark went, Actions
-  // narrowed and the field grew under the pointer, so the click missed
-  // (rq-u8b2).
-  test('acts on the first click on the Esc mark of the stage Actions while typing', async ({
-    page,
-  }) => {
-    await page.setViewportSize({ width: 1280, height: 800 })
-    await page.goto('/')
-    await injectMockState(page)
-    await page.getByRole('button', { name: 'Type', exact: true }).click()
-    const input = page.getByLabel('Command')
-    await expect(input).toBeFocused()
-    await input.pressSequentially('lo')
-    // Escape puts the word list away first.
-    await input.press('Escape')
-    await expect(page.getByRole('listbox')).toHaveCount(0)
-    await expect(input).toBeFocused()
-
-    await page.locator('[data-actions] .lq-esc').click()
-    await expect(input).toHaveCount(0)
-    await expect(page.locator('.lq-verbs .lq-verb').first()).toBeFocused()
   })
 
   test('plays the room on its picture on a laptop: plate, buttons, map on pointing, drawer', async ({
@@ -577,28 +370,7 @@ test.describe('Lantern UI (the default)', () => {
     const drawer = page.getByRole('complementary', { name: 'Journal drawer' })
     await expect(drawer.getByRole('heading', { name: 'Quests' })).toBeVisible()
     await expect(drawer.getByRole('tab')).toHaveCount(0)
-    // It stops above the actions, so every action stays in reach.
-    const drawerBox = await drawer.boundingBox()
-    const actionVerbs = await page.locator('.lq-verbs').boundingBox()
-    expect(drawerBox!.y + drawerBox!.height).toBeLessThanOrEqual(
-      actionVerbs!.y + 1,
-    )
-    // Its foot follows the action row: More… open makes the row taller. A
-    // press on More… is outside the drawer, so it closes it; open it again.
-    await page.getByRole('button', { name: 'More…' }).click()
-    await expect(drawer).toHaveCount(0)
-    await page.getByRole('button', { name: /Quests · 0/ }).click()
-    await expect
-      .poll(async () => {
-        const composer = await page.locator('.lq-composer').boundingBox()
-        const taller = await drawer.boundingBox()
-        return composer!.y + 1 - (taller!.y + taller!.height)
-      })
-      .toBeGreaterThanOrEqual(0)
-    await page.getByRole('button', { name: 'More…' }).click()
-    await expect(drawer).toHaveCount(0)
     // The lit button stays in sight, and pressing it again closes the drawer.
-    await page.getByRole('button', { name: /Quests · 0/ }).click()
     await expect(page.getByRole('button', { name: /Quests · 0/ })).toBeVisible()
     await page.getByRole('button', { name: /Quests · 0/ }).click()
     await expect(drawer).toHaveCount(0)
@@ -607,13 +379,6 @@ test.describe('Lantern UI (the default)', () => {
     await expect(drawer).toBeVisible()
     await page.keyboard.press('Escape')
     await expect(drawer).toHaveCount(0)
-
-    // One slim row to choose who or what opens just above the verbs.
-    await page.getByRole('button', { name: 'Use', exact: true }).click()
-    const row = await page.locator('.lq-row').boundingBox()
-    const verbs = await page.locator('.lq-verbs').boundingBox()
-    expect(row!.y + row!.height).toBeLessThanOrEqual(verbs!.y + 1)
-    expect(row!.height).toBeLessThan(100)
 
     await page.setViewportSize({ width: 390, height: 844 })
     await expect(page.locator('.lq-stage-plate')).toHaveCount(0)
@@ -636,9 +401,11 @@ test.describe('Lantern UI (the default)', () => {
     await expect(button).toHaveAttribute('aria-pressed', 'true')
     const box = await drawer.boundingBox()
     expect(Math.abs(box!.width - 640)).toBeLessThanOrEqual(2)
-    // It stops above the actions, which stay in reach.
-    const verbs = await page.locator('.lq-verbs').boundingBox()
-    expect(box!.y + box!.height).toBeLessThanOrEqual(verbs!.y + 1)
+    // It reaches the foot of the picture: no action bar is left to stop above.
+    const stage = await page.locator('.lq-stage').boundingBox()
+    expect(box!.y + box!.height).toBeLessThanOrEqual(
+      stage!.y + stage!.height + 1,
+    )
 
     await page.keyboard.press('Escape')
     await expect(drawer).toHaveCount(0)
@@ -665,18 +432,12 @@ test.describe('Lantern UI (the default)', () => {
     await page.goto('/')
     await page.getByRole('button', { name: 'Start', exact: true }).click()
     await page.locator('.lq-chapter-button').click()
-    await page
-      .getByRole('region', { name: 'Actions' })
-      .getByRole('button', { name: 'Type', exact: true })
-      .click()
-    const input = page.getByLabel('Command')
     const lines = page.getByTestId('speech-line')
 
     // Talking to the Voice wakes Elior in his cottage: the talk is told as
     // any conversation is (rq-uqp8), the Voice's line on the right, and
     // leaves the screen with the dream.
-    await input.fill('talk to voice')
-    await input.press('Enter')
+    await enterCommand(page, 'talk to voice')
     await expect(lines).toHaveCount(1)
     await expect(page.locator('.lq-line-right')).toContainText('let them rest')
     await expect(
@@ -686,8 +447,7 @@ test.describe('Lantern UI (the default)', () => {
 
     // Talking to his grandmother: no portrait is made yet, so the initial
     // card stands in, on the right.
-    await input.fill('talk to grandmother')
-    await input.press('Enter')
+    await enterCommand(page, 'talk to grandmother')
     await expect(page.locator('.lq-line-right .lq-line-name')).toContainText(
       'Grandmother',
     )
@@ -698,8 +458,7 @@ test.describe('Lantern UI (the default)', () => {
     const eliorFace = page.waitForRequest(
       /images\/generated\/portrait-elior\.png/,
     )
-    await input.fill('say hello to grandmother')
-    await input.press('Enter')
+    await enterCommand(page, 'say hello to grandmother')
     await eliorFace
     await expect(page.locator('.lq-line-left .lq-initial')).toHaveText('E')
     await expect(page.locator('.lq-line-left .lq-line-name')).toHaveText(
@@ -718,20 +477,18 @@ test.describe('Lantern UI (the default)', () => {
     await expect(page.getByRole('button', { name: '▾ Hide' })).toBeFocused()
 
     // N hides too (not in the command box, where it is a letter).
-    await input.blur()
+    await page.evaluate(() => (document.activeElement as HTMLElement)?.blur())
     await page.keyboard.press('n')
     await expect(lines.first()).toBeHidden()
     await page.keyboard.press('n')
     await expect(lines.first()).toBeVisible()
 
     // Walking away clears the speech.
-    await input.fill('look')
-    await input.press('Enter')
+    await enterCommand(page, 'look')
     await expect(lines).toHaveCount(0)
 
     // A phone tells the same turns in the one column: nothing is lost.
-    await input.fill('talk to grandmother')
-    await input.press('Enter')
+    await enterCommand(page, 'talk to grandmother')
     await expect(lines.first()).toBeVisible()
     await page.setViewportSize({ width: 390, height: 844 })
     await expect(lines.first()).toBeVisible()
@@ -746,11 +503,7 @@ test.describe('Lantern UI (the default)', () => {
     await page.getByRole('button', { name: 'Start', exact: true }).click()
     await page.locator('.lq-chapter-button').click()
     const say = async (command: string): Promise<void> => {
-      const input = page.getByLabel('Command', { exact: true })
-      if (!(await input.isVisible()))
-        await page.getByRole('button', { name: 'Type a command' }).click()
-      await input.fill(command)
-      await input.press('Enter')
+      await enterCommand(page, command)
     }
     await say('talk to voice')
     await say('talk to grandmother')
@@ -838,7 +591,7 @@ test.describe('Lantern UI (the default)', () => {
     await expect(paper.getByText('› wait')).toHaveCount(0)
   })
 
-  test('keeps the story and actions in view in a busy room on a laptop', async ({
+  test('keeps the story and the room name in view in a busy room on a laptop', async ({
     page,
   }) => {
     await page.setViewportSize({ width: 1024, height: 700 })
@@ -853,9 +606,8 @@ test.describe('Lantern UI (the default)', () => {
       /* eslint-enable @typescript-eslint/no-explicit-any */
     })
 
-    await expect(page.getByRole('region', { name: 'Actions' })).toBeInViewport({
-      ratio: 1,
-    })
+    // The room's name button stays whole in view, however long the name.
+    await expect(page.locator('.lq-name-btn')).toBeInViewport({ ratio: 1 })
     const story = await page
       .getByRole('region', { name: 'Story' })
       .boundingBox()
@@ -879,12 +631,11 @@ test.describe('Lantern UI (the default)', () => {
 
     await expect(page.getByRole('heading', { name: 'Bag' })).toBeVisible()
     await expect(page.getByRole('button', { name: 'Use Bread' })).toBeVisible()
-    await expect(page.getByRole('region', { name: 'Actions' })).toBeHidden()
     const navBox = await sections.boundingBox()
     expect(navBox!.y + navBox!.height).toBeCloseTo(844, 0)
 
     await sections.getByRole('button', { name: 'Story' }).click()
-    await expect(page.getByRole('region', { name: 'Action bar' })).toBeVisible()
+    await expect(page.locator('.lq-phone-plate')).toBeVisible()
   })
 
   test('puts the section tabs on top of the page in phone landscape, under the menu button', async ({
@@ -927,76 +678,6 @@ test.describe('Lantern UI (the default)', () => {
     await sections.getByRole('button', { name: 'Map' }).click()
 
     expect(await textStart('Map')).toEqual(bag)
-  })
-
-  test('caps the open action sheet at 62% of a phone screen', async ({
-    page,
-  }) => {
-    await page.setViewportSize({ width: 320, height: 568 })
-    await page.goto('/')
-    await injectMockState(page)
-    await page.getByRole('button', { name: 'Actions ▴' }).click()
-
-    const sheet = page.getByRole('region', { name: 'Actions' })
-    await expect(sheet).toBeVisible()
-    await page.getByRole('button', { name: 'More…' }).click()
-    const box = await sheet.boundingBox()
-    expect(box!.height).toBeLessThanOrEqual(568 * 0.62 + 1)
-
-    await page.getByRole('button', { name: 'Hide actions' }).click()
-    await expect(sheet).toBeHidden()
-    await expect(page.getByRole('button', { name: 'Actions ▴' })).toBeFocused()
-  })
-
-  test('starts with the actions folded in phone landscape', async ({
-    page,
-  }) => {
-    await page.setViewportSize({ width: 844, height: 390 })
-    await page.goto('/')
-    await injectMockState(page)
-
-    await expect(page.getByRole('region', { name: 'Action bar' })).toBeVisible()
-    await expect(page.getByRole('region', { name: 'Actions' })).toBeHidden()
-
-    await page.getByRole('button', { name: 'Actions ▴' }).click()
-    await expect(page.getByRole('region', { name: 'Actions' })).toBeVisible()
-    const overflow = await page.evaluate(
-      () => document.documentElement.scrollHeight - window.innerHeight,
-    )
-    expect(overflow).toBeLessThanOrEqual(0)
-  })
-
-  test('keeps Actions ▴ on one line and scrolls the exits on a narrow phone', async ({
-    page,
-  }) => {
-    await page.setViewportSize({ width: 320, height: 568 })
-    await page.goto('/')
-    await injectMockState(page)
-    await page.evaluate(() => {
-      /* eslint-disable @typescript-eslint/no-explicit-any */
-      const app = (document.querySelector('#app') as any).__vue_app__
-      app.config.globalProperties.$pinia.state.value.game.exits = {
-        north: "Mira's Hut",
-        east: 'General Store',
-        south: 'Village Well',
-        west: "Elior's Cottage",
-        up: 'Bell Tower',
-      }
-      /* eslint-enable @typescript-eslint/no-explicit-any */
-    })
-
-    const open = page.getByRole('button', { name: 'Actions ▴' })
-    const lines = await open.evaluate((el) => {
-      const range = document.createRange()
-      range.selectNodeContents(el)
-      return new Set([...range.getClientRects()].map((r) => Math.round(r.top)))
-        .size
-    })
-    expect(lines).toBe(1)
-    const exits = page.locator('.lq-dock-exits')
-    expect(await exits.evaluate((el) => el.scrollWidth > el.clientWidth)).toBe(
-      true,
-    )
   })
 
   for (const [width, height] of [

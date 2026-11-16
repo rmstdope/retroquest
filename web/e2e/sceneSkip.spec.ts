@@ -1,4 +1,4 @@
-import { test, expect } from './fixtures'
+import { test, expect, enterCommand, closeTypingBox } from './fixtures'
 
 /**
  * Hurrying past a change of scene on the phone's picture stage (rq-dxpb): a
@@ -20,14 +20,13 @@ for (const key of ['Enter', 'Space']) {
       .getByTestId('arrival-on-picture')
       .click({ position: { x: 200, y: 300 } })
 
-    await page.getByRole('button', { name: 'Type a command' }).click()
-    const input = page.getByLabel('Command', { exact: true })
-    await input.fill('say hello to voice')
-    await input.press('Enter')
-    // The change of scene is under way, and the sheet has folded.
+    await enterCommand(page, 'say hello to voice')
+    // The change of scene is under way.
     await expect(page.locator('.lq-stage-picture.lq-scene-idle')).toHaveCount(0)
     await expect(page.locator('.lq-scrim')).toHaveCount(0)
 
+    // The box takes Space and Enter as letters: put it away so the key reaches the scene.
+    await closeTypingBox(page)
     await page.keyboard.press(key)
 
     await expect(page.locator('.lq-stage-picture.lq-scene-idle')).toHaveCount(1)
@@ -35,6 +34,5 @@ for (const key of ['Enter', 'Space']) {
       page.getByRole('region', { name: 'Current location' }),
     ).not.toContainText('The Dream')
     await expect(page.locator('.lq-scrim')).toHaveCount(0)
-    await expect(page.getByRole('region', { name: 'Actions' })).toBeHidden()
   })
 }

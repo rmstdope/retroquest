@@ -1,4 +1,10 @@
-import { test, expect, type Page, skipTelling } from './fixtures'
+import {
+  test,
+  expect,
+  type Page,
+  skipTelling,
+  enterCommand as enter,
+} from './fixtures'
 
 /**
  * Answering the voice ends the dream (rq-uqp8): the answer is told the way
@@ -24,17 +30,6 @@ async function startInDream(page: Page): Promise<void> {
   await page.locator('.lq-chapter-button').click()
   // The dream's own arrival is told in the middle first.
   await skipTelling(page)
-  await page
-    .getByRole('region', { name: 'Actions' })
-    .getByRole('button', { name: 'Type', exact: true })
-    .click()
-}
-
-/** Type a command. */
-async function enter(page: Page, command: string): Promise<void> {
-  const input = page.getByLabel('Command', { exact: true })
-  await input.fill(command)
-  await input.press('Enter')
 }
 
 for (const command of ['talk to voice', 'say who are you to voice']) {

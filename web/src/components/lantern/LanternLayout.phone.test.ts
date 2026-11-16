@@ -49,10 +49,9 @@ describe('LanternLayout: the stage on a phone', () => {
 
     it('plays the room on its picture, with the plate and a folded bar', () => {
       expect(w.find('.lq-stage-picture').exists()).toBe(true)
-      expect(w.get('.lq-plate h2').text()).toBe(useGameStore().roomName)
+      expect(w.get('.lq-plate h2').text()).toContain(useGameStore().roomName)
       expect(w.get('.lq-plate').text()).not.toContain('You are in')
-      expect(w.find('.lq-dock').exists()).toBe(true)
-      expect(w.get('.lq-sheet').isVisible()).toBe(false)
+      expect(w.find('.lq-dock, .lq-composer, .lq-sheet').exists()).toBe(false)
     })
 
     it('keeps the five section tabs and no buttons on the picture, but the round ☰ in the corner', () => {
@@ -83,25 +82,6 @@ describe('LanternLayout: the stage on a phone', () => {
       expect(w.find('.lq-story-drawer').exists()).toBe(false)
     })
 
-    it('opens the sheet over the picture from the bar, covering the words', async () => {
-      await w.get('.lq-dock-open').trigger('click')
-      expect(w.find('.lq-sheet').exists()).toBe(true)
-      expect(w.get('.lq-sheet').isVisible()).toBe(true)
-      expect(w.find('.lq-scrim').exists()).toBe(true)
-      expect(w.find('.lq-dock').exists()).toBe(false)
-      expect(w.get('.lq-story-wrap').classes()).toContain('lq-covered')
-      expect(w.find('.lq-speech-zone').exists()).toBe(false)
-    })
-
-    it('folds the sheet after a turn, so the answer is read on the picture', async () => {
-      await w.get('.lq-dock-open').trigger('click')
-      useGameStore().submitCommand('look')
-      await flushPromises()
-      await flushPromises()
-      expect(w.find('.lq-scrim').exists()).toBe(false)
-      expect(w.find('.lq-dock').exists()).toBe(true)
-    })
-
     it('moves focus into the story so far and back to its button on ✕', async () => {
       await w.get('.lq-story-so-far').trigger('click')
       await flushPromises()
@@ -120,9 +100,13 @@ describe('LanternLayout: the stage on a phone', () => {
       expect(w.find('.lq-story-drawer').exists()).toBe(false)
     })
 
-    it('has "⟲ Story so far" as the only button on the plate: no one and nothing is listed', () => {
+    it('has the room name, "⟲ Story so far" and a round 💡 Hint on the plate: no one and nothing is listed', () => {
       const buttons = w.get('.lq-plate').findAll('button')
-      expect(buttons.map((b) => b.text())).toEqual(['⟲ Story so far'])
+      expect(buttons.map((b) => b.text())).toEqual([
+        expect.stringContaining(useGameStore().roomName),
+        '⟲ Story so far',
+        '💡',
+      ])
     })
 
     it('keeps the stage as it was left when another tab is visited', async () => {
@@ -160,13 +144,14 @@ describe('LanternLayout: the stage on a phone', () => {
       expect(w.find('.lq-phone-plate').exists()).toBe(false)
     })
 
-    it('has one plate top left, and the three buttons and ☰ top right', () => {
+    it('has one plate top left, and Hint, the three buttons and ☰ top right', () => {
       expect(w.find('.lq-float-menu').exists()).toBe(false)
       expect(w.get('.lq-stage-plate').classes()).toContain('lq-plate-compact')
       const labels = w
         .findAll('.lq-stage-buttons .lq-stage-btn')
         .map((b) => b.text().replace(/\s+/g, ' '))
       expect(labels).toEqual([
+        '💡',
         expect.stringMatching(/^Quests · \d+$/),
         '⟲',
         '🧭',
@@ -174,15 +159,18 @@ describe('LanternLayout: the stage on a phone', () => {
       ])
     })
 
-    it('has the folded bar at the foot left: Actions, the keyboard and the hint', () => {
-      const dock = w.get('.lq-dock')
-      expect(dock.classes()).toContain('lq-floating')
-      expect(dock.find('.lq-dock-exits').exists()).toBe(false)
-      expect(dock.get('.lq-dock-open').text()).toBe('Actions ▴')
-      expect(dock.get('.lq-dock-icon').attributes('aria-label')).toBe(
-        'Type a command',
-      )
-      expect(dock.get('.lq-dock-hint').text()).toBe('💡 Hint')
+    it('has no action bar and no typing box: a phone plays by pointing only', async () => {
+      expect(w.find('.lq-dock, .lq-composer, .lq-sheet').exists()).toBe(false)
+      window.dispatchEvent(new KeyboardEvent('keydown', { key: 'F1' }))
+      await flushPromises()
+      expect(w.find('.lq-type-input').exists()).toBe(false)
+    })
+
+    it('opens Look, Search and Rest in a row to the right of the name', async () => {
+      await w.get('.lq-stage-plate .lq-name-btn').trigger('click')
+      expect(
+        w.findAll('.lq-stage-plate .lq-pill').map((b) => b.text()),
+      ).toEqual(['👁 Look', '🔍 Search', '💤 Rest'])
     })
 
     it('opens the same centred menu from ☰', async () => {
@@ -191,16 +179,6 @@ describe('LanternLayout: the stage on a phone', () => {
       await flushPromises()
       expect(document.body.querySelector('.lq-dialog-centered')).not.toBeNull()
       expect(document.body.querySelector('.lq-side-list')).toBeNull()
-    })
-
-    it('opens the sheet over the picture and folds it after a turn', async () => {
-      await w.get('.lq-dock-open').trigger('click')
-      expect(w.get('.lq-sheet').isVisible()).toBe(true)
-      useGameStore().submitCommand('look')
-      await flushPromises()
-      await flushPromises()
-      expect(w.find('.lq-scrim').exists()).toBe(false)
-      expect(w.find('.lq-dock').exists()).toBe(true)
     })
   })
 
@@ -225,8 +203,6 @@ describe('LanternLayout: the stage on a phone', () => {
     )
     await startedHoldStore()
     w = mount(LanternLayout, { attachTo: document.body })
-    await w.get('.lq-dock-open').trigger('click')
-    const sheetBefore = w.find('.lq-sheet').exists()
     await w.get('[data-button="story"]').trigger('click')
     expect(w.find('.lq-story-drawer').exists()).toBe(true)
 
@@ -240,7 +216,7 @@ describe('LanternLayout: the stage on a phone', () => {
     listeners.forEach((change) => change({ matches: false }))
     await flushPromises()
     expect(w.find('.lq-turn-page').exists()).toBe(false)
-    expect(w.find('.lq-sheet').exists()).toBe(sheetBefore)
+    expect(w.find('.lq-dock, .lq-sheet').exists()).toBe(false)
     expect(w.find('.lq-story-drawer').exists()).toBe(true)
     expect(w.find('.lq-header').exists()).toBe(false)
     expect(w.find('.lq-stage-picture').exists()).toBe(true)

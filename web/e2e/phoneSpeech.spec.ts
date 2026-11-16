@@ -1,4 +1,4 @@
-import { test, expect, type Page } from './fixtures'
+import { test, expect, type Page, enterCommand as enter } from './fixtures'
 
 /**
  * The conversation on the picture: a line taller than the room between the
@@ -7,22 +7,6 @@ import { test, expect, type Page } from './fixtures'
  * fit, the newest stays at the foot while the oldest leave at the top
  * (rq-gw9m); on a phone each new line comes whole into view (rq-r7ct).
  */
-
-/**
- * Type a command: the laptop's actions have a Type button; on the phone stage
- * the bar's keyboard button opens the sheet into typing.
- */
-async function enter(page: Page, command: string): Promise<void> {
-  const input = page.getByLabel('Command', { exact: true })
-  const type = page
-    .getByRole('region', { name: 'Actions' })
-    .getByRole('button', { name: 'Type', exact: true })
-  if (await type.isVisible()) await type.click()
-  else if (!(await input.isVisible()))
-    await page.getByRole('button', { name: 'Type a command' }).click()
-  await input.fill(command)
-  await input.press('Enter')
-}
 
 /** Whether the centre of the element is what the player sees there (not clipped or covered). */
 async function seenAtCentre(page: Page, selector: string): Promise<boolean> {

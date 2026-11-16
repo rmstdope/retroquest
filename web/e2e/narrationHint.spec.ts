@@ -7,7 +7,13 @@
  * making room for it must not make the story jump when the reading lets it go
  * (rq-7juz).
  */
-import { test, expect, type Page } from './fixtures'
+import {
+  test,
+  expect,
+  enterCommand,
+  type Page,
+  closeTypingBox,
+} from './fixtures'
 
 // Narration on, as for a new player (the config turns it off for the other specs).
 test.use({
@@ -162,18 +168,10 @@ for (const { name, width, height } of [
     // The dream is read first; the voice wakes the hero in the cottage,
     // whose arrival is read; then the lantern. Each is checked to its end.
     expectClear(await watchReading(page), 'the dream')
-    await page
-      .getByRole('button', { name: /^Type( a command)?$/ })
-      .first()
-      .click()
-    const input = page.getByLabel('Command', { exact: true })
     for (const command of ['talk to voice', 'examine lantern']) {
-      if (!(await input.isVisible()))
-        await page.getByRole('button', { name: 'Type a command' }).click()
-      await input.fill(command)
-      await input.press('Enter')
+      await enterCommand(page, command)
       // Space is a letter in the command box, where no hint shows: leave it.
-      await input.blur()
+      await closeTypingBox(page)
       await expect(page.locator('.lq-narration-hint')).toBeVisible()
       expectClear(await watchReading(page), command)
     }
@@ -195,16 +193,10 @@ test('on a wide desktop the hint sits at the height of the Hide button and cover
   await page.goto('/')
   await page.getByRole('button', { name: 'Start', exact: true }).click()
   await page.locator('.lq-chapter-button').click()
-  const input = page.getByLabel('Command', { exact: true })
-  const type = page
-    .getByRole('region', { name: 'Actions' })
-    .getByRole('button', { name: 'Type', exact: true })
   const enter = async (command: string): Promise<void> => {
-    if (await type.isVisible()) await type.click()
-    await input.fill(command)
-    await input.press('Enter')
+    await enterCommand(page, command)
     // Space is a letter in the command box, where no hint shows: leave it.
-    await input.blur()
+    await closeTypingBox(page)
   }
   // The voice wakes the hero, whose arrival in the cottage is told on the
   // picture; the next command clears it and is read on the cards.
@@ -240,17 +232,10 @@ for (const { name, width, height } of [
     await page.goto('/')
     await page.getByRole('button', { name: 'Start', exact: true }).click()
     await page.locator('.lq-chapter-button').click()
-    const input = page.getByLabel('Command', { exact: true })
     const enter = async (command: string): Promise<void> => {
-      if (!(await input.isVisible()))
-        await page
-          .getByRole('button', { name: /^Type( a command)?$/ })
-          .first()
-          .click()
-      await input.fill(command)
-      await input.press('Enter')
+      await enterCommand(page, command)
       // Space is a letter in the command box, where no hint shows: leave it.
-      await input.blur()
+      await closeTypingBox(page)
     }
     await enter('talk to voice')
     await expect(page.getByTestId('arrival-on-picture')).toBeVisible()

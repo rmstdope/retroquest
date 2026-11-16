@@ -17,7 +17,6 @@ function press(over: Partial<HurryKeyPress>): HurryKeyPress {
     dialogOpen: false,
     inField: false,
     onControl: false,
-    onFoldedActions: false,
     onActionButton: false,
     onCommandButton: false,
     onPaperTab: false,
@@ -47,20 +46,6 @@ describe('decideHurryKey during a change of scene', () => {
       swallowSpaceUp: true,
     })
     expect(decideHurryKey(press({ ...scene, key: 'Escape' }))).toBeNull()
-  })
-
-  it('takes Enter and Space from the folded Actions, swallowing only the Space release', () => {
-    const folded = { ...scene, onControl: true, onFoldedActions: true }
-    expect(decideHurryKey(press({ ...folded, key: 'Enter' }))).toEqual({
-      action: 'skip-scene',
-      consume: true,
-      swallowSpaceUp: false,
-    })
-    expect(decideHurryKey(press({ ...folded, key: SPACE }))).toEqual({
-      action: 'skip-scene',
-      consume: true,
-      swallowSpaceUp: true,
-    })
   })
 
   it('takes Enter from an empty command box, even though the box handled it', () => {
@@ -205,19 +190,6 @@ describe('decideHurryKey while the story is narrated', () => {
     })
   })
 
-  it('hurries on Space from the folded Actions and swallows its release', () => {
-    expect(
-      decideHurryKey(
-        press({
-          ...narrating,
-          onControl: true,
-          onFoldedActions: true,
-          key: SPACE,
-        }),
-      ),
-    ).toEqual({ action: 'hurry', consume: true, swallowSpaceUp: true })
-  })
-
   it('hurries on Space from an action button and swallows its release', () => {
     const verb = { ...narrating, onControl: true, onActionButton: true }
     expect(decideHurryKey(press({ ...verb, key: SPACE }))).toEqual({
@@ -258,14 +230,6 @@ describe('decideHurryKey while the story is narrated', () => {
       settling: true,
     }
     expect(decideHurryKey(press(verb))?.action).toBe('hurry')
-  })
-
-  it('leaves Enter on the folded Actions to the button, unlike a scene', () => {
-    expect(
-      decideHurryKey(
-        press({ ...narrating, onControl: true, onFoldedActions: true }),
-      ),
-    ).toBeNull()
   })
 
   it('leaves Enter and Space to other controls and fields', () => {

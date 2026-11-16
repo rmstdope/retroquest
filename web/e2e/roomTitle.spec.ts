@@ -4,7 +4,7 @@
  * name alone in the corner; any key settles it at once, and a press on a
  * thing in the picture goes through it. The room card lists no one and nothing.
  */
-import { test, expect, type Page } from './fixtures'
+import { test, expect, type Page, enterCommand } from './fixtures'
 
 interface VueHost {
   __vue_app__: {
@@ -36,19 +36,13 @@ async function playedAct(page: Page): Promise<void> {
     store.modalQueue = []
     store.acceptInput = true
   })
-  await page
-    .getByRole('region', { name: 'Actions' })
-    .getByRole('button', { name: 'Type', exact: true })
-    .click()
   await command(page, 'debug act1')
   await expect(page.getByText("Debug script 'act1' played")).toBeVisible()
 }
 
 /** Type `text` in the command box and send it. */
 async function command(page: Page, text: string): Promise<void> {
-  const input = page.getByLabel('Command', { exact: true })
-  await input.fill(text)
-  await input.press('Enter')
+  await enterCommand(page, text)
 }
 
 /** Walk back west into a room already visited, and bring its picture up. */
@@ -68,7 +62,7 @@ test('walking back into a room tells its name over the picture, then in the corn
   const name = (await title.locator('.lq-room-title-name').textContent()) ?? ''
   expect(name.length).toBeGreaterThan(0)
   const corner = page.locator('.lq-stage-plate .lq-room-name')
-  await expect(corner).toHaveText(name)
+  await expect(corner.locator('.lq-name-text')).toHaveText(name)
   await expect(corner).toHaveCSS('opacity', '0')
   // It settles by itself: the title goes and the corner's name comes back.
   await expect(title).toHaveCount(0, { timeout: 8000 })
@@ -186,10 +180,6 @@ test('waking into a new room does not name it in the corner before its arrival t
   await expect(arrival).toBeVisible()
   for (let turn = 0; turn < 8 && (await arrival.isVisible()); turn++)
     await page.keyboard.press('Enter')
-  await page
-    .getByRole('region', { name: /^Action/ })
-    .getByRole('button', { name: /^(Type|Type a command)$/ })
-    .click()
   await watchCorner(page, ARRIVAL_UP)
   await command(page, 'say hello to voice')
   // The waking is read in the dark first (about fifteen seconds unnarrated).

@@ -3,26 +3,19 @@
  * of the picture, on its own line, with the narrator's cards and the speech
  * ending above it at every width; it clears both sides and leaves "▴ Show".
  */
-import { test, expect, type Page, skipTelling } from './fixtures'
+import {
+  test,
+  expect,
+  type Page,
+  skipTelling,
+  enterCommand as enter,
+} from './fixtures'
 
 /** Open the game and close the opening chapter page. */
 async function start(page: Page): Promise<void> {
   await page.goto('/')
   await page.getByRole('button', { name: 'Start', exact: true }).click()
   await page.locator('.lq-chapter-button').click()
-}
-
-/** Type a command: the laptop's actions have a Type button; the phone's bar has a keyboard button. */
-async function enter(page: Page, command: string): Promise<void> {
-  const input = page.getByLabel('Command', { exact: true })
-  const type = page
-    .getByRole('region', { name: 'Actions' })
-    .getByRole('button', { name: 'Type', exact: true })
-  if (await type.isVisible()) await type.click()
-  else if (!(await input.isVisible()))
-    await page.getByRole('button', { name: 'Type a command' }).click()
-  await input.fill(command)
-  await input.press('Enter')
 }
 
 for (const width of [1440]) {

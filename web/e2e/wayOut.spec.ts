@@ -3,7 +3,14 @@
  * now is plain painting, but pressing where the studio placed it gets the
  * game's own answer, as the typed direction does, and Elior stays.
  */
-import { test, expect, type Page, skipTelling } from './fixtures'
+import {
+  test,
+  expect,
+  type Page,
+  skipTelling,
+  enterCommand,
+  closeTypingBox,
+} from './fixtures'
 
 /** A one-pixel transparent PNG, standing for a picture the studio made. */
 const PIXEL = Buffer.from(
@@ -38,16 +45,11 @@ async function toTheCottage(page: Page): Promise<void> {
   for (let turn = 0; turn < 8 && (await arrival.isVisible()); turn++)
     await page.keyboard.press('Enter')
   // The voice wakes Elior in his cottage.
-  await page
-    .getByRole('region', { name: /^Action/ })
-    .getByRole('button', { name: /^(Type|Type a command)$/ })
-    .click()
-  const input = page.getByLabel('Command', { exact: true })
-  await input.fill('say hello to voice')
-  await input.press('Enter')
+  await enterCommand(page, 'say hello to voice')
+  await closeTypingBox(page)
   await skipTelling(page)
   await expect(page.locator('.lq-stage-picture.lq-scene-idle')).toHaveCount(1)
-  await expect(page.locator('.lq-room-name')).toHaveText("Elior's Cottage")
+  await expect(page.locator('.lq-name-text')).toHaveText("Elior's Cottage")
 }
 
 test('pressing a closed way in the picture answers as the typed direction does', async ({
@@ -73,5 +75,5 @@ test('pressing a closed way in the picture answers as the typed direction does',
   await expect(
     page.getByText(/Grandmother looks up from the hearth/).first(),
   ).toBeVisible()
-  await expect(page.locator('.lq-room-name')).toHaveText("Elior's Cottage")
+  await expect(page.locator('.lq-name-text')).toHaveText("Elior's Cottage")
 })

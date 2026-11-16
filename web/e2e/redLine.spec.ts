@@ -6,7 +6,7 @@
  * green again. Each act is played with the dev server's `debug act<N>` command
  * (the act's golden path), then finished with the act's completing commands.
  */
-import { test, expect, type Page } from './fixtures'
+import { test, expect, type Page, enterCommand } from './fixtures'
 import { ACT1_COMPLETING_COMMANDS } from '../src/act1/Act1GoldenPath'
 import { ACT2_COMPLETING_COMMANDS } from '../src/act2/Act2GoldenPath'
 import { ACT3_COMPLETING_COMMANDS } from '../src/act3/Act3GoldenPath'
@@ -206,9 +206,7 @@ async function newestCommand(page: Page): Promise<string | null> {
 
 /** Type one command into the command box and wait until it is the game's newest turn. */
 async function type(page: Page, command: string): Promise<void> {
-  const input = page.getByLabel('Command')
-  await input.fill(command)
-  await input.press('Enter')
+  await enterCommand(page, command)
   await expect.poll(() => newestCommand(page)).toBe(command)
 }
 
@@ -228,10 +226,6 @@ test('plays the red line from Act I to the Willowbrook epilogue', async ({
         pages.join('\n'),
         'Act I opening page: the storm, and sleep that is not quiet',
       ).toContain('Sleep, when it comes, is not quiet.')
-      await page
-        .getByRole('region', { name: 'Actions' })
-        .getByRole('button', { name: 'Type', exact: true })
-        .click()
     }
 
     await type(page, `debug act${index + 1}`)

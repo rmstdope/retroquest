@@ -53,10 +53,10 @@ describe('useSettingsStore', () => {
       musicVolume: 100,
       effectsVolume: 100,
       narrationVolume: 100,
-      startMode: 'actions',
       reduceMotion: 'device',
       alwaysShowNames: false,
     })
+    expect(settings.$state).not.toHaveProperty('startMode')
   })
 
   it('turns the volume to 0 for a mute choice from the old music setting', () => {
@@ -136,7 +136,7 @@ describe('useSettingsStore', () => {
     expect(settings.textSize).toBe('large')
     expect(settings.musicVolume).toBe(25)
     expect(settings.effectsVolume).toBe(0)
-    expect(settings.startMode).toBe('type')
+    expect(settings).not.toHaveProperty('startMode')
     expect(settings.reduceMotion).toBe('on')
     expect(settings.alwaysShowNames).toBe(true)
   })
@@ -159,7 +159,6 @@ describe('useSettingsStore', () => {
     expect(settings.textSize).toBe('medium')
     expect(settings.musicVolume).toBe(100)
     expect(settings.effectsVolume).toBe(0)
-    expect(settings.startMode).toBe('actions')
     expect(settings.reduceMotion).toBe('device')
     expect(settings.alwaysShowNames).toBe(false)
   })

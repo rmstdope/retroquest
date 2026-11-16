@@ -3,7 +3,7 @@
  * newest save at once, Load game opens the save window without a question,
  * New game starts afresh, and with no saves the page offers Start only.
  */
-import { test, expect, type Page } from './fixtures'
+import { test, expect, type Page, enterCommand } from './fixtures'
 
 /** Start a game, close the opening chapter page and save (a quick save, or under a name with `save <name>`). */
 async function makeSave(page: Page, command = 'save'): Promise<void> {
@@ -14,13 +14,7 @@ async function makeSave(page: Page, command = 'save'): Promise<void> {
   await page.goto('/')
   await page.getByRole('button', { name: 'Start', exact: true }).click()
   await page.locator('.lq-chapter-button').click()
-  await page
-    .getByRole('button', { name: /^Type( a command)?$/ })
-    .first()
-    .click()
-  const input = page.getByLabel('Command')
-  await input.fill(command)
-  await input.press('Enter')
+  await enterCommand(page, command)
   await expect(page.getByText('Game saved').first()).toBeVisible()
 }
 

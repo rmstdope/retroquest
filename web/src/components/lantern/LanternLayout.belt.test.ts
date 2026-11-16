@@ -521,9 +521,7 @@ describe('LanternLayout: the belt of pictures', () => {
     ;(hit('grandmother').element as HTMLElement).focus()
     await key('b')
     // Focus goes elsewhere, then back to the belt by Tab: the old place is forgotten.
-    ;(
-      w.get('.lq-composer input, .lq-composer button').element as HTMLElement
-    ).focus()
+    ;(w.get('.lq-stage-btn').element as HTMLElement).focus()
     ;(tile('item:bread').element as HTMLElement).focus()
     await key('Escape')
     expect(document.activeElement).toBe(hit('grandmother').element)

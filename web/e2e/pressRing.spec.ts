@@ -3,7 +3,13 @@
  * round it, an action sends the command it would have typed, Escape steps back,
  * and on the smallest sideways phone the ring stays inside the picture.
  */
-import { test, expect, type Page } from './fixtures'
+import {
+  test,
+  expect,
+  enterCommand,
+  type Page,
+  closeTypingBox,
+} from './fixtures'
 
 /** A one-pixel transparent PNG, standing for a picture the studio made. */
 const PIXEL = Buffer.from(
@@ -42,17 +48,12 @@ async function toTheCottage(page: Page, breadY = 0.6): Promise<void> {
   for (let turn = 0; turn < 8 && (await arrival.isVisible()); turn++)
     await page.keyboard.press('Enter')
   // The voice wakes Elior in his cottage.
-  await page
-    .getByRole('region', { name: /^Action/ })
-    .getByRole('button', { name: /^(Type|Type a command)$/ })
-    .click()
-  const input = page.getByLabel('Command', { exact: true })
-  await input.fill('say hello to voice')
-  await input.press('Enter')
+  await enterCommand(page, 'say hello to voice')
+  await closeTypingBox(page)
   // The waking is told in the middle of the dark first; Enter brings the cottage up.
   await page.getByTestId('scene-interlude').waitFor()
   await page.keyboard.press('Enter')
-  await expect(page.locator('.lq-room-name')).toHaveText("Elior's Cottage")
+  await expect(page.locator('.lq-name-text')).toHaveText("Elior's Cottage")
   await expect(page.locator('.lq-stage-picture.lq-scene-idle')).toHaveCount(1)
   // The words are told first; a press while they are told only hurries them.
   // Only while a card is really up: one fading out takes no key, and a press

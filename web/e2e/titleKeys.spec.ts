@@ -2,7 +2,7 @@
  * The title page works from the keyboard: the cream ring starts on the main
  * choice, the arrow keys move it round the choices and Enter picks.
  */
-import { test, expect } from './fixtures'
+import { test, expect, enterCommand } from './fixtures'
 
 test('a returning player moves the ring with the arrows and picks with Enter', async ({
   page,
@@ -14,13 +14,7 @@ test('a returning player moves the ring with the arrows and picks with Enter', a
   await page.goto('/')
   await page.getByRole('button', { name: 'Start', exact: true }).click()
   await page.locator('.lq-chapter-button').click()
-  await page
-    .getByRole('button', { name: /^Type( a command)?$/ })
-    .first()
-    .click()
-  const input = page.getByLabel('Command')
-  await input.fill('save')
-  await input.press('Enter')
+  await enterCommand(page, 'save')
   await expect(page.getByText('Game saved').first()).toBeVisible()
   await page.reload()
 

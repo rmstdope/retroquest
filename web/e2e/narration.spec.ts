@@ -1,4 +1,11 @@
-import { test, expect, type Locator, type Page, skipTelling } from './fixtures'
+import {
+  test,
+  expect,
+  enterCommand,
+  type Locator,
+  type Page,
+  skipTelling,
+} from './fixtures'
 
 // Narration at full volume, as for a new player (the config sets it to 0 for the other specs).
 test.use({
@@ -20,39 +27,24 @@ async function slowNarrationClips(page: Page): Promise<void> {
   })
 }
 
-/** Open the game, close the opening chapter page and switch the actions to typing. */
+/** Open the game, close the opening chapter page. */
 async function startAct1(page: Page): Promise<void> {
   await page.goto('/')
   await page.getByRole('button', { name: 'Start', exact: true }).click()
   await page.locator('.lq-chapter-button').click()
-  await openTyping(page)
 }
 
-/**
- * Switch the actions to typing: the stage's row has a Type button; on a phone
- * the folded bar's keyboard button opens the sheet straight into typing.
- */
-async function openTyping(page: Page): Promise<void> {
-  const type = page
-    .getByRole('region', { name: 'Actions' })
-    .getByRole('button', { name: 'Type', exact: true })
-  if (await type.isVisible()) await type.click()
-  else await page.getByRole('button', { name: 'Type a command' }).click()
-}
-
-/** Open the sheet into typing again after an answer folded it (the bar's keyboard button). */
+/** Bring the typing box up again if it is not (F1). */
 async function reopenTyping(page: Page): Promise<void> {
   const input = page.getByLabel('Command', { exact: true })
-  if (!(await input.isVisible()))
-    await page.getByRole('button', { name: 'Type a command' }).click()
+  if (!(await input.isVisible())) await page.keyboard.press('F1')
 }
 
-/** Type a command and press Enter, opening the sheet again if the last answer folded it. */
+/** Type a command and press Enter (F1 brings the box up first). */
 async function enter(page: Page, command: string): Promise<void> {
-  const input = page.getByLabel('Command', { exact: true })
-  await reopenTyping(page)
-  await input.fill(command)
-  await input.press('Enter')
+  await enterCommand(page, command)
+  // Space is a letter in the command box, where no hint shows: leave it.
+  await page.evaluate(() => (document.activeElement as HTMLElement)?.blur())
 }
 
 /** The app's game store, as much of it as the tests read. */
@@ -103,9 +95,7 @@ test('tells an answer block by block, a tap hurries and a hold shows the rest', 
   await page.setViewportSize({ width: 1280, height: 500 })
   await startAct1(page)
 
-  const input = page.getByLabel('Command', { exact: true })
-  await input.fill('talk to voice')
-  await input.press('Enter')
+  await enterCommand(page, 'talk to voice')
 
   await expect(lastTurnBlocks(page).first()).toBeVisible()
   const early = await lastTurnBlocks(page).count()
@@ -135,9 +125,7 @@ test('a hold let go before the ring is full skips nothing', async ({
   await slowNarrationClips(page)
   await page.setViewportSize({ width: 1280, height: 500 })
   await startAct1(page)
-  const input = page.getByLabel('Command', { exact: true })
-  await input.fill('talk to voice')
-  await input.press('Enter')
+  await enterCommand(page, 'talk to voice')
   await expect(page.locator('.lq-speaking')).toHaveCount(1)
   const blocks = await lastTurnBlocks(page).count()
 
@@ -182,12 +170,10 @@ test('opens a journal drawer at once while the voice reads, and a press inside i
 }): Promise<void> => {
   await slowNarrationClips(page)
   await startAct1(page)
-  const roomName = page.locator('.lq-room-name')
+  const roomName = page.locator('.lq-name-text')
   const before = await roomName.textContent()
 
-  const input = page.getByLabel('Command', { exact: true })
-  await input.fill('talk to voice')
-  await input.press('Enter')
+  await enterCommand(page, 'talk to voice')
   // The answer is read over the dream first.
   await expect(lastTurnBlocks(page).first()).toBeAttached()
   await expect(page.locator('.lq-speaking')).toHaveCount(1)
@@ -212,50 +198,6 @@ test('opens a journal drawer at once while the voice reads, and a press inside i
   await expect(reading).toHaveCount(0, { timeout: 1_000 })
   // That press did nothing but catch up: the drawer is still open.
   await expect(drawer).toHaveCount(1)
-  expect(await turnCount(page)).toBe(commands)
-})
-
-test('Enter and Space on a focused verb hurry as the voice reads, without pressing it (rq-kfur)', async ({
-  page,
-}): Promise<void> => {
-  // A short screen: the text page, where the sheet is the composer (a taller
-  // screen tells this first arrival on the picture, arrival.spec.ts).
-  await page.setViewportSize({ width: 390, height: 500 })
-  await slowNarrationClips(page)
-  await startAct1(page)
-  await enter(page, 'talk to voice')
-  await expect(page.locator('.lq-speaking')).not.toHaveCount(0)
-
-  // Back to the verbs, as the default mode has it, with one of them focused.
-  await page.getByRole('button', { name: 'Actions ▴' }).click()
-  const actions = page.getByRole('region', { name: 'Actions' })
-  await actions.getByRole('button', { name: 'Actions', exact: true }).click()
-  const verb = actions.getByRole('button', { name: 'Talk', exact: true })
-  const cancel = actions.getByRole('button', { name: 'Cancel' })
-
-  // Enter on the focused verb is the hurry too: no builder, no turn.
-  const sent = await turnCount(page)
-  await verb.focus()
-  await page.keyboard.press('Enter')
-  await page.waitForTimeout(300)
-  expect(await cancel.count()).toBe(0)
-  expect(await turnCount(page)).toBe(sent)
-
-  // A button that sends nothing keeps its Enter: Cancel still cancels.
-  await verb.click()
-  await expect(cancel).toBeVisible()
-  await cancel.focus()
-  await page.keyboard.press('Enter')
-  await expect(cancel).toHaveCount(0)
-
-  // Space on the focused verb is the hurry the hint invites: the verb is not
-  // pressed, and no turn is sent.
-  const commands = await turnCount(page)
-  await verb.focus()
-  await page.keyboard.press(' ')
-  // Let a press, had there been one, open the builder before looking.
-  await page.waitForTimeout(300)
-  expect(await cancel.count()).toBe(0)
   expect(await turnCount(page)).toBe(commands)
 })
 
@@ -327,9 +269,7 @@ test('hints at hurrying on the first narrated turn, and Settings has a volume fo
   await page.setViewportSize({ width: 1280, height: 500 })
   await startAct1(page)
 
-  const input = page.getByLabel('Command', { exact: true })
-  await input.fill('talk to voice')
-  await input.press('Enter')
+  await enter(page, 'talk to voice')
   await expect(page.locator('.lq-narration-hint')).toBeVisible()
 
   await holdToSkip(page, page.getByRole('region', { name: 'Story' }))
@@ -364,7 +304,7 @@ test('reads the opening chapter page, and Continue mid-sentence moves on', async
   await page.locator('.lq-chapter-button').click()
   await expect(page.locator('.lq-chapter-button')).toHaveCount(0)
   await expect(page.locator('.lq-speaking')).toHaveCount(0)
-  await expect(page.getByRole('region', { name: 'Actions' })).toBeVisible()
+  await expect(page.locator('.lq-name-btn')).toBeVisible()
 })
 
 for (const viewport of [

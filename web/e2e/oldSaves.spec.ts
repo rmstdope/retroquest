@@ -5,7 +5,7 @@
  * game, a dimmed Quick load in the menu, and one plain line when `load` is
  * typed, with the game left where it was.
  */
-import { test, expect, type Page } from './fixtures'
+import { test, expect, type Page, enterCommand } from './fixtures'
 
 /** The menu (☰) is among the buttons on the picture. */
 const PHONE = { width: 360, height: 740 }
@@ -111,17 +111,11 @@ test('typing load for an old save says so and leaves the game as it was', async 
   await seedOldSaves(page)
   await start(page)
 
-  await page
-    .getByRole('button', { name: /^Type( a command)?$/ })
-    .first()
-    .click()
   const turns = page.locator('.lq-story .lq-turn')
-  const act = page.locator('.lq-room-name')
+  const act = page.locator('.lq-name-text')
   const actBefore = await act.textContent()
   const turnsBefore = await turns.count()
-  const input = page.getByLabel('Command')
-  await input.fill('load')
-  await input.press('Enter')
+  await enterCommand(page, 'load')
 
   await expect(turns).toHaveCount(turnsBefore + 1)
   await expect(turns.last()).toContainText(OLD_LINE)

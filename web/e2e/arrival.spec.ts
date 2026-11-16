@@ -1,5 +1,4 @@
-import { test, expect, type Page, skipTelling } from './fixtures'
-import { AFTER_TELLING_PAUSE_MS } from '../src/lantern/hurryKeys'
+import { test, expect, enterCommand, type Page, skipTelling } from './fixtures'
 
 /** Open the game on a laptop and close the opening chapter page: the first room arrives. */
 async function startAct1(page: Page): Promise<void> {
@@ -73,9 +72,6 @@ async function turnCount(page: Page): Promise<number> {
 /** Long enough for a press, had there been one, to reach the game. */
 const PRESS_SETTLES_MS = 300
 
-/** Longer than the silence between two hurried blocks of narration. */
-const BLOCKS_GAP_MS = 200
-
 const arrival = (page: Page) => page.getByTestId('arrival-on-picture')
 const story = (page: Page) => page.getByRole('region', { name: 'Story' })
 
@@ -115,31 +111,7 @@ test.describe('the arrival told on the picture', () => {
     expect(await turnCount(page)).toBe(before)
   })
 
-  test('Enter while the opening is told never presses the focused Look (rq-6koz)', async ({
-    page,
-  }) => {
-    await startAct1(page)
-    const look = page
-      .getByRole('region', { name: 'Actions' })
-      .getByRole('button', { name: 'Look', exact: true })
-    await expect(look).toBeFocused()
-    const card = arrival(page).locator('.lq-arrival-card')
-    // The Dream's picture is still rising: the first Enter brings it up.
-    await expect(card).toHaveCount(0)
-    await page.keyboard.press('Enter')
-    await expect(card).toHaveCount(1)
-    for (let i = 0; i < 12 && (await card.count()); i++) {
-      await page.keyboard.press('Enter')
-      await page.waitForTimeout(50)
-    }
-    await expect(card).toHaveCount(0)
-    await page.waitForTimeout(PRESS_SETTLES_MS)
-    expect(await turnCount(page)).toBe(1)
-  })
-
-  test('a held Enter does not press the focused Look (rq-6koz)', async ({
-    page,
-  }) => {
+  test('a held Enter sends no command (rq-6koz)', async ({ page }) => {
     await startAct1(page)
     await page.keyboard.down('Enter')
     await expect(arrival(page).locator('.lq-arrival-card')).toHaveCount(1)
@@ -160,42 +132,9 @@ test.describe('the arrival told on the picture', () => {
     expect(await turnCount(page)).toBe(1)
   })
 
-  test('Enter just after Escape ended the telling does not press Look (rq-6koz)', async ({
-    page,
-  }) => {
-    await startAct1(page)
-    const card = arrival(page).locator('.lq-arrival-card')
-    await page.keyboard.press('Enter')
-    await expect(card).toHaveCount(1)
-    await skipTelling(page)
-    await page.keyboard.press('Enter')
-    await page.waitForTimeout(PRESS_SETTLES_MS)
-    expect(await turnCount(page)).toBe(1)
-  })
-
-  test('Enter presses Look again once the pause after a telling is over (rq-6koz)', async ({
-    page,
-  }) => {
-    await startAct1(page)
-    const card = arrival(page).locator('.lq-arrival-card')
-    await page.keyboard.press('Enter')
-    await expect(card).toHaveCount(1)
-    for (let i = 0; i < 12 && (await card.count()); i++) {
-      await page.keyboard.press('Enter')
-      await page.waitForTimeout(50)
-    }
-    await expect(card).toHaveCount(0)
-    await page.waitForTimeout(AFTER_TELLING_PAUSE_MS + PRESS_SETTLES_MS)
-    await page.keyboard.press('Enter')
-    await expect.poll(() => turnCount(page)).toBe(2)
-  })
-
   test('goes on with Enter in the empty command box', async ({ page }) => {
     await startAct1(page)
-    await page
-      .getByRole('region', { name: 'Actions' })
-      .getByRole('button', { name: 'Type', exact: true })
-      .click()
+    await page.keyboard.press('F1')
     await pushArrival(page)
     const line = arrival(page).locator('.lq-arrival-line')
     await expect(line).toHaveText('Some place.')
@@ -207,10 +146,16 @@ test.describe('the arrival told on the picture', () => {
     expect(await turnCount(page)).toBe(before)
   })
 
-  test('clears when an action is chosen', async ({ page }) => {
+  test('clears when Hint is pressed, and the room name is out of reach while it is told', async ({
+    page,
+  }) => {
     await startAct1(page)
     await expect(arrival(page).locator('.lq-arrival-line')).toBeVisible()
-    await page.getByRole('button', { name: 'Search', exact: true }).click()
+    await expect(page.locator('.lq-name-wrap').first()).toHaveAttribute(
+      'inert',
+      '',
+    )
+    await page.getByRole('button', { name: 'Hint' }).first().click()
     await expect(arrival(page).locator('.lq-arrival-line')).toHaveCount(0)
     await expect(story(page)).toBeVisible()
   })
@@ -236,10 +181,8 @@ test.describe('the arrival told on the picture', () => {
       await startAct1(page)
       await arrival(page).click({ position: { x: 600, y: 300 } })
       await expect(arrival(page).locator('.lq-arrival-line')).toHaveCount(0)
-      const actions = page.getByRole('region', { name: 'Actions' })
-      await actions.getByRole('button', { name: 'Talk', exact: true }).click()
-      // The click that plays the turn must not also clear the arrival it starts.
-      await actions.getByRole('button', { name: 'Voice', exact: true }).click()
+      // The command that plays the turn must not also clear the arrival it starts.
+      await enterCommand(page, 'talk to voice')
       const lines = arrival(page).locator('.lq-arrival-line')
       // The answer is told on the sides first (rq-uqp8); the middle opens on
       // Elior's Cottage, described as any arrival is ("You are in …" is only
@@ -254,109 +197,11 @@ test.describe('the arrival told on the picture', () => {
     })
   })
 
-  test.describe('with the narrator reading slowly', () => {
-    // Narration on, as for a new player (the config sets it to volume 0 elsewhere).
-    test.use({
-      storageState: { cookies: [], origins: [] },
-      narrationRecordings: true,
-    })
-
-    // Clips last long enough for the Enters to land while the voice reads.
-    test.beforeEach(async ({ page }) => {
-      await page.addInitScript(() => {
-        HTMLMediaElement.prototype.play = function (this: HTMLMediaElement) {
-          if (this.src.includes('/audio/narration/'))
-            setTimeout(() => this.dispatchEvent(new Event('ended')), 3000)
-          return Promise.resolve()
-        }
-      })
-    })
-
-    test('Enter while the waking lines are read sends no second talk to voice (rq-kfur)', async ({
-      page,
-    }) => {
-      await startAct1(page)
-      await arrival(page).click({ position: { x: 600, y: 300 } })
-      await expect(arrival(page).locator('.lq-arrival-line')).toHaveCount(0)
-      const actions = page.getByRole('region', { name: 'Actions' })
-      const talk = actions.getByRole('button', { name: 'Talk', exact: true })
-      await talk.click()
-      await actions.getByRole('button', { name: 'Voice', exact: true }).click()
-      await expect.poll(() => turnCount(page)).toBe(2)
-      await expect(talk).toBeFocused()
-      for (let i = 0; i < 4; i++) {
-        await page.keyboard.press('Enter')
-        await page.waitForTimeout(PRESS_SETTLES_MS)
-      }
-      expect(await turnCount(page)).toBe(2)
-      await expect(page.getByText(/no character named/)).toHaveCount(0)
-    })
-
-    test('Talk while the waking lines are read offers no one from the dream (rq-l4l8)', async ({
-      page,
-    }) => {
-      await startAct1(page)
-      await arrival(page).click({ position: { x: 600, y: 300 } })
-      await expect(arrival(page).locator('.lq-arrival-line')).toHaveCount(0)
-      const actions = page.getByRole('region', { name: 'Actions' })
-      const talk = actions.getByRole('button', { name: 'Talk', exact: true })
-      const voice = actions.getByRole('button', { name: 'Voice', exact: true })
-      await talk.click()
-      await voice.click()
-      await expect.poll(() => turnCount(page)).toBe(2)
-      await talk.click()
-      const targets = actions.locator('.lq-target')
-      await expect(targets).not.toHaveCount(0)
-      expect(await targets.allTextContents()).toContain('Grandmother')
-      expect(await targets.allTextContents()).not.toContain('Voice')
-      // Choosing who to talk to is not a command yet: the reading goes on.
-      await expect(page.locator('.lq-speaking')).not.toHaveCount(0)
-      expect(await turnCount(page)).toBe(2)
-      await expect(page.getByText(/no character named/)).toHaveCount(0)
-    })
-
-    test('Enter just after the last line was hurried does not press the verb again (rq-kfur)', async ({
-      page,
-    }) => {
-      await startAct1(page)
-      await arrival(page).click({ position: { x: 600, y: 300 } })
-      await expect(arrival(page).locator('.lq-arrival-line')).toHaveCount(0)
-      const look = page
-        .getByRole('region', { name: 'Actions' })
-        .getByRole('button', { name: 'Look', exact: true })
-      await look.click()
-      await expect.poll(() => turnCount(page)).toBe(2)
-      await expect(look).toBeFocused()
-      const speaking = page.locator('.lq-speaking')
-      await expect(speaking).not.toHaveCount(0)
-      for (let i = 0; i < 30; i++) {
-        // Between two hurried blocks the voice is briefly silent: only a longer silence is the end.
-        if (!(await speaking.count())) {
-          await page.waitForTimeout(BLOCKS_GAP_MS)
-          if (!(await speaking.count())) break
-        }
-        await page.keyboard.press('Enter')
-        await page.waitForTimeout(50)
-      }
-      await expect(speaking).toHaveCount(0)
-      await page.keyboard.press('Enter')
-      await page.waitForTimeout(PRESS_SETTLES_MS)
-      expect(await turnCount(page)).toBe(2)
-      // The verb was only paused: past the pause, Enter presses it.
-      await page.waitForTimeout(AFTER_TELLING_PAUSE_MS + PRESS_SETTLES_MS)
-      await page.keyboard.press('Enter')
-      await expect.poll(() => turnCount(page)).toBe(3)
-    })
-  })
-
   test('clears when the player types, and keeps what was typed', async ({
     page,
   }) => {
     await startAct1(page)
-    await page
-      .getByRole('region', { name: 'Actions' })
-      .getByRole('button', { name: 'Type', exact: true })
-      .click()
+    await page.keyboard.press('F1')
     await pushArrival(page)
     await expect(arrival(page).locator('.lq-arrival-line')).toHaveText(
       'Some place.',
@@ -368,7 +213,7 @@ test.describe('the arrival told on the picture', () => {
     await expect(input).toHaveValue('look')
   })
 
-  test('has no slide under Reduce motion, and the bar still runs', async ({
+  test('has no slide under Reduce motion, and the reading bar still runs', async ({
     page,
   }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' })
@@ -455,10 +300,9 @@ test.describe('the arrival told on the picture', () => {
       const buttons = await page
         .getByRole('button', { name: /^Quests/ })
         .boundingBox()
-      // No tab is left on the laptop during an arrival: the actions are the floor.
-      const tab = await page
-        .getByRole('region', { name: 'Actions' })
-        .boundingBox()
+      // No tab is left on the laptop during an arrival: the picture's foot is the floor.
+      const stage = await page.locator('.lq-stage').boundingBox()
+      const tab = { y: stage!.y + stage!.height }
       const pill = await arrival(page).locator('.lq-arrival-pill').boundingBox()
       for (const line of await arrival(page)
         .locator('.lq-arrival-line')

@@ -130,8 +130,10 @@ describe('LanternLayout: pressing a thing on the picture', () => {
     ).toEqual(['take', 'use', 'open', 'close', 'examine'])
   })
 
-  it('keeps the ring in the part of the picture the command bar leaves, over the words', async () => {
+  it('keeps the ring in the part of the picture the typing box leaves, over the words', async () => {
     await cottage()
+    window.dispatchEvent(new KeyboardEvent('keydown', { key: 'F1' }))
+    await flushPromises()
     const box = (top: number, height: number): DOMRect =>
       ({
         left: 0,
@@ -146,7 +148,7 @@ describe('LanternLayout: pressing a thing on the picture', () => {
       }) as DOMRect
     vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockImplementation(
       function (this: HTMLElement) {
-        return this.classList.contains('lq-composer')
+        return this.classList.contains('lq-stage-box')
           ? box(440, 100)
           : box(0, 540)
       },

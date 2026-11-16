@@ -14,6 +14,7 @@ import { useSettingsStore } from '@/stores/useSettingsStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
 import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
 import { useArrivalStore } from '@/stores/useArrivalStore'
+import { useCommandBox } from '@/composables/useCommandBox'
 import { useRoomTitleStore } from '@/stores/useRoomTitleStore'
 import { useSceneStore } from '@/stores/useSceneStore'
 import { useAreaNamesStore } from '@/stores/useAreaNamesStore'
@@ -62,7 +63,8 @@ import {
   WIDE_QUERY,
   SIDES_QUERY,
 } from '@/composables/useMediaQuery'
-import ActionComposer from './ActionComposer.vue'
+import CommandBox from './CommandBox.vue'
+import F1Note from './F1Note.vue'
 import ArrivalOnPicture from './ArrivalOnPicture.vue'
 import AreaNames from './AreaNames.vue'
 import AreaPress from './AreaPress.vue'
@@ -87,7 +89,6 @@ import type { AreaThing } from '@/lantern/areaThings'
 import AcquiredFlight from './AcquiredFlight.vue'
 import ChapterPage from './ChapterPage.vue'
 import CompassPanel from './CompassPanel.vue'
-import DockBar from './DockBar.vue'
 import EndScreen from './EndScreen.vue'
 import FinishDialog from './FinishDialog.vue'
 import JournalDrawer from './JournalDrawer.vue'
@@ -124,12 +125,12 @@ import type { SaveSlot } from '@/types/bridge'
 
 /**
  * Shell of the Lantern UI (the only UI; old `?ui=` links open it too): no top bar, story (one
- * StoryTurn per turn) and the action composer. On laptops (≥1024 × 560) the
+ * StoryTurn per turn) and, on a keyboard, the typing box (F1). On laptops (≥1024 × 560) the
  * room is played on its picture, which fills the play area: the room's name
  * top-left (`RoomPlate`; who and what is here are marked on the picture), the buttons Quests, Story
  * so far and Map and the round ☰ (the menu) top-right (the journal and the story open as a drawer from
  * the right, the map beneath its button), the narrator's words up the left
- * side and the actions as one row along the bottom.
+ * side. There is no action bar: Look, Search and Rest open from the room's name, Hint is the first of the buttons, and F1 brings up a typing box at the foot of the picture (not on a phone).
  * The left side is the narration paper: the turns since the last room change
  * (`useNarrationPaper`), each told as one bubble per paragraph like the speech
  * on the right (`StoryTurn`); every bubble and line on the picture fades away
@@ -156,17 +157,15 @@ import type { SaveSlot } from '@/types/bridge'
  * sideways: held upright it shows only the turn page (`TurnPage`) over the
  * game, which waits behind it, inert and unchanged (the layout does not
  * depend on how the phone is held); on its side it is the laptop stage made
- * small: the plate top left, the buttons and ☰ top right, the folded
- * bar (Actions, keyboard, Hint) at the foot left, the words up the left side,
- * and the actions a sheet over the picture that folds after every turn.
+ * small: the plate top left, the buttons (Hint first) and ☰ top right, and
+ * the words up the left side.
  * Other smaller screens that are not short (a tablet upright, a narrow window)
  * play the same stage arranged for a tall screen: the plate across the top
- * with "⟲ Story so far" (the whole story over the stage), the one column over
- * the picture and the folded bar above the section tabs (Story, Bag, Spells,
- * Quests, Map); the actions are a sheet (at most 62% of the height) over the
- * picture that folds after every turn. A short mouse window keeps the text
- * page, with the tabs on top (and ☰ in the corner) and the same sheet folded into the bar,
- * which also folds when an answer does not fit beside it.
+ * with "⟲ Story so far" (the whole story over the stage) and a round 💡 Hint,
+ * and the one column over the picture above the section tabs (Story, Bag,
+ * Spells, Quests, Map). A short mouse window keeps the text page, with the
+ * tabs on top (and ☰ in the corner), the room's plate with its Hint, and the
+ * typing box at the foot.
  * A new turn opens at its start, with a "More below" pill while the story
  * goes on below the visible part; in the one column each line said after
  * comes whole into view, pushing the older lines up (rq-r7ct).
@@ -237,8 +236,6 @@ const wide = computed(() => laptop.value || sideways.value)
 const textPage = computed(() => short.value && !phone.value)
 /** Any other screen (a tablet, a narrow window) that is not short: the picture stage, arranged for a tall screen. */
 const phoneStage = computed(() => !wide.value && !textPage.value)
-/** The actions are a sheet over the picture, opened from a folded bar. */
-const sheeted = computed(() => phoneStage.value || sideways.value)
 /** The room is played on its picture: the laptop stage or the phone's. */
 const staged = computed(() => wide.value || phoneStage.value)
 /** The laptop window is wide enough for the narrator on one side and speech on the other. */
@@ -274,15 +271,25 @@ const stageButtons = ref<InstanceType<typeof StageButtons> | null>(null)
 const plate = ref<InstanceType<typeof RoomPlate> | null>(null)
 /** Whether the room's picture is up (otherwise the paper backdrop), for the arrival's ink. */
 const pictured = ref(false)
-/** The actions sheet: every screen starts with it folded into the bar. */
-const dockOpen = ref(false)
-// A window turned into the text page (a short mouse window) shows the sheet folded.
-watch(textPage, (isText) => {
-  if (isText) dockOpen.value = false
-})
-/** The phone's sheet is up over the picture. */
-const sheetOpen = computed(
-  () => sheeted.value && section.value === 'story' && dockOpen.value,
+/** A keyboard can type here: every screen but a phone (touch, small), which plays by pointing only. */
+const canType = computed(() => !phone.value)
+/** The typing box (F1 brings it up and hides it): hidden whenever a game begins. */
+const commandBox = useCommandBox(canType, () => dialogOpen())
+const typingOpen = commandBox.open
+/** Whether the start-of-game note about F1 is up. */
+const f1NoteShown = ref(false)
+/** A new game has begun and its opening pop-up is up: the note waits for it to close. */
+let f1NotePending = false
+/** Show the note, unless this is a phone. */
+function showF1Note(): void {
+  f1NotePending = false
+  f1NoteShown.value = canType.value
+}
+watch(
+  () => game.showModal,
+  (shown) => {
+    if (!shown && f1NotePending) showF1Note()
+  },
 )
 
 // "Open in journal": the Quests drawer on the stage, the Quests section on a phone.
@@ -442,34 +449,27 @@ onUnmounted(() => document.removeEventListener('pointerdown', onOutsidePress))
 
 /** The height the belt of pictures takes at the foot of the picture (0 while it is put away). */
 const beltHeight = ref(0)
-/** The row at the foot of a phone (the folded Actions bar), which the belt stands above or beside. */
-const dockSize = ref({ w: 0, h: 0 })
-/** How far above the foot of the picture the belt stands: above the laptop's action row, on a sideways phone in its foot row, above the folded bar of the upright stage. */
+/** The room the typing box takes at the foot of the picture, with its gap. */
+const BOX_ROOM = 64
+/** How far above the foot of the picture the belt stands: above the typing box while it is up, else at the foot (a sideways phone keeps 8px). */
 const beltBottom = computed(() =>
-  laptop.value
-    ? actionsHeight.value
-    : sideways.value
-      ? 8
-      : dockSize.value.h + 16,
+  laptop.value ? boxRoom.value : sideways.value ? 8 : 16 + boxRoom.value,
 )
-/** On a sideways phone the belt starts after the Actions, keyboard and hint buttons, which share its foot row. */
-const beltLeft = computed(() => (sideways.value ? dockSize.value.w + 16 : 0))
+/** The belt starts at the picture's left edge. */
+const beltLeft = computed(() => 0)
 /** How far up from the foot of the picture the belt's top lies: what the names and press areas must keep clear of (0 while the belt is away, then the action row alone on a laptop). */
 const footCover = computed(() =>
   beltHeight.value > 0
     ? beltBottom.value + beltHeight.value
     : laptop.value
-      ? actionsHeight.value
+      ? boxRoom.value
       : 0,
 )
 
-/** The height of the action row, which the story drawer stops above. */
-const actionsHeight = ref(0)
-/** Follows the action row's height, on the next frame: the cards' column ends above the row. */
-const actionsResize = useSizeWatch(() => {
-  const actions = composer.value?.$el
-  if (actions instanceof HTMLElement) actionsHeight.value = actions.offsetHeight
-})
+/** The room the typing box takes at the foot of the picture while it is up, which the story drawer and the words stop above. */
+const boxRoom = computed(() =>
+  staged.value && typingOpen.value ? BOX_ROOM : 0,
+)
 
 // The laptop shows everything at once; coming back from it starts on the story.
 // Turning the phone, or changing the stage, starts the stage afresh.
@@ -853,43 +853,20 @@ function readOn(): void {
     behavior: still ? 'auto' : 'smooth',
   })
 }
-const composer = ref<InstanceType<typeof ActionComposer> | null>(null)
-const dock = ref<InstanceType<typeof DockBar> | null>(null)
-/** Follows the dock's size, on the next frame: what moves with it is not measured in the same one. */
-const dockResize = useSizeWatch(() => {
-  const el = dock.value?.$el
-  if (el instanceof HTMLElement)
-    dockSize.value = { w: el.offsetWidth, h: el.offsetHeight }
-})
-watch(
-  dock,
-  (current) => {
-    const el = current?.$el
-    dockResize.retarget(...(el instanceof HTMLElement ? [el] : []))
-    if (el instanceof HTMLElement)
-      dockSize.value = { w: el.offsetWidth, h: el.offsetHeight }
-  },
-  { flush: 'post' },
-)
-
-/** Focus the actions: the open composer, or the folded bar's Actions button. */
+const commandBoxEl = ref<InstanceType<typeof CommandBox> | null>(null)
+/** Put the cursor back in the typing box, when it is up. */
 function focusActions(): void {
-  if (!laptop.value && !dockOpen.value) dock.value?.focus()
-  else composer.value?.focus()
+  if (typingOpen.value) commandBoxEl.value?.focus()
 }
 
-async function fold(): Promise<void> {
-  dockOpen.value = false
-  await nextTick()
-  dock.value?.focus()
+/** The typing box asked to be hidden (Escape in it). */
+function hideBox(): void {
+  commandBox.hide()
 }
-
-async function openDock(mode: 'actions' | 'type'): Promise<void> {
-  composer.value?.setMode(mode)
-  dockOpen.value = true
-  await nextTick()
-  composer.value?.focus()
-}
+// The box takes the cursor when it comes up, and a note about it is no longer needed.
+watch(typingOpen, (open) => {
+  if (open) f1NoteShown.value = false
+})
 
 /**
  * The story's element for the game's newest turn, or null when that turn
@@ -902,13 +879,6 @@ function newestTurnEl(): HTMLElement | null {
   return (
     contentEl.value?.querySelector<HTMLElement>(`[data-turn="${id}"]`) ?? null
   )
-}
-
-/** Whether the newest turn is taller than the story area beside the actions. */
-function answerTooLong(): boolean {
-  const story = storyEl.value
-  const last = newestTurnEl()
-  return !!story && !!last && last.offsetHeight > story.clientHeight
 }
 
 /**
@@ -1084,7 +1054,6 @@ function onNarrationKey(event: KeyboardEvent): void {
     dialogOpen: dialogOpen(),
     inField: !!target?.closest('input, textarea, select, [contenteditable]'),
     onControl: !!target?.closest('button, a, [role="button"], summary'),
-    onFoldedActions: !!target?.closest('.lq-dock-open'),
     ...aimOf(target),
     onPaperTab: !!target?.closest('.lq-paper-tab'),
     inOpenList: !!target?.closest('[aria-expanded="true"]'),
@@ -1232,15 +1201,6 @@ watch(
   { flush: 'post' },
 )
 
-// The action row is a new element after a new game: follow the current one.
-watch(
-  composer,
-  (current) => {
-    const actions = current?.$el
-    actionsResize.retarget(...(actions instanceof HTMLElement ? [actions] : []))
-  },
-  { flush: 'post' },
-)
 onUnmounted(() => {
   document.removeEventListener('keydown', noteEmptyBoxEnter, true)
   document.removeEventListener('keydown', onNarrationKey)
@@ -1395,12 +1355,10 @@ function onPanelPress(event: MouseEvent): void {
   if (!target?.closest('[data-panel] :is(button, a, [role="button"])')) return
   // A press during a change of scene (or before a talk's) brings the new room up first.
   presentation.bringSceneUp()
-  // Opening the sheet, or the bigger map, changes nothing the voice holds: it
-  // never waits for it.
-  if (target.closest('.lq-dock-open, .lq-dock-icon, [data-bigger-map]')) return
-  // Hint on the folded bar acts on the first press during an arrival, as it
-  // does on the action row: it cuts the arrival short and gives the hint.
-  if (arrival.active && target.closest('.lq-dock-hint')) return
+  // Opening the bigger map changes nothing the voice holds: it never waits for it.
+  // The room name's pills and Hint act on the first press, wherever they stand: a pill or Hint cuts an arrival short and sends its command.
+  if (target.closest('.lq-name-btn, .lq-pill, .lq-hint-btn, [data-bigger-map]'))
+    return
   if (!presentation.catchUpPanels()) return
   event.stopPropagation()
   event.preventDefault()
@@ -1509,21 +1467,10 @@ watch(
     else latest?.scrollIntoView?.({ block: 'start' })
     // Opened at its start, the story no longer rests at its foot.
     noteFoot()
-    // Every answer is read on the picture: the phone's sheet folds after each turn.
-    const folds =
-      !laptop.value &&
-      dockOpen.value &&
-      (sheeted.value || textPage.value || answerTooLong())
-    if (folds) {
-      dockOpen.value = false
-      await nextTick()
-    }
     updateMoreBelow()
-    const lost =
-      !laptop.value &&
-      !dockOpen.value &&
-      document.activeElement === document.body
-    if ((away || folds || lost) && !game.showModal) focusActions()
+    // The cursor goes back to the typing box when the new turn took it away.
+    const lost = document.activeElement === document.body
+    if ((away || lost) && !game.showModal) focusActions()
   },
   { flush: 'post' },
 )
@@ -1688,7 +1635,7 @@ function pressOf(
     telling: telling.value,
     acceptInput: game.acceptInput,
     sceneBusy: scene.phase !== 'idle',
-    blocked: dialogOpen() || drawerTab.value !== null || sheetOpen.value,
+    blocked: dialogOpen() || drawerTab.value !== null,
     way: false,
     hand: belt.hand !== null,
     onControl: false,
@@ -1729,14 +1676,14 @@ function pressOn(
   return action
 }
 
-/** Where a ring pressed at `at` (in the window) is drawn: in the part of the picture the command bar, dock and phone panel leave, so no button or name hides under them. */
+/** Where a ring pressed at `at` (in the window) is drawn: in the part of the picture the typing box and phone plate leave, so no button or name hides under them. */
 function ringPlacement(
   stage: DOMRect,
   at: { x: number; y: number },
 ): Pick<NonNullable<typeof ring.value>, 'at' | 'bounds' | 'layer'> {
   const covers = [
     ...(stageEl.value?.parentElement?.querySelectorAll<HTMLElement>(
-      '.lq-composer, .lq-dock, .lq-phone-plate',
+      '.lq-stage-box, .lq-phone-plate',
     ) ?? []),
   ].map((el) => el.getBoundingClientRect())
   const seen = visibleBox(stage, covers)
@@ -1919,7 +1866,6 @@ watch(
       game.showTitle,
       gameDialog.value,
       drawerTab.value,
-      sheetOpen.value,
       section.value,
       game.roomName,
       staged.value,
@@ -2123,12 +2069,21 @@ const NARRATION_KEY_HELP = '\nN — hide or show the words\n'
 /** Help's line for the key that shows or hides the names on the picture (laptop only). */
 const NAMES_KEY_HELP = "\nS — show or hide what's here\n"
 
+/** Help's line for the room's name, which opens Look, Search and Rest. */
+const ROOM_NAME_HELP = "\nPress the room's name for Look, Search and Rest.\n"
+
+/** Help's line for F1, the typing box (where a keyboard can type). */
+const TYPING_BOX_HELP =
+  '\nPress F1 to type commands instead; F1 again hides the box.\n'
+
 /** Stats or Help as HTML (Help ends with the music credits). */
 const infoHtml = computed(() => {
   if (gameDialog.value !== 'help') return ''
   return (
     renderMarkup(game.readInfo('help')) +
     renderMarkup(NARRATION_HELP) +
+    renderMarkup(ROOM_NAME_HELP) +
+    (canType.value ? renderMarkup(TYPING_BOX_HELP) : '') +
     (laptop.value
       ? renderMarkup(ESCAPE_KEY_HELP) +
         (fullscreen.supported ? renderMarkup(FULLSCREEN_KEY_HELP) : '') +
@@ -2237,8 +2192,8 @@ watch(
 /**
  * Focus goes back without scrolling (a scroll away also closes the menu).
  * When nothing had it (a mouse click on text) and a key closed the menu,
- * it goes to the actions; a click or scroll leaves it be (on a phone,
- * focusing the composer could open the keyboard).
+ * it goes to the typing box (when it is up); a click or scroll leaves it be (on a phone,
+ * focusing the typing box could open the keyboard).
  */
 function closeNameMenu(byKey: boolean): void {
   nameMenu.value = null
@@ -2272,6 +2227,9 @@ async function startGame(): Promise<void> {
   game.dismissTitle()
   await nextTick()
   focusPopUp()
+  // A new game: tell keyboard players about F1 once its opening pop-up is read.
+  if (game.showModal) f1NotePending = true
+  else showF1Note()
 }
 const titlePage = ref<InstanceType<typeof TitlePage> | null>(null)
 /** The Load game window is open over the title page. */
@@ -2394,7 +2352,7 @@ watch(
           :style="{
             ...(phoneStage ? { '--lq-plate-h': `${plateHeight}px` } : {}),
             '--lq-belt-h': `${beltHeight}px`,
-            '--lq-actions-h': `${actionsHeight}px`,
+            '--lq-actions-h': `${boxRoom}px`,
           }"
           @click.capture="onPanelPress"
         >
@@ -2443,6 +2401,21 @@ watch(
               @map="toggleDrawer('map')"
               @menu="openGameDialog('menu')"
               @close="closeDrawer"
+            />
+            <!-- The typing box (F1) and the note about F1 stand at the foot of the picture, where the action bar used to be. -->
+            <CommandBox
+              v-if="typingOpen && staged"
+              :key="`box-${game.gameNumber}`"
+              ref="commandBoxEl"
+              class="lq-stage-box"
+              data-lq-obstacle="keep-clear"
+              @input="clearShownArrival"
+              @hide="hideBox"
+            />
+            <F1Note
+              v-else-if="f1NoteShown && staged"
+              class="lq-stage-note"
+              @done="f1NoteShown = false"
             />
             <!-- After the plate and the buttons, so the things on the picture are Tab stops right after them; the picture itself lies beneath everything (z-index). -->
             <StagePicture
@@ -2556,6 +2529,14 @@ watch(
             :small="!laptop"
           />
           <RoomPlate
+            v-if="textPage"
+            v-show="section === 'story'"
+            class="lq-text-plate"
+            data-panel
+            bare
+            hint-button
+          />
+          <RoomPlate
             v-if="phoneStage"
             v-show="section === 'story'"
             ref="plate"
@@ -2563,6 +2544,7 @@ watch(
             data-lq-obstacle="panel"
             data-panel
             story-button
+            hint-button
             :bare="!pictured"
             :away="plateAway"
             @story="drawerTab = 'story'"
@@ -2571,7 +2553,6 @@ watch(
             v-if="twoSides"
             v-show="section === 'story'"
             class="lq-above-hide"
-            :class="{ 'lq-covered': sheetOpen }"
             :away="paper.hidden.value || arrival.active"
           />
           <div
@@ -2587,7 +2568,6 @@ watch(
               'lq-one-column': column,
               'lq-hint-room': storyHeld,
               'lq-paper-away': paperAway,
-              'lq-covered': sheetOpen,
             }"
             :style="{
               ...(wide
@@ -2595,7 +2575,7 @@ watch(
                     top: `${cardsTop}px`,
                     bottom: sideways
                       ? 'calc(var(--lq-hide-line) + 60px + var(--lq-belt-h))'
-                      : `calc(${actionsHeight}px + var(--lq-belt-h) + var(--lq-hide-line) + 12px)`,
+                      : `calc(${boxRoom}px + var(--lq-belt-h) + var(--lq-hide-line) + 12px)`,
                   }
                 : {}),
               ...wordsCursor,
@@ -2654,7 +2634,6 @@ watch(
             v-if="staged"
             v-show="section === 'story'"
             class="lq-paper-tabrow"
-            :class="{ 'lq-covered': sheetOpen }"
           >
             <button
               v-if="showHide"
@@ -2695,30 +2674,19 @@ watch(
             </button>
           </div>
 
-          <!-- Choosing an action or typing clears an arrival on the picture. Typing
-             listens bubbling, not capture: a render before the command box's own
-             v-model has read the text would give the first typed character back.
-             A click is captured, so a turn the click plays keeps the arrival it starts. -->
-          <div v-if="sheetOpen" class="lq-scrim" aria-hidden="true"></div>
-          <ActionComposer
-            v-show="laptop || (section === 'story' && dockOpen)"
-            :key="`composer-${game.gameNumber}`"
-            ref="composer"
-            class="lq-composer"
-            data-lq-obstacle="keep-clear"
-            :class="{ 'lq-sheet': !laptop, 'lq-sheet-over': sheeted }"
-            :foldable="!laptop"
-            :stage="laptop"
-            @click.capture="clearShownArrival"
+          <!-- The typing box on a screen with no picture stage (the short mouse window's text page); on the stage it stands in the picture. Typing clears an arrival on the picture. -->
+          <CommandBox
+            v-if="typingOpen && !staged"
+            :key="`box-${game.gameNumber}`"
+            ref="commandBoxEl"
+            class="lq-text-box"
             @input="clearShownArrival"
-            @fold="fold"
+            @hide="hideBox"
           />
-          <DockBar
-            v-if="!laptop && section === 'story' && !dockOpen"
-            ref="dock"
-            data-panel
-            :floating="sideways"
-            @open="openDock"
+          <F1Note
+            v-else-if="f1NoteShown && !staged"
+            class="lq-text-note"
+            @done="f1NoteShown = false"
           />
 
           <template v-if="!wide">
@@ -3075,14 +3043,20 @@ watch(
   transform: translateX(-50%);
 }
 .lq-above-hide {
-  margin-bottom: calc(var(--lq-hide-line) + var(--lq-belt-h, 0px));
+  margin-bottom: calc(
+    var(--lq-hide-line) + var(--lq-belt-h, 0px) + var(--lq-actions-h, 0px)
+  );
 }
 /* The belt stands at the foot of the picture, and the words and the buttons over them rise above it (nothing rises while it is put away). */
 .lq-staged .lq-paper-tabrow {
-  transform: translateY(calc(-1 * var(--lq-belt-h, 0px)));
+  transform: translateY(
+    calc(-1 * (var(--lq-belt-h, 0px) + var(--lq-actions-h, 0px)))
+  );
 }
 .lq-phone .lq-story-wrap.lq-cards.lq-one-column {
-  margin-bottom: calc(var(--lq-hide-line) + var(--lq-belt-h, 0px));
+  margin-bottom: calc(
+    var(--lq-hide-line) + var(--lq-belt-h, 0px) + var(--lq-actions-h, 0px)
+  );
 }
 /* The strip saying what the next press does: under the top row, in the middle of the picture. */
 .lq-stage .lq-hand-strip {
@@ -3146,23 +3120,6 @@ watch(
   outline: 2px solid var(--lq-accent);
   outline-offset: 2px;
 }
-.lq-phone :deep(.lq-dock) {
-  position: relative;
-  z-index: 3;
-  margin: 8px;
-}
-.lq-phone .lq-sheet-over,
-.lq-sideways .lq-sheet-over {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 5;
-  border-radius: 14px 14px 0 0;
-}
-.lq-sideways .lq-sheet {
-  max-height: 85dvh;
-}
 /* The menu button where the stage has no row of buttons (a tall stage, the text page): in the corner, over the page. */
 .lq-float-menu {
   position: fixed;
@@ -3202,16 +3159,6 @@ watch(
 .lq-sideways.lq-staged .lq-story-wrap.lq-cards.lq-one-column {
   left: 8px;
   width: min(46%, 420px);
-}
-.lq-scrim {
-  position: absolute;
-  inset: 0;
-  z-index: 4;
-  background: rgb(0 0 0 / 0.45);
-}
-/* Under the open sheet the paper and the speech are covered. */
-.lq-covered {
-  visibility: hidden;
 }
 .lq-phone-section {
   flex: 1;
@@ -3253,25 +3200,24 @@ watch(
   font-size: 13px;
   cursor: pointer;
 }
-.lq-wide:not(.lq-sideways) .lq-composer {
-  position: relative;
-  z-index: 3;
-  flex: 0 0 auto;
-  border-radius: 0;
-  border-width: 1px 0 0;
+.lq-stage-box,
+.lq-stage-note {
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  z-index: 7;
+  transform: translateX(-50%);
 }
-/* Positioned, so the composer's completion list can open above the whole
-   sheet (rq-k8p5); the phone's sheet over the stage is absolute instead. */
-.lq-sheet {
-  position: relative;
-  flex: 0 0 auto;
-  max-height: 62dvh;
-  overflow-y: auto;
+.lq-stage-box {
+  width: 60%;
 }
-/* Type mode is too short to need the scroll, and a scrolling sheet would clip
-   the completion list that opens above it (rq-mvd). */
-.lq-sheet.lq-typing {
-  overflow-y: visible;
+.lq-text-note {
+  align-self: center;
+  margin: 8px;
+}
+.lq-text-box {
+  flex: 0 0 auto;
+  margin: 8px;
 }
 .lq-section-view {
   flex: 1;

@@ -230,15 +230,10 @@ describe('SettingsDialog', () => {
     )
   })
 
-  it('picks how the actions start', async () => {
+  it('has no Start with choice: the typing box always starts hidden', () => {
     const w = mountSettings()
 
-    await choice(w, 'Start with', 'Type').trigger('click')
-
-    expect(useSettingsStore().startMode).toBe('type')
-    expect(choice(w, 'Start with', 'Type').attributes('aria-pressed')).toBe(
-      'true',
-    )
+    expect(w.text()).not.toContain('Start with')
   })
 
   it('says moving pictures stop with Reduce motion, and when it follows the device', async () => {

@@ -1,4 +1,4 @@
-import { test, expect, type Page } from './fixtures'
+import { test, expect, enterCommand, type Page } from './fixtures'
 
 interface VueHost {
   __vue_app__: {
@@ -34,14 +34,7 @@ async function openGame(page: Page) {
 test.describe('debug command (dev server)', () => {
   test('names a script that does not exist', async ({ page }) => {
     await openGame(page)
-    await page
-      .getByRole('region', { name: 'Actions' })
-      .getByRole('button', { name: 'Type', exact: true })
-      .click()
-    const input = page.getByLabel('Command')
-
-    await input.fill('debug nothing-here')
-    await input.press('Enter')
+    await enterCommand(page, 'debug nothing-here')
     await expect(page.getByText("'nothing-here' not found")).toBeVisible()
   })
 })

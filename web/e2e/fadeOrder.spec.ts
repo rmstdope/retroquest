@@ -1,4 +1,4 @@
-import { test, expect, type Page } from './fixtures'
+import { test, expect, type Page, enterCommand as enter } from './fixtures'
 
 /**
  * Lines on the picture fade away top first in each column (rq-8clk): a line
@@ -7,19 +7,6 @@ import { test, expect, type Page } from './fixtures'
  * (rq-r7ct), also when a short line below would be read before a long one
  * above it.
  */
-
-/** Type a command into the actions bar (or the phone's sheet). */
-async function enter(page: Page, command: string): Promise<void> {
-  const input = page.getByLabel('Command', { exact: true })
-  const type = page
-    .getByRole('region', { name: 'Actions' })
-    .getByRole('button', { name: 'Type', exact: true })
-  if (await type.isVisible()) await type.click()
-  else if (!(await input.isVisible()))
-    await page.getByRole('button', { name: 'Type a command' }).click()
-  await input.fill(command)
-  await input.press('Enter')
-}
 
 /**
  * Watch every fading line on the picture, frame by frame as painted, until

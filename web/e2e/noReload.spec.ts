@@ -9,7 +9,7 @@
  * re-optimisation, a restarted server), so a failure here is first read as
  * "did Vite reload?" before "did the game reload itself?".
  */
-import { test, expect, type Page } from './fixtures'
+import { test, expect, enterCommand, type Page } from './fixtures'
 import { ACT1_GOLDEN_PATH } from '../src/act1/Act1GoldenPath'
 
 /** The golden path up to and including the walk north out of the Abandoned Shed. */
@@ -72,9 +72,7 @@ async function clearPages(page: Page): Promise<void> {
 async function type(page: Page, command: string): Promise<void> {
   await clearPages(page)
   const before = (await newestTurn(page))?.id ?? -1
-  const input = page.getByLabel('Command')
-  await input.fill(command, { timeout: 5_000 })
-  await input.press('Enter')
+  await enterCommand(page, command)
   await expect
     .poll(
       async () => {
@@ -96,10 +94,6 @@ test('typing Act I through the Abandoned Shed and north out of it never reloads 
   await page.goto('/')
   await page.getByRole('button', { name: 'Start', exact: true }).click()
   await clearPages(page)
-  await page
-    .getByRole('region', { name: 'Actions' })
-    .getByRole('button', { name: 'Type', exact: true })
-    .click()
 
   for (const command of THROUGH_THE_SHED) {
     expect(loads, `the page reloaded before "${command}"`).toBe(1)
