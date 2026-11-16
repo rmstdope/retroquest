@@ -93,6 +93,10 @@ for (const [name, width, height] of [
     await said.first().locator('.lq-line').click()
     // A pointer resting on a line holds its fade.
     await page.mouse.move(1, 1)
+    // The type of the lines just shown arrives once, and may wrap them anew: not a fade.
+    await page.evaluate(async () => {
+      await document.fonts.ready
+    })
     const { watched, moved, left } = await watchFades(page, 60_000)
     expect(watched).toBeGreaterThan(1)
     expect(left).toBe(0)
