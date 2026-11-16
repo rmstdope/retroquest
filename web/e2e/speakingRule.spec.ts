@@ -117,12 +117,10 @@ for (const width of [1280, 360]) {
     })
 
     test('the rule sits beside a narrated paragraph', async ({ page }) => {
-      // The stage tells it on the picture; a short screen keeps the story page.
-      await page.setViewportSize({ width, height: width === 360 ? 500 : 800 })
+      // A short screen keeps the story page, which reads the answer as it is told.
+      await page.setViewportSize({ width, height: 500 })
       await openChapter(page)
       await type(page, 'talk to voice')
-      // The walk into the first room is told in the middle first; Escape sends it away.
-      await skipTelling(page)
       const paragraph = page
         .getByTestId('turn')
         .last()

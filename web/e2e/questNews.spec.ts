@@ -157,10 +157,11 @@ test.describe('quest news told in the middle of the picture', () => {
   }
 
   // Heights at which a page holds the short need alone, under the one-row
-  // room plate (about 94 px lower than under the old room card).
+  // room plate (about 94 px lower than under the old room card), and with no
+  // top bar (about 70 px lower again).
   for (const [width, height] of [
-    [850, 740],
-    [390, 620],
+    [850, 670],
+    [390, 570],
   ]) {
     test(`keeps one left edge for a checklist split over pages at ${width} wide`, async ({
       page,
