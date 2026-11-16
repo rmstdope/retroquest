@@ -62,14 +62,15 @@ const newest = computed(() => newestLoadable(props.saves))
 const loadButton = ref<HTMLButtonElement | null>(null)
 const sounds = useUiSounds()
 
+/** True while focus is put back on Load game, which is no move of the ring. */
+let returning = false
+
 /** Put focus on Load game (after its window closed). */
 function focusLoad(): void {
   returning = true
   loadButton.value?.focus()
   returning = false
 }
-/** True while focus is put back on Load game, which is no move of the ring. */
-let returning = false
 defineExpose({ focusLoad })
 const titleId = useId()
 const page = ref<HTMLElement | null>(null)

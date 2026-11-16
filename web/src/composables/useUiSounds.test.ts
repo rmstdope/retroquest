@@ -12,13 +12,15 @@ const TAKES: ChosenManifest = {
   [TITLE_CHOOSE_EFFECT]: { file: 'title-choose.mp3', duration: 1 },
 }
 
-function player() {
-  const made: Array<{
-    src: string
-    volume: number
-    muted?: boolean
-    play: ReturnType<typeof vi.fn>
-  }> = []
+interface Made {
+  src: string
+  volume: number
+  muted?: boolean
+  play: ReturnType<typeof vi.fn>
+}
+
+function player(): { made: Made[]; factory: AudioFactory } {
+  const made: Made[] = []
   const factory = ((src: string) => {
     const element = {
       src,

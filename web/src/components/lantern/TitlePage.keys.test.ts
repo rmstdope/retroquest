@@ -116,6 +116,20 @@ describe('TitlePage keyboard choice', () => {
     expect(sounds.playChoose).toHaveBeenCalledTimes(2)
   })
 
+  it('tings when Tab-like focus moves from one choice to another', async () => {
+    const w = await mountTitle([save(2)])
+    buttons(w)[1].focus()
+    expect(sounds.playMove).toHaveBeenCalledTimes(1)
+  })
+
+  it('does not latch on the click of the press that skipped the opening', async () => {
+    useSettingsStore().reduceMotion = 'off'
+    const w = await mountTitle([save(2)])
+    window.dispatchEvent(new Event('pointerdown'))
+    await w.get('.lq-title-buttons > button').trigger('click')
+    expect(sounds.playChoose).not.toHaveBeenCalled()
+  })
+
   it('does not move the ring or sound while the opening plays; a key only finishes it', async () => {
     useSettingsStore().reduceMotion = 'off'
     const w = await mountTitle([save(2)])

@@ -13,7 +13,7 @@ import type { ChosenManifest } from './chosenMusic'
 export function useUiSounds(
   audioFactory: AudioFactory = (src) => new Audio(src),
   loadEffects: () => Promise<ChosenManifest> = loadChosenEffects,
-) {
+): { playMove(): void; playChoose(): void } {
   const settings = useSettingsStore()
   let takes: ChosenManifest = {}
   void loadEffects()
