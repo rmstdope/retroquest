@@ -882,13 +882,6 @@ function newestTurnEl(): HTMLElement | null {
   )
 }
 
-/** Whether the newest turn is taller than the story area beside the actions. */
-function answerTooLong(): boolean {
-  const story = storyEl.value
-  const last = newestTurnEl()
-  return !!story && !!last && last.offsetHeight > story.clientHeight
-}
-
 /**
  * Keeps the player's reading place across a crossing of 1100 px. It owns the
  * view, the decision and the landing; the layout only measures the story for
@@ -1366,9 +1359,9 @@ function onPanelPress(event: MouseEvent): void {
   presentation.bringSceneUp()
   // Opening the sheet, or the bigger map, changes nothing the voice holds: it
   // never waits for it.
-  if (target.closest('[data-bigger-map]')) return
-  // Hint acts on the first press during an arrival: it cuts the arrival short and gives the hint.
-  if (arrival.active && target.closest('.lq-hint-btn')) return
+  // The room name's pills and Hint act on the first press, wherever they stand: a pill or Hint cuts an arrival short and sends its command.
+  if (target.closest('.lq-name-btn, .lq-pill, .lq-hint-btn, [data-bigger-map]'))
+    return
   if (!presentation.catchUpPanels()) return
   event.stopPropagation()
   event.preventDefault()
@@ -2079,12 +2072,21 @@ const NARRATION_KEY_HELP = '\nN — hide or show the words\n'
 /** Help's line for the key that shows or hides the names on the picture (laptop only). */
 const NAMES_KEY_HELP = "\nS — show or hide what's here\n"
 
+/** Help's line for the room's name, which opens Look, Search and Rest. */
+const ROOM_NAME_HELP = "\nPress the room's name for Look, Search and Rest.\n"
+
+/** Help's line for F1, the typing box (where a keyboard can type). */
+const TYPING_BOX_HELP =
+  '\nPress F1 to type commands instead; F1 again hides the box.\n'
+
 /** Stats or Help as HTML (Help ends with the music credits). */
 const infoHtml = computed(() => {
   if (gameDialog.value !== 'help') return ''
   return (
     renderMarkup(game.readInfo('help')) +
     renderMarkup(NARRATION_HELP) +
+    renderMarkup(ROOM_NAME_HELP) +
+    (canType.value ? renderMarkup(TYPING_BOX_HELP) : '') +
     (laptop.value
       ? renderMarkup(ESCAPE_KEY_HELP) +
         (fullscreen.supported ? renderMarkup(FULLSCREEN_KEY_HELP) : '') +
@@ -2409,6 +2411,7 @@ watch(
               :key="`box-${game.gameNumber}`"
               ref="commandBoxEl"
               class="lq-stage-box"
+              data-lq-obstacle="keep-clear"
               @input="clearShownArrival"
               @hide="hideBox"
             />

@@ -101,12 +101,10 @@ describe('LanternLayout: the Escape menu', () => {
     expect(heading()).toBe('Menu')
   })
 
-  it('first clears what is typed in the command box: the menu needs another press', async () => {
+  it('first closes the word list, then hides the typing box: the menu needs another press', async () => {
     useGameStore().acceptInput = true
     await flushPromises()
-    w.get('[data-type]').element.dispatchEvent(
-      new MouseEvent('click', { bubbles: true }),
-    )
+    window.dispatchEvent(new KeyboardEvent('keydown', { key: 'F1' }))
     await flushPromises()
     const box = document.querySelector<HTMLInputElement>(
       'input[aria-label="Command"]',
@@ -117,7 +115,7 @@ describe('LanternLayout: the Escape menu', () => {
     await flushPromises()
     await press('Escape', box)
     await press('Escape', box)
-    expect(box.value).toBe('')
+    expect(document.querySelector('input[aria-label="Command"]')).toBeNull()
     expect(heading()).toBeUndefined()
   })
 

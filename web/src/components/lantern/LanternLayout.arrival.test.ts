@@ -205,47 +205,6 @@ describe('LanternLayout: the arrival on the picture', () => {
     expect(card(w)).toBe('')
   })
 
-  it('goes on with Enter or Space from a focused verb, without pressing it', async () => {
-    const w = await ready()
-    await run('go north')
-    const turns = useGameStore(pinia).turns.length
-    const verb = w.get('[data-verb="look"]').element as HTMLElement
-    verb.focus()
-    const down = new KeyboardEvent('keydown', {
-      key: 'Enter',
-      bubbles: true,
-      cancelable: true,
-    })
-    verb.dispatchEvent(down)
-    await vi.advanceTimersByTimeAsync(0)
-    expect(down.defaultPrevented).toBe(true)
-    expect(card(w)).toBe('')
-    expect(document.activeElement).toBe(verb)
-    expect(useGameStore(pinia).turns).toHaveLength(turns)
-  })
-
-  it('goes on with Space from a focused verb, and swallows its key-up', async () => {
-    const w = await ready()
-    await run('go north')
-    const verb = w.get('[data-verb="look"]').element as HTMLElement
-    verb.focus()
-    const down = new KeyboardEvent('keydown', {
-      key: ' ',
-      bubbles: true,
-      cancelable: true,
-    })
-    verb.dispatchEvent(down)
-    const up = new KeyboardEvent('keyup', {
-      key: ' ',
-      bubbles: true,
-      cancelable: true,
-    })
-    verb.dispatchEvent(up)
-    await vi.advanceTimersByTimeAsync(0)
-    expect(card(w)).toBe('')
-    expect(up.defaultPrevented).toBe(true)
-  })
-
   it('clears with a held Space', async () => {
     const w = await ready()
     await run('go north')
@@ -265,11 +224,12 @@ describe('LanternLayout: the arrival on the picture', () => {
   })
 
   it('clears when the player types, and the command still goes through', async () => {
-    useSettingsStore(pinia).startMode = 'type'
     const w = await ready()
     useSettingsStore(pinia).narrationVolume = 0
     await run('go north')
     expect(card(w)).not.toBe('')
+    window.dispatchEvent(new KeyboardEvent('keydown', { key: 'F1' }))
+    await vi.advanceTimersByTimeAsync(0)
     const input = w.get('.lq-type-input')
     await input.setValue('inventory')
     expect(card(w)).toBe('')
@@ -461,8 +421,9 @@ describe('LanternLayout: the arrival on the picture', () => {
       const narration = useNarrationStore(pinia)
       expect(narration.narrates(90)).toBe(true)
       expect(useArrivalStore(pinia).newsPending(90)).toBe(true)
-      await w.get('.lq-composer').trigger('input')
-      await w.get('.lq-composer').trigger('click')
+      window.dispatchEvent(new KeyboardEvent('keydown', { key: 'F1' }))
+      await vi.advanceTimersByTimeAsync(0)
+      await w.get('.lq-type-input').trigger('input')
       expect(narration.narrates(90)).toBe(true)
       expect(useArrivalStore(pinia).newsPending(90)).toBe(true)
       expect(w.findAll('[data-testid="news-line"]')).toHaveLength(0)

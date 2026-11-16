@@ -82,7 +82,7 @@ describe('LanternLayout: panels wait for the narration', () => {
     await vi.advanceTimersByTimeAsync(0)
   }
 
-  const cardName = (w: VueWrapper): string => w.get('.lq-room-name').text()
+  const cardName = (w: VueWrapper): string => w.get('.lq-name-text').text()
 
   beforeEach(() => {
     setActivePinia(createPinia())
@@ -202,16 +202,14 @@ describe('LanternLayout: panels wait for the narration', () => {
   )
 
   it.each([
-    ['the action row', true, false, '.lq-composer button.lq-hint'],
-    ['the open phone sheet', false, true, '.lq-composer button.lq-hint'],
-    ['the folded phone bar', false, false, 'button.lq-dock-hint'],
+    ['the stage buttons', true, '[data-button="hint"]'],
+    ['the phone plate', false, '[data-button="hint"]'],
   ])(
     'offers Hint on %s during an arrival, and a press cuts it short with one hint',
-    async (_surface, wide, openSheet, selector) => {
+    async (_surface, wide, selector) => {
       const w = await ready(wide)
       const game = useGameStore()
       await goNorth()
-      if (openSheet) await w.get('button.lq-dock-open').trigger('click')
       expect(useArrivalStore().active).toBe(true)
       expect(useNarrationStore().isNarrating).toBe(true)
       const hint = w.get(selector)
@@ -234,19 +232,22 @@ describe('LanternLayout: panels wait for the narration', () => {
     expect(useNarrationStore().isNarrating).toBe(true)
   })
 
-  it('clears the arrival on the picture, and the voice, when a verb is pressed', async () => {
+  it('clears the arrival on the picture, and the voice, when a pill is pressed', async () => {
     const w = await ready()
     await goNorth()
     expect(useNarrationStore().isNarrating).toBe(true)
-    await w.get('[data-verb="take"]').trigger('click')
+    await w.get('.lq-name-btn').trigger('click')
+    await w.findAll('.lq-pill')[1].trigger('click')
+    expect(useGameStore().turns.at(-1)?.command).toBe('search')
     expect(useNarrationStore().isNarrating).toBe(false)
     expect(cardName(w)).toBe('Garden')
   })
 
-  it('cuts in when a verb that needs nothing more is pressed', async () => {
+  it('cuts in when Look is pressed', async () => {
     const w = await ready()
     await goNorth()
-    await w.get('[data-verb="look"]').trigger('click')
+    await w.get('.lq-name-btn').trigger('click')
+    await w.get('.lq-pill').trigger('click')
     // The look is the newest turn; no command is echoed on the left.
     expect(useGameStore().turns.at(-1)?.command).toBe('look')
     expect(w.find('[data-testid="command"]').exists()).toBe(false)
@@ -254,9 +255,9 @@ describe('LanternLayout: panels wait for the narration', () => {
   })
 
   it('keeps the voice reading while typing, and the word list follows the place', async () => {
-    useSettingsStore().startMode = 'type'
     const w = await ready()
     const game = useGameStore()
+    window.dispatchEvent(new KeyboardEvent('keydown', { key: 'F1' }))
     await goNorth()
     expect(cardName(w)).toBe('Hall')
     await w.get('.lq-type-input').trigger('keydown', { key: 'x' })

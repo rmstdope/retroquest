@@ -505,10 +505,19 @@ describe('the narration paper', () => {
   })
 
   it('steps back from the real command box on Escape without hiding the words', async () => {
+    // A laptop with a mouse and keyboard (not a phone), so the typing box can come up.
+    vi.stubGlobal(
+      'matchMedia',
+      vi.fn((query: string) => ({
+        matches: !query.includes('coarse'),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+      })),
+    )
     await mountWith([turn(1, 'Only the narrator.')])
     game.acceptInput = true
     await nextTick()
-    document.querySelector<HTMLButtonElement>('[data-type]')?.click()
+    window.dispatchEvent(new KeyboardEvent('keydown', { key: 'F1' }))
     await nextTick()
     await nextTick()
     const box = document.querySelector<HTMLInputElement>(
@@ -524,15 +533,12 @@ describe('the narration paper', () => {
     press('Escape', box)
     await nextTick()
     expect(tab()).toBeNull()
-    // The box's own steps, one per press.
-    press('Escape', box)
-    await nextTick()
-    expect(box.value).toBe('')
-    expect(tab()).toBeNull()
+    // The next press hides the box, and the words stay.
     expect(document.activeElement).toBe(box)
     press('Escape', box)
     await nextTick()
     await nextTick()
+    expect(tab()).toBeNull()
     expect(document.querySelector('input[aria-label="Command"]')).toBeNull()
   })
 
@@ -669,6 +675,32 @@ describe('the narration paper', () => {
     const phoneHelp = await helpText()
     expect(phoneHelp).not.toContain('hide or show the')
     expect(phoneHelp).not.toContain("show or hide what's here")
+  })
+
+  it('has the Help lines for the room name, and for F1 where a keyboard can type', async () => {
+    vi.stubGlobal(
+      'matchMedia',
+      vi.fn((query: string) => ({
+        matches: !query.includes('coarse'),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+      })),
+    )
+    const keyboardHelp = await helpText()
+    expect(keyboardHelp).toContain(
+      "Press the room's name for Look, Search and Rest.",
+    )
+    expect(keyboardHelp).toContain(
+      'Press F1 to type commands instead; F1 again hides the box.',
+    )
+    w?.unmount()
+    document.body.innerHTML = ''
+    stubScreen(false)
+    const phoneHelp = await helpText()
+    expect(phoneHelp).toContain(
+      "Press the room's name for Look, Search and Rest.",
+    )
+    expect(phoneHelp).not.toContain('F1')
   })
 
   it('tells a phone everything in one column with the one Hide, which N works too', async () => {

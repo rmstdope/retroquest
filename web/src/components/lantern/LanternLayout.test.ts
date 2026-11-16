@@ -445,11 +445,6 @@ describe('LanternLayout', () => {
 
       expect(submit).toHaveBeenCalledWith('take bucket')
       expect(w.find('[role="menu"]').exists()).toBe(false)
-      // Focus goes on to the actions, not lost with the menu.
-      expect(document.activeElement).not.toBe(document.body)
-      expect(w.get('.lq-story').element.contains(document.activeElement)).toBe(
-        false,
-      )
     })
 
     it('closes the menu with Escape', async () => {
@@ -466,21 +461,6 @@ describe('LanternLayout', () => {
       expect(w.find('[role="menu"]').exists()).toBe(false)
       // Focus goes back to where it was (a name in the text cannot take it).
       expect(document.activeElement).toBe(before)
-    })
-
-    it('sends focus to the actions when nothing had it before the menu', async () => {
-      const w = await storyWith('You see a [item_name]bucket[/item_name].')
-      ;(document.activeElement as HTMLElement | null)?.blur()
-      await w.get('.lq-story .theme-item_name').trigger('click')
-      await flushPromises()
-
-      await w.get('[role="menu"]').trigger('keydown', { key: 'Escape' })
-      await flushPromises()
-
-      expect(document.activeElement).not.toBe(document.body)
-      expect(w.get('.lq-story').element.contains(document.activeElement)).toBe(
-        false,
-      )
     })
 
     it('leaves focus be when a scroll closes the menu', async () => {
@@ -581,7 +561,8 @@ describe('LanternLayout', () => {
     game.characters = ['grandmother']
     await flushPromises()
     const plate = wrapper.get('[aria-label="Current location"]')
-    expect(plate.findAll('button')).toHaveLength(0)
+    // The room's name is the one button on it: it opens Look, Search and Rest.
+    expect(plate.findAll('button')).toHaveLength(1)
     expect(plate.text()).not.toContain('Journal')
     vi.unstubAllGlobals()
   })
@@ -744,30 +725,30 @@ describe('LanternLayout', () => {
     expect(turns[1].find('.theme-item_name').text()).toBe('Bucket')
   })
 
-  it('plays through the action composer', async () => {
+  it('plays through the room name menu and the typing box', async () => {
     const w = mountLayout()
     const game = useGameStore()
     game.acceptInput = true
     const submit = vi.spyOn(game, 'submitCommand').mockImplementation(() => {})
     await w.vm.$nextTick()
 
-    expect(w.find('[aria-label="Actions"]').exists()).toBe(true)
-    const look = w.findAll('button').find((b) => b.text() === 'Look')
-    await look!.trigger('click')
-
+    expect(w.find('.lq-composer, .lq-dock').exists()).toBe(false)
+    expect(w.find('.lq-type-input').exists()).toBe(false)
+    await w.get('.lq-name-btn').trigger('click')
+    await w.findAll('.lq-pill')[0].trigger('click')
     expect(submit).toHaveBeenCalledWith('look')
+
+    window.dispatchEvent(new KeyboardEvent('keydown', { key: 'F1' }))
+    await w.vm.$nextTick()
+    await w.get('.lq-type-input').setValue('take bucket')
+    await w.get('.lq-type-input').trigger('keydown', { key: 'Enter' })
+    expect(submit).toHaveBeenCalledWith('take bucket')
   })
 
-  it('disables the actions while the game is not accepting input', () => {
-    const w = mountLayout()
-
-    const look = w.findAll('button').find((b) => b.text() === 'Look')
-    expect(look!.attributes()).toHaveProperty('disabled')
-  })
-
-  it('returns focus to the actions when the last pop-up closes', async () => {
+  it('returns focus to the typing box when the last pop-up closes', async () => {
     wrapper = mount(LanternLayout, { attachTo: document.body })
     const game = useGameStore()
+    window.dispatchEvent(new KeyboardEvent('keydown', { key: 'F1' }))
     game.showModal = true
     await wrapper.vm.$nextTick()
 
@@ -775,7 +756,7 @@ describe('LanternLayout', () => {
     game.acceptInput = true
     await wrapper.vm.$nextTick()
 
-    expect(document.activeElement?.textContent?.trim()).toBe('Actions ▴')
+    expect(document.activeElement).toBe(wrapper.get('.lq-type-input').element)
   })
 
   it('brings the start of the newest turn into view', async () => {
@@ -829,7 +810,7 @@ describe('LanternLayout', () => {
 
     afterEach(() => vi.unstubAllGlobals())
 
-    it('plays the room on its picture: plate, buttons, story band and actions', () => {
+    it('plays the room on its picture: plate, buttons and story band, with no action bar', () => {
       useGameStore().roomName = 'Village Square'
       const w = mountLayout()
 
@@ -838,13 +819,15 @@ describe('LanternLayout', () => {
         'Village Square',
       )
       expect(w.findAll('.lq-stage-btn').map((b) => b.text())).toEqual([
+        '💡 Hint',
         'Quests · 0',
         '⟲ Story so far',
         '🧭 Map',
         '☰',
       ])
       expect(w.find('section[aria-label="Story"]').exists()).toBe(true)
-      expect(w.find('section[aria-label="Actions"]').exists()).toBe(true)
+      expect(w.find('section[aria-label="Actions"]').exists()).toBe(false)
+      expect(w.find('.lq-composer, .lq-dock').exists()).toBe(false)
     })
 
     it('has no side column, and the map and the drawer start closed', () => {
@@ -1103,7 +1086,6 @@ describe('LanternLayout', () => {
     const w = mountLayout()
 
     expect(w.find('aside').exists()).toBe(false)
-    expect(w.find('[aria-label="Current location"]').exists()).toBe(false)
     expect(w.find('.lq-stage').exists()).toBe(false)
   })
 
@@ -1150,7 +1132,6 @@ describe('LanternLayout', () => {
 
       expect(w.get('[aria-label="Journal"] h2').text()).toBe('Bag')
       expect(w.get('section[aria-label="Story"]').isVisible()).toBe(false)
-      expect(w.get('section[aria-label="Actions"]').isVisible()).toBe(false)
     })
 
     it('shows the map', async () => {
@@ -1213,25 +1194,6 @@ describe('LanternLayout', () => {
       expect(shownWhenScrolled).toEqual([true])
     })
 
-    it('moves focus to the actions after Use from the bag', async () => {
-      wrapper = mount(LanternLayout, { attachTo: document.body })
-      const w = wrapper
-      const game = useGameStore()
-      game.acceptInput = true
-      game.rawInventory = [{ name: 'bread', description: 'A loaf.' }]
-      vi.spyOn(game, 'submitCommand').mockImplementation(() => {
-        game.turns = [{ ...TURN, id: 1, command: 'use bread' }]
-      })
-      await open(w, 'Bag')
-      const use = w.get('[aria-label="Use Bread"]')
-      ;(use.element as HTMLElement).focus()
-
-      await use.trigger('click')
-      await flushPromises()
-
-      expect(document.activeElement?.textContent?.trim()).toBe('Actions ▴')
-    })
-
     it('returns to the story after the window was laptop-wide', async () => {
       const listeners: Array<(e: { matches: boolean }) => void> = []
       vi.stubGlobal(
@@ -1274,152 +1236,6 @@ describe('LanternLayout', () => {
       expect(w.find('header').exists()).toBe(false)
       expect(sections(w).classes()).toContain('lq-nav-top')
       expect(w.get('.lq-float-menu').attributes('aria-label')).toBe('Menu')
-    })
-  })
-
-  describe('the action dock on a phone', () => {
-    function stubScreen(short: boolean) {
-      vi.stubGlobal(
-        'matchMedia',
-        vi.fn((query: string) => ({
-          matches: query.includes('519px') ? short : false,
-          addEventListener: vi.fn(),
-          removeEventListener: vi.fn(),
-        })),
-      )
-    }
-
-    /** Pretend each turn is `turn` px tall in a story `story` px tall. */
-    function stubHeights(turn: number, story: number) {
-      vi.spyOn(HTMLElement.prototype, 'offsetHeight', 'get').mockImplementation(
-        function (this: HTMLElement) {
-          return this.classList.contains('lq-story') ? story : turn
-        },
-      )
-      vi.spyOn(HTMLElement.prototype, 'clientHeight', 'get').mockImplementation(
-        function (this: HTMLElement) {
-          return this.classList.contains('lq-story') ? story : turn
-        },
-      )
-    }
-
-    function mountAttached() {
-      wrapper = mount(LanternLayout, { attachTo: document.body })
-      return wrapper
-    }
-
-    function actions(w: VueWrapper) {
-      return w.get('section[aria-label="Actions"]')
-    }
-
-    async function addTurn(w: VueWrapper, id: number) {
-      useGameStore().turns = [
-        {
-          id,
-          command: 'look',
-          text: 'You look around.',
-          room: 'Hall',
-          description: null,
-          gained: [],
-          lost: [],
-          arrival: null,
-        },
-      ]
-      await flushPromises()
-      await w.vm.$nextTick()
-    }
-
-    beforeEach(() => stubScreen(false))
-    afterEach(() => {
-      vi.unstubAllGlobals()
-      vi.restoreAllMocks()
-    })
-
-    it('starts folded into the bar, so the picture is clear', () => {
-      const w = mountLayout()
-
-      expect(actions(w).isVisible()).toBe(false)
-      expect(actions(w).classes()).toContain('lq-sheet')
-      expect(w.find('[aria-label="Action bar"]').exists()).toBe(true)
-    })
-
-    it('starts folded on a short screen', () => {
-      stubScreen(true)
-      const w = mountLayout()
-
-      expect(actions(w).isVisible()).toBe(false)
-      expect(w.find('[aria-label="Action bar"]').exists()).toBe(true)
-    })
-
-    it('folds with Hide actions and keeps the focus on the bar', async () => {
-      const w = mountAttached()
-
-      await w.get('button[aria-label="Hide actions"]').trigger('click')
-      await flushPromises()
-
-      expect(actions(w).isVisible()).toBe(false)
-      expect(document.activeElement).toBe(w.get('button.lq-dock-open').element)
-    })
-
-    it('opens again into Actions or straight into typing', async () => {
-      stubScreen(true)
-      useGameStore().acceptInput = true
-      const w = mountAttached()
-
-      await w.get('button[aria-label="Type a command"]').trigger('click')
-      await flushPromises()
-
-      expect(actions(w).isVisible()).toBe(true)
-      expect(document.activeElement).toBe(
-        w.get('input[aria-label="Command"]').element,
-      )
-    })
-
-    it('folds when the answer does not fit beside the actions', async () => {
-      stubHeights(900, 300)
-      const w = mountAttached()
-
-      await addTurn(w, 7)
-
-      expect(actions(w).isVisible()).toBe(false)
-      expect(document.activeElement).toBe(w.get('button.lq-dock-open').element)
-    })
-
-    it('folds after every answer, however short, so it is read on the picture', async () => {
-      stubHeights(100, 300)
-      const w = mountLayout()
-      await w.get('button.lq-dock-open').trigger('click')
-      expect(actions(w).isVisible()).toBe(true)
-
-      await addTurn(w, 7)
-      await flushPromises()
-
-      expect(w.find('[aria-label="Action bar"]').exists()).toBe(true)
-    })
-
-    it('puts the focus back on the bar when its exit button has gone', async () => {
-      stubScreen(true)
-      const game = useGameStore()
-      game.acceptInput = true
-      game.exits = { north: 'Hall' }
-      const w = mountAttached()
-      ;(w.get('button.lq-dock-exit').element as HTMLElement).focus()
-
-      game.exits = { south: 'Square' }
-      await addTurn(w, 7)
-
-      expect(document.activeElement).toBe(w.get('button.lq-dock-open').element)
-    })
-
-    it('folds after every answer on a short screen', async () => {
-      stubScreen(true)
-      stubHeights(50, 300)
-      const w = mountLayout()
-      await w.get('button.lq-dock-open').trigger('click')
-
-      await addTurn(w, 7)
-
-      expect(actions(w).isVisible()).toBe(false)
     })
   })
 
@@ -1582,10 +1398,12 @@ describe('LanternLayout', () => {
       expect(w.find('button.lq-more-below').exists()).toBe(true)
     })
 
-    it('hands focus to the actions when the pill goes at the end', async () => {
+    it('hands focus to the typing box when the pill goes at the end', async () => {
       wrapper = mount(LanternLayout, { attachTo: document.body })
       const w = wrapper
       useGameStore().acceptInput = true
+      window.dispatchEvent(new KeyboardEvent('keydown', { key: 'F1' }))
+      await flushPromises()
       const { story } = stubStory(w, 2000)
       await addTurn(w)
       const pill = w.get('button.lq-more-below')
@@ -1595,7 +1413,7 @@ describe('LanternLayout', () => {
       await w.get('section[aria-label="Story"]').trigger('scroll')
 
       expect(w.find('button.lq-more-below').exists()).toBe(false)
-      expect(document.activeElement?.textContent?.trim()).toBe('Actions ▴')
+      expect(document.activeElement).toBe(w.get('.lq-type-input').element)
     })
   })
 
@@ -2117,121 +1935,6 @@ describe('LanternLayout', () => {
       }
       expect(useNarrationStore().isNarrating).toBe(true)
       button.remove()
-    })
-
-    it('hurries on a Space on the folded Actions, which stays folded', async () => {
-      await ready()
-      await say(narratedTurn(1))
-      const hurry = vi.spyOn(useNarrationStore(), 'hurry')
-      // A command folds the phone's sheet and leaves focus on its Actions.
-      const actions = document.createElement('button')
-      actions.className = 'lq-dock-open'
-      document.body.appendChild(actions)
-      const down = new KeyboardEvent('keydown', {
-        key: ' ',
-        bubbles: true,
-        cancelable: true,
-      })
-      actions.dispatchEvent(down)
-      expect(hurry).toHaveBeenCalledOnce()
-      // Handled, key-up too: the browser does not also press the button and
-      // open the sheet.
-      expect(down.defaultPrevented).toBe(true)
-      const up = new KeyboardEvent('keyup', {
-        key: ' ',
-        bubbles: true,
-        cancelable: true,
-      })
-      actions.dispatchEvent(up)
-      expect(up.defaultPrevented).toBe(true)
-      actions.remove()
-    })
-
-    it('hurries on a Space or Enter on a focused action button, which is not pressed again', async () => {
-      const w = await ready()
-      await say(narratedTurn(1))
-      const hurry = vi.spyOn(useNarrationStore(), 'hurry')
-      // A verb sent from the laptop's actions keeps focus (Look, say).
-      const look = w.get('.lq-composer .lq-verb').element as HTMLElement
-      look.focus()
-      const down = new KeyboardEvent('keydown', {
-        key: ' ',
-        bubbles: true,
-        cancelable: true,
-      })
-      look.dispatchEvent(down)
-      expect(hurry).toHaveBeenCalledOnce()
-      expect(down.defaultPrevented).toBe(true)
-      const up = new KeyboardEvent('keyup', {
-        key: ' ',
-        bubbles: true,
-        cancelable: true,
-      })
-      look.dispatchEvent(up)
-      expect(up.defaultPrevented).toBe(true)
-
-      // Enter hurries too, so the verb is not sent again (rq-kfur).
-      const enter = new KeyboardEvent('keydown', {
-        key: 'Enter',
-        bubbles: true,
-        cancelable: true,
-      })
-      look.dispatchEvent(enter)
-      expect(enter.defaultPrevented).toBe(true)
-      expect(hurry).toHaveBeenCalledTimes(2)
-    })
-
-    it.each([
-      ['a verb', 'data-verb', true],
-      ['an exit', 'data-exit', true],
-      ['a target', 'class:lq-target', true],
-      ['the hint', 'class:lq-hint', true],
-      ['the Type switch', 'data-type', false],
-      ['the Actions switch', 'data-actions', false],
-      ['More', 'data-more', false],
-      ['Cancel', 'class:lq-cancel', false],
-    ])(
-      'Enter on %s as the voice reads: hurried only if it sends a command (rq-kfur)',
-      async (_name, mark, taken) => {
-        const w = await ready()
-        await say(narratedTurn(1))
-        const button = document.createElement('button')
-        if (mark.startsWith('class:')) button.className = mark.slice(6)
-        else {
-          // On a laptop the switches and More are styled as verbs.
-          button.className = 'lq-verb'
-          button.setAttribute(mark, 'x')
-        }
-        // A button that sends a command says so, as the composer's own do.
-        if (taken) button.setAttribute('data-hurry', 'command')
-        w.get('.lq-composer').element.appendChild(button)
-        const enter = new KeyboardEvent('keydown', {
-          key: 'Enter',
-          bubbles: true,
-          cancelable: true,
-        })
-        button.dispatchEvent(enter)
-        expect(enter.defaultPrevented).toBe(taken)
-      },
-    )
-
-    it('leaves Enter to the folded Actions: it opens and the voice goes on', async () => {
-      await ready()
-      await say(narratedTurn(1))
-      const hurry = vi.spyOn(useNarrationStore(), 'hurry')
-      const actions = document.createElement('button')
-      actions.className = 'lq-dock-open'
-      document.body.appendChild(actions)
-      const down = new KeyboardEvent('keydown', {
-        key: 'Enter',
-        bubbles: true,
-        cancelable: true,
-      })
-      actions.dispatchEvent(down)
-      expect(down.defaultPrevented).toBe(false)
-      expect(hurry).not.toHaveBeenCalled()
-      expect(useNarrationStore().isNarrating).toBe(true)
-      actions.remove()
     })
 
     it('leaves Space and Enter to the command box', async () => {
