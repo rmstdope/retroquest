@@ -109,11 +109,11 @@ describe('TitlePage keyboard choice', () => {
     expect(sounds.playMove).not.toHaveBeenCalled()
   })
 
-  it('latches when a choice is made by click, and when Escape starts', async () => {
+  it('latches when a choice is made by click, and Escape chooses nothing', async () => {
     const w = await mountTitle()
     await w.get('button').trigger('click')
     await press(w, 'Escape')
-    expect(sounds.playChoose).toHaveBeenCalledTimes(2)
+    expect(sounds.playChoose).toHaveBeenCalledTimes(1)
   })
 
   it('tings when Tab-like focus moves from one choice to another', async () => {
