@@ -19,6 +19,12 @@ export const FADING_LINES =
  */
 export const FADING_COLUMNS = '.lq-thread, .lq-paper-content'
 
+/**
+ * Event fired (bubbling) on a line the moment it is gone and takes its room
+ * away, so a column can step a run's name and portrait down to the next line.
+ */
+export const LINE_GONE_EVENT = 'lq-line-gone'
+
 /** What marks a line (or a part of it) as being read aloud now. */
 const READING = '.lq-speaking, [data-reading]'
 
@@ -58,7 +64,7 @@ export function useFadeOnceRead(
   container: Ref<HTMLElement | null>,
   selector: string,
   held: () => boolean = () => false,
-  columns = '',
+  columns: string = '',
 ): FadeOnceRead {
   const live = ref(0)
   let observer: MutationObserver | null = null
@@ -93,9 +99,13 @@ export function useFadeOnceRead(
       for (const timer of waiting.values()) clearTimeout(timer)
       waiting.clear()
       ready = new WeakSet<Element>()
-      spent = new WeakSet<Element>()
       for (const el of lines)
-        if (el.dataset.fade !== 'gone') el.dataset.fade = 'live'
+        if (spent.has(el)) {
+          // Seen to fade away already: it goes, rather than coming back.
+          el.dataset.fade = 'gone'
+          el.dispatchEvent(new Event(LINE_GONE_EVENT, { bubbles: true }))
+        } else if (el.dataset.fade !== 'gone') el.dataset.fade = 'live'
+      spent = new WeakSet<Element>()
       live.value = lines.filter((el) => el.dataset.fade !== 'gone').length
       return
     }
@@ -138,6 +148,7 @@ export function useFadeOnceRead(
     if (el.dataset.fade === 'away' && spent.has(el) && goneAbove) {
       spent.delete(el)
       el.dataset.fade = 'gone'
+      el.dispatchEvent(new Event(LINE_GONE_EVENT, { bubbles: true }))
       return
     }
     if (el.dataset.fade !== 'live' || waiting.has(el)) return
@@ -160,7 +171,7 @@ export function useFadeOnceRead(
     )
   }
 
-  /** A line's fade has run: it is gone. */
+  /** A line's fade has run: it is gone once every line above it in its column is (`LINE_GONE_EVENT`). */
   function onAnimationEnd(event: Event): void {
     const el = event.target
     if (!(el instanceof HTMLElement) || el.dataset.fade !== 'away') return

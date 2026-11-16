@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { ref } from 'vue'
 import { mount, type VueWrapper } from '@vue/test-utils'
 import { defineComponent, h, type Ref } from 'vue'
-import { useFadeOnceRead } from './useFadeOnceRead'
+import { LINE_GONE_EVENT, useFadeOnceRead } from './useFadeOnceRead'
 
 describe('useFadeOnceRead', () => {
   let root: HTMLElement
@@ -235,5 +235,30 @@ describe('useFadeOnceRead', () => {
     expect([told.dataset.fade, said.dataset.fade]).toEqual(['live', 'away'])
     fadeEnds(said)
     expect(said.dataset.fade).toBe('gone')
+  })
+
+  it('lets a line already faded away go when the words are hidden, not come back', async () => {
+    const older = line()
+    const newer = line()
+    await settle()
+    fadeEnds(newer)
+    expect(newer.dataset.fade).toBe('away')
+    held.value = true
+    await settle()
+    expect([older.dataset.fade, newer.dataset.fade]).toEqual(['live', 'gone'])
+  })
+
+  it('says when each line is gone, also one held back by the line above it', async () => {
+    const older = line()
+    const newer = line()
+    await settle()
+    const said: HTMLElement[] = []
+    root.addEventListener(LINE_GONE_EVENT, (event) => {
+      if (event.target instanceof HTMLElement) said.push(event.target)
+    })
+    fadeEnds(newer)
+    expect(said).toEqual([])
+    fadeEnds(older)
+    expect(said).toEqual([older, newer])
   })
 })

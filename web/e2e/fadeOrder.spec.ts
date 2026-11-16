@@ -22,12 +22,16 @@ async function enter(page: Page, command: string): Promise<void> {
 
 /**
  * Watch every fading line on the picture until all are gone (or `ms` has
- * passed) and return the furthest any moved while it still showed, in px.
+ * passed): the furthest any moved while it still showed, in px, and how many
+ * are left.
  */
-function furthestMove(page: Page, ms: number): Promise<number> {
+function watchFades(
+  page: Page,
+  ms: number,
+): Promise<{ moved: number; left: number }> {
   return page.evaluate(
     (limit) =>
-      new Promise<number>((resolve) => {
+      new Promise<{ moved: number; left: number }>((resolve) => {
         const lines = (): HTMLElement[] =>
           Array.from(
             document.querySelectorAll<HTMLElement>(
@@ -48,7 +52,7 @@ function furthestMove(page: Page, ms: number): Promise<number> {
             else furthest = Math.max(furthest, Math.abs(top - was))
           }
           if (showing.length === 0 || performance.now() - started > limit)
-            resolve(Math.round(furthest))
+            resolve({ moved: Math.round(furthest), left: showing.length })
           else requestAnimationFrame(look)
         }
         look()
@@ -71,6 +75,10 @@ test('a line fading away never moves the lines still showing', async ({
   const said = page.getByTestId('speech-line')
   await expect(said.first()).toBeVisible({ timeout: 20_000 })
   await said.first().locator('.lq-line').click()
+  // A pointer resting on a line holds its fade.
+  await page.mouse.move(1, 1)
+  const { moved, left } = await watchFades(page, 60_000)
+  expect(left).toBe(0)
   // Within a pixel: a line's top may round differently as the page settles.
-  expect(await furthestMove(page, 60_000)).toBeLessThanOrEqual(1)
+  expect(moved).toBeLessThanOrEqual(1)
 })

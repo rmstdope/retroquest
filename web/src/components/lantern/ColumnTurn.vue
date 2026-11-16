@@ -109,14 +109,11 @@ const gone = ref<number[]>([])
 
 /** A line has faded away: note which, so the name and portrait step down to the next line of its run. */
 function lineGone(): void {
-  // The fade marks the line gone as the event reaches the layout, after this.
-  requestAnimationFrame(() => {
-    gone.value = Array.from(
-      root.value?.querySelectorAll<HTMLElement>(
-        '.lq-cl[data-fade="gone"][data-piece]',
-      ) ?? [],
-    ).map((row) => Number(row.dataset.piece))
-  })
+  gone.value = Array.from(
+    root.value?.querySelectorAll<HTMLElement>(
+      '.lq-cl[data-fade="gone"][data-piece]',
+    ) ?? [],
+  ).map((row) => Number(row.dataset.piece))
 }
 
 /** A stable key for a piece, so a row is never reused for another line (its fade marks are its own). */
@@ -151,7 +148,7 @@ function heads(index: number): boolean {
     class="lq-column-turn"
     data-testid="column-turn"
     @click="speech.revealAll()"
-    @animationend="lineGone"
+    @lq-line-gone="lineGone"
   >
     <template v-for="(piece, index) in told" :key="pieceKey(piece, index)">
       <StoryTurn

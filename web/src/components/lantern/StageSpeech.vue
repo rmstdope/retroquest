@@ -104,12 +104,6 @@ function findFirstShowing(): void {
   firstShowing.value = at === -1 ? Math.max(0, rows.length - 1) : at
 }
 
-/** A line has faded away: the name and portrait of its run step down to the next line showing. */
-function lineGone(): void {
-  // The fade marks the line gone as the event reaches the layout, after this.
-  requestAnimationFrame(findFirstShowing)
-}
-
 // A new line, or a thread made shorter by the paper growing, pins it again.
 watch(
   () => speech.visible.at(-1)?.key,
@@ -151,7 +145,7 @@ function hurry(): void {
         class="lq-thread"
         aria-hidden="true"
         @scroll.passive="findFirstShowing"
-        @animationend="lineGone"
+        @lq-line-gone="findFirstShowing"
       >
         <!-- eslint-disable vue/no-v-html -->
         <div
