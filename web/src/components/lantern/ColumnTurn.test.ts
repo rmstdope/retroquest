@@ -5,7 +5,7 @@ import { createPinia, setActivePinia } from 'pinia'
 import { ref } from 'vue'
 import ColumnTurn from './ColumnTurn.vue'
 import { FOLLOW_EVENT } from '@/composables/useStoryFollow'
-import { LINE_LEFT_EVENT } from '@/composables/useFadeOnceRead'
+import { LINE_SIGHT_EVENT } from '@/composables/useFadeOnceRead'
 import type { Turn } from '@/stores/useGameStore'
 import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
@@ -103,7 +103,7 @@ describe('ColumnTurn', () => {
       ])
       // The fade (run by the layout) has taken the first line away.
       rows()[0].dataset.fade = mark
-      rows()[0].dispatchEvent(new Event(LINE_LEFT_EVENT, { bubbles: true }))
+      rows()[0].dispatchEvent(new Event(LINE_SIGHT_EVENT, { bubbles: true }))
       await w.vm.$nextTick()
       expect(rows().map((r) => !!r.querySelector('.lq-line-name'))).toEqual([
         true,

@@ -62,12 +62,18 @@ function lineHtml(line: StageLine): string {
 /** Index of the first line still showing at the top of the thread (0 when nothing is laid out). */
 const firstShowing = ref(0)
 
-/** The lines whose fade has run (spent or gone), by index: out of sight, so never a head. */
+/** The lines whose fade has run (spent or gone), by key: out of sight, so never a head. */
 const outOfSight = ref<number[]>([])
 
 /** Which lines head a run, so carry its name and portrait. */
 const heads = computed(() =>
-  runHeads(speech.visible, firstShowing.value, outOfSight.value),
+  runHeads(
+    speech.visible,
+    firstShowing.value,
+    speech.visible.flatMap((line, index) =>
+      outOfSight.value.includes(line.key) ? [index] : [],
+    ),
+  ),
 )
 
 /** The thread of lines, while there is one. */
@@ -113,13 +119,13 @@ function findFirstShowing(): void {
   firstShowing.value = at === -1 ? Math.max(0, rows.length - 1) : at
 }
 
-/** A line has left sight: its run's name and portrait step down to the next line in sight. */
-function lineLeft(): void {
+/** A line has left sight, or come back: its run's name and portrait go to the first of its lines in sight. */
+function sightChanged(): void {
   const rows = Array.from(thread.value?.children ?? [])
-  outOfSight.value = rows.flatMap((row, index) =>
+  outOfSight.value = rows.flatMap((row) =>
     row instanceof HTMLElement &&
     (row.dataset.fade === 'spent' || row.dataset.fade === 'gone')
-      ? [index]
+      ? [Number(row.dataset.key)]
       : [],
   )
   findFirstShowing()
@@ -166,7 +172,7 @@ function hurry(): void {
         class="lq-thread"
         aria-hidden="true"
         @scroll.passive="findFirstShowing"
-        @lq-line-left="lineLeft"
+        @lq-line-sight="sightChanged"
       >
         <!-- eslint-disable vue/no-v-html -->
         <div
@@ -180,6 +186,7 @@ function hurry(): void {
               'lq-run-first': !continuesRun(line, speech.visible[index - 1]),
             },
           ]"
+          :data-key="line.key"
           :data-read-ms="readingPauseMs(line.markup)"
           data-testid="speech-line"
         >
@@ -285,7 +292,7 @@ function hurry(): void {
   align-self: flex-end;
   justify-content: flex-end;
 }
-.lq-line-left {
+.lq-line-sight {
   align-self: flex-start;
 }
 .lq-gap {
@@ -319,7 +326,7 @@ function hurry(): void {
 .lq-line-right .lq-line-name {
   right: 0;
 }
-.lq-line-left .lq-line-name {
+.lq-line-sight .lq-line-name {
   left: 0;
 }
 .lq-line {
@@ -337,7 +344,7 @@ function hurry(): void {
   overflow-wrap: anywhere;
   animation: lq-line-in calc(0.25s * var(--lq-motion)) ease-out both;
 }
-.lq-line-left .lq-line {
+.lq-line-sight .lq-line {
   border-color: var(--lq-accent);
   background: color-mix(in srgb, var(--lq-accent) 10%, var(--lq-surface));
 }
@@ -361,7 +368,7 @@ function hurry(): void {
   font-size: calc(12.5px * var(--lq-text-scale));
   color: var(--lq-character);
 }
-.lq-line-left .lq-line-name {
+.lq-line-sight .lq-line-name {
   color: var(--lq-accent-text);
 }
 /* The line being read: the read-along ring. */

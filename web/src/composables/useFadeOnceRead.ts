@@ -20,11 +20,12 @@ export const FADING_LINES =
 export const FADING_COLUMNS = '.lq-thread, .lq-paper-content'
 
 /**
- * Event fired (bubbling) on a line the moment it leaves sight: its fade has
- * run (`spent`) or it has gone and taken its room away (`gone`). A column
- * steps a run's name and portrait down to the next line still in sight.
+ * Event fired (bubbling) on a line the moment it leaves sight (its fade has
+ * run, `spent`, or it has gone and taken its room away, `gone`) or comes back
+ * into sight (read aloud again). A column moves a run's name and portrait to
+ * the first of its lines in sight.
  */
-export const LINE_LEFT_EVENT = 'lq-line-left'
+export const LINE_SIGHT_EVENT = 'lq-line-sight'
 
 /** What marks a line (or a part of it) as being read aloud now. */
 const READING = '.lq-speaking, [data-reading]'
@@ -42,18 +43,18 @@ export interface FadeOnceRead {
  * Fade every line on the picture away once it has been read: each element in
  * `container` matching `selector` is marked `data-fade="live"` when it shows,
  * `"away"` once it has been read, which runs its fade (`lantern.css`: clear
- * for 2 s, gone by `FADE_AWAY_MS`, held while the pointer rests on it), and
- * `"gone"` when the fade has run, which takes it and its room away (each
- * leaving fires `LINE_LEFT_EVENT`). A line is
+ * for 2 s, gone by `FADE_AWAY_MS`, held while the pointer rests on it),
+ * `"spent"` when the fade has run (unseen, keeping its room), and `"gone"`
+ * once every line above it in its column is gone too, which takes it and its
+ * room away (each change of sight fires `LINE_SIGHT_EVENT`). A line is
  * read once neither it nor a part of it is being read aloud (`.lq-speaking`,
  * `[data-reading]`); a line never read aloud (its turn not narrated, a skip
  * showed it, or it has no recording yet) waits its `data-read-ms` first, the
  * time to read it. It fades whether or not more lines come after it, but
  * never ahead of the lines above it in its column (the nearest ancestor
  * matching `columns`, else `container`): a line read while one above it still
- * shows starts fading once that one has, and a line whose fade has run while
- * one above it is still there is `"spent"`: it keeps its room, unseen, until
- * that one is gone.
+ * shows starts fading once that one has, and a spent line keeps its room
+ * until the lines above it are gone.
  * So a line going never moves the lines still showing in a column resting at
  * its foot. The marks follow the DOM as lines come and go and as their reading
  * starts and stops; Story so far keeps every line.
@@ -139,7 +140,11 @@ export function useFadeOnceRead(
       clearTimeout(waiting.get(el))
       waiting.delete(el)
       // A row Vue reused for a line being read starts over.
+      const outOfSight =
+        el.dataset.fade === 'spent' || el.dataset.fade === 'gone'
       el.dataset.fade = 'live'
+      if (outOfSight)
+        el.dispatchEvent(new Event(LINE_SIGHT_EVENT, { bubbles: true }))
       return
     }
     if (!el.dataset.fade) el.dataset.fade = 'live'
@@ -170,7 +175,7 @@ export function useFadeOnceRead(
   /** Mark `el` spent or gone, and say it has left sight. */
   function leave(el: HTMLElement, how: 'spent' | 'gone'): void {
     el.dataset.fade = how
-    el.dispatchEvent(new Event(LINE_LEFT_EVENT, { bubbles: true }))
+    el.dispatchEvent(new Event(LINE_SIGHT_EVENT, { bubbles: true }))
   }
 
   /** A line's fade has run: it is spent, and gone once every line above it in its column is. */

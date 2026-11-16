@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { ref } from 'vue'
 import { mount, type VueWrapper } from '@vue/test-utils'
 import { defineComponent, h, type Ref } from 'vue'
-import { LINE_LEFT_EVENT, useFadeOnceRead } from './useFadeOnceRead'
+import { LINE_SIGHT_EVENT, useFadeOnceRead } from './useFadeOnceRead'
 
 describe('useFadeOnceRead', () => {
   let root: HTMLElement
@@ -256,7 +256,7 @@ describe('useFadeOnceRead', () => {
     const newer = line()
     await settle()
     const said: string[] = []
-    root.addEventListener(LINE_LEFT_EVENT, (event) => {
+    root.addEventListener(LINE_SIGHT_EVENT, (event) => {
       if (event.target instanceof HTMLElement)
         said.push(
           `${event.target === older ? 'older' : 'newer'} ${event.target.dataset.fade}`,
@@ -272,5 +272,19 @@ describe('useFadeOnceRead', () => {
       'older gone',
       'newer gone',
     ])
+  })
+
+  it('says when a line out of sight comes back, read aloud again', async () => {
+    const older = line()
+    const newer = line()
+    await settle()
+    fadeEnds(newer)
+    let said = 0
+    root.addEventListener(LINE_SIGHT_EVENT, () => said++)
+    newer.classList.add('lq-speaking')
+    await settle()
+    expect(newer.dataset.fade).toBe('live')
+    expect(said).toBe(1)
+    expect(older.dataset.fade).toBe('away')
   })
 })
