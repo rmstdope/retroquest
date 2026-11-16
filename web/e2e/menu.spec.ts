@@ -79,3 +79,21 @@ test('Escape does nothing on the title page', async ({
   await expect(page.locator('.lq-title-page')).toBeVisible()
   await expect(page.getByRole('dialog', { name: 'Menu' })).toHaveCount(0)
 })
+
+test('on a tall screen the menu button does not cover Story so far', async ({
+  page,
+}): Promise<void> => {
+  await page.setViewportSize({ width: 390, height: 844 })
+  await page.goto('/')
+  await page.getByRole('button', { name: 'Start', exact: true }).click()
+  await page.locator('.lq-chapter-button').click()
+  const menu = await page
+    .getByRole('button', { name: 'Menu', exact: true })
+    .boundingBox()
+  const story = await page
+    .getByRole('button', { name: /Story so far/ })
+    .boundingBox()
+  expect(menu).not.toBeNull()
+  expect(story).not.toBeNull()
+  expect(story!.x + story!.width).toBeLessThanOrEqual(menu!.x)
+})
