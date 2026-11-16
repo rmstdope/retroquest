@@ -17,6 +17,9 @@ const HUSH_MS = 250
  * browser re-sending the pointer after a scroll, not the player moving it, so
  * it never takes the ring.
  * `choose` is the latch of a choice made.
+ * `afterTab` (bound to a Tab key press) brings the whole stop the ring has
+ * reached into view, since the browser scrolls only the focused control, not
+ * the row around it.
  */
 export function useMenuRing(stopSelector: string): {
   onFocusIn(event: FocusEvent): void
@@ -24,6 +27,7 @@ export function useMenuRing(stopSelector: string): {
   onHover(event: MouseEvent): void
   track(event: MouseEvent): void
   choose(): void
+  afterTab(): void
   moved(): void
 } {
   const sounds = useUiSounds()
@@ -69,6 +73,11 @@ export function useMenuRing(stopSelector: string): {
     choose: (): void => {
       hushedUntil = Date.now() + HUSH_MS
       sounds.playChoose()
+    },
+    afterTab: (): void => {
+      setTimeout(() => {
+        stopOf(document.activeElement)?.scrollIntoView?.({ block: 'nearest' })
+      }, 0)
     },
     moved: (): void => sounds.playMove(),
   }

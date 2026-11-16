@@ -252,6 +252,8 @@ defineExpose({ focusFirst: trap.focusFirst })
   min-height: 0;
   overflow-y: auto;
   padding: 18px 22px 22px;
+  /* Room for the 6px reach of the cream ring when a row is scrolled to an edge. */
+  scroll-padding-block: 10px;
 }
 .lq-dialog-keys {
   flex: 0 0 auto;

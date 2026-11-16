@@ -135,4 +135,19 @@ describe('useMenuRing', () => {
     useMenuRing('.stop').choose()
     expect(choose).toHaveBeenCalledOnce()
   })
+
+  it('after a Tab, brings the stop holding focus whole into view', () => {
+    vi.useFakeTimers()
+    const ring = useMenuRing('.stop')
+    const root = dialog()
+    const stop = root.querySelector<HTMLElement>('#a')
+    const scroll = vi.fn()
+    if (stop) stop.scrollIntoView = scroll
+    root.querySelector<HTMLElement>('#a1')?.focus()
+    ring.afterTab()
+    expect(scroll).not.toHaveBeenCalled()
+    vi.runAllTimers()
+    vi.useRealTimers()
+    expect(scroll).toHaveBeenCalledWith({ block: 'nearest' })
+  })
 })

@@ -178,6 +178,7 @@ function volume(event: Event): number {
     @close="emit('close')"
     @focusin="ring.onFocusIn"
     @mousemove="ring.track"
+    @keydown.tab="ring.afterTab"
   >
     <div ref="root" @keydown="onKeydown">
       <section class="lq-group" aria-labelledby="lq-set-look">
