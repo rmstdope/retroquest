@@ -74,6 +74,26 @@ export function newestLoadable(saves: SaveSlot[]): SaveSlot | null {
 }
 
 /**
+ * The oldest filled save (the quick save is not a slot, so callers pass slots
+ * only). A save with no time counts as the oldest; the first listed wins a
+ * tie; null when none is filled.
+ */
+export function oldestFilled(saves: SaveSlot[]): SaveSlot | null {
+  let best: SaveSlot | null = null
+  let bestTime = Infinity
+  for (const save of saves) {
+    if (!filled(save)) continue
+    const time = save.timestamp ? new Date(save.timestamp).getTime() : NaN
+    const at = Number.isNaN(time) ? -Infinity : time
+    if (best === null || at < bestTime) {
+      best = save
+      bestTime = at
+    }
+  }
+  return best
+}
+
+/**
  * The line under Continue: "Act II · The Old Mill · Yesterday · 21:14", as the
  * save card reads; a named save starts with its name, and has no "Quick save"
  * stand-in for a missing room.

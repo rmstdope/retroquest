@@ -6,6 +6,7 @@ import {
   continueLine,
   filled,
   newestLoadable,
+  oldestFilled,
   savedWhen,
 } from './saveCard'
 
@@ -148,5 +149,24 @@ describe('named saves', () => {
   it('keys a named card by its name and others by slot', () => {
     expect(cardKey(named())).toBe('name:before-the-mirrors')
     expect(cardKey({ ...named(), slot: 3, name: undefined })).toBe(3)
+  })
+})
+
+describe('oldestFilled', () => {
+  const at = (n: number, timestamp: string | null): SaveSlot => ({
+    ...card(n),
+    timestamp,
+  })
+  it('picks the save made longest ago', () => {
+    const a = at(1, '2026-01-02T10:00:00Z')
+    const b = at(2, '2026-01-01T10:00:00Z')
+    expect(oldestFilled([a, b])).toBe(b)
+  })
+  it('counts a save with no time as the oldest, and skips empty slots', () => {
+    const none = at(3, null)
+    const dated = at(1, '2026-01-01T10:00:00Z')
+    expect(oldestFilled([dated, none])).toBe(none)
+    expect(oldestFilled([card(5, { room: null }), dated])).toBe(dated)
+    expect(oldestFilled([])).toBeNull()
   })
 })

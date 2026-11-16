@@ -86,6 +86,7 @@ import GameMenu, {
 } from './GameMenu.vue'
 import QuestDialog, { type QuestView } from './QuestDialog.vue'
 import QuitDialog from './QuitDialog.vue'
+import type { KeyHint } from './KeyLine.vue'
 import SaveLoadDialog from './SaveLoadDialog.vue'
 import SettingsDialog from './SettingsDialog.vue'
 import RoomPlate from './RoomPlate.vue'
@@ -1894,6 +1895,11 @@ watch(
   },
 )
 
+/** Help has nothing to select: the arrows scroll it. */
+const HELP_KEYS: KeyHint[] = [
+  { keys: ['↑', '↓'], word: 'scroll' },
+  { keys: ['Esc'], word: 'back' },
+]
 const INFO_TITLES: Record<InfoKind, string> = { help: 'Help' }
 let dialogOpener: HTMLElement | null = null
 /** The menu entry a window or the quit question was opened from, which gets focus when it closes and the menu comes back. */
@@ -2725,6 +2731,9 @@ watch(
             :key="gameDialog"
             :title="INFO_TITLES[gameDialog]"
             eyebrow="RetroQuest"
+            :key-line="HELP_KEYS"
+            start-on-panel
+            scroll-keys
             @close="closeGameDialog"
           >
             <!-- eslint-disable vue/no-v-html -->

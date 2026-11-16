@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { nextTick, onBeforeUnmount, onMounted, ref, useId } from 'vue'
 import { useFocusTrap } from '@/composables/useFocusTrap'
+import KeyLine, { type KeyHint } from './KeyLine.vue'
 
 /**
  * The Lantern dialog frame: centred on laptops, a bottom sheet on phones
@@ -18,7 +19,10 @@ import { useFocusTrap } from '@/composables/useFocusTrap'
  * panel at least 680px wide that grows to fit its body, up to the window
  * (on a phone it is the full-width sheet like any other). `centered` keeps
  * the panel in the middle of the screen on a phone too, as the pause menu
- * and the quit question are.
+ * and the quit question are. `keyLine` is the quiet line of keys at the foot
+ * (a keyboard player only). `startOnPanel` starts focus on the dialog itself,
+ * so no ring shows (a screen with nothing to select). `scrollKeys` lets ↑ ↓
+ * (a line), Page Up and Page Down (a page), Home and End scroll the body.
  */
 const props = withDefaults(
   defineProps<{
@@ -28,6 +32,9 @@ const props = withDefaults(
     restoreFocus?: boolean
     wide?: boolean
     centered?: boolean
+    keyLine?: KeyHint[]
+    startOnPanel?: boolean
+    scrollKeys?: boolean
   }>(),
   {
     eyebrow: '',
@@ -35,12 +42,19 @@ const props = withDefaults(
     restoreFocus: true,
     wide: false,
     centered: false,
+    keyLine: () => [],
+    startOnPanel: false,
+    scrollKeys: false,
   },
 )
 const emit = defineEmits<{ close: [] }>()
 const titleId = useId()
 const panel = ref<HTMLElement | null>(null)
 const trap = useFocusTrap(panel)
+const content = ref<HTMLElement | null>(null)
+
+/** One line of scrolling, in pixels. */
+const LINE = 40
 
 function onKeydown(event: KeyboardEvent): void {
   if (event.key === 'Escape') {
@@ -48,7 +62,27 @@ function onKeydown(event: KeyboardEvent): void {
     emit('close')
     return
   }
+  if (props.scrollKeys && scroll(event)) return
   trap.onKeydown(event)
+}
+
+/** Scroll the body for a scroll key; true when the key was one. */
+function scroll(event: KeyboardEvent): boolean {
+  const body = content.value
+  if (!body) return false
+  const page = body.clientHeight * 0.9
+  const by: Record<string, number> = {
+    ArrowDown: LINE,
+    ArrowUp: -LINE,
+    PageDown: page,
+    PageUp: -page,
+  }
+  if (event.key === 'Home') body.scrollTo?.({ top: 0 })
+  else if (event.key === 'End') body.scrollTo?.({ top: body.scrollHeight })
+  else if (event.key in by) body.scrollBy?.({ top: by[event.key] })
+  else return false
+  event.preventDefault()
+  return true
 }
 
 function onBackdrop(): void {
@@ -59,7 +93,11 @@ function onBackdrop(): void {
 let opener: HTMLElement | null = null
 onMounted(() => {
   opener = document.activeElement as HTMLElement | null
-  void nextTick(trap.focusFirst)
+  void nextTick(() =>
+    props.startOnPanel
+      ? panel.value?.focus({ preventScroll: true })
+      : trap.focusFirst(),
+  )
 })
 onBeforeUnmount(() => {
   if (props.restoreFocus && opener?.isConnected) opener.focus()
@@ -108,12 +146,15 @@ defineExpose({ focusFirst: trap.focusFirst })
           </svg>
         </button>
       </header>
-      <div class="lq-dialog-content">
+      <div ref="content" class="lq-dialog-content">
         <slot />
       </div>
       <footer v-if="$slots.footer" class="lq-dialog-foot">
         <slot name="footer" />
       </footer>
+      <div v-if="keyLine.length" class="lq-dialog-keys">
+        <KeyLine :hints="keyLine" />
+      </div>
     </section>
   </div>
 </template>
@@ -213,6 +254,10 @@ defineExpose({ focusFirst: trap.focusFirst })
   min-height: 0;
   overflow-y: auto;
   padding: 18px 22px 22px;
+}
+.lq-dialog-keys {
+  flex: 0 0 auto;
+  padding: 0 22px 12px;
 }
 .lq-dialog-foot {
   flex: 0 0 auto;
