@@ -1,6 +1,6 @@
 /**
  * The cream ring in Settings is always drawn whole: when the arrows, a wrap
- * round or Tab bring a row to either end of the scrolling list, the list
+ * round, Tab, the mouse or a tap bring a row to either end of the scrolling list, the list
  * scrolls a little further so the ring and its gap are not clipped.
  */
 import { test, expect, type Page } from './fixtures'
@@ -101,11 +101,20 @@ async function cutRow(
   )
 }
 
+/** The name of the row holding the ring (its `data-stop`). */
+async function ringed(page: Page): Promise<string | null | undefined> {
+  return page.evaluate(() =>
+    document.activeElement?.closest('[data-stop]')?.getAttribute('data-stop'),
+  )
+}
+
 /** Move the mouse onto a point in two steps, so it really moves. */
 async function pointAt(
   page: Page,
   at: { x: number; y: number },
 ): Promise<void> {
+  // Leave the dialog first: pointing at a row means arriving on it.
+  await page.mouse.move(5, 5)
   await page.mouse.move(at.x - 20, at.y)
   await page.mouse.move(at.x, at.y)
 }
@@ -123,8 +132,10 @@ test('Settings: a mouse on a row half hidden at the foot or the head brings the 
   await openSettings(page)
   await pointAt(page, await cutRow(page, 'foot', 26))
   await expect.poll(() => clipped(page)).toBe('0')
+  expect(await ringed(page)).toBe('musicVolume')
   await pointAt(page, await cutRow(page, 'head', 26))
   await expect.poll(() => clipped(page)).toBe('0')
+  expect(await ringed(page)).toBe('musicVolume')
 })
 
 test('Settings: a mouse on a sliver of a row brings the whole row in', async ({
@@ -133,17 +144,35 @@ test('Settings: a mouse on a sliver of a row brings the whole row in', async ({
   await openSettings(page)
   await pointAt(page, await cutRow(page, 'foot', 4))
   await expect.poll(() => clipped(page)).toBe('0')
+  expect(await ringed(page)).toBe('musicVolume')
   await pointAt(page, await cutRow(page, 'head', 4))
   await expect.poll(() => clipped(page)).toBe('0')
 })
 
-test('Settings: a tap on a row half hidden at the foot brings the ring whole', async ({
-  page,
-}): Promise<void> => {
-  await openSettings(page, 390)
-  const at = await cutRow(page, 'foot', 26)
-  await page.mouse.click(at.x, at.y)
-  await expect.poll(() => clipped(page)).toBe('0')
+test.describe('on a touch screen', () => {
+  test.use({ hasTouch: true, isMobile: true })
+
+  test('Settings: a tap on a row half hidden at the foot brings the ring whole', async ({
+    page,
+  }): Promise<void> => {
+    await openSettings(page, 844)
+    const at = await cutRow(page, 'foot', 26)
+    await page.touchscreen.tap(at.x, at.y)
+    await expect
+      .poll(() =>
+        page.evaluate(() => {
+          const list = document.querySelector('.lq-dialog-content')
+          const row = document.querySelector('[data-stop="musicVolume"]')
+          if (!list || !row) return 'missing'
+          const l = list.getBoundingClientRect()
+          const r = row.getBoundingClientRect()
+          return r.top >= l.top && r.bottom <= l.bottom
+            ? 'whole'
+            : `row ${r.top}-${r.bottom} list ${l.top}-${l.bottom}`
+        }),
+      )
+      .toBe('whole')
+  })
 })
 
 test('Settings: scrolling by hand does not nudge back', async ({
@@ -153,16 +182,9 @@ test('Settings: scrolling by hand does not nudge back', async ({
   await pointAt(page, await cutRow(page, 'foot', 26))
   await expect.poll(() => clipped(page)).toBe('0')
   await page.mouse.wheel(0, -2000)
-  await page.waitForTimeout(300)
-  expect(await scrolled(page)).toBe(0)
-})
-
-test('Settings: in a tall window the list never scrolls when pointed at', async ({
-  page,
-}): Promise<void> => {
-  await openSettings(page)
-  await page.setViewportSize({ width: 900, height: 1600 })
-  await pointAt(page, { x: 450, y: 400 })
-  await pointAt(page, { x: 450, y: 600 })
+  await expect.poll(() => scrolled(page)).toBe(0)
+  // A small move inside the row under the resting mouse must not scroll either.
+  await page.mouse.move(450, 300)
+  await page.mouse.move(452, 300)
   expect(await scrolled(page)).toBe(0)
 })

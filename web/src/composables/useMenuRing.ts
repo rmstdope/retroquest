@@ -19,7 +19,7 @@ const HUSH_MS = 250
  * browser re-sending the pointer after a scroll, not the player moving it, so
  * it never takes the ring.
  * With `wholeOnPoint` (Settings, whose list scrolls) a pointer that moves onto
- * a stop, or a click on one (`onPress`, for a tap on a touch screen), also
+ * a stop, or a press on one (`onPress`, for a tap on a touch screen), also
  * brings the whole stop into view, as the arrow keys do. Hand scrolling never
  * does, since a re-sent move is not a move.
  * `choose` is the latch of a choice made.
@@ -45,6 +45,8 @@ export function useMenuRing(
   let hushedUntil = 0
   /** Where the pointer was at its last move anywhere in the dialog, if it has moved. */
   let lastPointer: { x: number; y: number } | null = null
+  /** The stop the pointer was last on, so only arriving on a stop brings it into view. */
+  let pointedStop: Element | null = null
 
   /** The stop an element is, or is inside. */
   function stopOf(node: EventTarget | null): Element | null {
@@ -73,11 +75,14 @@ export function useMenuRing(
         lastPointer !== null &&
         (lastPointer.x !== event.screenX || lastPointer.y !== event.screenY)
       lastPointer = { x: event.screenX, y: event.screenY }
-      if (!moved || !(stop instanceof HTMLElement)) return
+      if (!moved) return
+      const arrived = stop !== pointedStop
+      pointedStop = stop
+      if (!(stop instanceof HTMLElement)) return
       if (canHover && !canHover(stop)) return
       if (!stop.contains(document.activeElement))
         stop.focus({ preventScroll: true })
-      if (wholeOnPoint) stop.scrollIntoView?.({ block: 'nearest' })
+      if (wholeOnPoint && arrived) stop.scrollIntoView?.({ block: 'nearest' })
     },
     onPress(event: MouseEvent): void {
       const stop = stopOf(event.target)

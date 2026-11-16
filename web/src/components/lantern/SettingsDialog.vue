@@ -178,7 +178,7 @@ function volume(event: Event): number {
     @close="emit('close')"
     @focusin="ring.onFocusIn"
     @mousemove="ring.onMove"
-    @click="ring.onPress"
+    @pointerup="ring.onPress"
     @keydown.tab="ring.afterTab"
   >
     <div ref="root" @keydown="onKeydown">

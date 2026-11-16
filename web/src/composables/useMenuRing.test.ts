@@ -195,4 +195,18 @@ describe('useMenuRing', () => {
     useMenuRing('.stop', undefined, true).onPress(click)
     expect(a.scrollIntoView).toHaveBeenCalledWith({ block: 'nearest' })
   })
+
+  it('with wholeOnPoint, moving about inside a stop does not bring it into view again, leaving and returning does', () => {
+    const ring = useMenuRing('.stop', undefined, true)
+    const root = dialog()
+    const a = root.querySelector<HTMLElement>('#a')!
+    a.scrollIntoView = vi.fn()
+    pointer(ring, a, 1, 1)
+    pointer(ring, a, 4, 1)
+    pointer(ring, a, 6, 1)
+    expect(a.scrollIntoView).toHaveBeenCalledTimes(1)
+    pointer(ring, root.querySelector('#b'), 9, 1)
+    pointer(ring, a, 12, 1)
+    expect(a.scrollIntoView).toHaveBeenCalledTimes(2)
+  })
 })
