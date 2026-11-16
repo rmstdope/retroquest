@@ -54,7 +54,21 @@ function watchFades(
               ).getBoundingClientRect().top
               const was = first.get(el)
               if (was === undefined) first.set(el, top)
-              else furthest = Math.max(furthest, Math.abs(top - was))
+              else {
+                if (Math.abs(top - was) > Math.max(1, furthest)) {
+                  const st = document.querySelector('.lq-cards .lq-story')
+                  console.log(
+                    `MOVE ${Math.round(performance.now() - started)} ${el.className} ${el.dataset.fade} ${Math.round(was)}->${Math.round(top)} st=${st?.scrollTop} sh=${st?.scrollHeight} ch=${st?.clientHeight} | ` +
+                      lines()
+                        .map(
+                          (l) =>
+                            `${l.className.split(' ')[0]}:${l.dataset.fade}:${Math.round(l.getBoundingClientRect().top)}-${Math.round(l.getBoundingClientRect().bottom)}`,
+                        )
+                        .join(' '),
+                  )
+                }
+                furthest = Math.max(furthest, Math.abs(top - was))
+              }
             }
             if (showing.length === 0 || performance.now() - started > limit)
               resolve({
@@ -79,6 +93,9 @@ for (const [name, width, height] of [
     page,
   }): Promise<void> => {
     test.setTimeout(90_000)
+    page.on('console', (m) => {
+      if (m.text().startsWith('MOVE')) console.log(`${name} ${m.text()}`)
+    })
     await page.setViewportSize({ width, height })
     await page.goto('/')
     await page.getByRole('button', { name: 'Start', exact: true }).click()
