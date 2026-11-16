@@ -96,7 +96,7 @@ describe('LanternLayout', () => {
       expect(w.find('.lq-dialog-layer').exists()).toBe(false)
     })
 
-    it('goes on with Escape as with its button', async () => {
+    it('does nothing on Escape: only its button goes on', async () => {
       const w = mountLayout()
       const game = useGameStore()
       const dismiss = vi
@@ -108,7 +108,7 @@ describe('LanternLayout', () => {
 
       await w.get('[role="dialog"]').trigger('keydown', { key: 'Escape' })
 
-      expect(dismiss).toHaveBeenCalledOnce()
+      expect(dismiss).not.toHaveBeenCalled()
     })
 
     it('keeps Tab on the chapter page', async () => {
@@ -189,7 +189,7 @@ describe('LanternLayout', () => {
       )
     })
 
-    it('opens the save dialog with Escape on the last chapter', async () => {
+    it('does not open the save dialog with Escape on the last chapter', async () => {
       const w = mountLayout()
       const game = useGameStore()
       game.modalChapter = FINAL
@@ -198,7 +198,7 @@ describe('LanternLayout', () => {
 
       await w.get('.lq-chapter-dialog').trigger('keydown', { key: 'Escape' })
 
-      expect(game.finishAsked).toBe(true)
+      expect(game.finishAsked).toBe(false)
       expect(game.showModal).toBe(true)
     })
 
@@ -2319,11 +2319,11 @@ describe('LanternLayout', () => {
         expect(w.get('.lq-chapter-title').classes()).toContain('lq-speaking')
       })
 
-      it('stops the voice when Escape goes on from a chapter page', async () => {
+      it('leaves the voice on when Escape is pressed on a chapter page', async () => {
         const w = await ready()
         await openChapter(w)
         await w.get('[role="dialog"]').trigger('keydown', { key: 'Escape' })
-        expect(useNarrationStore().isNarrating).toBe(false)
+        expect(useNarrationStore().isNarrating).toBe(true)
       })
 
       it('tells a chapter page the same way at narration volume 0', async () => {

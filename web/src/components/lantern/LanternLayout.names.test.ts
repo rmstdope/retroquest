@@ -127,7 +127,7 @@ describe('LanternLayout: what is here, named on the picture', () => {
     expect(button().attributes('title')).toBeUndefined()
   })
 
-  it('takes the names away on Escape, before it does anything else', async () => {
+  it('leaves the names showing on Escape (S takes them away)', async () => {
     await cottage()
     await key('s')
     expect(useAreaNamesStore().showing).toBe(true)
@@ -137,8 +137,7 @@ describe('LanternLayout: what is here, named on the picture', () => {
       cancelable: true,
     })
     document.dispatchEvent(escape)
-    expect(useAreaNamesStore().showing).toBe(false)
-    expect(escape.defaultPrevented).toBe(true)
+    expect(useAreaNamesStore().showing).toBe(true)
   })
 
   it('folds the words away while the names show, and brings them back after', async () => {
@@ -232,21 +231,6 @@ describe('LanternLayout: what is here, named on the picture', () => {
     expect(w.get('[data-testid="arrival-on-picture"]').classes()).not.toContain(
       'lq-arrival-away',
     )
-  })
-
-  it('takes the names away on Escape even with a drawer open', async () => {
-    await cottage()
-    await key('s')
-    await w.get('.lq-stage-buttons button').trigger('click')
-    expect(useAreaNamesStore().showing).toBe(true)
-    document.dispatchEvent(
-      new KeyboardEvent('keydown', {
-        key: 'Escape',
-        bubbles: true,
-        cancelable: true,
-      }),
-    )
-    expect(useAreaNamesStore().showing).toBe(false)
   })
 
   it('takes a press on a dot that shows through the words as a press on its thing, and never hurries the narration (rq-njoa)', async () => {

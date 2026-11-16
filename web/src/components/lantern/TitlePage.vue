@@ -188,13 +188,8 @@ function onRisen(event: AnimationEvent): void {
 
 function onKeydown(event: KeyboardEvent): void {
   if (event === skippedBy) return
-  if (event.key === 'Escape') {
-    event.stopPropagation()
-    if (!hasSaves.value) {
-      sounds.playChoose()
-      emit('start')
-    }
-  } else if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+  if (event.key === 'Escape') event.stopPropagation()
+  else if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
     event.preventDefault()
     moveRing(event.key === 'ArrowDown' ? 1 : -1)
   } else trap.onKeydown(event)

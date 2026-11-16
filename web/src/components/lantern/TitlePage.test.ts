@@ -287,12 +287,12 @@ describe('TitlePage', () => {
       expect(w.emitted('start')).toBeUndefined()
     })
 
-    it('is skipped by Escape without starting the game, which works afterwards', async () => {
+    it('does not start on Escape, and Escape does not skip the opening', async () => {
       const w = mountTitle()
       await w.get('section').trigger('keydown', { key: 'Escape' })
       expect(w.emitted('start')).toBeUndefined()
       await w.get('section').trigger('keydown', { key: 'Escape' })
-      expect(w.emitted('start')).toHaveLength(1)
+      expect(w.emitted('start')).toBeUndefined()
     })
 
     it('is skipped by a press, and presses after it behave as normal', async () => {
@@ -313,26 +313,25 @@ describe('TitlePage', () => {
     expect(document.activeElement?.textContent?.trim()).toBe('Start')
   })
 
-  it('starts with the Start button, Enter or Escape', async () => {
+  it('starts with the Start button', async () => {
     const w = mountTitle()
     await flushPromises()
     expect(document.activeElement?.textContent?.trim()).toBe('Start')
 
     await w.get('button').trigger('click')
-    await w.get('[role="dialog"]').trigger('keydown', { key: 'Escape' })
 
-    expect(w.emitted('start')).toHaveLength(2)
+    expect(w.emitted('start')).toHaveLength(1)
   })
 
   describe('with saves', () => {
     const labels = (w: VueWrapper): string[] =>
       w.findAll('button').map((b) => b.text())
 
-    it('offers only Start when there are no saves, and Escape starts', async () => {
+    it('offers only Start when there are no saves, and Escape does nothing', async () => {
       const w = mountTitle()
       expect(labels(w)).toEqual(['Start'])
       await w.get('section').trigger('keydown', { key: 'Escape' })
-      expect(w.emitted('start')).toHaveLength(1)
+      expect(w.emitted('start')).toBeUndefined()
     })
 
     it('treats empty slots as no saves', () => {

@@ -688,7 +688,7 @@ function onNamesKey(event: KeyboardEvent): void {
   toggleNames()
 }
 
-/** Escape takes the names away before it does anything else, but for a dialog that is up, which shuts first. */
+/** Escape steps back from what is in hand and from the belt (S, not Escape, takes the names away); a dialog that is up shuts first. */
 function onNamesEscape(event: KeyboardEvent): void {
   if (event.key !== 'Escape') return
   if (dialogOpen() || ring.value) return
@@ -713,10 +713,6 @@ function onNamesEscape(event: KeyboardEvent): void {
     back?.focus({ preventScroll: true })
     return
   }
-  if (!names.showing || !showNamesButton.value) return
-  event.preventDefault()
-  event.stopImmediatePropagation()
-  names.turnOff()
 }
 
 /** The pointer leaves the stage: no name follows it, no way's arrow shows. */
@@ -2137,14 +2133,12 @@ const chapterDialog = ref<HTMLElement | null>(null)
 const chapterTrap = useFocusTrap(chapterDialog)
 
 /**
- * A chapter page keeps Tab inside, and Escape goes on like its button (also
- * after a click on its text, which focuses the page itself).
+ * A chapter page keeps Tab inside (also after a click on its text, which
+ * focuses the page itself). Escape does nothing here: only its button goes on.
  */
 function onChapterKeydown(event: KeyboardEvent): void {
-  if (event.key === 'Escape') {
-    event.stopPropagation()
-    presentation.continueChapter()
-  } else chapterTrap.onKeydown(event)
+  if (event.key === 'Escape') event.stopPropagation()
+  else chapterTrap.onKeydown(event)
 }
 
 // Closing the save dialog puts focus back on the last chapter's button.
