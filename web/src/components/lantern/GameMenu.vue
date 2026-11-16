@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
+import { useMenuRing } from '@/composables/useMenuRing'
 import LanternDialog from './LanternDialog.vue'
 
 /**
@@ -10,7 +11,9 @@ import LanternDialog from './LanternDialog.vue'
  * Quick load is dimmed, and says why, when the quick save is from an older
  * version. Focus starts on Save, or on `focus` when a window opened from the
  * menu closes and hands it back; Tab and the up and down arrows move between
- * the entries (the arrows go round, passing over a dimmed one). Escape, ✕ and
+ * the entries (the arrows go round, passing over a dimmed one), and a moving
+ * pointer takes the ring; only the ringed entry is filled, so a resting pointer
+ * never leaves a second entry looking picked. Escape, ✕ and
  * a click on the dimmed game emit `close`; Quit emits `quit`.
  */
 export type InfoKind = 'help'
@@ -27,6 +30,7 @@ const emit = defineEmits<{
 const game = useGameStore()
 const quickSaveOld = game.getQuickSave()?.outdated === true
 const list = ref<HTMLElement | null>(null)
+const ring = useMenuRing('.lq-menu-entry')
 
 function quickSave(): void {
   game.saveGame()
@@ -66,16 +70,28 @@ function onKeydown(event: KeyboardEvent): void {
 </script>
 
 <template>
-  <LanternDialog title="Menu" eyebrow="Paused" centered @close="emit('close')">
+  <LanternDialog
+    title="Menu"
+    eyebrow="Paused"
+    centered
+    @close="emit('close')"
+    @mousemove="ring.track"
+  >
     <div ref="list" class="lq-menu" @keydown="onKeydown">
       <div class="lq-quick">
-        <button type="button" class="lq-menu-entry" @click="quickSave">
+        <button
+          type="button"
+          class="lq-menu-entry"
+          @mousemove="ring.onHover"
+          @click="quickSave"
+        >
           Quick save
         </button>
         <button
           type="button"
           class="lq-menu-entry"
           :disabled="quickSaveOld"
+          @mousemove="ring.onHover"
           @click="quickLoad"
         >
           Quick load
@@ -91,6 +107,7 @@ function onKeydown(event: KeyboardEvent): void {
         type="button"
         class="lq-menu-entry lq-menu-row"
         :data-autofocus="starts(row.kind) || undefined"
+        @mousemove="ring.onHover"
         @click="emit('open', row.kind)"
       >
         {{ row.label }}
@@ -100,6 +117,7 @@ function onKeydown(event: KeyboardEvent): void {
         type="button"
         class="lq-menu-entry lq-menu-row lq-menu-quit"
         :data-autofocus="starts('quit') || undefined"
+        @mousemove="ring.onHover"
         @click="emit('quit')"
       >
         Quit
@@ -139,8 +157,7 @@ function onKeydown(event: KeyboardEvent): void {
 .lq-menu-row {
   text-align: left;
 }
-.lq-menu-entry:hover:not(:disabled),
-.lq-menu-entry:focus-visible {
+.lq-menu-entry:focus {
   background: var(--lq-accent-soft);
 }
 .lq-menu-entry:disabled {
