@@ -31,10 +31,18 @@
     },
     "effects": [
       {
-        "type": "dust"
+        "kind": "dust",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
       },
       {
-        "type": "leaves"
+        "kind": "leaves",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
       }
     ]
   },
@@ -152,10 +160,18 @@
     },
     "effects": [
       {
-        "type": "dust"
+        "kind": "dust",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
       },
       {
-        "type": "leaves"
+        "kind": "leaves",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
       }
     ]
   },
@@ -230,60 +246,73 @@
     },
     "effects": [
       {
-        "type": "dust"
-      },
-      {
-        "type": "fire",
-        "spot": {
-          "points": [
-            {
-              "x": 0.281771,
-              "y": 0.660185
-            },
-            {
-              "x": 0.419792,
-              "y": 0.660185
-            },
-            {
-              "x": 0.419792,
-              "y": 0.762037
-            },
-            {
-              "x": 0.281771,
-              "y": 0.762037
-            }
-          ],
-          "mark": {
-            "x": 0.321354,
-            "y": 0.719444
-          }
+        "kind": "dust",
+        "settings": {
+          "amount": 1,
+          "speed": 1
         }
       },
       {
-        "type": "smoke",
-        "spot": {
-          "points": [
-            {
-              "x": 0.259375,
-              "y": 0.006481
-            },
-            {
-              "x": 0.392188,
-              "y": 0.006481
-            },
-            {
-              "x": 0.392188,
-              "y": 0.661111
-            },
-            {
-              "x": 0.259375,
-              "y": 0.661111
-            }
+        "kind": "embers",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
+      },
+      {
+        "kind": "fire",
+        "settings": {
+          "amount": 1,
+          "speed": 1,
+          "glow": 1
+        },
+        "spot": [
+          [
+            [
+              0.281771,
+              0.660185
+            ],
+            [
+              0.419792,
+              0.660185
+            ],
+            [
+              0.419792,
+              0.762037
+            ],
+            [
+              0.281771,
+              0.762037
+            ]
           ]
-        }
+        ]
       },
       {
-        "type": "embers"
+        "kind": "smoke",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        },
+        "spot": [
+          [
+            [
+              0.259375,
+              0.006481
+            ],
+            [
+              0.392188,
+              0.006481
+            ],
+            [
+              0.392188,
+              0.661111
+            ],
+            [
+              0.259375,
+              0.661111
+            ]
+          ]
+        ]
       }
     ]
   },
@@ -364,10 +393,18 @@
     },
     "effects": [
       {
-        "type": "dust"
+        "kind": "dust",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
       },
       {
-        "type": "leaves"
+        "kind": "leaves",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
       }
     ]
   },
@@ -489,30 +526,39 @@
     },
     "effects": [
       {
-        "type": "dust"
+        "kind": "dust",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
       },
       {
-        "type": "fire",
-        "spot": {
-          "points": [
-            {
-              "x": 0.244792,
-              "y": 0.572222
-            },
-            {
-              "x": 0.31198,
-              "y": 0.572222
-            },
-            {
-              "x": 0.31198,
-              "y": 0.77037
-            },
-            {
-              "x": 0.244792,
-              "y": 0.77037
-            }
+        "kind": "fire",
+        "settings": {
+          "amount": 1,
+          "speed": 1,
+          "glow": 1
+        },
+        "spot": [
+          [
+            [
+              0.244792,
+              0.572222
+            ],
+            [
+              0.31198,
+              0.572222
+            ],
+            [
+              0.31198,
+              0.77037
+            ],
+            [
+              0.244792,
+              0.77037
+            ]
           ]
-        }
+        ]
       }
     ]
   },
@@ -613,10 +659,18 @@
     },
     "effects": [
       {
-        "type": "dust"
+        "kind": "dust",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
       },
       {
-        "type": "leaves"
+        "kind": "leaves",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
       }
     ]
   },
@@ -723,7 +777,11 @@
     },
     "effects": [
       {
-        "type": "dust"
+        "kind": "dust",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
       }
     ]
   },
@@ -794,10 +852,18 @@
     },
     "effects": [
       {
-        "type": "dust"
+        "kind": "dust",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
       },
       {
-        "type": "leaves"
+        "kind": "leaves",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
       }
     ]
   },
@@ -852,7 +918,11 @@
     },
     "effects": [
       {
-        "type": "dust"
+        "kind": "dust",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
       }
     ]
   },
@@ -924,7 +994,11 @@
     },
     "effects": [
       {
-        "type": "dust"
+        "kind": "dust",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
       }
     ]
   },
@@ -1059,7 +1133,11 @@
     },
     "effects": [
       {
-        "type": "mist"
+        "kind": "mist",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
       }
     ]
   },
@@ -1114,10 +1192,18 @@
     },
     "effects": [
       {
-        "type": "dust"
+        "kind": "dust",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
       },
       {
-        "type": "leaves"
+        "kind": "leaves",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
       }
     ]
   },
@@ -1165,7 +1251,11 @@
     },
     "effects": [
       {
-        "type": "mist"
+        "kind": "mist",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
       }
     ]
   },
@@ -1242,7 +1332,11 @@
     },
     "effects": [
       {
-        "type": "dust"
+        "kind": "dust",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
       }
     ]
   },
@@ -1332,31 +1426,40 @@
     },
     "effects": [
       {
-        "type": "dust"
+        "kind": "dust",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
       },
       {
-        "type": "fire",
-        "whilePatch": "candle-lit",
-        "spot": {
-          "points": [
-            {
-              "x": 0.476563,
-              "y": 0.438889
-            },
-            {
-              "x": 0.523438,
-              "y": 0.438889
-            },
-            {
-              "x": 0.523438,
-              "y": 0.510185
-            },
-            {
-              "x": 0.476563,
-              "y": 0.510185
-            }
+        "kind": "fire",
+        "settings": {
+          "amount": 1,
+          "speed": 1,
+          "glow": 1
+        },
+        "patch": "candle-lit",
+        "spot": [
+          [
+            [
+              0.476563,
+              0.438889
+            ],
+            [
+              0.523438,
+              0.438889
+            ],
+            [
+              0.523438,
+              0.510185
+            ],
+            [
+              0.476563,
+              0.510185
+            ]
           ]
-        }
+        ]
       }
     ]
   },
@@ -1447,30 +1550,38 @@
     },
     "effects": [
       {
-        "type": "dust"
+        "kind": "dust",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
       },
       {
-        "type": "water",
-        "spot": {
-          "points": [
-            {
-              "x": 0.413021,
-              "y": 0.423148
-            },
-            {
-              "x": 0.569271,
-              "y": 0.423148
-            },
-            {
-              "x": 0.569271,
-              "y": 0.773148
-            },
-            {
-              "x": 0.413021,
-              "y": 0.773148
-            }
+        "kind": "water",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        },
+        "spot": [
+          [
+            [
+              0.413021,
+              0.423148
+            ],
+            [
+              0.569271,
+              0.423148
+            ],
+            [
+              0.569271,
+              0.773148
+            ],
+            [
+              0.413021,
+              0.773148
+            ]
           ]
-        }
+        ]
       }
     ]
   },
@@ -1523,7 +1634,11 @@
     },
     "effects": [
       {
-        "type": "dust"
+        "kind": "dust",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
       }
     ]
   },
@@ -1533,10 +1648,18 @@
     "height": 1080,
     "effects": [
       {
-        "type": "dust"
+        "kind": "dust",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
       },
       {
-        "type": "leaves"
+        "kind": "leaves",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
       }
     ]
   },
@@ -1546,10 +1669,18 @@
     "height": 1080,
     "effects": [
       {
-        "type": "dust"
+        "kind": "dust",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
       },
       {
-        "type": "leaves"
+        "kind": "leaves",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
       }
     ]
   },
@@ -1559,10 +1690,18 @@
     "height": 1080,
     "effects": [
       {
-        "type": "dust"
+        "kind": "dust",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
       },
       {
-        "type": "leaves"
+        "kind": "leaves",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
       }
     ]
   },
@@ -1572,13 +1711,25 @@
     "height": 1080,
     "effects": [
       {
-        "type": "dust"
+        "kind": "dust",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
       },
       {
-        "type": "leaves"
+        "kind": "leaves",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
       },
       {
-        "type": "mist"
+        "kind": "mist",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
       }
     ]
   },
@@ -1588,10 +1739,18 @@
     "height": 1080,
     "effects": [
       {
-        "type": "dust"
+        "kind": "dust",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
       },
       {
-        "type": "mist"
+        "kind": "mist",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
       }
     ]
   },
@@ -1601,7 +1760,11 @@
     "height": 1080,
     "effects": [
       {
-        "type": "dust"
+        "kind": "dust",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
       }
     ]
   },
@@ -1611,7 +1774,11 @@
     "height": 1080,
     "effects": [
       {
-        "type": "dust"
+        "kind": "dust",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
       }
     ]
   },
@@ -1621,10 +1788,18 @@
     "height": 1080,
     "effects": [
       {
-        "type": "dust"
+        "kind": "dust",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
       },
       {
-        "type": "embers"
+        "kind": "embers",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
       }
     ]
   },
@@ -1634,10 +1809,18 @@
     "height": 1080,
     "effects": [
       {
-        "type": "dust"
+        "kind": "dust",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
       },
       {
-        "type": "fireflies"
+        "kind": "fireflies",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
       }
     ]
   },
@@ -1647,7 +1830,11 @@
     "height": 1080,
     "effects": [
       {
-        "type": "dust"
+        "kind": "dust",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
       }
     ]
   },
@@ -1657,7 +1844,11 @@
     "height": 1080,
     "effects": [
       {
-        "type": "dust"
+        "kind": "dust",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
       }
     ]
   },
@@ -1667,7 +1858,11 @@
     "height": 1080,
     "effects": [
       {
-        "type": "dust"
+        "kind": "dust",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
       }
     ]
   },
@@ -1677,7 +1872,11 @@
     "height": 1080,
     "effects": [
       {
-        "type": "dust"
+        "kind": "dust",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
       }
     ]
   },
@@ -1687,7 +1886,11 @@
     "height": 1080,
     "effects": [
       {
-        "type": "dust"
+        "kind": "dust",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
       }
     ]
   },
@@ -1697,7 +1900,11 @@
     "height": 1080,
     "effects": [
       {
-        "type": "mist"
+        "kind": "mist",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
       }
     ]
   },
@@ -1822,10 +2029,18 @@
     "height": 1080,
     "effects": [
       {
-        "type": "dust"
+        "kind": "dust",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
       },
       {
-        "type": "leaves"
+        "kind": "leaves",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
       }
     ]
   },
@@ -1835,7 +2050,11 @@
     "height": 1080,
     "effects": [
       {
-        "type": "dust"
+        "kind": "dust",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
       }
     ]
   },
@@ -1845,10 +2064,18 @@
     "height": 1080,
     "effects": [
       {
-        "type": "dust"
+        "kind": "dust",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
       },
       {
-        "type": "fireflies"
+        "kind": "fireflies",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
       }
     ]
   },

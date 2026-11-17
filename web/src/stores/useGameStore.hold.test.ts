@@ -433,9 +433,9 @@ describe('useGameStore: panels held while a turn is narrated', () => {
           width: 1920,
           height: 1080,
           effects: [
-            { type: 'dust', settings: { amount: 2 } },
-            { type: 'fire', spot: { points } },
-            { type: 'water' },
+            { kind: 'dust', settings: { amount: 2 } },
+            { kind: 'fire', spot: [points.map((p) => [p.x, p.y])] },
+            { kind: 'water' },
           ],
         },
       }

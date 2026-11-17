@@ -28,8 +28,8 @@ describe("useGameStore: the title picture's movement", () => {
         height: 1000,
         zoom: { seconds: 12, percent: 4 },
         effects: [
-          { type: 'stars', spot: { points: points } },
-          { type: 'dust' },
+          { kind: 'stars', spot: [points.map((p) => [p.x, p.y])] },
+          { kind: 'dust' },
         ],
       },
     }

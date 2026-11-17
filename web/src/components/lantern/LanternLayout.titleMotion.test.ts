@@ -64,7 +64,7 @@ describe("LanternLayout: the title page's movement", () => {
         width: 1920,
         height: 1080,
         zoom: { seconds: 22, percent: 4 },
-        effects: [{ type: 'dust' }],
+        effects: [{ kind: 'dust' }],
       },
     })
     expect(layout.get('.lq-title-drift').attributes('style')).toContain(

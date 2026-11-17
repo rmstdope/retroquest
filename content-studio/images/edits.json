@@ -40,6 +40,24 @@
             "height": 439
           }
         }
+      },
+      "effects": {
+        "dust": {
+          "title": "Dust",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          }
+        },
+        "leaves": {
+          "title": "Leaves",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          }
+        }
       }
     },
     "act1-abandoned-shed-inside": {
@@ -142,6 +160,24 @@
             "height": 877
           }
         }
+      },
+      "effects": {
+        "dust": {
+          "title": "Dust",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          }
+        },
+        "leaves": {
+          "title": "Leaves",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          }
+        }
       }
     },
     "act1-blacksmiths-forge": {
@@ -222,6 +258,81 @@
             "height": 137
           }
         }
+      },
+      "effects": {
+        "dust": {
+          "title": "Dust",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          }
+        },
+        "embers": {
+          "title": "Embers",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          }
+        },
+        "fire": {
+          "title": "Fire",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "glow": 1,
+            "speed": 1
+          },
+          "spot": [
+            [
+              [
+                0.281771,
+                0.660185
+              ],
+              [
+                0.419792,
+                0.660185
+              ],
+              [
+                0.419792,
+                0.762037
+              ],
+              [
+                0.281771,
+                0.762037
+              ]
+            ]
+          ]
+        },
+        "smoke": {
+          "title": "Smoke",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          },
+          "spot": [
+            [
+              [
+                0.259375,
+                0.006481
+              ],
+              [
+                0.392188,
+                0.006481
+              ],
+              [
+                0.392188,
+                0.661111
+              ],
+              [
+                0.259375,
+                0.661111
+              ]
+            ]
+          ]
+        }
       }
     },
     "act1-chicken-coop": {
@@ -286,6 +397,24 @@
             "y": 230,
             "width": 765,
             "height": 77
+          }
+        }
+      },
+      "effects": {
+        "dust": {
+          "title": "Dust",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          }
+        },
+        "leaves": {
+          "title": "Leaves",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
           }
         }
       }
@@ -412,6 +541,45 @@
             "height": 302
           }
         }
+      },
+      "effects": {
+        "dust": {
+          "title": "Dust",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          }
+        },
+        "fire": {
+          "title": "Fire",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "glow": 1,
+            "speed": 1
+          },
+          "spot": [
+            [
+              [
+                0.244792,
+                0.572222
+              ],
+              [
+                0.31198,
+                0.572222
+              ],
+              [
+                0.31198,
+                0.77037
+              ],
+              [
+                0.244792,
+                0.77037
+              ]
+            ]
+          ]
+        }
       }
     },
     "act1-forest-path": {
@@ -496,6 +664,24 @@
             "y": 746,
             "width": 284,
             "height": 334
+          }
+        }
+      },
+      "effects": {
+        "dust": {
+          "title": "Dust",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          }
+        },
+        "leaves": {
+          "title": "Leaves",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
           }
         }
       }
@@ -594,6 +780,16 @@
             "height": 445
           }
         }
+      },
+      "effects": {
+        "dust": {
+          "title": "Dust",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          }
+        }
       }
     },
     "act1-hidden-glade": {
@@ -654,6 +850,24 @@
             "height": 75
           }
         }
+      },
+      "effects": {
+        "dust": {
+          "title": "Dust",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          }
+        },
+        "leaves": {
+          "title": "Leaves",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          }
+        }
       }
     },
     "act1-miras-hut": {
@@ -696,6 +910,16 @@
             "y": 20,
             "width": 1835,
             "height": 314
+          }
+        }
+      },
+      "effects": {
+        "dust": {
+          "title": "Dust",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
           }
         }
       }
@@ -752,6 +976,16 @@
             "y": 722,
             "width": 143,
             "height": 65
+          }
+        }
+      },
+      "effects": {
+        "dust": {
+          "title": "Dust",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
           }
         }
       }
@@ -840,6 +1074,16 @@
             "height": 207
           }
         }
+      },
+      "effects": {
+        "mist": {
+          "title": "Mist",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          }
+        }
       }
     },
     "act1-road-to-greendale": {
@@ -884,6 +1128,24 @@
             "height": 701
           }
         }
+      },
+      "effects": {
+        "dust": {
+          "title": "Dust",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          }
+        },
+        "leaves": {
+          "title": "Leaves",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          }
+        }
       }
     },
     "act1-the-dream": {
@@ -926,6 +1188,16 @@
             "y": 280,
             "width": 156,
             "height": 177
+          }
+        }
+      },
+      "effects": {
+        "mist": {
+          "title": "Mist",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
           }
         }
       }
@@ -982,6 +1254,16 @@
             "y": 790,
             "width": 221,
             "height": 100
+          }
+        }
+      },
+      "effects": {
+        "dust": {
+          "title": "Dust",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
           }
         }
       }
@@ -1074,6 +1356,47 @@
             "height": 417
           }
         }
+      },
+      "effects": {
+        "dust": {
+          "title": "Dust",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          }
+        },
+        "fire": {
+          "title": "Fire",
+          "on": true,
+          "patch": "candle-lit",
+          "patchTitle": "Candle lit",
+          "settings": {
+            "amount": 1,
+            "glow": 1,
+            "speed": 1
+          },
+          "spot": [
+            [
+              [
+                0.476563,
+                0.438889
+              ],
+              [
+                0.523438,
+                0.438889
+              ],
+              [
+                0.523438,
+                0.510185
+              ],
+              [
+                0.476563,
+                0.510185
+              ]
+            ]
+          ]
+        }
       }
     },
     "act1-village-square": {
@@ -1160,6 +1483,44 @@
             }
           }
         }
+      },
+      "effects": {
+        "dust": {
+          "title": "Dust",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          }
+        },
+        "water": {
+          "title": "Running water",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          },
+          "spot": [
+            [
+              [
+                0.413021,
+                0.423148
+              ],
+              [
+                0.569271,
+                0.423148
+              ],
+              [
+                0.569271,
+                0.773148
+              ],
+              [
+                0.413021,
+                0.773148
+              ]
+            ]
+          ]
+        }
       }
     },
     "act1-village-well": {
@@ -1208,43 +1569,279 @@
             }
           }
         }
+      },
+      "effects": {
+        "dust": {
+          "title": "Dust",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          }
+        }
       }
     },
     "act2-ancient-grove": {
       "text": "A ring of trees so old their trunks are wider than a cottage. Text is carved in their bark, older than any letters you know. In the middle stands one tree taller than the rest, with bark the colour of tarnished silver. There are no houses here.",
-      "gameWas": "A ring of trees so old their trunks are wider than a cottage. Signs are carved in their bark, older than any letters you know. In the middle stands one tree taller than the rest, with bark the colour of tarnished silver."
+      "gameWas": "A ring of trees so old their trunks are wider than a cottage. Signs are carved in their bark, older than any letters you know. In the middle stands one tree taller than the rest, with bark the colour of tarnished silver.",
+      "effects": {
+        "dust": {
+          "title": "Dust",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          }
+        },
+        "leaves": {
+          "title": "Leaves",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          }
+        }
+      }
+    },
+    "act2-castle-approach": {
+      "effects": {
+        "dust": {
+          "title": "Dust",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          }
+        },
+        "leaves": {
+          "title": "Leaves",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          }
+        }
+      }
+    },
+    "act2-castle-courtyard": {
+      "effects": {
+        "dust": {
+          "title": "Dust",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          }
+        },
+        "leaves": {
+          "title": "Leaves",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          }
+        }
+      }
     },
     "act2-forest-entrance": {
       "text": "Massive trees create a natural cathedral as you enter the Enchanted Forest. Dappled sunlight filters through the dense canopy, and the path ahead disappears into green shadows. The air is alive with birds and rustling leaves, but beneath it lies an expectant silence, as if the forest itself is watching. the further into the forest you look, the more trees there are.",
-      "gameWas": "Massive trees create a natural cathedral as you enter the Enchanted Forest. Dappled sunlight filters through the dense canopy, and the path ahead disappears into green shadows. The air is alive with birds and rustling leaves, but beneath it lies an expectant silence, as if the forest itself is watching."
+      "gameWas": "Massive trees create a natural cathedral as you enter the Enchanted Forest. Dappled sunlight filters through the dense canopy, and the path ahead disappears into green shadows. The air is alive with birds and rustling leaves, but beneath it lies an expectant silence, as if the forest itself is watching.",
+      "effects": {
+        "dust": {
+          "title": "Dust",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          }
+        },
+        "leaves": {
+          "title": "Leaves",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          }
+        },
+        "mist": {
+          "title": "Mist",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          }
+        }
+      }
+    },
+    "act2-forest-transition": {
+      "effects": {
+        "dust": {
+          "title": "Dust",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          }
+        },
+        "mist": {
+          "title": "Mist",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          }
+        }
+      }
+    },
+    "act2-great-hall": {
+      "effects": {
+        "dust": {
+          "title": "Dust",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          }
+        }
+      }
     },
     "act2-greendale-gates": {
       "text": "In the city walls stands a magnificent stone archway with sturdy wooden doors that marks the entrance to the largest settlement you have encountered. Guards in polished mail stand watch, banners fluttering in the mountain breeze. Beyond, cobblestone streets wind between stone houses and bustling shops. The air carries the sounds of commerce—a stark contrast to Willowbrook's quiet charm.",
-      "gameWas": "A magnificent stone archway marks the entrance to Greendale, the largest settlement you have encountered. Guards in polished mail stand watch, banners fluttering in the mountain breeze. Beyond, cobblestone streets wind between stone houses and bustling shops. The air carries the sounds of commerce—a stark contrast to Willowbrook's quiet charm."
+      "gameWas": "A magnificent stone archway marks the entrance to Greendale, the largest settlement you have encountered. Guards in polished mail stand watch, banners fluttering in the mountain breeze. Beyond, cobblestone streets wind between stone houses and bustling shops. The air carries the sounds of commerce—a stark contrast to Willowbrook's quiet charm.",
+      "effects": {
+        "dust": {
+          "title": "Dust",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          }
+        }
+      }
     },
     "act2-healers-house": {
       "text": "Inside of a small stone house that smells of crushed herbs. A few bundles of dried plants still hang from the rafters, but the shelves below them are nearly bare: rows of empty bottles, rinsed and waiting. A fire burns in the hearth, and a door at the back stands half shut.",
-      "gameWas": "A small stone house that smells of crushed herbs. A few bundles of dried plants still hang from the rafters, but the shelves below them are nearly bare: rows of empty bottles, rinsed and waiting. A fire burns in the hearth, and a door at the back stands half shut."
+      "gameWas": "A small stone house that smells of crushed herbs. A few bundles of dried plants still hang from the rafters, but the shelves below them are nearly bare: rows of empty bottles, rinsed and waiting. A fire burns in the hearth, and a door at the back stands half shut.",
+      "effects": {
+        "dust": {
+          "title": "Dust",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          }
+        },
+        "embers": {
+          "title": "Embers",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          }
+        }
+      }
     },
     "act2-heart-of-the-forest": {
       "text": "The deepest part of the forest. The light here is green and gold and does not seem to come from the sky. A tree vaster than any other holds up the branches overhead, and before it stands an altar with a carved star on it The forest is so thick so the only way out is back the way you came..",
-      "gameWas": "The deepest part of the forest. The light here is green and gold and does not seem to come from the sky. A tree vaster than any other holds up the branches overhead, and before it stands an altar of starstone. The only way out is back north, to the grove."
+      "gameWas": "The deepest part of the forest. The light here is green and gold and does not seem to come from the sky. A tree vaster than any other holds up the branches overhead, and before it stands an altar of starstone. The only way out is back north, to the grove.",
+      "effects": {
+        "dust": {
+          "title": "Dust",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          }
+        },
+        "fireflies": {
+          "title": "Fireflies",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          }
+        }
+      }
     },
     "act2-hidden-library": {
       "text": "Discovered beneath Greendale through a secret passage, this ancient library holds countless volumes of magical lore. Glowing crystals mounted as torches provide soft illumination and the air hums with residual energy. Protective enchantments shimmer around the most valuable texts. Somewhere on these shelves may be an answer about the mark you carry.",
-      "gameWas": "Discovered beneath Greendale through a secret passage, this ancient library holds countless volumes of magical lore. Glowing crystals provide soft illumination and the air hums with residual energy. Protective enchantments shimmer around the most valuable texts. Somewhere on these shelves may be an answer about the mark you carry."
+      "gameWas": "Discovered beneath Greendale through a secret passage, this ancient library holds countless volumes of magical lore. Glowing crystals provide soft illumination and the air hums with residual energy. Protective enchantments shimmer around the most valuable texts. Somewhere on these shelves may be an answer about the mark you carry.",
+      "effects": {
+        "dust": {
+          "title": "Dust",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          }
+        }
+      }
     },
     "act2-inn-rooms": {
       "text": "A comfortable guest room. in a medieval inn. The room has a cozy bed, a writing desk, and a window overlooking the Market District. The room is clean and well-maintained, offering a peaceful retreat for travelers. Faint conversation drifts up from the common room below.",
-      "gameWas": "Comfortable guest rooms on the upper floor of The Silver Stag Inn. Each room has a cozy bed, a writing desk, and a window overlooking the Market District. The rooms are clean and well-maintained, offering a peaceful retreat for travelers. Faint conversation drifts up from the common room below."
+      "gameWas": "Comfortable guest rooms on the upper floor of The Silver Stag Inn. Each room has a cozy bed, a writing desk, and a window overlooking the Market District. The rooms are clean and well-maintained, offering a peaceful retreat for travelers. Faint conversation drifts up from the common room below.",
+      "effects": {
+        "dust": {
+          "title": "Dust",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          }
+        }
+      }
     },
     "act2-main-square": {
       "text": "The heart of Greendale: a great fountain with statues of old heroes fighting beasts, stalls under bright awnings, red roofs all round. The square is crowded, but the talk is low, and it stops when a guard walks past. Castle towers rise to the north.",
-      "gameWas": "The heart of Greendale: a great fountain of old heroes fighting beasts, stalls under bright awnings, red roofs all round. The square is crowded, but the talk is low, and it stops when a guard walks past. Castle towers rise to the north."
+      "gameWas": "The heart of Greendale: a great fountain of old heroes fighting beasts, stalls under bright awnings, red roofs all round. The square is crowded, but the talk is low, and it stops when a guard walks past. Castle towers rise to the north.",
+      "effects": {
+        "dust": {
+          "title": "Dust",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          }
+        }
+      }
+    },
+    "act2-market-district": {
+      "effects": {
+        "dust": {
+          "title": "Dust",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          }
+        }
+      }
     },
     "act2-merchants-warehouse": {
       "text": "The inside of a large stone building packed with goods from distant lands. Crates and barrels form narrow corridors between tall shelving. Exotic spice and lacquer aromas mingle in the cool still air. This is where the most valuable inventory rests under quiet watch.",
-      "gameWas": "A large stone building packed with goods from distant lands. Crates and barrels form narrow corridors between tall shelving. Exotic spice and lacquer aromas mingle in the cool still air. This is where the most valuable inventory rests under quiet watch."
+      "gameWas": "A large stone building packed with goods from distant lands. Crates and barrels form narrow corridors between tall shelving. Exotic spice and lacquer aromas mingle in the cool still air. This is where the most valuable inventory rests under quiet watch.",
+      "effects": {
+        "dust": {
+          "title": "Dust",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          }
+        }
+      }
+    },
+    "act2-mountain-path": {
+      "effects": {
+        "mist": {
+          "title": "Mist",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          }
+        }
+      }
     },
     "act2-portrait-spectral-librarian": {
       "text": "A face portrait of a ghostly scholar shimmering with soft blue light, translucent and gaunt, with a stern, watchful look. The background is a library.",
@@ -1260,15 +1857,61 @@
     },
     "act2-residential-quarter": {
       "text": "Quiet lanes of two-storey houses in the midst of a medieval city, each with a small garden and a workshop. Craftsmen work at benches in the open doorways, and neighbours sit on their steps. Half the garden plots have gone grey.",
-      "gameWas": "Quiet lanes of two-storey houses, each with a small garden and a workshop. Craftsmen work at benches in the open doorways, and neighbours sit on their steps. Half the garden plots have gone grey."
+      "gameWas": "Quiet lanes of two-storey houses, each with a small garden and a workshop. Craftsmen work at benches in the open doorways, and neighbours sit on their steps. Half the garden plots have gone grey.",
+      "effects": {
+        "dust": {
+          "title": "Dust",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          }
+        },
+        "leaves": {
+          "title": "Leaves",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          }
+        }
+      }
     },
     "act2-silver-stag-inn": {
       "text": "The inside of a medieval/fantasy inn glows with warm yellow light. Conversations from travelers and locals merge into a comforting din while tales are traded over bread and ale. All people are wearing medieval clothes. Stag mounts and adventuring trophies line the walls. The place feels welcoming; information flows here as freely as the drink.",
-      "gameWas": "A three-story inn glows with warm yellow light. Conversations from travelers and locals merge into a comforting din while tales are traded over bread and ale. Stag mounts and adventuring trophies line the walls. The place feels welcoming; information flows here as freely as the drink."
+      "gameWas": "A three-story inn glows with warm yellow light. Conversations from travelers and locals merge into a comforting din while tales are traded over bread and ale. Stag mounts and adventuring trophies line the walls. The place feels welcoming; information flows here as freely as the drink.",
+      "effects": {
+        "dust": {
+          "title": "Dust",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          }
+        }
+      }
     },
     "act2-whispering-glade": {
       "text": "In the midst of the forest, a meadow opens round a small stream that runs over smooth stones and ends up in a small pond. Wildflowers grow thick to the water's edge. Under the sound of the water there are other sounds, almost voices, and they stop when you listen for them.",
-      "gameWas": "A meadow opens round a small stream that runs over smooth stones. Wildflowers grow thick to the water's edge. Under the sound of the water there are other sounds, almost voices, and they stop when you listen for them."
+      "gameWas": "A meadow opens round a small stream that runs over smooth stones. Wildflowers grow thick to the water's edge. Under the sound of the water there are other sounds, almost voices, and they stop when you listen for them.",
+      "effects": {
+        "dust": {
+          "title": "Dust",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          }
+        },
+        "fireflies": {
+          "title": "Fireflies",
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          }
+        }
+      }
     },
     "act3-cavern-mouth": {
       "patches": {

@@ -69,6 +69,7 @@
     "from": {
       "part": "tts/{part}/images.json"
     },
+    "motion": "web/src/lantern/motionRenderer.ts",
     "clips": "web/public/images/generated",
     "manifest": "web/public/images/generated/manifest.json"
   },

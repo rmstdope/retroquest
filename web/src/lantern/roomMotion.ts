@@ -3,14 +3,16 @@
  * the picture (dust, leaves, embers, fireflies, low mist) and what lives on a
  * drawn spot only (water, fire, smoke). The game declares none of it: the
  * navigator tunes each image's effects in Content Studio, and they reach the
- * game in the images manifest, under the image's `effects`: each with its
- * `type` (one the renderer has, `motionRenderer.ts`), its `settings` (numbers
- * by setting id; a missing one plays at its default), an optional tie to the
- * story through one of the image's patch ids (`whilePatch` applies while that
- * patch is laid, `unlessPatch` while it is not) and, for a spot type, the
- * `spot` the navigator drew: a polygon of picture fractions with an optional
- * `mark`. A spot type with no drawn spot simply has no movement, and the rest
- * of the room moves all the same. Nothing is saved.
+ * game in the images manifest, under the image's `effects`, exactly as the
+ * studio exports them: each with its `kind` (one the renderer has,
+ * `motionRenderer.ts`), its `settings` (numbers by setting id; a missing one
+ * plays at its default), an optional tie to the story through one of the
+ * image's patch ids (`patch` applies while that patch is laid, `unlessPatch`
+ * while it is not), for a spot kind the `spot` the navigator drew (one or more
+ * shapes, each a list of `[x, y]` corners in picture fractions) and an
+ * optional `mark` (`[x, y]`, where its light comes from). A spot kind plays
+ * once in each of its shapes; one with no drawn shape simply has no movement,
+ * and the rest of the room moves all the same. Nothing is saved.
  */
 import { effectType } from './motionEffects'
 
@@ -57,24 +59,22 @@ export interface PicturePoint {
   y: number
 }
 
-/** The shape the navigator drew for a spot: a polygon, and where its mark sits. */
-export interface SpotShape {
-  points: PicturePoint[]
-  /** Where the studio put the spot's mark, as fractions of the picture; absent means the middle of the shape. */
-  mark?: PicturePoint
-}
+/** One shape the navigator drew for a spot: its corners in order, as fractions of the picture. */
+export type SpotShape = PicturePoint[]
 
 /** One movement of an image, as the manifest lists it. */
 export interface RoomEffect {
   kind: MotionKind
   /** The settings the navigator tuned, by setting id; missing ones play at their default. */
   settings?: Record<string, number>
-  /** A patch id of the same image: the effect applies while that patch is laid. */
+  /** A patch id of the same image: the effect applies while that patch is laid (the studio's `patch`). */
   whilePatch?: string
   /** A patch id of the same image: the effect applies while that patch is not laid. */
   unlessPatch?: string
-  /** The drawn spot of a spot kind. */
-  spot?: SpotShape
+  /** The shapes drawn for a spot kind; it plays once in each. */
+  spot?: SpotShape[]
+  /** Where a spot's light comes from, as fractions of the picture; absent means the middle of each shape. */
+  mark?: PicturePoint
 }
 
 /** A movement that applies now: a spot kind carries its drawn shape and the box around it. */
@@ -146,18 +146,13 @@ export function madeAreaBoxes(
   return boxes
 }
 
-/** Whether `value` is a point inside the picture. */
-function isPoint(value: unknown): value is PicturePoint {
-  if (typeof value !== 'object' || value === null) return false
-  const { x, y } = value as Record<string, unknown>
-  return (
-    typeof x === 'number' &&
-    typeof y === 'number' &&
-    x >= 0 &&
-    x <= 1 &&
-    y >= 0 &&
-    y <= 1
-  )
+/** The point of an `[x, y]` pair of picture fractions, or undefined when it is not one inside the picture. */
+function madePoint(value: unknown): PicturePoint | undefined {
+  if (!Array.isArray(value) || value.length !== 2) return undefined
+  const [x, y]: unknown[] = value
+  if (typeof x !== 'number' || typeof y !== 'number') return undefined
+  if (!(x >= 0 && x <= 1 && y >= 0 && y <= 1)) return undefined
+  return { x, y }
 }
 
 /** The box around `points`; null when it has no size. */
@@ -171,15 +166,25 @@ function boundingBox(points: readonly PicturePoint[]): AreaBox | null {
   return width > 0 && height > 0 ? { x, y, width, height } : null
 }
 
-/** The spot of `value`: at least three points, all inside the picture, around something with a size; the mark only when it is inside the picture. */
-function madeSpot(value: unknown): SpotShape | undefined {
-  if (typeof value !== 'object' || value === null) return undefined
-  const { points, mark } = value as Record<string, unknown>
-  if (!Array.isArray(points) || points.length < 3) return undefined
-  if (!points.every(isPoint) || !boundingBox(points)) return undefined
-  const kept = points.map(({ x, y }) => ({ x, y }))
-  const markPoint = madeMark(mark)
-  return markPoint ? { points: kept, mark: markPoint } : { points: kept }
+/** One drawn shape: at least three corners, all inside the picture, around something with a size. */
+function madeShape(value: unknown): SpotShape | undefined {
+  if (!Array.isArray(value) || value.length < 3) return undefined
+  const points: PicturePoint[] = []
+  for (const corner of value as unknown[]) {
+    const point = madePoint(corner)
+    if (!point) return undefined
+    points.push(point)
+  }
+  return boundingBox(points) ? points : undefined
+}
+
+/** The shapes of a spot that are shapes; undefined when none is. */
+function madeSpot(value: unknown): SpotShape[] | undefined {
+  if (!Array.isArray(value)) return undefined
+  const shapes = (value as unknown[])
+    .map(madeShape)
+    .filter((shape): shape is SpotShape => shape !== undefined)
+  return shapes.length > 0 ? shapes : undefined
 }
 
 /** The settings of `value` that are finite numbers. */
@@ -192,10 +197,32 @@ function madeSettings(value: unknown): Record<string, number> | undefined {
 }
 
 /**
+ * One effect as Content Studio exports it (`{ kind, settings, patch?,
+ * unlessPatch?, spot?, mark? }`); null for one that is broken or of a kind
+ * the renderer does not have. What is broken inside it (a setting that is not
+ * a number, a shape that is not one inside the picture, a mark outside it) is
+ * left out.
+ */
+export function madeEffect(value: unknown): RoomEffect | null {
+  if (typeof value !== 'object' || value === null) return null
+  const raw = value as Record<string, unknown>
+  if (typeof raw.kind !== 'string' || !effectType(raw.kind)) return null
+  const effect: RoomEffect = { kind: raw.kind as MotionKind }
+  const settings = madeSettings(raw.settings)
+  if (settings) effect.settings = settings
+  if (typeof raw.patch === 'string') effect.whilePatch = raw.patch
+  if (typeof raw.unlessPatch === 'string') effect.unlessPatch = raw.unlessPatch
+  const spot = madeSpot(raw.spot)
+  if (spot) effect.spot = spot
+  const mark = madePoint(raw.mark)
+  if (mark) effect.mark = mark
+  return effect
+}
+
+/**
  * The effects the images manifest lists under image `imageId`. Tolerant of
- * anything: a manifest that is not an object, an image with no `effects`, an
- * effect of a type the renderer does not have, settings that are not numbers
- * and a spot that is not a shape wholly inside the picture are left out.
+ * anything: a manifest that is not an object, an image with no `effects` and
+ * a broken effect are left out (`madeEffect`).
  */
 export function madeEffects(manifest: unknown, imageId: string): RoomEffect[] {
   if (typeof manifest !== 'object' || manifest === null) return []
@@ -203,48 +230,57 @@ export function madeEffects(manifest: unknown, imageId: string): RoomEffect[] {
   if (typeof image !== 'object' || image === null) return []
   const listed: unknown = (image as Record<string, unknown>).effects
   if (!Array.isArray(listed)) return []
-  const effects: RoomEffect[] = []
-  for (const item of listed as unknown[]) {
-    if (typeof item !== 'object' || item === null) continue
-    const raw = item as Record<string, unknown>
-    if (typeof raw.type !== 'string' || !effectType(raw.type)) continue
-    const effect: RoomEffect = { kind: raw.type as MotionKind }
-    const settings = madeSettings(raw.settings)
-    if (settings) effect.settings = settings
-    if (typeof raw.whilePatch === 'string') effect.whilePatch = raw.whilePatch
-    if (typeof raw.unlessPatch === 'string')
-      effect.unlessPatch = raw.unlessPatch
-    const spot = madeSpot(raw.spot)
-    if (spot) effect.spot = spot
-    effects.push(effect)
-  }
-  return effects
+  return (listed as unknown[])
+    .map(madeEffect)
+    .filter((effect): effect is RoomEffect => effect !== null)
+}
+
+/** Whether `point` lies in `box` (its edges included). */
+function inBox(point: PicturePoint, box: AreaBox): boolean {
+  return (
+    point.x >= box.x &&
+    point.x <= box.x + box.width &&
+    point.y >= box.y &&
+    point.y <= box.y + box.height
+  )
 }
 
 /**
- * The movement that applies to the story as it stands: the effects whose
- * patch condition holds (`patchIds` are the patches laid now), the spot kinds
- * with their drawn shape and the box around it (a spot with none is left out).
+ * What one effect plays, whatever the story: a floating kind as it is, a
+ * spot kind once in each drawn shape with the shape and the box around it
+ * (the mark on the box of a shape that holds it), and a spot kind with no
+ * drawn shape not at all.
+ */
+export function effectSpecs(effect: RoomEffect): MotionSpec[] {
+  const base: MotionSpec = { kind: effect.kind }
+  if (effect.settings) base.settings = effect.settings
+  if (!isSpotKind(effect.kind)) return [base]
+  const specs: MotionSpec[] = []
+  for (const shape of effect.spot ?? []) {
+    const box = boundingBox(shape)
+    if (!box) continue
+    const mark = effect.mark && inBox(effect.mark, box) ? effect.mark : null
+    specs.push({ ...base, box: mark ? { ...box, mark } : box, polygon: shape })
+  }
+  return specs
+}
+
+/**
+ * The movement that applies to the story as it stands: what the effects
+ * whose patch condition holds play (`patchIds` are the patches laid now; see
+ * `effectSpecs`).
  */
 export function appliedMotion(
   effects: readonly RoomEffect[],
   patchIds: readonly string[],
 ): MotionSpec[] {
-  const specs: MotionSpec[] = []
-  for (const effect of effects) {
-    if (effect.whilePatch && !patchIds.includes(effect.whilePatch)) continue
-    if (effect.unlessPatch && patchIds.includes(effect.unlessPatch)) continue
-    const spec: MotionSpec = { kind: effect.kind }
-    if (effect.settings) spec.settings = effect.settings
-    if (isSpotKind(effect.kind)) {
-      const box = effect.spot && boundingBox(effect.spot.points)
-      if (!effect.spot || !box) continue
-      spec.box = effect.spot.mark ? { ...box, mark: effect.spot.mark } : box
-      spec.polygon = effect.spot.points
-    }
-    specs.push(spec)
-  }
-  return specs
+  return effects
+    .filter(
+      (effect) =>
+        (!effect.whilePatch || patchIds.includes(effect.whilePatch)) &&
+        (!effect.unlessPatch || !patchIds.includes(effect.unlessPatch)),
+    )
+    .flatMap(effectSpecs)
 }
 
 /** How an image's picture drifts: seconds each way, and how far it moves in, in percent. */
