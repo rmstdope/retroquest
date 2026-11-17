@@ -1,6 +1,6 @@
-# RetroQuest Web Frontend
+# Tales of Twinmoor Web Frontend
 
-Browser-based frontend for RetroQuest: the game engine and the acts are TypeScript and run in the page.
+Browser-based frontend for Tales of Twinmoor: Wardens of the Dawn: the game engine and the acts are TypeScript and run in the page.
 
 ## Tech Stack
 

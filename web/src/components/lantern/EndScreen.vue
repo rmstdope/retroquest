@@ -28,7 +28,7 @@ onMounted(() => {
     <div class="lq-end-inner">
       <span class="lq-end-kicker">The end</span>
       <h1 ref="title" class="lq-end-title" tabindex="-1">
-        Thank you for playing RetroQuest
+        Thank you for playing Tales of Twinmoor
       </h1>
       <div class="lq-ornament" aria-hidden="true">
         <span class="lq-rule"></span><span class="lq-diamond">◆</span

@@ -55,7 +55,7 @@ describe('LanternLayout: the Escape menu', () => {
 
   it('has no top bar at all', () => {
     expect(w.find('header').exists()).toBe(false)
-    expect(w.text()).not.toContain('RetroQuest')
+    expect(w.text()).not.toContain('Tales of Twinmoor')
     expect(w.find('[data-button="menu"]').exists()).toBe(true)
   })
 

@@ -100,7 +100,7 @@ export class Act1 extends Act {
   override getActIntro(): string {
     return (
       '[bold]ACT 1: THE CALL TO ADVENTURE[/bold]\n\n' +
-      `You are ${characterName('Elior')}, a farmer boy in the village of Willowbrook, on the outskirts of Eldoria. ` +
+      `You are ${characterName('Elior')}, a farmer boy in the village of Willowbrook, on the outskirts of Twinmoor. ` +
       `Your ${characterName('grandmother')} raised you after your parents vanished, and your days are the crops, the hens and the weather.\n` +
       '\nTonight the weather is a storm, and a light that is not lightning has split the sky over the fields. ' +
       'Sleep, when it comes, is not quiet.\n'

@@ -309,7 +309,7 @@ describe('LanternLayout', () => {
     await flushPromises()
 
     const w = wrapper
-    expect(w.get('h1').text()).toBe('Thank you for playing RetroQuest')
+    expect(w.get('h1').text()).toBe('Thank you for playing Tales of Twinmoor')
     expect(w.text()).toContain('The realm breathes again.')
     expect(w.text()).toContain('Your game is saved in the quick slot.')
     expect(w.find('header').exists()).toBe(false)
@@ -690,7 +690,7 @@ describe('LanternLayout', () => {
   it('has no top bar: no title, no bar of buttons', () => {
     const w = mountLayout()
     expect(w.find('header').exists()).toBe(false)
-    expect(w.text()).not.toContain('RetroQuest')
+    expect(w.text()).not.toContain('Tales of Twinmoor')
   })
 
   it('lists the turns with their command and rendered answer', async () => {
@@ -1560,7 +1560,7 @@ describe('LanternLayout', () => {
         const text = await settingsWith({
           'act1-village-square': { file: 'square.mp3', duration: 60 },
         })
-        expect(text).toContain('Original music for RetroQuest')
+        expect(text).toContain('Original music for Tales of Twinmoor')
         expect(text).not.toContain('Content Studio')
         expect(text).not.toContain('Audio Studio')
         expect(text).not.toContain('Conquest')

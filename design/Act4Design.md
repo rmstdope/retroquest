@@ -246,7 +246,7 @@ through the black stone at the gate arch.
 
 ### The Corruption's Source
 
-A temporal wound torn to save his friends, which consumes life energy. It is why Eldoria's land
+A temporal wound torn to save his friends, which consumes life energy. It is why Twinmoor's land
 withers and why Alden is drained. The wound is held shut by the ward that is Elior's parents.
 
 ### Kingdom's True History
@@ -533,7 +533,7 @@ story. None of them are implemented yet.
 
 -   **Items:** Throne Key and Ancient Iron Key (the Ancient Amulet replaces both as the key to the Parents' Vault), Time Crystal,
     Mirror Shard, Memory Fragment and the Combined Mirror-Memory Shard, Royal Sigil, Hero's
-    Memorial, Crown of Eldoria, Parent's Journal, Restoration Seed, Peace Lily, Hero's Medal, and
+    Memorial, Crown of Twinmoor, Parent's Journal, Restoration Seed, Peace Lily, Hero's Medal, and
     the decorative extras of the old room lists (Battle Standard, Fallen Banner, Knight's Crest,
     Shadow Essence, Whispering Scroll, Light Crystal, Truth Serum, Sorceress's Tears, Memory Orb, Compass of Truth).
 -   **Spells:** Dispel Lies, Memory Restoration, Royal Blessing, Parent's Blessing, Triumphant

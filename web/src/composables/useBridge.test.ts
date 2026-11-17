@@ -696,8 +696,12 @@ describe('useBridge', () => {
         false,
       ])
       expect(slots[1].room).toBe("Elior's Cottage")
-      expect(bridge.loadFromSlot(2)).toMatch(/older version of RetroQuest/)
-      expect(bridge.quickLoadGame()).toMatch(/older version of RetroQuest/)
+      expect(bridge.loadFromSlot(2)).toMatch(
+        /older version of Tales of Twinmoor/,
+      )
+      expect(bridge.quickLoadGame()).toMatch(
+        /older version of Tales of Twinmoor/,
+      )
       expect(localStorageMock.getItem('retroquest_save_slots')).toBe(slotsRaw)
       expect(localStorageMock.getItem('retroquest_save')).toBe(older)
 

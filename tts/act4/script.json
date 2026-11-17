@@ -990,11 +990,6 @@
     "text": "You have learned Redemption's Light. Light that reminds a fallen soul of who it was."
   },
   {
-    "id": "0a8e1f8fdbdc52",
-    "speaker": "narrator",
-    "text": "The king of Eldoria, alive, his crown bright again."
-  },
-  {
     "id": "0aa774c90f9636",
     "speaker": "narrator",
     "text": "The shadows draw back from the light, a moment late, and come again as soon as it passes. They only ever follow you."
@@ -1583,6 +1578,11 @@
     "id": "1176e73e4e700e",
     "speaker": "narrator",
     "text": "The Shadow turned the mask over and gave it back. If she could choose the truth, perhaps he can too. Its words are still waiting for an answer: Be patient where I was not."
+  },
+  {
+    "id": "1178dbe7887a1e",
+    "speaker": "narrator",
+    "text": "The king of Twinmoor, grey and thin, as if each week in here had been a year. His crown is dark."
   },
   {
     "id": "118cd465309ac1",
@@ -2210,11 +2210,6 @@
     "text": "I know what that costs. Thank you."
   },
   {
-    "id": "185f06236f6093",
-    "speaker": "narrator",
-    "text": "The king of Eldoria, grey and thin, as if each week in here had been a year. His crown is dark."
-  },
-  {
     "id": "18689cb023d3d9",
     "speaker": "narrator",
     "text": "You step into the empty corridor. Behind you the false mirrors go dark, one by one, until a single corridor remains. At its end stands a plain mirror that shows you exactly as you are."
@@ -2678,6 +2673,11 @@
     "id": "1cffb979ea928d",
     "speaker": "narrator",
     "text": "The Final Stand: You forgave him, and forgiveness is yours now. The wound is still open."
+  },
+  {
+    "id": "1d04099559edf6",
+    "speaker": "narrator",
+    "text": "The king of Twinmoor, alive, his crown bright again."
   },
   {
     "id": "1d0adb6b8b53f2",

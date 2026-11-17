@@ -14,7 +14,7 @@ import { executeCommands, expectNoStockReply } from '@/testing/gameHelpers'
 
 /** How he looks in the crystal: weeks there, not years (the Settled Timeline). */
 const IN_THE_CRYSTAL =
-  'The king of Eldoria, grey and thin, as if each week in here had been a ' +
+  'The king of Twinmoor, grey and thin, as if each week in here had been a ' +
   'year. His crown is dark.'
 
 describe('King Alden', () => {

@@ -1,6 +1,6 @@
 # Voice
 
-How RetroQuest reads. Every room description, item line, refusal and speech in every act follows
+How Tales of Twinmoor reads. Every room description, item line, refusal and speech in every act follows
 this, so that a line written for Act I and a line written for Act IV sound like the same game.
 The register that won, across three prose passes, is plain and particular: the Sea-Sealed
 Letter's margin ("You would have me wait while you die. — M."), Mira's confession ("You noticed.

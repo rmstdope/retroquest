@@ -291,7 +291,7 @@ export function titleImage(): GameImage {
     width: IMAGE_WIDTH,
     height: IMAGE_HEIGHT,
     text:
-      'The world of RetroQuest at the start of the story: a quiet village ' +
+      'The world of Twinmoor at the start of the story: a quiet village ' +
       'under a lantern-lit dusk, drawn with open sky across the top third ' +
       "for the game's name and a calm, uncluttered middle for the buttons.",
   }

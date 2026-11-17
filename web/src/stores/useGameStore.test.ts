@@ -2351,7 +2351,7 @@ describe('useGameStore', () => {
       'leaves the game as it was when a save is too old to load (%s)',
       (command, answer) => {
         const OLD =
-          '[failure]That save was made by an older version of RetroQuest' +
+          '[failure]That save was made by an older version of Tales of Twinmoor' +
           ' and can no longer be loaded.[/failure]'
         answer().mockReturnValue(OLD)
         store.questsHaveNew = true
@@ -2462,7 +2462,7 @@ describe('useGameStore', () => {
     }
     const CLOSING =
       'The realm breathes again.\n\nCongratulations — you have completed ' +
-      'Act IV, the final act of RetroQuest!\n'
+      'Act IV, the final act of Tales of Twinmoor!\n'
 
     beforeEach(async () => {
       bridge.controller.advanceTurn
@@ -2490,7 +2490,7 @@ describe('useGameStore', () => {
       kind: 'complete',
       act: 'Act IV',
       title: 'The Long Night Ends',
-      body: 'Congratulations — you have completed Act IV, the final act of RetroQuest!',
+      body: 'Congratulations — you have completed Act IV, the final act of Tales of Twinmoor!',
       stats: STATS,
       final: true,
     }

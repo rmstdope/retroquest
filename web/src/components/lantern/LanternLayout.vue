@@ -2782,7 +2782,7 @@ watch(
             v-else-if="gameDialog"
             :key="gameDialog"
             :title="INFO_TITLES[gameDialog]"
-            eyebrow="RetroQuest"
+            eyebrow="Tales of Twinmoor"
             :key-line="HELP_KEYS"
             start-on-panel
             scroll-keys

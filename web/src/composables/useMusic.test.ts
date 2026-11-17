@@ -92,7 +92,7 @@ describe('useMusic', () => {
 
     it('keeps the folder of a file in a folder', () => {
       const { loadTrack } = useMusic(audio)
-      loadTrack('generated/hall one.mp3', 'Made for RetroQuest')
+      loadTrack('generated/hall one.mp3', 'Made for Tales of Twinmoor')
       expect(audio.src).toBe('/audio/music/generated/hall%20one.mp3')
     })
 

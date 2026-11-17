@@ -1320,6 +1320,11 @@
     "text": "You search around the General Store, but find nothing of interest beyond what you can already see."
   },
   {
+    "id": "0842eb9ef7d3ac",
+    "speaker": "narrator",
+    "text": "You are Elior, a farmer boy in the village of Willowbrook, on the outskirts of Twinmoor. Your grandmother raised you after your parents vanished, and your days are the crops, the hens and the weather."
+  },
+  {
     "id": "0844b4b9abc5e8",
     "speaker": "borin",
     "text": "How is that blade holding up? Keep that edge oiled, mind, or the damp will have it dull again before you know it."
@@ -1658,11 +1663,6 @@
     "id": "0a2f78f83100c4",
     "speaker": "narrator",
     "text": "You search around Mira's Hut, but find nothing of interest beyond what you can already see."
-  },
-  {
-    "id": "0a377912f4ee7e",
-    "speaker": "narrator",
-    "text": "You are Elior, a farmer boy in the village of Willowbrook, on the outskirts of Eldoria. Your grandmother raised you after your parents vanished, and your days are the crops, the hens and the weather."
   },
   {
     "id": "0a3adde6864e71",

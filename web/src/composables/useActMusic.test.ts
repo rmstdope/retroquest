@@ -322,7 +322,7 @@ describe('useActMusic', () => {
       game.musicRoomKey = 'VillageSquare'
       await settle()
       expect(music?.musicInfo.value).toBe(
-        'Original music for RetroQuest\n' +
+        'Original music for Tales of Twinmoor\n' +
           'Images, narration and music made with Content Studio',
       )
       scope.stop()

@@ -1,4 +1,4 @@
-# Game Story: RetroQuest – The Awakening
+# Game Story: Tales of Twinmoor: Wardens of the Dawn
 
 ## Story Canon
 
@@ -38,7 +38,7 @@ The canon above lists facts; this orders them, so every act agrees on when thing
 
 ## Prologue
 
-Elior, a humble farmer boy, lives in the quiet village of Willowbrook on the outskirts of Eldoria. Raised by his grandmother after his parents vanished, Elior’s life is simple—tending crops and caring for animals. He believes they simply vanished, and he longs to uncover the truth behind their disappearance. One stormy night, a strange light appears in the sky, and Elior dreams of a shadowy figure calling his name—a voice that feels achingly familiar. It is the first time he hears the dream voice, which is not tied to either parent. The game opens inside that dream: one dark room with the storm in it, the cradle tune, a man's hand lifting a child, and the figure whispering his name. Nothing can be carried out of it and no way leads anywhere; when Elior answers the voice it says "…let them rest…" and his name, and he wakes in his cottage with the tune still going out by the hearth.
+Elior, a humble farmer boy, lives in the quiet village of Willowbrook on the outskirts of Twinmoor. Raised by his grandmother after his parents vanished, Elior’s life is simple—tending crops and caring for animals. He believes they simply vanished, and he longs to uncover the truth behind their disappearance. One stormy night, a strange light appears in the sky, and Elior dreams of a shadowy figure calling his name—a voice that feels achingly familiar. It is the first time he hears the dream voice, which is not tied to either parent. The game opens inside that dream: one dark room with the storm in it, the cradle tune, a man's hand lifting a child, and the figure whispering his name. Nothing can be carried out of it and no way leads anywhere; when Elior answers the voice it says "…let them rest…" and his name, and he wakes in his cottage with the tune still going out by the hearth.
 
 ## Act I: The Awakening
 
@@ -90,7 +90,7 @@ In Greendale, Elior meets Sir Cedric, who recognizes the Warden sigil of the War
 
 ## Act III: Trials and Revelations
 
-With Nyx’s help, Elior unlocks new magical abilities. The group learns that Malakar has captured King Alden and is draining his life force; the same draining magic is behind the blight over Eldoria. To save the king, Elior must retrieve three ancient relics hidden across the kingdom: the Crystal of Light, the Phoenix Feather, and the Dragon’s Scale. Each relic represents a virtue Elior must embrace—courage, wisdom, and selflessness. Along the way, Elior faces Malakar’s minions and optional moments of mercy, truth and selfless help that shape which endings open.
+With Nyx’s help, Elior unlocks new magical abilities. The group learns that Malakar has captured King Alden and is draining his life force; the same draining magic is behind the blight over Twinmoor. To save the king, Elior must retrieve three ancient relics hidden across the kingdom: the Crystal of Light, the Phoenix Feather, and the Dragon’s Scale. Each relic represents a virtue Elior must embrace—courage, wisdom, and selflessness. Along the way, Elior faces Malakar’s minions and optional moments of mercy, truth and selfless help that shape which endings open.
 
 **Key Events:**
 
@@ -103,7 +103,7 @@ With Nyx’s help, Elior unlocks new magical abilities. The group learns that Ma
 
 **Highlights from the Act III design** (see `Act3Design.md`):
 
-- **Opening:** the opening page quotes what Elior said in the courtyard, "He took them", now the belief he carries, and tells how Mira came to Greendale the night of the vision, drew a chalk circle in the castle courtyard and brought the party to her hut in Willowbrook; she has not yet said how a village healer learned to do that. At her hut Mira reveals the stakes: if King Alden dies, the bindings that protect Eldoria unravel. She gives Elior her **Keepsake Note** and **teleports** the party (Elior, Mira and Cedric) between three six-room relic sites. The curse is visibly worse at each (dead sea birds and grey surf, ash rain, silent mines), and Mira says the king is weaker at each departure.
+- **Opening:** the opening page quotes what Elior said in the courtyard, "He took them", now the belief he carries, and tells how Mira came to Greendale the night of the vision, drew a chalk circle in the castle courtyard and brought the party to her hut in Willowbrook; she has not yet said how a village healer learned to do that. At her hut Mira reveals the stakes: if King Alden dies, the bindings that protect Twinmoor unravel. She gives Elior her **Keepsake Note** and **teleports** the party (Elior, Mira and Cedric) between three six-room relic sites. The curse is visibly worse at each (dead sea birds and grey surf, ash rain, silent mines), and Mira says the king is weaker at each departure.
 - **Main quest – _The Three Virtues_:** each site has two side quests and a trial that tests its virtue:
     - **Sunken Ruins (Courage):** _Tideward Sigils_ and _Lanterns of the Deeps_. In the sanctum the Tide-Born Guardian puts out every light and asks Elior to walk: three steps east into black water, each with a line of fear, then the vow of what he did not abandon, **"myself"**. The Guardian tests him as Aren asked to have later visitors tested.
     - **Mount Ember (Wisdom):** _Mirrors of Emberlight_ (four brass segments, resin, `mend`, then rest till the noon beam fires) and _Breath of the Mountain_ (a heat ward, then the vents crossed only on their in-breath). The Phoenix appears only to one who rests and asks _"What is wisdom when time is short?"_: **"patience"**, the virtue a Warden lacked. The Ash Scholar holds Malakar's charred notebook: the good years, and the Wasting reaching Willowbrook.
@@ -139,7 +139,7 @@ With all relics in hand, Elior and his companions infiltrate Malakar’s fortres
 
 ## Epilogue
 
-Peace returns to Eldoria. Elior is celebrated as a hero but chooses to return to Willowbrook, humbled by his journey. Mira, Cedric, and Nyx remain close allies, and the kingdom flourishes once more. His parents have spoken to him one last time and now rest in peace. In the last scene Elior walks out to the withered field from Act I, Grandmother humming his mother's cradle song at the gate, and casts `grow`; the field turns green, Nyx's light says the refrain once more, and Grandmother says "Welcome home."
+Peace returns to Twinmoor. Elior is celebrated as a hero but chooses to return to Willowbrook, humbled by his journey. Mira, Cedric, and Nyx remain close allies, and the kingdom flourishes once more. His parents have spoken to him one last time and now rest in peace. In the last scene Elior walks out to the withered field from Act I, Grandmother humming his mother's cradle song at the gate, and casts `grow`; the field turns green, Nyx's light says the refrain once more, and Grandmother says "Welcome home."
 
 ## Red Line
 
@@ -160,4 +160,4 @@ What Elior believes and what is revealed, act by act, with the recurring threads
 - **Middle:** Gathering allies, learning magic, retrieving relics, and facing moral choices.
 - **End:** Confrontation with Malakar, saving the kingdom, and Elior’s return home to Willowbrook, where the withered field is green again as he casts `grow`.
 
-The story adapts to player choices, offering three endings (Redemption, Justice and Sacrifice) shaped by optional virtue moments, but always centers on Elior’s growth from a simple farmer boy to the savior of Eldoria, and his quest to uncover the truth about his family.
+The story adapts to player choices, offering three endings (Redemption, Justice and Sacrifice) shaped by optional virtue moments, but always centers on Elior’s growth from a simple farmer boy to the savior of Twinmoor, and his quest to uncover the truth about his family.

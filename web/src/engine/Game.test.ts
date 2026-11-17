@@ -1885,7 +1885,7 @@ describe('Game', () => {
         '[failure]Failed to load game',
       )
       expect(game.loadSaveData('{"version":1}')).toContain(
-        'older version of RetroQuest',
+        'older version of Tales of Twinmoor',
       )
       expect(game.loadSaveData('{"version":4}')).toContain(
         'unsupported save format',
@@ -1909,7 +1909,7 @@ describe('Game', () => {
 
       const state = game.state
       expect(game.loadSaveData(older(3))).toBe(
-        '[failure]That save was made by an older version of RetroQuest' +
+        '[failure]That save was made by an older version of Tales of Twinmoor' +
           ' and can no longer be loaded.[/failure]',
       )
       expect(game.state).toBe(state)
