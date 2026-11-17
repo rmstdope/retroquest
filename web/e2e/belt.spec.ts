@@ -215,6 +215,21 @@ test('at 390px the word list spans the typing box and No match takes at most two
   expect(lineBox?.height ?? 999).toBeLessThanOrEqual(60)
 })
 
+test("at 390px the Show what's here pill steps aside while the typing box is open (rq-ttg0)", async ({
+  page,
+}): Promise<void> => {
+  await page.setViewportSize({ width: 390, height: 757 })
+  await toTheCottage(page)
+  const pill = page.getByRole('button', { name: /Show what's here/ })
+  await expect(pill).toBeVisible()
+  await page.keyboard.press('F1')
+  await page.getByLabel('Command', { exact: true }).fill('look ')
+  await expect(
+    page.getByRole('listbox', { name: 'Matching words' }),
+  ).toBeVisible()
+  await expect(pill).toBeHidden()
+})
+
 test('at 1280px the word list stays as wide as the text field, narrower than the box (rq-ttg0)', async ({
   page,
 }): Promise<void> => {
