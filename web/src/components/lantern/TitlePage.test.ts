@@ -6,6 +6,7 @@ import TitlePage from './TitlePage.vue'
 import { GAME_FULL_NAME, GAME_NAME, GAME_SUBTITLE } from '@/engine'
 import type { SaveSlot } from '@/types/bridge'
 import { setPictureProbe } from '@/lantern/roomPicture'
+import type { ImageZoom, MotionSpec } from '@/lantern/roomMotion'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 
 const CREDIT = 'Original music, images and narration made with Content Studio'
@@ -105,6 +106,91 @@ describe('TitlePage', () => {
       expect(w.get('.lq-title-picture').attributes('style')).toContain(
         'images/generated/act1-the-dream.png',
       )
+    })
+  })
+
+  describe("the painting's movement", () => {
+    const DUST: MotionSpec[] = [{ kind: 'dust' }]
+
+    beforeEach(() => {
+      useSettingsStore().reduceMotion = 'off'
+      vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue(null)
+    })
+
+    /** A title page with the given movement and zoom, its picture up. */
+    async function mountMoving(
+      props: { motion?: MotionSpec[]; zoom?: ImageZoom | null } = {},
+    ): Promise<VueWrapper> {
+      wrapper = mount(TitlePage, { props, attachTo: document.body })
+      await flushPromises()
+      return wrapper
+    }
+
+    it('zooms from the first moment, in the 16 s and 3% the team has not yet changed', async () => {
+      const w = await mountMoving()
+      const art = w.get('.lq-title-art')
+      const drift = art.get('.lq-title-drift')
+      expect(drift.classes()).toContain('lq-title-drift-on')
+      expect(drift.attributes('style')).toContain(
+        '--lq-title-zoom-seconds: 16s',
+      )
+      expect(drift.attributes('style')).toContain('--lq-title-zoom-percent: 3')
+      expect(w.find('canvas').exists()).toBe(false)
+    })
+
+    it('zooms at the seconds and size the team saved', async () => {
+      const w = await mountMoving({ zoom: { seconds: 20, percent: 5 } })
+      const style = w.get('.lq-title-drift').attributes('style')
+      expect(style).toContain('--lq-title-zoom-seconds: 20s')
+      expect(style).toContain('--lq-title-zoom-percent: 5')
+    })
+
+    it('does not zoom when the zoom is off, and its effects still play', async () => {
+      const w = await mountMoving({ zoom: null, motion: DUST })
+      expect(w.get('.lq-title-drift').classes()).not.toContain(
+        'lq-title-drift-on',
+      )
+      expect(w.find('canvas').exists()).toBe(true)
+    })
+
+    it('draws the saved effects on the painting, inside the zooming layer with the picture', async () => {
+      const w = await mountMoving({ motion: DUST })
+      const drift = w.get('.lq-title-drift')
+      expect(drift.find('.lq-title-picture').exists()).toBe(true)
+      expect(drift.find('canvas').exists()).toBe(true)
+    })
+
+    it('keeps the name, the credit, the buttons and the shade out of the zoom', async () => {
+      const w = await mountMoving({ motion: DUST })
+      const drift = w.get('.lq-title-drift').element
+      for (const selector of [
+        '.lq-title-name',
+        '.lq-credit',
+        '.lq-title-buttons',
+        '.lq-title-shade',
+      ])
+        expect(drift.contains(w.get(selector).element), selector).toBe(false)
+    })
+
+    it('draws no effects over the opening dream that stands in for the title picture', async () => {
+      setPictureProbe((url) => Promise.resolve(!url.includes('title-screen')))
+      const w = await mountMoving({ motion: DUST })
+      expect(w.find('.lq-title-picture').exists()).toBe(true)
+      expect(w.find('canvas').exists()).toBe(false)
+    })
+
+    it('stops everything at once under Reduce motion, and starts again when it is off', async () => {
+      const w = await mountMoving({ motion: DUST })
+      useSettingsStore().reduceMotion = 'on'
+      await flushPromises()
+      expect(w.get('.lq-title-drift').classes()).not.toContain(
+        'lq-title-drift-on',
+      )
+      expect(w.find('canvas').exists()).toBe(false)
+      useSettingsStore().reduceMotion = 'off'
+      await flushPromises()
+      expect(w.get('.lq-title-drift').classes()).toContain('lq-title-drift-on')
+      expect(w.find('canvas').exists()).toBe(true)
     })
   })
 

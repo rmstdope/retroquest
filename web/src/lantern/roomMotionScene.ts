@@ -61,8 +61,17 @@ interface Layer {
   warm: boolean
 }
 
+/** The picture a scene may redraw (the ripples do): the image and its own pixel size. */
+export interface PictureSource {
+  image: CanvasImageSource
+  width: number
+  height: number
+}
+
 /** What a scene is driven through. */
 export interface MotionScene {
+  /** The picture itself, for the effects that redraw it (pond ripples); null while it is not there. */
+  setSource(source: PictureSource | null): void
   /** The canvas is `width` × `height` pixels, showing a picture of `picture` size trimmed to fill it. */
   resize(width: number, height: number, picture: PictureSize): void
   /** What applies now; with `instant`, a new layer is run ahead and starts at full strength. */
@@ -156,6 +165,27 @@ export function createMotionScene(): MotionScene {
   let height = BASE_HEIGHT
   let picture: PictureSize = { width: 16, height: 9 }
   let layers: Layer[] = []
+  let source: PictureSource | null = null
+
+  /** Canvas pixels to a picture pixel when the picture is shown trimmed to fill the canvas. */
+  function cover(): number {
+    return Math.max(width / picture.width, height / picture.height)
+  }
+
+  /** The size of a picture detail drawn for a 1920 pixel wide picture, on this canvas. */
+  function k(): number {
+    return (cover() * picture.width) / 1920
+  }
+
+  /** The light the layer's spot is lit from: its mark on the picture, else the middle of its rectangle. */
+  function lightOf(layer: Layer): { x: number; y: number } {
+    const mark = layer.spec.box?.mark
+    if (mark) return pointPosition(mark, { width, height }, picture)
+    const rect = layer.rect
+    return rect
+      ? { x: rect.x + rect.w / 2, y: rect.y + rect.h / 2 }
+      : { x: 0, y: 0 }
+  }
 
   /** Sizes and speeds shrink a little with the canvas, never below 60% nor above the drawing's. */
   function unit(): number {
@@ -224,6 +254,53 @@ export function createMotionScene(): MotionScene {
             m: 0,
             ph: 0,
           })
+        break
+      }
+      case 'glints':
+        for (let i = 0; i < floatCount(70, area, amount); i++)
+          layer.parts.push({
+            x: rect.x + rnd() * rect.w,
+            y: rect.y + rnd() * rect.h,
+            vx: 0,
+            vy: 0,
+            r: (6 + rnd() * 18) * k(),
+            l: 0,
+            m: 500 + rnd() * 900,
+            ph: rnd() * 7,
+          })
+        break
+      case 'stars':
+        for (let i = 0; i < floatCount(90, area, amount); i++)
+          layer.parts.push({
+            x: rect.x + rnd() * rect.w,
+            y: rect.y + rnd() * rect.h,
+            vx: 0,
+            vy: 0,
+            r: (0.8 + rnd() * 1.4) * k(),
+            l: 0,
+            m: 700 + rnd() * 1500,
+            ph: rnd() * 7,
+          })
+        break
+      case 'clouds': {
+        const clouds = amount > 0 ? Math.max(1, Math.round(5 * amount)) : 0
+        for (let c = 0; c < clouds; c++) {
+          const cx = rect.x + ((c + rnd()) / clouds) * rect.w
+          const cy = rect.y + rnd() * rect.h
+          const v = (0.1 + rnd() * 0.1) * k() * speed
+          const base = 0.1 + rnd() * 0.08
+          for (let b = 0; b < 8; b++)
+            layer.parts.push({
+              x: cx + rnd() * 380 * k(),
+              y: cy + (rnd() - 0.5) * 50 * k(),
+              vx: v,
+              vy: 0,
+              r: (50 + rnd() * 70) * k(),
+              l: c,
+              m: 0,
+              ph: base,
+            })
+        }
         break
       }
       default:
@@ -332,7 +409,17 @@ export function createMotionScene(): MotionScene {
           })
         emberStep(parts, t, speed)
         break
+      case 'clouds':
+        for (const p of parts) {
+          p.x += p.vx
+          if (p.x - p.r > rect.x + rect.w) p.x -= rect.w + 500 * k()
+        }
+        break
       case 'fire':
+      case 'moonglow':
+      case 'ripples':
+      case 'glints':
+      case 'stars':
         break
       case 'smoke':
         if (due(n - 1, 22, amount))
@@ -530,12 +617,132 @@ export function createMotionScene(): MotionScene {
         }
         break
       }
+      case 'glints': {
+        const light = lightOf(layer)
+        for (const g of layer.parts) {
+          const a = Math.pow(Math.max(0, Math.sin((t * speed) / g.m + g.ph)), 4)
+          if (a < 0.02) continue
+          const near = 1 - Math.min(1, Math.abs(g.x - light.x) / (400 * k()))
+          c.fillStyle = `rgba(255,250,222,${a * (0.35 + 0.55 * near)})`
+          c.fillRect(g.x - g.r / 2, g.y, g.r, 1.6 * k())
+        }
+        const spread = ((t * speed) / 5200) % 1
+        const origin =
+          layer.parts[
+            Math.floor((t * speed) / 5200) % Math.max(1, layer.parts.length)
+          ]
+        if (origin) {
+          c.strokeStyle = `rgba(255,250,222,${0.5 * (1 - spread)})`
+          c.lineWidth = 1.4 * k()
+          c.beginPath()
+          c.ellipse(
+            origin.x,
+            origin.y,
+            60 * k() * spread,
+            14 * k() * spread,
+            0,
+            0,
+            7,
+          )
+          c.stroke()
+        }
+        break
+      }
+      case 'stars':
+        for (const p of layer.parts) {
+          const a = 0.3 + 0.7 * Math.max(0, Math.sin((t * speed) / p.m + p.ph))
+          c.fillStyle = `rgba(255,248,230,${a})`
+          c.beginPath()
+          c.arc(p.x, p.y, p.r, 0, 7)
+          c.fill()
+        }
+        break
+      case 'clouds': {
+        const light = lightOf(layer)
+        for (const p of layer.parts) {
+          const lit = Math.max(
+            0,
+            1 - Math.hypot(p.x - light.x, p.y - light.y) / (360 * k()),
+          )
+          const a = p.ph + lit * 0.12
+          const tone = Math.round(170 + lit * 70)
+          const g = c.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r)
+          g.addColorStop(0, `rgba(${tone},${tone + 6},${tone + 18},${a})`)
+          g.addColorStop(1, `rgba(${tone},${tone + 6},${tone + 18},0)`)
+          c.fillStyle = g
+          c.beginPath()
+          c.arc(p.x, p.y, p.r, 0, 7)
+          c.fill()
+        }
+        break
+      }
+      case 'moonglow': {
+        const amount = settingValue('moonglow', layer.spec.settings, 'amount')
+        const glow = settingValue('moonglow', layer.spec.settings, 'glow')
+        if (amount <= 0) break
+        const light = lightOf(layer)
+        const a = (0.2 + 0.08 * Math.sin((t * speed) / 1800)) * glow
+        const radius = (Math.max(rect.w, rect.h) / 2) * amount
+        const g = c.createRadialGradient(
+          light.x,
+          light.y,
+          4 * k(),
+          light.x,
+          light.y,
+          radius,
+        )
+        g.addColorStop(0, `rgba(235,240,255,${a})`)
+        g.addColorStop(1, 'rgba(235,240,255,0)')
+        c.globalCompositeOperation = 'lighter'
+        c.fillStyle = g
+        c.fillRect(rect.x, rect.y, rect.w, rect.h)
+        break
+      }
+      case 'ripples': {
+        if (!source) break
+        const amount = settingValue('ripples', layer.spec.settings, 'amount')
+        if (amount <= 0) break
+        const strength = settingValue(
+          'ripples',
+          layer.spec.settings,
+          'strength',
+        )
+        const drawnW = picture.width * cover()
+        const drawnH = picture.height * cover()
+        const left = (width - drawnW) / 2
+        const top = (height - drawnH) / 2
+        const step = 2
+        for (let y = rect.y; y < rect.y + rect.h; y += step) {
+          const depth = (y - rect.y) / rect.h
+          const wave =
+            Math.sin(y * 0.11 * amount - (t * speed) / 650) *
+              (0.6 + depth * 3.2) +
+            Math.sin(y * 0.031 * amount + (t * speed) / 1700) *
+              (0.4 + depth * 1.5)
+          const sy = ((y - top) / drawnH) * source.height
+          c.drawImage(
+            source.image,
+            0,
+            sy,
+            source.width,
+            (step / drawnH) * source.height,
+            left + wave * strength * k(),
+            y,
+            drawnW,
+            step + 0.2,
+          )
+        }
+        break
+      }
       default:
     }
     c.restore()
   }
 
   return {
+    setSource(next) {
+      source = next
+    },
     resize(w, h, pic) {
       if (
         w === width &&

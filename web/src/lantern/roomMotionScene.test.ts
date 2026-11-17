@@ -276,3 +276,136 @@ describe('the settings of an effect', () => {
     expect(scene.count('dust')).toBe(32)
   })
 })
+
+describe("the title picture's kinds", () => {
+  const POLYGON = [
+    { x: 0.25, y: 0.25 },
+    { x: 0.75, y: 0.25 },
+    { x: 0.5, y: 0.75 },
+  ]
+  const MARK = { x: 0.5, y: 0.3 }
+  const SPOT = { box: { ...BOX, mark: MARK }, polygon: POLYGON }
+  const KINDS = ['ripples', 'glints', 'clouds', 'stars', 'moonglow'] as const
+
+  /** A source picture for the ripples to redraw. */
+  const SOURCE = { image: {} as CanvasImageSource, width: 1920, height: 1080 }
+
+  /** A scene of the kinds in `kinds` with `settings`, run for `ticks`. */
+  function run(
+    kinds: readonly MotionKind[],
+    settings: Record<string, number> | undefined,
+    ticks: number,
+  ) {
+    const scene = sceneOf(1280, 720)
+    scene.setSource(SOURCE)
+    scene.setEffects(
+      kinds.map((kind) => ({ kind, settings, ...SPOT })),
+      true,
+    )
+    for (let i = 0; i < ticks; i++) scene.step(1000 / 60)
+    return scene
+  }
+
+  it('runs and draws every one, clipped to its drawn shape, without a fault', () => {
+    const scene = run(KINDS, undefined, 400)
+    const clip = vi.fn()
+    for (let i = 0; i < 60; i++) {
+      scene.step(16.7)
+      scene.draw(fakeContext({ clip }))
+    }
+    expect(scene.isEmpty()).toBe(false)
+    expect(clip).toHaveBeenCalled()
+  })
+
+  it('has specks for glints, stars and clouds, more for a bigger amount and none for amount 0', () => {
+    for (const kind of ['glints', 'stars', 'clouds'] as const) {
+      const normal = run([kind], undefined, 3).count(kind)
+      expect(normal, kind).toBeGreaterThan(0)
+      expect(run([kind], { amount: 2 }, 3).count(kind), kind).toBeGreaterThan(
+        normal,
+      )
+      expect(run([kind], { amount: 0 }, 3).count(kind), kind).toBe(0)
+    }
+  })
+
+  it('redraws the picture for the ripples only when it has the picture', () => {
+    for (const [source, drawn] of [
+      [SOURCE, true],
+      [null, false],
+    ] as const) {
+      const scene = sceneOf(1280, 720)
+      scene.setSource(source)
+      scene.setEffects([{ kind: 'ripples', ...SPOT }], true)
+      const drawImage = vi.fn()
+      scene.draw(fakeContext({ drawImage }))
+      expect(drawImage.mock.calls.length > 0).toBe(drawn)
+    }
+  })
+
+  it('stills the ripples at amount 0', () => {
+    const scene = sceneOf(1280, 720)
+    scene.setSource(SOURCE)
+    scene.setEffects(
+      [{ kind: 'ripples', settings: { amount: 0 }, ...SPOT }],
+      true,
+    )
+    const drawImage = vi.fn()
+    scene.draw(fakeContext({ drawImage }))
+    expect(drawImage).not.toHaveBeenCalled()
+  })
+
+  it("draws the moon's glow with the mark as its centre and shows nothing at amount 0", () => {
+    for (const [amount, drawn] of [
+      [1, true],
+      [0, false],
+    ] as const) {
+      const scene = sceneOf(1280, 720)
+      scene.setEffects(
+        [{ kind: 'moonglow', settings: { amount }, ...SPOT }],
+        true,
+      )
+      const createRadialGradient = vi.fn(() => ({ addColorStop: vi.fn() }))
+      scene.draw(fakeContext({ createRadialGradient }))
+      expect(createRadialGradient.mock.calls.length > 0).toBe(drawn)
+      if (drawn) {
+        const [x, y] = createRadialGradient.mock.calls[0] as unknown as number[]
+        expect(x).toBeCloseTo(640)
+        expect(y).toBeCloseTo(216)
+      }
+    }
+  })
+
+  it('moves the clouds across the picture', () => {
+    const scene = run(['clouds'], undefined, 1)
+    const before = JSON.stringify(
+      (() => {
+        const fills: number[] = []
+        scene.draw(
+          fakeContext({
+            createRadialGradient: (x: number) => {
+              fills.push(x)
+              return { addColorStop: vi.fn() }
+            },
+          }),
+        )
+        return fills
+      })(),
+    )
+    for (let i = 0; i < 120; i++) scene.step(1000 / 60)
+    const after = JSON.stringify(
+      (() => {
+        const fills: number[] = []
+        scene.draw(
+          fakeContext({
+            createRadialGradient: (x: number) => {
+              fills.push(x)
+              return { addColorStop: vi.fn() }
+            },
+          }),
+        )
+        return fills
+      })(),
+    )
+    expect(after).not.toBe(before)
+  })
+})

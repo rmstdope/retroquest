@@ -9,18 +9,36 @@ import { createMotionScene as sceneOfOrigin } from './roomMotionScene'
 
 describe('the motion renderer the studio loads', () => {
   it('lists every effect type, spots first marked as needing a spot', () => {
-    expect(EFFECT_TYPES.map((t) => t.type).sort()).toEqual([
-      'dust',
-      'embers',
-      'fire',
-      'fireflies',
-      'leaves',
-      'mist',
-      'smoke',
-      'water',
-    ])
+    expect(EFFECT_TYPES.map((t) => t.type).sort()).toEqual(
+      [
+        'dust',
+        'embers',
+        'fire',
+        'fireflies',
+        'glints',
+        'leaves',
+        'mist',
+        'moonglow',
+        'ripples',
+        'smoke',
+        'stars',
+        'water',
+        'clouds',
+      ].sort(),
+    )
     const spots = EFFECT_TYPES.filter((t) => t.spot).map((t) => t.type)
-    expect(spots.sort()).toEqual(['fire', 'smoke', 'water'])
+    expect(spots.sort()).toEqual(
+      [
+        'clouds',
+        'fire',
+        'glints',
+        'moonglow',
+        'ripples',
+        'smoke',
+        'stars',
+        'water',
+      ].sort(),
+    )
   })
 
   it('gives every type amount and speed, each inside its range and defaulting to 1', () => {
@@ -37,12 +55,17 @@ describe('the motion renderer the studio loads', () => {
     }
   })
 
-  it('gives fire a glow setting only', () => {
+  it("gives fire and the moon's glow a glow setting, and ripples a strength", () => {
     expect(
       EFFECT_TYPES.filter((t) => t.settings.some((s) => s.id === 'glow')).map(
         (t) => t.type,
       ),
-    ).toEqual(['fire'])
+    ).toEqual(['fire', 'moonglow'])
+    expect(
+      EFFECT_TYPES.filter((t) =>
+        t.settings.some((s) => s.id === 'strength'),
+      ).map((t) => t.type),
+    ).toEqual(['ripples'])
   })
 
   it('finds a type, and reads a setting with its default and clamped range', () => {
