@@ -259,6 +259,15 @@ describe('LanternLayout: the Escape menu', () => {
       expect(document.activeElement).toBe(box())
     })
 
+    it('gives the cursor back to the box when the Story so far drawer closes', async () => {
+      w.get<HTMLElement>('[data-button="story"]').element.focus()
+      await click('story')
+      expect(w.find('.lq-story-drawer').exists()).toBe(true)
+      await press('Escape', document.activeElement!)
+      expect(w.find('.lq-story-drawer').exists()).toBe(false)
+      expect(document.activeElement).toBe(box())
+    })
+
     it('gives the cursor back to the box when the Map closes', async () => {
       w.get<HTMLElement>('[data-button="map"]').element.focus()
       await click('map')
