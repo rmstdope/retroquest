@@ -113,16 +113,24 @@ watch(
     const urls = save ? continuePictureUrls(save) : null
     if (!urls) return
     let base = ''
-    for (const url of urls.base) {
+    let first = false
+    for (const [index, url] of urls.base.entries()) {
       if (await pictureExists(url)) {
         base = url
+        first = index === 0
         break
       }
     }
     if (!base || newest.value !== save) return
-    const found = await Promise.all(
-      urls.patches.map(async (url) => ((await pictureExists(url)) ? url : '')),
-    )
+    // The patches belong to the picture they were made for, as on the stage:
+    // none over the plain picture that stands in for an unmade other one.
+    const found = first
+      ? await Promise.all(
+          urls.patches.map(async (url) =>
+            (await pictureExists(url)) ? url : '',
+          ),
+        )
+      : []
     if (newest.value !== save) return
     thumb.value = { base, patches: found.filter(Boolean) }
   },
@@ -585,6 +593,7 @@ onBeforeUnmount(() => {
 }
 .lq-continue-picture img {
   position: absolute;
+  object-fit: cover;
   inset: 0;
   width: 100%;
   height: 100%;
@@ -605,7 +614,7 @@ onBeforeUnmount(() => {
   animation: none;
 }
 .lq-title-continue:has(.lq-continue-picture) {
-  padding-left: 14px;
+  padding-left: 12px;
 }
 .lq-continue-text {
   flex: 1;
@@ -842,7 +851,7 @@ onBeforeUnmount(() => {
     padding: 6px 10px 6px 14px;
   }
   .lq-title-continue:has(.lq-continue-picture) {
-    padding-left: 10px;
+    padding-left: 6px;
   }
   .lq-continue-picture {
     width: 72px;

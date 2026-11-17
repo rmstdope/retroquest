@@ -554,6 +554,33 @@ describe('TitlePage', () => {
       expect(missing.find('.lq-continue-picture').exists()).toBe(false)
     })
 
+    it("falls back to the room's plain picture, without the other picture's patches, when that one is not made", async () => {
+      setPictureProbe((url) => Promise.resolve(!url.includes('-night')))
+      const w = mountTitle([
+        save(1, {
+          picture: { ...picture, variant: 'night', patchIds: ['lamp'] },
+        }),
+      ])
+      await flushPromises()
+      const images = w.findAll('.lq-continue-picture img')
+      expect(images).toHaveLength(1)
+      expect(images[0].attributes('src')).not.toContain('-night')
+    })
+
+    it('leaves out a patch that is not made and keeps the picture', async () => {
+      setPictureProbe((url) => Promise.resolve(!url.includes('.lamp.')))
+      const w = mountTitle([
+        save(1, { picture: { ...picture, patchIds: ['lamp', 'door'] } }),
+      ])
+      await flushPromises()
+      const sources = w
+        .findAll('.lq-continue-picture img')
+        .map((img) => img.attributes('src'))
+      expect(sources).toHaveLength(2)
+      expect(sources.some((src) => src?.includes('.door.'))).toBe(true)
+      expect(sources.some((src) => src?.includes('.lamp.'))).toBe(false)
+    })
+
     it('adds the picture when it arrives late', async () => {
       const arrivals: ((found: boolean) => void)[] = []
       setPictureProbe(
