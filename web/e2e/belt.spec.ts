@@ -106,8 +106,16 @@ test('the No match line of the typing box lies over the belt, not under its labe
   await toTheCottage(page)
   // A full bag, so the belt's pictures and their names run under the typing box.
   await page.evaluate(() => {
-    /* eslint-disable @typescript-eslint/no-explicit-any */
-    const app = (document.querySelector('#app') as any).__vue_app__
+    type Root = {
+      __vue_app__: {
+        config: {
+          globalProperties: {
+            $pinia: { state: { value: { game: { rawInventory: unknown } } } }
+          }
+        }
+      }
+    }
+    const app = (document.querySelector('#app') as unknown as Root).__vue_app__
     const store = app.config.globalProperties.$pinia.state.value.game
     store.rawInventory = [
       'Bread',
@@ -121,7 +129,6 @@ test('the No match line of the typing box lies over the belt, not under its labe
       'Candle',
       'Coin',
     ].map((name) => ({ name, description: `A ${name}.` }))
-    /* eslint-enable @typescript-eslint/no-explicit-any */
   })
   await expect(page.locator('[data-belt-pic]')).toHaveCount(10)
   await page.keyboard.press('F1')
