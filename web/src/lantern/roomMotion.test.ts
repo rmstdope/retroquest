@@ -352,3 +352,59 @@ describe('madeZoom', () => {
     )
   })
 })
+
+describe('a floating kind with a drawn shape', () => {
+  const strip = [
+    [0.6, 0.2],
+    [1, 0.2],
+    [1, 0.8],
+    [0.6, 0.8],
+  ]
+  const patch = [
+    [0, 0],
+    [0.3, 0],
+    [0.3, 0.3],
+    [0, 0.3],
+  ]
+
+  it('plays once in each shape, with the shape and the box around it', () => {
+    const effects = madeEffects(
+      {
+        a: {
+          effects: [
+            {
+              kind: 'fireflies',
+              settings: { amount: 3 },
+              spot: [strip, patch],
+            },
+          ],
+        },
+      },
+      'a',
+    )
+    const specs = appliedMotion(effects, [])
+    expect(specs).toHaveLength(2)
+    expect(specs[0].kind).toBe('fireflies')
+    expect(specs[0].settings).toEqual({ amount: 3 })
+    expect(specs[0].box).toEqual({ x: 0.6, y: 0.2, width: 0.4, height: 0.6 })
+    expect(specs[0].polygon).toHaveLength(4)
+    expect(specs[1].box).toEqual({ x: 0, y: 0, width: 0.3, height: 0.3 })
+  })
+
+  it('plays as it always did with no shape, or with none that is one', () => {
+    const slanted = [
+      [0.2, 0.2],
+      [0.3, 0.3],
+      [0.4, 0.4],
+    ]
+    for (const kind of ['dust', 'leaves', 'embers', 'fireflies', 'mist']) {
+      const none = madeEffects({ a: { effects: [{ kind }] } }, 'a')
+      expect(appliedMotion(none, [])).toEqual([{ kind }])
+      const broken = madeEffects(
+        { a: { effects: [{ kind, spot: [slanted] }] } },
+        'a',
+      )
+      expect(appliedMotion(broken, [])).toEqual([{ kind }])
+    }
+  })
+})

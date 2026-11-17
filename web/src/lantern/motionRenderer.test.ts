@@ -210,6 +210,86 @@ describe('the scene the studio drives', () => {
   })
 })
 
+describe('the default placement the renderer reports', () => {
+  const FLOATING = ['dust', 'leaves', 'embers', 'fireflies', 'mist']
+
+  it('gives each floating type the shape it plays in when none is drawn', () => {
+    for (const type of FLOATING) {
+      const shapes = effectType(type)?.defaultSpot
+      expect(shapes?.length).toBeGreaterThan(0)
+      for (const shape of shapes ?? []) {
+        expect(shape.length).toBeGreaterThanOrEqual(3)
+        for (const [x, y] of shape) {
+          expect(x).toBeGreaterThanOrEqual(0)
+          expect(x).toBeLessThanOrEqual(1)
+          expect(y).toBeGreaterThanOrEqual(0)
+          expect(y).toBeLessThanOrEqual(1)
+        }
+      }
+    }
+  })
+
+  it('reports dust, leaves and embers over the whole picture, fireflies in their lower band and mist in its low band', () => {
+    const box = (type: string): number[] => {
+      const points = effectType(type)?.defaultSpot?.[0] ?? []
+      const xs = points.map((p) => p[0])
+      const ys = points.map((p) => p[1])
+      return [Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys)]
+    }
+    for (const type of ['dust', 'leaves', 'embers'])
+      expect(box(type)).toEqual([0, 0, 1, 1])
+    expect(box('fireflies')).toEqual([0.1, 0.5, 0.9, 0.9])
+    expect(box('mist')).toEqual([0, 0.6, 1, 1])
+  })
+
+  it('reports none for the types that need a drawn spot', () => {
+    for (const t of EFFECT_TYPES.filter((t) => t.spot))
+      expect(t.defaultSpot).toBeUndefined()
+  })
+})
+
+describe('the studio handing a floating kind a shape', () => {
+  const STRIP = [
+    [0.6, 0.2],
+    [1, 0.2],
+    [1, 0.8],
+    [0.6, 0.8],
+  ]
+
+  it('plays it in the shape, in each shape, and plays it as before without one', () => {
+    const scene = createMotionScene()
+    scene.resize(960, 540, { width: 1920, height: 1080 })
+    scene.setEffects([{ kind: 'fireflies', settings: {}, spot: [STRIP] }], true)
+    const drawn = drawnBy(scene)
+    const game = gameScene()
+    game.resize(960, 540, { width: 1920, height: 1080 })
+    game.setEffects(
+      appliedMotion(
+        madeEffects(
+          { a: { effects: [{ kind: 'fireflies', spot: [STRIP] }] } },
+          'a',
+        ),
+        [],
+      ),
+      true,
+    )
+    expect(scene.count('fireflies')).toBe(game.count('fireflies'))
+    expect(drawn.length).toBeGreaterThan(0)
+  })
+
+  it('plays its default placement when the shapes handed are none of them a shape', () => {
+    const scene = createMotionScene()
+    scene.resize(960, 540, { width: 1920, height: 1080 })
+    const flat = [
+      [0.2, 0.2],
+      [0.3, 0.3],
+      [0.4, 0.4],
+    ]
+    scene.setEffects([{ kind: 'dust', settings: {}, spot: [flat] }], true)
+    expect(scene.count('dust')).toBe(9)
+  })
+})
+
 describe("the studio's project file", () => {
   it('names this module as the motion renderer', () => {
     const project = JSON.parse(readFileSync('../content-studio.json', 'utf8'))

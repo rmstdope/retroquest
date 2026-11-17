@@ -24,10 +24,44 @@ export interface EffectType {
   type: string
   /** What the studio calls it. */
   title: string
-  /** Whether it lives on a spot drawn on the picture (water, fire, smoke) rather than floating over the whole picture. */
+  /** Whether it needs a spot drawn on the picture (water, fire, smoke) rather than floating over the picture; a floating one may still be given shapes to play in. */
   spot: boolean
   /** The settings it takes. */
   settings: EffectSetting[]
+  /**
+   * Where a floating type plays when no shape is drawn for it, as shapes in
+   * the form the manifest's `spot` uses (lists of `[x, y]` corners in picture
+   * fractions), so the studio can show it and draw over it. Absent for the
+   * types that need a drawn spot.
+   */
+  defaultSpot?: [number, number][][]
+}
+
+/** The whole picture, as a shape. */
+const WHOLE_PICTURE: [number, number][][] = [
+  [
+    [0, 0],
+    [1, 0],
+    [1, 1],
+    [0, 1],
+  ],
+]
+
+/** A band across the picture, as a shape: from `x0` to `x1` and from `y0` to `y1`, in picture fractions. */
+function band(
+  x0: number,
+  y0: number,
+  x1: number,
+  y1: number,
+): [number, number][][] {
+  return [
+    [
+      [x0, y0],
+      [x1, y0],
+      [x1, y1],
+      [x0, y1],
+    ],
+  ]
 }
 
 /** The amount of an effect: 1 is the density the game always had. For fire and the moon's glow it widens the glow's reach (inside the spot); for pond ripples it is how closely the waves are spaced, and 0 stills them. */
@@ -70,16 +104,41 @@ const STRENGTH: EffectSetting = {
 
 /** Every effect type the renderer has, with the settings each takes. */
 export const EFFECT_TYPES: readonly EffectType[] = [
-  { type: 'dust', title: 'Dust', spot: false, settings: [AMOUNT, SPEED] },
-  { type: 'leaves', title: 'Leaves', spot: false, settings: [AMOUNT, SPEED] },
-  { type: 'embers', title: 'Embers', spot: false, settings: [AMOUNT, SPEED] },
+  {
+    type: 'dust',
+    title: 'Dust',
+    spot: false,
+    settings: [AMOUNT, SPEED],
+    defaultSpot: WHOLE_PICTURE,
+  },
+  {
+    type: 'leaves',
+    title: 'Leaves',
+    spot: false,
+    settings: [AMOUNT, SPEED],
+    defaultSpot: WHOLE_PICTURE,
+  },
+  {
+    type: 'embers',
+    title: 'Embers',
+    spot: false,
+    settings: [AMOUNT, SPEED],
+    defaultSpot: WHOLE_PICTURE,
+  },
   {
     type: 'fireflies',
     title: 'Fireflies',
     spot: false,
     settings: [AMOUNT, SPEED],
+    defaultSpot: band(0.1, 0.5, 0.9, 0.9),
   },
-  { type: 'mist', title: 'Mist', spot: false, settings: [AMOUNT, SPEED] },
+  {
+    type: 'mist',
+    title: 'Mist',
+    spot: false,
+    settings: [AMOUNT, SPEED],
+    defaultSpot: band(0, 0.6, 1, 1),
+  },
   {
     type: 'water',
     title: 'Running water',
