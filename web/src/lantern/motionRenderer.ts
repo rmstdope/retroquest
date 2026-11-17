@@ -15,10 +15,16 @@
  * is in the game. A spot kind handed no `spot` at all plays over the whole
  * picture, for a studio that clips it to the shape itself; the game never
  * plays one so. One handed a `spot` with no usable shape plays nothing, as in
- * the game.
+ * the game. A floating kind plays inside the shapes it is handed, else in its
+ * default placement (`defaultSpot`), as in the game.
  * Patch ties are the studio's to apply: it hands over only what plays.
  */
-import { effectSpecs, madeEffect, type MotionSpec } from './roomMotion'
+import {
+  effectSpecs,
+  isSpotKind,
+  madeEffect,
+  type MotionSpec,
+} from './roomMotion'
 import {
   createMotionScene as createGameScene,
   type MotionScene,
@@ -48,7 +54,8 @@ function studioSpecs(value: unknown): MotionSpec[] {
   if (!effect) return []
   const handedSpot =
     typeof value === 'object' && value !== null && 'spot' in value
-  if (effect.spot || handedSpot) return effectSpecs(effect)
+  if (effect.spot || (isSpotKind(effect.kind) && handedSpot))
+    return effectSpecs(effect)
   return [
     effect.settings
       ? { kind: effect.kind, settings: effect.settings }

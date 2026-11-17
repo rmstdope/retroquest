@@ -1,6 +1,7 @@
 /**
  * The gentle movement laid over a room's painting: what floats anywhere over
- * the picture (dust, leaves, embers, fireflies, low mist) and what lives on a
+ * the picture (dust, leaves, embers, fireflies, low mist; each plays inside the
+ * shapes drawn for it, else in its default placement) and what lives on a
  * drawn spot only (water, fire, smoke). The game declares none of it: the
  * navigator tunes each image's effects in Content Studio, and they reach the
  * game in the images manifest, under the image's `effects`, exactly as the
@@ -8,11 +9,12 @@
  * `motionRenderer.ts`), its `settings` (numbers by setting id; a missing one
  * plays at its default), an optional tie to the story through one of the
  * image's patch ids (`patch` applies while that patch is laid, `unlessPatch`
- * while it is not), for a spot kind the `spot` the navigator drew (one or more
+ * while it is not), the `spot` the navigator drew (one or more
  * shapes, each a list of `[x, y]` corners in picture fractions) and an
  * optional `mark` (`[x, y]`, where its light comes from). A spot kind plays
- * once in each of its shapes; one with no drawn shape simply has no movement,
- * and the rest of the room moves all the same. Nothing is saved.
+ * once in each of its shapes; a floating kind with no drawn shape plays in its
+ * default placement, a spot kind with none has no movement, and the rest of
+ * the room moves all the same. Nothing is saved.
  */
 import { effectType } from './motionEffects'
 
@@ -71,13 +73,13 @@ export interface RoomEffect {
   whilePatch?: string
   /** A patch id of the same image: the effect applies while that patch is not laid. */
   unlessPatch?: string
-  /** The shapes drawn for a spot kind; it plays once in each. */
+  /** The shapes drawn for the effect; it plays once in each. */
   spot?: SpotShape[]
   /** Where a spot's light comes from, as fractions of the picture; absent means the middle of each shape. */
   mark?: PicturePoint
 }
 
-/** A movement that applies now: a spot kind carries its drawn shape and the box around it. */
+/** A movement that applies now: an effect with drawn shapes carries each shape and the box around it. */
 export interface MotionSpec {
   kind: MotionKind
   settings?: Record<string, number>
@@ -256,15 +258,15 @@ function inBox(point: PicturePoint, box: AreaBox): boolean {
 }
 
 /**
- * What one effect plays, whatever the story: a floating kind as it is, a
- * spot kind once in each drawn shape with the shape and the box around it
- * (the mark on the box of a shape that holds it), and a spot kind with no
- * drawn shape not at all.
+ * What one effect plays, whatever the story: once in each drawn shape with
+ * the shape and the box around it (the mark on the box of a shape that holds
+ * it); a floating kind with no drawn shape as it is, over its default
+ * placement; and a spot kind with no drawn shape not at all.
  */
 export function effectSpecs(effect: RoomEffect): MotionSpec[] {
   const base: MotionSpec = { kind: effect.kind }
   if (effect.settings) base.settings = effect.settings
-  if (!isSpotKind(effect.kind)) return [base]
+  if (!isSpotKind(effect.kind) && !effect.spot) return [base]
   const specs: MotionSpec[] = []
   for (const shape of effect.spot ?? []) {
     const box = boundingBox(shape)

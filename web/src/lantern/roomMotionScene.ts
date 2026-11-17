@@ -5,10 +5,14 @@
  * trimmed fit puts it), the movement that applies (`setEffects`), and then
  * stepped and drawn. Everything is gentle: a few slow specks, at most a couple
  * of leaves at a time, a quiet trickle. The amount follows the size of what is
- * seen, so a small picture is no more crowded than a large one. A layer that
+ * seen, so a small picture is no more crowded than a large one. A floating
+ * kind (dust, leaves, embers, fireflies, mist) handed a drawn shape plays
+ * inside it: its specks are as dense as over the whole picture by the area of
+ * the shape, stay in it, and fade out as they near its line. A layer that
  * stops applying fades out over about a second and a new one fades in; a room
  * entered fresh is run ahead first, so it is already under way.
  */
+import { isSpotKind } from './roomMotion'
 import type { AreaBox, MotionKind, MotionSpec } from './roomMotion'
 import { settingValue } from './motionEffects'
 
@@ -39,6 +43,12 @@ export interface PictureSize {
   height: number
 }
 
+/** A point on the canvas, in pixels. */
+interface Pt {
+  x: number
+  y: number
+}
+
 /** One speck, drop, leaf, ember or puff. */
 interface Particle {
   x: number
@@ -56,6 +66,8 @@ interface Layer {
   key: string
   spec: MotionSpec
   rect: Rect | null
+  /** The corners of a floating kind's drawn shape in canvas pixels; null when it plays over its default placement or is not a floating kind. */
+  points: Pt[] | null
   alpha: number
   target: 0 | 1
   parts: Particle[]
@@ -152,10 +164,74 @@ function due(k: number, interval: number, amount: number): boolean {
  * a small picture than of a large one, so the chance falls faster than the area
  * does, and a small picture has no more leaves for its size.
  */
-function leafChance(rect: Rect): number {
-  const share = (rect.w * rect.h) / (BASE_WIDTH * BASE_HEIGHT)
+function leafChance(area: number): number {
+  const share = area / (BASE_WIDTH * BASE_HEIGHT)
   return 0.005 * Math.min(1, share * share)
 }
+
+/** The area a closed shape encloses (the shoelace formula). */
+function polygonArea(points: readonly Pt[]): number {
+  let twice = 0
+  points.forEach((p, i) => {
+    const next = points[(i + 1) % points.length]
+    twice += p.x * next.y - next.x * p.y
+  })
+  return Math.abs(twice) / 2
+}
+
+/** Whether (`x`, `y`) lies inside the closed shape `points`. */
+function insideShape(points: readonly Pt[], x: number, y: number): boolean {
+  let inside = false
+  points.forEach((a, i) => {
+    const b = points[(i + 1) % points.length]
+    if (
+      a.y > y !== b.y > y &&
+      x < a.x + ((y - a.y) / (b.y - a.y)) * (b.x - a.x)
+    )
+      inside = !inside
+  })
+  return inside
+}
+
+/** The stretch of the line across the shape (`at` along the other axis) that the shape covers, from its first to its last crossing; null when the line misses it. */
+function spanAcross(
+  points: readonly Pt[],
+  across: 'row' | 'column',
+  at: number,
+): { min: number; max: number } | null {
+  const [u, v]: ('x' | 'y')[] = across === 'row' ? ['y', 'x'] : ['x', 'y']
+  let min = Infinity
+  let max = -Infinity
+  points.forEach((a, i) => {
+    const b = points[(i + 1) % points.length]
+    if (a[u] > at === b[u] > at) return
+    const crossing = a[v] + ((at - a[u]) / (b[u] - a[u])) * (b[v] - a[v])
+    min = Math.min(min, crossing)
+    max = Math.max(max, crossing)
+  })
+  return max >= min ? { min, max } : null
+}
+
+/** How far (`x`, `y`) is from the nearest side of the shape. */
+function distanceToLine(points: readonly Pt[], x: number, y: number): number {
+  let best = Infinity
+  points.forEach((a, i) => {
+    const b = points[(i + 1) % points.length]
+    const dx = b.x - a.x
+    const dy = b.y - a.y
+    const len = dx * dx + dy * dy
+    const t = len
+      ? Math.max(0, Math.min(1, ((x - a.x) * dx + (y - a.y) * dy) / len))
+      : 0
+    best = Math.min(best, Math.hypot(x - a.x - t * dx, y - a.y - t * dy))
+  })
+  return best
+}
+
+/** The least chance a leaf starts to fall on a tick over a drawn shape: about one every half minute. */
+const LEAF_FLOOR = 0.0005
+/** The most ticks between two embers over a drawn shape: ten seconds. */
+const EMBER_CEILING = 600
 
 /** A random number in [0, 1). */
 function rnd(): number {
@@ -241,6 +317,68 @@ export function createMotionScene(): MotionScene {
     return Math.min(1, Math.max(0.6, width / BASE_WIDTH))
   }
 
+  /** The corners of the shape a floating kind plays in, on the canvas; null for any other layer. */
+  function pointsOf(spec: MotionSpec): Pt[] | null {
+    if (!spec.polygon || isSpotKind(spec.kind)) return null
+    return spec.polygon.map((p) => pointPosition(p, { width, height }, picture))
+  }
+
+  /** The square pixels of canvas a layer's specks are counted for: the visible part of its shape, else its rectangle. */
+  function areaOf(layer: Layer): number {
+    const rect = layer.rect
+    if (!rect) return 0
+    const points = layer.points
+    if (!points) return rect.w * rect.h
+    const xs = points.map((p) => p.x)
+    const ys = points.map((p) => p.y)
+    const boxArea =
+      (Math.max(...xs) - Math.min(...xs)) * (Math.max(...ys) - Math.min(...ys))
+    return boxArea > 0 ? (polygonArea(points) * rect.w * rect.h) / boxArea : 0
+  }
+
+  /** A place for a new speck: random inside the layer's shape and in view; failing that the first place of a grid over the rectangle that is, and null when the shape has none in view. */
+  function placeIn(layer: Layer, rect: Rect): Pt | null {
+    const points = layer.points
+    for (let i = 0; i < 40; i++) {
+      const x = rect.x + rnd() * rect.w
+      const y = rect.y + rnd() * rect.h
+      if (!points || insideShape(points, x, y)) return { x, y }
+    }
+    for (let i = 0; i < 20; i++)
+      for (let j = 0; j < 20; j++) {
+        const x = rect.x + ((i + 0.5) / 20) * rect.w
+        const y = rect.y + ((j + 0.5) / 20) * rect.h
+        if (points && insideShape(points, x, y)) return { x, y }
+      }
+    return null
+  }
+
+  /** Whether (`x`, `y`) is a place the layer's specks may be: anywhere for a layer with no shape. */
+  function allowed(layer: Layer, x: number, y: number): boolean {
+    return !layer.points || insideShape(layer.points, x, y)
+  }
+
+  /** How much of itself a speck at (`x`, `y`) shows: it fades out over a margin as it nears the line of the layer's shape. */
+  function fadeAt(layer: Layer, x: number, y: number): number {
+    const points = layer.points
+    const rect = layer.rect
+    if (!points || !rect) return 1
+    if (!insideShape(points, x, y)) return 0
+    const margin = Math.min(60 * unit(), 0.25 * Math.min(rect.w, rect.h))
+    return margin > 0 ? Math.min(1, distanceToLine(points, x, y) / margin) : 1
+  }
+
+  /** How much of itself a mist puff of radius `r` centred at (`x`, `y`) shows: it is gone before its flat top or bottom, or its sides, reach the line, so the line never cuts one. */
+  function fadeOfPuff(layer: Layer, x: number, y: number, r: number): number {
+    return Math.min(
+      fadeAt(layer, x, y),
+      fadeAt(layer, x, y - 0.2 * r),
+      fadeAt(layer, x, y + 0.2 * r),
+      fadeAt(layer, x - 0.5 * r, y),
+      fadeAt(layer, x + 0.5 * r, y),
+    )
+  }
+
   function rectOf(spec: MotionSpec): Rect | null {
     if (!spec.box) return { x: 0, y: 0, w: width, h: height }
     return boxRect(spec.box, { width, height }, picture)
@@ -263,17 +401,19 @@ export function createMotionScene(): MotionScene {
     layer.parts = []
     const rect = layer.rect
     if (!rect) return
-    const area = rect.w * rect.h
+    const area = areaOf(layer)
     const u = unit()
     const kind = layer.spec.kind
     const amount = settingValue(kind, layer.spec.settings, 'amount')
     const speed = settingValue(kind, layer.spec.settings, 'speed')
     switch (kind) {
       case 'dust':
-        for (let i = 0; i < floatCount(16, area, amount); i++)
+        for (let i = 0; i < floatCount(16, area, amount); i++) {
+          const at = placeIn(layer, rect)
+          if (!at) break
           layer.parts.push({
-            x: rect.x + rnd() * rect.w,
-            y: rect.y + rnd() * rect.h,
+            x: at.x,
+            y: at.y,
             vx: (0.04 + rnd() * 0.15) * u * speed,
             vy: (-0.03 - rnd() * 0.08) * u * speed,
             r: (0.8 + rnd() * 1.8) * u,
@@ -281,12 +421,20 @@ export function createMotionScene(): MotionScene {
             m: 0,
             ph: rnd() * 6,
           })
+        }
         break
       case 'fireflies':
-        for (let i = 0; i < floatCount(9, area, amount); i++)
+        for (let i = 0; i < floatCount(9, area, amount); i++) {
+          const at = layer.points
+            ? placeIn(layer, rect)
+            : {
+                x: rect.x + rect.w * (0.1 + rnd() * 0.8),
+                y: rect.y + rect.h * (0.5 + rnd() * 0.4),
+              }
+          if (!at) break
           layer.parts.push({
-            x: rect.x + rect.w * (0.1 + rnd() * 0.8),
-            y: rect.y + rect.h * (0.5 + rnd() * 0.4),
+            x: at.x,
+            y: at.y,
             vx: 0,
             vy: 0,
             r: 12 * u,
@@ -294,20 +442,37 @@ export function createMotionScene(): MotionScene {
             m: 0,
             ph: rnd() * 6,
           })
+        }
         break
       case 'mist': {
         const count = floatCount(6, area, amount)
-        for (let i = 0; i < count; i++)
+        for (let i = 0; i < count; i++) {
+          // In a drawn shape the puffs lie in rows spread over the whole of it.
+          const y = layer.points
+            ? rect.y + rect.h * (0.1 + (0.8 * (i + 0.5)) / count)
+            : rect.y + rect.h * (0.6 + (0.3 * i) / count)
+          const span = layer.points ? spanAcross(layer.points, 'row', y) : null
+          const lost = layer.points && !span ? placeIn(layer, rect) : null
+          if (layer.points && !span && !lost) break
           layer.parts.push({
-            x: rect.x + rnd() * rect.w,
-            y: rect.y + rect.h * (0.6 + (0.3 * i) / count),
+            x: span
+              ? span.min + rnd() * (span.max - span.min)
+              : lost
+                ? lost.x
+                : rect.x + rnd() * rect.w,
+            y: lost ? lost.y : y,
             vx: (0.12 + rnd() * 0.14) * u * speed,
             vy: 0,
-            r: (260 + rnd() * 200) * u,
+            // A puff in a drawn shape is no wider than the shape, nor higher.
+            r: Math.min(
+              (260 + rnd() * 200) * u,
+              layer.points ? Math.min(rect.w / 2, rect.h) : Infinity,
+            ),
             l: 0,
             m: 0,
             ph: 0,
           })
+        }
         break
       }
       case 'glints':
@@ -366,6 +531,7 @@ export function createMotionScene(): MotionScene {
       key: keyOf(spec),
       spec,
       rect: rectOf(spec),
+      points: pointsOf(spec),
       alpha: instant ? 1 : 0,
       target: 1,
       parts: [],
@@ -400,46 +566,80 @@ export function createMotionScene(): MotionScene {
         for (const p of parts) {
           p.x += p.vx + Math.sin(t / 1500 + p.ph) * 0.1 * u * speed
           p.y += p.vy
+          if (layer.points) {
+            comeBackIn(layer, rect, p)
+            continue
+          }
           if (p.x > rect.x + rect.w + 10) p.x = rect.x - 10
           if (p.y < rect.y - 10) p.y = rect.y + rect.h + 10
         }
         break
       case 'fireflies':
         for (const p of parts) {
+          const x = p.x
+          const y = p.y
           p.x +=
             Math.sin(t / 900 + p.ph) *
             (0.5 + 0.5 * Math.sin(p.ph * 3)) *
             u *
             speed
           p.y += Math.cos(t / 1200 + p.ph * 2) * 0.4 * u * speed
+          // A firefly drifts back inside rather than crossing the line.
+          if (!allowed(layer, p.x, p.y)) {
+            p.x = x
+            p.y = y
+          }
         }
         break
       case 'mist':
         for (const p of parts) {
           p.x += p.vx
+          if (layer.points) {
+            comeBackIn(layer, rect, p)
+            continue
+          }
           if (p.x - p.r > rect.x + rect.w) p.x = rect.x - p.r
         }
         break
       case 'leaves': {
-        const baseCap = rect.w * rect.h < 0.5 * BASE_WIDTH * BASE_HEIGHT ? 1 : 2
+        const area = areaOf(layer)
+        const baseCap = area < 0.5 * BASE_WIDTH * BASE_HEIGHT ? 1 : 2
         const cap = amount > 0 ? Math.max(1, Math.round(baseCap * amount)) : 0
-        if (parts.length < cap && rnd() < leafChance(rect) * amount)
-          parts.push({
-            x: rect.x + rnd() * rect.w,
-            y: rect.y,
-            vx: 0,
-            vy: (0.5 + rnd() * 0.3) * u * speed,
-            r: u,
-            l: 0,
-            m: 0,
-            ph: rnd() * 6,
-          })
+        // A shape is a share of the canvas, so it holds that share of the leaves, but never fewer than one every half minute.
+        const chance = layer.points
+          ? Math.max(
+              leafChance(width * height) * (area / (width * height)),
+              LEAF_FLOOR,
+            )
+          : leafChance(area)
+        if (parts.length < cap && rnd() < chance * amount) {
+          const loose = layer.points ? placeIn(layer, rect) : null
+          const top = loose
+            ? spanAcross(layer.points ?? [], 'column', loose.x)
+            : null
+          if (!layer.points || top)
+            parts.push({
+              // A leaf comes loose along the top of the shape.
+              x: loose ? loose.x : rect.x + rnd() * rect.w,
+              y: top ? top.min + 1 : rect.y,
+              vx: 0,
+              vy: (0.5 + rnd() * 0.3) * u * speed,
+              r: u,
+              l: 0,
+              m: 0,
+              ph: rnd() * 6,
+            })
+        }
         for (let i = parts.length - 1; i >= 0; i--) {
           const p = parts[i]
           p.y += p.vy
-          p.x += Math.sin(t / 500 + p.ph) * 0.9 * u * speed
+          const sway = Math.sin(t / 500 + p.ph) * 0.9 * u * speed
+          if (allowed(layer, p.x + sway, p.y)) p.x += sway
           p.l += 0.03
-          if (p.y > rect.y + rect.h) parts.splice(i, 1)
+          const bottom = layer.points
+            ? (spanAcross(layer.points, 'column', p.x)?.max ?? -Infinity)
+            : rect.y + rect.h
+          if (p.y > bottom) parts.splice(i, 1)
         }
         break
       }
@@ -447,21 +647,15 @@ export function createMotionScene(): MotionScene {
         if (
           due(
             n,
-            Math.round(24 / ((rect.w * rect.h) / (BASE_WIDTH * BASE_HEIGHT))),
+            Math.min(
+              layer.points ? EMBER_CEILING : Infinity,
+              Math.round(24 / (areaOf(layer) / (BASE_WIDTH * BASE_HEIGHT))),
+            ),
             amount,
           )
         )
-          parts.push({
-            x: rect.x + rnd() * rect.w,
-            y: rect.y + rect.h * (0.7 + rnd() * 0.25),
-            vx: (rnd() - 0.5) * 0.25 * u * speed,
-            vy: (-0.7 - rnd() * 0.6) * u * speed,
-            r: 1.8 * u,
-            l: 0,
-            m: 120 + rnd() * 130,
-            ph: rnd() * 6,
-          })
-        emberStep(parts, t, speed)
+          spawnEmber(layer, rect, u, speed)
+        emberStep(layer, t, speed)
         break
       case 'clouds':
         for (const p of parts) {
@@ -523,11 +717,76 @@ export function createMotionScene(): MotionScene {
     }
   }
 
+  /** A dust speck or mist puff that has left the shape's line comes back in on its far side: across the row, or from the bottom of the column. */
+  function comeBackIn(layer: Layer, rect: Rect, p: Particle): void {
+    const points = layer.points
+    if (!points || insideShape(points, p.x, p.y)) return
+    const row = spanAcross(points, 'row', p.y)
+    if (row && p.x > row.max) p.x = row.min + 1
+    else if (row && p.x < row.min) p.x = row.max - 1
+    else {
+      const column = spanAcross(points, 'column', p.x)
+      if (column && p.y < column.min) p.y = column.max - 1
+      else if (column && p.y > column.max) p.y = column.min + 1
+    }
+    if (!insideShape(points, p.x, p.y)) {
+      const at = placeIn(layer, rect)
+      if (at) {
+        p.x = at.x
+        p.y = at.y
+      }
+    }
+  }
+
+  /** Light one ember: in a drawn shape it rises from the bottom of its column and burns out before the shape's top. */
+  function spawnEmber(
+    layer: Layer,
+    rect: Rect,
+    u: number,
+    speed: number,
+  ): void {
+    const parts = layer.parts
+    if (!layer.points) {
+      parts.push({
+        x: rect.x + rnd() * rect.w,
+        y: rect.y + rect.h * (0.7 + rnd() * 0.25),
+        vx: (rnd() - 0.5) * 0.25 * u * speed,
+        vy: (-0.7 - rnd() * 0.6) * u * speed,
+        r: 1.8 * u,
+        l: 0,
+        m: 120 + rnd() * 130,
+        ph: rnd() * 6,
+      })
+      return
+    }
+    const rise = placeIn(layer, rect)
+    const column = rise ? spanAcross(layer.points, 'column', rise.x) : null
+    if (!rise || !column) return
+    const y = column.min + (column.max - column.min) * (0.7 + rnd() * 0.25)
+    const vy = (-0.7 - rnd() * 0.6) * u * speed
+    const life = 120 + rnd() * 130
+    parts.push({
+      x: rise.x,
+      y,
+      vx: (rnd() - 0.5) * 0.25 * u * speed,
+      vy,
+      r: 1.8 * u,
+      l: 0,
+      m:
+        vy < 0
+          ? Math.max(1, Math.min(life, (0.9 * (y - column.min)) / -vy))
+          : life,
+      ph: rnd() * 6,
+    })
+  }
+
   /** Move the live embers and drop the spent ones. */
-  function emberStep(parts: Particle[], t: number, speed: number): void {
+  function emberStep(layer: Layer, t: number, speed: number): void {
+    const parts = layer.parts
     for (let i = parts.length - 1; i >= 0; i--) {
       const e = parts[i]
-      e.x += e.vx + Math.sin(t / 300 + e.ph) * 0.25 * speed
+      const drift = e.vx + Math.sin(t / 300 + e.ph) * 0.25 * speed
+      if (allowed(layer, e.x + drift, e.y + e.vy)) e.x += drift
       e.y += e.vy
       e.l++
       if (e.l > e.m) parts.splice(i, 1)
@@ -536,6 +795,16 @@ export function createMotionScene(): MotionScene {
 
   let clock = 0
   let carry = 0
+
+  /** Set the alpha a speck at (`x`, `y`) is drawn with: the layer's, and for a drawn shape fading out towards its line. */
+  function fade(
+    c: CanvasRenderingContext2D,
+    layer: Layer,
+    x: number,
+    y: number,
+  ): void {
+    if (layer.points) c.globalAlpha = layer.alpha * fadeAt(layer, x, y)
+  }
 
   function drawLayer(c: CanvasRenderingContext2D, layer: Layer): void {
     const rect = layer.rect
@@ -560,6 +829,7 @@ export function createMotionScene(): MotionScene {
     switch (kind) {
       case 'dust':
         for (const p of layer.parts) {
+          fade(c, layer, p.x, p.y)
           const tw = Math.max(0, 0.5 + 0.25 * Math.sin(t / 600 + p.ph))
           c.fillStyle = `rgba(255,246,214,${tw})`
           c.strokeStyle = `rgba(120,90,40,${tw * 0.35})`
@@ -572,6 +842,7 @@ export function createMotionScene(): MotionScene {
         break
       case 'fireflies':
         for (const p of layer.parts) {
+          fade(c, layer, p.x, p.y)
           const a = Math.max(0, Math.sin(t / 700 + p.ph))
           const g = c.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r)
           g.addColorStop(0, `rgba(230,255,130,${a})`)
@@ -582,6 +853,8 @@ export function createMotionScene(): MotionScene {
         break
       case 'mist':
         for (const p of layer.parts) {
+          if (layer.points)
+            c.globalAlpha = layer.alpha * fadeOfPuff(layer, p.x, p.y, p.r)
           const g = c.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r)
           g.addColorStop(0, 'rgba(240,244,240,.22)')
           g.addColorStop(1, 'rgba(240,244,240,0)')
@@ -598,6 +871,7 @@ export function createMotionScene(): MotionScene {
         break
       case 'leaves':
         for (const p of layer.parts) {
+          fade(c, layer, p.x, p.y)
           c.save()
           c.translate(p.x, p.y)
           c.rotate(Math.sin(p.l) * 1.2)
@@ -610,6 +884,7 @@ export function createMotionScene(): MotionScene {
         break
       case 'embers':
         for (const e of layer.parts) {
+          fade(c, layer, e.x, e.y)
           const k = 1 - e.l / e.m
           c.fillStyle = `rgba(255,${120 + Math.round(70 * k)},40,${0.95 * k})`
           c.beginPath()
@@ -822,6 +1097,7 @@ export function createMotionScene(): MotionScene {
       picture = pic
       for (const layer of layers) {
         layer.rect = rectOf(layer.spec)
+        layer.points = pointsOf(layer.spec)
         lay(layer)
       }
     },
