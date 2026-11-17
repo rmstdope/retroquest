@@ -194,6 +194,27 @@ for (const width of [390, 500]) {
   })
 }
 
+test('at 390px the word list spans the typing box and No match takes at most two lines (rq-ttg0)', async ({
+  page,
+}): Promise<void> => {
+  await page.setViewportSize({ width: 390, height: 757 })
+  await toTheCottage(page)
+  await page.keyboard.press('F1')
+  await page.getByLabel('Command', { exact: true }).fill('quests')
+  const none = page.getByRole('option', { name: 'No match for “quests”' })
+  await expect(none).toBeVisible()
+  const list = page.getByRole('listbox', { name: 'Matching words' })
+  const box = page.getByRole('form', { name: 'Typing box' })
+  const listBox = await list.boundingBox()
+  const formBox = await box.boundingBox()
+  if (!listBox || !formBox) throw new Error('list or box not drawn')
+  expect(Math.abs(listBox.x - formBox.x)).toBeLessThanOrEqual(2)
+  expect(Math.abs(listBox.width - formBox.width)).toBeLessThanOrEqual(2) // the box border
+  // Two 20px lines and 10px padding above and below.
+  const lineBox = await none.boundingBox()
+  expect(lineBox?.height ?? 999).toBeLessThanOrEqual(60)
+})
+
 test('Cancel and Escape put the thing down and send nothing', async ({
   page,
 }): Promise<void> => {
