@@ -8,6 +8,7 @@ import {
   ref,
   watch,
 } from 'vue'
+import { GAME_NAME } from '@/engine'
 import { useGameStore } from '@/stores/useGameStore'
 import { renderMarkup } from '@/utils/theme'
 import { useSettingsStore } from '@/stores/useSettingsStore'
@@ -2788,7 +2789,7 @@ watch(
             v-else-if="gameDialog"
             :key="gameDialog"
             :title="INFO_TITLES[gameDialog]"
-            eyebrow="Tales of Twinmoor"
+            :eyebrow="GAME_NAME"
             :key-line="HELP_KEYS"
             start-on-panel
             scroll-keys

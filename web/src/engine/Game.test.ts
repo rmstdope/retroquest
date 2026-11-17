@@ -11,6 +11,7 @@ import {
   type SaveStorage,
 } from './Game'
 import { GameState } from './GameState'
+import { GAME_NAME } from './gameName'
 import { Item } from './Item'
 import { Quest } from './Quest'
 import { Room } from './Room'
@@ -1885,7 +1886,7 @@ describe('Game', () => {
         '[failure]Failed to load game',
       )
       expect(game.loadSaveData('{"version":1}')).toContain(
-        'older version of Tales of Twinmoor',
+        `older version of ${GAME_NAME}`,
       )
       expect(game.loadSaveData('{"version":4}')).toContain(
         'unsupported save format',
@@ -1909,7 +1910,7 @@ describe('Game', () => {
 
       const state = game.state
       expect(game.loadSaveData(older(3))).toBe(
-        '[failure]That save was made by an older version of Tales of Twinmoor' +
+        `[failure]That save was made by an older version of ${GAME_NAME}` +
           ' and can no longer be loaded.[/failure]',
       )
       expect(game.state).toBe(state)

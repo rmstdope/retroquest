@@ -25,6 +25,7 @@ import {
 import { Item } from './Item'
 import { Quest } from './Quest'
 import { Room } from './Room'
+import { GAME_NAME } from './gameName'
 import { indefiniteArticle } from './names'
 import { deserialize, serialize, type SerializedGraph } from './Serializer'
 import { Spell } from './Spell'
@@ -77,7 +78,7 @@ const PICKUP_LINE = 'This might come in handy, so you decide to pick it up.'
 const SAVE_VERSION = 4
 /** What loading a save from an older version answers. */
 const OUTDATED_SAVE =
-  '[failure]That save was made by an older version of Tales of Twinmoor' +
+  `[failure]That save was made by an older version of ${GAME_NAME}` +
   ' and can no longer be loaded.[/failure]'
 const DEFAULT_SAVE_NAME = 'retroquest'
 const SAVE_NAME = /^[a-z0-9_-]+$/

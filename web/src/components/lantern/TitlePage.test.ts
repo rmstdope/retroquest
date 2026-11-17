@@ -3,6 +3,7 @@ import { describe, it, expect, afterEach, beforeEach, vi } from 'vitest'
 import { mount, flushPromises, type VueWrapper } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import TitlePage from './TitlePage.vue'
+import { GAME_FULL_NAME, GAME_NAME, GAME_SUBTITLE } from '@/engine'
 import type { SaveSlot } from '@/types/bridge'
 import { setPictureProbe } from '@/lantern/roomPicture'
 import { useSettingsStore } from '@/stores/useSettingsStore'
@@ -40,18 +41,18 @@ describe('TitlePage', () => {
     return wrapper
   }
 
-  it('is a page named Tales of Twinmoor: Wardens of the Dawn, with the name written over the picture', () => {
+  it("is a page named by the game's full name, with the name written over the picture", () => {
     const w = mountTitle()
     const dialog = w.get('[role="dialog"]')
 
     expect(dialog.get(`#${dialog.attributes('aria-labelledby')}`).text()).toBe(
-      'Tales of Twinmoor: Wardens of the Dawn',
+      GAME_FULL_NAME,
     )
     expect(w.get('.lq-welcome').text()).toBe('Welcome to')
     expect(w.get('.lq-wordmark').attributes('aria-hidden')).toBe('true')
-    expect(w.get('.lq-wordmark').text()).toBe('Tales of Twinmoor')
+    expect(w.get('.lq-wordmark').text()).toBe(GAME_NAME)
     expect(w.get('.lq-subtitle').attributes('aria-hidden')).toBe('true')
-    expect(w.get('.lq-subtitle').text()).toBe('Wardens of the Dawn')
+    expect(w.get('.lq-subtitle').text()).toBe(GAME_SUBTITLE)
     expect(w.get('.lq-title-rule').attributes('aria-hidden')).toBe('true')
     expect(w.get('.lq-title-name').findAll('.lq-subtitle')).toHaveLength(1)
     expect(w.find('pre').exists()).toBe(false)

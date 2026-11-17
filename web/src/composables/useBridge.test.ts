@@ -1,6 +1,7 @@
 import { setAppStorage } from '@/storage/appStorage'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { useBridge } from '@/composables/useBridge'
+import { GAME_NAME } from '@/engine'
 import type { SaveSlot } from '@/types/bridge'
 
 /** Minimal localStorage mock shared across all tests in this file. */
@@ -697,10 +698,10 @@ describe('useBridge', () => {
       ])
       expect(slots[1].room).toBe("Elior's Cottage")
       expect(bridge.loadFromSlot(2)).toMatch(
-        /older version of Tales of Twinmoor/,
+        new RegExp(`older version of ${GAME_NAME}`),
       )
       expect(bridge.quickLoadGame()).toMatch(
-        /older version of Tales of Twinmoor/,
+        new RegExp(`older version of ${GAME_NAME}`),
       )
       expect(localStorageMock.getItem('retroquest_save_slots')).toBe(slotsRaw)
       expect(localStorageMock.getItem('retroquest_save')).toBe(older)

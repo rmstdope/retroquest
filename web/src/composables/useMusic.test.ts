@@ -13,6 +13,7 @@ import {
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import { FakeAudioContext } from '@/testing/fakeAudioContext'
 import { sharedAudioContext } from './musicVoice'
+import { GAME_NAME } from '@/engine'
 import { Ambience } from './ambience'
 
 /**
@@ -92,7 +93,7 @@ describe('useMusic', () => {
 
     it('keeps the folder of a file in a folder', () => {
       const { loadTrack } = useMusic(audio)
-      loadTrack('generated/hall one.mp3', 'Made for Tales of Twinmoor')
+      loadTrack('generated/hall one.mp3', `Made for ${GAME_NAME}`)
       expect(audio.src).toBe('/audio/music/generated/hall%20one.mp3')
     })
 

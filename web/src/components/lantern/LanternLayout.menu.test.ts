@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { flushPromises, mount, type VueWrapper } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import LanternLayout from './LanternLayout.vue'
+import { GAME_NAME } from '@/engine'
 import { startedHoldStore } from '@/testing/holdGame'
 import { useGameStore } from '@/stores/useGameStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
@@ -55,7 +56,7 @@ describe('LanternLayout: the Escape menu', () => {
 
   it('has no top bar at all', () => {
     expect(w.find('header').exists()).toBe(false)
-    expect(w.text()).not.toContain('Tales of Twinmoor')
+    expect(w.text()).not.toContain(GAME_NAME)
     expect(w.find('[data-button="menu"]').exists()).toBe(true)
   })
 

@@ -3,6 +3,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { flushPromises, mount, type VueWrapper } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import LanternLayout from './LanternLayout.vue'
+import { GAME_NAME } from '@/engine'
 import { useGameStore } from '@/stores/useGameStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import {
@@ -309,7 +310,7 @@ describe('LanternLayout', () => {
     await flushPromises()
 
     const w = wrapper
-    expect(w.get('h1').text()).toBe('Thank you for playing Tales of Twinmoor')
+    expect(w.get('h1').text()).toBe(`Thank you for playing ${GAME_NAME}`)
     expect(w.text()).toContain('The realm breathes again.')
     expect(w.text()).toContain('Your game is saved in the quick slot.')
     expect(w.find('header').exists()).toBe(false)
@@ -690,7 +691,7 @@ describe('LanternLayout', () => {
   it('has no top bar: no title, no bar of buttons', () => {
     const w = mountLayout()
     expect(w.find('header').exists()).toBe(false)
-    expect(w.text()).not.toContain('Tales of Twinmoor')
+    expect(w.text()).not.toContain(GAME_NAME)
   })
 
   it('lists the turns with their command and rendered answer', async () => {
@@ -1560,7 +1561,7 @@ describe('LanternLayout', () => {
         const text = await settingsWith({
           'act1-village-square': { file: 'square.mp3', duration: 60 },
         })
-        expect(text).toContain('Original music for Tales of Twinmoor')
+        expect(text).toContain(`Original music for ${GAME_NAME}`)
         expect(text).not.toContain('Content Studio')
         expect(text).not.toContain('Audio Studio')
         expect(text).not.toContain('Conquest')

@@ -8,6 +8,7 @@ import {
   useId,
   watch,
 } from 'vue'
+import { GAME_FULL_NAME, GAME_NAME } from '@/engine'
 import { continueLine, filled, newestLoadable } from '@/lantern/saveCard'
 import {
   pictureExists,
@@ -233,9 +234,9 @@ onBeforeUnmount(() => {
       <div class="lq-title-name">
         <span class="lq-welcome">Welcome to</span>
         <h2 :id="titleId" class="lq-sr-only">
-          Tales of Twinmoor: Wardens of the Dawn
+          {{ GAME_FULL_NAME }}
         </h2>
-        <span class="lq-wordmark" aria-hidden="true">Tales of Twinmoor</span>
+        <span class="lq-wordmark" aria-hidden="true">{{ GAME_NAME }}</span>
         <span class="lq-title-rule" aria-hidden="true"
           ><span class="lq-title-rule-line"></span>◆<span
             class="lq-title-rule-line"
