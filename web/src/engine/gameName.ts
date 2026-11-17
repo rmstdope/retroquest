@@ -4,8 +4,14 @@
  * import them, so `lantern/gameName.test.ts` compares them with these values.
  */
 
+/** The first part of the short name: the small line above the wordmark on the title page. */
+export const GAME_NAME_EYEBROW = 'Tales of'
+
+/** The second part of the short name: the wordmark on the title page. */
+export const GAME_NAME_WORDMARK = 'Twinmoor'
+
 /** The short name: the wordmark, the loading heading and the sentences that name the game. */
-export const GAME_NAME = 'Tales of Twinmoor'
+export const GAME_NAME = `${GAME_NAME_EYEBROW} ${GAME_NAME_WORDMARK}`
 
 /** The subtitle that follows the short name in the full name. */
 export const GAME_SUBTITLE = 'Wardens of the Dawn'

@@ -8,7 +8,12 @@ import {
   useId,
   watch,
 } from 'vue'
-import { GAME_FULL_NAME } from '@/engine'
+import {
+  GAME_FULL_NAME,
+  GAME_NAME_EYEBROW,
+  GAME_NAME_WORDMARK,
+  GAME_SUBTITLE,
+} from '@/engine'
 import { continueCard, filled, newestLoadable } from '@/lantern/saveCard'
 import {
   pictureExists,
@@ -285,9 +290,13 @@ onBeforeUnmount(() => {
         <h2 :id="titleId" class="lq-sr-only">
           {{ GAME_FULL_NAME }}
         </h2>
-        <span class="lq-title-eyebrow" aria-hidden="true">Tales of</span>
-        <span class="lq-wordmark" aria-hidden="true">Twinmoor</span>
-        <span class="lq-subtitle" aria-hidden="true">Wardens of the Dawn</span>
+        <span class="lq-title-eyebrow" aria-hidden="true">{{
+          GAME_NAME_EYEBROW
+        }}</span>
+        <span class="lq-wordmark" aria-hidden="true">{{
+          GAME_NAME_WORDMARK
+        }}</span>
+        <span class="lq-subtitle" aria-hidden="true">{{ GAME_SUBTITLE }}</span>
       </div>
       <p v-if="error" class="lq-title-error" role="alert">{{ error }}</p>
       <div

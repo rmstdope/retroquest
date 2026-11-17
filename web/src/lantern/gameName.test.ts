@@ -1,7 +1,13 @@
 import { describe, it, expect } from 'vitest'
 import { readFileSync, readdirSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
-import { GAME_FULL_NAME, GAME_NAME } from '@/engine'
+import {
+  GAME_FULL_NAME,
+  GAME_NAME,
+  GAME_NAME_EYEBROW,
+  GAME_NAME_WORDMARK,
+  GAME_SUBTITLE,
+} from '@/engine'
 
 const read = (path: string): string =>
   readFileSync(fileURLToPath(new URL(path, import.meta.url)), 'utf8')
@@ -45,5 +51,15 @@ describe('the name of the game and of its land', () => {
         name !== 'gameName.ts' && text.replace(/\s+/g, ' ').includes(GAME_NAME),
     )
     expect(copies.map(([name]) => name)).toEqual([])
+  })
+
+  it('writes no part of the name or its subtitle into a screen', () => {
+    // Twinmoor and the Wardens of the Dawn are also the land and the order
+    // in the story, so only the screens (Vue components) are held to this.
+    const screens = sources().filter(([name]) => name.endsWith('.vue'))
+    for (const text of [GAME_NAME_EYEBROW, GAME_NAME_WORDMARK, GAME_SUBTITLE]) {
+      const copies = screens.filter(([, source]) => source.includes(text))
+      expect(copies.map(([name]) => name)).toEqual([])
+    }
   })
 })
