@@ -3,6 +3,7 @@ import type { SaveSlot } from '@/types/bridge'
 import {
   actLabel,
   cardKey,
+  continuePictureUrls,
   continueCard,
   filled,
   newestLoadable,
@@ -172,5 +173,45 @@ describe('oldestFilled', () => {
     expect(oldestFilled([dated, none])).toBe(none)
     expect(oldestFilled([card(5, { room: null }), dated])).toBe(dated)
     expect(oldestFilled([])).toBeNull()
+  })
+})
+
+describe('continuePictureUrls', () => {
+  const base: SaveSlot = {
+    slot: 1,
+    act: 'Act 1',
+    room: 'The Forge',
+    timestamp: null,
+    quests: null,
+  }
+
+  it('is null for a save with no picture', () => {
+    expect(continuePictureUrls(base)).toBeNull()
+  })
+
+  it("lists the room's other picture before its plain one, and the patches over it", () => {
+    const urls = continuePictureUrls({
+      ...base,
+      picture: {
+        actName: 'Act1',
+        roomKey: 'Forge',
+        variant: 'night',
+        patchIds: ['lamp'],
+      },
+    })
+    expect(urls?.base).toHaveLength(2)
+    expect(urls?.base[0]).toMatch(/-night\.png$/)
+    expect(urls?.base[1]).not.toMatch(/-night/)
+    expect(urls?.patches).toHaveLength(1)
+    expect(urls?.patches[0]).toMatch(/\.lamp\.png$/)
+  })
+
+  it("lists only the room's plain picture when it has no other", () => {
+    const urls = continuePictureUrls({
+      ...base,
+      picture: { actName: 'Act1', roomKey: 'Forge', variant: '', patchIds: [] },
+    })
+    expect(urls?.base).toHaveLength(1)
+    expect(urls?.patches).toEqual([])
   })
 })

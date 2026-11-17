@@ -1,4 +1,5 @@
 import type { SaveSlot } from '@/types/bridge'
+import { roomPatchUrl, roomPictureUrl } from './roomPicture'
 
 const ROMAN = ['I', 'II', 'III', 'IV', 'V', 'VI']
 const MONTHS = [
@@ -115,4 +116,31 @@ export function continueCard(card: SaveSlot, now = new Date()): ContinueCard {
     .filter(Boolean)
     .join(' · ')
   return { title, line }
+}
+
+/** The files that make up a save's thumbnail: the room's pictures to try in order, and the patches that go over the one that loads. */
+export interface ContinuePictureUrls {
+  base: string[]
+  patches: string[]
+}
+
+/**
+ * The files of the picture a save was made looking at, or null for a save
+ * that kept none. The room's other picture comes first and its plain one
+ * stands in for it, as on the stage.
+ */
+export function continuePictureUrls(
+  card: SaveSlot,
+): ContinuePictureUrls | null {
+  const { picture } = card
+  if (!picture) return null
+  const { actName, roomKey, variant, patchIds } = picture
+  const plain = roomPictureUrl(actName, roomKey)
+  if (!plain) return null
+  return {
+    base: variant
+      ? [roomPictureUrl(actName, roomKey, variant), plain]
+      : [plain],
+    patches: patchIds.map((id) => roomPatchUrl(actName, roomKey, id, variant)),
+  }
 }

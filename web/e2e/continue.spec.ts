@@ -44,6 +44,22 @@ test('Continue opens the newest save with no chapter page', async ({
   await expect(page.locator('.lq-room-name')).toBeVisible()
 })
 
+test('the Continue card shows a small picture of the room the save was made in', async ({
+  page,
+}) => {
+  await makeSave(page)
+  await page.reload()
+
+  const cont = page.getByRole('button', { name: /^Continue/ })
+  const picture = cont.locator('.lq-continue-picture')
+  await expect(picture).toBeVisible()
+  await expect(picture).toHaveAttribute('aria-hidden', 'true')
+  await expect(picture.locator('img').first()).toHaveAttribute(
+    'src',
+    /images\/generated\/.+\.png$/,
+  )
+})
+
 test('Load game from the title page loads a card with no question', async ({
   page,
 }) => {

@@ -23,6 +23,8 @@ type StoredSave = {
   room?: string
   /** Missing in saves made before quest counts were kept. */
   quests?: SaveSlot['quests']
+  /** The picture of the room as the player left it; missing in saves made before it was kept. */
+  picture?: SaveSlot['picture']
   /** The story so far as the UI kept it; missing in saves made before it was kept. */
   story?: unknown
 }
@@ -129,6 +131,7 @@ function cardOf(stored: StoredSave, slot: number, name?: string): SaveSlot {
     room: stored.room ?? null,
     timestamp: stored.timestamp ?? null,
     quests: stored.quests ?? null,
+    ...(stored.picture === undefined ? {} : { picture: stored.picture }),
     outdated: isOutdatedSave(stored.data),
   }
 }
@@ -207,12 +210,15 @@ export function useBridge(loader: () => Promise<ActClass[]> = loadActs) {
 
   /** The details stored next to a save: where the player was and when. */
   function saveDetails(): Omit<StoredSave, 'data' | 'story'> {
-    const { controller } = requireGame()
+    const { controller, game } = requireGame()
+    const { actName } = game.currentMusicPlace()
+    const { roomKey, variant, patchIds } = pictureState()
     return {
       act: controller.getActName(),
       room: controller.getRoomName(),
       timestamp: new Date().toISOString(),
       quests: readQuests(),
+      ...(roomKey ? { picture: { actName, roomKey, variant, patchIds } } : {}),
     }
   }
 

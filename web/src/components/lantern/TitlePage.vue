@@ -14,7 +14,12 @@ import {
   GAME_NAME_WORDMARK,
   GAME_SUBTITLE,
 } from '@/engine'
-import { continueCard, filled, newestLoadable } from '@/lantern/saveCard'
+import {
+  continuePictureUrls,
+  continueCard,
+  filled,
+  newestLoadable,
+} from '@/lantern/saveCard'
 import {
   pictureExists,
   roomPictureUrl,
@@ -98,6 +103,30 @@ const card = computed(() => (newest.value ? continueCard(newest.value) : null))
 /** The Continue card's name for a screen reader, its three lines read as one: "Continue, The Old Mill, Act II · …". */
 const continueName = computed(() =>
   ['Continue', card.value?.title, card.value?.line].filter(Boolean).join(', '),
+)
+/** The Continue card's thumbnail once it is known to load: the room's picture and the patches over it; null until then, and for good when there is none. */
+const thumb = ref<{ base: string; patches: string[] } | null>(null)
+watch(
+  newest,
+  async (save) => {
+    thumb.value = null
+    const urls = save ? continuePictureUrls(save) : null
+    if (!urls) return
+    let base = ''
+    for (const url of urls.base) {
+      if (await pictureExists(url)) {
+        base = url
+        break
+      }
+    }
+    if (!base || newest.value !== save) return
+    const found = await Promise.all(
+      urls.patches.map(async (url) => ((await pictureExists(url)) ? url : '')),
+    )
+    if (newest.value !== save) return
+    thumb.value = { base, patches: found.filter(Boolean) }
+  },
+  { immediate: true },
 )
 const loadButton = ref<HTMLButtonElement | null>(null)
 const sounds = useUiSounds()
@@ -327,6 +356,15 @@ onBeforeUnmount(() => {
             @mouseenter="onChoiceHover"
             @click="press(() => emit('continue'))"
           >
+            <span
+              v-if="thumb"
+              class="lq-continue-picture"
+              :class="{ 'is-still': reduced }"
+              aria-hidden="true"
+            >
+              <img :src="thumb.base" alt="" />
+              <img v-for="url in thumb.patches" :key="url" :src="url" alt="" />
+            </span>
             <span class="lq-continue-text">
               <span class="lq-continue-kicker">Continue</span>
               <span class="lq-continue-title">{{ card.title }}</span>
@@ -536,6 +574,39 @@ onBeforeUnmount(() => {
   background: rgb(255 255 255 / 0.06);
   text-align: left;
 }
+.lq-continue-picture {
+  flex: none;
+  position: relative;
+  width: 112px;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 9px;
+  animation: lq-continue-picture-in 0.25s ease-out;
+}
+.lq-continue-picture img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.lq-continue-picture::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.18);
+}
+@keyframes lq-continue-picture-in {
+  from {
+    opacity: 0;
+  }
+}
+.lq-continue-picture.is-still {
+  animation: none;
+}
+.lq-title-continue:has(.lq-continue-picture) {
+  padding-left: 14px;
+}
 .lq-continue-text {
   flex: 1;
   display: flex;
@@ -717,6 +788,9 @@ onBeforeUnmount(() => {
   .lq-continue-title {
     font-size: 20px;
   }
+  .lq-continue-picture {
+    width: 84px;
+  }
   .lq-continue-play {
     display: none;
   }
@@ -766,6 +840,13 @@ onBeforeUnmount(() => {
   }
   .lq-title-continue {
     padding: 6px 10px 6px 14px;
+  }
+  .lq-title-continue:has(.lq-continue-picture) {
+    padding-left: 10px;
+  }
+  .lq-continue-picture {
+    width: 72px;
+    border-radius: 7px;
   }
   .lq-continue-title {
     font-size: 18px;

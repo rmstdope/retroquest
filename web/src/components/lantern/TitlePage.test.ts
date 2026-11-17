@@ -520,4 +520,51 @@ describe('TitlePage', () => {
       expect(w.get('[role="alert"]').text()).toBe('No save file found.')
     })
   })
+
+  describe('the Continue picture', () => {
+    const picture = {
+      actName: 'Act1',
+      roomKey: 'Forge',
+      variant: '',
+      patchIds: [],
+    }
+
+    it('shows the room picture first on the card, hidden from a screen reader, and keeps the card name', async () => {
+      const w = mountTitle([save(1, { picture })])
+      await flushPromises()
+      const thumb = w.get('.lq-continue-picture')
+      expect(thumb.attributes('aria-hidden')).toBe('true')
+      expect(thumb.find('img').attributes('src')).toMatch(/\.png$/)
+      expect(w.get('.lq-title-continue').element.firstElementChild).toBe(
+        thumb.element,
+      )
+      expect(w.get('.lq-title-continue').attributes('aria-label')).toBe(
+        'Continue, The Old Mill, Act II · 3 Nov · 21:14',
+      )
+    })
+
+    it('shows nothing for an older save, for a picture not made and for one that fails', async () => {
+      const older = mountTitle([save(1)])
+      await flushPromises()
+      expect(older.find('.lq-continue-picture').exists()).toBe(false)
+      older.unmount()
+      setPictureProbe(() => Promise.resolve(false))
+      const missing = mountTitle([save(1, { picture })])
+      await flushPromises()
+      expect(missing.find('.lq-continue-picture').exists()).toBe(false)
+    })
+
+    it('adds the picture when it arrives late', async () => {
+      const arrivals: ((found: boolean) => void)[] = []
+      setPictureProbe(
+        () => new Promise<boolean>((resolve) => arrivals.push(resolve)),
+      )
+      const w = mountTitle([save(1, { picture })])
+      await flushPromises()
+      expect(w.find('.lq-continue-picture').exists()).toBe(false)
+      arrivals.forEach((arrive) => arrive(true))
+      await flushPromises()
+      expect(w.find('.lq-continue-picture').exists()).toBe(true)
+    })
+  })
 })
