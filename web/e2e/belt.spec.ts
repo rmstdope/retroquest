@@ -239,6 +239,9 @@ test('at 1280px the word list stays as wide as the text field, narrower than the
   await page.getByLabel('Command', { exact: true }).fill('quests')
   const list = page.getByRole('listbox', { name: 'Matching words' })
   await expect(list).toBeVisible()
+  await expect(
+    page.getByRole('button', { name: /Show what's here/ }),
+  ).toBeVisible()
   const listBox = await list.boundingBox()
   const formBox = await page
     .getByRole('form', { name: 'Typing box' })
