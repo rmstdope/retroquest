@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 import { useSettingsStore, type ThemeSetting } from '@/stores/useSettingsStore'
 import { useMenuRing } from '@/composables/useMenuRing'
 import { useReducedMotion } from '@/composables/useReducedMotion'
@@ -149,6 +149,28 @@ function onKeydown(event: KeyboardEvent): void {
 
 /** The first line of the track's credits ("Market by Conquest"). */
 const nowPlaying = computed(() => props.musicInfo.split('\n')[0]?.trim() ?? '')
+
+/** The ringed row, when the player sees all of it in the scrolling list. */
+function ringedRowWhole(): HTMLElement | null {
+  const list = root.value?.parentElement
+  const stop = document.activeElement?.closest<HTMLElement>('[data-stop]')
+  if (!list || !stop || !root.value?.contains(stop)) return null
+  const l = list.getBoundingClientRect()
+  const r = stop.getBoundingClientRect()
+  return r.top >= l.top && r.bottom <= l.bottom ? stop : null
+}
+
+/**
+ * The "Now playing" line comes or goes above the Playing rows when the music
+ * starts or stops, often just after Settings opens, while the track is still
+ * being prepared, and moves those rows. A ringed row the player saw whole is
+ * drawn whole again once it has moved; one partly or wholly scrolled out of
+ * view by hand stays where it is.
+ */
+watch(nowPlaying, () => {
+  const row = ringedRowWhole()
+  if (row) void nextTick(() => row.scrollIntoView?.({ block: 'nearest' }))
+})
 
 function volume(event: Event): number {
   return Number((event.target as HTMLInputElement).value)

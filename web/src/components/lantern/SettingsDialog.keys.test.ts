@@ -189,4 +189,40 @@ describe('SettingsDialog from the keyboard', () => {
       { keys: ['Esc'], word: 'back' },
     ])
   })
+
+  describe('when the Now playing line arrives late', () => {
+    const original = Element.prototype.scrollIntoView
+    let scrolled: string[]
+
+    beforeEach(() => {
+      scrolled = []
+      Element.prototype.scrollIntoView = function (this: Element): void {
+        scrolled.push(this.getAttribute('data-stop') ?? '')
+      }
+    })
+    afterEach(() => {
+      Element.prototype.scrollIntoView = original
+    })
+
+    it('draws a ringed row it moved whole again', async () => {
+      const w = await open()
+      w.get<HTMLElement>('[data-stop="alwaysShowNames"]').element.focus()
+      scrolled = []
+      await w.setProps({ musicInfo: 'Market by Conquest' })
+      await flushPromises()
+      expect(w.find('.lq-now-playing').exists()).toBe(true)
+      expect(scrolled).toEqual(['alwaysShowNames'])
+    })
+
+    it('leaves a ringed row scrolled out of view by hand where it is', async () => {
+      const w = await open()
+      const row = w.get<HTMLElement>('[data-stop="alwaysShowNames"]').element
+      row.focus()
+      row.getBoundingClientRect = (): DOMRect => new DOMRect(0, 500, 100, 52)
+      scrolled = []
+      await w.setProps({ musicInfo: 'Market by Conquest' })
+      await flushPromises()
+      expect(scrolled).toEqual([])
+    })
+  })
 })
