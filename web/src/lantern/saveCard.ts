@@ -93,18 +93,26 @@ export function oldestFilled(saves: SaveSlot[]): SaveSlot | null {
   return best
 }
 
+/** What the title page's Continue card says about a save: a name in large type and a line under it. */
+export interface ContinueCard {
+  title: string
+  line: string
+}
+
 /**
- * The line under Continue: "Act II · The Old Mill · Yesterday · 21:14", as the
- * save card reads; a named save starts with its name, and has no "Quick save"
- * stand-in for a missing room.
+ * The Continue card for a save: the place it was made ("The Old Mill") over
+ * "Act II · Yesterday · 21:14". A named save starts the line with its name, or
+ * is titled by it when it has no place; a quick save with no place is "Quick
+ * save".
  */
-export function continueLine(card: SaveSlot, now = new Date()): string {
-  return [
-    card.name,
+export function continueCard(card: SaveSlot, now = new Date()): ContinueCard {
+  const title = card.room ?? card.name ?? 'Quick save'
+  const line = [
+    card.room === null ? null : card.name,
     actLabel(card.act),
-    card.room ?? (card.name === undefined ? 'Quick save' : null),
     savedWhen(card.timestamp, now),
   ]
     .filter(Boolean)
     .join(' · ')
+  return { title, line }
 }

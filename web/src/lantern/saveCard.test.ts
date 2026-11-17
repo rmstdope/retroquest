@@ -3,7 +3,7 @@ import type { SaveSlot } from '@/types/bridge'
 import {
   actLabel,
   cardKey,
-  continueLine,
+  continueCard,
   filled,
   newestLoadable,
   oldestFilled,
@@ -86,19 +86,21 @@ describe('newestLoadable', () => {
   })
 })
 
-describe('continueLine', () => {
-  it('reads act · place · when like the save card', () => {
+describe('continueCard', () => {
+  it('names the place, with the act and when under it', () => {
     const now = new Date(2026, 10, 4, 12, 0)
-    expect(continueLine(card(1), now)).toBe(
-      'Act II · The Old Mill · Yesterday · 21:14',
-    )
+    expect(continueCard(card(1), now)).toEqual({
+      title: 'The Old Mill',
+      line: 'Act II · Yesterday · 21:14',
+    })
   })
 
-  it('calls the quick save Quick save', () => {
+  it('calls a quick save with no place Quick save', () => {
     const now = new Date(2026, 10, 4, 12, 0)
-    expect(continueLine(card(0, { room: null }), now)).toBe(
-      'Act II · Quick save · Yesterday · 21:14',
-    )
+    expect(continueCard(card(0, { room: null }), now)).toEqual({
+      title: 'Quick save',
+      line: 'Act II · Yesterday · 21:14',
+    })
   })
 })
 
@@ -119,16 +121,18 @@ describe('named saves', () => {
     expect(filled(named({ act: null, room: null }))).toBe(true)
   })
 
-  it('starts the Continue line with the name', () => {
-    expect(continueLine(named(), NOW)).toBe(
-      'before-the-mirrors · Act III · Mount Ember · Today · 14:51',
-    )
+  it('names the place on the Continue card and starts the line under it with the name', () => {
+    expect(continueCard(named(), NOW)).toEqual({
+      title: 'Mount Ember',
+      line: 'before-the-mirrors · Act III · Today · 14:51',
+    })
   })
 
-  it('gives the name and the time when the save has no act or room', () => {
-    expect(continueLine(named({ act: null, room: null }), NOW)).toBe(
-      'before-the-mirrors · Today · 14:51',
-    )
+  it('names the save on the Continue card when it has no act or room', () => {
+    expect(continueCard(named({ act: null, room: null }), NOW)).toEqual({
+      title: 'before-the-mirrors',
+      line: 'Today · 14:51',
+    })
   })
 
   it('lets the newest named save win over older slots', () => {
