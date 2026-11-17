@@ -13,6 +13,7 @@ import { NaturesCharm } from '../items/NaturesCharm'
 import { TrainingSword } from '../items/TrainingSword'
 import {
   FLAG_CEDRIC_RECOGNISED_SIGIL,
+  FLAG_CEDRIC_OATH_LINE_SAID,
   FLAG_CEDRIC_PAID_FOR_SUPPLIES,
   FLAG_DEMONSTRATED_COMBAT_SKILLS,
   FLAG_SPOKEN_TO_SIR_CEDRIC,
@@ -23,6 +24,7 @@ import {
   FLAG_VISION_SHARED,
   QUEST_GATHERING_STORM,
 } from '../Act2StoryFlags'
+import { FOUNDING_OATH } from '../oath'
 
 /** Cedric's description while his name is not yet cleared: old mail, no device, an empty scabbard. */
 export const CEDRIC_DESCRIPTION_BEFORE =
@@ -192,6 +194,29 @@ export class SirCedric extends Character {
    * After Elior broke off the bout by leaving, a talk picks it back up.
    */
   override talkTo(gameState: GameState): string {
+    const due =
+      gameState.getStoryFlag(FLAG_CEDRIKS_HONOR_COMPLETED) &&
+      !gameState.getStoryFlag(FLAG_CEDRIC_OATH_LINE_SAID) &&
+      !this.boutRunning() &&
+      !this.boutBrokenOff(gameState) &&
+      !this.waitingForElior(gameState)
+    const usual = this.talkReply(gameState)
+    if (!due) return usual
+    gameState.setStoryFlag(FLAG_CEDRIC_OATH_LINE_SAID, true)
+    return (
+      usual +
+      '\n\n' +
+      dialogue(
+        'Sir Cedric',
+        `Every knight swears on the crown's oath. '${FOUNDING_OATH}' I swore ` +
+          'it at sixteen and never asked whose words they were. I will ask ' +
+          'now.',
+      )
+    )
+  }
+
+  /** His reply to a talk by the state of the bout and the act; the oath line is added once by `talkTo`. */
+  private talkReply(gameState: GameState): string {
     if (this.boutRunning()) return this.talkDuringBout()
     if (this.boutBrokenOff(gameState)) return this.resumeBout()
     if (this.waitingForElior(gameState)) return this.endAct(gameState)

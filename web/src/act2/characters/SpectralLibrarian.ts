@@ -11,6 +11,7 @@ import { AncientAmulet } from '../items/AncientAmulet'
 import { CrystalFocus } from '../items/CrystalFocus'
 import {
   FLAG_LIBRARIAN_CONFESSED,
+  FLAG_LIBRARIAN_NAMED_THE_LAND,
   FLAG_LIBRARIAN_NOTICED_AMULET,
   FLAG_MENDED_LIBRARY_ENCHANTMENTS,
   FLAG_READ_ANCIENT_CHRONICLE,
@@ -77,6 +78,25 @@ export class SpectralLibrarian extends Character {
    * the amulet was left behind, play it once when he carries it.
    */
   override talkTo(gameState: GameState): string {
+    const due =
+      gameState.getStoryFlag(FLAG_SPECTRAL_LIBRARIAN_FRIENDLY) &&
+      !gameState.getStoryFlag(FLAG_LIBRARIAN_NAMED_THE_LAND)
+    const usual = this.usualTalk(gameState)
+    if (!due) return usual
+    gameState.setStoryFlag(FLAG_LIBRARIAN_NAMED_THE_LAND, true)
+    return (
+      usual +
+      '\n\n' +
+      dialogue(
+        this.name,
+        'They named it Twinmoor before there was a crown to name it. Ask ' +
+          'the crown what it promised them.',
+      )
+    )
+  }
+
+  /** What he says by the stage of the mending; the land's naming is added once by `talkTo`. */
+  private usualTalk(gameState: GameState): string {
     const carrying = gameState.inventory.some(
       (item) => item instanceof AncientAmulet,
     )

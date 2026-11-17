@@ -96,3 +96,11 @@ export const QUEST_HERMITS_WARNING = "The Hermit's Warning"
 export const QUEST_INNKEEPERS_DAUGHTER = "The Innkeeper's Daughter"
 export const QUEST_LOST_CARAVAN = "The Merchant's Lost Caravan"
 export const QUEST_WHISPERS_IN_THE_WIND = 'Whispers in the Wind'
+/** Set once the Historians have told of the first grant and the oath (said once). */
+export const FLAG_HISTORIANS_OATH_LINE_SAID = 'historians_oath_line_said'
+/** Set once the Court Herald has said the crowning oath (said once). */
+export const FLAG_COURT_HERALD_OATH_LINE_SAID = 'court_herald_oath_line_said'
+/** Set once the Spectral Librarian has said who named the land (said once). */
+export const FLAG_LIBRARIAN_NAMED_THE_LAND = 'librarian_named_the_land'
+/** Set once Sir Cedric has said he swore the crown's oath (said once). */
+export const FLAG_CEDRIC_OATH_LINE_SAID = 'cedric_oath_line_said'

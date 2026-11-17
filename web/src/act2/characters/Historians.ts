@@ -9,6 +9,7 @@ import {
   type NameOptions,
 } from '@/engine'
 import {
+  FLAG_HISTORIANS_OATH_LINE_SAID,
   FLAG_SHOWED_JOURNAL_TO_HISTORIANS,
   FLAG_READ_TRAVELERS_JOURNAL,
   FLAG_RESEARCHED_FAMILY_HERITAGE,
@@ -36,8 +37,33 @@ export class Historians extends Character {
     })
   }
 
-  /** Return appropriate dialogue when the player talks to the Historians. */
+  /**
+   * Their usual talk, and on the first talk after the archive search is
+   * done, once, what the first land grant says of the Wardens and the oath.
+   */
   override talkTo(gameState: GameState): string {
+    const due =
+      gameState.getStoryFlag(FLAG_RESEARCHED_FAMILY_HERITAGE) &&
+      !gameState.getStoryFlag(FLAG_HISTORIANS_OATH_LINE_SAID)
+    const usual = this.usualTalk(gameState)
+    if (!due) return usual
+    gameState.setStoryFlag(FLAG_HISTORIANS_OATH_LINE_SAID, true)
+    return (
+      usual +
+      '\n\n' +
+      dialogue(
+        this.name,
+        'The land grants are older than the crown. The first is not a ' +
+          "grant at all: a page in the Wardens' hand naming the moor " +
+          "Twinmoor, and under it the first king's mark, swearing to hold " +
+          'what they bind. Every king since has sworn the same words at ' +
+          'his crowning. We had thought them only words.',
+      )
+    )
+  }
+
+  /** Return appropriate dialogue when the player talks to the Historians. */
+  private usualTalk(gameState: GameState): string {
     const name = this.name
     if (gameState.getStoryFlag(FLAG_RESEARCHED_FAMILY_HERITAGE)) {
       return (

@@ -183,6 +183,7 @@ describe('Sir Cedric narration between quotes', () => {
       'Sir Cedric',
       'Sir Cedric',
       'Sir Cedric',
+      'Sir Cedric',
     ])
   })
 

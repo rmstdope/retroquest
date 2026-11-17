@@ -29,12 +29,12 @@ describe('Villager dialogue markup', () => {
     }
   })
 
-  it('carries the amulet and the mill in her cloaked-stranger rumour, second in her cycle of six', () => {
+  it('carries the amulet and the mill in her cloaked-stranger rumour, second in her cycle of seven', () => {
     const villager = gameInSquare().state.currentRoom.characters.find(
       (c) => c instanceof Villager,
     ) as Villager
 
-    expect(villager.dialogueOptions).toHaveLength(6)
+    expect(villager.dialogueOptions).toHaveLength(7)
     expect(villager.dialogueOptions[1]).toBe(
       'Last night, someone spotted a cloaked stranger near the old well, asking after ' +
         'an old amulet, from a family that left. Nobody would tell him a thing, ' +
@@ -307,12 +307,12 @@ describe('Tilda and the truth about the well', () => {
 })
 
 describe('Tilda and the king', () => {
-  it('tells, last in her cycle of six, that the king is ill and the flour cart has stopped', () => {
+  it('tells, last in her cycle of seven, that the king is ill and the flour cart has stopped', () => {
     const villager = gameInSquare().state.currentRoom.characters.find(
       (c) => c instanceof Villager,
     ) as Villager
 
-    expect(villager.dialogueOptions).toHaveLength(6)
+    expect(villager.dialogueOptions).toHaveLength(7)
     expect(villager.dialogueOptions[5]).toContain(
       "the king's taken to his bed in Greendale",
     )

@@ -51,6 +51,9 @@ export class Villager extends Character {
     "They say the king's taken to his bed in Greendale, and not one " +
       "physician can name what ails him. And the flour cart didn't come " +
       "Thursday. Eleven years, and it's never once missed a Thursday.",
+    'My mother used to say, two moons on the moor, no rain at the door. ' +
+      "Still nights, she meant. We've not had a still night since the " +
+      'fields went grey.',
   ]
 
   dialogueOptions: string[] = [...Villager.RUMOURS]

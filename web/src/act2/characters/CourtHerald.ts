@@ -6,7 +6,12 @@ import {
   dialogue,
   type NameOptions,
 } from '@/engine'
-import { FLAG_COURT_HERALD_FORMAL_PRESENTATION } from '../Act2StoryFlags'
+import {
+  FLAG_COURT_HERALD_FORMAL_PRESENTATION,
+  FLAG_COURT_HERALD_OATH_LINE_SAID,
+  FLAG_RESEARCHED_FAMILY_HERITAGE,
+} from '../Act2StoryFlags'
+import { FOUNDING_OATH } from '../oath'
 import { EntryPass } from '../items/EntryPass'
 
 /** Official who manages court presentations and grants archive access. */
@@ -48,8 +53,30 @@ export class CourtHerald extends Character {
     }
   }
 
-  /** Return dialogue for the Court Herald depending on presentation flag state. */
+  /**
+   * His usual talk, and on the first talk after the archive search is done,
+   * once, the oath he read at the king's crowning.
+   */
   override talkTo(gameState: GameState): string {
+    const due =
+      gameState.getStoryFlag(FLAG_RESEARCHED_FAMILY_HERITAGE) &&
+      !gameState.getStoryFlag(FLAG_COURT_HERALD_OATH_LINE_SAID)
+    const usual = this.usualTalk(gameState)
+    if (!due) return usual
+    gameState.setStoryFlag(FLAG_COURT_HERALD_OATH_LINE_SAID, true)
+    return (
+      usual +
+      '\n\n' +
+      dialogue(
+        this.name,
+        `I read the oath at His Majesty's crowning. '${FOUNDING_OATH}' I ` +
+          'did not know who the Wardens were. I am told you do.',
+      )
+    )
+  }
+
+  /** Return dialogue for the Court Herald depending on presentation flag state. */
+  private usualTalk(gameState: GameState): string {
     const name = this.name
     if (gameState.getStoryFlag(FLAG_COURT_HERALD_FORMAL_PRESENTATION)) {
       return dialogue(

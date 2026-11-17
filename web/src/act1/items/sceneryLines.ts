@@ -623,7 +623,9 @@ export const SCENERY_BY_ROOM: Record<string, SceneryDef[]> = {
       'mark over the door',
       ['mark', 'shape', 'carving'],
       'A tree under two moons, cut into the stone over the door. ' +
-        'The weather has worn it almost smooth.',
+        'The weather has worn it almost smooth. ' +
+        'The lower moon is cut shallower than the upper, like a moon seen ' +
+        'in water.',
     ),
     plain(
       'VillageChapel.pews',
