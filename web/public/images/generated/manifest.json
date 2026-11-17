@@ -2386,6 +2386,76 @@
   "title-screen": {
     "file": "title-screen.png",
     "width": 1920,
-    "height": 1080
+    "height": 1080,
+    "effects": [
+      {
+        "kind": "dust",
+        "settings": {
+          "amount": 1.95,
+          "speed": 1.4
+        }
+      },
+      {
+        "kind": "fireflies",
+        "settings": {
+          "amount": 3,
+          "speed": 1
+        },
+        "spot": [
+          [
+            [
+              0.7141,
+              0
+            ],
+            [
+              0.7144,
+              1
+            ],
+            [
+              0.9971,
+              0.9896
+            ],
+            [
+              1,
+              0
+            ]
+          ]
+        ]
+      },
+      {
+        "kind": "leaves",
+        "settings": {
+          "amount": 1.95,
+          "speed": 1
+        }
+      },
+      {
+        "kind": "mist",
+        "settings": {
+          "amount": 3,
+          "speed": 0
+        },
+        "spot": [
+          [
+            [
+              0,
+              0
+            ],
+            [
+              1,
+              0
+            ],
+            [
+              1,
+              0.6702
+            ],
+            [
+              0,
+              0.6849
+            ]
+          ]
+        ]
+      }
+    ]
   }
 }

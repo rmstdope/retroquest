@@ -2027,7 +2027,89 @@
     },
     "title-screen": {
       "text": "A quiet village under a lantern-lit night, drawn with open sky across the top third and a calm, uncluttered middle for the buttons. In the sky, there is a full moon which reflects clearly in the water of a pond in the village. In the clouds, you can see the outlines of a cloaked man.",
-      "gameWas": "The world of Twinmoor at the start of the story: a quiet village under a lantern-lit dusk, drawn with open sky across the top third for the game's name and a calm, uncluttered middle for the buttons."
+      "gameWas": "The world of Twinmoor at the start of the story: a quiet village under a lantern-lit dusk, drawn with open sky across the top third for the game's name and a calm, uncluttered middle for the buttons.",
+      "effects": {
+        "dust": {
+          "title": "Dust",
+          "on": true,
+          "settings": {
+            "amount": 1.95,
+            "speed": 1.4
+          }
+        },
+        "embers": {
+          "title": "Embers",
+          "on": false,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          }
+        },
+        "fireflies": {
+          "title": "Fireflies",
+          "on": true,
+          "settings": {
+            "amount": 3,
+            "speed": 1
+          },
+          "spot": [
+            [
+              [
+                0.7141,
+                0
+              ],
+              [
+                0.7144,
+                1
+              ],
+              [
+                0.9971,
+                0.9896
+              ],
+              [
+                1,
+                0
+              ]
+            ]
+          ]
+        },
+        "leaves": {
+          "title": "Leaves",
+          "on": true,
+          "settings": {
+            "amount": 1.95,
+            "speed": 1
+          }
+        },
+        "mist": {
+          "title": "Mist",
+          "on": true,
+          "settings": {
+            "amount": 3,
+            "speed": 0
+          },
+          "spot": [
+            [
+              [
+                0,
+                0
+              ],
+              [
+                1,
+                0
+              ],
+              [
+                1,
+                0.6702
+              ],
+              [
+                0,
+                0.6849
+              ]
+            ]
+          ]
+        }
+      }
     }
   }
 }
