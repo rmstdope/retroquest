@@ -215,6 +215,23 @@ test('at 390px the word list spans the typing box and No match takes at most two
   expect(lineBox?.height ?? 999).toBeLessThanOrEqual(60)
 })
 
+test('at 1280px the word list stays as wide as the text field, narrower than the box (rq-ttg0)', async ({
+  page,
+}): Promise<void> => {
+  await page.setViewportSize({ width: 1280, height: 757 })
+  await toTheCottage(page)
+  await page.keyboard.press('F1')
+  await page.getByLabel('Command', { exact: true }).fill('quests')
+  const list = page.getByRole('listbox', { name: 'Matching words' })
+  await expect(list).toBeVisible()
+  const listBox = await list.boundingBox()
+  const formBox = await page
+    .getByRole('form', { name: 'Typing box' })
+    .boundingBox()
+  if (!listBox || !formBox) throw new Error('list or box not drawn')
+  expect(listBox.width).toBeLessThan(formBox.width - 20)
+})
+
 test('Cancel and Escape put the thing down and send nothing', async ({
   page,
 }): Promise<void> => {
