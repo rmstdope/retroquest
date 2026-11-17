@@ -2671,7 +2671,10 @@ watch(
               type="button"
               class="lq-show-names"
               data-lq-obstacle="panel"
-              :class="{ 'lq-show-names-on': namesUp }"
+              :class="{
+                'lq-show-names-on': namesUp,
+                'lq-show-names-typing': typingOpen,
+              }"
               :aria-pressed="namesUp ? 'true' : 'false'"
               :title="laptop ? 'Show what\'s here (S)' : undefined"
               :aria-keyshortcuts="laptop ? 'S' : undefined"
@@ -3109,6 +3112,12 @@ watch(
   font-size: 13px;
   cursor: pointer;
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+}
+/* At phone width the typing box's word list spans the whole box and would run under the pill, so the pill steps aside while the box is open (rq-ttg0). */
+@media (max-width: 639px) {
+  .lq-show-names-typing {
+    visibility: hidden;
+  }
 }
 .lq-show-names:hover {
   color: var(--lq-fg);
