@@ -38,7 +38,9 @@ export class Steles extends Item {
   override examine(_gameState: GameState): string {
     return (
       'The steles bear shallow moon-marks, pores packed with salt. ' +
-      'Loose pale fragments glint in crevices—likely usable in sigil work.'
+      'Loose pale fragments glint in crevices—likely usable in sigil work. ' +
+      'Each sigil is two moons, one cut fainter beneath the other, like the ' +
+      'mark over the chapel door at home.'
     )
   }
 }

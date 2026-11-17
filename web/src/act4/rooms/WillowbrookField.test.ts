@@ -427,13 +427,28 @@ describe('casting grow at home', () => {
         'Power follows purpose; purpose follows truth.',
         'Grandmother opens the gate.',
         'Welcome home, Elior.',
+        'That night the moor water holds two moons again.',
       ].map((line) => text.indexOf(line))
       expect(order[0]).toBeGreaterThanOrEqual(0)
       expect(order).toEqual([...order].sort((x, y) => x - y))
-      expect(text.trimEnd().endsWith('[/dialogue]')).toBe(true)
+      expect(
+        text
+          .trimEnd()
+          .endsWith('That night the moor water holds two moons again.'),
+      ).toBe(true)
       expectStoryFlag(game.state, FLAG_ACT4_FIELD_GREEN, true)
       game.newTurn()
       expect(game.runState).toBe(GameRunState.GameOver)
+    })
+  }
+
+  for (const ending of ['redemption', 'justice', 'sacrifice'] as const) {
+    it(`closes the ${ending} ending on the moor, after Grandmother's welcome`, () => {
+      const text = executeCommands(home(ending), ['cast grow'])
+      expect(text.indexOf('Welcome home, Elior.')).toBeGreaterThan(-1)
+      expect(text.trimEnd()).toMatch(
+        /Welcome home, Elior\.\[\/dialogue\]\nThat night the moor water holds two moons again\.$/,
+      )
     })
   }
 

@@ -16,10 +16,10 @@ export class CharredNotebook extends Item {
     })
   }
 
-  /** Read the two surviving entries; the text never changes and no state is set. */
+  /** Read the three surviving entries; the text never changes and no state is set. */
   override examine(_gameState: GameState): string {
     return (
-      "Most of the notebook's pages have crumbled to flakes; two survive, " +
+      "Most of the notebook's pages have crumbled to flakes; three survive, " +
       'in a neat and patient hand.' +
       '\n\n' +
       writing(
@@ -29,12 +29,19 @@ export class CharredNotebook extends Item {
       ) +
       '\n\n' +
       writing(
+        'We walked up onto the moor tonight, the four of us, to see the two ' +
+          'moons. Mira fell asleep in the heather. Lysa says the founders ' +
+          'crossed here. I kept watch till dawn and never once wished the ' +
+          'night shorter.',
+      ) +
+      '\n\n' +
+      writing(
         'The Wasting has reached Willowbrook. Lysa coughs at night and ' +
           'pretends she does not. Aren sits up with her and pretends he is ' +
           'not afraid. They tell me to wait. I have waited all my life.',
       ) +
       '\n\n' +
-      'The second entry is pressed so hard into the page that the pen has ' +
+      'The last entry is pressed so hard into the page that the pen has ' +
       "torn it. The names in it are your parents'."
     )
   }

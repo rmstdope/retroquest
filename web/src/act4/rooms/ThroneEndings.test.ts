@@ -189,14 +189,18 @@ describe('Redemption', () => {
       'say forgiveness to malakar',
       'cast forgiveness on wound',
     ])
+    let kingHasSpoken = false
     for (const g of [game, (reload(game), game)]) {
       expect(executeCommands(g, ['talk to malakar'])).toContain(
         'Go home, Elior. Tell Mira I am sorry, and that I remember her.',
       )
       expect(g.state.getStoryFlag(FLAG_ACT4_MALAKAR_MESSAGE_HEARD)).toBe(true)
       expect(executeCommands(g, ['talk to king alden'])).toContain(
-        'You saved my kingdom, and somehow him as well. I would not have known how.',
+        g === game && !kingHasSpoken
+          ? 'You saved my kingdom, and somehow him as well. I would not have known how.'
+          : 'Every king of Twinmoor swears to hold what the Wardens bind.',
       )
+      kingHasSpoken = true
       expect(executeCommands(g, ['cast forgiveness on wound'])).toContain(
         'There is no wound left to forgive.',
       )

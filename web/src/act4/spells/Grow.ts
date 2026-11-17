@@ -100,6 +100,7 @@ export class Grow extends Spell {
       dialogue('Nyx', 'Power follows purpose; purpose follows truth.'),
       'Grandmother opens the gate.',
       dialogue('Grandmother', 'Welcome home, Elior.'),
+      'That night the moor water holds two moons again.',
     ].join('\n')
   }
 }
