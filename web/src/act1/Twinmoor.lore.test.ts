@@ -4,6 +4,10 @@ import { executeCommands } from '@/testing/gameHelpers'
 import { Act1 } from './Act1'
 import { Villager } from './characters/Villager'
 import { Locket } from './items/Locket'
+import {
+  FLAG_GRANDMOTHER_MOOR_LINE_SAID,
+  FLAG_GRANDMOTHER_SAW_LOCKET,
+} from './Act1StoryFlags'
 
 /** An Act I game with Elior standing in the named room. */
 function gameIn(room: string): Game {
@@ -108,6 +112,10 @@ describe('Grandmother and the moor, once', () => {
     executeCommands(game, ['talk to grandmother'])
     const loaded = new Game([new Act1()])
     loaded.loadSaveData(game.toSaveData())
+    expect(loaded.state.getStoryFlag(FLAG_GRANDMOTHER_SAW_LOCKET)).toBe(true)
+    expect(loaded.state.getStoryFlag(FLAG_GRANDMOTHER_MOOR_LINE_SAID)).toBe(
+      true,
+    )
     expect(executeCommands(loaded, ['talk to grandmother'])).not.toContain(
       MOOR_LINE,
     )

@@ -5,6 +5,8 @@ import {
   FLAG_ACT4_BARRIERS_DISABLED,
   FLAG_ACT4_ELIXIR_ON_KING,
   FLAG_ACT4_JUSTICE_ENDING,
+  FLAG_ACT4_KING_ENDING_LINE_SAID,
+  FLAG_ACT4_KING_OATH_SAID,
   FLAG_ACT4_REDEMPTION_ENDING,
   FLAG_ACT4_SACRIFICE_ENDING,
 } from './Act4StoryFlags'
@@ -57,6 +59,12 @@ describe('Twinmoor lore in Act IV', () => {
     king.talkTo(game.state)
     const loaded = new Game([new Act4()])
     loaded.loadSaveData(game.toSaveData())
-    expect(new KingAlden().talkTo(loaded.state)).not.toContain(OATH_LINE)
+    expect(loaded.state.getStoryFlag(FLAG_ACT4_KING_ENDING_LINE_SAID)).toBe(
+      true,
+    )
+    expect(loaded.state.getStoryFlag(FLAG_ACT4_KING_OATH_SAID)).toBe(true)
+    const after = new KingAlden().talkTo(loaded.state)
+    expect(after).not.toContain(OATH_LINE)
+    expect(after).toContain('The kingdom will remember what you did here')
   })
 })

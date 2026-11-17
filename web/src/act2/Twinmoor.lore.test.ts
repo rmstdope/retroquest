@@ -3,7 +3,11 @@ import { Game } from '@/engine'
 import { executeCommands } from '@/testing/gameHelpers'
 import { Act2 } from './Act2'
 import {
+  FLAG_CEDRIC_OATH_LINE_SAID,
   FLAG_CEDRIKS_HONOR_COMPLETED,
+  FLAG_COURT_HERALD_OATH_LINE_SAID,
+  FLAG_HISTORIANS_OATH_LINE_SAID,
+  FLAG_LIBRARIAN_NAMED_THE_LAND,
   FLAG_RESEARCHED_FAMILY_HERITAGE,
   FLAG_SPECTRAL_LIBRARIAN_FRIENDLY,
 } from './Act2StoryFlags'
@@ -23,6 +27,7 @@ function expectOnce(
   room: string,
   who: string,
   trigger: string,
+  said: string,
   line: string,
 ): void {
   const game = gameIn(room)
@@ -33,6 +38,8 @@ function expectOnce(
   expect(executeCommands(game, [`talk to ${who}`])).not.toContain(line)
   const loaded = new Game([new Act2()])
   loaded.loadSaveData(game.toSaveData())
+  expect(loaded.state.getStoryFlag(trigger)).toBe(true)
+  expect(loaded.state.getStoryFlag(said)).toBe(true)
   expect(executeCommands(loaded, [`talk to ${who}`])).not.toContain(line)
 }
 
@@ -42,6 +49,7 @@ describe('Twinmoor lore in Act II', () => {
       'GreatHall',
       'historians',
       FLAG_RESEARCHED_FAMILY_HERITAGE,
+      FLAG_HISTORIANS_OATH_LINE_SAID,
       "The land grants are older than the crown. The first is not a grant at all: a page in the Wardens' hand naming the moor Twinmoor, and under it the first king's mark, swearing to hold what they bind. Every king since has sworn the same words at his crowning. We had thought them only words.",
     )
   })
@@ -51,6 +59,7 @@ describe('Twinmoor lore in Act II', () => {
       'GreatHall',
       'court herald',
       FLAG_RESEARCHED_FAMILY_HERITAGE,
+      FLAG_COURT_HERALD_OATH_LINE_SAID,
       `I read the oath at His Majesty's crowning. '${OATH}' I did not know who the Wardens were. I am told you do.`,
     )
   })
@@ -60,6 +69,7 @@ describe('Twinmoor lore in Act II', () => {
       'HiddenLibrary',
       'spectral librarian',
       FLAG_SPECTRAL_LIBRARIAN_FRIENDLY,
+      FLAG_LIBRARIAN_NAMED_THE_LAND,
       'They named it Twinmoor before there was a crown to name it. Ask the crown what it promised them.',
     )
   })
@@ -69,6 +79,7 @@ describe('Twinmoor lore in Act II', () => {
       'CastleCourtyard',
       'sir cedric',
       FLAG_CEDRIKS_HONOR_COMPLETED,
+      FLAG_CEDRIC_OATH_LINE_SAID,
       `Every knight swears on the crown's oath. '${OATH}' I swore it at sixteen and never asked whose words they were. I will ask now.`,
     )
   })

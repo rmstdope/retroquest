@@ -196,7 +196,7 @@ describe('Redemption', () => {
       )
       expect(g.state.getStoryFlag(FLAG_ACT4_MALAKAR_MESSAGE_HEARD)).toBe(true)
       expect(executeCommands(g, ['talk to king alden'])).toContain(
-        g === game && !kingHasSpoken
+        !kingHasSpoken
           ? 'You saved my kingdom, and somehow him as well. I would not have known how.'
           : 'Every king of Twinmoor swears to hold what the Wardens bind.',
       )

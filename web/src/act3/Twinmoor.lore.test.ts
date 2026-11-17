@@ -3,6 +3,7 @@ import { Game } from '@/engine'
 import { Act3 } from './Act3'
 import {
   FLAG_ACT3_DRAGON_MESSAGE_GIVEN,
+  FLAG_ACT3_DRAGON_MOOR_LINE_SAID,
   FLAG_ACT3_DRAGON_VOICE_HEARD,
   FLAG_ACT3_DRAGONS_MEMORY_RECEIVED,
   FLAG_ACT3_DRAGONS_SCALE_ACQUIRED,
@@ -53,6 +54,12 @@ describe('Twinmoor lore in Act III', () => {
     expect(dragon.talkTo(state)).not.toContain(DRAGON_LINE)
     const loaded = new Game([new Act3()])
     loaded.loadSaveData(game.toSaveData())
+    expect(loaded.state.getStoryFlag(FLAG_ACT3_DRAGONS_SCALE_ACQUIRED)).toBe(
+      true,
+    )
+    expect(loaded.state.getStoryFlag(FLAG_ACT3_DRAGON_MOOR_LINE_SAID)).toBe(
+      true,
+    )
     expect(new AncientDragon().talkTo(loaded.state)).not.toContain(DRAGON_LINE)
   })
 })
