@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Title Motion Drawing</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600&family=Fraunces:ital,wght@0,600;1,400&display=swap">
+<style>
+:root{--bg:#10151a;--fg:#ece6d6;--accent:#ffa914;--accent-text:#ffb836;--accent-line:#a8740f;--on-accent:#1a1408;color-scheme:dark}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--fg);font-family:'DM Sans',system-ui,sans-serif;overflow:hidden}
+.stage{position:fixed;inset:0;overflow:hidden}
+.drift{position:absolute;inset:0;opacity:0;transition:opacity 2.4s ease}
+.drift.shown{opacity:1}
+.drift.zoom{animation:dr 16s ease-in-out infinite alternate}
+@keyframes dr{from{transform:scale(1)}to{transform:scale(1.03) translate(-.5%,-.3%)}}
+canvas{position:absolute;inset:0;width:100%;height:100%}
+.shade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgb(16 21 26/.82) 0%,rgb(16 21 26/.25) 38%,rgb(16 21 26/.19) 55%,rgb(16 21 26/.75) 100%)}
+.inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;text-align:center;padding:9vh 16px 64px}
+.name{margin-bottom:auto;opacity:0}
+.welcome{display:block;margin-bottom:8px;font-size:12px;font-weight:600;letter-spacing:.3em;text-transform:uppercase;color:rgb(236 230 214/.8)}
+.wordmark{display:block;font-family:Fraunces,Georgia,serif;font-size:clamp(44px,9vw,84px);font-weight:600;line-height:1;color:var(--accent-text);text-shadow:0 0 22px rgb(0 0 0/.8),0 2px 3px #000}
+.subtitle{display:block;margin-top:14px;font-family:Fraunces,Georgia,serif;font-size:clamp(20px,4vw,28px);font-style:italic}
+.buttons{display:flex;flex-direction:column;align-items:center;gap:12px;margin-bottom:6vh}
+.buttons button{width:300px;max-width:100%;font:inherit;font-weight:600;border-radius:12px;opacity:0;transform:translateY(12px)}
+.start{min-height:54px;border:none;background:var(--accent);color:var(--on-accent);font-size:16px}
+.second{height:48px;border:1px solid var(--accent-line);background:rgb(16 21 26/.8);color:var(--accent-text);font-size:15px}
+.go .name{animation:fade 2.4s ease 2s forwards}
+.go .buttons button{animation:rise .35s ease forwards}
+.go .buttons button:nth-child(1){animation-delay:4.8s}.go .buttons button:nth-child(2){animation-delay:4.98s}.go .buttons button:nth-child(3){animation-delay:5.16s}
+@keyframes fade{to{opacity:1}}@keyframes rise{to{opacity:1;transform:none}}
+.tag{position:fixed;left:16px;top:16px;z-index:5;max-width:calc(100vw - 32px);background:rgb(16 21 26/.92);border:1px solid #2c3640;border-radius:12px;padding:10px 12px;font-size:13px;line-height:1.4}
+.tag strong{color:var(--accent-text);display:block;font-size:12px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px}
+.tag button{margin-top:8px;background:none;border:1px solid #2c3640;color:var(--fg);border-radius:8px;padding:4px 10px;font:inherit;cursor:pointer}
+.clock{color:rgb(236 230 214/.73);font-variant-numeric:tabular-nums}
+</style></head><body>
+<div class="stage" aria-hidden="true"><div class="drift" id="drift"><canvas id="cv"></canvas></div><div class="shade"></div></div>
+<div class="inner" id="inner">
+ <div class="name"><span class="welcome">Welcome to</span><span class="wordmark">Tales of Twinmoor</span><span class="subtitle">Wardens of the Dawn</span></div>
+ <div class="buttons"><button class="start">Continue</button><button class="second">New game</button><button class="second">Load game</button></div>
+</div>
+<div class="tag"><strong id="vt"></strong><span id="vd"></span><br><span class="clock" id="clock"></span><br><button id="replay" type="button">Replay the opening</button></div>
+<script>
+(()=>{
+const V=(new URLSearchParams(location.search).get('v')||'a')
+const INFO={
+ a:['Option A — alive from the first moment','The painting fades in already zooming and moving; the name and buttons arrive over it.'],
+ b:['Option B — still until the buttons are up','The painting fades in still, as today. When the last button has risen, the zoom starts and the effects fade in over about a second.'],
+ 'untuned-a':['Option A — not tuned yet: zoom only','The studio has no settings saved for the title yet. The painting zooms slowly; nothing else on it moves.'],
+ 'untuned-b':['Option B — not tuned yet: a starting mix','The studio has no settings saved for the title yet. It plays a starting mix (pond ripples, moon glints, clouds, fireflies, the lit window) until the team tunes its own.'],
+}
+const [t,d]=INFO[V]||INFO.a
+document.getElementById('vt').textContent=t;document.getElementById('vd').textContent=d
+const zoomOnly=V==='untuned-a', late=V==='b'
+const img=new Image();img.src='../../web/public/images/generated/title-screen.png'
+const cv=document.getElementById('cv'),ctx=cv.getContext('2d'),drift=document.getElementById('drift'),inner=document.getElementById('inner')
+const PW=1920,PH=1080;let r=7;const rnd=()=>(r=(r*16807)%2147483647)/2147483647
+const POND=[[470,790],[860,776],[1180,780],[1600,792],[1745,880],[1735,1010],[1580,1080],[560,1080],[420,965],[395,860]]
+const MOON={x:973,y:212}
+const WIN=[{x:1696,y:698},{x:1490,y:706},{x:1772,y:690}]
+const glints=Array.from({length:70},()=>{const c=rnd()<.6;return{x:c?MOON.x-130+rnd()*260:520+rnd()*1150,y:c?880+rnd()*195:800+rnd()*270,w:6+rnd()*18,ph:rnd()*7,sp:500+rnd()*900}})
+const ffs=Array.from({length:12},(_,i)=>({bx:i%2?1450+rnd()*440:40+rnd()*460,by:860+rnd()*190,ph:rnd()*7,r:12+rnd()*6}))
+const mk=x=>({x,y:90+rnd()*330,v:.006+rnd()*.006,a:.1+rnd()*.08,b:Array.from({length:8},()=>({dx:rnd()*380,dy:(rnd()-.5)*50,r:50+rnd()*70}))})
+const clouds=Array.from({length:5},(_,i)=>mk(i*420+rnd()*200))
+let W,H,dpr,s,ox,oy
+function resize(){dpr=Math.min(2,devicePixelRatio||1);W=cv.clientWidth;H=cv.clientHeight;cv.width=W*dpr;cv.height=H*dpr;s=Math.max(W/PW,H/PH);ox=(W-PW*s)/2;oy=(H-PH*s)/2}
+addEventListener('resize',resize)
+const pond=()=>{ctx.beginPath();POND.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));ctx.closePath()}
+let t0=0,last=0,fx=0,clock=0
+function start(){t0=performance.now();clock=0;fx=late||zoomOnly?0:1;inner.classList.remove('go');drift.classList.remove('shown','zoom');void inner.offsetWidth;inner.classList.add('go');drift.classList.add('shown');if(!late)drift.classList.add('zoom')}
+document.getElementById('replay').onclick=start
+function frame(now){const ms=last?Math.min(100,now-last):16;last=now;const el=(now-t0)/1000
+ document.getElementById('clock').textContent=`${el.toFixed(1)} s since the page opened`
+ if(late&&el>5.5){drift.classList.add('zoom');fx=Math.min(1,fx+ms/1000)}
+ if(fx>0)clock+=ms
+ ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H)
+ if(img.complete&&img.naturalWidth){ctx.setTransform(s*dpr,0,0,s*dpr,ox*dpr,oy*dpr);ctx.drawImage(img,0,0,PW,PH)
+  if(fx>0){
+   ctx.save();pond();ctx.clip();ctx.globalAlpha=fx
+   for(let y=776;y<PH;y+=2){const dp=(y-776)/(PH-776);const o=Math.sin(y*.11-clock/650)*(.6+dp*3.2)+Math.sin(y*.031+clock/1700)*(.4+dp*1.5);ctx.drawImage(img,390,y,1360,2,390+o,y,1360,2.2)}
+   ctx.globalAlpha=1
+   glints.forEach(g=>{const a=Math.pow(Math.max(0,Math.sin(clock/g.sp+g.ph)),4)*fx;if(a<.02)return;const n=1-Math.min(1,Math.abs(g.x-MOON.x)/400);ctx.fillStyle=`rgba(255,250,222,${a*(.35+.55*n)})`;ctx.fillRect(g.x-g.w/2,g.y,g.w,1.6)})
+   ctx.restore()
+   clouds.forEach(c=>{c.x+=c.v*ms;if(c.x>PW+60)Object.assign(c,mk(-480));c.b.forEach(b=>{const x=c.x+b.dx,y=c.y+b.dy,l=Math.max(0,1-Math.hypot(x-MOON.x,y-MOON.y)/360),a=(c.a+l*.12)*fx,tn=Math.round(170+l*70),g=ctx.createRadialGradient(x,y,0,x,y,b.r);g.addColorStop(0,`rgba(${tn},${tn+6},${tn+18},${a})`);g.addColorStop(1,`rgba(${tn},${tn+6},${tn+18},0)`);ctx.fillStyle=g;ctx.save();ctx.translate(x,y);ctx.scale(1.8,.7);ctx.translate(-x,-y);ctx.beginPath();ctx.arc(x,y,b.r,0,7);ctx.fill();ctx.restore()})})
+   ctx.save();ctx.globalCompositeOperation='lighter';WIN.forEach((w,i)=>{const a=(.13+.06*Math.sin(clock/140+i*2)+.04*Math.sin(clock/61+i))*fx*(i===2?.5:1),g=ctx.createRadialGradient(w.x,w.y,4,w.x,w.y,80);g.addColorStop(0,`rgba(255,175,70,${a})`);g.addColorStop(1,'rgba(255,160,50,0)');ctx.fillStyle=g;ctx.fillRect(w.x-80,w.y-80,160,160)});ctx.restore()
+   ffs.forEach(f=>{const x=f.bx+Math.sin(clock/2100+f.ph)*40,y=f.by+Math.cos(clock/2600+f.ph*3)*22,a=Math.max(0,Math.sin(clock/800+f.ph))*fx;if(a<.02)return;const g=ctx.createRadialGradient(x,y,0,x,y,f.r);g.addColorStop(0,`rgba(230,255,130,${a})`);g.addColorStop(1,'rgba(220,255,110,0)');ctx.fillStyle=g;ctx.fillRect(x-f.r,y-f.r,f.r*2,f.r*2)})
+  }}
+ requestAnimationFrame(frame)}
+resize();start();requestAnimationFrame(frame)
+})()
+</script></body></html>
