@@ -1,21 +1,18 @@
 /**
  * The gentle movement laid over a room's painting: what floats anywhere over
  * the picture (dust, leaves, embers, fireflies, low mist) and what lives on a
- * marked spot only (water, fire, smoke). The game never knows where on a
- * painting anything is: a spot is a named area (`motion-water`, `motion-fire`,
- * `motion-smoke`) the navigator places in Content Studio like the area of any
- * clickable thing, and its placed box reaches the game in the images manifest
- * as a fraction of the picture. A spot not placed yet simply has no movement,
- * and the rest of the room moves all the same. The declared lists live in
- * `roomMotion/act<N>RoomMotion.ts`, one entry for each room that has a
- * painting; an entry may be empty, the painting then only drifts. An effect may
- * be tied to the story through one of the room's patch ids (`whilePatch`
- * applies while that patch is laid, `unlessPatch` while it is not), so the
- * movement follows what the picture itself shows. Nothing is saved.
+ * drawn spot only (water, fire, smoke). The game declares none of it: the
+ * navigator tunes each image's effects in Content Studio, and they reach the
+ * game in the images manifest, under the image's `effects`: each with its
+ * `type` (one the renderer has, `motionRenderer.ts`), its `settings` (numbers
+ * by setting id; a missing one plays at its default), an optional tie to the
+ * story through one of the image's patch ids (`whilePatch` applies while that
+ * patch is laid, `unlessPatch` while it is not) and, for a spot type, the
+ * `spot` the navigator drew: a polygon of picture fractions with an optional
+ * `mark`. A spot type with no drawn spot simply has no movement, and the rest
+ * of the room moves all the same. Nothing is saved.
  */
-import type { ImageArea } from './roomAreas'
-import { ACT1_ROOM_MOTION } from './roomMotion/act1RoomMotion'
-import { ACT2_ROOM_MOTION } from './roomMotion/act2RoomMotion'
+import { effectType } from './motionEffects'
 
 /** What floats over the whole picture and needs no marking. */
 export type FloatKind = 'dust' | 'leaves' | 'embers' | 'fireflies' | 'mist'
@@ -37,64 +34,43 @@ export interface AreaBox {
   mark?: { x: number; y: number }
 }
 
-/** One declared movement of a room. */
+/** A point on a picture, as fractions of it. */
+export interface PicturePoint {
+  x: number
+  y: number
+}
+
+/** The shape the navigator drew for a spot: a polygon, and where its mark sits. */
+export interface SpotShape {
+  points: PicturePoint[]
+  /** Where the studio put the spot's mark, as fractions of the picture; absent means the middle of the shape. */
+  mark?: PicturePoint
+}
+
+/** One movement of an image, as the manifest lists it. */
 export interface RoomEffect {
   kind: MotionKind
-  /** A patch id of the same room: the effect applies while that patch is laid. */
+  /** The settings the navigator tuned, by setting id; missing ones play at their default. */
+  settings?: Record<string, number>
+  /** A patch id of the same image: the effect applies while that patch is laid. */
   whilePatch?: string
-  /** A patch id of the same room: the effect applies while that patch is not laid. */
+  /** A patch id of the same image: the effect applies while that patch is not laid. */
   unlessPatch?: string
+  /** The drawn spot of a spot kind. */
+  spot?: SpotShape
 }
 
-/** A movement that applies now: a spot kind carries its placed box. */
+/** A movement that applies now: a spot kind carries its drawn shape and the box around it. */
 export interface MotionSpec {
   kind: MotionKind
+  settings?: Record<string, number>
   box?: AreaBox
+  polygon?: PicturePoint[]
 }
 
-/** The declared movement of each painted room of each act, by act name then room key. */
-const ROOM_MOTION: Readonly<
-  Record<string, Readonly<Record<string, readonly RoomEffect[]>>>
-> = {
-  Act1: ACT1_ROOM_MOTION,
-  Act2: ACT2_ROOM_MOTION,
-}
-
-/** The movement declared for room `roomKey` of act `actName`; none for a room without a declaration. */
-export function declaredMotion(
-  actName: string,
-  roomKey: string,
-): readonly RoomEffect[] {
-  return ROOM_MOTION[actName]?.[roomKey] ?? []
-}
-
-/** Whether `kind` lives on a marked spot. */
+/** Whether `kind` lives on a drawn spot. */
 export function isSpotKind(kind: MotionKind): kind is SpotKind {
   return (SPOT_KINDS as readonly string[]).includes(kind)
-}
-
-/** The named area the navigator places for a spot kind: `motion-water`, `motion-fire` or `motion-smoke`. */
-export function spotAreaId(kind: SpotKind): string {
-  return `motion-${kind}`
-}
-
-/** What the studio calls each kind of spot. */
-const SPOT_TITLES: Readonly<Record<SpotKind, string>> = {
-  water: 'Running water',
-  fire: 'Fire',
-  smoke: 'Smoke',
-}
-
-/** The named areas to ask the studio for: one for each kind of spot the room uses, once. */
-export function spotAreas(actName: string, roomKey: string): ImageArea[] {
-  const kinds = new Set<SpotKind>()
-  for (const effect of declaredMotion(actName, roomKey)) {
-    if (isSpotKind(effect.kind)) kinds.add(effect.kind)
-  }
-  return SPOT_KINDS.filter((kind) => kinds.has(kind)).map((kind) => ({
-    id: spotAreaId(kind),
-    title: SPOT_TITLES[kind],
-  }))
 }
 
 /** Whether `value` is a box wholly inside the picture, with some size. */
@@ -153,26 +129,103 @@ export function madeAreaBoxes(
   return boxes
 }
 
+/** Whether `value` is a point inside the picture. */
+function isPoint(value: unknown): value is PicturePoint {
+  if (typeof value !== 'object' || value === null) return false
+  const { x, y } = value as Record<string, unknown>
+  return (
+    typeof x === 'number' &&
+    typeof y === 'number' &&
+    x >= 0 &&
+    x <= 1 &&
+    y >= 0 &&
+    y <= 1
+  )
+}
+
+/** The box around `points`; null when it has no size. */
+function boundingBox(points: readonly PicturePoint[]): AreaBox | null {
+  const xs = points.map((p) => p.x)
+  const ys = points.map((p) => p.y)
+  const x = Math.min(...xs)
+  const y = Math.min(...ys)
+  const width = Math.round((Math.max(...xs) - x) * 1e6) / 1e6
+  const height = Math.round((Math.max(...ys) - y) * 1e6) / 1e6
+  return width > 0 && height > 0 ? { x, y, width, height } : null
+}
+
+/** The spot of `value`: at least three points, all inside the picture, around something with a size; the mark only when it is inside the picture. */
+function madeSpot(value: unknown): SpotShape | undefined {
+  if (typeof value !== 'object' || value === null) return undefined
+  const { points, mark } = value as Record<string, unknown>
+  if (!Array.isArray(points) || points.length < 3) return undefined
+  if (!points.every(isPoint) || !boundingBox(points)) return undefined
+  const kept = points.map(({ x, y }) => ({ x, y }))
+  const markPoint = madeMark(mark)
+  return markPoint ? { points: kept, mark: markPoint } : { points: kept }
+}
+
+/** The settings of `value` that are finite numbers. */
+function madeSettings(value: unknown): Record<string, number> | undefined {
+  if (typeof value !== 'object' || value === null) return undefined
+  const kept: Record<string, number> = {}
+  for (const [id, v] of Object.entries(value))
+    if (typeof v === 'number' && Number.isFinite(v)) kept[id] = v
+  return Object.keys(kept).length > 0 ? kept : undefined
+}
+
 /**
- * The movement that applies to the story as it stands: the declared effects
- * whose patch condition holds (`patchIds` are the patches laid now), the
- * spot kinds with their placed box (a spot with none is left out).
+ * The effects the images manifest lists under image `imageId`. Tolerant of
+ * anything: a manifest that is not an object, an image with no `effects`, an
+ * effect of a type the renderer does not have, settings that are not numbers
+ * and a spot that is not a shape wholly inside the picture are left out.
+ */
+export function madeEffects(manifest: unknown, imageId: string): RoomEffect[] {
+  if (typeof manifest !== 'object' || manifest === null) return []
+  const image: unknown = (manifest as Record<string, unknown>)[imageId]
+  if (typeof image !== 'object' || image === null) return []
+  const listed: unknown = (image as Record<string, unknown>).effects
+  if (!Array.isArray(listed)) return []
+  const effects: RoomEffect[] = []
+  for (const item of listed as unknown[]) {
+    if (typeof item !== 'object' || item === null) continue
+    const raw = item as Record<string, unknown>
+    if (typeof raw.type !== 'string' || !effectType(raw.type)) continue
+    const effect: RoomEffect = { kind: raw.type as MotionKind }
+    const settings = madeSettings(raw.settings)
+    if (settings) effect.settings = settings
+    if (typeof raw.whilePatch === 'string') effect.whilePatch = raw.whilePatch
+    if (typeof raw.unlessPatch === 'string')
+      effect.unlessPatch = raw.unlessPatch
+    const spot = madeSpot(raw.spot)
+    if (spot) effect.spot = spot
+    effects.push(effect)
+  }
+  return effects
+}
+
+/**
+ * The movement that applies to the story as it stands: the effects whose
+ * patch condition holds (`patchIds` are the patches laid now), the spot kinds
+ * with their drawn shape and the box around it (a spot with none is left out).
  */
 export function appliedMotion(
   effects: readonly RoomEffect[],
   patchIds: readonly string[],
-  boxes: Readonly<Record<string, AreaBox>>,
 ): MotionSpec[] {
   const specs: MotionSpec[] = []
   for (const effect of effects) {
     if (effect.whilePatch && !patchIds.includes(effect.whilePatch)) continue
     if (effect.unlessPatch && patchIds.includes(effect.unlessPatch)) continue
-    if (!isSpotKind(effect.kind)) {
-      specs.push({ kind: effect.kind })
-      continue
+    const spec: MotionSpec = { kind: effect.kind }
+    if (effect.settings) spec.settings = effect.settings
+    if (isSpotKind(effect.kind)) {
+      const box = effect.spot && boundingBox(effect.spot.points)
+      if (!effect.spot || !box) continue
+      spec.box = effect.spot.mark ? { ...box, mark: effect.spot.mark } : box
+      spec.polygon = effect.spot.points
     }
-    const box = boxes[spotAreaId(effect.kind)]
-    if (box) specs.push({ kind: effect.kind, box })
+    specs.push(spec)
   }
   return specs
 }

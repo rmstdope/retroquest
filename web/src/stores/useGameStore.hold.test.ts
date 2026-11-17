@@ -420,20 +420,32 @@ describe('useGameStore: panels held while a turn is narrated', () => {
       expect(store.roomPatchUrls).toHaveLength(1)
     })
 
-    it('lists the movement of the room with the spots the studio has marked', async () => {
+    it('lists the movement the manifest gives the room, the spots with the shape the navigator drew', async () => {
       const store = await cottage()
-      expect(store.roomMotion).toEqual([{ kind: 'dust' }])
-      const fire = { x: 0.1, y: 0.4, width: 0.2, height: 0.3 }
+      expect(store.roomMotion).toEqual([])
+      const points = [
+        { x: 0.1, y: 0.4 },
+        { x: 0.3, y: 0.4 },
+        { x: 0.3, y: 0.7 },
+      ]
       store.imageManifest = {
         'act1-eliors-cottage': {
           width: 1920,
           height: 1080,
-          areas: { 'motion-fire': fire },
+          effects: [
+            { type: 'dust', settings: { amount: 2 } },
+            { type: 'fire', spot: { points } },
+            { type: 'water' },
+          ],
         },
       }
       expect(store.roomMotion).toEqual([
-        { kind: 'dust' },
-        { kind: 'fire', box: fire },
+        { kind: 'dust', settings: { amount: 2 } },
+        {
+          kind: 'fire',
+          polygon: points,
+          box: { x: 0.1, y: 0.4, width: 0.2, height: 0.3 },
+        },
       ])
       expect(store.roomPictureSize).toEqual({ width: 1920, height: 1080 })
     })
@@ -472,13 +484,13 @@ describe('useGameStore: panels held while a turn is narrated', () => {
       ])
     })
 
-    it('moves only what floats when the manifest cannot be fetched', async () => {
+    it('moves nothing when the manifest cannot be fetched', async () => {
       const store = await cottage()
       vi.stubGlobal('fetch', () => Promise.reject(new Error('offline')))
       await store.loadImageManifest()
       vi.unstubAllGlobals()
       expect(store.imageManifest).toBeNull()
-      expect(store.roomMotion).toEqual([{ kind: 'dust' }])
+      expect(store.roomMotion).toEqual([])
     })
 
     it('has no picture size while the manifest does not say', async () => {

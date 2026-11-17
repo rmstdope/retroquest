@@ -1,13 +1,13 @@
 # TTS (Fish Audio)
 
 Tools for voicing the game's text with [Fish Audio](https://docs.fish.audio)'s hosted TTS. The
-recorded narration (see *Recording an act*) ships with the game from `web/public/audio/narration/`;
+recorded narration (see _Recording an act_) ships with the game from `web/public/audio/narration/`;
 everything else here is tooling and stays outside the build.
 
 ## Setup
 
 - [Content Studio](https://github.com/rmstdope/content-studio), installed once with `bun link`, records
-  the narration (see *Recording an act*).
+  the narration (see _Recording an act_).
 - `FISH_AUDIO_API_KEY=…` in the repository's `.env` (gitignored), or in the environment.
 - `ffmpeg` (for Content Studio, `level.py` and `check.py`), [uv](https://docs.astral.sh/uv/) (Content
   Studio's Whisper check, `check.py`) and `npm ci` in `web/`.
@@ -169,7 +169,7 @@ python3 tts/check.py line.txt web/public/audio/narration/act1/0028ec78cb405e.mp3
 
 `prompts/` holds two 30-36 s clips of LibriVox narrators, for cloning a voice (`fish_tts.py
 --prompt` did it; Content Studio uses library voices only, so cloning is back in the history):
-`praetzellis` (*Treasure Island*) and `driver` (*The Princess and the Goblin*). LibriVox
+`praetzellis` (_Treasure Island_) and `driver` (_The Princess and the Goblin_). LibriVox
 recordings are public domain, and both texts are public domain worldwide (Stevenson d. 1894,
 MacDonald d. 1905); `prompts.json` has the exact transcripts, sources and cut times. Clips of
 texts still in copyright outside the US were left out. Cloning a real narrator's voice for
@@ -207,3 +207,7 @@ game's code, and the chosen take of each image is in `content-studio/images/lock
 come from `web/src/lantern/imageLists.ts` and a vitest test fails when a committed list is stale.
 
 After the rooms and portraits each act's list also holds the belt pictures: one 256x256 square entry for every thing that can be carried and every spell the act registers, `item-<name>` or `spell-<name>` (`beltImageId`), the same entry in every act where the name appears. The words are the hand-written line of `web/src/lantern/beltPrompts.ts`, what is seen and never what it means, followed by the things-and-spells style (`BELT_STYLE`) that the studio's look cannot hold. The belt shows a picture once its file exists and keeps the first letter until then.
+
+### Motion
+
+An image's movement is the navigator's, tuned in Content Studio, not declared in the game's code. The game's motion renderer is `web/src/lantern/motionRenderer.ts`: it exports `EFFECT_TYPES` (each effect type, whether it lives on a drawn spot, and the settings it takes with `min`, `max`, `step` and `default`) and `createMotionScene`. The export puts each image's movement in the images manifest as `effects`, a list of `{ type, settings?, whilePatch?, unlessPatch?, spot? }`: `settings` are numbers by setting id (a missing one plays at its default), `whilePatch` and `unlessPatch` are patch ids of the same image, and `spot` (water, fire and smoke need one) is `{ points: [{x, y}, ...], mark?: {x, y} }`, a polygon of picture fractions. The game reads them in `web/src/lantern/roomMotion.ts`.
