@@ -2877,12 +2877,12 @@ watch(
 }
 .lq-ring-layer {
   position: absolute;
-  z-index: 5;
+  z-index: var(--lq-z-page-press-ring-layer);
   pointer-events: none;
 }
 .lq-belt-caption {
   position: absolute;
-  z-index: 5;
+  z-index: var(--lq-z-page-belt-caption);
   transform: translateX(-50%);
   max-width: min(520px, 92%);
   padding: 8px 14px;
@@ -2910,14 +2910,14 @@ watch(
   position: absolute;
   top: 16px;
   left: 16px;
-  z-index: 1;
+  z-index: var(--lq-z-stage-plate);
   max-width: min(360px, 40%);
 }
 .lq-stage-buttons {
   position: absolute;
   top: 16px;
   right: 16px;
-  z-index: 4;
+  z-index: var(--lq-z-stage-buttons);
   max-width: 55%;
 }
 .lq-staged .lq-story-wrap {
@@ -2928,7 +2928,7 @@ watch(
   transition:
     height calc(0.2s * var(--lq-motion)) ease,
     transform calc(0.2s * var(--lq-motion)) ease;
-  z-index: 2;
+  z-index: var(--lq-z-page-words);
   padding: 0 24px;
   background: color-mix(in srgb, var(--lq-surface) 96%, transparent);
   border-top: 1px solid var(--lq-line);
@@ -3028,7 +3028,7 @@ watch(
 }
 .lq-phone-plate {
   position: relative;
-  z-index: 1;
+  z-index: var(--lq-z-page-phone-plate);
   flex: 0 0 auto;
   /* The right margin leaves the corner to the menu button, so "Story so far" sits beside it. */
   margin: 8px 60px 0 8px;
@@ -3132,7 +3132,7 @@ watch(
   position: fixed;
   top: 8px;
   right: 8px;
-  z-index: 6;
+  z-index: var(--lq-z-page-float-menu);
   width: 44px;
   height: 44px;
   border-radius: 999px;
@@ -3183,7 +3183,7 @@ watch(
 /* A zero-height row on the edge of the actions, so the tab rests on them. */
 .lq-paper-tabrow {
   position: relative;
-  z-index: 3;
+  z-index: var(--lq-z-page-paper-tab-row);
   flex: 0 0 0;
 }
 /* The row (and the actions after it) rests at the foot of the stage when
@@ -3212,13 +3212,16 @@ watch(
   position: absolute;
   left: 50%;
   bottom: 12px;
-  z-index: 7;
   transform: translateX(-50%);
 }
 .lq-stage-box {
+  z-index: var(--lq-z-stage-command-box);
   width: 60%;
   /* Above the belt (7) and the hand strip (8): its word list opens upwards over them. */
   z-index: 9;
+}
+.lq-stage-note {
+  z-index: var(--lq-z-stage-f1-note);
 }
 .lq-text-note {
   align-self: center;
@@ -3340,12 +3343,12 @@ watch(
 }
 /* The Load game window opened from the title page sits above it. */
 .lq-over-title :deep(.lq-dialog-layer) {
-  z-index: 80;
+  z-index: var(--lq-z-page-title-load);
 }
 .lq-chapter-dialog {
   position: fixed;
   inset: 0;
-  z-index: 50;
+  z-index: var(--lq-z-page-chapter);
 }
 /* Not a Tab stop: it takes focus when its text is clicked, so Escape and
    Tab keep working. */

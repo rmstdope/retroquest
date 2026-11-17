@@ -219,7 +219,7 @@ function hurry(): void {
   flex: 1 1 auto;
   min-height: 0;
   /* Under the plate, so a faded line never covers a chip. */
-  z-index: 0;
+  z-index: var(--lq-z-page-speech);
   /* The picture and the plate under it stay pressable; only what is drawn here takes presses. */
   pointer-events: none;
 }

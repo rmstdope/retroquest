@@ -55,7 +55,7 @@ function onKeydown(event: KeyboardEvent): void {
   top: 76px;
   right: 0;
   bottom: var(--lq-actions-h, 0px);
-  z-index: 6;
+  z-index: var(--lq-z-page-drawers);
   width: min(380px, 92%);
   display: flex;
   flex-direction: column;
@@ -70,7 +70,7 @@ function onKeydown(event: KeyboardEvent): void {
   position: absolute;
   top: 8px;
   right: 8px;
-  z-index: 1;
+  z-index: 1; /* local */
   width: 44px;
   height: 44px;
   border-radius: 10px;

@@ -120,7 +120,7 @@ function onClick(entry: PlacedName, event: MouseEvent): void {
   position: absolute;
   inset: 0;
   /* Under the marks and names (which are above it), so a press on one is theirs. */
-  z-index: 1;
+  z-index: 1; /* local */
   pointer-events: none;
 }
 .lq-area-press-hit {

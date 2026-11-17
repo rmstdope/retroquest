@@ -62,7 +62,7 @@ defineExpose({ cancelButton })
   right: 0;
   width: max-content;
   margin: 0 auto;
-  z-index: 8;
+  z-index: var(--lq-z-stage-hand-strip);
   display: flex;
   align-items: center;
   gap: 10px;
@@ -98,7 +98,7 @@ defineExpose({ cancelButton })
 }
 .lq-hand-ghost {
   position: fixed;
-  z-index: 45;
+  z-index: var(--lq-z-stage-hand-ghost);
   display: flex;
   align-items: center;
   justify-content: center;

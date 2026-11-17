@@ -243,7 +243,7 @@ const style = computed(() => {
 /* The flying name: above the picture and its words, never taking a press. */
 .lq-flight {
   position: fixed;
-  z-index: 40;
+  z-index: var(--lq-z-page-acquired-flight);
   display: flex;
   align-items: center;
   gap: 12px;

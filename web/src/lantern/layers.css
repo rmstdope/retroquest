@@ -1,0 +1,53 @@
+/*
+ * The order in which the parts of the Lantern stage lie over one another, in
+ * one place: read each group from top to bottom, lowest first. A component
+ * reads its layer by name (`z-index: var(--lq-z-page-drawers)`) and never
+ * states a number, nor quotes another component's.
+ *
+ * There are two stacking contexts, so two groups; a layer's number only
+ * compares with those of its own group:
+ *
+ *  - stage: what lies inside the isolated `.lq-stage` (the picture's own box).
+ *    Everything in this group is behind everything in the page group.
+ *  - page: what lies beside the stage, in the page's one stacking context
+ *    (`<main>` makes none): the words, the drawers, the dialogs. A part that
+ *    must cover the whole stage belongs here, never in the stage group.
+ *
+ * Where two parts once shared a number, the one later in the markup won; each
+ * now has its own, in that order. A layer that only orders things inside one
+ * component's own box is not listed; it stays a small number marked
+ * `/* local *\/` beside the declaration.
+ */
+:root {
+  /* stage: inside the isolated `.lq-stage`, lowest first. */
+  --lq-z-stage-picture: -10;
+  --lq-z-stage-plate: 10;
+  --lq-z-stage-buttons: 40;
+  --lq-z-stage-command-box: 70;
+  --lq-z-stage-f1-note: 71;
+  --lq-z-stage-belt: 72;
+  --lq-z-stage-hand-strip: 80;
+  --lq-z-stage-hand-ghost: 450;
+
+  /* page: beside the stage, lowest first. */
+  --lq-z-page-speech: 10;
+  --lq-z-page-phone-plate: 15;
+  --lq-z-page-words: 20;
+  --lq-z-page-interlude: 30;
+  --lq-z-page-room-title: 31;
+  --lq-z-page-paper-tab-row: 32;
+  --lq-z-page-belt-caption: 50;
+  --lq-z-page-press-ring-layer: 51;
+  --lq-z-page-float-menu: 60;
+  --lq-z-page-drawers: 61;
+  --lq-z-page-acquired-flight: 400;
+  --lq-z-page-name-menu: 401;
+  --lq-z-page-hold-ring: 500;
+  --lq-z-page-dialogs: 501;
+  --lq-z-page-chapter: 502;
+  --lq-z-page-save-toast: 600;
+  --lq-z-page-title-page: 700;
+  --lq-z-page-title-load: 800;
+  --lq-z-page-turn-page: 10000;
+  --lq-z-page-loading: 10001;
+}

@@ -61,7 +61,7 @@ watch(
 .lq-loading {
   position: fixed;
   inset: 0;
-  z-index: 1000;
+  z-index: var(--lq-z-page-loading);
   display: flex;
   flex-direction: column;
   align-items: center;

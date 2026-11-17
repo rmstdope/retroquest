@@ -524,7 +524,7 @@ onUnmounted(() => {
 .lq-stage-picture {
   position: absolute;
   inset: 0;
-  z-index: -1;
+  z-index: var(--lq-z-stage-picture);
   overflow: hidden;
   background: var(--lq-bg);
 }

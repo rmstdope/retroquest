@@ -269,7 +269,7 @@ onBeforeUnmount(() =>
 .lq-press-ring {
   position: absolute;
   inset: 0;
-  z-index: 40;
+  z-index: 40; /* local */
   pointer-events: none;
   overflow: hidden;
 }

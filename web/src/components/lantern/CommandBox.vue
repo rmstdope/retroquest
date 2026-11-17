@@ -169,7 +169,7 @@ function onEscape(event: KeyboardEvent): void {
   left: 0;
   right: 0;
   bottom: calc(100% + 10px);
-  z-index: 5;
+  z-index: 5; /* local */
   margin: 0;
   padding: 4px;
   list-style: none;

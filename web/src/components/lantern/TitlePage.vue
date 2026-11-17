@@ -311,7 +311,7 @@ onBeforeUnmount(() => {
 .lq-title-page {
   position: fixed;
   inset: 0;
-  z-index: 70;
+  z-index: var(--lq-z-page-title-page);
   overflow-y: auto;
   display: flex;
   background: var(--lq-bg);

@@ -139,7 +139,7 @@ function onKeydown(event: KeyboardEvent): void {
   top: 76px;
   right: 0;
   bottom: var(--lq-actions-h, 0px);
-  z-index: 6;
+  z-index: var(--lq-z-page-drawers);
   width: 50%;
   display: flex;
   flex-direction: column;
