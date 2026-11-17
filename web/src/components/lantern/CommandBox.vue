@@ -212,4 +212,13 @@ function onEscape(event: KeyboardEvent): void {
   background: var(--lq-accent-soft);
   color: var(--lq-accent-text);
 }
+/* At phone width the text field is a narrow column, so the word list spans the whole box (rq-ttg0). On the picture stage the parent's absolute positioning already anchors the list; this rule is for the box outside it. */
+@media (max-width: 639px) {
+  .lq-box {
+    position: relative;
+  }
+  .lq-box-field {
+    position: static;
+  }
+}
 </style>
