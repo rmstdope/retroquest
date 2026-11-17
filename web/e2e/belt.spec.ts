@@ -164,6 +164,36 @@ test('the No match line of the typing box lies over the belt, not under its labe
   expect(covered.filter((entry) => entry.endsWith(':false'))).toEqual([])
 })
 
+for (const width of [390, 500]) {
+  test(`at ${width}px the No match line shows the whole word typed, over the belt (rq-6ga3)`, async ({
+    page,
+  }): Promise<void> => {
+    await page.setViewportSize({ width, height: 757 })
+    await toTheCottage(page)
+    await page.keyboard.press('F1')
+    const input = page.getByLabel('Command', { exact: true })
+    await input.fill('quests')
+    const none = page.getByRole('option', { name: 'No match for “quests”' })
+    await expect(none).toBeVisible()
+    // Nothing of the line is cut off: its text fits the box it is drawn in.
+    const clipped = await none.evaluate(
+      (el) =>
+        el.scrollWidth > el.clientWidth || el.scrollHeight > el.clientHeight,
+    )
+    expect(clipped, 'the line is cut off').toBe(false)
+    // And it is still what a look at its middle meets, not the belt below.
+    const onTop = await none.evaluate((el) => {
+      const box = el.getBoundingClientRect()
+      const hit = document.elementFromPoint(
+        box.left + box.width / 2,
+        box.top + box.height / 2,
+      )
+      return hit !== null && el.contains(hit)
+    })
+    expect(onTop, 'the line is on top').toBe(true)
+  })
+}
+
 test('Cancel and Escape put the thing down and send nothing', async ({
   page,
 }): Promise<void> => {

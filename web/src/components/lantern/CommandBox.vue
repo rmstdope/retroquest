@@ -199,6 +199,11 @@ function onEscape(event: KeyboardEvent): void {
   color: var(--lq-accent-text);
 }
 .lq-completion-none {
+  /* Wraps rather than cutting off the word typed in a narrow box (rq-6ga3). */
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 20px;
+  padding-block: 10px;
   font-style: italic;
   color: var(--lq-muted);
   cursor: default;
