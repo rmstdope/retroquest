@@ -615,6 +615,11 @@
     "text": "It didn't take. I felt it go in, warm as a hearth, and then the cold closed over it again."
   },
   {
+    "id": "059f6795089854",
+    "speaker": "court herald",
+    "text": "I read the oath at His Majesty's crowning. 'What the Wardens bind, the crown will hold.' I did not know who the Wardens were. I am told you do."
+  },
+  {
     "id": "05a144504ccb4e",
     "speaker": "narrator",
     "text": "All your life, Malakar has been a name from old books, a story told to frighten children. Now he has agents asking after the Willowbrook bloodline, a seal on the secret documents, and a hand reaching for you out of a vision. The bloodline he seeks is yours."
@@ -1925,6 +1930,11 @@
     "text": "An official in a tabard stiff with gold thread, standing at a lectern with the court ledger open on it. He reads every seal twice."
   },
   {
+    "id": "1321c2239e7f73",
+    "speaker": "sir cedric",
+    "text": "Every knight swears on the crown's oath. 'What the Wardens bind, the crown will hold.' I swore it at sixteen and never asked whose words they were. I will ask now."
+  },
+  {
     "id": "1322cdd207d46f",
     "speaker": "narrator",
     "text": "Heart of the Forest"
@@ -2338,6 +2348,11 @@
     "id": "1728aafb4b5253",
     "speaker": "narrator",
     "text": "Cedric's Lost Honor: According to the squires and their diary, one of the watchmen who accused Cedric fled to Heavensforth and sent papers back with a merchant caravan that never arrived. Find these papers to restore his honor."
+  },
+  {
+    "id": "175a06b4a1f3f2",
+    "speaker": "historians",
+    "text": "The land grants are older than the crown. The first is not a grant at all: a page in the Wardens' hand naming the moor Twinmoor, and under it the first king's mark, swearing to hold what they bind. Every king since has sworn the same words at his crowning. We had thought them only words."
   },
   {
     "id": "1779ef481d042e",
@@ -2913,6 +2928,11 @@
     "id": "1d167ec2d018fd",
     "speaker": "narrator",
     "text": "A bundle of carefully selected medicinal herbs known for their healing properties. These herbs are essential for advanced healing magic and potion-making."
+  },
+  {
+    "id": "1d2caa16a11a18",
+    "speaker": "spectral librarian",
+    "text": "They named it Twinmoor before there was a crown to name it. Ask the crown what it promised them."
   },
   {
     "id": "1d2ed9c992f72d",

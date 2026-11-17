@@ -890,3 +890,7 @@ the Throne Chamber (Step 11) as the anchor of the ward.
 -   **Sorceress's Truth:** proves to the Shadow that redemption is possible (Step 9)
 
 **All carried items have a use.** Every item the player can carry in this act has a use in quest progress or conversations. The decorative items of the earlier design are cut or stay as scenery, like the Ward Stone Fragment.
+
+## Twinmoor lore (optional finds)
+
+The fortress gates show the moor south of the ridge; King Alden, on the talk after his ending line, says once that he kept the Wardens' oath; all three endings close on the moor line after Grandmother's welcome.

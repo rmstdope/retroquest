@@ -524,3 +524,7 @@ The five quests gating entry into the forest are The Knight's Test, Supplies for
 `ACT2_GOLDEN_PATH` completes those eleven side quests; its integration test deliberately leaves The Gathering Storm for the player to finish. The final steps after the declared route are `cast prophetic vision` (with Sir Cedric in the room), then `say truth to cedric` or `talk to sir cedric`.
 
 **Progression-critical items and spells:** Entry Pass, City Map, Merchant's Flyer, Walking Stick, Coins, Room Key, Traveler's Journal, Training Sword, Forest Survival Kit, Enhanced Lantern, Quality Rope, Crystal Focus, Enchanted Acorn, Crystal-Clear Water, Moonflowers, Secret Documents, Protective Charm, Druidic Charm, Nature's Charm, `mend`, `greater_heal`, `dispel`, `nature_sense`, `forest_speech`, and `prophetic_vision`. The three charms are consumed by the Offering Altar. Nyx's Token and the Forest Heart Crystal are rewards, not prerequisites for the final cast.
+
+## Twinmoor lore (optional finds)
+
+After the archive search the Historians and Court Herald give the first grant and the crowning oath; the Spectral Librarian (once friendly) and Sir Cedric (once his name is cleared) each add one line. Each is said once. The oath is exactly "What the Wardens bind, the crown will hold."

@@ -784,3 +784,7 @@ This sequence completes all Act III requirements in a linear path. Each step lis
 
 -   Commands and yields:
     -   `examine gates` → Marks Act III completion and the beginning of Act IV, ending on the Act III row of the red line.
+
+## Twinmoor lore (optional finds)
+
+Malakar's charred notebook has a third, middle entry (the walk onto the moor); the steles carry two-moon sigils; the Ancient Dragon, after the scale is taken, says once that it saw the first Wardens come off the moor.

@@ -540,6 +540,11 @@
     "text": "Miners' Rescue: Collapsed Galleries have trapped people behind tons of stone. You must find a way to free them."
   },
   {
+    "id": "060c5f72a37a24",
+    "speaker": "ancient dragon",
+    "text": "I saw the first of them come down off the moor, with wet feet and one relic between them. They were fewer than your songs say."
+  },
+  {
     "id": "063646d201b312",
     "speaker": "narrator",
     "text": "Fumarole Passages"
@@ -553,6 +558,11 @@
     "id": "0650cd01bbfb2e",
     "speaker": "narrator",
     "text": "The sigils are cut deep, ring inside ring, and each ring glows faintly. They are the walls of the dragon's prison, and every ring holds."
+  },
+  {
+    "id": "065b99778dd2cd",
+    "speaker": "narrator",
+    "text": "We walked up onto the moor tonight, the four of us, to see the two moons. Mira fell asleep in the heather. Lysa says the founders crossed here. I kept watch till dawn and never once wished the night shorter."
   },
   {
     "id": "0678b14852e2e7",
@@ -1235,6 +1245,11 @@
     "text": "Thin causeways of old stone run out across the black water. The wet stones shine under the moon. Broken arches stand along the way, and their shadows lie deep over a faded mural. Dead sea birds line the stones, and the surf runs grey."
   },
   {
+    "id": "0e40b3878407c4",
+    "speaker": "narrator",
+    "text": "The last entry is pressed so hard into the page that the pen has torn it. The names in it are your parents'."
+  },
+  {
     "id": "0e472f873a6621",
     "speaker": "narrator",
     "text": "✓ On Mount Ember: the promise the three of them burned into stone, one virtue each, and Malakar's name struck deeper than the others."
@@ -1268,11 +1283,6 @@
     "id": "0e80a77c3d3ef2",
     "speaker": "narrator",
     "text": "The phoenix does not open its beak, but its voice is in your head all the same:"
-  },
-  {
-    "id": "0e8a2ec25351ef",
-    "speaker": "narrator",
-    "text": "Most of the notebook's pages have crumbled to flakes; two survive, in a neat and patient hand."
   },
   {
     "id": "0e8d73eea987bd",
@@ -2130,11 +2140,6 @@
     "text": "You sift through the sorted fragments on the worktable and find a brittle frond of ash-fern tucked in a tool roll, and a pile of cooled slag fragments sifted into a shallow basin. They look suitable for warding mixtures."
   },
   {
-    "id": "168515f0f92648",
-    "speaker": "narrator",
-    "text": "The steles bear shallow moon-marks, pores packed with salt. Loose pale fragments glint in crevices—likely usable in sigil work."
-  },
-  {
     "id": "168530307915bb",
     "speaker": "narrator",
     "text": "A subtle click echoes under the pier as fused pins release. The locker can now be opened."
@@ -2295,9 +2300,9 @@
     "text": "A corroded iron key from a hollow in the causeway rock, beside the mural. Its teeth are pitted with salt and age."
   },
   {
-    "id": "18dbc36ed50d0e",
+    "id": "18d5a06be8980a",
     "speaker": "narrator",
-    "text": "The second entry is pressed so hard into the page that the pen has torn it. The names in it are your parents'."
+    "text": "Most of the notebook's pages have crumbled to flakes; three survive, in a neat and patient hand."
   },
   {
     "id": "18f9ba6292bf12",
@@ -2460,6 +2465,11 @@
     "text": "The crystal is cold, and steady in your hand."
   },
   {
+    "id": "1a719bbf9cc60b",
+    "speaker": "narrator",
+    "text": "The steles bear shallow moon-marks, pores packed with salt. Loose pale fragments glint in crevices—likely usable in sigil work. Each sigil is two moons, one cut fainter beneath the other, like the mark over the chapel door at home."
+  },
+  {
     "id": "1a90a0cdb2e72a",
     "speaker": "narrator",
     "text": "The gates are taller than a house, and the sigils on them seem to move at the edge of sight. Beyond the lattice, corridors run into the dark. Somewhere in there is King Alden."
@@ -2523,6 +2533,11 @@
     "id": "1b477479b0d77c",
     "speaker": "narrator",
     "text": "You stand at the edge of the black water. Somewhere ahead, the Tide-Born Guardian waits."
+  },
+  {
+    "id": "1b66816549b378",
+    "speaker": "narrator",
+    "text": "The ancient dragon rumbles, lower still:"
   },
   {
     "id": "1b69a07db83615",
