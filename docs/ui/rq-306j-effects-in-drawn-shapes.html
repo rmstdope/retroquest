@@ -1,0 +1,80 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Effects in drawn shapes</title><style>
+body{background:#111417;color:#e8e4d8;font:16px/1.5 system-ui;margin:0;padding:24px 16px;max-width:980px;margin:auto}
+h1{font-size:20px;margin:0 0 6px} .cap{margin:0 0 14px;color:#cfc9b8} .note{color:#8f8a7c;font-size:13px}
+canvas{width:100%;height:auto;border-radius:6px;display:block}
+section{margin:0 0 40px} header h1{font-size:24px}</style></head><body><header><h1>Floating effects play inside the drawn shape (rq-306j)</h1><p class="cap">Agreed: a soft edge, the same density as over the whole picture (shared over several shapes by size), and falling or rising effects that make their whole journey inside the shape. Each picture animates.</p></header><script>
+// Drawing helper: a night picture with movement held to drawn shapes.
+function run(cfg){
+
+  const sec = document.createElement("section"); document.body.appendChild(sec); sec.innerHTML = `<h1>${cfg.title}</h1><p class="cap">${cfg.caption}</p><canvas width="960" height="540"></canvas><p class="note">${cfg.note||'The dashed line is the shape drawn in the studio; a player never sees it.'}</p>`
+  const cv = sec.querySelector('canvas'), c = cv.getContext('2d'), W = 960, H = 540
+  const P = s => s.map(([x,y]) => ({x:x*W, y:y*H}))
+  const inside = (pt, poly) => { let r=false; for(let i=0,j=poly.length-1;i<poly.length;j=i++){const a=poly[i],b=poly[j]; if((a.y>pt.y)!=(b.y>pt.y) && pt.x < (b.x-a.x)*(pt.y-a.y)/(b.y-a.y)+a.x) r=!r} return r }
+  const edgeDist = (pt, poly) => { let m=1e9; for(let i=0,j=poly.length-1;i<poly.length;j=i++){const a=poly[j],b=poly[i],dx=b.x-a.x,dy=b.y-a.y,t=Math.max(0,Math.min(1,((pt.x-a.x)*dx+(pt.y-a.y)*dy)/(dx*dx+dy*dy||1))); m=Math.min(m,Math.hypot(pt.x-a.x-t*dx, pt.y-a.y-t*dy))} return m }
+  const area = poly => { let s=0; for(let i=0,j=poly.length-1;i<poly.length;j=i++) s+=(poly[j].x+poly[i].x)*(poly[j].y-poly[i].y); return Math.abs(s/2) }
+  const bbox = poly => { const xs=poly.map(p=>p.x), ys=poly.map(p=>p.y); return {x:Math.min(...xs),y:Math.min(...ys),w:Math.max(...xs)-Math.min(...xs),h:Math.max(...ys)-Math.min(...ys)} }
+  const sample = (poly,b) => { for(let k=0;k<500;k++){const p={x:b.x+Math.random()*b.w,y:b.y+Math.random()*b.h}; if(inside(p,poly)) return p} return {x:b.x+b.w/2,y:b.y+b.h/2} }
+  const topAt = (poly,b,x) => { for(let y=b.y;y<b.y+b.h;y+=2) if(inside({x,y},poly)) return y; return b.y }
+  const BASE = {dust:16, fireflies:9, mist:6, leaves:2, embers:1}
+  const layers = cfg.layers.map(L => {
+    const shapes = L.shapes.map(P); const total = shapes.reduce((s,p)=>s+area(p),0)
+    return {L, groups: shapes.map(poly => {
+      const b = bbox(poly), share = area(poly)/(W*H)
+      let n = BASE[L.kind]*(L.amount||1)
+      if (cfg.count==='packed') n *= cfg.multi==='each' ? 1 : area(poly)/total
+      else n *= share
+      n = Math.max(1, Math.round(n))
+      const parts = []
+      if (L.kind!=='leaves') for(let i=0;i<n;i++){const p=sample(poly,b); parts.push({...p, ph:Math.random()*6, vx:(L.kind==='mist'?0.25+Math.random()*0.2:0.1+Math.random()*0.3), vy:-0.05-Math.random()*0.15, r:L.kind==='mist'?(160+Math.random()*120):L.kind==='fireflies'?12:1.5+Math.random()*1.5})}
+      return {poly,b,n,parts}
+    })}
+  })
+  const shapePath = poly => { c.beginPath(); poly.forEach((p,i)=> i?c.lineTo(p.x,p.y):c.moveTo(p.x,p.y)); c.closePath() }
+  function bg(){ const g=c.createLinearGradient(0,0,0,H); g.addColorStop(0,'#1b2440'); g.addColorStop(.6,'#2c3b4a'); g.addColorStop(1,'#1c2a22'); c.fillStyle=g; c.fillRect(0,0,W,H)
+    c.fillStyle='#0f1a14'; c.beginPath(); c.moveTo(0,H); for(let x=0;x<=W;x+=40) c.lineTo(x, H*0.72+Math.sin(x/90)*18); c.lineTo(W,H); c.fill()
+    c.fillStyle='#e9e3c4'; c.beginPath(); c.arc(W*0.18,H*0.2,26,0,7); c.fill()
+    c.fillStyle='#e9e3c4'; c.font='600 34px Georgia'; c.textAlign='center'; c.fillText(cfg.sceneTitle||'RetroQuest', W/2, H*0.45) }
+  function fade(p,poly){ if(cfg.edge!=='soft') return 1; if(!inside(p,poly)) return 0; return Math.min(1, edgeDist(p,poly)/45) }
+  let t=0
+  function step(){
+    t+=16; bg()
+    for(const {L,groups} of layers) for(const G of groups){
+      const {poly,b,parts} = G
+      c.save(); if(cfg.edge!=='spill' && !(L.kind==='leaves' && cfg.travel==='window' && false)) { shapePath(poly); c.clip() }
+      if(L.kind==='leaves'){
+        if(parts.length < Math.round((L.amount||1)*2) && Math.random()<0.02){
+          if(cfg.travel==='window'){ parts.push({x:Math.random()*W, y:0, ph:Math.random()*6, l:0}) }
+          else { const x=b.x+Math.random()*b.w; parts.push({x, y:topAt(poly,b,x), ph:Math.random()*6, l:0}) }
+        }
+        for(let i=parts.length-1;i>=0;i--){const p=parts[i]; p.y+=0.9; p.x+=Math.sin(t/500+p.ph)*0.9; p.l+=0.03
+          const gone = cfg.travel==='window' ? p.y>H : (p.y>b.y+b.h || (!inside(p,poly) && p.y>b.y+10))
+          if(gone){parts.splice(i,1); continue}
+          c.globalAlpha=fade(p,poly)||(cfg.edge==='soft'?0:1); c.save(); c.translate(p.x,p.y); c.rotate(Math.sin(p.l)*1.2); c.fillStyle='rgba(150,180,80,.95)'; c.beginPath(); c.ellipse(0,0,7,3.5,0,0,7); c.fill(); c.restore()}
+      } else for(const p of parts){
+        if(L.kind==='fireflies'){ p.x+=Math.sin(t/900+p.ph)*(0.5+0.5*Math.sin(p.ph*3)); p.y+=Math.cos(t/1200+p.ph*2)*0.4 }
+        else if(L.kind==='mist'){ p.x+=p.vx; if(p.x-p.r>b.x+b.w) p.x=b.x-p.r }
+        else { p.x+=p.vx; p.y+=p.vy; if(p.x>b.x+b.w) p.x=b.x; if(p.y<b.y) p.y=b.y+b.h }
+        if(cfg.edge!=='hard' && L.kind!=='mist' && !inside(p,poly)){ const q=sample(poly,b); p.x+= (q.x-p.x)*0.02; p.y+=(q.y-p.y)*0.02 }
+        const a = fade(L.kind==='mist'?{x:Math.max(b.x+1,Math.min(b.x+b.w-1,p.x)),y:p.y}:p, poly)
+        if(L.kind==='fireflies'){ const k=Math.max(0,Math.sin(t/700+p.ph))*a; const g=c.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r); g.addColorStop(0,`rgba(230,255,130,${k})`); g.addColorStop(1,'rgba(220,255,110,0)'); c.fillStyle=g; c.fillRect(p.x-p.r,p.y-p.r,p.r*2,p.r*2) }
+        else if(L.kind==='mist'){ const ea = cfg.edge==='soft' ? Math.min(1, (b.y+b.h-p.y)/(b.h*0.35)) * Math.min(1,(p.y-b.y+40)/80) : 1; const g=c.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r); g.addColorStop(0,`rgba(240,244,240,${.3*ea})`); g.addColorStop(1,'rgba(240,244,240,0)'); c.save(); c.translate(0,p.y*0.8); c.scale(1,0.25); c.translate(0,-p.y*0.8); c.fillStyle=g; c.beginPath(); c.arc(p.x,p.y,p.r,0,7); c.fill(); c.restore() }
+        else { const k=(0.5+0.25*Math.sin(t/600+p.ph))*a; c.fillStyle=`rgba(255,246,214,${k})`; c.beginPath(); c.arc(p.x,p.y,p.r,0,7); c.fill() }
+      }
+      c.restore()
+      c.save(); c.setLineDash([6,6]); c.strokeStyle='rgba(255,200,120,.55)'; c.lineWidth=1.5; shapePath(poly); c.stroke(); c.restore()
+      if(cfg.showCount){ c.fillStyle='rgba(255,200,120,.9)'; c.font='13px system-ui'; c.textAlign='left'; c.fillText(`${G.n} ${L.kind}`, b.x+8, b.y+18) }
+    }
+    requestAnimationFrame(step)
+  }
+  for(let i=0;i<200;i++) t+=16
+  step()
+}
+run({title:'Option B — a soft edge',caption:'The effect stays inside the shape and fades out as it nears the line, so the shape is felt but never seen. Mist thins toward the bottom of its shape.',edge:'soft',count:'density',layers:[{"kind":"fireflies","amount":3,"shapes":[[[0.7141,0],[0.7144,1],[0.9971,0.9896],[1,0]]]},{"kind":"mist","amount":3,"shapes":[[[0,0],[1,0],[1,0.6702],[0,0.6849]]]}]})
+
+run({title:'Option A — the same density as over the whole picture',caption:'A shape a quarter of the picture holds a quarter of the fireflies. The Amount slider reads the same whatever the shape: 1 is always the familiar density.',edge:'soft',count:'density',showCount:true,layers:[{"kind":"fireflies","amount":3,"shapes":[[[0.7141,0],[0.7144,1],[0.9971,0.9896],[1,0]]]}]})
+
+run({title:'Option A — the whole journey happens inside the shape',caption:'Leaves come loose at the top of the shape and are gone by its bottom (embers likewise rise from its bottom and die before its top). A small shape means a short fall.',edge:'soft',count:'density',travel:'shape',layers:[{"kind":"leaves","amount":3,"shapes":[[[0.08,0.08],[0.42,0.06],[0.48,0.42],[0.3,0.62],[0.1,0.5]]]}]})
+
+run({title:'Option A — shared out by size',caption:'An effect with two shapes spreads its specks over both by their size, so both look equally dense and adding a second shape does not add more.',edge:'soft',count:'packed',multi:'share',showCount:true,layers:[{"kind":"dust","amount":2,"shapes":[[[0.05,0.1],[0.55,0.1],[0.55,0.65],[0.05,0.65]],[[0.7,0.55],[0.9,0.55],[0.9,0.8],[0.7,0.8]]]}]})
+
+</script></body></html>
