@@ -41,7 +41,8 @@ describe('the name of the game and of its land', () => {
 
   it('writes the name once, in engine/gameName.ts', () => {
     const copies = sources().filter(
-      ([name, text]) => name !== 'gameName.ts' && text.includes(GAME_NAME),
+      ([name, text]) =>
+        name !== 'gameName.ts' && text.replace(/\s+/g, ' ').includes(GAME_NAME),
     )
     expect(copies.map(([name]) => name)).toEqual([])
   })
