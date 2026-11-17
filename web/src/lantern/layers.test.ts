@@ -61,6 +61,8 @@ describe('the Lantern components', () => {
     const stray: string[] = []
     for (const [file, text] of Object.entries(sources()))
       for (const line of text.split('\n')) {
+        if (/zIndex/.test(line) && !line.includes('/* local'))
+          stray.push(`${file}: ${line.trim()}`)
         if (!/^\s*z-index:/.test(line)) continue
         const used = line.match(/var\(--lq-z-([a-z0-9-]+)\)/)
         if (used ? !declared.has(used[1]) : !line.includes('/* local')) {
@@ -82,11 +84,47 @@ describe('the Lantern components', () => {
     const quoted: string[] = []
     for (const [file, text] of Object.entries(sources()))
       for (const line of text.split('\n'))
-        if (
-          /z-index\s*\(?\d|z-index \d/.test(line) &&
-          !/^\s*z-index:/.test(line)
-        )
+        if (/z-index\s*:?\s*\(?-?\d/.test(line) && !/^\s*z-index:/.test(line))
           quoted.push(`${file}: ${line.trim()}`)
     expect(quoted).toEqual([])
+  })
+})
+
+describe('LanternLayout.vue markup', () => {
+  it('draws what must cover the whole stage beside the isolated `.lq-stage`, never inside it', () => {
+    const lines = readFileSync(
+      join(COMPONENTS, 'LanternLayout.vue'),
+      'utf8',
+    ).split('\n')
+    const start = lines.findIndex((l) => l.includes('class="lq-stage"'))
+    // The stage's own `<div>` opens a line or two above its class and closes where the nesting of divs returns to zero.
+    const open = lines
+      .slice(0, start + 1)
+      .map((l) => /<div\b/.test(l))
+      .lastIndexOf(true)
+    let depth = 0
+    let end = open
+    for (let i = open; i < lines.length; i++) {
+      depth += (lines[i].match(/<div\b/g) ?? []).length
+      depth -= (lines[i].match(/<\/div>/g) ?? []).length
+      if (depth === 0) {
+        end = i
+        break
+      }
+    }
+    expect(end).toBeGreaterThan(start)
+    const inside = lines.slice(open, end + 1).join('\n')
+    const covers = [
+      'lq-belt-caption',
+      'lq-ring-layer',
+      'lq-story-wrap',
+      '<JournalDrawer',
+      '<StoryDrawer',
+      '<RoomTitle',
+      '<SceneInterlude',
+    ]
+    expect(inside).toContain('<BeltOfPictures')
+    for (const part of covers) expect(inside).not.toContain(part)
+    for (const part of covers) expect(lines.join('\n')).toContain(part)
   })
 })

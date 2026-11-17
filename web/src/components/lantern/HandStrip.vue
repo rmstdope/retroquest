@@ -98,7 +98,7 @@ defineExpose({ cancelButton })
 }
 .lq-hand-ghost {
   position: fixed;
-  z-index: var(--lq-z-stage-hand-ghost);
+  z-index: 450; /* local */
   display: flex;
   align-items: center;
   justify-content: center;

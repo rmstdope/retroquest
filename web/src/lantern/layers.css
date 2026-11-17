@@ -17,6 +17,10 @@
  * now has its own, in that order. A layer that only orders things inside one
  * component's own box is not listed; it stays a small number marked
  * `/* local *\/` beside the declaration.
+ *
+ * The properties are on `:root`, not `.lq-root`, because the loading page lies
+ * outside `.lq-root`. `room-pills` is a page layer only on the text page; in the
+ * stage it orders inside the plate's own box.
  */
 :root {
   /* stage: inside the isolated `.lq-stage`, lowest first. */
@@ -27,7 +31,6 @@
   --lq-z-stage-f1-note: 71;
   --lq-z-stage-belt: 72;
   --lq-z-stage-hand-strip: 80;
-  --lq-z-stage-hand-ghost: 450;
 
   /* page: beside the stage, lowest first. */
   --lq-z-page-speech: 10;
@@ -40,6 +43,7 @@
   --lq-z-page-press-ring-layer: 51;
   --lq-z-page-float-menu: 60;
   --lq-z-page-drawers: 61;
+  --lq-z-page-room-pills: 62;
   --lq-z-page-acquired-flight: 400;
   --lq-z-page-name-menu: 401;
   --lq-z-page-hold-ring: 500;

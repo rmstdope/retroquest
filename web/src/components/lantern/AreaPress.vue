@@ -106,7 +106,7 @@ function onClick(entry: PlacedName, event: MouseEvent): void {
         top: `${stop.entry.rect.y}px`,
         width: `${stop.entry.rect.w}px`,
         height: `${stop.entry.rect.h}px`,
-        zIndex: stop.layer,
+        zIndex: stop.layer /* local */,
       }"
       @click="onClick(stop.entry, $event)"
       @focus="onFocus(stop.entry.areaId, $event)"

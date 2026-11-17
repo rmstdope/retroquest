@@ -251,7 +251,7 @@ defineExpose({ focusStoryButton, focusName })
   position: absolute;
   top: 100%;
   left: 0;
-  z-index: 6; /* local */
+  z-index: var(--lq-z-page-room-pills);
   display: flex;
   flex-direction: column;
   gap: 6px;
