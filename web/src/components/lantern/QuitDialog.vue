@@ -126,7 +126,7 @@ function saveAndQuit(): void {
 .lq-quit-buttons {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: var(--lq-ring-gap);
 }
 .lq-quit-primary,
 .lq-quit-plain {

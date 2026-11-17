@@ -151,5 +151,5 @@ test('The menu: only the ringed entry looks picked when the pointer rests on ano
   await page.keyboard.press('ArrowUp')
   await expect(save).toBeFocused()
   expect(await fill(quit)).toBe(quitPlain)
-  expect(await fill(save)).not.toBe(plain)
+  await expect.poll(() => fill(save)).not.toBe(plain)
 })

@@ -407,9 +407,19 @@ function volume(event: Event): number {
 </template>
 
 <style scoped>
-/* The ring itself is drawn by `[data-ring]` in lantern.css; here only the row's corners. */
-.lq-stop:focus-within {
-  border-radius: 8px;
+/*
+ * The ring itself is drawn by `[data-ring]` in lantern.css; here only where it
+ * lies. A row stands out into the dialog's margin by the room it keeps around
+ * its words, and the ring is drawn just inside that room, so it never reaches
+ * the rows above and below, nor touches the words it rings.
+ */
+.lq-stop {
+  margin: 3px -12px;
+  padding: 6px 12px;
+}
+.lq-stop[data-ring]:focus-within {
+  border-radius: 14px;
+  outline-offset: -3px;
 }
 .lq-stop :focus-visible {
   outline: 2px solid var(--lq-ring);
@@ -521,7 +531,6 @@ function volume(event: Event): number {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 0 0 8px;
 }
 .lq-volume input {
   flex: 1;

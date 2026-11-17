@@ -218,6 +218,16 @@ describe('GameMenu', () => {
     }
   })
 
+  it('carries the key line at its foot, as the windows it opens do', () => {
+    const w = mountMenu()
+    const hints = w.getComponent({ name: 'KeyLine' }).props('hints')
+    expect(hints).toEqual([
+      { keys: ['↑', '↓'], word: 'move' },
+      { keys: ['Enter'], word: 'choose' },
+      { keys: ['Esc'], word: 'back' },
+    ])
+  })
+
   it('closes with its close button', async () => {
     const w = mountMenu()
 

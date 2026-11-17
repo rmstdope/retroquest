@@ -426,7 +426,7 @@ function cardLabel(card: SaveSlot): string {
   padding: 0;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 8px;
+  gap: var(--lq-ring-gap);
 }
 .lq-named-heading {
   margin: 18px 0 8px;

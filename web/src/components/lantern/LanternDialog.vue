@@ -274,7 +274,7 @@ defineExpose({ focusFirst: trap.focusFirst })
 }
 .lq-dialog-keys {
   flex: 0 0 auto;
-  padding: 0 22px 12px;
+  padding: 10px 22px 12px;
 }
 .lq-dialog-foot {
   flex: 0 0 auto;
@@ -360,7 +360,11 @@ defineExpose({ focusFirst: trap.focusFirst })
 .lq-dialog-glass .lq-dialog-panel {
   border: 1px solid color-mix(in srgb, var(--lq-fg) 16%, transparent);
   border-radius: 22px;
-  background: color-mix(in srgb, var(--lq-surface) 82%, transparent);
+  background: color-mix(
+    in srgb,
+    var(--lq-surface) var(--lq-glass),
+    transparent
+  );
   backdrop-filter: blur(20px) saturate(1.3);
   box-shadow:
     0 20px 60px rgb(0 0 0 / 0.45),
@@ -383,8 +387,13 @@ defineExpose({ focusFirst: trap.focusFirst })
 /* A phone's bottom sheet keeps its shape: rounded at the top, flush below. */
 @media (max-width: 639px) {
   .lq-dialog-glass:not(.lq-dialog-centered) .lq-dialog-panel {
+    border-right: none;
     border-bottom: none;
+    border-left: none;
     border-radius: 22px 22px 0 0;
+    box-shadow:
+      0 -20px 40px rgb(0 0 0 / 0.45),
+      inset 0 1px 0 rgb(255 255 255 / 0.08);
   }
 }
 /* Solid where the device asks for less transparency, or nothing can blur. */

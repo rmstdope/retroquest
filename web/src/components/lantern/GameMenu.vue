@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { useMenuRing } from '@/composables/useMenuRing'
 import LanternDialog from './LanternDialog.vue'
+import type { KeyHint } from './KeyLine.vue'
 
 /**
  * The pause menu, a pane of frosted glass in the middle of the screen over the
@@ -17,7 +18,8 @@ import LanternDialog from './LanternDialog.vue'
  * the entries (the arrows go round, passing over a dimmed one), and a moving
  * pointer takes the ring; only the ringed entry is lit, so a resting pointer
  * never leaves a second entry looking picked. Escape, ✕ and
- * a click on the dimmed game emit `close`; Quit emits `quit`.
+ * a click on the dimmed game emit `close`; Quit emits `quit`. The quiet key
+ * line at its foot names the keys, as in the windows it opens.
  */
 export type InfoKind = 'help'
 export type MenuKind = 'save' | 'load' | 'settings' | InfoKind
@@ -34,6 +36,11 @@ const game = useGameStore()
 const quickSaveOld = game.getQuickSave()?.outdated === true
 const list = ref<HTMLElement | null>(null)
 const ring = useMenuRing('.lq-menu-entry')
+const KEYS: KeyHint[] = [
+  { keys: ['↑', '↓'], word: 'move' },
+  { keys: ['Enter'], word: 'choose' },
+  { keys: ['Esc'], word: 'back' },
+]
 
 function quickSave(): void {
   game.saveGame()
@@ -90,6 +97,7 @@ function onKeydown(event: KeyboardEvent): void {
     centered
     glass
     narrow
+    :key-line="KEYS"
     @close="emit('close')"
     @mousemove="ring.onMove"
   >
@@ -161,17 +169,17 @@ function onKeydown(event: KeyboardEvent): void {
 .lq-menu {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--lq-ring-gap);
 }
 .lq-quick {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  gap: var(--lq-ring-gap);
 }
 .lq-menu-rows {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: var(--lq-ring-gap);
 }
 .lq-menu-entry {
   display: flex;
@@ -249,5 +257,20 @@ function onKeydown(event: KeyboardEvent): void {
   font-size: 12px;
   line-height: 1.35;
   color: var(--lq-muted);
+}
+/* A short screen: lower entries, so Quit still shows without scrolling. */
+@media (max-height: 640px) {
+  .lq-menu-entry {
+    min-height: 44px;
+  }
+  .lq-menu-tile {
+    min-height: 48px;
+  }
+}
+/* A narrow phone: the Quick tiles drop their icons so the words stay on one line. */
+@media (max-width: 359px) {
+  .lq-menu-tile .lq-menu-icon {
+    display: none;
+  }
 }
 </style>
