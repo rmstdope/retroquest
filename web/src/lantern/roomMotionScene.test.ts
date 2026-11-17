@@ -486,6 +486,31 @@ describe("the title picture's kinds", () => {
     }
   })
 
+  it('draws no glow when both the mark and the middle of its rectangle lie outside a hollow shape', () => {
+    const scene = sceneOf(1280, 720)
+    scene.setEffects(
+      [
+        {
+          kind: 'moonglow',
+          settings: { amount: 2 },
+          box: { ...BOX, mark: { x: 0.9, y: 0.3 } },
+          polygon: [
+            { x: 0.25, y: 0.25 },
+            { x: 0.75, y: 0.25 },
+            { x: 0.75, y: 0.35 },
+            { x: 0.35, y: 0.35 },
+            { x: 0.35, y: 0.75 },
+            { x: 0.25, y: 0.75 },
+          ],
+        },
+      ],
+      true,
+    )
+    const createRadialGradient = vi.fn(() => ({ addColorStop: vi.fn() }))
+    scene.draw(fakeContext({ createRadialGradient }))
+    expect(createRadialGradient).not.toHaveBeenCalled()
+  })
+
   /** Whether (x, y) lies inside the title polygon on a 1280 by 720 canvas. */
   function insidePolygon(x: number, y: number): boolean {
     const points = POLYGON.map((p) => ({ x: p.x * 1280, y: p.y * 720 }))

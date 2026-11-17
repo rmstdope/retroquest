@@ -730,7 +730,8 @@ export function createMotionScene(): MotionScene {
         const glow = settingValue('moonglow', layer.spec.settings, 'glow')
         if (amount <= 0) break
         // A mark outside the drawn shape would leave the glow cut off at its edge, so the glow
-        // then shines from the middle of the shape's rectangle instead.
+        // then shines from the middle of the shape's rectangle instead; when that middle lies
+        // outside the shape too (a hollow shape), no glow is drawn.
         const mark = lightOf(layer)
         const light =
           edgeDistance(mark, layer) > 0
