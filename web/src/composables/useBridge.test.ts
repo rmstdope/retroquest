@@ -481,6 +481,7 @@ describe('useBridge', () => {
       delete stored[0].act
       delete stored[0].room
       delete stored[0].quests
+      delete stored[0].picture
       localStorageMock._setRaw('retroquest_named_saves', JSON.stringify(stored))
       expect(bridge.getNamedSaves()).toEqual([
         {
@@ -583,6 +584,34 @@ describe('useBridge', () => {
         completed: 0,
         total: 11,
       })
+    })
+
+    it('keeps the picture the player was looking at, and an older save lists without one', async () => {
+      const bridge = await runningBridge()
+      bridge.saveToSlot(3)
+      const saved = bridge.getSaveSlots()[2].picture
+      expect(saved).toMatchObject({
+        actName: 'Act1',
+        roomKey: expect.any(String) as string,
+        variant: expect.any(String) as string,
+        patchIds: expect.any(Array) as string[],
+      })
+      expect(saved?.roomKey).not.toBe('')
+      const old = Array.from({ length: 8 }, (_, i) =>
+        i === 0
+          ? {
+              slot: 1,
+              act: 'Act 1',
+              room: 'Square',
+              timestamp: 't',
+              data: '{}',
+            }
+          : null,
+      )
+      localStorageMock._setRaw('retroquest_save_slots', JSON.stringify(old))
+      const card = bridge.getSaveSlots()[0]
+      expect(card.room).toBe('Square')
+      expect(card.picture).toBeUndefined()
     })
 
     it('overwrites existing data in the same slot and keeps the others', async () => {
