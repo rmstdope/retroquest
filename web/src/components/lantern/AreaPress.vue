@@ -106,7 +106,7 @@ function onClick(entry: PlacedName, event: MouseEvent): void {
         top: `${stop.entry.rect.y}px`,
         width: `${stop.entry.rect.w}px`,
         height: `${stop.entry.rect.h}px`,
-        zIndex: stop.layer,
+        zIndex: stop.layer /* local */,
       }"
       @click="onClick(stop.entry, $event)"
       @focus="onFocus(stop.entry.areaId, $event)"
@@ -120,7 +120,7 @@ function onClick(entry: PlacedName, event: MouseEvent): void {
   position: absolute;
   inset: 0;
   /* Under the marks and names (which are above it), so a press on one is theirs. */
-  z-index: 1;
+  z-index: 1; /* local */
   pointer-events: none;
 }
 .lq-area-press-hit {

@@ -52,8 +52,8 @@ const { html } = useReadAlong(() => scene.interlude?.turn ?? 0, root)
 .lq-interlude-layer {
   position: absolute;
   inset: 0;
-  /* Above the words over the picture (z-index 2); presses go through. */
-  z-index: 3;
+  /* Above the words over the picture; presses go through. */
+  z-index: var(--lq-z-page-interlude);
   pointer-events: none;
 }
 .lq-interlude {

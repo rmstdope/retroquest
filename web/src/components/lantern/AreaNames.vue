@@ -497,7 +497,7 @@ const pointed = computed<Hung | null>(() => {
 .lq-area-names {
   position: absolute;
   inset: 0;
-  z-index: 2;
+  z-index: 2; /* local */
   overflow: hidden;
   pointer-events: none;
 }

@@ -149,7 +149,7 @@ onBeforeUnmount(() => {
 <style scoped>
 .lq-name-menu {
   position: fixed;
-  z-index: 40;
+  z-index: var(--lq-z-page-name-menu);
   min-width: 140px;
   max-width: 180px;
   display: flex;

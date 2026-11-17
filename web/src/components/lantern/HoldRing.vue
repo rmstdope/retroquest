@@ -56,7 +56,7 @@ const style = computed(() => ({
 <style scoped>
 .lq-hold-ring {
   position: fixed;
-  z-index: 50;
+  z-index: var(--lq-z-page-hold-ring);
   width: 46px;
   height: 46px;
   margin: -23px 0 0 -23px;

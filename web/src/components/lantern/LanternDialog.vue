@@ -161,7 +161,7 @@ defineExpose({ focusFirst: trap.focusFirst })
 .lq-dialog-layer {
   position: fixed;
   inset: 0;
-  z-index: 50;
+  z-index: var(--lq-z-page-dialogs);
   display: flex;
   align-items: center;
   justify-content: center;

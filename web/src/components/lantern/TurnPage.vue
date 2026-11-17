@@ -49,7 +49,7 @@ import { GAME_NAME } from '@/engine'
 .lq-turn-page {
   position: fixed;
   inset: 0;
-  z-index: 1000;
+  z-index: var(--lq-z-page-turn-page);
   display: flex;
   flex-direction: column;
   align-items: center;

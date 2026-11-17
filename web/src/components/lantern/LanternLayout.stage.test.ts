@@ -78,6 +78,17 @@ describe('LanternLayout: one thing open on the stage', () => {
     expect(lit()).toEqual(['quests'])
   })
 
+  it('keeps what must cover the whole stage beside it, never inside it (layers.css, page group)', async () => {
+    const outsideStage = (selector: string): void => {
+      const found = w.get(selector).element
+      expect(found.closest('.lq-stage')).toBeNull()
+    }
+    await press('quests')
+    outsideStage('.lq-drawer')
+    await press('story')
+    outsideStage('.lq-story-drawer')
+  })
+
   it('shows the Quests alone in the drawer, and a second press closes it', async () => {
     await press('quests')
     expect(w.find('.lq-drawer [role="tab"]').exists()).toBe(false)

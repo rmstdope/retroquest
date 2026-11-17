@@ -234,7 +234,7 @@ defineExpose({ focusButton })
   position: absolute;
   top: 100%;
   right: 0;
-  z-index: 5;
+  z-index: 5; /* local */
   width: 300px;
   padding-top: 6px;
 }

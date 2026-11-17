@@ -56,7 +56,7 @@ onScopeDispose(() => clearTimeout(timer))
   position: fixed;
   top: 72px;
   right: 16px;
-  z-index: 60;
+  z-index: var(--lq-z-page-save-toast);
   pointer-events: none;
 }
 .lq-toast {

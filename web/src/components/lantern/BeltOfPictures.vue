@@ -413,7 +413,7 @@ defineExpose({ focusBelt, focusPicture, has, root })
   left: var(--lq-belt-left, 0px);
   right: 0;
   bottom: var(--lq-belt-bottom, 0px);
-  z-index: 7;
+  z-index: var(--lq-z-stage-belt);
   pointer-events: none;
   font-family: var(--lq-font-ui);
 }
