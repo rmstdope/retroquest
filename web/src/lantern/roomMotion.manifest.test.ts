@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { Act1 } from '@/act1/Act1'
 import { Act2 } from '@/act2/Act2'
 import { EFFECT_TYPES } from './motionEffects'
-import { madeEffects } from './roomMotion'
+import { appliedMotion, madeEffects } from './roomMotion'
 import { roomTrackId } from './musicLists'
 import type { Act } from '@/engine'
 
@@ -14,6 +14,8 @@ const MANIFEST: Record<string, Record<string, unknown>> = JSON.parse(
 
 /** The movement every room had when it was declared in the game's code (rq-m2jr.1): the effect types, in order, of each room image. */
 const CARRIED_OVER: Record<string, string> = {
+  // The opened shed is a picture variant of AbandonedShed, which moved with its room's effects.
+  'act1-abandoned-shed-inside': 'dust,leaves',
   'act1-abandoned-shed': 'dust,leaves',
   'act1-blacksmiths-forge': 'dust,fire,smoke,embers',
   'act1-chicken-coop': 'dust,leaves',
@@ -63,7 +65,41 @@ describe('the movement the images manifest carries', () => {
         ]),
     )
     expect(got).toEqual(CARRIED_OVER)
-    expect(Object.keys(CARRIED_OVER)).toHaveLength(34)
+    expect(Object.keys(CARRIED_OVER)).toHaveLength(35)
+  })
+
+  it("carries the chapel candle's tie and the spots drawn where the old areas were", () => {
+    expect(madeEffects(MANIFEST, 'act1-village-chapel')).toContainEqual(
+      expect.objectContaining({ kind: 'fire', whilePatch: 'candle-lit' }),
+    )
+    const box = (id: string, kind: string) =>
+      appliedMotion(
+        madeEffects(MANIFEST, id).filter((e) => e.kind === kind),
+        ['candle-lit'],
+      )[0]?.box
+    expect(box('act1-village-square', 'water')).toEqual({
+      x: 0.413021,
+      y: 0.423148,
+      width: 0.15625,
+      height: 0.35,
+    })
+    expect(box('act1-blacksmiths-forge', 'smoke')).toEqual({
+      x: 0.259375,
+      y: 0.006481,
+      width: 0.132813,
+      height: 0.65463,
+    })
+    expect(box('act1-blacksmiths-forge', 'fire')?.mark).toEqual({
+      x: 0.321354,
+      y: 0.719444,
+    })
+  })
+
+  it('moves the opened shed as the shed moves', () => {
+    expect(
+      madeEffects(MANIFEST, 'act1-abandoned-shed-inside').map((e) => e.kind),
+    ).toEqual(madeEffects(MANIFEST, 'act1-abandoned-shed').map((e) => e.kind))
+    expect(madeEffects(MANIFEST, 'act1-abandoned-shed')).toHaveLength(2)
   })
 
   it('holds only effect types the renderer has, and a drawn spot for each spot type', () => {

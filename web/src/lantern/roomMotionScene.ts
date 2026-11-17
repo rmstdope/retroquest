@@ -405,7 +405,8 @@ export function createMotionScene(): MotionScene {
     const speed = settingValue(kind, layer.spec.settings, 'speed')
     c.save()
     c.globalAlpha = layer.alpha
-    if (layer.spec.polygon) {
+    // Smoke drifts and spreads past its spot, so only the other spots are held to their shape.
+    if (layer.spec.polygon && kind !== 'smoke') {
       c.beginPath()
       layer.spec.polygon.forEach((point, i) => {
         const at = pointPosition(point, { width, height }, picture)

@@ -251,6 +251,24 @@ describe('the settings of an effect', () => {
     expect(clip).toHaveBeenCalled()
   })
 
+  it('leaves smoke unclipped, as it always was, and clips the other spots to their shape', () => {
+    const polygon = [
+      { x: 0.25, y: 0.25 },
+      { x: 0.75, y: 0.25 },
+      { x: 0.5, y: 0.75 },
+    ]
+    for (const [kind, clips] of [
+      ['smoke', false],
+      ['fire', true],
+    ] as const) {
+      const scene = sceneOf(1280, 720)
+      scene.setEffects([{ kind, box: BOX, polygon }], true)
+      const clip = vi.fn()
+      scene.draw(fakeContext({ clip }))
+      expect(clip.mock.calls.length > 0, kind).toBe(clips)
+    }
+  })
+
   it('lays an effect anew when a setting changes', () => {
     const scene = sceneOf(1280, 720)
     scene.setEffects([{ kind: 'dust', settings: { amount: 1 } }], true)

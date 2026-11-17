@@ -30,7 +30,7 @@ export interface EffectType {
   settings: EffectSetting[]
 }
 
-/** The amount of an effect: 1 is the density the game always had. */
+/** The amount of an effect: 1 is the density the game always had. For fire it widens the glow's reach, which still stays inside the spot, so it mostly brightens. */
 const AMOUNT: EffectSetting = {
   id: 'amount',
   title: 'Amount',

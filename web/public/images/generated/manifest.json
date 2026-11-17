@@ -149,7 +149,15 @@
         "width": 0.050521,
         "height": 0.051852
       }
-    }
+    },
+    "effects": [
+      {
+        "type": "dust"
+      },
+      {
+        "type": "leaves"
+      }
+    ]
   },
   "act1-blacksmiths-forge": {
     "file": "act1-blacksmiths-forge.png",
