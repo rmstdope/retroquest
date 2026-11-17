@@ -11700,6 +11700,143 @@
    }
   ]
  },
+ "060c5f72a37a24": {
+  "file": "060c5f72a37a24.mp3",
+  "speaker": "ancient dragon",
+  "duration": 9.613,
+  "words": [
+   {
+    "word": "I",
+    "start": 0.0,
+    "end": 0.16
+   },
+   {
+    "word": "saw",
+    "start": 0.16,
+    "end": 0.48
+   },
+   {
+    "word": "the",
+    "start": 0.48,
+    "end": 0.7
+   },
+   {
+    "word": "first",
+    "start": 0.7,
+    "end": 1.1
+   },
+   {
+    "word": "of",
+    "start": 1.1,
+    "end": 1.32
+   },
+   {
+    "word": "them",
+    "start": 1.32,
+    "end": 1.52
+   },
+   {
+    "word": "come",
+    "start": 1.52,
+    "end": 1.86
+   },
+   {
+    "word": "down",
+    "start": 1.86,
+    "end": 2.12
+   },
+   {
+    "word": "off",
+    "start": 2.12,
+    "end": 2.44
+   },
+   {
+    "word": "the",
+    "start": 2.44,
+    "end": 2.66
+   },
+   {
+    "word": "moor,",
+    "start": 2.66,
+    "end": 3.12
+   },
+   {
+    "word": "with",
+    "start": 3.12,
+    "end": 3.74
+   },
+   {
+    "word": "wet",
+    "start": 3.74,
+    "end": 4.06
+   },
+   {
+    "word": "feet",
+    "start": 4.06,
+    "end": 4.48
+   },
+   {
+    "word": "and",
+    "start": 4.48,
+    "end": 4.94
+   },
+   {
+    "word": "one",
+    "start": 4.94,
+    "end": 5.32
+   },
+   {
+    "word": "relic",
+    "start": 5.32,
+    "end": 5.82
+   },
+   {
+    "word": "between",
+    "start": 5.82,
+    "end": 6.26
+   },
+   {
+    "word": "them.",
+    "start": 6.26,
+    "end": 6.62
+   },
+   {
+    "word": "They",
+    "start": 6.96,
+    "end": 7.6
+   },
+   {
+    "word": "were",
+    "start": 7.6,
+    "end": 7.78
+   },
+   {
+    "word": "fewer",
+    "start": 7.78,
+    "end": 8.1
+   },
+   {
+    "word": "than",
+    "start": 8.1,
+    "end": 8.36
+   },
+   {
+    "word": "your",
+    "start": 8.36,
+    "end": 8.52
+   },
+   {
+    "word": "songs",
+    "start": 8.52,
+    "end": 8.92
+   },
+   {
+    "word": "say.",
+    "start": 8.92,
+    "end": 9.36
+   }
+  ]
+ },
  "063646d201b312": {
   "file": "063646d201b312.mp3",
   "speaker": "narrator",
@@ -11958,6 +12095,213 @@
     "word": "holds.",
     "start": 9.6,
     "end": 10.02
+   }
+  ]
+ },
+ "065b99778dd2cd": {
+  "file": "065b99778dd2cd.mp3",
+  "speaker": "narrator",
+  "duration": 15.093,
+  "words": [
+   {
+    "word": "We",
+    "start": 0.0,
+    "end": 0.18
+   },
+   {
+    "word": "walked",
+    "start": 0.18,
+    "end": 0.54
+   },
+   {
+    "word": "up",
+    "start": 0.54,
+    "end": 0.76
+   },
+   {
+    "word": "onto",
+    "start": 0.76,
+    "end": 1.06
+   },
+   {
+    "word": "the",
+    "start": 1.06,
+    "end": 1.22
+   },
+   {
+    "word": "moor",
+    "start": 1.22,
+    "end": 1.52
+   },
+   {
+    "word": "tonight,",
+    "start": 1.52,
+    "end": 1.84
+   },
+   {
+    "word": "the",
+    "start": 2.14,
+    "end": 2.46
+   },
+   {
+    "word": "four",
+    "start": 2.46,
+    "end": 2.7
+   },
+   {
+    "word": "of",
+    "start": 2.7,
+    "end": 2.88
+   },
+   {
+    "word": "us,",
+    "start": 2.88,
+    "end": 3.12
+   },
+   {
+    "word": "to",
+    "start": 3.4,
+    "end": 3.62
+   },
+   {
+    "word": "see",
+    "start": 3.62,
+    "end": 3.88
+   },
+   {
+    "word": "the",
+    "start": 3.88,
+    "end": 4.08
+   },
+   {
+    "word": "two",
+    "start": 4.08,
+    "end": 4.28
+   },
+   {
+    "word": "moons.",
+    "start": 4.28,
+    "end": 4.74
+   },
+   {
+    "word": "Mira",
+    "start": 5.28,
+    "end": 5.82
+   },
+   {
+    "word": "fell",
+    "start": 5.82,
+    "end": 6.16
+   },
+   {
+    "word": "asleep",
+    "start": 6.16,
+    "end": 6.58
+   },
+   {
+    "word": "in",
+    "start": 6.58,
+    "end": 6.78
+   },
+   {
+    "word": "the",
+    "start": 6.78,
+    "end": 6.88
+   },
+   {
+    "word": "heather.",
+    "start": 6.88,
+    "end": 7.2
+   },
+   {
+    "word": "Lysa",
+    "start": 7.86,
+    "end": 8.26
+   },
+   {
+    "word": "says",
+    "start": 8.26,
+    "end": 8.5
+   },
+   {
+    "word": "the",
+    "start": 8.5,
+    "end": 8.72
+   },
+   {
+    "word": "founders",
+    "start": 8.72,
+    "end": 9.16
+   },
+   {
+    "word": "crossed",
+    "start": 9.16,
+    "end": 9.7
+   },
+   {
+    "word": "here.",
+    "start": 9.7,
+    "end": 10.02
+   },
+   {
+    "word": "I",
+    "start": 10.42,
+    "end": 10.78
+   },
+   {
+    "word": "kept",
+    "start": 10.78,
+    "end": 11.08
+   },
+   {
+    "word": "watch",
+    "start": 11.08,
+    "end": 11.5
+   },
+   {
+    "word": "till",
+    "start": 11.5,
+    "end": 11.78
+   },
+   {
+    "word": "dawn",
+    "start": 11.78,
+    "end": 12.22
+   },
+   {
+    "word": "and",
+    "start": 12.22,
+    "end": 12.78
+   },
+   {
+    "word": "never",
+    "start": 12.78,
+    "end": 13.1
+   },
+   {
+    "word": "once",
+    "start": 13.1,
+    "end": 13.52
+   },
+   {
+    "word": "wished",
+    "start": 13.52,
+    "end": 13.92
+   },
+   {
+    "word": "the",
+    "start": 13.92,
+    "end": 14.1
+   },
+   {
+    "word": "night",
+    "start": 14.1,
+    "end": 14.36
+   },
+   {
+    "word": "shorter.",
+    "start": 14.36,
+    "end": 14.78
    }
   ]
  },
@@ -27130,6 +27474,128 @@
     "word": "grey.",
     "start": 16.76,
     "end": 17.06
+   }
+  ]
+ },
+ "0e40b3878407c4": {
+  "file": "0e40b3878407c4.mp3",
+  "speaker": "narrator",
+  "duration": 7.616,
+  "words": [
+   {
+    "word": "The",
+    "start": 0.0,
+    "end": 0.36
+   },
+   {
+    "word": "last",
+    "start": 0.36,
+    "end": 0.68
+   },
+   {
+    "word": "entry",
+    "start": 0.68,
+    "end": 1.1
+   },
+   {
+    "word": "is",
+    "start": 1.1,
+    "end": 1.32
+   },
+   {
+    "word": "pressed",
+    "start": 1.32,
+    "end": 1.68
+   },
+   {
+    "word": "so",
+    "start": 1.68,
+    "end": 1.96
+   },
+   {
+    "word": "hard",
+    "start": 1.96,
+    "end": 2.34
+   },
+   {
+    "word": "into",
+    "start": 2.34,
+    "end": 2.54
+   },
+   {
+    "word": "the",
+    "start": 2.54,
+    "end": 2.7
+   },
+   {
+    "word": "page",
+    "start": 2.7,
+    "end": 3.12
+   },
+   {
+    "word": "that",
+    "start": 3.12,
+    "end": 3.62
+   },
+   {
+    "word": "the",
+    "start": 3.62,
+    "end": 3.78
+   },
+   {
+    "word": "pen",
+    "start": 3.78,
+    "end": 4.06
+   },
+   {
+    "word": "has",
+    "start": 4.06,
+    "end": 4.32
+   },
+   {
+    "word": "torn",
+    "start": 4.32,
+    "end": 4.62
+   },
+   {
+    "word": "it.",
+    "start": 4.62,
+    "end": 4.88
+   },
+   {
+    "word": "The",
+    "start": 5.14,
+    "end": 5.7
+   },
+   {
+    "word": "names",
+    "start": 5.7,
+    "end": 6.06
+   },
+   {
+    "word": "in",
+    "start": 6.06,
+    "end": 6.28
+   },
+   {
+    "word": "it",
+    "start": 6.28,
+    "end": 6.4
+   },
+   {
+    "word": "are",
+    "start": 6.4,
+    "end": 6.72
+   },
+   {
+    "word": "your",
+    "start": 6.72,
+    "end": 6.88
+   },
+   {
+    "word": "parents'.",
+    "start": 6.88,
+    "end": 7.24
    }
   ]
  },
@@ -50188,6 +50654,98 @@
    }
   ]
  },
+ "18d5a06be8980a": {
+  "file": "18d5a06be8980a.mp3",
+  "speaker": "narrator",
+  "duration": 7.012,
+  "words": [
+   {
+    "word": "Most",
+    "start": 0.0,
+    "end": 0.38
+   },
+   {
+    "word": "of",
+    "start": 0.38,
+    "end": 0.52
+   },
+   {
+    "word": "the",
+    "start": 0.52,
+    "end": 0.66
+   },
+   {
+    "word": "notebook's",
+    "start": 0.66,
+    "end": 1.28
+   },
+   {
+    "word": "pages",
+    "start": 1.28,
+    "end": 1.62
+   },
+   {
+    "word": "have",
+    "start": 1.62,
+    "end": 2.1
+   },
+   {
+    "word": "crumbled",
+    "start": 2.1,
+    "end": 2.62
+   },
+   {
+    "word": "to",
+    "start": 2.62,
+    "end": 2.82
+   },
+   {
+    "word": "flakes;",
+    "start": 2.82,
+    "end": 3.24
+   },
+   {
+    "word": "three",
+    "start": 3.82,
+    "end": 4.08
+   },
+   {
+    "word": "survive,",
+    "start": 4.08,
+    "end": 4.62
+   },
+   {
+    "word": "in",
+    "start": 4.62,
+    "end": 5.24
+   },
+   {
+    "word": "a",
+    "start": 5.24,
+    "end": 5.36
+   },
+   {
+    "word": "neat",
+    "start": 5.36,
+    "end": 5.66
+   },
+   {
+    "word": "and",
+    "start": 5.66,
+    "end": 5.94
+   },
+   {
+    "word": "patient",
+    "start": 5.94,
+    "end": 6.42
+   },
+   {
+    "word": "hand.",
+    "start": 6.42,
+    "end": 6.72
+   }
+  ]
+ },
  "18f9ba6292bf12": {
   "file": "18f9ba6292bf12.mp3",
   "speaker": "narrator",
@@ -53447,6 +54005,208 @@
    }
   ]
  },
+ "1a719bbf9cc60b": {
+  "file": "1a719bbf9cc60b.mp3",
+  "speaker": "narrator",
+  "duration": 18.112,
+  "words": [
+   {
+    "word": "The",
+    "start": 0.0,
+    "end": 0.14
+   },
+   {
+    "word": "steles",
+    "start": 0.14,
+    "end": 0.72
+   },
+   {
+    "word": "bear",
+    "start": 0.72,
+    "end": 1.14
+   },
+   {
+    "word": "shallow",
+    "start": 1.14,
+    "end": 1.64
+   },
+   {
+    "word": "moon-marks,",
+    "start": 1.64,
+    "end": 2.44
+   },
+   {
+    "word": "pores",
+    "start": 2.72,
+    "end": 3.1
+   },
+   {
+    "word": "packed",
+    "start": 3.1,
+    "end": 3.5
+   },
+   {
+    "word": "with",
+    "start": 3.5,
+    "end": 3.74
+   },
+   {
+    "word": "salt.",
+    "start": 3.74,
+    "end": 4.16
+   },
+   {
+    "word": "Loose",
+    "start": 4.68,
+    "end": 5.32
+   },
+   {
+    "word": "pale",
+    "start": 5.32,
+    "end": 5.64
+   },
+   {
+    "word": "fragments",
+    "start": 5.64,
+    "end": 6.28
+   },
+   {
+    "word": "glint",
+    "start": 6.28,
+    "end": 6.74
+   },
+   {
+    "word": "in",
+    "start": 6.74,
+    "end": 6.9
+   },
+   {
+    "word": "crevices\u2014likely",
+    "start": 6.9,
+    "end": 8.46
+   },
+   {
+    "word": "usable",
+    "start": 8.46,
+    "end": 9.0
+   },
+   {
+    "word": "in",
+    "start": 9.0,
+    "end": 9.26
+   },
+   {
+    "word": "sigil",
+    "start": 9.26,
+    "end": 9.72
+   },
+   {
+    "word": "work.",
+    "start": 9.72,
+    "end": 10.02
+   },
+   {
+    "word": "Each",
+    "start": 10.46,
+    "end": 11.18
+   },
+   {
+    "word": "sigil",
+    "start": 11.18,
+    "end": 11.66
+   },
+   {
+    "word": "is",
+    "start": 11.66,
+    "end": 11.88
+   },
+   {
+    "word": "two",
+    "start": 11.88,
+    "end": 12.18
+   },
+   {
+    "word": "moons,",
+    "start": 12.18,
+    "end": 12.62
+   },
+   {
+    "word": "one",
+    "start": 12.94,
+    "end": 13.46
+   },
+   {
+    "word": "cut",
+    "start": 13.46,
+    "end": 13.78
+   },
+   {
+    "word": "fainter",
+    "start": 13.78,
+    "end": 14.3
+   },
+   {
+    "word": "beneath",
+    "start": 14.3,
+    "end": 14.6
+   },
+   {
+    "word": "the",
+    "start": 14.6,
+    "end": 14.9
+   },
+   {
+    "word": "other,",
+    "start": 14.9,
+    "end": 15.2
+   },
+   {
+    "word": "like",
+    "start": 15.44,
+    "end": 15.82
+   },
+   {
+    "word": "the",
+    "start": 15.82,
+    "end": 15.98
+   },
+   {
+    "word": "mark",
+    "start": 15.98,
+    "end": 16.32
+   },
+   {
+    "word": "over",
+    "start": 16.32,
+    "end": 16.58
+   },
+   {
+    "word": "the",
+    "start": 16.58,
+    "end": 16.76
+   },
+   {
+    "word": "chapel",
+    "start": 16.76,
+    "end": 17.12
+   },
+   {
+    "word": "door",
+    "start": 17.12,
+    "end": 17.4
+   },
+   {
+    "word": "at",
+    "start": 17.4,
+    "end": 17.58
+   },
+   {
+    "word": "home.",
+    "start": 17.58,
+    "end": 17.82
+   }
+  ]
+ },
  "1a90a0cdb2e72a": {
   "file": "1a90a0cdb2e72a.mp3",
   "speaker": "narrator",
@@ -54845,6 +55605,43 @@
     "word": "waits.",
     "start": 5.54,
     "end": 6.04
+   }
+  ]
+ },
+ "1b66816549b378": {
+  "file": "1b66816549b378.mp3",
+  "speaker": "narrator",
+  "duration": 3.39,
+  "words": [
+   {
+    "word": "The",
+    "start": 0.0,
+    "end": 0.14
+   },
+   {
+    "word": "ancient",
+    "start": 0.14,
+    "end": 0.6
+   },
+   {
+    "word": "dragon",
+    "start": 0.6,
+    "end": 1.08
+   },
+   {
+    "word": "rumbles,",
+    "start": 1.08,
+    "end": 1.74
+   },
+   {
+    "word": "lower",
+    "start": 1.98,
+    "end": 2.64
+   },
+   {
+    "word": "still:",
+    "start": 2.64,
+    "end": 3.06
    }
   ]
  },
