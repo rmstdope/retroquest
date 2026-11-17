@@ -23,6 +23,10 @@ import KeyLine, { type KeyHint } from './KeyLine.vue'
  * (a keyboard player only). `startOnPanel` starts focus on the dialog itself,
  * so no ring shows (a screen with nothing to select). `scrollKeys` lets ↑ ↓
  * (a line), Page Up and Page Down (a page), Home and End scroll the body.
+ * `glass` makes the panel a pane of frosted glass, as the title page's dock
+ * is: the game shows blurred through it and through a lighter shade, the
+ * panel is narrower and rounder, and it rises in as it opens (at once under
+ * Reduce motion). It follows the theme like any other panel.
  */
 const props = withDefaults(
   defineProps<{
@@ -35,6 +39,7 @@ const props = withDefaults(
     keyLine?: KeyHint[]
     startOnPanel?: boolean
     scrollKeys?: boolean
+    glass?: boolean
   }>(),
   {
     eyebrow: '',
@@ -45,6 +50,7 @@ const props = withDefaults(
     keyLine: () => [],
     startOnPanel: false,
     scrollKeys: false,
+    glass: false,
   },
 )
 const emit = defineEmits<{ close: [] }>()
@@ -107,7 +113,10 @@ defineExpose({ focusFirst: trap.focusFirst })
 </script>
 
 <template>
-  <div class="lq-dialog-layer" :class="{ 'lq-dialog-centered': centered }">
+  <div
+    class="lq-dialog-layer"
+    :class="{ 'lq-dialog-centered': centered, 'lq-dialog-glass': glass }"
+  >
     <div class="lq-dialog-scrim" aria-hidden="true" @click="onBackdrop"></div>
     <section
       ref="panel"
@@ -330,6 +339,34 @@ defineExpose({ focusFirst: trap.focusFirst })
   }
   .lq-dialog-centered .lq-dialog-foot {
     padding: 10px 22px 14px;
+  }
+}
+/* A pane of frosted glass, as on the title page: the game shows through, blurred. */
+.lq-dialog-glass .lq-dialog-scrim {
+  background: rgb(5 8 11 / 0.42);
+}
+.lq-dialog-glass .lq-dialog-panel {
+  max-width: 420px;
+  border: 1px solid color-mix(in srgb, var(--lq-fg) 16%, transparent);
+  border-radius: 22px;
+  background: color-mix(in srgb, var(--lq-surface) 62%, transparent);
+  backdrop-filter: blur(18px) saturate(1.3);
+  box-shadow:
+    0 20px 60px rgb(0 0 0 / 0.45),
+    inset 0 1px 0 rgb(255 255 255 / 0.08);
+  animation: lq-dialog-rise calc(0.24s * var(--lq-motion)) ease-out;
+}
+.lq-dialog-glass .lq-dialog-head {
+  padding-bottom: 4px;
+  border-bottom: none;
+}
+.lq-dialog-glass .lq-dialog-content {
+  padding-top: 14px;
+}
+@keyframes lq-dialog-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
   }
 }
 </style>

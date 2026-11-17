@@ -46,6 +46,28 @@ describe('GameMenu', () => {
     expect(w.get('.lq-dialog-layer').classes()).toContain('lq-dialog-centered')
   })
 
+  it('is a pane of frosted glass, like the title page', () => {
+    const w = mountMenu()
+
+    expect(w.get('.lq-dialog-layer').classes()).toContain('lq-dialog-glass')
+  })
+
+  it('gives every entry a quiet icon, and each window it opens an arrow', () => {
+    const w = mountMenu()
+    const entries = w.findAll('.lq-menu-entry')
+
+    for (const entry of entries) {
+      expect(entry.get('.lq-menu-icon').attributes('aria-hidden')).toBe('true')
+    }
+    const arrowed = entries
+      .filter((entry) => entry.find('.lq-menu-arrow').exists())
+      .map((entry) => entry.text())
+    expect(arrowed).toEqual(['Save', 'Load', 'Settings', 'Help'])
+    for (const arrow of w.findAll('.lq-menu-arrow')) {
+      expect(arrow.attributes('aria-hidden')).toBe('true')
+    }
+  })
+
   it('lists plain one-word entries in the agreed order', () => {
     const w = mountMenu()
 

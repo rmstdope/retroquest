@@ -40,6 +40,16 @@ describe('LanternDialog', () => {
     ).toContain('lq-dialog-centered')
   })
 
+  it('can be a pane of frosted glass (glass)', () => {
+    expect(mountDialog().get('.lq-dialog-layer').classes()).not.toContain(
+      'lq-dialog-glass',
+    )
+    wrapper?.unmount()
+    expect(
+      mountDialog({ glass: true }).get('.lq-dialog-layer').classes(),
+    ).toContain('lq-dialog-glass')
+  })
+
   it('is a modal dialog named by its title', () => {
     const w = mountDialog()
     const dialog = w.get('[role="dialog"]')
