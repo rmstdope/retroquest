@@ -701,6 +701,7 @@ export function createMotionScene(): MotionScene {
       case 'ripples': {
         if (!source) break
         const amount = settingValue('ripples', layer.spec.settings, 'amount')
+        if (amount <= 0) break
         const strength = settingValue(
           'ripples',
           layer.spec.settings,

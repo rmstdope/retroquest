@@ -342,6 +342,18 @@ describe("the title picture's kinds", () => {
     }
   })
 
+  it('stills the ripples at amount 0', () => {
+    const scene = sceneOf(1280, 720)
+    scene.setSource(SOURCE)
+    scene.setEffects(
+      [{ kind: 'ripples', settings: { amount: 0 }, ...SPOT }],
+      true,
+    )
+    const drawImage = vi.fn()
+    scene.draw(fakeContext({ drawImage }))
+    expect(drawImage).not.toHaveBeenCalled()
+  })
+
   it("draws the moon's glow with the mark as its centre and shows nothing at amount 0", () => {
     for (const [amount, drawn] of [
       [1, true],

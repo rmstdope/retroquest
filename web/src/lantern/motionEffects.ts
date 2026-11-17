@@ -30,7 +30,7 @@ export interface EffectType {
   settings: EffectSetting[]
 }
 
-/** The amount of an effect: 1 is the density the game always had. For fire it widens the glow's reach, which still stays inside the spot, so it mostly brightens. */
+/** The amount of an effect: 1 is the density the game always had. For fire and the moon's glow it widens the glow's reach (inside the spot); for pond ripples it is how closely the waves are spaced, and 0 stills them. */
 const AMOUNT: EffectSetting = {
   id: 'amount',
   title: 'Amount',
