@@ -280,6 +280,11 @@ describe('the studio handing a floating kind a shape', () => {
     )
     expect(scene.count('fireflies')).toBe(game.count('fireflies'))
     expect(drawn.length).toBeGreaterThan(0)
+    // The strip is a fraction of the picture, so it holds fewer than the whole picture would.
+    const whole = createMotionScene()
+    whole.resize(960, 540, { width: 1920, height: 1080 })
+    whole.setEffects([{ kind: 'fireflies', settings: {} }], true)
+    expect(scene.count('fireflies')).toBeLessThan(whole.count('fireflies'))
   })
 
   it('plays its default placement when the shapes handed are none of them a shape', () => {

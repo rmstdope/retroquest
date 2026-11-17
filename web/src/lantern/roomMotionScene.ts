@@ -228,6 +228,11 @@ function distanceToLine(points: readonly Pt[], x: number, y: number): number {
   return best
 }
 
+/** The least chance a leaf starts to fall on a tick over a drawn shape: about one every half minute. */
+const LEAF_FLOOR = 0.0005
+/** The most ticks between two embers over a drawn shape: ten seconds. */
+const EMBER_CEILING = 600
+
 /** A random number in [0, 1). */
 function rnd(): number {
   return Math.random()
@@ -331,14 +336,21 @@ export function createMotionScene(): MotionScene {
     return boxArea > 0 ? (polygonArea(points) * rect.w * rect.h) / boxArea : 0
   }
 
-  /** A place for a new speck: random inside the layer's shape and in view, else the middle of its rectangle. */
-  function placeIn(layer: Layer, rect: Rect): Pt {
+  /** A place for a new speck: random inside the layer's shape and in view; failing that the first place of a grid over the rectangle that is, and null when the shape has none in view. */
+  function placeIn(layer: Layer, rect: Rect): Pt | null {
+    const points = layer.points
     for (let i = 0; i < 40; i++) {
       const x = rect.x + rnd() * rect.w
       const y = rect.y + rnd() * rect.h
-      if (!layer.points || insideShape(layer.points, x, y)) return { x, y }
+      if (!points || insideShape(points, x, y)) return { x, y }
     }
-    return { x: rect.x + rect.w / 2, y: rect.y + rect.h / 2 }
+    for (let i = 0; i < 20; i++)
+      for (let j = 0; j < 20; j++) {
+        const x = rect.x + ((i + 0.5) / 20) * rect.w
+        const y = rect.y + ((j + 0.5) / 20) * rect.h
+        if (points && insideShape(points, x, y)) return { x, y }
+      }
+    return null
   }
 
   /** Whether (`x`, `y`) is a place the layer's specks may be: anywhere for a layer with no shape. */
@@ -354,6 +366,17 @@ export function createMotionScene(): MotionScene {
     if (!insideShape(points, x, y)) return 0
     const margin = Math.min(60 * unit(), 0.25 * Math.min(rect.w, rect.h))
     return margin > 0 ? Math.min(1, distanceToLine(points, x, y) / margin) : 1
+  }
+
+  /** How much of itself a mist puff of radius `r` centred at (`x`, `y`) shows: it is gone before its flat top or bottom, or its sides, reach the line, so the line never cuts one. */
+  function fadeOfPuff(layer: Layer, x: number, y: number, r: number): number {
+    return Math.min(
+      fadeAt(layer, x, y),
+      fadeAt(layer, x, y - 0.2 * r),
+      fadeAt(layer, x, y + 0.2 * r),
+      fadeAt(layer, x - 0.5 * r, y),
+      fadeAt(layer, x + 0.5 * r, y),
+    )
   }
 
   function rectOf(spec: MotionSpec): Rect | null {
@@ -387,6 +410,7 @@ export function createMotionScene(): MotionScene {
       case 'dust':
         for (let i = 0; i < floatCount(16, area, amount); i++) {
           const at = placeIn(layer, rect)
+          if (!at) break
           layer.parts.push({
             x: at.x,
             y: at.y,
@@ -407,6 +431,7 @@ export function createMotionScene(): MotionScene {
                 x: rect.x + rect.w * (0.1 + rnd() * 0.8),
                 y: rect.y + rect.h * (0.5 + rnd() * 0.4),
               }
+          if (!at) break
           layer.parts.push({
             x: at.x,
             y: at.y,
@@ -422,22 +447,26 @@ export function createMotionScene(): MotionScene {
       case 'mist': {
         const count = floatCount(6, area, amount)
         for (let i = 0; i < count; i++) {
-          const y = rect.y + rect.h * (0.6 + (0.3 * i) / count)
+          // In a drawn shape the puffs lie in rows spread over the whole of it.
+          const y = layer.points
+            ? rect.y + rect.h * (0.1 + (0.8 * (i + 0.5)) / count)
+            : rect.y + rect.h * (0.6 + (0.3 * i) / count)
           const span = layer.points ? spanAcross(layer.points, 'row', y) : null
-          const x = span
-            ? span.min + rnd() * (span.max - span.min)
-            : layer.points
-              ? placeIn(layer, rect).x
-              : rect.x + rnd() * rect.w
+          const lost = layer.points && !span ? placeIn(layer, rect) : null
+          if (layer.points && !span && !lost) break
           layer.parts.push({
-            x,
-            y: layer.points && !span ? placeIn(layer, rect).y : y,
+            x: span
+              ? span.min + rnd() * (span.max - span.min)
+              : lost
+                ? lost.x
+                : rect.x + rnd() * rect.w,
+            y: lost ? lost.y : y,
             vx: (0.12 + rnd() * 0.14) * u * speed,
             vy: 0,
-            // A puff in a drawn shape is no wider than the shape.
+            // A puff in a drawn shape is no wider than the shape, nor higher.
             r: Math.min(
               (260 + rnd() * 200) * u,
-              layer.points ? rect.w / 2 : Infinity,
+              layer.points ? Math.min(rect.w / 2, rect.h) : Infinity,
             ),
             l: 0,
             m: 0,
@@ -576,7 +605,14 @@ export function createMotionScene(): MotionScene {
         const area = areaOf(layer)
         const baseCap = area < 0.5 * BASE_WIDTH * BASE_HEIGHT ? 1 : 2
         const cap = amount > 0 ? Math.max(1, Math.round(baseCap * amount)) : 0
-        if (parts.length < cap && rnd() < leafChance(area) * amount) {
+        // A shape is a share of the canvas, so it holds that share of the leaves, but never fewer than one every half minute.
+        const chance = layer.points
+          ? Math.max(
+              leafChance(width * height) * (area / (width * height)),
+              LEAF_FLOOR,
+            )
+          : leafChance(area)
+        if (parts.length < cap && rnd() < chance * amount) {
           const loose = layer.points ? placeIn(layer, rect) : null
           const top = loose
             ? spanAcross(layer.points ?? [], 'column', loose.x)
@@ -611,36 +647,14 @@ export function createMotionScene(): MotionScene {
         if (
           due(
             n,
-            Math.round(24 / (areaOf(layer) / (BASE_WIDTH * BASE_HEIGHT))),
+            Math.min(
+              layer.points ? EMBER_CEILING : Infinity,
+              Math.round(24 / (areaOf(layer) / (BASE_WIDTH * BASE_HEIGHT))),
+            ),
             amount,
           )
-        ) {
-          const rise = layer.points ? placeIn(layer, rect) : null
-          const column = rise
-            ? spanAcross(layer.points ?? [], 'column', rise.x)
-            : null
-          const x = rise ? rise.x : rect.x + rnd() * rect.w
-          const high = column ? column.max - column.min : rect.h
-          const y = column
-            ? column.min + high * (0.7 + rnd() * 0.25)
-            : rect.y + rect.h * (0.7 + rnd() * 0.25)
-          const vy = (-0.7 - rnd() * 0.6) * u * speed
-          const life = 120 + rnd() * 130
-          parts.push({
-            x,
-            y,
-            vx: (rnd() - 0.5) * 0.25 * u * speed,
-            vy,
-            r: 1.8 * u,
-            l: 0,
-            // In a drawn shape the ember burns out before the shape's top.
-            m:
-              column && vy < 0
-                ? Math.max(1, Math.min(life, (0.9 * (y - column.min)) / -vy))
-                : life,
-            ph: rnd() * 6,
-          })
-        }
+        )
+          spawnEmber(layer, rect, u, speed)
         emberStep(layer, t, speed)
         break
       case 'clouds':
@@ -717,9 +731,53 @@ export function createMotionScene(): MotionScene {
     }
     if (!insideShape(points, p.x, p.y)) {
       const at = placeIn(layer, rect)
-      p.x = at.x
-      p.y = at.y
+      if (at) {
+        p.x = at.x
+        p.y = at.y
+      }
     }
+  }
+
+  /** Light one ember: in a drawn shape it rises from the bottom of its column and burns out before the shape's top. */
+  function spawnEmber(
+    layer: Layer,
+    rect: Rect,
+    u: number,
+    speed: number,
+  ): void {
+    const parts = layer.parts
+    if (!layer.points) {
+      parts.push({
+        x: rect.x + rnd() * rect.w,
+        y: rect.y + rect.h * (0.7 + rnd() * 0.25),
+        vx: (rnd() - 0.5) * 0.25 * u * speed,
+        vy: (-0.7 - rnd() * 0.6) * u * speed,
+        r: 1.8 * u,
+        l: 0,
+        m: 120 + rnd() * 130,
+        ph: rnd() * 6,
+      })
+      return
+    }
+    const rise = placeIn(layer, rect)
+    const column = rise ? spanAcross(layer.points, 'column', rise.x) : null
+    if (!rise || !column) return
+    const y = column.min + (column.max - column.min) * (0.7 + rnd() * 0.25)
+    const vy = (-0.7 - rnd() * 0.6) * u * speed
+    const life = 120 + rnd() * 130
+    parts.push({
+      x: rise.x,
+      y,
+      vx: (rnd() - 0.5) * 0.25 * u * speed,
+      vy,
+      r: 1.8 * u,
+      l: 0,
+      m:
+        vy < 0
+          ? Math.max(1, Math.min(life, (0.9 * (y - column.min)) / -vy))
+          : life,
+      ph: rnd() * 6,
+    })
   }
 
   /** Move the live embers and drop the spent ones. */
@@ -795,7 +853,8 @@ export function createMotionScene(): MotionScene {
         break
       case 'mist':
         for (const p of layer.parts) {
-          fade(c, layer, p.x, p.y)
+          if (layer.points)
+            c.globalAlpha = layer.alpha * fadeOfPuff(layer, p.x, p.y, p.r)
           const g = c.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r)
           g.addColorStop(0, 'rgba(240,244,240,.22)')
           g.addColorStop(1, 'rgba(240,244,240,0)')

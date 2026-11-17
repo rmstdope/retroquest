@@ -73,13 +73,13 @@ export interface RoomEffect {
   whilePatch?: string
   /** A patch id of the same image: the effect applies while that patch is not laid. */
   unlessPatch?: string
-  /** The shapes drawn for a spot kind; it plays once in each. */
+  /** The shapes drawn for the effect; it plays once in each. */
   spot?: SpotShape[]
   /** Where a spot's light comes from, as fractions of the picture; absent means the middle of each shape. */
   mark?: PicturePoint
 }
 
-/** A movement that applies now: a spot kind carries its drawn shape and the box around it. */
+/** A movement that applies now: an effect with drawn shapes carries each shape and the box around it. */
 export interface MotionSpec {
   kind: MotionKind
   settings?: Record<string, number>

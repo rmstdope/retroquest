@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { boxRect, createMotionScene, pointPosition } from './roomMotionScene'
 import type { AreaBox, MotionKind } from './roomMotion'
 
@@ -624,6 +624,8 @@ describe('a spot drawn as several shapes', () => {
 })
 
 describe('a floating kind drawn inside a shape', () => {
+  afterEach(() => vi.restoreAllMocks())
+
   type Corner = { x: number; y: number }
   /** A rectangle of the picture, as the four corners a drawn shape has. */
   function rectangle(x0: number, y0: number, x1: number, y1: number): Corner[] {
@@ -800,7 +802,6 @@ describe('a floating kind drawn inside a shape', () => {
     const top = 0.2 * H
     expect(Math.min(...seen.map((p) => p.y))).toBeLessThan(top + 10)
     expect(Math.max(...seen.map((p) => p.y))).toBeLessThanOrEqual(0.5 * H + 1)
-    vi.restoreAllMocks()
   })
 
   it('lets embers rise from the bottom of the shape and burn out before its top', () => {
@@ -845,5 +846,26 @@ describe('a floating kind drawn inside a shape', () => {
       expect(sorted[i].alpha).toBeGreaterThanOrEqual(sorted[i - 1].alpha - 1e-9)
     expect(sorted[0].alpha).toBeLessThan(0.5)
     expect(sorted[sorted.length - 1].alpha).toBe(1)
+  })
+  it('spreads mist across the whole shape, and thins it before the line, most at the bottom', () => {
+    const shape = rectangle(0, 0, 1, 2 / 3)
+    const scene = sceneOf(W, H)
+    scene.setEffects([drawnIn('mist', shape, { amount: 3 })], true)
+    const seen = watch(scene, 'mist', 20)
+    const bottom = (2 / 3) * H
+    expect(Math.min(...seen.map((p) => p.y))).toBeLessThan(0.3 * bottom)
+    for (const p of seen) {
+      // A puff reaching the line is gone, so the line never cuts one.
+      if (p.y > bottom - 20) expect(p.alpha).toBeLessThan(0.1)
+    }
+  })
+
+  it('brings a leaf or an ember now and then to a small shape, as it does to a small picture', () => {
+    const small = rectangle(0.5, 0.5, 0.6, 0.6)
+    for (const kind of ['leaves', 'embers'] as const) {
+      const scene = sceneOf(W, H)
+      scene.setEffects([drawnIn(kind, small)], true)
+      expect(watch(scene, kind, 240).length, kind).toBeGreaterThan(0)
+    }
   })
 })
