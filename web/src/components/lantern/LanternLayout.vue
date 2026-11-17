@@ -376,13 +376,15 @@ function toggleDrawer(tab: 'quests' | 'story' | 'map'): void {
   else drawerTab.value = tab
 }
 
-/** Close the drawer; focus goes back to its lit button (the tab it was on). */
+/** Close the drawer; focus goes back to the typing box when it is up, else to its lit button (the tab it was on). */
 function closeDrawer(): void {
   const tab = drawerTab.value
   drawerTab.value = null
   if (!tab) return
+  if (typingOpen.value) void nextTick(focusActions)
   // On a phone the story so far was opened from the plate.
-  if (phoneStage.value) void nextTick(() => plate.value?.focusStoryButton())
+  else if (phoneStage.value)
+    void nextTick(() => plate.value?.focusStoryButton())
   else void stageButtons.value?.focusButton(tab)
 }
 
@@ -1968,7 +1970,7 @@ watch(
   },
 )
 
-/** Closing the menu gives focus back to what opened it. */
+/** Closing the menu gives focus back to what opened it, or to the typing box when it is up. */
 async function closeGameDialog(): Promise<void> {
   // A window opened from the menu goes back to the menu, focus on its entry.
   if (gameDialog.value !== 'menu' && menuEntry.value) {
@@ -1979,13 +1981,17 @@ async function closeGameDialog(): Promise<void> {
   await closeAllGameDialogs()
 }
 
-/** Everything the menu opened is closed and the game goes on (a slot saved or loaded, the menu closed). */
+/** Everything the menu opened is closed and the game goes on (a slot saved or loaded, the menu closed): focus goes to the typing box when it is up, else back to what opened the menu. */
 async function closeAllGameDialogs(): Promise<void> {
   gameDialog.value = null
   menuEntry.value = null
   focusMenuEntry.value = null
   await nextTick()
-  if (document.activeElement === document.body && dialogOpener?.isConnected)
+  if (typingOpen.value) focusActions()
+  else if (
+    document.activeElement === document.body &&
+    dialogOpener?.isConnected
+  )
     dialogOpener.focus()
 }
 
