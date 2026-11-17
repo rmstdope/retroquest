@@ -223,6 +223,61 @@ describe('LanternLayout: the Escape menu', () => {
     expect(resume).toHaveBeenCalledOnce()
   })
 
+  describe('with the typing box up (rq-9let)', () => {
+    const box = (): HTMLInputElement | null =>
+      document.querySelector<HTMLInputElement>('input[aria-label="Command"]')
+    const click = async (button: string): Promise<void> => {
+      w.get(`[data-button="${button}"]`).element.dispatchEvent(
+        new MouseEvent('click', { bubbles: true }),
+      )
+      await flushPromises()
+    }
+
+    beforeEach(async () => {
+      useGameStore().acceptInput = true
+      await flushPromises()
+      window.dispatchEvent(new KeyboardEvent('keydown', { key: 'F1' }))
+      await flushPromises()
+      expect(document.activeElement).toBe(box())
+    })
+
+    it('gives the cursor back to the box when the menu closes', async () => {
+      w.get<HTMLElement>('[data-button="menu"]').element.focus()
+      await click('menu')
+      expect(heading()).toBe('Menu')
+      await press('Escape', document.activeElement!)
+      expect(heading()).toBeUndefined()
+      expect(document.activeElement).toBe(box())
+    })
+
+    it('gives the cursor back to the box when the Quests drawer closes', async () => {
+      w.get<HTMLElement>('[data-button="quests"]').element.focus()
+      await click('quests')
+      expect(w.find('[aria-label="Journal drawer"]').exists()).toBe(true)
+      await press('Escape', document.activeElement!)
+      expect(w.find('[aria-label="Journal drawer"]').exists()).toBe(false)
+      expect(document.activeElement).toBe(box())
+    })
+
+    it('gives the cursor back to the box when the Story so far drawer closes', async () => {
+      w.get<HTMLElement>('[data-button="story"]').element.focus()
+      await click('story')
+      expect(w.find('.lq-story-drawer').exists()).toBe(true)
+      await press('Escape', document.activeElement!)
+      expect(w.find('.lq-story-drawer').exists()).toBe(false)
+      expect(document.activeElement).toBe(box())
+    })
+
+    it('gives the cursor back to the box when the Map closes', async () => {
+      w.get<HTMLElement>('[data-button="map"]').element.focus()
+      await click('map')
+      expect(w.find('.lq-map-pop').exists()).toBe(true)
+      await press('Escape')
+      expect(w.find('.lq-map-pop').exists()).toBe(false)
+      expect(document.activeElement).toBe(box())
+    })
+  })
+
   describe('F, full screen', () => {
     let request: ReturnType<typeof vi.fn>
 
