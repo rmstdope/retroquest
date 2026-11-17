@@ -272,6 +272,7 @@ defineExpose({ focusFirst: trap.focusFirst })
   /* Room for the 6px reach of the cream ring when a row is scrolled to an edge. */
   scroll-padding-block: 10px;
 }
+/* Clear of a scrolling body above it; under a footer's buttons it sits close. */
 .lq-dialog-keys {
   flex: 0 0 auto;
   padding: 10px 22px 12px;
@@ -280,6 +281,9 @@ defineExpose({ focusFirst: trap.focusFirst })
   flex: 0 0 auto;
   padding: 10px 22px 14px;
   border-top: 1px solid var(--lq-line);
+}
+.lq-dialog-foot + .lq-dialog-keys {
+  padding-top: 0;
 }
 /* Phones: a bottom sheet with a grabber. */
 @media (max-width: 639px) {

@@ -258,7 +258,7 @@ function onKeydown(event: KeyboardEvent): void {
   line-height: 1.35;
   color: var(--lq-muted);
 }
-/* A short screen: lower entries, so Quit still shows without scrolling. */
+/* A short screen: lower entries, so the wider gaps between them cost no height. */
 @media (max-height: 640px) {
   .lq-menu-entry {
     min-height: 44px;
