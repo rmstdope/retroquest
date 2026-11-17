@@ -60,6 +60,27 @@ test('Settings: the ring is whole on every row walked down with the arrow keys',
   }
 })
 
+test('Settings: the ring stays whole on the last row when the music arrives late', async ({
+  page,
+}): Promise<void> => {
+  // Hold the music back, as a slow machine does, so its "Now playing" line
+  // shows up above the Playing rows only after the ring has reached them.
+  let release = (): void => {}
+  const held = new Promise<void>((resolve) => (release = resolve))
+  await page.route('**/audio/music/**', async (route) => {
+    await held
+    await route.continue()
+  })
+  await openSettings(page)
+  await expect(page.locator('.lq-now-playing')).toHaveCount(0)
+  await page.keyboard.press('ArrowUp')
+  await expect.poll(() => ringed(page)).toBe('alwaysShowNames')
+  await expect.poll(() => clipped(page)).toBe('0')
+  release()
+  await expect(page.locator('.lq-now-playing')).toBeVisible()
+  await expect.poll(() => clipped(page)).toBe('0')
+})
+
 test('Settings: the ring is whole on every stop Tab reaches, on a phone too', async ({
   page,
 }): Promise<void> => {
