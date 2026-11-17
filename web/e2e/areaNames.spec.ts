@@ -145,7 +145,8 @@ test.describe('at the edges of a laptop picture (rq-5hs1)', () => {
     await page.setViewportSize({ width: 1842, height: 580 })
     await toTheCottage(page, AT_THE_EDGES)
     // The belt covers the very foot of the picture while it is up.
-    await page.getByRole('button', { name: 'Put the belt away' }).click()
+    await page.locator('[data-belt-switch="bag"]').click()
+    await expect(page.locator('[data-belt-pic]')).toHaveCount(0)
     const stage = await page.locator('.lq-stage').boundingBox()
     // No bar below the picture now: its foot is the floor.
     const bar = { y: stage!.y + stage!.height }
@@ -162,7 +163,8 @@ test.describe('at the edges of a laptop picture (rq-5hs1)', () => {
     await page.setViewportSize({ width: 1842, height: 580 })
     await toTheCottage(page, AT_THE_EDGES)
     // The belt covers the very foot of the picture while it is up (belt.spec.ts); put away, the picture's foot is the floor.
-    await page.getByRole('button', { name: 'Put the belt away' }).click()
+    await page.locator('[data-belt-switch="bag"]').click()
+    await expect(page.locator('[data-belt-pic]')).toHaveCount(0)
     await holdDriftAtPeak(page)
     await page.getByRole('button', { name: /Show what's here/ }).click()
     const marks = page.locator('[data-area-mark]')

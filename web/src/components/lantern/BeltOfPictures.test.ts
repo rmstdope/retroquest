@@ -306,6 +306,17 @@ describe('BeltOfPictures', () => {
       expect(w!.emitted('press')).toBeUndefined()
     })
 
+    it('does not eat a later key press when no click follows a hold', async () => {
+      mountBelt()
+      const el = w!.get('[data-belt-pic="item:bread"]').element
+      el.dispatchEvent(touch('pointerdown'))
+      vi.advanceTimersByTime(450)
+      el.dispatchEvent(touch('pointercancel'))
+      vi.advanceTimersByTime(1)
+      el.dispatchEvent(new MouseEvent('click', { bubbles: true, detail: 0 }))
+      expect(w!.emitted('press')).toHaveLength(1)
+    })
+
     it('leaves a tap as a press, with no caption', async () => {
       mountBelt()
       const el = w!.get('[data-belt-pic="item:bread"]').element

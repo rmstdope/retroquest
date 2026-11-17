@@ -179,7 +179,8 @@ for (const [width, height] of [
 
 test('folded away the pouch and star stack again', async ({ page }) => {
   await start(page, 568, 320)
-  await page.getByRole('button', { name: 'Put the belt away' }).click()
+  await page.locator('[data-belt-switch="bag"]').click()
+  await expect(page.locator('[data-belt-pic]')).toHaveCount(0)
   const { bag, spells } = await beltGeometry(page)
   expect(bag.x).toBeCloseTo(spells.x, 0)
   expect(spells.y).toBeGreaterThan(bag.y + bag.height)

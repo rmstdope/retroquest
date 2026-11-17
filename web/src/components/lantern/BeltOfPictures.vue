@@ -145,6 +145,7 @@ function pick(list: BeltList): void {
     belt.show(list)
     return
   }
+  // The folded state is the store's (and so remembered) for the 0.6 s between the fold and the unfurl; a reload in that moment comes back folded.
   switching.value = true
   belt.putAway()
   switchTimer = setTimeout(() => {
@@ -218,6 +219,8 @@ function endHold(): void {
   clearTimeout(holdTimer)
   holdFrom = null
   held.value = null
+  // The click that follows a release comes at once; one that never comes must not eat a later key press.
+  if (swallowClick) setTimeout(() => (swallowClick = false), 0)
 }
 
 /** A hold would raise the system's menu on a phone; it is the caption's. */
@@ -599,8 +602,8 @@ defineExpose({ focusBelt, focusPicture, has, root })
   gap: 4px;
   pointer-events: auto;
 }
-.lq-belt-compact .lq-belt-switch {
-  /* Pouch and star side by side on a sideways phone. */
+.lq-belt-compact:not(.lq-belt-folded) .lq-belt-switch {
+  /* Pouch and star side by side while the strap is up on a sideways phone; folded away they stack, clear of Hide / Show. */
   flex-direction: row;
   align-items: center;
 }
@@ -672,6 +675,8 @@ defineExpose({ focusBelt, focusPicture, has, root })
   align-items: center;
   gap: 10px;
   min-width: 0;
+  /* An empty strap keeps the height of one with pictures. */
+  min-height: calc(var(--lq-pocket) + 12px);
   /* Room for the lift of a pocket and its tag. */
   padding: 6px 4px;
   margin: -6px -4px;
@@ -764,13 +769,21 @@ defineExpose({ focusBelt, focusPicture, has, root })
   color: #3a250b;
   font: 700 11px/16px var(--lq-font-ui);
 }
-.lq-belt-pic:hover .lq-belt-square,
 .lq-belt-pic:focus-visible .lq-belt-square {
   transform: scale(1.08);
   border-color: #ffd77a;
   box-shadow:
     0 0 0 1px #4a3110,
     0 0 14px rgb(255 200 90 / 0.6);
+}
+@media (hover: hover) {
+  .lq-belt-pic:hover .lq-belt-square {
+    transform: scale(1.08);
+    border-color: #ffd77a;
+    box-shadow:
+      0 0 0 1px #4a3110,
+      0 0 14px rgb(255 200 90 / 0.6);
+  }
 }
 /* The thing in hand keeps a lit, glowing rim. */
 .lq-belt-pic.lq-lit .lq-belt-square {
