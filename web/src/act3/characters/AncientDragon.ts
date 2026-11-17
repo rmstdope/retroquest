@@ -14,6 +14,7 @@ import {
   FLAG_ACT3_DRAGON_OATH_SPOKEN,
   FLAG_ACT3_DRAGON_VOICE_HEARD,
   FLAG_ACT3_DRAGON_MESSAGE_GIVEN,
+  FLAG_ACT3_DRAGON_MOOR_LINE_SAID,
   FLAG_ACT3_DRAGONS_SCALE_ACQUIRED,
   FLAG_ACT3_OATH_SCROLLS_EXAMINED,
   FLAG_ACT3_PHANTOMS_HEARD,
@@ -110,6 +111,25 @@ export class AncientDragon extends Character {
    * voice existed hears the voice and the naming once on its next talk.
    */
   override talkTo(gameState: GameState): string {
+    const due =
+      gameState.getStoryFlag(FLAG_ACT3_DRAGONS_SCALE_ACQUIRED) &&
+      !gameState.getStoryFlag(FLAG_ACT3_DRAGON_MOOR_LINE_SAID)
+    const usual = this.talkReply(gameState)
+    if (!due) return usual
+    gameState.setStoryFlag(FLAG_ACT3_DRAGON_MOOR_LINE_SAID, true)
+    return (
+      usual +
+      '\n\n' +
+      `The ${characterName(this.name)} rumbles, lower still: ` +
+      speech(
+        'I saw the first of them come down off the moor, with wet feet and ' +
+          'one relic between them. They were fewer than your songs say.',
+      )
+    )
+  }
+
+  /** The dragon's reply by the stage of the memory and the oath; the first Wardens' line is added once by `talkTo`. */
+  private talkReply(gameState: GameState): string {
     const name = this.name
     // Check if this is the first conversation
     let text = ''

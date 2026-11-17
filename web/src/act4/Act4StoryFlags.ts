@@ -160,3 +160,7 @@ export const FLAG_ACT4_CAPTAIN_APOLOGY_HEARD = 'act4_captain_apology_heard'
 export const FLAG_ACT4_MALAKAR_MESSAGE_HEARD = 'act4_malakar_message_heard'
 /** The redeemed Sorceress asked Elior to tell Elena she is sorry. */
 export const FLAG_ACT4_ELENA_MESSAGE_HEARD = 'act4_elena_message_heard'
+/** Set once King Alden has said his ending line (his next talk is the oath). */
+export const FLAG_ACT4_KING_ENDING_LINE_SAID = 'act4_king_ending_line_said'
+/** Set once King Alden has said the oath he kept (said once). */
+export const FLAG_ACT4_KING_OATH_SAID = 'act4_king_oath_said'

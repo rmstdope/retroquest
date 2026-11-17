@@ -1065,6 +1065,11 @@
     "text": "The priest touches the altar rail, quick, the way the village knocks on wood."
   },
   {
+    "id": "06b99132af796d",
+    "speaker": "tilda",
+    "text": "My mother used to say, two moons on the moor, no rain at the door. Still nights, she meant. We've not had a still night since the fields went grey."
+  },
+  {
     "id": "06bbe04180c155",
     "speaker": "narrator",
     "text": "The map stays a plain map of Willowbrook. The hidden road will not show itself while something here is unfinished: the amulet Mira still keeps for you, the rune token Mira has not yet seen and your preparations for the road."
@@ -1505,6 +1510,11 @@
     "text": "Warm clothing"
   },
   {
+    "id": "092a7d0c86e16b",
+    "speaker": "priest",
+    "text": "When the founders came to this valley, they brought a relic with them, and they hung that bell to watch over it. Their mark was a tree under two moons; it is cut over the door, if you look, though the weather has nearly had it. They came over the moor on a still night, and the moon lay in the moor water as bright as the one above it. Two moons, they said, one for the sky and one for the ground, and they named the land Twinmoor. The relic passed quietly down their line, until one night, years ago, it was lost, and the bell rang at midnight with no hand on the rope."
+  },
+  {
     "id": "092ea580f172c6",
     "speaker": "narrator",
     "text": "The grass at your feet stands a little taller. Nothing here was waiting for it."
@@ -1645,11 +1655,6 @@
     "text": "You have his way of frowning when you're thinking, dear."
   },
   {
-    "id": "0a06acda3b39a7",
-    "speaker": "narrator",
-    "text": "The main road out of Willowbrook runs east under old oaks, their branches meeting overhead. The way is well trodden, lined with wildflowers and fallen leaves. A merchant's cart stands at the roadside, and his thin grey mare grazes beside it on three good shoes."
-  },
-  {
     "id": "0a07e078ad1161",
     "speaker": "narrator",
     "text": "The bush greens under your hand, every leaf at once. Life it has. It bears nothing; fruit wants something else of you."
@@ -1738,6 +1743,11 @@
     "id": "0ab346f06df1c0",
     "speaker": "narrator",
     "text": "The priest looks at the locket in your hand, at the tree under two moons on it, and then up at the door."
+  },
+  {
+    "id": "0abf7236105218",
+    "speaker": "narrator",
+    "text": "The main road out of Willowbrook runs east under old oaks, their branches meeting overhead. The way is well trodden, lined with wildflowers and fallen leaves. A merchant's cart stands at the roadside, and his thin grey mare grazes beside it on three good shoes. North of the road the land climbs onto the edge of the moor: heather, and still brown pools."
   },
   {
     "id": "0acca903cca760",
@@ -2158,6 +2168,11 @@
     "id": "0d5555a8eba12e",
     "speaker": "narrator",
     "text": "He shows you, slowly."
+  },
+  {
+    "id": "0d5b5482a2322d",
+    "speaker": "narrator",
+    "text": "A tree under two moons, cut into the stone over the door. The weather has worn it almost smooth. The lower moon is cut shallower than the upper, like a moon seen in water."
   },
   {
     "id": "0d5fca4e49a460",
@@ -3128,6 +3143,11 @@
     "id": "138e12e1b614fb",
     "speaker": "narrator",
     "text": "The flickering light reveals more of the room. A journal appears in the light."
+  },
+  {
+    "id": "138e82643b930f",
+    "speaker": "grandmother",
+    "text": "Your mother used to walk up to the moor on still nights to see the two moons. She came home with wet hems and not a word of sorry."
   },
   {
     "id": "1394ff9613d80c",
@@ -4255,11 +4275,6 @@
     "text": "Your mother taught it to the fisherman at the bend, and he gave it back to you. It makes foul water clean."
   },
   {
-    "id": "1a5b10f1b8f1a4",
-    "speaker": "priest",
-    "text": "When the founders came to this valley, they brought a relic with them, and they hung that bell to watch over it. Their mark was a tree under two moons; it is cut over the door, if you look, though the weather has nearly had it. The relic passed quietly down their line, until one night, years ago, it was lost, and the bell rang at midnight with no hand on the rope."
-  },
-  {
     "id": "1a62cbd2e7c708",
     "speaker": "tilda",
     "text": "Not with these, love. That's Mira's, and it's not for passing round the square."
@@ -4503,11 +4518,6 @@
     "id": "1bfabcc75c79cd",
     "speaker": "borin",
     "text": "A coin's no use to me without something to put an edge on, lad. Bring the dull knife as well."
-  },
-  {
-    "id": "1bfd6f61e1d358",
-    "speaker": "narrator",
-    "text": "A tree under two moons, cut into the stone over the door. The weather has worn it almost smooth."
   },
   {
     "id": "1bfe451691e92b",

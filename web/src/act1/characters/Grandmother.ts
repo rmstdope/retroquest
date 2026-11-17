@@ -25,6 +25,8 @@ import { Patches } from './Patches'
 import {
   FLAG_GRANDMOTHER_BAKED_BREAD,
   FLAG_JOURNAL_READ,
+  FLAG_GRANDMOTHER_MOOR_LINE_SAID,
+  FLAG_GRANDMOTHER_SAW_LOCKET,
   FLAG_LANTERN_LIT,
   FLAG_MAGIC_FULLY_UNLOCKED,
   FLAG_PATCHES_FOUND,
@@ -135,7 +137,32 @@ export class Grandmother extends Character {
 
     if (!dialogue) dialogue = this.backAgain(gameState)
 
-    return dialogue
+    return dialogue + this.moorLine(gameState, dreamToTell)
+  }
+
+  /**
+   * Her line about her daughter and the two moons, said once on the first
+   * talk after she has seen the locket (after the usual talk, and not while
+   * the journal dream is still to be told).
+   */
+  private moorLine(gameState: GameState, dreamToTell: boolean): string {
+    if (
+      !gameState.getStoryFlag(FLAG_GRANDMOTHER_SAW_LOCKET) ||
+      gameState.getStoryFlag(FLAG_GRANDMOTHER_MOOR_LINE_SAID) ||
+      dreamToTell
+    ) {
+      return ''
+    }
+    gameState.setStoryFlag(FLAG_GRANDMOTHER_MOOR_LINE_SAID, true)
+    return (
+      '\n' +
+      speech(
+        'Your mother used to walk up to the moor on still nights to see ' +
+          'the two moons. She came home with wet hems and not a word of ' +
+          'sorry.',
+      ) +
+      '\nShe pushes the bread board toward you.'
+    )
   }
 
   /**
@@ -448,6 +475,7 @@ export class Grandmother extends Character {
   /** What Grandmother answers to a gift, before the speaker is labelled. */
   private giveAnswer(gameState: GameState, item: Item): string {
     if (item instanceof Locket) {
+      gameState.setStoryFlag(FLAG_GRANDMOTHER_SAW_LOCKET, true)
       gameState.removeItemFromInventory(item.name)
       const travelCloak = new TravelCloak()
       gameState.addItemToInventory(travelCloak)

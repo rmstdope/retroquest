@@ -18,19 +18,19 @@ describe('CharredNotebook', () => {
     )
   })
 
-  it('shows the opening line, both entries and the closing line', () => {
+  it('shows the opening line, all three entries and the closing line', () => {
     const game = new Game([new Act3()])
     const text = new CharredNotebook().examine(game.state)
     expectMarkupWellFormed(text)
     expect(text).toContain(
-      "Most of the notebook's pages have crumbled to flakes; two survive, in a neat and patient hand.",
+      "Most of the notebook's pages have crumbled to flakes; three survive, in a neat and patient hand.",
     )
     expect(text).not.toContain('You open')
     expect(text).toContain('Lysa says I measure the light too carefully.')
     expect(text).toContain('The Wasting has reached Willowbrook.')
     expect(text).toContain('I have waited all my life.')
     expect(text).toContain(
-      'The second entry is pressed so hard into the page that the pen has torn it.',
+      'The last entry is pressed so hard into the page that the pen has torn it.',
     )
     expect(text).toContain("The names in it are your parents'.")
     expect(text).toContain(

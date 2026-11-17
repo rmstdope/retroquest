@@ -226,7 +226,7 @@ describe('Act III items narrate effects and keep no echo of the command', () => 
     )
     expect(letterText).not.toContain('You examine')
     expect(notebookText).toContain(
-      "Most of the notebook's pages have crumbled to flakes; two survive, " +
+      "Most of the notebook's pages have crumbled to flakes; three survive, " +
         'in a neat and patient hand.',
     )
     expect(focusText).toBe(

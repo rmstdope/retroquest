@@ -30,11 +30,6 @@
     "text": "No. Your parents gave themselves to hold that wound shut. It does not get to have you too."
   },
   {
-    "id": "0056210734aabc",
-    "speaker": "narrator",
-    "text": "You stand just inside the fortress gates. The ways on, north and east, are barred by a thin wall of violet light, and three ward stones, left, middle and right, swell and fade with it. Guardians made of shadow drift between the stones, watching you. On the arch behind you, under the black, an older carving shows through: a sun rising over three linked rings. Just inside the threshold Mira keeps the way out, her back to the gatepost. Sir Cedric stands beside her, his eyes on the guardians."
-  },
-  {
     "id": "006780e0a013e4",
     "speaker": "elior",
     "text": "you should have told me"
@@ -1275,6 +1270,11 @@
     "text": "You hold the token up, and it grows warm. Under the whispers, very faint, you think you hear your name, in Mira's voice, and what she said at the gate: say our names."
   },
   {
+    "id": "0e02cabf7423c3",
+    "speaker": "narrator",
+    "text": "That night the moor water holds two moons again."
+  },
+  {
     "id": "0e28c3062eb242",
     "speaker": "elior",
     "text": "Take my magic. All of it. Close the wound with that."
@@ -1583,6 +1583,11 @@
     "id": "1178dbe7887a1e",
     "speaker": "narrator",
     "text": "The king of Twinmoor, grey and thin, as if each week in here had been a year. His crown is dark."
+  },
+  {
+    "id": "11843c6cc1a31b",
+    "speaker": "king alden",
+    "text": "Every king of Twinmoor swears to hold what the Wardens bind. In all those years, I was the first they asked to keep it. I would swear it again."
   },
   {
     "id": "118cd465309ac1",
@@ -2113,6 +2118,11 @@
     "id": "171dd0c2ac305e",
     "speaker": "narrator",
     "text": "You hold the stone to your ear. The voices are clear, and they ask for nothing now. The orbs are whole."
+  },
+  {
+    "id": "17217c7c893b9a",
+    "speaker": "narrator",
+    "text": "You stand just inside the fortress gates. The ways on, north and east, are barred by a thin wall of violet light, and three ward stones, left, middle and right, swell and fade with it. Guardians made of shadow drift between the stones, watching you. On the arch behind you, under the black, an older carving shows through: a sun rising over three linked rings. Just inside the threshold Mira keeps the way out, her back to the gatepost. Sir Cedric stands beside her, his eyes on the guardians. South of the ridge the moor runs to the edge of sight. Its pools hold no moon tonight."
   },
   {
     "id": "1729a66d7a6306",
@@ -2665,11 +2675,6 @@
     "text": "The right stone brightens a breath after the barrier does, every time, like a man who has lost count."
   },
   {
-    "id": "1cfdcfb029aaac",
-    "speaker": "narrator",
-    "text": "You stand just inside the fortress gates. The ward stones are dark, and the violet wall is gone; the ways north and east lie open. On the arch behind you, under the black, an older carving shows through: a sun rising over three linked rings. Just inside the threshold Mira keeps the way out, her back to the gatepost. Sir Cedric has gone on ahead, into the hall."
-  },
-  {
     "id": "1cffb979ea928d",
     "speaker": "narrator",
     "text": "The Final Stand: You forgave him, and forgiveness is yours now. The wound is still open."
@@ -2713,6 +2718,11 @@
     "id": "1d5ec79ba8374b",
     "speaker": "true self",
     "text": "You told me the truth. It is over now, and you are still you."
+  },
+  {
+    "id": "1d6c796cf0ed46",
+    "speaker": "narrator",
+    "text": "You stand just inside the fortress gates. The ward stones are dark, and the violet wall is gone; the ways north and east lie open. On the arch behind you, under the black, an older carving shows through: a sun rising over three linked rings. Just inside the threshold Mira keeps the way out, her back to the gatepost. Sir Cedric has gone on ahead, into the hall. South of the ridge the moor runs to the edge of sight. Its pools hold no moon tonight."
   },
   {
     "id": "1d8373b816e792",

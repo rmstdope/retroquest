@@ -7,7 +7,9 @@ const ROAD_DESCRIPTION =
   'The main road out of Willowbrook runs east under old oaks, their ' +
   'branches meeting overhead. The way is well trodden, lined with ' +
   `wildflowers and fallen leaves. A ${characterName('merchant')}'s cart stands at the roadside, ` +
-  'and his thin grey mare grazes beside it on three good shoes.'
+  'and his thin grey mare grazes beside it on three good shoes. ' +
+  'North of the road the land climbs onto the edge of the moor: heather, ' +
+  'and still brown pools.'
 
 /** Road to Greendale room: outbound transition toward broader world scope. */
 export class RoadToGreendale extends Room {

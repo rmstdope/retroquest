@@ -97,3 +97,7 @@ export const VIRTUE_SELFLESS = 'selfless'
 
 /** The General Store's sound trigger, fired as the shopkeeper takes Patches back and the store reopens. */
 export const TRIGGER_PATCHES_RETURNS = 'patches-returns'
+/** Set when Elior gives Grandmother his mother's locket and she has seen it. */
+export const FLAG_GRANDMOTHER_SAW_LOCKET = 'grandmother_saw_locket'
+/** Set once Grandmother has told of her daughter and the two moons (she says it once). */
+export const FLAG_GRANDMOTHER_MOOR_LINE_SAID = 'grandmother_moor_line_said'

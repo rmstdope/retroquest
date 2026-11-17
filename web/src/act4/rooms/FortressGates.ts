@@ -32,6 +32,11 @@ const CEDRIC_BESIDE_SENTENCE =
 /** Sir Cedric gone once the wall has fallen. */
 const CEDRIC_GONE_SENTENCE = ` ${characterName('Sir Cedric')} has gone on ahead, into the hall.`
 
+/** The moor south of the ridge, the same in both states of the gates. */
+const MOOR_SENTENCE =
+  ' South of the ridge the moor runs to the edge of sight. Its pools hold ' +
+  'no moon tonight.'
+
 /** The gates while the barrier stands and the guardians drift between the stones. */
 const GATES_BEFORE_DESCRIPTION =
   'You stand just inside the fortress gates. The ways on, north and east, ' +
@@ -40,7 +45,8 @@ const GATES_BEFORE_DESCRIPTION =
   'drift between the stones, watching you.' +
   SIGIL_SENTENCE +
   MIRA_SENTENCE +
-  CEDRIC_BESIDE_SENTENCE
+  CEDRIC_BESIDE_SENTENCE +
+  MOOR_SENTENCE
 
 /** The gates once the stones are dark and the guardians gone. */
 const GATES_AFTER_DESCRIPTION =
@@ -48,7 +54,8 @@ const GATES_AFTER_DESCRIPTION =
   'the violet wall is gone; the ways north and east lie open.' +
   SIGIL_SENTENCE +
   MIRA_SENTENCE +
-  CEDRIC_GONE_SENTENCE
+  CEDRIC_GONE_SENTENCE +
+  MOOR_SENTENCE
 
 /**
  * The dark entrance to Malakar's fortress, protected by shadow guardians.

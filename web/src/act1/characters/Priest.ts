@@ -143,6 +143,10 @@ export class Priest extends Character {
           'them, and they hung that bell to watch over it. Their mark was a ' +
           'tree under two moons; it is cut over the door, if you look, though ' +
           'the weather has nearly had it. ' +
+          'They came over the moor on a still night, and the moon lay in ' +
+          'the moor water as bright as the one above it. Two moons, they ' +
+          'said, one for the sky and one for the ground, and they named ' +
+          'the land Twinmoor. ' +
           'The relic passed quietly down their line, until one night, years ' +
           'ago, it was lost, and the bell rang at midnight with no hand on ' +
           'the rope.',

@@ -1,5 +1,9 @@
 import { Character, type GameState, type Item, dialogue } from '@/engine'
-import { FLAG_ACT4_ELIXIR_ON_KING } from '../Act4StoryFlags'
+import {
+  FLAG_ACT4_ELIXIR_ON_KING,
+  FLAG_ACT4_KING_ENDING_LINE_SAID,
+  FLAG_ACT4_KING_OATH_SAID,
+} from '../Act4StoryFlags'
 import { endingPlayed, type Ending } from '../endings'
 import { AncientAmulet } from '../items/AncientAmulet'
 import { LifelightElixir } from '../items/LifelightElixir'
@@ -56,10 +60,27 @@ export class KingAlden extends Character {
     return IN_THE_CRYSTAL
   }
 
-  /** Asleep in the crystal until it is broken; then his line, by ending. */
+  /**
+   * Asleep in the crystal until it is broken; then his line, by ending. The
+   * talk after his ending line is the oath he kept, once; then the ending
+   * line again.
+   */
   override talkTo(gameState: GameState): string {
     const ending = endingPlayed(gameState)
-    if (ending) return dialogue('King Alden', ENDING_LINES[ending])
+    if (ending) {
+      if (!gameState.getStoryFlag(FLAG_ACT4_KING_ENDING_LINE_SAID)) {
+        gameState.setStoryFlag(FLAG_ACT4_KING_ENDING_LINE_SAID, true)
+      } else if (!gameState.getStoryFlag(FLAG_ACT4_KING_OATH_SAID)) {
+        gameState.setStoryFlag(FLAG_ACT4_KING_OATH_SAID, true)
+        return dialogue(
+          'King Alden',
+          'Every king of Twinmoor swears to hold what the Wardens bind. In ' +
+            'all those years, I was the first they asked to keep it. I ' +
+            'would swear it again.',
+        )
+      }
+      return dialogue('King Alden', ENDING_LINES[ending])
+    }
     if (gameState.getStoryFlag(FLAG_ACT4_ELIXIR_ON_KING)) {
       return dialogue(
         'King Alden',

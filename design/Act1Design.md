@@ -771,3 +771,7 @@ This list tracks items obtained in the Golden Path and their subsequent uses wit
     - Fulfills Mira's quest requirement for "Sturdy footwear" when she checks the preparations in Step 27.
 34. **`Ancient Amulet`** (Obtained: Step 27):
     - Its acquisition is the primary goal of Mira's quest and is required before using the map to complete Act I in Step 28.
+
+## Twinmoor lore (optional finds)
+
+The priest's first talk names the land after the mark over the door (a still night, the moon in the moor water, two moons); the mark's lower moon is cut shallower; Tilda has a rumour and Grandmother (after the locket) one line of the two moons; the road to Greendale shows the edge of the moor. See the Story Canon.
