@@ -434,25 +434,72 @@ describe("the title picture's kinds", () => {
     expect(outer).toBeGreaterThan(inner)
   })
 
-  it("does not hold the moon's glow back when its mark lies outside the shape", () => {
-    const scene = sceneOf(1280, 720)
-    scene.setEffects(
-      [
-        {
-          kind: 'moonglow',
-          settings: { amount: 1 },
-          ...SPOT,
-          box: { ...BOX, mark: { x: 0.5, y: 0.1 } },
-        },
-      ],
-      true,
-    )
-    const createRadialGradient = vi.fn(() => ({ addColorStop: vi.fn() }))
-    scene.draw(fakeContext({ createRadialGradient }))
-    const [, , , , , outer] = createRadialGradient.mock
-      .calls[0] as unknown as number[]
-    expect(outer).toBeGreaterThan(100)
+  it("keeps the moon's glow inside the drawn shape at every amount when its mark lies outside it", () => {
+    for (const amount of [0.5, 1, 2, 3]) {
+      const scene = sceneOf(1280, 720)
+      scene.setEffects(
+        [
+          {
+            kind: 'moonglow',
+            settings: { amount },
+            ...SPOT,
+            box: { ...BOX, mark: { x: 0.9, y: 0.3 } },
+          },
+        ],
+        true,
+      )
+      const createRadialGradient = vi.fn(() => ({ addColorStop: vi.fn() }))
+      scene.draw(fakeContext({ createRadialGradient }))
+      const [x, y, , , , radius] = createRadialGradient.mock
+        .calls[0] as unknown as number[]
+      expect(insidePolygon(x, y)).toBe(true)
+      expect(radius).toBeLessThan(nearestEdge(x, y))
+    }
   })
+
+  it("keeps the moon's glow inside its rectangle at every amount when its mark lies outside it", () => {
+    for (const amount of [0.5, 1, 2, 3]) {
+      const scene = sceneOf(1280, 720)
+      scene.setEffects(
+        [
+          {
+            kind: 'moonglow',
+            settings: { amount },
+            box: { ...BOX, mark: { x: 0.9, y: 0.3 } },
+          },
+        ],
+        true,
+      )
+      const createRadialGradient = vi.fn(() => ({ addColorStop: vi.fn() }))
+      scene.draw(fakeContext({ createRadialGradient }))
+      const [x, y, , , , radius] = createRadialGradient.mock
+        .calls[0] as unknown as number[]
+      const rect = { x: 320, y: 180, w: 640, h: 360 }
+      const edge = Math.min(
+        x - rect.x,
+        rect.x + rect.w - x,
+        y - rect.y,
+        rect.y + rect.h - y,
+      )
+      expect(edge).toBeGreaterThan(0)
+      expect(radius).toBeLessThan(edge)
+    }
+  })
+
+  /** Whether (x, y) lies inside the title polygon on a 1280 by 720 canvas. */
+  function insidePolygon(x: number, y: number): boolean {
+    const points = POLYGON.map((p) => ({ x: p.x * 1280, y: p.y * 720 }))
+    let inside = false
+    points.forEach((a, i) => {
+      const b = points[(i + 1) % points.length]
+      if (
+        a.y > y !== b.y > y &&
+        x < a.x + ((y - a.y) / (b.y - a.y)) * (b.x - a.x)
+      )
+        inside = !inside
+    })
+    return inside
+  }
 
   /** The distance from (x, y) to the nearest side of the title polygon on a 1280 by 720 canvas, cover-fitted like the scene's picture. */
   function nearestEdge(x: number, y: number): number {
