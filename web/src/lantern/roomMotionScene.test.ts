@@ -375,6 +375,102 @@ describe("the title picture's kinds", () => {
     }
   })
 
+  it("fades the moon's glow to nothing inside the drawn shape at every amount", () => {
+    for (const amount of [0.5, 1, 2, 3]) {
+      const scene = sceneOf(1280, 720)
+      scene.setEffects(
+        [{ kind: 'moonglow', settings: { amount }, ...SPOT }],
+        true,
+      )
+      const createRadialGradient = vi.fn(() => ({ addColorStop: vi.fn() }))
+      scene.draw(fakeContext({ createRadialGradient }))
+      const [x, y, , , , radius] = createRadialGradient.mock
+        .calls[0] as unknown as number[]
+      const edge = nearestEdge(x, y)
+      expect(radius).toBeLessThan(edge)
+    }
+  })
+
+  it("keeps the moon's glow growing with its amount where the shape allows", () => {
+    const radiusAt = (amount: number, mark: { x: number; y: number }) => {
+      const scene = sceneOf(1280, 720)
+      scene.setEffects(
+        [
+          {
+            kind: 'moonglow',
+            settings: { amount },
+            ...SPOT,
+            box: { ...BOX, mark },
+          },
+        ],
+        true,
+      )
+      const createRadialGradient = vi.fn(() => ({ addColorStop: vi.fn() }))
+      scene.draw(fakeContext({ createRadialGradient }))
+      return createRadialGradient.mock.calls[0] as unknown as number[]
+    }
+    const middle = { x: 0.5, y: 0.45 }
+    expect(radiusAt(0.05, middle)[5]).toBeLessThan(radiusAt(0.1, middle)[5])
+    expect(radiusAt(0.05, middle)[5]).toBeCloseTo(16)
+  })
+
+  it("never lets the moon's glow start beyond where it ends, next to an edge", () => {
+    const scene = sceneOf(1280, 720)
+    scene.setEffects(
+      [
+        {
+          kind: 'moonglow',
+          settings: { amount: 3 },
+          ...SPOT,
+          box: { ...BOX, mark: { x: 0.5, y: 0.2501 } },
+        },
+      ],
+      true,
+    )
+    const createRadialGradient = vi.fn(() => ({ addColorStop: vi.fn() }))
+    scene.draw(fakeContext({ createRadialGradient }))
+    const [, , inner, , , outer] = createRadialGradient.mock
+      .calls[0] as unknown as number[]
+    expect(outer).toBeGreaterThan(inner)
+  })
+
+  it("does not hold the moon's glow back when its mark lies outside the shape", () => {
+    const scene = sceneOf(1280, 720)
+    scene.setEffects(
+      [
+        {
+          kind: 'moonglow',
+          settings: { amount: 1 },
+          ...SPOT,
+          box: { ...BOX, mark: { x: 0.5, y: 0.1 } },
+        },
+      ],
+      true,
+    )
+    const createRadialGradient = vi.fn(() => ({ addColorStop: vi.fn() }))
+    scene.draw(fakeContext({ createRadialGradient }))
+    const [, , , , , outer] = createRadialGradient.mock
+      .calls[0] as unknown as number[]
+    expect(outer).toBeGreaterThan(100)
+  })
+
+  /** The distance from (x, y) to the nearest side of the title polygon on a 1280 by 720 canvas, cover-fitted like the scene's picture. */
+  function nearestEdge(x: number, y: number): number {
+    const points = POLYGON.map((p) => ({ x: p.x * 1280, y: p.y * 720 }))
+    let best = Infinity
+    points.forEach((a, i) => {
+      const b = points[(i + 1) % points.length]
+      const dx = b.x - a.x
+      const dy = b.y - a.y
+      const u = Math.max(
+        0,
+        Math.min(1, ((x - a.x) * dx + (y - a.y) * dy) / (dx * dx + dy * dy)),
+      )
+      best = Math.min(best, Math.hypot(x - a.x - u * dx, y - a.y - u * dy))
+    })
+    return best
+  }
+
   it('moves the clouds across the picture', () => {
     const scene = run(['clouds'], undefined, 1)
     const before = JSON.stringify(

@@ -22,6 +22,9 @@ const WARM_TICKS = 600
 /** How long a layer takes to fade in or out. */
 const FADE_MS = 1000
 
+/** The share of the distance to the shape's edge the moon's glow reaches at most, so it fades out inside the shape. */
+const GLOW_REACH = 0.9
+
 /** A rectangle in canvas pixels. */
 export interface Rect {
   x: number
@@ -185,6 +188,52 @@ export function createMotionScene(): MotionScene {
     return rect
       ? { x: rect.x + rect.w / 2, y: rect.y + rect.h / 2 }
       : { x: 0, y: 0 }
+  }
+
+  /**
+   * How far from the light the layer's drawn shape (its polygon, else its rectangle) ends, nearest
+   * side; unbounded when the light lies outside the shape, where nothing needs holding back.
+   */
+  function edgeDistance(light: { x: number; y: number }, layer: Layer): number {
+    const polygon = layer.spec.polygon
+    if (!polygon) {
+      const r = layer.rect
+      if (!r) return Infinity
+      const inside = Math.min(
+        light.x - r.x,
+        r.x + r.w - light.x,
+        light.y - r.y,
+        r.y + r.h - light.y,
+      )
+      return inside < 0 ? Infinity : inside
+    }
+    const points = polygon.map((p) =>
+      pointPosition(p, { width, height }, picture),
+    )
+    let best = Infinity
+    let inside = false
+    points.forEach((a, i) => {
+      const b = points[(i + 1) % points.length]
+      if (
+        a.y > light.y !== b.y > light.y &&
+        light.x < a.x + ((light.y - a.y) / (b.y - a.y)) * (b.x - a.x)
+      )
+        inside = !inside
+      const dx = b.x - a.x
+      const dy = b.y - a.y
+      const len = dx * dx + dy * dy
+      const u = len
+        ? Math.max(
+            0,
+            Math.min(1, ((light.x - a.x) * dx + (light.y - a.y) * dy) / len),
+          )
+        : 0
+      best = Math.min(
+        best,
+        Math.hypot(light.x - a.x - u * dx, light.y - a.y - u * dy),
+      )
+    })
+    return inside ? best : Infinity
   }
 
   /** Sizes and speeds shrink a little with the canvas, never below 60% nor above the drawing's. */
@@ -682,11 +731,16 @@ export function createMotionScene(): MotionScene {
         if (amount <= 0) break
         const light = lightOf(layer)
         const a = (0.2 + 0.08 * Math.sin((t * speed) / 1800)) * glow
-        const radius = (Math.max(rect.w, rect.h) / 2) * amount
+        // The fade ends just inside the nearest drawn edge, so no amount lights the shape evenly.
+        const radius = Math.min(
+          (Math.max(rect.w, rect.h) / 2) * amount,
+          GLOW_REACH * edgeDistance(light, layer),
+        )
+        if (radius <= 0) break
         const g = c.createRadialGradient(
           light.x,
           light.y,
-          4 * k(),
+          Math.min(4 * k(), radius / 2),
           light.x,
           light.y,
           radius,
