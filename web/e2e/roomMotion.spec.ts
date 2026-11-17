@@ -19,7 +19,7 @@ async function toTheCottage(
           file: 'act1-the-dream.png',
           width: 1,
           height: 1,
-          effects: [{ type: 'mist' }],
+          effects: [{ kind: 'mist' }],
         },
         'act1-eliors-cottage': {
           file: 'act1-eliors-cottage.png',
@@ -27,15 +27,15 @@ async function toTheCottage(
           height: 1,
           effects: [
             {
-              type: 'fire',
-              spot: {
-                points: [
-                  { x: 0.1, y: 0.4 },
-                  { x: 0.3, y: 0.4 },
-                  { x: 0.3, y: 0.7 },
-                  { x: 0.1, y: 0.7 },
+              kind: 'fire',
+              spot: [
+                [
+                  [0.1, 0.4],
+                  [0.3, 0.4],
+                  [0.3, 0.7],
+                  [0.1, 0.7],
                 ],
-              },
+              ],
             },
           ],
         },

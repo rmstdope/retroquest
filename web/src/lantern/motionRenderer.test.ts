@@ -1,11 +1,13 @@
-import { describe, expect, it } from 'vitest'
+import { readFileSync, existsSync } from 'node:fs'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import {
   EFFECT_TYPES,
   effectType,
   settingValue,
   createMotionScene,
 } from './motionRenderer'
-import { createMotionScene as sceneOfOrigin } from './roomMotionScene'
+import { createMotionScene as gameScene } from './roomMotionScene'
+import { appliedMotion, madeEffects } from './roomMotion'
 
 describe('the motion renderer the studio loads', () => {
   it('lists every effect type, spots first marked as needing a spot', () => {
@@ -77,8 +79,141 @@ describe('the motion renderer the studio loads', () => {
     expect(settingValue('dust', { amount: -5 }, 'amount')).toBe(0)
     expect(settingValue('dust', { amount: Number.NaN }, 'amount')).toBe(1)
   })
+})
 
-  it('hands out the game scene itself', () => {
-    expect(createMotionScene).toBe(sceneOfOrigin)
+/** A 2D context that writes down every call made to it, with its arguments. */
+function recordingContext(): {
+  ctx: CanvasRenderingContext2D
+  calls: string[]
+} {
+  const calls: string[] = []
+  const record =
+    (name: string) =>
+    (...args: unknown[]): unknown => {
+      calls.push(`${name}(${JSON.stringify(args)})`)
+      return name === 'createRadialGradient' || name === 'createLinearGradient'
+        ? { addColorStop: record('addColorStop') }
+        : undefined
+    }
+  const ctx = new Proxy({} as Record<string, unknown>, {
+    get: (_t, key: string) => record(key),
+    set: (_t, key: string, value: unknown) => {
+      calls.push(`${key}=${JSON.stringify(value)}`)
+      return true
+    },
+  }) as unknown as CanvasRenderingContext2D
+  return { ctx, calls }
+}
+
+/** Replace `Math.random` with the same seeded sequence each time it is called. */
+function seeded(): void {
+  let seed = 7
+  vi.spyOn(Math, 'random').mockImplementation(
+    () => (seed = (seed * 16807) % 2147483647) / 2147483647,
+  )
+}
+
+/** Every draw call a scene makes over a few seconds, with `Math.random` replaced by the same sequence each time. */
+function drawnBy(scene: {
+  resize(w: number, h: number, p: { width: number; height: number }): void
+  step(ms: number): void
+  draw(ctx: CanvasRenderingContext2D): void
+}): string[] {
+  seeded()
+  const { ctx, calls } = recordingContext()
+  for (let i = 0; i < 40; i++) {
+    scene.step(100)
+    scene.draw(ctx)
+  }
+  vi.restoreAllMocks()
+  return calls
+}
+
+describe('the scene the studio drives', () => {
+  afterEach(() => vi.restoreAllMocks())
+
+  const SHAPE: [number, number][] = [
+    [0.3, 0.6],
+    [0.45, 0.6],
+    [0.45, 0.8],
+    [0.3, 0.8],
+  ]
+
+  /** What the studio exports for an image, and so what it hands the scene. */
+  const STUDIO = [
+    { kind: 'dust', settings: { amount: 2 } },
+    { kind: 'fire', settings: { glow: 1.5 }, spot: [SHAPE], mark: [0.35, 0.7] },
+    { kind: 'water', settings: {}, spot: [SHAPE] },
+    {
+      kind: 'smoke',
+      settings: {},
+      spot: [
+        [
+          [0.6, 0.1],
+          [0.8, 0.1],
+          [0.6, 0.4],
+        ],
+        [
+          [0.8, 0.1],
+          [0.8, 0.4],
+          [0.6, 0.4],
+        ],
+      ],
+    },
+  ]
+
+  it('plays the effects the studio hands it exactly as the game plays the same manifest entries', () => {
+    const game = gameScene()
+    game.resize(960, 540, { width: 1920, height: 1080 })
+    seeded()
+    game.setEffects(
+      appliedMotion(madeEffects({ a: { effects: STUDIO } }, 'a'), []),
+      true,
+    )
+    vi.restoreAllMocks()
+
+    const studio = createMotionScene()
+    studio.resize(960, 540, { width: 1920, height: 1080 })
+    seeded()
+    studio.setEffects(STUDIO, true)
+    vi.restoreAllMocks()
+
+    const drawn = drawnBy(studio)
+    expect(drawn.length).toBeGreaterThan(0)
+    expect(drawn).toEqual(drawnBy(game))
+  })
+
+  it('plays a spot kind handed no shape over the whole picture, for a studio that clips it itself', () => {
+    const scene = createMotionScene()
+    scene.resize(960, 540, { width: 1920, height: 1080 })
+    scene.setEffects([{ kind: 'smoke', settings: {} }], true)
+    expect(scene.isEmpty()).toBe(false)
+  })
+
+  it('plays nothing of a spot whose shapes are none of them a shape, as the game does', () => {
+    const scene = createMotionScene()
+    scene.resize(960, 540, { width: 1920, height: 1080 })
+    const flat = [
+      [0.2, 0.2],
+      [0.3, 0.3],
+      [0.4, 0.4],
+    ]
+    scene.setEffects([{ kind: 'smoke', settings: {}, spot: [flat] }], true)
+    expect(scene.isEmpty()).toBe(true)
+  })
+
+  it('ignores a kind it does not have', () => {
+    const scene = createMotionScene()
+    scene.resize(960, 540, { width: 1920, height: 1080 })
+    scene.setEffects([{ kind: 'rain', settings: {} }], true)
+    expect(scene.isEmpty()).toBe(true)
+  })
+})
+
+describe("the studio's project file", () => {
+  it('names this module as the motion renderer', () => {
+    const project = JSON.parse(readFileSync('../content-studio.json', 'utf8'))
+    expect(project.images.motion).toBe('web/src/lantern/motionRenderer.ts')
+    expect(existsSync(`../${project.images.motion}`)).toBe(true)
   })
 })

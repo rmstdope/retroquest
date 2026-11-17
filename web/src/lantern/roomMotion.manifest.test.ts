@@ -7,17 +7,25 @@ import { appliedMotion, madeEffects } from './roomMotion'
 import { roomTrackId } from './musicLists'
 import type { Act } from '@/engine'
 
+/** One effect as Content Studio keeps it in its images edits. */
+interface StudioEffect {
+  on: boolean
+  settings: Record<string, number>
+  patch?: string
+  spot?: [number, number][][]
+}
+
 /** The images manifest the studio exported, as the game fetches it. */
 const MANIFEST: Record<string, Record<string, unknown>> = JSON.parse(
   readFileSync('public/images/generated/manifest.json', 'utf8'),
 )
 
-/** The movement every room had when it was declared in the game's code (rq-m2jr.1): the effect types, in order, of each room image. */
+/** The movement every room had when it was declared in the game's code (rq-m2jr.1): the effect kinds of each room image, in the order Content Studio exports them (by kind). */
 const CARRIED_OVER: Record<string, string> = {
   // The opened shed is a picture variant of AbandonedShed, which moved with its room's effects.
   'act1-abandoned-shed-inside': 'dust,leaves',
   'act1-abandoned-shed': 'dust,leaves',
-  'act1-blacksmiths-forge': 'dust,fire,smoke,embers',
+  'act1-blacksmiths-forge': 'dust,embers,fire,smoke',
   'act1-chicken-coop': 'dust,leaves',
   'act1-eliors-cottage': 'dust,fire',
   'act1-forest-path': 'dust,leaves',
@@ -89,10 +97,6 @@ describe('the movement the images manifest carries', () => {
       width: 0.132813,
       height: 0.65463,
     })
-    expect(box('act1-blacksmiths-forge', 'fire')?.mark).toEqual({
-      x: 0.321354,
-      y: 0.719444,
-    })
   })
 
   it('moves the opened shed as the shed moves', () => {
@@ -100,6 +104,31 @@ describe('the movement the images manifest carries', () => {
       madeEffects(MANIFEST, 'act1-abandoned-shed-inside').map((e) => e.kind),
     ).toEqual(madeEffects(MANIFEST, 'act1-abandoned-shed').map((e) => e.kind))
     expect(madeEffects(MANIFEST, 'act1-abandoned-shed')).toHaveLength(2)
+  })
+
+  it('is exactly what Content Studio exports from its edits, so a studio save keeps it', () => {
+    const edits = JSON.parse(
+      readFileSync('../content-studio/images/edits.json', 'utf8'),
+    ) as { images: Record<string, { effects?: Record<string, StudioEffect> }> }
+    for (const id of Object.keys(MANIFEST)) {
+      const saved = edits.images[id]?.effects ?? {}
+      const exported = Object.keys(saved)
+        .sort()
+        .filter((kind) => saved[kind].on)
+        .map((kind) => {
+          const { settings, patch, spot } = saved[kind]
+          return {
+            kind,
+            settings,
+            ...(patch !== undefined && { patch }),
+            ...(spot && { spot }),
+          }
+        })
+      // Compared as text: a studio save writes the keys in this order too, so any other order is a diff.
+      expect(JSON.stringify(MANIFEST[id].effects ?? []), id).toBe(
+        JSON.stringify(exported),
+      )
+    }
   })
 
   it('holds only effect types the renderer has, and a drawn spot for each spot type', () => {

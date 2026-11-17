@@ -66,41 +66,72 @@ describe('madeAreaBoxes mark points', () => {
   })
 })
 
-const POND = {
-  points: [
-    { x: 0.25, y: 0.5 },
-    { x: 0.5, y: 0.5 },
-    { x: 0.5, y: 0.75 },
-  ],
-}
+/** A drawn shape as the studio writes it: corners as [x, y] fractions of the picture. */
+const POND: [number, number][] = [
+  [0.25, 0.5],
+  [0.5, 0.5],
+  [0.5, 0.75],
+]
+/** The same shape as the game holds it. */
+const POND_POINTS = [
+  { x: 0.25, y: 0.5 },
+  { x: 0.5, y: 0.5 },
+  { x: 0.5, y: 0.75 },
+]
+const POND_BOX = { x: 0.25, y: 0.5, width: 0.25, height: 0.25 }
+const HILL: [number, number][] = [
+  [0.75, 0.25],
+  [1, 0.25],
+  [1, 0.5],
+]
+const HILL_POINTS = [
+  { x: 0.75, y: 0.25 },
+  { x: 1, y: 0.25 },
+  { x: 1, y: 0.5 },
+]
 
 describe('madeEffects', () => {
-  it('reads the effects of the image with settings, patch ties and a drawn spot', () => {
+  it('reads the effects as Content Studio exports them: kind, settings, patch ties and drawn shapes', () => {
     const manifest = {
       a: {
         effects: [
-          { type: 'dust' },
-          { type: 'mist', settings: { amount: 2 }, unlessPatch: 'door-open' },
-          { type: 'fire', whilePatch: 'hearth-lit', spot: POND },
+          { kind: 'dust', settings: {} },
+          {
+            kind: 'mist',
+            settings: { amount: 2 },
+            unlessPatch: 'door-open',
+          },
+          {
+            kind: 'fire',
+            settings: { amount: 1 },
+            patch: 'hearth-lit',
+            spot: [POND, HILL],
+          },
         ],
       },
     }
     expect(madeEffects(manifest, 'a')).toEqual([
       { kind: 'dust' },
       { kind: 'mist', settings: { amount: 2 }, unlessPatch: 'door-open' },
-      { kind: 'fire', whilePatch: 'hearth-lit', spot: POND },
+      {
+        kind: 'fire',
+        settings: { amount: 1 },
+        whilePatch: 'hearth-lit',
+        spot: [POND_POINTS, HILL_POINTS],
+      },
     ])
   })
 
-  it('keeps the mark of a spot when it is inside the picture', () => {
-    const spot = { ...POND, mark: { x: 0.3, y: 0.6 } }
-    const got = madeEffects({ a: { effects: [{ type: 'fire', spot }] } }, 'a')
-    expect(got[0].spot).toEqual(spot)
-    const bad = { ...POND, mark: { x: 2, y: 0.6 } }
-    expect(
-      madeEffects({ a: { effects: [{ type: 'fire', spot: bad }] } }, 'a')[0]
-        .spot,
-    ).toEqual(POND)
+  it('keeps the mark of an effect when it is inside the picture', () => {
+    const got = madeEffects(
+      { a: { effects: [{ kind: 'fire', spot: [POND], mark: [0.3, 0.6] }] } },
+      'a',
+    )
+    expect(got[0].mark).toEqual({ x: 0.3, y: 0.6 })
+    for (const mark of [[2, 0.6], [0.3], 'x', { x: 0.3, y: 0.6 }])
+      expect(
+        madeEffects({ a: { effects: [{ kind: 'fire', mark }] } }, 'a')[0].mark,
+      ).toBeUndefined()
   })
 
   it('gives none for a manifest, image or effects that are not as expected', () => {
@@ -111,68 +142,79 @@ describe('madeEffects', () => {
     expect(madeEffects({ a: { effects: 'x' } }, 'a')).toEqual([])
   })
 
-  it('leaves out an effect of a type the renderer does not have, and a broken one', () => {
+  it('leaves out an effect of a kind the renderer does not have, and a broken one', () => {
     const manifest = {
       a: {
         effects: [
-          { type: 'rain' },
+          { kind: 'rain' },
           null,
           7,
-          { kind: 'dust' },
           { type: 'dust' },
+          { kind: 'dust' },
         ],
       },
     }
     expect(madeEffects(manifest, 'a')).toEqual([{ kind: 'dust' }])
   })
 
-  it('drops settings that are not numbers and a spot that is not a shape inside the picture', () => {
+  it('drops settings that are not numbers and every shape that is not one inside the picture', () => {
     const manifest = {
       a: {
         effects: [
-          { type: 'dust', settings: { amount: 'lots', speed: 2 } },
+          { kind: 'dust', settings: { amount: 'lots', speed: 2 } },
           {
-            type: 'water',
-            spot: {
-              points: [
-                { x: 0, y: 0 },
-                { x: 1, y: 1 },
+            kind: 'water',
+            spot: [
+              [
+                [0, 0],
+                [1, 1],
               ],
-            },
-          },
-          {
-            type: 'water',
-            spot: {
-              points: [
-                { x: 0, y: 0 },
-                { x: 2, y: 1 },
-                { x: 0, y: 1 },
+              [
+                [0, 0],
+                [2, 1],
+                [0, 1],
               ],
-            },
-          },
-          {
-            type: 'water',
-            spot: {
-              points: [
-                { x: 0.2, y: 0.2 },
-                { x: 0.4, y: 0.2 },
-                { x: 0.6, y: 0.2 },
+              [
+                [0.2, 0.2],
+                [0.4, 0.2],
+                [0.6, 0.2],
               ],
-            },
+              'x',
+            ],
           },
+          { kind: 'water', spot: [POND, [[0.1, 0.1], 'x', [0.2, 0.3]]] },
+          { kind: 'water', spot: { points: POND_POINTS } },
         ],
       },
     }
     const got = madeEffects(manifest, 'a')
     expect(got[0]).toEqual({ kind: 'dust', settings: { speed: 2 } })
-    for (const e of got.slice(1)) expect(e.spot).toBeUndefined()
+    expect(got[1].spot).toBeUndefined()
+    expect(got[2].spot).toEqual([POND_POINTS])
+    expect(got[3].spot).toBeUndefined()
+  })
+})
+
+describe('a drawn shape with no area', () => {
+  it('is no shape, even when the box around it has a size', () => {
+    const slanted = [
+      [0.2, 0.2],
+      [0.3, 0.3],
+      [0.4, 0.4],
+    ]
+    expect(
+      madeEffects(
+        { a: { effects: [{ kind: 'fire', spot: [slanted] }] } },
+        'a',
+      )[0].spot,
+    ).toBeUndefined()
   })
 })
 
 describe('appliedMotion', () => {
   const effects: RoomEffect[] = [
     { kind: 'dust', settings: { speed: 2 } },
-    { kind: 'fire', whilePatch: 'hearth-lit', spot: POND },
+    { kind: 'fire', whilePatch: 'hearth-lit', spot: [POND_POINTS] },
     { kind: 'mist', unlessPatch: 'door-open' },
     { kind: 'water' },
   ]
@@ -180,19 +222,52 @@ describe('appliedMotion', () => {
   it('keeps floating kinds and the spots that have a shape, with the shape and its box', () => {
     expect(appliedMotion(effects, ['hearth-lit'])).toEqual([
       { kind: 'dust', settings: { speed: 2 } },
-      {
-        kind: 'fire',
-        polygon: POND.points,
-        box: { x: 0.25, y: 0.5, width: 0.25, height: 0.25 },
-      },
+      { kind: 'fire', polygon: POND_POINTS, box: POND_BOX },
       { kind: 'mist' },
     ])
   })
 
-  it('carries the mark of the spot on its box', () => {
-    const spot = { ...POND, mark: { x: 0.3, y: 0.6 } }
-    const [fire] = appliedMotion([{ kind: 'fire', spot }], [])
-    expect(fire.box?.mark).toEqual({ x: 0.3, y: 0.6 })
+  it('plays a spot once in each of its shapes, with its settings', () => {
+    expect(
+      appliedMotion(
+        [
+          {
+            kind: 'water',
+            settings: { amount: 2 },
+            spot: [POND_POINTS, HILL_POINTS],
+          },
+        ],
+        [],
+      ),
+    ).toEqual([
+      {
+        kind: 'water',
+        settings: { amount: 2 },
+        polygon: POND_POINTS,
+        box: POND_BOX,
+      },
+      {
+        kind: 'water',
+        settings: { amount: 2 },
+        polygon: HILL_POINTS,
+        box: { x: 0.75, y: 0.25, width: 0.25, height: 0.25 },
+      },
+    ])
+  })
+
+  it('carries the mark on the box of the shape that holds it, and no other', () => {
+    const [pond, hill] = appliedMotion(
+      [
+        {
+          kind: 'fire',
+          spot: [POND_POINTS, HILL_POINTS],
+          mark: { x: 0.3, y: 0.6 },
+        },
+      ],
+      [],
+    )
+    expect(pond.box?.mark).toEqual({ x: 0.3, y: 0.6 })
+    expect(hill.box?.mark).toBeUndefined()
   })
 
   it('drops an effect whose patch condition fails', () => {
@@ -210,10 +285,15 @@ describe('appliedMotion', () => {
 
 describe("the title picture's kinds", () => {
   it('reads the five kinds beside the old ones, each with its drawn spot and mark', () => {
-    const spot = { ...POND, mark: { x: 0.5, y: 0.2 } }
     const kinds = ['ripples', 'glints', 'clouds', 'stars', 'moonglow']
     const manifest = {
-      a: { effects: kinds.map((type) => ({ type, spot })) },
+      a: {
+        effects: kinds.map((kind) => ({
+          kind,
+          spot: [POND],
+          mark: [0.3, 0.6],
+        })),
+      },
     }
     expect(madeEffects(manifest, 'a').map((e) => e.kind)).toEqual(kinds)
     const applied = appliedMotion(madeEffects(manifest, 'a'), [])
@@ -224,7 +304,7 @@ describe("the title picture's kinds", () => {
   it('leaves out one of them that has no drawn spot', () => {
     expect(
       appliedMotion(
-        madeEffects({ a: { effects: [{ type: 'stars' }] } }, 'a'),
+        madeEffects({ a: { effects: [{ kind: 'stars' }] } }, 'a'),
         [],
       ),
     ).toEqual([])
