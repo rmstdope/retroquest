@@ -27,10 +27,11 @@
   --lq-z-stage-picture: -10;
   --lq-z-stage-plate: 10;
   --lq-z-stage-buttons: 40;
-  --lq-z-stage-command-box: 70;
   --lq-z-stage-f1-note: 71;
   --lq-z-stage-belt: 72;
   --lq-z-stage-hand-strip: 80;
+  /* Above the belt and the hand strip: its word list opens upwards over them. */
+  --lq-z-stage-command-box: 90;
 
   /* page: beside the stage, lowest first. */
   --lq-z-page-speech: 10;
