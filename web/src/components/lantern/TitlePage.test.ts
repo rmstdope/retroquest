@@ -3,7 +3,13 @@ import { describe, it, expect, afterEach, beforeEach, vi } from 'vitest'
 import { mount, flushPromises, type VueWrapper } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import TitlePage from './TitlePage.vue'
-import { GAME_FULL_NAME, GAME_NAME, GAME_SUBTITLE } from '@/engine'
+import {
+  GAME_FULL_NAME,
+  GAME_NAME,
+  GAME_NAME_EYEBROW,
+  GAME_NAME_WORDMARK,
+  GAME_SUBTITLE,
+} from '@/engine'
 import type { SaveSlot } from '@/types/bridge'
 import { setPictureProbe } from '@/lantern/roomPicture'
 import type { ImageZoom, MotionSpec } from '@/lantern/roomMotion'
@@ -50,9 +56,9 @@ describe('TitlePage', () => {
       GAME_FULL_NAME,
     )
     expect(w.get('.lq-title-eyebrow').attributes('aria-hidden')).toBe('true')
-    expect(w.get('.lq-title-eyebrow').text()).toBe('Tales of')
+    expect(w.get('.lq-title-eyebrow').text()).toBe(GAME_NAME_EYEBROW)
     expect(w.get('.lq-wordmark').attributes('aria-hidden')).toBe('true')
-    expect(w.get('.lq-wordmark').text()).toBe('Twinmoor')
+    expect(w.get('.lq-wordmark').text()).toBe(GAME_NAME_WORDMARK)
     expect(
       `${w.get('.lq-title-eyebrow').text()} ${w.get('.lq-wordmark').text()}`,
     ).toBe(GAME_NAME)
