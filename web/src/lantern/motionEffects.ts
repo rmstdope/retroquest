@@ -58,6 +58,16 @@ const GLOW: EffectSetting = {
   default: 1,
 }
 
+/** How strongly the reflection of a pond wavers. */
+const STRENGTH: EffectSetting = {
+  id: 'strength',
+  title: 'Strength',
+  min: 0,
+  max: 2,
+  step: 0.05,
+  default: 1,
+}
+
 /** Every effect type the renderer has, with the settings each takes. */
 export const EFFECT_TYPES: readonly EffectType[] = [
   { type: 'dust', title: 'Dust', spot: false, settings: [AMOUNT, SPEED] },
@@ -78,6 +88,36 @@ export const EFFECT_TYPES: readonly EffectType[] = [
   },
   { type: 'fire', title: 'Fire', spot: true, settings: [AMOUNT, SPEED, GLOW] },
   { type: 'smoke', title: 'Smoke', spot: true, settings: [AMOUNT, SPEED] },
+  {
+    type: 'ripples',
+    title: 'Pond ripples',
+    spot: true,
+    settings: [AMOUNT, SPEED, STRENGTH],
+  },
+  {
+    type: 'glints',
+    title: 'Moon glints',
+    spot: true,
+    settings: [AMOUNT, SPEED],
+  },
+  {
+    type: 'clouds',
+    title: 'Drifting clouds',
+    spot: true,
+    settings: [AMOUNT, SPEED],
+  },
+  {
+    type: 'stars',
+    title: 'Twinkling stars',
+    spot: true,
+    settings: [AMOUNT, SPEED],
+  },
+  {
+    type: 'moonglow',
+    title: "The moon's glow",
+    spot: true,
+    settings: [AMOUNT, SPEED, GLOW],
+  },
 ]
 
 /** The effect type `type`, or undefined when the renderer has none of that name. */

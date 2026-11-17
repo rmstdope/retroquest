@@ -17,12 +17,29 @@ import { effectType } from './motionEffects'
 /** What floats over the whole picture and needs no marking. */
 export type FloatKind = 'dust' | 'leaves' | 'embers' | 'fireflies' | 'mist'
 /** What lives on a spot the navigator marks. */
-export type SpotKind = 'water' | 'fire' | 'smoke'
+export type SpotKind =
+  | 'water'
+  | 'fire'
+  | 'smoke'
+  | 'ripples'
+  | 'glints'
+  | 'clouds'
+  | 'stars'
+  | 'moonglow'
 /** Any kind of movement. */
 export type MotionKind = FloatKind | SpotKind
 
 /** The kinds that need a marked spot. */
-export const SPOT_KINDS: readonly SpotKind[] = ['water', 'fire', 'smoke']
+export const SPOT_KINDS: readonly SpotKind[] = [
+  'water',
+  'fire',
+  'smoke',
+  'ripples',
+  'glints',
+  'clouds',
+  'stars',
+  'moonglow',
+]
 
 /** A box on a picture: fractions of the picture, as the studio writes them. */
 export interface AreaBox {
@@ -228,4 +245,43 @@ export function appliedMotion(
     specs.push(spec)
   }
   return specs
+}
+
+/** How an image's picture drifts: seconds each way, and how far it moves in, in percent. */
+export interface ImageZoom {
+  seconds: number
+  percent: number
+}
+
+/** What the title picture drifts at until the team saves a zoom for it. */
+export const DEFAULT_TITLE_ZOOM: ImageZoom = { seconds: 16, percent: 3 }
+
+/**
+ * The zoom the images manifest saves under image `imageId` (`zoom`: seconds
+ * each way and percent in), clamped to 4 to 60 seconds and 0 to 10 percent;
+ * `DEFAULT_TITLE_ZOOM` when it saves none or one that is not a pair of
+ * numbers; null (no zoom) when it saves `null` or `false`, or a zoom with no
+ * seconds or no size.
+ */
+export function madeZoom(manifest: unknown, imageId: string): ImageZoom | null {
+  if (typeof manifest !== 'object' || manifest === null)
+    return DEFAULT_TITLE_ZOOM
+  const image: unknown = (manifest as Record<string, unknown>)[imageId]
+  if (typeof image !== 'object' || image === null) return DEFAULT_TITLE_ZOOM
+  const zoom: unknown = (image as Record<string, unknown>).zoom
+  if (zoom === null || zoom === false) return null
+  if (typeof zoom !== 'object') return DEFAULT_TITLE_ZOOM
+  const { seconds, percent } = zoom as Record<string, unknown>
+  if (
+    typeof seconds !== 'number' ||
+    typeof percent !== 'number' ||
+    !Number.isFinite(seconds) ||
+    !Number.isFinite(percent)
+  )
+    return DEFAULT_TITLE_ZOOM
+  if (seconds <= 0 || percent <= 0) return null
+  return {
+    seconds: Math.min(60, Math.max(4, seconds)),
+    percent: Math.min(10, percent),
+  }
 }

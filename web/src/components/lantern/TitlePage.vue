@@ -19,6 +19,10 @@ import type { SaveSlot } from '@/types/bridge'
 import { useFocusTrap } from '@/composables/useFocusTrap'
 import { useReducedMotion } from '@/composables/useReducedMotion'
 import { useUiSounds } from '@/composables/useUiSounds'
+import { DEFAULT_TITLE_ZOOM } from '@/lantern/roomMotion'
+import type { ImageZoom, MotionSpec } from '@/lantern/roomMotion'
+import type { PictureSize } from '@/lantern/roomMotionScene'
+import TitleMotion from './TitleMotion.vue'
 
 /**
  * The game's title page, before the first act: a full-screen picture, the
@@ -53,13 +57,32 @@ import { useUiSounds } from '@/composables/useUiSounds'
  * The picture is the title picture Content Studio makes, or the opening
  * dream's picture until it is made; while neither has loaded the page's plain
  * background stands in.
+ *
+ * The painting moves from its first moment, fading in already under way. The
+ * painting and the movement drawn on it (`motion`, the effects the team tuned
+ * for the title picture in Content Studio, see `TitleMotion.vue`) zoom slowly
+ * in and back together (`zoom`: seconds each way and percent in, 16 s and 3%
+ * until the team sets them, none when null); the shade, the text and the
+ * buttons stay still. The effects are only drawn over the title picture, never
+ * over the dream that stands in for it. The movement goes on behind the Load
+ * game window, and under Reduce motion nothing moves, at once when it is
+ * switched on while the page is up.
  */
 const props = withDefaults(
   defineProps<{
     saves?: SaveSlot[]
     error?: string
+    motion?: MotionSpec[]
+    zoom?: ImageZoom | null
+    pictureSize?: PictureSize
   }>(),
-  { saves: () => [], error: '' },
+  {
+    saves: () => [],
+    error: '',
+    motion: () => [],
+    zoom: () => DEFAULT_TITLE_ZOOM,
+    pictureSize: () => ({ width: 1920, height: 1080 }),
+  },
 )
 const emit = defineEmits<{ start: []; continue: []; load: [] }>()
 const hasSaves = computed(() => props.saves.some(filled))
@@ -93,6 +116,8 @@ watch(opened, (now) => {
 
 /** The picture's URL: the title picture, or the dream's until it is made; '' until one has loaded. */
 const picture = ref('')
+/** Whether the picture up is the title picture itself, not the dream that stands in. */
+const isTitlePicture = computed(() => picture.value === titlePictureUrl())
 void (async (): Promise<void> => {
   for (const url of [titlePictureUrl(), roomPictureUrl('Act1', 'TheDream')]) {
     if (await pictureExists(url)) {
@@ -223,12 +248,30 @@ onBeforeUnmount(() => {
     tabindex="-1"
     @keydown="onKeydown"
   >
-    <div
-      v-if="picture"
-      class="lq-title-picture"
-      :style="{ backgroundImage: `url('${picture}')` }"
-      aria-hidden="true"
-    ></div>
+    <div v-if="picture" class="lq-title-art" aria-hidden="true">
+      <div
+        class="lq-title-drift"
+        :class="{ 'lq-title-drift-on': zoom && !reduced }"
+        :style="
+          zoom
+            ? {
+                '--lq-title-zoom-seconds': `${zoom.seconds}s`,
+                '--lq-title-zoom-percent': zoom.percent,
+              }
+            : undefined
+        "
+      >
+        <div
+          class="lq-title-picture"
+          :style="{ backgroundImage: `url('${picture}')` }"
+        ></div>
+        <TitleMotion
+          :motion="isTitlePicture ? motion : []"
+          :src="picture"
+          :picture-size="pictureSize"
+        />
+      </div>
+    </div>
     <div class="lq-title-shade" aria-hidden="true"></div>
     <div class="lq-title-inner">
       <div class="lq-title-name">
@@ -330,11 +373,24 @@ onBeforeUnmount(() => {
 .lq-title-page:focus {
   outline: none;
 }
-.lq-title-picture {
+.lq-title-art {
   position: fixed;
   inset: 0;
-  background: center / cover no-repeat;
+  overflow: hidden;
   opacity: 0;
+}
+.lq-title-drift {
+  position: absolute;
+  inset: 0;
+}
+.lq-title-drift-on {
+  animation: lq-title-drift var(--lq-title-zoom-seconds) ease-in-out infinite
+    alternate;
+}
+.lq-title-picture {
+  position: absolute;
+  inset: 0;
+  background: center / cover no-repeat;
 }
 .lq-title-shade {
   position: fixed;
@@ -485,7 +541,7 @@ onBeforeUnmount(() => {
   font-size: 14px;
 }
 /* The opening: picture, name, credit, then the buttons one after another. */
-.is-playing .lq-title-picture {
+.is-playing .lq-title-art {
   animation: lq-title-fade 2.4s ease forwards;
 }
 .is-playing .lq-title-name {
@@ -506,7 +562,7 @@ onBeforeUnmount(() => {
 .is-playing .lq-title-buttons > button:nth-child(3) {
   animation-delay: 5.16s;
 }
-.is-open .lq-title-picture,
+.is-open .lq-title-art,
 .is-open .lq-title-name,
 .is-open .lq-credit {
   opacity: 1;
@@ -518,6 +574,19 @@ onBeforeUnmount(() => {
 @keyframes lq-title-fade {
   to {
     opacity: 1;
+  }
+}
+/* The size is the team's, in percent; the shift is the rooms' (a sixth, and a tenth, of it). */
+@keyframes lq-title-drift {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(calc(1 + var(--lq-title-zoom-percent) / 100))
+      translate(
+        calc(var(--lq-title-zoom-percent) * -0.1667%),
+        calc(var(--lq-title-zoom-percent) * -0.1%)
+      );
   }
 }
 @keyframes lq-title-rise {

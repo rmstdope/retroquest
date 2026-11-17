@@ -43,9 +43,12 @@ import {
   appliedMotion,
   madeAreaBoxes,
   madeEffects,
+  madeZoom,
   type AreaBox,
+  type ImageZoom,
   type MotionSpec,
 } from '@/lantern/roomMotion'
+import { TITLE_IMAGE_ID } from '@/lantern/imageLists'
 import { ELIOR } from '@/lantern/stageSpeech'
 import type { Chapter } from '@/lantern/chapter'
 
@@ -534,6 +537,19 @@ export const useGameStore = defineStore('game', () => {
     return appliedMotion(effects, shown.patchIds)
   })
 
+  /** The movement over the title picture: the effects the team saved for it, none until it has. */
+  const titleMotion = computed<MotionSpec[]>(() =>
+    appliedMotion(madeEffects(imageManifest.value, TITLE_IMAGE_ID), []),
+  )
+
+  /** How the title picture zooms (16 s and 3% until the team saves another), null when saved as off. */
+  const titleZoom = computed<ImageZoom | null>(() =>
+    madeZoom(imageManifest.value, TITLE_IMAGE_ID),
+  )
+
+  /** The size of the title picture as the manifest lists it; undefined while it is not known. */
+  const titlePictureSize = computed(() => pictureSizeOf(TITLE_IMAGE_ID))
+
   /**
    * What the room's picture can name right now: the things and ways out in
    * the room (as the held `picture` group lets them be seen) that the studio
@@ -562,9 +578,10 @@ export const useGameStore = defineStore('game', () => {
     }
   })
 
-  /** The size of the room's picture as the manifest lists it, for the boxes laid on it; absent while it is not known. */
-  const roomPictureSize = computed(() => {
-    const id = shownPictureId.value
+  /** The size of image `id` as the manifest lists it; undefined while it is not known. */
+  function pictureSizeOf(
+    id: string | null,
+  ): { width: number; height: number } | undefined {
     const manifest = imageManifest.value
     if (id === null || typeof manifest !== 'object' || manifest === null)
       return undefined
@@ -577,7 +594,10 @@ export const useGameStore = defineStore('game', () => {
       height > 0
       ? { width, height }
       : undefined
-  })
+  }
+
+  /** The size of the room's picture as the manifest lists it, for the boxes laid on it; absent while it is not known. */
+  const roomPictureSize = computed(() => pictureSizeOf(shownPictureId.value))
 
   /**
    * The URLs of the patches laid over the room's picture: the ones that apply
@@ -1932,6 +1952,9 @@ export const useGameStore = defineStore('game', () => {
     roomPicture,
     roomPatchUrls,
     roomMotion,
+    titleMotion,
+    titleZoom,
+    titlePictureSize,
     roomAreas,
     roomPictureSize,
     imageManifest,

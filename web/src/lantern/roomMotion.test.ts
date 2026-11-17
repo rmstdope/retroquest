@@ -3,6 +3,8 @@ import {
   appliedMotion,
   madeAreaBoxes,
   madeEffects,
+  madeZoom,
+  DEFAULT_TITLE_ZOOM,
   type AreaBox,
   type RoomEffect,
 } from './roomMotion'
@@ -202,6 +204,71 @@ describe('appliedMotion', () => {
   it('leaves a spot that is not drawn yet out and moves everything else', () => {
     expect(appliedMotion(effects, ['hearth-lit'])).not.toContainEqual(
       expect.objectContaining({ kind: 'water' }),
+    )
+  })
+})
+
+describe("the title picture's kinds", () => {
+  it('reads the five kinds beside the old ones, each with its drawn spot and mark', () => {
+    const spot = { ...POND, mark: { x: 0.5, y: 0.2 } }
+    const kinds = ['ripples', 'glints', 'clouds', 'stars', 'moonglow']
+    const manifest = {
+      a: { effects: kinds.map((type) => ({ type, spot })) },
+    }
+    expect(madeEffects(manifest, 'a').map((e) => e.kind)).toEqual(kinds)
+    const applied = appliedMotion(madeEffects(manifest, 'a'), [])
+    expect(applied.map((s) => s.kind)).toEqual(kinds)
+    expect(applied.every((s) => s.polygon && s.box?.mark)).toBe(true)
+  })
+
+  it('leaves out one of them that has no drawn spot', () => {
+    expect(
+      appliedMotion(
+        madeEffects({ a: { effects: [{ type: 'stars' }] } }, 'a'),
+        [],
+      ),
+    ).toEqual([])
+  })
+})
+
+describe('madeZoom', () => {
+  it('plays the start the team agreed when the image saves no zoom', () => {
+    expect(DEFAULT_TITLE_ZOOM).toEqual({ seconds: 16, percent: 3 })
+    expect(madeZoom({}, 'a')).toEqual(DEFAULT_TITLE_ZOOM)
+    expect(madeZoom({ a: {} }, 'a')).toEqual(DEFAULT_TITLE_ZOOM)
+    expect(madeZoom(null, 'a')).toEqual(DEFAULT_TITLE_ZOOM)
+  })
+
+  it('reads the saved seconds and size, clamped', () => {
+    expect(madeZoom({ a: { zoom: { seconds: 20, percent: 5 } } }, 'a')).toEqual(
+      {
+        seconds: 20,
+        percent: 5,
+      },
+    )
+    expect(madeZoom({ a: { zoom: { seconds: 1, percent: 99 } } }, 'a')).toEqual(
+      {
+        seconds: 4,
+        percent: 10,
+      },
+    )
+  })
+
+  it('is off when saved as off, as null or with nothing to move', () => {
+    expect(madeZoom({ a: { zoom: null } }, 'a')).toBeNull()
+    expect(madeZoom({ a: { zoom: false } }, 'a')).toBeNull()
+    expect(
+      madeZoom({ a: { zoom: { seconds: 0, percent: 3 } } }, 'a'),
+    ).toBeNull()
+    expect(
+      madeZoom({ a: { zoom: { seconds: 16, percent: 0 } } }, 'a'),
+    ).toBeNull()
+  })
+
+  it('plays the default for a zoom that is not a pair of numbers', () => {
+    expect(madeZoom({ a: { zoom: 'fast' } }, 'a')).toEqual(DEFAULT_TITLE_ZOOM)
+    expect(madeZoom({ a: { zoom: { seconds: 'x' } } }, 'a')).toEqual(
+      DEFAULT_TITLE_ZOOM,
     )
   })
 })
