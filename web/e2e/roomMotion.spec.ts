@@ -18,9 +18,19 @@ async function toTheCottage(
           file: 'act1-eliors-cottage.png',
           width: 1,
           height: 1,
-          areas: {
-            'motion-fire': { x: 0.1, y: 0.4, width: 0.2, height: 0.3 },
-          },
+          effects: [
+            {
+              type: 'fire',
+              spot: {
+                points: [
+                  { x: 0.1, y: 0.4 },
+                  { x: 0.3, y: 0.4 },
+                  { x: 0.3, y: 0.7 },
+                  { x: 0.1, y: 0.7 },
+                ],
+              },
+            },
+          ],
         },
       },
     }),

@@ -207,3 +207,7 @@ game's code, and the chosen take of each image is in `content-studio/images/lock
 come from `web/src/lantern/imageLists.ts` and a vitest test fails when a committed list is stale.
 
 After the rooms and portraits each act's list also holds the belt pictures: one 256x256 square entry for every thing that can be carried and every spell the act registers, `item-<name>` or `spell-<name>` (`beltImageId`), the same entry in every act where the name appears. The words are the hand-written line of `web/src/lantern/beltPrompts.ts`, what is seen and never what it means, followed by the things-and-spells style (`BELT_STYLE`) that the studio's look cannot hold. The belt shows a picture once its file exists and keeps the first letter until then.
+
+### Motion
+
+An image's movement is the navigator's, tuned in Content Studio, not declared in the game's code. The game's motion renderer is `web/src/lantern/motionRenderer.ts`: it exports `EFFECT_TYPES` (each effect type, whether it lives on a drawn spot, and the settings it takes with `min`, `max`, `step` and `default`) and `createMotionScene`. The export puts each image's movement in the images manifest as `effects`, a list of `{ type, settings?, whilePatch?, unlessPatch?, spot? }`: `settings` are numbers by setting id (a missing one plays at its default), `whilePatch` and `unlessPatch` are patch ids of the same image, and `spot` (water, fire and smoke need one) is `{ points: [{x, y}, ...], mark?: {x, y} }`, a polygon of picture fractions. The game reads them in `web/src/lantern/roomMotion.ts`.

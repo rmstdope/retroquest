@@ -10,6 +10,7 @@
  * entered fresh is run ahead first, so it is already under way.
  */
 import type { AreaBox, MotionKind, MotionSpec } from './roomMotion'
+import { settingValue } from './motionEffects'
 
 /** The size the amounts of the drawing are for. */
 const BASE_WIDTH = 1280
@@ -117,8 +118,21 @@ export function boxRect(
 }
 
 /** The amounts of the drawing that float over the whole picture, for a canvas of `area` square pixels. */
-function floatCount(base: number, area: number): number {
-  return Math.max(1, Math.round((base * area) / (BASE_WIDTH * BASE_HEIGHT)))
+function floatCount(base: number, area: number, amount: number): number {
+  if (amount <= 0) return 0
+  return Math.max(
+    1,
+    Math.round((base * amount * area) / (BASE_WIDTH * BASE_HEIGHT)),
+  )
+}
+
+/** Whether something is due on tick `k` when it comes once every `interval` ticks at amount 1 (and so on tick 0, `interval`, ...), `amount` times as often. */
+function due(k: number, interval: number, amount: number): boolean {
+  if (amount <= 0) return false
+  return (
+    Math.floor((k * amount) / interval) >
+    Math.floor(((k - 1) * amount) / interval)
+  )
 }
 
 /**
@@ -155,7 +169,9 @@ export function createMotionScene(): MotionScene {
 
   function keyOf(spec: MotionSpec): string {
     const b = spec.box
-    return b ? `${spec.kind}@${b.x},${b.y},${b.width},${b.height}` : spec.kind
+    const at = b ? `@${b.x},${b.y},${b.width},${b.height}` : ''
+    const set = spec.settings ? `#${JSON.stringify(spec.settings)}` : ''
+    return `${spec.kind}${at}${set}`
   }
 
   /** Seed the specks that are always there (dust, fireflies, mist). */
@@ -165,14 +181,17 @@ export function createMotionScene(): MotionScene {
     if (!rect) return
     const area = rect.w * rect.h
     const u = unit()
-    switch (layer.spec.kind) {
+    const kind = layer.spec.kind
+    const amount = settingValue(kind, layer.spec.settings, 'amount')
+    const speed = settingValue(kind, layer.spec.settings, 'speed')
+    switch (kind) {
       case 'dust':
-        for (let i = 0; i < floatCount(16, area); i++)
+        for (let i = 0; i < floatCount(16, area, amount); i++)
           layer.parts.push({
             x: rect.x + rnd() * rect.w,
             y: rect.y + rnd() * rect.h,
-            vx: (0.04 + rnd() * 0.15) * u,
-            vy: (-0.03 - rnd() * 0.08) * u,
+            vx: (0.04 + rnd() * 0.15) * u * speed,
+            vy: (-0.03 - rnd() * 0.08) * u * speed,
             r: (0.8 + rnd() * 1.8) * u,
             l: 0,
             m: 0,
@@ -180,7 +199,7 @@ export function createMotionScene(): MotionScene {
           })
         break
       case 'fireflies':
-        for (let i = 0; i < floatCount(9, area); i++)
+        for (let i = 0; i < floatCount(9, area, amount); i++)
           layer.parts.push({
             x: rect.x + rect.w * (0.1 + rnd() * 0.8),
             y: rect.y + rect.h * (0.5 + rnd() * 0.4),
@@ -193,12 +212,12 @@ export function createMotionScene(): MotionScene {
           })
         break
       case 'mist': {
-        const count = floatCount(6, area)
+        const count = floatCount(6, area, amount)
         for (let i = 0; i < count; i++)
           layer.parts.push({
             x: rect.x + rnd() * rect.w,
             y: rect.y + rect.h * (0.6 + (0.3 * i) / count),
-            vx: (0.12 + rnd() * 0.14) * u,
+            vx: (0.12 + rnd() * 0.14) * u * speed,
             vy: 0,
             r: (260 + rnd() * 200) * u,
             l: 0,
@@ -242,10 +261,13 @@ export function createMotionScene(): MotionScene {
     const u = unit()
     const parts = layer.parts
     const n = layer.ticks
-    switch (layer.spec.kind) {
+    const kind = layer.spec.kind
+    const amount = settingValue(kind, layer.spec.settings, 'amount')
+    const speed = settingValue(kind, layer.spec.settings, 'speed')
+    switch (kind) {
       case 'dust':
         for (const p of parts) {
-          p.x += p.vx + Math.sin(t / 1500 + p.ph) * 0.1 * u
+          p.x += p.vx + Math.sin(t / 1500 + p.ph) * 0.1 * u * speed
           p.y += p.vy
           if (p.x > rect.x + rect.w + 10) p.x = rect.x - 10
           if (p.y < rect.y - 10) p.y = rect.y + rect.h + 10
@@ -253,8 +275,12 @@ export function createMotionScene(): MotionScene {
         break
       case 'fireflies':
         for (const p of parts) {
-          p.x += Math.sin(t / 900 + p.ph) * (0.5 + 0.5 * Math.sin(p.ph * 3)) * u
-          p.y += Math.cos(t / 1200 + p.ph * 2) * 0.4 * u
+          p.x +=
+            Math.sin(t / 900 + p.ph) *
+            (0.5 + 0.5 * Math.sin(p.ph * 3)) *
+            u *
+            speed
+          p.y += Math.cos(t / 1200 + p.ph * 2) * 0.4 * u * speed
         }
         break
       case 'mist':
@@ -264,13 +290,14 @@ export function createMotionScene(): MotionScene {
         }
         break
       case 'leaves': {
-        const cap = rect.w * rect.h < 0.5 * BASE_WIDTH * BASE_HEIGHT ? 1 : 2
-        if (parts.length < cap && rnd() < leafChance(rect))
+        const baseCap = rect.w * rect.h < 0.5 * BASE_WIDTH * BASE_HEIGHT ? 1 : 2
+        const cap = amount > 0 ? Math.max(1, Math.round(baseCap * amount)) : 0
+        if (parts.length < cap && rnd() < leafChance(rect) * amount)
           parts.push({
             x: rect.x + rnd() * rect.w,
             y: rect.y,
             vx: 0,
-            vy: (0.5 + rnd() * 0.3) * u,
+            vy: (0.5 + rnd() * 0.3) * u * speed,
             r: u,
             l: 0,
             m: 0,
@@ -279,7 +306,7 @@ export function createMotionScene(): MotionScene {
         for (let i = parts.length - 1; i >= 0; i--) {
           const p = parts[i]
           p.y += p.vy
-          p.x += Math.sin(t / 500 + p.ph) * 0.9 * u
+          p.x += Math.sin(t / 500 + p.ph) * 0.9 * u * speed
           p.l += 0.03
           if (p.y > rect.y + rect.h) parts.splice(i, 1)
         }
@@ -287,33 +314,33 @@ export function createMotionScene(): MotionScene {
       }
       case 'embers':
         if (
-          n %
-            Math.round(
-              24 / ((rect.w * rect.h) / (BASE_WIDTH * BASE_HEIGHT)),
-            ) ===
-          0
+          due(
+            n,
+            Math.round(24 / ((rect.w * rect.h) / (BASE_WIDTH * BASE_HEIGHT))),
+            amount,
+          )
         )
           parts.push({
             x: rect.x + rnd() * rect.w,
             y: rect.y + rect.h * (0.7 + rnd() * 0.25),
-            vx: (rnd() - 0.5) * 0.25 * u,
-            vy: (-0.7 - rnd() * 0.6) * u,
+            vx: (rnd() - 0.5) * 0.25 * u * speed,
+            vy: (-0.7 - rnd() * 0.6) * u * speed,
             r: 1.8 * u,
             l: 0,
             m: 120 + rnd() * 130,
             ph: rnd() * 6,
           })
-        emberStep(parts, t)
+        emberStep(parts, t, speed)
         break
       case 'fire':
         break
       case 'smoke':
-        if (n % 22 === 1)
+        if (due(n - 1, 22, amount))
           parts.push({
             x: rect.x + rect.w * (0.3 + rnd() * 0.4),
             y: rect.y + rect.h * 0.9,
             vx: 0,
-            vy: -0.55 * u,
+            vy: -0.55 * u * speed,
             r: Math.min(18 * u, rect.w / 2),
             l: 0,
             m: 0,
@@ -322,7 +349,7 @@ export function createMotionScene(): MotionScene {
         for (let i = parts.length - 1; i >= 0; i--) {
           const p = parts[i]
           p.y += p.vy
-          p.x += Math.sin(t / 900 + p.ph) * 0.3 * u
+          p.x += Math.sin(t / 900 + p.ph) * 0.3 * u * speed
           p.r += 0.13 * u
           p.l += 0.0009
           if (p.l >= 0.26 || p.y < rect.y - 40) parts.splice(i, 1)
@@ -330,12 +357,12 @@ export function createMotionScene(): MotionScene {
         break
       case 'water': {
         const side = rnd() < 0.5 ? -1 : 1
-        if (n % 2 === 0)
+        if (due(n, 2, amount))
           parts.push({
             x: rect.x + rect.w * (0.5 + side * rnd() * 0.3),
             y: rect.y + rect.h * 0.1,
-            vx: side * (0.2 + rnd() * 0.5) * u,
-            vy: (0.6 + rnd() * 0.4) * u,
+            vx: side * (0.2 + rnd() * 0.5) * u * speed,
+            vy: (0.6 + rnd() * 0.4) * u * speed,
             r: u,
             l: 0,
             m: 80,
@@ -343,7 +370,7 @@ export function createMotionScene(): MotionScene {
           })
         for (let i = parts.length - 1; i >= 0; i--) {
           const p = parts[i]
-          p.vy += 0.12 * u
+          p.vy += 0.12 * u * speed
           p.x += p.vx
           p.y += p.vy
           p.l++
@@ -356,10 +383,10 @@ export function createMotionScene(): MotionScene {
   }
 
   /** Move the live embers and drop the spent ones. */
-  function emberStep(parts: Particle[], t: number): void {
+  function emberStep(parts: Particle[], t: number, speed: number): void {
     for (let i = parts.length - 1; i >= 0; i--) {
       const e = parts[i]
-      e.x += e.vx + Math.sin(t / 300 + e.ph) * 0.25
+      e.x += e.vx + Math.sin(t / 300 + e.ph) * 0.25 * speed
       e.y += e.vy
       e.l++
       if (e.l > e.m) parts.splice(i, 1)
@@ -374,9 +401,21 @@ export function createMotionScene(): MotionScene {
     if (!rect) return
     const t = clock
     const u = unit()
+    const kind = layer.spec.kind
+    const speed = settingValue(kind, layer.spec.settings, 'speed')
     c.save()
     c.globalAlpha = layer.alpha
-    switch (layer.spec.kind) {
+    if (layer.spec.polygon) {
+      c.beginPath()
+      layer.spec.polygon.forEach((point, i) => {
+        const at = pointPosition(point, { width, height }, picture)
+        if (i === 0) c.moveTo(at.x, at.y)
+        else c.lineTo(at.x, at.y)
+      })
+      c.closePath()
+      c.clip()
+    }
+    switch (kind) {
       case 'dust':
         for (const p of layer.parts) {
           const tw = Math.max(0, 0.5 + 0.25 * Math.sin(t / 600 + p.ph))
@@ -437,12 +476,18 @@ export function createMotionScene(): MotionScene {
         }
         break
       case 'fire': {
-        const a = 0.2 + 0.09 * Math.sin(t / 130) + 0.06 * Math.sin(t / 57)
+        const glow = settingValue('fire', layer.spec.settings, 'glow')
+        const amount = settingValue('fire', layer.spec.settings, 'amount')
+        const flicker =
+          0.2 +
+          0.09 * Math.sin((t * speed) / 130) +
+          0.06 * Math.sin((t * speed) / 57)
+        const a = flicker * glow
         const cx = rect.x + rect.w / 2
         const cy = rect.y + rect.h * 0.6
-        const radius = Math.max(rect.w, rect.h) / 2
+        const radius = (Math.max(rect.w, rect.h) / 2) * amount
         const g = c.createRadialGradient(cx, cy, 6 * u, cx, cy, radius)
-        g.addColorStop(0, `rgba(255,170,60,${a + 0.16})`)
+        g.addColorStop(0, `rgba(255,170,60,${a + 0.16 * glow})`)
         g.addColorStop(1, 'rgba(255,150,40,0)')
         c.fillStyle = g
         c.fillRect(rect.x, rect.y, rect.w, rect.h)
@@ -467,7 +512,7 @@ export function createMotionScene(): MotionScene {
         c.fillStyle = 'rgba(225,245,255,.85)'
         for (const d of layer.parts) c.fillRect(d.x, d.y, 2 * u, 3 * u)
         for (let i = 0; i < 2; i++) {
-          const k = (t / 2200 + i / 2) % 1
+          const k = ((t * speed) / 2200 + i / 2) % 1
           c.strokeStyle = `rgba(230,250,255,${0.6 * (1 - k)})`
           c.lineWidth = 1.8 * u
           c.beginPath()

@@ -41,8 +41,8 @@ import {
 } from '@/lantern/roomPicture'
 import {
   appliedMotion,
-  declaredMotion,
   madeAreaBoxes,
+  madeEffects,
   type AreaBox,
   type MotionSpec,
 } from '@/lantern/roomMotion'
@@ -521,17 +521,17 @@ export const useGameStore = defineStore('game', () => {
 
   /**
    * The movement over the room's painting that applies to the story as it
-   * stands (the declared effects whose patch condition holds, the spots with
-   * the box the studio placed for them; a spot not placed is left out).
+   * stands (the effects the images manifest lists for it whose patch
+   * condition holds, the spots with the shape the navigator drew for them; a
+   * spot not drawn is left out).
    */
   const roomMotion = computed<MotionSpec[]>(() => {
     const shown = roomPictureState.value
     const id = shownPictureId.value
     if (!shown || id === null) return []
-    const effects = declaredMotion(musicActName.value, shown.roomKey)
+    const effects = madeEffects(imageManifest.value, id)
     if (effects.length === 0) return []
-    const boxes = madeAreaBoxes(imageManifest.value, id)
-    return appliedMotion(effects, shown.patchIds, boxes)
+    return appliedMotion(effects, shown.patchIds)
   })
 
   /**

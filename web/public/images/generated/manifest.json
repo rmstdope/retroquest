@@ -28,7 +28,15 @@
         "width": 0.453125,
         "height": 0.144444
       }
-    }
+    },
+    "effects": [
+      {
+        "type": "dust"
+      },
+      {
+        "type": "leaves"
+      }
+    ]
   },
   "act1-abandoned-shed-inside": {
     "file": "act1-abandoned-shed-inside.png",
@@ -210,24 +218,66 @@
         "y": 0.005556,
         "width": 0.291667,
         "height": 0.151852
+      }
+    },
+    "effects": [
+      {
+        "type": "dust"
       },
-      "motion-fire": {
-        "x": 0.281771,
-        "y": 0.660185,
-        "width": 0.138021,
-        "height": 0.101852,
-        "mark": {
-          "x": 0.321354,
-          "y": 0.719444
+      {
+        "type": "fire",
+        "spot": {
+          "points": [
+            {
+              "x": 0.281771,
+              "y": 0.660185
+            },
+            {
+              "x": 0.419792,
+              "y": 0.660185
+            },
+            {
+              "x": 0.419792,
+              "y": 0.762037
+            },
+            {
+              "x": 0.281771,
+              "y": 0.762037
+            }
+          ],
+          "mark": {
+            "x": 0.321354,
+            "y": 0.719444
+          }
         }
       },
-      "motion-smoke": {
-        "x": 0.259375,
-        "y": 0.006481,
-        "width": 0.132813,
-        "height": 0.65463
+      {
+        "type": "smoke",
+        "spot": {
+          "points": [
+            {
+              "x": 0.259375,
+              "y": 0.006481
+            },
+            {
+              "x": 0.392188,
+              "y": 0.006481
+            },
+            {
+              "x": 0.392188,
+              "y": 0.661111
+            },
+            {
+              "x": 0.259375,
+              "y": 0.661111
+            }
+          ]
+        }
+      },
+      {
+        "type": "embers"
       }
-    }
+    ]
   },
   "act1-chicken-coop": {
     "file": "act1-chicken-coop.png",
@@ -303,7 +353,15 @@
         "width": 0.032292,
         "height": 0.056481
       }
-    }
+    },
+    "effects": [
+      {
+        "type": "dust"
+      },
+      {
+        "type": "leaves"
+      }
+    ]
   },
   "act1-eliors-cottage": {
     "file": "act1-eliors-cottage.png",
@@ -419,14 +477,36 @@
         "y": 0.065741,
         "width": 0.094792,
         "height": 0.188889
-      },
-      "motion-fire": {
-        "x": 0.244792,
-        "y": 0.572222,
-        "width": 0.067188,
-        "height": 0.198148
       }
-    }
+    },
+    "effects": [
+      {
+        "type": "dust"
+      },
+      {
+        "type": "fire",
+        "spot": {
+          "points": [
+            {
+              "x": 0.244792,
+              "y": 0.572222
+            },
+            {
+              "x": 0.31198,
+              "y": 0.572222
+            },
+            {
+              "x": 0.31198,
+              "y": 0.77037
+            },
+            {
+              "x": 0.244792,
+              "y": 0.77037
+            }
+          ]
+        }
+      }
+    ]
   },
   "act1-forest-path": {
     "file": "act1-forest-path.png",
@@ -522,7 +602,15 @@
         "width": 0.147917,
         "height": 0.309259
       }
-    }
+    },
+    "effects": [
+      {
+        "type": "dust"
+      },
+      {
+        "type": "leaves"
+      }
+    ]
   },
   "act1-general-store": {
     "file": "act1-general-store.png",
@@ -624,7 +712,12 @@
         "width": 0.099479,
         "height": 0.110185
       }
-    }
+    },
+    "effects": [
+      {
+        "type": "dust"
+      }
+    ]
   },
   "act1-hidden-glade": {
     "file": "act1-hidden-glade.png",
@@ -690,7 +783,15 @@
         "width": 0.232813,
         "height": 0.54537
       }
-    }
+    },
+    "effects": [
+      {
+        "type": "dust"
+      },
+      {
+        "type": "leaves"
+      }
+    ]
   },
   "act1-miras-hut": {
     "file": "act1-miras-hut.png",
@@ -740,7 +841,12 @@
         "width": 0.336458,
         "height": 0.092593
       }
-    }
+    },
+    "effects": [
+      {
+        "type": "dust"
+      }
+    ]
   },
   "act1-old-mill": {
     "file": "act1-old-mill.png",
@@ -807,7 +913,12 @@
         "width": 0.045313,
         "height": 0.068519
       }
-    }
+    },
+    "effects": [
+      {
+        "type": "dust"
+      }
+    ]
   },
   "act1-portrait-blacksmith": {
     "file": "act1-portrait-blacksmith.png",
@@ -937,7 +1048,12 @@
         "width": 0.082813,
         "height": 0.086111
       }
-    }
+    },
+    "effects": [
+      {
+        "type": "mist"
+      }
+    ]
   },
   "act1-road-to-greendale": {
     "file": "act1-road-to-greendale.png",
@@ -987,7 +1103,15 @@
         "width": 0.065104,
         "height": 0.538889
       }
-    }
+    },
+    "effects": [
+      {
+        "type": "dust"
+      },
+      {
+        "type": "leaves"
+      }
+    ]
   },
   "act1-the-dream": {
     "file": "act1-the-dream.png",
@@ -1030,7 +1154,12 @@
           "y": 0.275
         }
       }
-    }
+    },
+    "effects": [
+      {
+        "type": "mist"
+      }
+    ]
   },
   "act1-vegetable-field": {
     "file": "act1-vegetable-field.png",
@@ -1102,7 +1231,12 @@
         "width": 0.467188,
         "height": 0.087037
       }
-    }
+    },
+    "effects": [
+      {
+        "type": "dust"
+      }
+    ]
   },
   "act1-village-chapel": {
     "file": "act1-village-chapel.png",
@@ -1186,14 +1320,37 @@
         "y": 0.683333,
         "width": 0.043229,
         "height": 0.072222
-      },
-      "motion-fire": {
-        "x": 0.476563,
-        "y": 0.438889,
-        "width": 0.046875,
-        "height": 0.071296
       }
-    }
+    },
+    "effects": [
+      {
+        "type": "dust"
+      },
+      {
+        "type": "fire",
+        "whilePatch": "candle-lit",
+        "spot": {
+          "points": [
+            {
+              "x": 0.476563,
+              "y": 0.438889
+            },
+            {
+              "x": 0.523438,
+              "y": 0.438889
+            },
+            {
+              "x": 0.523438,
+              "y": 0.510185
+            },
+            {
+              "x": 0.476563,
+              "y": 0.510185
+            }
+          ]
+        }
+      }
+    ]
   },
   "act1-village-square": {
     "file": "act1-village-square.png",
@@ -1278,14 +1435,36 @@
         "y": 0.358333,
         "width": 0.033333,
         "height": 0.47963
-      },
-      "motion-water": {
-        "x": 0.413021,
-        "y": 0.423148,
-        "width": 0.15625,
-        "height": 0.35
       }
-    }
+    },
+    "effects": [
+      {
+        "type": "dust"
+      },
+      {
+        "type": "water",
+        "spot": {
+          "points": [
+            {
+              "x": 0.413021,
+              "y": 0.423148
+            },
+            {
+              "x": 0.569271,
+              "y": 0.423148
+            },
+            {
+              "x": 0.569271,
+              "y": 0.773148
+            },
+            {
+              "x": 0.413021,
+              "y": 0.773148
+            }
+          ]
+        }
+      }
+    ]
   },
   "act1-village-well": {
     "file": "act1-village-well.png",
@@ -1333,82 +1512,186 @@
         "width": 0.644271,
         "height": 0.114815
       }
-    }
+    },
+    "effects": [
+      {
+        "type": "dust"
+      }
+    ]
   },
   "act2-ancient-grove": {
     "file": "act2-ancient-grove.png",
     "width": 1920,
-    "height": 1080
+    "height": 1080,
+    "effects": [
+      {
+        "type": "dust"
+      },
+      {
+        "type": "leaves"
+      }
+    ]
   },
   "act2-castle-approach": {
     "file": "act2-castle-approach.png",
     "width": 1920,
-    "height": 1080
+    "height": 1080,
+    "effects": [
+      {
+        "type": "dust"
+      },
+      {
+        "type": "leaves"
+      }
+    ]
   },
   "act2-castle-courtyard": {
     "file": "act2-castle-courtyard.png",
     "width": 1920,
-    "height": 1080
+    "height": 1080,
+    "effects": [
+      {
+        "type": "dust"
+      },
+      {
+        "type": "leaves"
+      }
+    ]
   },
   "act2-forest-entrance": {
     "file": "act2-forest-entrance.png",
     "width": 1920,
-    "height": 1080
+    "height": 1080,
+    "effects": [
+      {
+        "type": "dust"
+      },
+      {
+        "type": "leaves"
+      },
+      {
+        "type": "mist"
+      }
+    ]
   },
   "act2-forest-transition": {
     "file": "act2-forest-transition.png",
     "width": 1920,
-    "height": 1080
+    "height": 1080,
+    "effects": [
+      {
+        "type": "dust"
+      },
+      {
+        "type": "mist"
+      }
+    ]
   },
   "act2-great-hall": {
     "file": "act2-great-hall.png",
     "width": 1920,
-    "height": 1080
+    "height": 1080,
+    "effects": [
+      {
+        "type": "dust"
+      }
+    ]
   },
   "act2-greendale-gates": {
     "file": "act2-greendale-gates.png",
     "width": 1920,
-    "height": 1080
+    "height": 1080,
+    "effects": [
+      {
+        "type": "dust"
+      }
+    ]
   },
   "act2-healers-house": {
     "file": "act2-healers-house.png",
     "width": 1920,
-    "height": 1080
+    "height": 1080,
+    "effects": [
+      {
+        "type": "dust"
+      },
+      {
+        "type": "embers"
+      }
+    ]
   },
   "act2-heart-of-the-forest": {
     "file": "act2-heart-of-the-forest.png",
     "width": 1920,
-    "height": 1080
+    "height": 1080,
+    "effects": [
+      {
+        "type": "dust"
+      },
+      {
+        "type": "fireflies"
+      }
+    ]
   },
   "act2-hidden-library": {
     "file": "act2-hidden-library.png",
     "width": 1920,
-    "height": 1080
+    "height": 1080,
+    "effects": [
+      {
+        "type": "dust"
+      }
+    ]
   },
   "act2-inn-rooms": {
     "file": "act2-inn-rooms.png",
     "width": 1920,
-    "height": 1080
+    "height": 1080,
+    "effects": [
+      {
+        "type": "dust"
+      }
+    ]
   },
   "act2-main-square": {
     "file": "act2-main-square.png",
     "width": 1920,
-    "height": 1080
+    "height": 1080,
+    "effects": [
+      {
+        "type": "dust"
+      }
+    ]
   },
   "act2-market-district": {
     "file": "act2-market-district.png",
     "width": 1920,
-    "height": 1080
+    "height": 1080,
+    "effects": [
+      {
+        "type": "dust"
+      }
+    ]
   },
   "act2-merchants-warehouse": {
     "file": "act2-merchants-warehouse.png",
     "width": 1920,
-    "height": 1080
+    "height": 1080,
+    "effects": [
+      {
+        "type": "dust"
+      }
+    ]
   },
   "act2-mountain-path": {
     "file": "act2-mountain-path.png",
     "width": 1920,
-    "height": 1080
+    "height": 1080,
+    "effects": [
+      {
+        "type": "mist"
+      }
+    ]
   },
   "act2-portrait-ancient-tree-spirit": {
     "file": "act2-portrait-ancient-tree-spirit.png",
@@ -1528,17 +1811,38 @@
   "act2-residential-quarter": {
     "file": "act2-residential-quarter.png",
     "width": 1920,
-    "height": 1080
+    "height": 1080,
+    "effects": [
+      {
+        "type": "dust"
+      },
+      {
+        "type": "leaves"
+      }
+    ]
   },
   "act2-silver-stag-inn": {
     "file": "act2-silver-stag-inn.png",
     "width": 1920,
-    "height": 1080
+    "height": 1080,
+    "effects": [
+      {
+        "type": "dust"
+      }
+    ]
   },
   "act2-whispering-glade": {
     "file": "act2-whispering-glade.png",
     "width": 1920,
-    "height": 1080
+    "height": 1080,
+    "effects": [
+      {
+        "type": "dust"
+      },
+      {
+        "type": "fireflies"
+      }
+    ]
   },
   "act3-cavern-mouth": {
     "file": "act3-cavern-mouth.png",

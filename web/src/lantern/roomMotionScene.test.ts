@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
 import { boxRect, createMotionScene, pointPosition } from './roomMotionScene'
-import type { AreaBox } from './roomMotion'
+import type { AreaBox, MotionKind } from './roomMotion'
 
 const PICTURE = { width: 1920, height: 1080 }
 const BOX: AreaBox = { x: 0.25, y: 0.25, width: 0.5, height: 0.5 }
@@ -191,5 +191,70 @@ describe('a scene', () => {
     scene.draw(fakeContext({ arc }))
     expect(arc.mock.calls.length).toBeGreaterThan(6)
     for (const call of arc.mock.calls) expect(call[1]).toBeLessThanOrEqual(1440)
+  })
+})
+
+describe('the settings of an effect', () => {
+  /** The scene with one effect run for `ticks` ticks of 1/60 s, from empty. */
+  function run(
+    kind: MotionKind,
+    settings: Record<string, number> | undefined,
+    ticks: number,
+    box?: AreaBox,
+  ) {
+    const scene = sceneOf(1280, 720)
+    scene.setEffects([{ kind, settings, box }], false)
+    for (let i = 0; i < ticks; i++) scene.step(1000 / 60)
+    return scene
+  }
+
+  it('plays at the old amounts when no settings are given or all are at their defaults', () => {
+    for (const kind of ['dust', 'fireflies', 'mist'] as const)
+      expect(run(kind, { amount: 1, speed: 1 }, 5).count(kind)).toBe(
+        run(kind, undefined, 5).count(kind),
+      )
+    expect(run('dust', undefined, 5).count('dust')).toBe(16)
+  })
+
+  it('has more specks for a bigger amount and none for amount 0', () => {
+    expect(run('dust', { amount: 2 }, 5).count('dust')).toBe(32)
+    expect(run('dust', { amount: 0 }, 5).count('dust')).toBe(0)
+  })
+
+  it('spawns embers, smoke and water more often for a bigger amount', () => {
+    for (const kind of ['embers', 'smoke', 'water'] as const) {
+      const few = run(kind, { amount: 0.5 }, 300, BOX).count(kind)
+      const many = run(kind, { amount: 2 }, 300, BOX).count(kind)
+      expect(many, kind).toBeGreaterThan(few)
+      expect(run(kind, { amount: 0 }, 300, BOX).count(kind)).toBe(0)
+    }
+  })
+
+  it('draws a spot inside its drawn shape only', () => {
+    const scene = sceneOf(1280, 720)
+    scene.setEffects(
+      [
+        {
+          kind: 'fire',
+          box: BOX,
+          polygon: [
+            { x: 0.25, y: 0.25 },
+            { x: 0.75, y: 0.25 },
+            { x: 0.5, y: 0.75 },
+          ],
+        },
+      ],
+      true,
+    )
+    const clip = vi.fn()
+    scene.draw(fakeContext({ clip }))
+    expect(clip).toHaveBeenCalled()
+  })
+
+  it('lays an effect anew when a setting changes', () => {
+    const scene = sceneOf(1280, 720)
+    scene.setEffects([{ kind: 'dust', settings: { amount: 1 } }], true)
+    scene.setEffects([{ kind: 'dust', settings: { amount: 2 } }], true)
+    expect(scene.count('dust')).toBe(32)
   })
 })
