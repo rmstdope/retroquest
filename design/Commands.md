@@ -1,4 +1,4 @@
-# Command List for RetroQuest: The Awakening
+# Command List for Tales of Twinmoor: Wardens of the Dawn
 
 Below is a comprehensive list of all commands that should be possible to use in the game. Commands that render the same result are grouped together for clarity.
 

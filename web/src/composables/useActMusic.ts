@@ -29,7 +29,7 @@ import {
  * shows the first.
  */
 const CHOSEN_TAKE_CREDIT =
-  'Original music for RetroQuest\n' +
+  'Original music for Tales of Twinmoor\n' +
   'Images, narration and music made with Content Studio'
 
 const GESTURES = ['keydown', 'click', 'touchstart'] as const

@@ -1,12 +1,12 @@
-# RetroQuest: A Text Adventure Built with AI
+# Tales of Twinmoor: Wardens of the Dawn
 
-Welcome to RetroQuest, a (as the name may give away) retro inspired text adventure game!
+Welcome to Tales of Twinmoor: Wardens of the Dawn, a retro inspired text adventure game, built with AI!
 
 ## How to Play
 
 ### Starting the game
 
-RetroQuest runs in the browser. From a checkout:
+Tales of Twinmoor runs in the browser. From a checkout:
 
 ```bash
 npm install --prefix web

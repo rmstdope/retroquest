@@ -232,8 +232,14 @@ onBeforeUnmount(() => {
     <div class="lq-title-inner">
       <div class="lq-title-name">
         <span class="lq-welcome">Welcome to</span>
-        <h2 :id="titleId" class="lq-sr-only">RetroQuest</h2>
-        <span class="lq-wordmark" aria-hidden="true">RetroQuest</span>
+        <h2 :id="titleId" class="lq-sr-only">
+          Tales of Twinmoor: Wardens of the Dawn
+        </h2>
+        <span class="lq-wordmark" aria-hidden="true">Tales of Twinmoor</span>
+        <span class="lq-rule" aria-hidden="true"
+          ><span class="lq-rule-line"></span>◆<span class="lq-rule-line"></span
+        ></span>
+        <span class="lq-subtitle" aria-hidden="true">Wardens of the Dawn</span>
       </div>
       <p v-if="error" class="lq-title-error" role="alert">{{ error }}</p>
       <div
@@ -365,14 +371,41 @@ onBeforeUnmount(() => {
 }
 .lq-wordmark {
   display: block;
+  max-width: 100%;
   font-family: var(--lq-font-display);
   font-size: 84px;
   font-weight: 600;
   line-height: 1;
+  text-align: center;
+  text-wrap: balance;
   color: var(--lq-accent-text);
   text-shadow:
     0 0 22px rgb(0 0 0 / 0.8),
     0 2px 3px #000;
+}
+.lq-rule {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 220px;
+  max-width: 100%;
+  margin: 10px auto;
+  color: var(--lq-accent-line);
+}
+.lq-rule-line {
+  flex: 1;
+  height: 1px;
+  background: var(--lq-accent-line);
+}
+.lq-subtitle {
+  display: block;
+  font-family: var(--lq-font-display);
+  font-size: 28px;
+  font-style: italic;
+  line-height: 1.15;
+  text-align: center;
+  color: #ece6d6;
+  text-shadow: 0 1px 3px #000;
 }
 .lq-title-buttons {
   display: flex;
@@ -498,6 +531,9 @@ onBeforeUnmount(() => {
   .lq-wordmark {
     font-size: 48px;
   }
+  .lq-subtitle {
+    font-size: 18px;
+  }
   .lq-title-buttons {
     width: 100%;
     max-width: 320px;
@@ -518,7 +554,14 @@ onBeforeUnmount(() => {
     margin-bottom: 4px;
   }
   .lq-wordmark {
-    font-size: 52px;
+    font-size: 36px;
+  }
+  .lq-rule {
+    display: none;
+  }
+  .lq-subtitle {
+    margin-top: 4px;
+    font-size: 14px;
   }
   .lq-title-buttons {
     flex-direction: row;

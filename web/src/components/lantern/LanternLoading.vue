@@ -3,7 +3,7 @@ import { computed, nextTick, ref, watch } from 'vue'
 
 /**
  * The Lantern UI's loading screen while the game engine starts: the
- * RetroQuest wordmark, a lantern-glow spinner and the loading status. A
+ * Tales of Twinmoor wordmark, a lantern-glow spinner and the loading status. A
  * polite live region announces each step once, without its running file
  * count. When loading `failed`, the spinner stops, a plain sentence is
  * the alert (the raw error, which can be a long error text, is in a
@@ -29,11 +29,11 @@ watch(
 
 <template>
   <div class="lq-loading">
-    <h1 class="lq-loading-title">RetroQuest</h1>
+    <h1 class="lq-loading-title">Tales of Twinmoor</h1>
     <template v-if="failed">
       <p class="lq-loading-status" role="alert">
-        RetroQuest could not start. Try again, or open Details to see what went
-        wrong.
+        Tales of Twinmoor could not start. Try again, or open Details to see
+        what went wrong.
       </p>
       <button
         ref="retryButton"

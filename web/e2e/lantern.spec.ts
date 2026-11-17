@@ -54,7 +54,7 @@ test.describe('Lantern UI (the default)', () => {
     await injectMockState(page)
 
     await expect(page.getByRole('banner')).toHaveCount(0)
-    await expect(page.getByText('RetroQuest', { exact: true })).toHaveCount(0)
+    await expect(page.getByText('Tales of Twinmoor', { exact: true })).toHaveCount(0)
     await expect(page.getByText('bustles with life')).toBeVisible()
     await expect(page.locator('.lq-name-btn')).toBeEnabled()
     await expect(page.locator('.lq-composer, .lq-dock')).toHaveCount(0)
@@ -814,7 +814,7 @@ test.describe('Lantern UI (the default)', () => {
     })
     await page.getByText('Details', { exact: true }).click()
 
-    const title = page.getByRole('heading', { name: 'RetroQuest' })
+    const title = page.getByRole('heading', { name: 'Tales of Twinmoor' })
     await title.scrollIntoViewIfNeeded()
     const box = await title.boundingBox()
     expect(box!.y).toBeGreaterThanOrEqual(0)
@@ -943,7 +943,7 @@ test.describe('Lantern UI (the default)', () => {
     await dialog.getByRole('button', { name: 'Finish without saving' }).click()
 
     await expect(
-      page.getByRole('heading', { name: 'Thank you for playing RetroQuest' }),
+      page.getByRole('heading', { name: 'Thank you for playing Tales of Twinmoor' }),
     ).toBeFocused()
     await expect(page.getByText('This game was not saved.')).toBeVisible()
   })
@@ -968,7 +968,7 @@ test.describe('Lantern UI (the default)', () => {
     })
 
     const title = page.getByRole('heading', {
-      name: 'Thank you for playing RetroQuest',
+      name: 'Thank you for playing Tales of Twinmoor',
     })
     await expect(title).toBeInViewport()
     const foot = page.getByText('Your game is saved in the quick slot.')
@@ -1001,7 +1001,7 @@ test.describe('Lantern UI (the default)', () => {
 
     await expect(page.locator('.lq-title-page')).toBeVisible()
     await expect(
-      page.getByRole('heading', { name: 'Thank you for playing RetroQuest' }),
+      page.getByRole('heading', { name: 'Thank you for playing Tales of Twinmoor' }),
     ).toHaveCount(0)
   })
 

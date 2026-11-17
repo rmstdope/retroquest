@@ -10,7 +10,7 @@ describe('TurnPage', () => {
     expect(page.get('h2').text()).toBe('Turn your phone on its side')
     const lines = page.findAll('p').map((p) => p.text())
     expect(lines).toEqual([
-      'RetroQuest is played with the phone held sideways, so the whole room fits.',
+      'Tales of Twinmoor is played with the phone held sideways, so the whole room fits.',
       "If nothing happens, check that your phone's rotation lock is off.",
     ])
   })

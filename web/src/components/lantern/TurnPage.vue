@@ -35,7 +35,8 @@
       Turn your phone on its side
     </h2>
     <p class="lq-turn-line">
-      RetroQuest is played with the phone held sideways, so the whole room fits.
+      Tales of Twinmoor is played with the phone held sideways, so the whole
+      room fits.
     </p>
     <p class="lq-turn-small">
       If nothing happens, check that your phone's rotation lock is off.

@@ -27,7 +27,7 @@ describe('EndScreen', () => {
     )
 
     expect(w.get('.lq-end-kicker').text()).toBe('The end')
-    expect(w.get('h1').text()).toBe('Thank you for playing RetroQuest')
+    expect(w.get('h1').text()).toBe('Thank you for playing Tales of Twinmoor')
     expect(w.find('.lq-ornament').exists()).toBe(true)
     expect(w.get('.lq-end-body').text()).toBe('The realm breathes again.')
     expect(w.get('.lq-end-body .theme-character_name').text()).toBe('realm')
@@ -51,7 +51,7 @@ describe('EndScreen', () => {
     const w = mountEnd('  \n', false)
 
     expect(w.find('.lq-end-body').exists()).toBe(false)
-    expect(w.get('h1').text()).toBe('Thank you for playing RetroQuest')
+    expect(w.get('h1').text()).toBe('Thank you for playing Tales of Twinmoor')
     expect(w.find('.lq-ornament').exists()).toBe(true)
     expect(w.get('.lq-end-foot').text()).toBe('This game was not saved.')
   })

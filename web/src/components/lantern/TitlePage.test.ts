@@ -40,16 +40,20 @@ describe('TitlePage', () => {
     return wrapper
   }
 
-  it('is a page named RetroQuest, with the name written over the picture', () => {
+  it('is a page named Tales of Twinmoor: Wardens of the Dawn, with the name written over the picture', () => {
     const w = mountTitle()
     const dialog = w.get('[role="dialog"]')
 
     expect(dialog.get(`#${dialog.attributes('aria-labelledby')}`).text()).toBe(
-      'RetroQuest',
+      'Tales of Twinmoor: Wardens of the Dawn',
     )
     expect(w.get('.lq-welcome').text()).toBe('Welcome to')
     expect(w.get('.lq-wordmark').attributes('aria-hidden')).toBe('true')
-    expect(w.get('.lq-wordmark').text()).toBe('RetroQuest')
+    expect(w.get('.lq-wordmark').text()).toBe('Tales of Twinmoor')
+    expect(w.get('.lq-subtitle').attributes('aria-hidden')).toBe('true')
+    expect(w.get('.lq-subtitle').text()).toBe('Wardens of the Dawn')
+    expect(w.get('.lq-rule').attributes('aria-hidden')).toBe('true')
+    expect(w.get('.lq-title-name').findAll('.lq-subtitle')).toHaveLength(1)
     expect(w.find('pre').exists()).toBe(false)
   })
 
