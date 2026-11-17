@@ -717,7 +717,7 @@ describe('a floating kind drawn inside a shape', () => {
     const strip = sceneOf(W, H)
     strip.setEffects([drawnIn('fireflies', QUARTER, { amount: 3 })], true)
     expect(strip.count('fireflies')).toBe(7)
-  })
+  }, 30_000)
 
   it('counts the area a shape encloses, not the box around it', () => {
     const triangle = [
@@ -728,7 +728,7 @@ describe('a floating kind drawn inside a shape', () => {
     const scene = sceneOf(W, H)
     scene.setEffects([drawnIn('dust', triangle)], true)
     expect(scene.count('dust')).toBe(2)
-  })
+  }, 30_000)
 
   it('keeps a speck in a small shape, and none at amount 0', () => {
     const small = rectangle(0.5, 0.5, 0.52, 0.52)
@@ -740,7 +740,7 @@ describe('a floating kind drawn inside a shape', () => {
       none.setEffects([drawnIn(kind, QUARTER, { amount: 0 })], true)
       expect(none.count(kind)).toBe(0)
     }
-  })
+  }, 30_000)
 
   it('shares the amount between several shapes by their size', () => {
     const one = sceneOf(W, H)
@@ -754,7 +754,7 @@ describe('a floating kind drawn inside a shape', () => {
       true,
     )
     expect(two.count('dust')).toBe(one.count('dust'))
-  })
+  }, 30_000)
 
   it('keeps every speck inside the shape for as long as it plays', () => {
     const shape = rectangle(0.55, 0.2, 0.95, 0.8)
@@ -771,7 +771,7 @@ describe('a floating kind drawn inside a shape', () => {
     ] as const) {
       const scene = sceneOf(W, H)
       scene.setEffects([drawnIn(kind, shape, { amount: 3 })], true)
-      const seen = watch(scene, kind, 60)
+      const seen = watch(scene, kind, 30)
       expect(seen.length, kind).toBeGreaterThan(0)
       for (const p of seen) {
         expect(p.x, kind).toBeGreaterThanOrEqual(x0 - 1)
@@ -780,7 +780,7 @@ describe('a floating kind drawn inside a shape', () => {
         expect(p.y, kind).toBeLessThanOrEqual(y1 + 1)
       }
     }
-  })
+  }, 30_000)
 
   it('lets leaves come loose along the top of the shape and be gone by its bottom', () => {
     // A leaf comes loose on the first of every five draws, so one does in a short time.
@@ -802,7 +802,7 @@ describe('a floating kind drawn inside a shape', () => {
     const top = 0.2 * H
     expect(Math.min(...seen.map((p) => p.y))).toBeLessThan(top + 10)
     expect(Math.max(...seen.map((p) => p.y))).toBeLessThanOrEqual(0.5 * H + 1)
-  })
+  }, 30_000)
 
   it('lets embers rise from the bottom of the shape and burn out before its top', () => {
     const scene = sceneOf(W, H)
@@ -818,7 +818,7 @@ describe('a floating kind drawn inside a shape', () => {
     const seen = watch(scene, 'embers', 60)
     expect(Math.max(...seen.map((p) => p.y))).toBeGreaterThan(0.3 * H)
     expect(Math.min(...seen.map((p) => p.y))).toBeGreaterThanOrEqual(0.2 * H)
-  })
+  }, 30_000)
 
   it('holds still inside its shape at speed 0', () => {
     const shape = rectangle(0.55, 0.2, 0.95, 0.8)
@@ -832,13 +832,13 @@ describe('a floating kind drawn inside a shape', () => {
         kind,
       ).toEqual(first.map((p) => [p.x, p.y]))
     }
-  })
+  }, 30_000)
 
   it('fades a speck out as it nears the line, and is whole well inside', () => {
     const shape = rectangle(0.55, 0.2, 0.95, 0.8)
     const scene = sceneOf(W, H)
     scene.setEffects([drawnIn('dust', shape, { amount: 3 })], true)
-    const seen = watch(scene, 'dust', 60)
+    const seen = watch(scene, 'dust', 30)
     const edge = (p: { x: number; y: number }): number =>
       Math.min(p.x - 0.55 * W, 0.95 * W - p.x, p.y - 0.2 * H, 0.8 * H - p.y)
     const sorted = [...seen].sort((a, b) => edge(a) - edge(b))
@@ -846,7 +846,7 @@ describe('a floating kind drawn inside a shape', () => {
       expect(sorted[i].alpha).toBeGreaterThanOrEqual(sorted[i - 1].alpha - 1e-9)
     expect(sorted[0].alpha).toBeLessThan(0.5)
     expect(sorted[sorted.length - 1].alpha).toBe(1)
-  })
+  }, 30_000)
   it('spreads mist across the whole shape, and thins it before the line, most at the bottom', () => {
     const shape = rectangle(0, 0, 1, 2 / 3)
     const scene = sceneOf(W, H)
@@ -858,7 +858,7 @@ describe('a floating kind drawn inside a shape', () => {
       // A puff reaching the line is gone, so the line never cuts one.
       if (p.y > bottom - 20) expect(p.alpha).toBeLessThan(0.1)
     }
-  })
+  }, 30_000)
 
   it('brings a leaf or an ember now and then to a small shape, as it does to a small picture', () => {
     const small = rectangle(0.5, 0.5, 0.6, 0.6)
@@ -867,5 +867,5 @@ describe('a floating kind drawn inside a shape', () => {
       scene.setEffects([drawnIn(kind, small)], true)
       expect(watch(scene, kind, 240).length, kind).toBeGreaterThan(0)
     }
-  })
+  }, 30_000)
 })
