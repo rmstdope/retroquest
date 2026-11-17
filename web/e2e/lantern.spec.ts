@@ -54,7 +54,9 @@ test.describe('Lantern UI (the default)', () => {
     await injectMockState(page)
 
     await expect(page.getByRole('banner')).toHaveCount(0)
-    await expect(page.getByText('Tales of Twinmoor', { exact: true })).toHaveCount(0)
+    await expect(
+      page.getByText('Tales of Twinmoor', { exact: true }),
+    ).toHaveCount(0)
     await expect(page.getByText('bustles with life')).toBeVisible()
     await expect(page.locator('.lq-name-btn')).toBeEnabled()
     await expect(page.locator('.lq-composer, .lq-dock')).toHaveCount(0)
@@ -841,6 +843,10 @@ test.describe('Lantern UI (the default)', () => {
       await page.setViewportSize(size)
       await expect(page.locator('.lq-wordmark')).toBeVisible()
       await expect(page.locator('.lq-credit')).toBeVisible()
+      await expect(page.locator('.lq-subtitle')).toBeVisible()
+      if (size.height < 450)
+        await expect(page.locator('.lq-title-rule')).toBeHidden()
+      else await expect(page.locator('.lq-title-rule')).toBeVisible()
     }
   })
 
@@ -943,7 +949,9 @@ test.describe('Lantern UI (the default)', () => {
     await dialog.getByRole('button', { name: 'Finish without saving' }).click()
 
     await expect(
-      page.getByRole('heading', { name: 'Thank you for playing Tales of Twinmoor' }),
+      page.getByRole('heading', {
+        name: 'Thank you for playing Tales of Twinmoor',
+      }),
     ).toBeFocused()
     await expect(page.getByText('This game was not saved.')).toBeVisible()
   })
@@ -1001,7 +1009,9 @@ test.describe('Lantern UI (the default)', () => {
 
     await expect(page.locator('.lq-title-page')).toBeVisible()
     await expect(
-      page.getByRole('heading', { name: 'Thank you for playing Tales of Twinmoor' }),
+      page.getByRole('heading', {
+        name: 'Thank you for playing Tales of Twinmoor',
+      }),
     ).toHaveCount(0)
   })
 

@@ -52,7 +52,7 @@ describe('TitlePage', () => {
     expect(w.get('.lq-wordmark').text()).toBe('Tales of Twinmoor')
     expect(w.get('.lq-subtitle').attributes('aria-hidden')).toBe('true')
     expect(w.get('.lq-subtitle').text()).toBe('Wardens of the Dawn')
-    expect(w.get('.lq-rule').attributes('aria-hidden')).toBe('true')
+    expect(w.get('.lq-title-rule').attributes('aria-hidden')).toBe('true')
     expect(w.get('.lq-title-name').findAll('.lq-subtitle')).toHaveLength(1)
     expect(w.find('pre').exists()).toBe(false)
   })

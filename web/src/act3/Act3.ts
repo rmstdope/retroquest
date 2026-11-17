@@ -46,7 +46,7 @@ import {
 import { Tobin } from './characters/Tobin'
 import { CEDRIC_NAME } from './CedricLines'
 
-/** Act 3 of Tales of Twinmoor: The Awakening. */
+/** Act 3 of Tales of Twinmoor. */
 export class Act3 extends Act {
   constructor() {
     const rooms = {

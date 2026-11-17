@@ -236,8 +236,10 @@ onBeforeUnmount(() => {
           Tales of Twinmoor: Wardens of the Dawn
         </h2>
         <span class="lq-wordmark" aria-hidden="true">Tales of Twinmoor</span>
-        <span class="lq-rule" aria-hidden="true"
-          ><span class="lq-rule-line"></span>◆<span class="lq-rule-line"></span
+        <span class="lq-title-rule" aria-hidden="true"
+          ><span class="lq-title-rule-line"></span>◆<span
+            class="lq-title-rule-line"
+          ></span
         ></span>
         <span class="lq-subtitle" aria-hidden="true">Wardens of the Dawn</span>
       </div>
@@ -383,7 +385,7 @@ onBeforeUnmount(() => {
     0 0 22px rgb(0 0 0 / 0.8),
     0 2px 3px #000;
 }
-.lq-rule {
+.lq-title-rule {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -392,7 +394,7 @@ onBeforeUnmount(() => {
   margin: 10px auto;
   color: var(--lq-accent-line);
 }
-.lq-rule-line {
+.lq-title-rule-line {
   flex: 1;
   height: 1px;
   background: var(--lq-accent-line);
@@ -556,7 +558,7 @@ onBeforeUnmount(() => {
   .lq-wordmark {
     font-size: 36px;
   }
-  .lq-rule {
+  .lq-title-rule {
     display: none;
   }
   .lq-subtitle {
