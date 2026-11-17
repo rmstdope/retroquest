@@ -21465,6 +21465,163 @@
    }
   ]
  },
+ "06b99132af796d": {
+  "file": "06b99132af796d.mp3",
+  "speaker": "tilda",
+  "duration": 9.66,
+  "words": [
+   {
+    "word": "My",
+    "start": 0.0,
+    "end": 0.26
+   },
+   {
+    "word": "mother",
+    "start": 0.26,
+    "end": 0.54
+   },
+   {
+    "word": "used",
+    "start": 0.54,
+    "end": 0.78
+   },
+   {
+    "word": "to",
+    "start": 0.78,
+    "end": 0.94
+   },
+   {
+    "word": "say,",
+    "start": 0.94,
+    "end": 1.32
+   },
+   {
+    "word": "two",
+    "start": 1.54,
+    "end": 2.0
+   },
+   {
+    "word": "moons",
+    "start": 2.0,
+    "end": 2.32
+   },
+   {
+    "word": "on",
+    "start": 2.32,
+    "end": 2.54
+   },
+   {
+    "word": "the",
+    "start": 2.54,
+    "end": 2.66
+   },
+   {
+    "word": "moor,",
+    "start": 2.66,
+    "end": 3.04
+   },
+   {
+    "word": "no",
+    "start": 3.22,
+    "end": 3.44
+   },
+   {
+    "word": "rain",
+    "start": 3.44,
+    "end": 3.72
+   },
+   {
+    "word": "at",
+    "start": 3.72,
+    "end": 3.9
+   },
+   {
+    "word": "the",
+    "start": 3.9,
+    "end": 4.0
+   },
+   {
+    "word": "door.",
+    "start": 4.0,
+    "end": 4.36
+   },
+   {
+    "word": "Still",
+    "start": 4.74,
+    "end": 5.24
+   },
+   {
+    "word": "nights,",
+    "start": 5.24,
+    "end": 5.62
+   },
+   {
+    "word": "she",
+    "start": 5.76,
+    "end": 5.82
+   },
+   {
+    "word": "meant.",
+    "start": 5.82,
+    "end": 6.12
+   },
+   {
+    "word": "We've",
+    "start": 6.5,
+    "end": 6.94
+   },
+   {
+    "word": "not",
+    "start": 6.94,
+    "end": 7.1
+   },
+   {
+    "word": "had",
+    "start": 7.1,
+    "end": 7.26
+   },
+   {
+    "word": "a",
+    "start": 7.26,
+    "end": 7.38
+   },
+   {
+    "word": "still",
+    "start": 7.38,
+    "end": 7.62
+   },
+   {
+    "word": "night",
+    "start": 7.62,
+    "end": 7.98
+   },
+   {
+    "word": "since",
+    "start": 7.98,
+    "end": 8.2
+   },
+   {
+    "word": "the",
+    "start": 8.2,
+    "end": 8.4
+   },
+   {
+    "word": "fields",
+    "start": 8.4,
+    "end": 8.74
+   },
+   {
+    "word": "went",
+    "start": 8.74,
+    "end": 8.94
+   },
+   {
+    "word": "grey.",
+    "start": 8.94,
+    "end": 9.22
+   }
+  ]
+ },
  "06bbe04180c155": {
   "file": "06bbe04180c155.mp3",
   "speaker": "narrator",
@@ -26832,6 +26989,188 @@
    }
   ]
  },
+ "0842eb9ef7d3ac": {
+  "file": "0842eb9ef7d3ac.mp3",
+  "speaker": "narrator",
+  "duration": 13.7,
+  "words": [
+   {
+    "word": "You",
+    "start": 0.0,
+    "end": 0.16
+   },
+   {
+    "word": "are",
+    "start": 0.16,
+    "end": 0.42
+   },
+   {
+    "word": "Elior,",
+    "start": 0.42,
+    "end": 0.9
+   },
+   {
+    "word": "a",
+    "start": 1.3,
+    "end": 1.54
+   },
+   {
+    "word": "farmer",
+    "start": 1.54,
+    "end": 1.88
+   },
+   {
+    "word": "boy",
+    "start": 1.88,
+    "end": 2.2
+   },
+   {
+    "word": "in",
+    "start": 2.2,
+    "end": 2.4
+   },
+   {
+    "word": "the",
+    "start": 2.4,
+    "end": 2.5
+   },
+   {
+    "word": "village",
+    "start": 2.5,
+    "end": 2.84
+   },
+   {
+    "word": "of",
+    "start": 2.84,
+    "end": 3.04
+   },
+   {
+    "word": "Willowbrook,",
+    "start": 3.04,
+    "end": 3.66
+   },
+   {
+    "word": "on",
+    "start": 3.86,
+    "end": 4.36
+   },
+   {
+    "word": "the",
+    "start": 4.36,
+    "end": 4.48
+   },
+   {
+    "word": "outskirts",
+    "start": 4.48,
+    "end": 5.16
+   },
+   {
+    "word": "of",
+    "start": 5.16,
+    "end": 5.32
+   },
+   {
+    "word": "Twinmoor.",
+    "start": 5.32,
+    "end": 5.94
+   },
+   {
+    "word": "Your",
+    "start": 6.26,
+    "end": 6.84
+   },
+   {
+    "word": "grandmother",
+    "start": 6.84,
+    "end": 7.36
+   },
+   {
+    "word": "raised",
+    "start": 7.36,
+    "end": 7.88
+   },
+   {
+    "word": "you",
+    "start": 7.88,
+    "end": 8.14
+   },
+   {
+    "word": "after",
+    "start": 8.14,
+    "end": 8.54
+   },
+   {
+    "word": "your",
+    "start": 8.54,
+    "end": 8.74
+   },
+   {
+    "word": "parents",
+    "start": 8.74,
+    "end": 9.18
+   },
+   {
+    "word": "vanished,",
+    "start": 9.18,
+    "end": 9.7
+   },
+   {
+    "word": "and",
+    "start": 9.92,
+    "end": 10.5
+   },
+   {
+    "word": "your",
+    "start": 10.5,
+    "end": 10.66
+   },
+   {
+    "word": "days",
+    "start": 10.66,
+    "end": 10.96
+   },
+   {
+    "word": "are",
+    "start": 10.96,
+    "end": 11.22
+   },
+   {
+    "word": "the",
+    "start": 11.22,
+    "end": 11.32
+   },
+   {
+    "word": "crops,",
+    "start": 11.32,
+    "end": 11.82
+   },
+   {
+    "word": "the",
+    "start": 12.02,
+    "end": 12.22
+   },
+   {
+    "word": "hens",
+    "start": 12.22,
+    "end": 12.64
+   },
+   {
+    "word": "and",
+    "start": 12.68,
+    "end": 13.0
+   },
+   {
+    "word": "the",
+    "start": 13.0,
+    "end": 13.12
+   },
+   {
+    "word": "weather.",
+    "start": 13.12,
+    "end": 13.4
+   }
+  ]
+ },
  "0844b4b9abc5e8": {
   "file": "1810aa84e25214.mp3",
   "speaker": "borin",
@@ -30176,6 +30515,593 @@
     "word": "clothing",
     "start": 0.46,
     "end": 0.92
+   }
+  ]
+ },
+ "092a7d0c86e16b": {
+  "file": "092a7d0c86e16b.mp3",
+  "speaker": "priest",
+  "duration": 39.295,
+  "words": [
+   {
+    "word": "When",
+    "start": 0.0,
+    "end": 0.2
+   },
+   {
+    "word": "the",
+    "start": 0.2,
+    "end": 0.4
+   },
+   {
+    "word": "founders",
+    "start": 0.4,
+    "end": 0.84
+   },
+   {
+    "word": "came",
+    "start": 0.84,
+    "end": 1.28
+   },
+   {
+    "word": "to",
+    "start": 1.28,
+    "end": 1.44
+   },
+   {
+    "word": "this",
+    "start": 1.44,
+    "end": 1.66
+   },
+   {
+    "word": "valley,",
+    "start": 1.66,
+    "end": 2.06
+   },
+   {
+    "word": "they",
+    "start": 2.28,
+    "end": 2.62
+   },
+   {
+    "word": "brought",
+    "start": 2.62,
+    "end": 2.96
+   },
+   {
+    "word": "a",
+    "start": 2.96,
+    "end": 3.16
+   },
+   {
+    "word": "relic",
+    "start": 3.16,
+    "end": 3.54
+   },
+   {
+    "word": "with",
+    "start": 3.54,
+    "end": 3.74
+   },
+   {
+    "word": "them,",
+    "start": 3.74,
+    "end": 4.04
+   },
+   {
+    "word": "and",
+    "start": 4.18,
+    "end": 4.5
+   },
+   {
+    "word": "they",
+    "start": 4.5,
+    "end": 4.7
+   },
+   {
+    "word": "hung",
+    "start": 4.7,
+    "end": 4.98
+   },
+   {
+    "word": "that",
+    "start": 4.98,
+    "end": 5.28
+   },
+   {
+    "word": "bell",
+    "start": 5.28,
+    "end": 5.62
+   },
+   {
+    "word": "to",
+    "start": 5.62,
+    "end": 5.84
+   },
+   {
+    "word": "watch",
+    "start": 5.84,
+    "end": 6.18
+   },
+   {
+    "word": "over",
+    "start": 6.18,
+    "end": 6.48
+   },
+   {
+    "word": "it.",
+    "start": 6.48,
+    "end": 6.78
+   },
+   {
+    "word": "Their",
+    "start": 7.0,
+    "end": 7.56
+   },
+   {
+    "word": "mark",
+    "start": 7.56,
+    "end": 7.96
+   },
+   {
+    "word": "was",
+    "start": 7.96,
+    "end": 8.2
+   },
+   {
+    "word": "a",
+    "start": 8.2,
+    "end": 8.34
+   },
+   {
+    "word": "tree",
+    "start": 8.34,
+    "end": 8.68
+   },
+   {
+    "word": "under",
+    "start": 8.68,
+    "end": 9.12
+   },
+   {
+    "word": "two",
+    "start": 9.12,
+    "end": 9.42
+   },
+   {
+    "word": "moons;",
+    "start": 9.42,
+    "end": 9.94
+   },
+   {
+    "word": "it",
+    "start": 10.0,
+    "end": 10.56
+   },
+   {
+    "word": "is",
+    "start": 10.56,
+    "end": 10.72
+   },
+   {
+    "word": "cut",
+    "start": 10.72,
+    "end": 10.98
+   },
+   {
+    "word": "over",
+    "start": 10.98,
+    "end": 11.34
+   },
+   {
+    "word": "the",
+    "start": 11.34,
+    "end": 11.52
+   },
+   {
+    "word": "door,",
+    "start": 11.52,
+    "end": 11.88
+   },
+   {
+    "word": "if",
+    "start": 12.02,
+    "end": 12.32
+   },
+   {
+    "word": "you",
+    "start": 12.32,
+    "end": 12.46
+   },
+   {
+    "word": "look,",
+    "start": 12.46,
+    "end": 12.84
+   },
+   {
+    "word": "though",
+    "start": 13.04,
+    "end": 13.28
+   },
+   {
+    "word": "the",
+    "start": 13.28,
+    "end": 13.48
+   },
+   {
+    "word": "weather",
+    "start": 13.48,
+    "end": 13.74
+   },
+   {
+    "word": "has",
+    "start": 13.74,
+    "end": 14.02
+   },
+   {
+    "word": "nearly",
+    "start": 14.02,
+    "end": 14.38
+   },
+   {
+    "word": "had",
+    "start": 14.38,
+    "end": 14.7
+   },
+   {
+    "word": "it.",
+    "start": 14.7,
+    "end": 14.92
+   },
+   {
+    "word": "They",
+    "start": 15.12,
+    "end": 15.6
+   },
+   {
+    "word": "came",
+    "start": 15.6,
+    "end": 15.98
+   },
+   {
+    "word": "over",
+    "start": 15.98,
+    "end": 16.3
+   },
+   {
+    "word": "the",
+    "start": 16.3,
+    "end": 16.48
+   },
+   {
+    "word": "moor",
+    "start": 16.48,
+    "end": 16.84
+   },
+   {
+    "word": "on",
+    "start": 16.84,
+    "end": 17.08
+   },
+   {
+    "word": "a",
+    "start": 17.08,
+    "end": 17.22
+   },
+   {
+    "word": "still",
+    "start": 17.22,
+    "end": 17.5
+   },
+   {
+    "word": "night,",
+    "start": 17.5,
+    "end": 17.96
+   },
+   {
+    "word": "and",
+    "start": 18.12,
+    "end": 18.4
+   },
+   {
+    "word": "the",
+    "start": 18.4,
+    "end": 18.56
+   },
+   {
+    "word": "moon",
+    "start": 18.56,
+    "end": 18.84
+   },
+   {
+    "word": "lay",
+    "start": 18.84,
+    "end": 19.2
+   },
+   {
+    "word": "in",
+    "start": 19.2,
+    "end": 19.46
+   },
+   {
+    "word": "the",
+    "start": 19.46,
+    "end": 19.58
+   },
+   {
+    "word": "moor",
+    "start": 19.58,
+    "end": 19.9
+   },
+   {
+    "word": "water",
+    "start": 19.9,
+    "end": 20.3
+   },
+   {
+    "word": "as",
+    "start": 20.3,
+    "end": 20.58
+   },
+   {
+    "word": "bright",
+    "start": 20.58,
+    "end": 20.86
+   },
+   {
+    "word": "as",
+    "start": 20.86,
+    "end": 21.12
+   },
+   {
+    "word": "the",
+    "start": 21.12,
+    "end": 21.24
+   },
+   {
+    "word": "one",
+    "start": 21.24,
+    "end": 21.44
+   },
+   {
+    "word": "above",
+    "start": 21.44,
+    "end": 21.7
+   },
+   {
+    "word": "it.",
+    "start": 21.7,
+    "end": 22.02
+   },
+   {
+    "word": "Two",
+    "start": 22.36,
+    "end": 22.68
+   },
+   {
+    "word": "moons,",
+    "start": 22.68,
+    "end": 23.24
+   },
+   {
+    "word": "they",
+    "start": 23.4,
+    "end": 23.54
+   },
+   {
+    "word": "said,",
+    "start": 23.54,
+    "end": 24.0
+   },
+   {
+    "word": "one",
+    "start": 24.28,
+    "end": 24.6
+   },
+   {
+    "word": "for",
+    "start": 24.6,
+    "end": 24.76
+   },
+   {
+    "word": "the",
+    "start": 24.76,
+    "end": 24.9
+   },
+   {
+    "word": "sky",
+    "start": 24.9,
+    "end": 25.26
+   },
+   {
+    "word": "and",
+    "start": 25.26,
+    "end": 25.58
+   },
+   {
+    "word": "one",
+    "start": 25.58,
+    "end": 25.82
+   },
+   {
+    "word": "for",
+    "start": 25.82,
+    "end": 26.0
+   },
+   {
+    "word": "the",
+    "start": 26.0,
+    "end": 26.12
+   },
+   {
+    "word": "ground,",
+    "start": 26.12,
+    "end": 26.52
+   },
+   {
+    "word": "and",
+    "start": 26.72,
+    "end": 27.04
+   },
+   {
+    "word": "they",
+    "start": 27.04,
+    "end": 27.22
+   },
+   {
+    "word": "named",
+    "start": 27.22,
+    "end": 27.6
+   },
+   {
+    "word": "the",
+    "start": 27.6,
+    "end": 27.8
+   },
+   {
+    "word": "land",
+    "start": 27.8,
+    "end": 28.2
+   },
+   {
+    "word": "Twinmoor.",
+    "start": 28.2,
+    "end": 28.98
+   },
+   {
+    "word": "The",
+    "start": 28.98,
+    "end": 29.4
+   },
+   {
+    "word": "relic",
+    "start": 29.4,
+    "end": 29.78
+   },
+   {
+    "word": "passed",
+    "start": 29.78,
+    "end": 30.2
+   },
+   {
+    "word": "quietly",
+    "start": 30.2,
+    "end": 30.8
+   },
+   {
+    "word": "down",
+    "start": 30.8,
+    "end": 31.14
+   },
+   {
+    "word": "their",
+    "start": 31.14,
+    "end": 31.42
+   },
+   {
+    "word": "line,",
+    "start": 31.42,
+    "end": 31.92
+   },
+   {
+    "word": "until",
+    "start": 32.04,
+    "end": 32.48
+   },
+   {
+    "word": "one",
+    "start": 32.48,
+    "end": 32.92
+   },
+   {
+    "word": "night,",
+    "start": 32.92,
+    "end": 33.32
+   },
+   {
+    "word": "years",
+    "start": 33.44,
+    "end": 33.76
+   },
+   {
+    "word": "ago,",
+    "start": 33.76,
+    "end": 34.14
+   },
+   {
+    "word": "it",
+    "start": 34.42,
+    "end": 34.62
+   },
+   {
+    "word": "was",
+    "start": 34.62,
+    "end": 34.84
+   },
+   {
+    "word": "lost,",
+    "start": 34.84,
+    "end": 35.32
+   },
+   {
+    "word": "and",
+    "start": 35.46,
+    "end": 35.76
+   },
+   {
+    "word": "the",
+    "start": 35.76,
+    "end": 35.92
+   },
+   {
+    "word": "bell",
+    "start": 35.92,
+    "end": 36.2
+   },
+   {
+    "word": "rang",
+    "start": 36.2,
+    "end": 36.56
+   },
+   {
+    "word": "at",
+    "start": 36.56,
+    "end": 36.8
+   },
+   {
+    "word": "midnight",
+    "start": 36.8,
+    "end": 37.22
+   },
+   {
+    "word": "with",
+    "start": 37.22,
+    "end": 37.58
+   },
+   {
+    "word": "no",
+    "start": 37.58,
+    "end": 37.88
+   },
+   {
+    "word": "hand",
+    "start": 37.88,
+    "end": 38.26
+   },
+   {
+    "word": "on",
+    "start": 38.26,
+    "end": 38.54
+   },
+   {
+    "word": "the",
+    "start": 38.54,
+    "end": 38.7
+   },
+   {
+    "word": "rope.",
+    "start": 38.7,
+    "end": 38.98
    }
   ]
  },
@@ -34778,6 +35704,328 @@
     "word": "door.",
     "start": 6.12,
     "end": 6.44
+   }
+  ]
+ },
+ "0abf7236105218": {
+  "file": "0abf7236105218.mp3",
+  "speaker": "narrator",
+  "duration": 25.42,
+  "words": [
+   {
+    "word": "The",
+    "start": 0.0,
+    "end": 0.28
+   },
+   {
+    "word": "main",
+    "start": 0.28,
+    "end": 0.54
+   },
+   {
+    "word": "road",
+    "start": 0.54,
+    "end": 0.9
+   },
+   {
+    "word": "out",
+    "start": 0.9,
+    "end": 1.12
+   },
+   {
+    "word": "of",
+    "start": 1.12,
+    "end": 1.3
+   },
+   {
+    "word": "Willowbrook",
+    "start": 1.3,
+    "end": 2.0
+   },
+   {
+    "word": "runs",
+    "start": 2.0,
+    "end": 2.5
+   },
+   {
+    "word": "east",
+    "start": 2.5,
+    "end": 3.02
+   },
+   {
+    "word": "under",
+    "start": 3.02,
+    "end": 3.42
+   },
+   {
+    "word": "old",
+    "start": 3.42,
+    "end": 3.8
+   },
+   {
+    "word": "oaks,",
+    "start": 3.8,
+    "end": 4.34
+   },
+   {
+    "word": "their",
+    "start": 4.72,
+    "end": 4.92
+   },
+   {
+    "word": "branches",
+    "start": 4.92,
+    "end": 5.38
+   },
+   {
+    "word": "meeting",
+    "start": 5.38,
+    "end": 5.84
+   },
+   {
+    "word": "overhead.",
+    "start": 5.84,
+    "end": 6.32
+   },
+   {
+    "word": "The",
+    "start": 6.78,
+    "end": 7.36
+   },
+   {
+    "word": "way",
+    "start": 7.36,
+    "end": 7.62
+   },
+   {
+    "word": "is",
+    "start": 7.62,
+    "end": 7.9
+   },
+   {
+    "word": "well",
+    "start": 7.9,
+    "end": 8.18
+   },
+   {
+    "word": "trodden,",
+    "start": 8.18,
+    "end": 8.74
+   },
+   {
+    "word": "lined",
+    "start": 8.94,
+    "end": 9.46
+   },
+   {
+    "word": "with",
+    "start": 9.46,
+    "end": 9.72
+   },
+   {
+    "word": "wildflowers",
+    "start": 9.72,
+    "end": 10.62
+   },
+   {
+    "word": "and",
+    "start": 10.62,
+    "end": 10.76
+   },
+   {
+    "word": "fallen",
+    "start": 10.76,
+    "end": 11.12
+   },
+   {
+    "word": "leaves.",
+    "start": 11.12,
+    "end": 11.58
+   },
+   {
+    "word": "A",
+    "start": 11.82,
+    "end": 12.16
+   },
+   {
+    "word": "merchant's",
+    "start": 12.16,
+    "end": 12.66
+   },
+   {
+    "word": "cart",
+    "start": 12.66,
+    "end": 12.98
+   },
+   {
+    "word": "stands",
+    "start": 12.98,
+    "end": 13.44
+   },
+   {
+    "word": "at",
+    "start": 13.44,
+    "end": 13.62
+   },
+   {
+    "word": "the",
+    "start": 13.62,
+    "end": 13.72
+   },
+   {
+    "word": "roadside,",
+    "start": 13.72,
+    "end": 14.34
+   },
+   {
+    "word": "and",
+    "start": 14.34,
+    "end": 14.98
+   },
+   {
+    "word": "his",
+    "start": 14.98,
+    "end": 15.16
+   },
+   {
+    "word": "thin",
+    "start": 15.16,
+    "end": 15.42
+   },
+   {
+    "word": "grey",
+    "start": 15.42,
+    "end": 15.74
+   },
+   {
+    "word": "mare",
+    "start": 15.74,
+    "end": 16.12
+   },
+   {
+    "word": "grazes",
+    "start": 16.12,
+    "end": 16.7
+   },
+   {
+    "word": "beside",
+    "start": 16.7,
+    "end": 17.1
+   },
+   {
+    "word": "it",
+    "start": 17.1,
+    "end": 17.36
+   },
+   {
+    "word": "on",
+    "start": 17.36,
+    "end": 17.6
+   },
+   {
+    "word": "three",
+    "start": 17.6,
+    "end": 17.9
+   },
+   {
+    "word": "good",
+    "start": 17.9,
+    "end": 18.24
+   },
+   {
+    "word": "shoes.",
+    "start": 18.24,
+    "end": 18.64
+   },
+   {
+    "word": "North",
+    "start": 19.34,
+    "end": 19.72
+   },
+   {
+    "word": "of",
+    "start": 19.72,
+    "end": 19.84
+   },
+   {
+    "word": "the",
+    "start": 19.84,
+    "end": 19.96
+   },
+   {
+    "word": "road",
+    "start": 19.96,
+    "end": 20.24
+   },
+   {
+    "word": "the",
+    "start": 20.24,
+    "end": 20.44
+   },
+   {
+    "word": "land",
+    "start": 20.44,
+    "end": 20.76
+   },
+   {
+    "word": "climbs",
+    "start": 20.76,
+    "end": 21.26
+   },
+   {
+    "word": "onto",
+    "start": 21.26,
+    "end": 21.54
+   },
+   {
+    "word": "the",
+    "start": 21.54,
+    "end": 21.74
+   },
+   {
+    "word": "edge",
+    "start": 21.74,
+    "end": 22.02
+   },
+   {
+    "word": "of",
+    "start": 22.02,
+    "end": 22.14
+   },
+   {
+    "word": "the",
+    "start": 22.14,
+    "end": 22.24
+   },
+   {
+    "word": "moor:",
+    "start": 22.24,
+    "end": 22.62
+   },
+   {
+    "word": "heather,",
+    "start": 23.08,
+    "end": 23.44
+   },
+   {
+    "word": "and",
+    "start": 23.44,
+    "end": 23.9
+   },
+   {
+    "word": "still",
+    "start": 23.9,
+    "end": 24.2
+   },
+   {
+    "word": "brown",
+    "start": 24.2,
+    "end": 24.64
+   },
+   {
+    "word": "pools.",
+    "start": 24.64,
+    "end": 25.08
    }
   ]
  },
@@ -41861,6 +43109,183 @@
     "word": "slowly.",
     "start": 1.1,
     "end": 1.68
+   }
+  ]
+ },
+ "0d5b5482a2322d": {
+  "file": "0d5b5482a2322d.mp3",
+  "speaker": "narrator",
+  "duration": 12.539,
+  "words": [
+   {
+    "word": "A",
+    "start": 0.0,
+    "end": 0.2
+   },
+   {
+    "word": "tree",
+    "start": 0.2,
+    "end": 0.5
+   },
+   {
+    "word": "under",
+    "start": 0.5,
+    "end": 0.84
+   },
+   {
+    "word": "two",
+    "start": 0.84,
+    "end": 1.12
+   },
+   {
+    "word": "moons,",
+    "start": 1.12,
+    "end": 1.62
+   },
+   {
+    "word": "cut",
+    "start": 1.62,
+    "end": 2.32
+   },
+   {
+    "word": "into",
+    "start": 2.32,
+    "end": 2.6
+   },
+   {
+    "word": "the",
+    "start": 2.6,
+    "end": 2.8
+   },
+   {
+    "word": "stone",
+    "start": 2.8,
+    "end": 3.16
+   },
+   {
+    "word": "over",
+    "start": 3.16,
+    "end": 3.5
+   },
+   {
+    "word": "the",
+    "start": 3.5,
+    "end": 3.66
+   },
+   {
+    "word": "door.",
+    "start": 3.66,
+    "end": 4.02
+   },
+   {
+    "word": "The",
+    "start": 4.36,
+    "end": 4.94
+   },
+   {
+    "word": "weather",
+    "start": 4.94,
+    "end": 5.2
+   },
+   {
+    "word": "has",
+    "start": 5.2,
+    "end": 5.48
+   },
+   {
+    "word": "worn",
+    "start": 5.48,
+    "end": 5.76
+   },
+   {
+    "word": "it",
+    "start": 5.76,
+    "end": 5.92
+   },
+   {
+    "word": "almost",
+    "start": 5.92,
+    "end": 6.34
+   },
+   {
+    "word": "smooth.",
+    "start": 6.34,
+    "end": 6.88
+   },
+   {
+    "word": "The",
+    "start": 7.26,
+    "end": 7.86
+   },
+   {
+    "word": "lower",
+    "start": 7.86,
+    "end": 8.12
+   },
+   {
+    "word": "moon",
+    "start": 8.12,
+    "end": 8.42
+   },
+   {
+    "word": "is",
+    "start": 8.42,
+    "end": 8.62
+   },
+   {
+    "word": "cut",
+    "start": 8.62,
+    "end": 8.9
+   },
+   {
+    "word": "shallower",
+    "start": 8.9,
+    "end": 9.48
+   },
+   {
+    "word": "than",
+    "start": 9.48,
+    "end": 9.62
+   },
+   {
+    "word": "the",
+    "start": 9.62,
+    "end": 9.76
+   },
+   {
+    "word": "upper,",
+    "start": 9.76,
+    "end": 10.1
+   },
+   {
+    "word": "like",
+    "start": 10.38,
+    "end": 10.92
+   },
+   {
+    "word": "a",
+    "start": 10.92,
+    "end": 11.08
+   },
+   {
+    "word": "moon",
+    "start": 11.08,
+    "end": 11.4
+   },
+   {
+    "word": "seen",
+    "start": 11.4,
+    "end": 11.78
+   },
+   {
+    "word": "in",
+    "start": 11.78,
+    "end": 12.0
+   },
+   {
+    "word": "water.",
+    "start": 12.0,
+    "end": 12.24
    }
   ]
  },
@@ -60269,6 +61694,158 @@
     "word": "light.",
     "start": 4.48,
     "end": 4.74
+   }
+  ]
+ },
+ "138e82643b930f": {
+  "file": "138e82643b930f.mp3",
+  "speaker": "grandmother",
+  "duration": 9.056,
+  "words": [
+   {
+    "word": "Your",
+    "start": 0.0,
+    "end": 0.18
+   },
+   {
+    "word": "mother",
+    "start": 0.18,
+    "end": 0.44
+   },
+   {
+    "word": "used",
+    "start": 0.44,
+    "end": 0.7
+   },
+   {
+    "word": "to",
+    "start": 0.7,
+    "end": 0.86
+   },
+   {
+    "word": "walk",
+    "start": 0.86,
+    "end": 1.16
+   },
+   {
+    "word": "up",
+    "start": 1.16,
+    "end": 1.3
+   },
+   {
+    "word": "to",
+    "start": 1.3,
+    "end": 1.44
+   },
+   {
+    "word": "the",
+    "start": 1.44,
+    "end": 1.56
+   },
+   {
+    "word": "moor",
+    "start": 1.56,
+    "end": 1.94
+   },
+   {
+    "word": "on",
+    "start": 1.94,
+    "end": 2.46
+   },
+   {
+    "word": "still",
+    "start": 2.46,
+    "end": 2.78
+   },
+   {
+    "word": "nights",
+    "start": 2.78,
+    "end": 3.26
+   },
+   {
+    "word": "to",
+    "start": 3.26,
+    "end": 3.74
+   },
+   {
+    "word": "see",
+    "start": 3.74,
+    "end": 3.96
+   },
+   {
+    "word": "the",
+    "start": 3.96,
+    "end": 4.12
+   },
+   {
+    "word": "two",
+    "start": 4.12,
+    "end": 4.3
+   },
+   {
+    "word": "moons.",
+    "start": 4.3,
+    "end": 4.72
+   },
+   {
+    "word": "She",
+    "start": 5.14,
+    "end": 5.66
+   },
+   {
+    "word": "came",
+    "start": 5.66,
+    "end": 5.94
+   },
+   {
+    "word": "home",
+    "start": 5.94,
+    "end": 6.18
+   },
+   {
+    "word": "with",
+    "start": 6.18,
+    "end": 6.4
+   },
+   {
+    "word": "wet",
+    "start": 6.4,
+    "end": 6.66
+   },
+   {
+    "word": "hems",
+    "start": 6.66,
+    "end": 7.1
+   },
+   {
+    "word": "and",
+    "start": 7.1,
+    "end": 7.6
+   },
+   {
+    "word": "not",
+    "start": 7.6,
+    "end": 7.82
+   },
+   {
+    "word": "a",
+    "start": 7.82,
+    "end": 7.96
+   },
+   {
+    "word": "word",
+    "start": 7.96,
+    "end": 8.2
+   },
+   {
+    "word": "of",
+    "start": 8.2,
+    "end": 8.38
+   },
+   {
+    "word": "sorry.",
+    "start": 8.38,
+    "end": 8.7
    }
   ]
  },
