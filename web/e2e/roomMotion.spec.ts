@@ -14,6 +14,13 @@ async function toTheCottage(
   await page.route('**/images/generated/manifest.json', (route) =>
     route.fulfill({
       json: {
+        // The story opens in the dream, whose low mist is what moves while the cottage waits.
+        'act1-the-dream': {
+          file: 'act1-the-dream.png',
+          width: 1,
+          height: 1,
+          effects: [{ type: 'mist' }],
+        },
         'act1-eliors-cottage': {
           file: 'act1-eliors-cottage.png',
           width: 1,

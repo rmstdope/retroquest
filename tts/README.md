@@ -1,13 +1,13 @@
 # TTS (Fish Audio)
 
 Tools for voicing the game's text with [Fish Audio](https://docs.fish.audio)'s hosted TTS. The
-recorded narration (see *Recording an act*) ships with the game from `web/public/audio/narration/`;
+recorded narration (see _Recording an act_) ships with the game from `web/public/audio/narration/`;
 everything else here is tooling and stays outside the build.
 
 ## Setup
 
 - [Content Studio](https://github.com/rmstdope/content-studio), installed once with `bun link`, records
-  the narration (see *Recording an act*).
+  the narration (see _Recording an act_).
 - `FISH_AUDIO_API_KEY=…` in the repository's `.env` (gitignored), or in the environment.
 - `ffmpeg` (for Content Studio, `level.py` and `check.py`), [uv](https://docs.astral.sh/uv/) (Content
   Studio's Whisper check, `check.py`) and `npm ci` in `web/`.
@@ -169,7 +169,7 @@ python3 tts/check.py line.txt web/public/audio/narration/act1/0028ec78cb405e.mp3
 
 `prompts/` holds two 30-36 s clips of LibriVox narrators, for cloning a voice (`fish_tts.py
 --prompt` did it; Content Studio uses library voices only, so cloning is back in the history):
-`praetzellis` (*Treasure Island*) and `driver` (*The Princess and the Goblin*). LibriVox
+`praetzellis` (_Treasure Island_) and `driver` (_The Princess and the Goblin_). LibriVox
 recordings are public domain, and both texts are public domain worldwide (Stevenson d. 1894,
 MacDonald d. 1905); `prompts.json` has the exact transcripts, sources and cut times. Clips of
 texts still in copyright outside the US were left out. Cloning a real narrator's voice for
