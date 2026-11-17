@@ -45,12 +45,13 @@ describe('BeltOfPictures', () => {
     vi.unstubAllGlobals()
   })
 
-  it('shows a picture for each carried thing, with its name and count beneath', () => {
+  it('shows a picture for each carried thing, with its count as a tag and no name beneath', () => {
     mountBelt()
     expect(tiles()).toEqual(['item:bread', "item:Elior's Journal"])
     const bread = w!.get('[data-belt-pic="item:bread"]')
-    expect(bread.text()).toContain('Bread')
+    expect(bread.text()).not.toContain('Bread')
     expect(bread.text()).toContain('×2')
+    expect(w!.find('.lq-belt-name').exists()).toBe(false)
     expect(bread.find('.lq-belt-letter').text()).toBe('B')
   })
 
@@ -62,9 +63,9 @@ describe('BeltOfPictures', () => {
     expect(bag.text()).toBe('')
     expect(bag.attributes('aria-pressed')).toBe('true')
     expect(spells.attributes('aria-pressed')).toBe('false')
-    await spells.trigger('click')
+    useBeltStore().show('spells')
+    await nextTick()
     expect(tiles()).toEqual(['spell:light'])
-    expect(useBeltStore().list).toBe('spells')
     expect(
       w!.get('[data-belt-switch="spells"]').attributes('aria-pressed'),
     ).toBe('true')
@@ -76,24 +77,112 @@ describe('BeltOfPictures', () => {
     game.rawSpells = []
     mountBelt()
     expect(w!.text()).toContain('Your bag is empty.')
-    await w!.get('[data-belt-switch="spells"]').trigger('click')
+    useBeltStore().show('spells')
+    await nextTick()
     expect(w!.text()).toContain('You know no spells yet.')
   })
 
-  it('puts the belt away with ▾, leaving the tiny buttons, and brings it back on the list pressed', async () => {
+  it('has no ▾ button', () => {
     mountBelt()
-    await w!.get('[data-belt-away]').trigger('click')
-    expect(w!.find('[data-belt-pic]').exists()).toBe(false)
-    expect(w!.find('[data-belt-switch="bag"]').exists()).toBe(true)
     expect(w!.find('[data-belt-away]').exists()).toBe(false)
+    expect(w!.text()).not.toContain('▾')
   })
 
-  it('brings the belt back on the list of the tiny button pressed', async () => {
-    useBeltStore().putAway()
-    mountBelt()
-    await w!.get('[data-belt-switch="spells"]').trigger('click')
-    expect(useBeltStore().away).toBe(false)
-    expect(tiles()).toEqual(['spell:light'])
+  describe('the strap folds and unfurls', () => {
+    beforeEach(() => vi.useFakeTimers())
+    afterEach(() => {
+      vi.useRealTimers()
+      document.documentElement.style.removeProperty('--lq-motion')
+    })
+    const stud = (list: string): ReturnType<VueWrapper['get']> =>
+      w!.get(`[data-belt-switch="${list}"]`)
+
+    it('folds away in 0.6 s when the lit stud is pressed, leaving the studs', async () => {
+      mountBelt()
+      await stud('bag').trigger('click')
+      expect(useBeltStore().away).toBe(true)
+      expect(w!.find('[data-belt-pic]').exists()).toBe(true)
+      expect(w!.get('.lq-belt').classes()).toContain('lq-belt-folded')
+      vi.advanceTimersByTime(599)
+      await nextTick()
+      expect(w!.find('[data-belt-pic]').exists()).toBe(true)
+      vi.advanceTimersByTime(1)
+      await nextTick()
+      expect(w!.find('[data-belt-pic]').exists()).toBe(false)
+      expect(w!.find('[data-belt-switch="bag"]').exists()).toBe(true)
+      expect(stud('bag').attributes('aria-pressed')).toBe('false')
+    })
+
+    it('unfurls on the list of the stud pressed while folded away', async () => {
+      useBeltStore().putAway()
+      mountBelt()
+      expect(w!.find('[data-belt-pic]').exists()).toBe(false)
+      await stud('spells').trigger('click')
+      expect(useBeltStore().away).toBe(false)
+      expect(useBeltStore().list).toBe('spells')
+      expect(tiles()).toEqual(['spell:light'])
+      await nextTick()
+      vi.advanceTimersByTime(600)
+      await nextTick()
+      expect(w!.get('.lq-belt').classes()).not.toContain('lq-belt-folded')
+      expect(tiles()).toEqual(['spell:light'])
+    })
+
+    it('folds the open list away, then unfurls the other, 0.6 s each, ignoring presses meanwhile', async () => {
+      mountBelt()
+      await stud('spells').trigger('click')
+      expect(useBeltStore().away).toBe(true)
+      expect(useBeltStore().list).toBe('bag')
+      await stud('bag').trigger('click')
+      await stud('spells').trigger('click')
+      vi.advanceTimersByTime(600)
+      await nextTick()
+      expect(useBeltStore().away).toBe(false)
+      expect(useBeltStore().list).toBe('spells')
+      expect(tiles()).toEqual(['spell:light'])
+      await stud('bag').trigger('click')
+      expect(useBeltStore().list).toBe('spells')
+      expect(useBeltStore().away).toBe(false)
+      vi.advanceTimersByTime(600)
+      await nextTick()
+      await stud('bag').trigger('click')
+      expect(useBeltStore().away).toBe(true)
+    })
+
+    it('changes at once when reduced motion is chosen', async () => {
+      document.documentElement.style.setProperty('--lq-motion', '0')
+      mountBelt()
+      await stud('bag').trigger('click')
+      await nextTick()
+      expect(w!.find('[data-belt-pic]').exists()).toBe(false)
+      await stud('spells').trigger('click')
+      await nextTick()
+      expect(tiles()).toEqual(['spell:light'])
+      await stud('bag').trigger('click')
+      await nextTick()
+      expect(tiles()).toEqual(['item:bread', "item:Elior's Journal"])
+    })
+
+    it('moves focus from a picture to the stud that folded the strap', async () => {
+      mountBelt()
+      ;(w!.get('[data-belt-pic="item:bread"]').element as HTMLElement).focus()
+      useBeltStore().putAway()
+      await nextTick()
+      expect(document.activeElement).toBe(stud('bag').element)
+    })
+
+    it('unfurls a short strap with the words when nothing is carried, and folds it the same', async () => {
+      const game = useGameStore()
+      game.rawInventory = []
+      mountBelt()
+      expect(w!.text()).toContain('Your bag is empty.')
+      await stud('bag').trigger('click')
+      vi.advanceTimersByTime(600)
+      await nextTick()
+      expect(w!.text()).not.toContain('Your bag is empty.')
+      await stud('bag').trigger('click')
+      expect(w!.text()).toContain('Your bag is empty.')
+    })
   })
 
   it('shows an amber dot only on the button of the list not showing, and on both while away', async () => {
@@ -187,6 +276,70 @@ describe('BeltOfPictures', () => {
     expect(w!.find('.lq-belt-name').exists()).toBe(false)
   })
 
+  describe('touch and hold', () => {
+    beforeEach(() => vi.useFakeTimers())
+    afterEach(() => vi.useRealTimers())
+    const told = (): unknown[] =>
+      (w!.emitted('caption') ?? []).map((e) => (e as unknown[])[0])
+    const touch = (type: string, x = 5): PointerEvent =>
+      new PointerEvent(type, {
+        pointerType: 'touch',
+        clientX: x,
+        clientY: 5,
+        bubbles: true,
+      })
+
+    it('shows only the caption after 450 ms, and no ring; letting go hides it', async () => {
+      mountBelt()
+      const el = w!.get('[data-belt-pic="item:bread"]').element
+      el.dispatchEvent(touch('pointerdown'))
+      vi.advanceTimersByTime(449)
+      await nextTick()
+      expect(told().at(-1)).toBeNull()
+      vi.advanceTimersByTime(1)
+      await nextTick()
+      expect(told().at(-1)).toMatchObject({ label: 'Bread' })
+      el.dispatchEvent(touch('pointerup'))
+      el.dispatchEvent(new MouseEvent('click', { bubbles: true, detail: 1 }))
+      await nextTick()
+      expect(told().at(-1)).toBeNull()
+      expect(w!.emitted('press')).toBeUndefined()
+    })
+
+    it('leaves a tap as a press, with no caption', async () => {
+      mountBelt()
+      const el = w!.get('[data-belt-pic="item:bread"]').element
+      el.dispatchEvent(touch('pointerenter'))
+      el.dispatchEvent(touch('pointerdown'))
+      el.dispatchEvent(touch('pointerup'))
+      el.dispatchEvent(new MouseEvent('click', { bubbles: true, detail: 1 }))
+      await nextTick()
+      expect(told().at(-1)).toBeNull()
+      expect(w!.emitted('press')).toHaveLength(1)
+    })
+
+    it('is no hold when the finger moves or the touch is cancelled', async () => {
+      mountBelt()
+      const el = w!.get('[data-belt-pic="item:bread"]').element
+      el.dispatchEvent(touch('pointerdown'))
+      el.dispatchEvent(touch('pointermove', 40))
+      vi.advanceTimersByTime(600)
+      await nextTick()
+      expect(told().at(-1)).toBeNull()
+      el.dispatchEvent(touch('pointerdown'))
+      el.dispatchEvent(touch('pointercancel'))
+      vi.advanceTimersByTime(600)
+      await nextTick()
+      expect(told().at(-1)).toBeNull()
+    })
+
+    it('still shows the caption for a mouse resting on a picture', async () => {
+      mountBelt()
+      await w!.get('[data-belt-pic="item:bread"]').trigger('pointerenter')
+      expect(told().at(-1)).toMatchObject({ label: 'Bread' })
+    })
+  })
+
   it('shows ‹ and › only when there are more pictures than fit', async () => {
     mountBelt()
     expect(w!.find('[data-belt-more="next"]').exists()).toBe(false)
@@ -251,7 +404,6 @@ describe('BeltOfPictures', () => {
       expect(bread.find('img').attributes('alt')).toBe('')
       expect(bread.find('.lq-belt-letter').exists()).toBe(false)
       expect(bread.text()).toContain('×2')
-      expect(bread.text()).toContain('Bread')
       expect(bread.attributes('aria-label')).toBe('Bread, 2')
       const journal = w!.get('[data-belt-pic="item:Elior\'s Journal"]')
       expect(journal.find('img').exists()).toBe(false)
@@ -261,7 +413,7 @@ describe('BeltOfPictures', () => {
     it('shows a painted spell, on the small row of a sideways phone too', async () => {
       setPictureProbe(() => Promise.resolve(true))
       mountBelt({ compact: true })
-      await w!.get('[data-belt-switch="spells"]').trigger('click')
+      useBeltStore().show('spells')
       await flushPromises()
       const light = w!.get('[data-belt-pic="spell:light"]')
       expect(light.find('img').attributes('src')).toMatch(/spell-light\.png$/)

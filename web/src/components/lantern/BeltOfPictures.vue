@@ -8,34 +8,37 @@ import BeltFace from './BeltFace.vue'
 import { beltPictures, type BeltList, type BeltPicture } from '@/lantern/belt'
 
 /**
- * The belt of pictures across the foot of the room's picture: the things
- * carried (the Bag) or the spells known, each a square with its name beneath
- * (none on a sideways phone, where the name is in the ring) in its usual
- * colour, ×2 on a counted thing, and the first letter of the name until the
- * picture is made (then the picture, `BeltFace`). Two tiny buttons with
- * pictures only, a pouch and a star,
- * sit at its left end: the lit one is the list showing, pressing the other
- * switches, and pressing either while the belt is away brings it back on that
- * list. ▾ puts it away. ‹ and › show when more pictures are carried than fit;
- * the strip also scrolls by wheel, swipe and arrow keys. The pictures are one
- * Tab stop (arrows walk, Home and End jump); Enter or Space presses. A press
- * says which picture and where (a key: its middle); what it does is the
- * layout's. The picture in hand stays lit. A caption for the picture pointed at is told to the layout, which draws it above the belt and the words. It gives the
- * name and short description of the picture pointed at or focused, or of
- * `captionFor` (the one whose ring is open). The list showing counts as seen,
- * so the amber dot only sits on the tiny button of the list not showing, and
- * on both while the belt is away. Which list and whether it is away are the
- * belt store's, remembered on this device.
+ * The strap of pictures across the foot of the room's picture: a stitched
+ * leather band holding the things carried (the Bag) or the spells known, each
+ * in a round brass-rimmed pocket (no name beneath: the caption says what it
+ * is), in its usual colour, a count as a small brass tag on a counted thing,
+ * and the first letter of the name until the picture is made (then the
+ * picture, `BeltFace`). A pouch and a star, brass studs with pictures only,
+ * sit at its left end: pressing the lit one folds the strap away into a short
+ * leather tab that keeps the studs, pressing either while it is folded
+ * unfurls it on that list, and pressing the other while one list shows folds
+ * it, then unfurls the other (0.6 s each way, at once under reduced motion;
+ * presses during the movement are ignored). ‹ and › show when more pictures
+ * are carried than fit; the strip also scrolls by wheel, swipe and arrow keys.
+ * The pictures are one Tab stop (arrows walk, Home and End jump); Enter or
+ * Space presses. A press says which picture and where (a key: its middle);
+ * what it does is the layout's. The picture in hand stays lit. A caption for
+ * the picture pointed at (a mouse resting on it), focused, held down by a
+ * finger for a moment, or `captionFor` (the one whose ring is open) is told
+ * to the layout, which draws it above the strap and the words. The list
+ * showing counts as seen, so the amber dot only sits on the stud of the list
+ * not showing, and on both while the strap is folded. Which list and whether
+ * it is folded are the belt store's, remembered on this device.
  */
 const props = defineProps<{
-  /** A sideways phone: small pictures with no names beneath. */
+  /** A sideways phone: smaller pictures (48px) on a slimmer strap. */
   compact?: boolean
   /** The key of the picture whose ring is open, whose caption shows. */
   captionFor?: string | null
 }>()
 const emit = defineEmits<{
   press: [picture: BeltPicture, at: { x: number; y: number }]
-  /** The height the belt takes at the foot of the picture (0 while away). */
+  /** The height the strap takes at the foot of the picture (0 while folded away). */
   measure: [height: number]
   /** The picture whose caption shows (null: none). The layout draws it, over the words. */
   caption: [picture: BeltPicture | null]
@@ -58,14 +61,49 @@ const rovingKey = computed(() =>
 )
 const pointed = ref<string | null>(null)
 const focused = ref<string | null>(null)
+/** The picture a finger has been held on, whose caption shows until it lets go. */
+const held = ref<string | null>(null)
 const captionKey = computed(
-  () => pointed.value ?? focused.value ?? props.captionFor ?? null,
+  () =>
+    pointed.value ?? focused.value ?? held.value ?? props.captionFor ?? null,
 )
 const caption = computed(() =>
   belt.away
     ? null
     : (pictures.value.find((p) => p.key === captionKey.value) ?? null),
 )
+
+/** How long the strap takes to unfurl or fold (ms), before reduced motion. */
+const STRAP_MS = 600
+/** How long a finger rests on a picture before it counts as a hold (ms). */
+const HOLD_MS = 450
+/** How far a finger may drift (px) and still be a hold, not a swipe. */
+const HOLD_SLOP = 10
+/** The strap's movement: it shows pictures except once folded all the way. */
+type Phase = 'open' | 'folding' | 'away' | 'unfurling'
+const phase = ref<Phase>(belt.away ? 'away' : 'open')
+/** The folded look (a short tab): the CSS transition runs between it and the unfurled one. */
+const folded = ref(belt.away)
+/** A switch of lists is under way (fold, then unfurl). */
+const switching = ref(false)
+const locked = computed(
+  () =>
+    switching.value || phase.value === 'folding' || phase.value === 'unfurling',
+)
+let moveTimer: ReturnType<typeof setTimeout> | undefined
+let switchTimer: ReturnType<typeof setTimeout> | undefined
+let holdTimer: ReturnType<typeof setTimeout> | undefined
+let holdFrom: { x: number; y: number } | null = null
+/** The press that follows a hold's release is not a press. */
+let swallowClick = false
+
+/** The movement's duration (ms): 0 when the player chose reduced motion. */
+function strapMs(): number {
+  const motion = parseFloat(
+    getComputedStyle(document.documentElement).getPropertyValue('--lq-motion'),
+  )
+  return Number.isNaN(motion) ? STRAP_MS : STRAP_MS * motion
+}
 watch(caption, (picture) => emit('caption', picture), { immediate: true })
 /** More pictures lie out of sight to the left or to the right. */
 const more = ref({ prev: false, next: false })
@@ -97,10 +135,99 @@ function page(way: 'prev' | 'next'): void {
   else el.scrollLeft += by
 }
 
-/** The list's tiny button was pressed: switch lists, or bring the belt back on it. */
+/** A stud was pressed: fold the strap (the lit one), unfurl it on that list (folded away), or fold, then unfurl the other list. */
 function pick(list: BeltList): void {
-  if (belt.away) belt.bringBack(list)
-  else belt.show(list)
+  if (locked.value) return
+  if (belt.away) return belt.bringBack(list)
+  if (list === belt.list) return belt.putAway()
+  const ms = strapMs()
+  if (ms === 0) {
+    belt.show(list)
+    return
+  }
+  switching.value = true
+  belt.putAway()
+  switchTimer = setTimeout(() => {
+    belt.bringBack(list)
+    void nextTick(() => (switching.value = false))
+  }, ms)
+}
+
+// The strap follows the store's `away`: fold, or unfurl from the folded look.
+watch(
+  () => belt.away,
+  (away) => {
+    clearTimeout(moveTimer)
+    const ms = strapMs()
+    if (away) {
+      const active = document.activeElement
+      if (
+        active instanceof HTMLElement &&
+        active.dataset.beltPic &&
+        root.value?.contains(active)
+      )
+        root.value
+          ?.querySelector<HTMLElement>(`[data-belt-switch="${belt.list}"]`)
+          ?.focus()
+      folded.value = true
+      if (ms === 0) phase.value = 'away'
+      else {
+        phase.value = 'folding'
+        moveTimer = setTimeout(() => (phase.value = 'away'), ms)
+      }
+      return
+    }
+    if (ms === 0) {
+      phase.value = 'open'
+      folded.value = false
+      return
+    }
+    phase.value = 'unfurling'
+    moveTimer = setTimeout(() => (phase.value = 'open'), ms)
+    void nextTick(() => {
+      void root.value?.offsetWidth
+      folded.value = false
+    })
+  },
+)
+
+/** A pointer went down on a picture: a finger held there for a moment shows its caption. */
+function onPicDown(key: string, event: PointerEvent): void {
+  swallowClick = false
+  if (event.pointerType !== 'touch') return
+  holdFrom = { x: event.clientX, y: event.clientY }
+  clearTimeout(holdTimer)
+  holdTimer = setTimeout(() => {
+    held.value = key
+    swallowClick = true
+  }, HOLD_MS)
+}
+
+/** The finger drifted: a swipe, not a hold. */
+function onPicMove(event: PointerEvent): void {
+  if (!holdFrom || held.value) return
+  if (
+    Math.hypot(event.clientX - holdFrom.x, event.clientY - holdFrom.y) >
+    HOLD_SLOP
+  )
+    endHold()
+}
+
+/** The finger let go or was taken over: the hold's caption goes. */
+function endHold(): void {
+  clearTimeout(holdTimer)
+  holdFrom = null
+  held.value = null
+}
+
+/** A hold would raise the system's menu on a phone; it is the caption's. */
+function onPicMenu(event: Event): void {
+  if (holdFrom || held.value) event.preventDefault()
+}
+
+/** A mouse or pen resting on a picture points at it; a touch does not (a tap opens its ring). */
+function onPicEnter(key: string, event: PointerEvent): void {
+  if (event.pointerType !== 'touch') pointed.value = key
 }
 
 /** The tiles in the strip, left to right. */
@@ -152,6 +279,10 @@ function onTileKey(event: KeyboardEvent): void {
 
 /** A press or key on a picture; a key (no pointer, `detail` 0) opens at the picture's middle. */
 function onPress(picture: BeltPicture, event: MouseEvent): void {
+  if (swallowClick) {
+    swallowClick = false
+    return
+  }
   const el =
     event.currentTarget instanceof HTMLElement ? event.currentTarget : null
   const box = el?.getBoundingClientRect()
@@ -199,27 +330,27 @@ watch(pictures, () => void nextTick(measureScroll))
 /** A new size is applied on the next frame, so the layout it moves is not measured in the same one. */
 const sizeWatch = useSizeWatch(() => {
   measureScroll()
-  emit('measure', belt.away ? 0 : (root.value?.offsetHeight ?? 0))
+  emit('measure', phase.value === 'away' ? 0 : (root.value?.offsetHeight ?? 0))
 })
 onMounted(() => {
   measureScroll()
   if (root.value) sizeWatch.observe(root.value)
-  emit('measure', belt.away ? 0 : (root.value?.offsetHeight ?? 0))
+  emit('measure', phase.value === 'away' ? 0 : (root.value?.offsetHeight ?? 0))
 })
 onUnmounted(() => {
+  clearTimeout(moveTimer)
+  clearTimeout(switchTimer)
+  clearTimeout(holdTimer)
   emit('caption', null)
   emit('measure', 0)
 })
-watch(
-  () => belt.away,
-  async () => {
-    await nextTick()
-    emit('measure', belt.away ? 0 : (root.value?.offsetHeight ?? 0))
-    measureScroll()
-  },
-)
+watch(phase, async () => {
+  await nextTick()
+  emit('measure', phase.value === 'away' ? 0 : (root.value?.offsetHeight ?? 0))
+  measureScroll()
+})
 
-/** Focus the first picture, the tiny button of the list showing when none is carried. */
+/** Focus the first picture, the stud of the list showing when none is carried. */
 async function focusBelt(): Promise<void> {
   await nextTick()
   if (pictures.value.length) return focusPicture()
@@ -234,7 +365,11 @@ defineExpose({ focusBelt, focusPicture, has, root })
   <section
     ref="root"
     class="lq-belt"
-    :class="{ 'lq-belt-compact': compact, 'lq-belt-away': belt.away }"
+    :class="{
+      'lq-belt-compact': compact,
+      'lq-belt-folded': folded,
+      'lq-belt-away': phase === 'away',
+    }"
     aria-label="Bag and spells"
   >
     <div class="lq-belt-bar">
@@ -310,9 +445,9 @@ defineExpose({ focusBelt, focusPicture, has, root })
           ></span>
         </button>
       </div>
-      <template v-if="!belt.away">
+      <template v-if="phase !== 'away'">
         <button
-          v-if="more.prev"
+          v-if="more.prev && phase === 'open'"
           type="button"
           class="lq-belt-more"
           data-belt-more="prev"
@@ -321,70 +456,79 @@ defineExpose({ focusBelt, focusPicture, has, root })
         >
           ‹
         </button>
-        <div ref="strip" class="lq-belt-strip" @scroll.passive="measureScroll">
-          <p v-if="!pictures.length" class="lq-belt-empty">
-            {{
-              belt.list === 'bag'
-                ? 'Your bag is empty.'
-                : 'You know no spells yet.'
-            }}
-          </p>
-          <button
-            v-for="picture in pictures"
-            :key="picture.key"
-            type="button"
-            class="lq-belt-pic"
-            :class="[
-              `lq-belt-${picture.kind}`,
-              {
-                'lq-lit':
-                  belt.hand?.kind === picture.kind &&
-                  belt.hand?.name === picture.name,
-                'lq-landed':
-                  flights.landed === picture.kind &&
-                  flights.landedName === picture.name,
-              },
-            ]"
-            :data-belt-pic="picture.key"
-            :tabindex="rovingKey === picture.key ? 0 : -1"
-            aria-haspopup="menu"
-            :aria-label="
-              picture.count > 1
-                ? `${picture.label}, ${picture.count}`
-                : picture.label
-            "
-            :aria-describedby="`lq-belt-note-${picture.key.replace(/\W/g, '_')}`"
-            @click="onPress(picture, $event)"
-            @keydown="onTileKey"
-            @focus="onTileFocus(picture.key)"
-            @blur="focused = null"
-            @pointerenter="pointed = picture.key"
-            @pointerleave="pointed = null"
+        <div class="lq-belt-reel">
+          <div
+            ref="strip"
+            class="lq-belt-strip"
+            @scroll.passive="measureScroll"
           >
-            <span class="lq-belt-square" aria-hidden="true">
-              <BeltFace
-                :kind="picture.kind"
-                :name="picture.name"
-                picture-class="lq-belt-face"
-              >
-                <span class="lq-belt-letter">{{ picture.letter }}</span>
-              </BeltFace>
-              <span v-if="picture.count > 1" class="lq-belt-count"
-                >×{{ picture.count }}</span
-              >
-            </span>
-            <span v-if="!compact" class="lq-belt-name" aria-hidden="true">{{
-              picture.label
-            }}</span>
-            <span
-              :id="`lq-belt-note-${picture.key.replace(/\W/g, '_')}`"
-              class="lq-sr-only"
-              >{{ plain(picture.note) }}</span
+            <p v-if="!pictures.length" class="lq-belt-empty">
+              {{
+                belt.list === 'bag'
+                  ? 'Your bag is empty.'
+                  : 'You know no spells yet.'
+              }}
+            </p>
+            <button
+              v-for="(picture, index) in pictures"
+              :key="picture.key"
+              type="button"
+              class="lq-belt-pic"
+              :class="[
+                `lq-belt-${picture.kind}`,
+                {
+                  'lq-lit':
+                    belt.hand?.kind === picture.kind &&
+                    belt.hand?.name === picture.name,
+                  'lq-landed':
+                    flights.landed === picture.kind &&
+                    flights.landedName === picture.name,
+                },
+              ]"
+              :style="{ '--i': index }"
+              :data-belt-pic="picture.key"
+              :tabindex="rovingKey === picture.key ? 0 : -1"
+              aria-haspopup="menu"
+              :aria-label="
+                picture.count > 1
+                  ? `${picture.label}, ${picture.count}`
+                  : picture.label
+              "
+              :aria-describedby="`lq-belt-note-${picture.key.replace(/\W/g, '_')}`"
+              @click="onPress(picture, $event)"
+              @keydown="onTileKey"
+              @focus="onTileFocus(picture.key)"
+              @blur="focused = null"
+              @pointerenter="onPicEnter(picture.key, $event)"
+              @pointerleave="pointed = null"
+              @pointerdown="onPicDown(picture.key, $event)"
+              @pointermove="onPicMove"
+              @pointerup="endHold"
+              @pointercancel="endHold"
+              @contextmenu="onPicMenu"
             >
-          </button>
+              <span class="lq-belt-square" aria-hidden="true">
+                <BeltFace
+                  :kind="picture.kind"
+                  :name="picture.name"
+                  picture-class="lq-belt-face"
+                >
+                  <span class="lq-belt-letter">{{ picture.letter }}</span>
+                </BeltFace>
+                <span v-if="picture.count > 1" class="lq-belt-count"
+                  >×{{ picture.count }}</span
+                >
+              </span>
+              <span
+                :id="`lq-belt-note-${picture.key.replace(/\W/g, '_')}`"
+                class="lq-sr-only"
+                >{{ plain(picture.note) }}</span
+              >
+            </button>
+          </div>
         </div>
         <button
-          v-if="more.next"
+          v-if="more.next && phase === 'open'"
           type="button"
           class="lq-belt-more"
           data-belt-more="next"
@@ -393,38 +537,60 @@ defineExpose({ focusBelt, focusPicture, has, root })
         >
           ›
         </button>
-        <button
-          type="button"
-          class="lq-belt-put-away"
-          data-belt-away
-          aria-label="Put the belt away"
-          @click="belt.putAway()"
-        >
-          ▾
-        </button>
       </template>
     </div>
   </section>
 </template>
 
 <style scoped>
+/* The strap's leather and brass are the same in the light and dark themes: it is a thing in the world, not chrome. */
 .lq-belt {
+  --lq-pocket: 56px;
+  --lq-stud: 32px;
+  --lq-strap-ms: calc(600ms * var(--lq-motion));
   position: absolute;
   left: var(--lq-belt-left, 0px);
-  right: 0;
+  /* Stops short of "Show what's here". */
+  right: var(--lq-belt-right, 180px);
   bottom: var(--lq-belt-bottom, 0px);
   z-index: var(--lq-z-stage-belt);
   pointer-events: none;
   font-family: var(--lq-font-ui);
 }
-.lq-belt-away {
-  right: auto;
+.lq-belt-compact {
+  --lq-pocket: 48px;
+  --lq-stud: 28px;
 }
 .lq-belt-bar {
+  /* Only as long as what it holds. */
   display: flex;
-  align-items: stretch;
-  gap: 6px;
-  padding: 6px 8px;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  max-width: 100%;
+  margin-left: 8px;
+  padding: 8px;
+  border-radius: 12px;
+  background: linear-gradient(#5a3a22, #3e2716);
+  box-shadow:
+    0 10px 26px rgb(0 0 0 / 0.45),
+    inset 0 1px 0 rgb(255 220 170 / 0.18);
+  /* The stitching, just inside the edge. */
+  outline: 1.5px dashed rgb(232 196 140 / 0.55);
+  outline-offset: -6px;
+  transition: border-radius var(--lq-strap-ms);
+}
+.lq-belt-folded .lq-belt-bar {
+  /* The buckle end of a belt. */
+  border-radius: 12px 22px 22px 12px;
+}
+.lq-belt-compact .lq-belt-bar {
+  /*
+   * The slim strap of a sideways phone: only as tall as its 48px pockets
+   * (52px), so its top lies 60px above the foot and a card's 61px holds.
+   */
+  padding: 2px 8px;
+  outline-offset: -3px;
 }
 .lq-belt-switch {
   display: flex;
@@ -433,46 +599,29 @@ defineExpose({ focusBelt, focusPicture, has, root })
   gap: 4px;
   pointer-events: auto;
 }
-.lq-belt-compact:not(.lq-belt-away) .lq-belt-bar {
-  /*
-   * The slim row of a sideways phone: only as tall as its 48px pictures
-   * (52px), so its top lies 60px above the foot and a card's 61px holds.
-   */
-  padding: 2px 8px;
-}
-.lq-belt-compact:not(.lq-belt-away) .lq-belt-strip {
-  /* An empty row keeps the height of a row of pictures. */
-  min-height: 48px;
-}
-.lq-belt-compact:not(.lq-belt-away) .lq-belt-switch {
-  /*
-   * Pouch and star side by side while the row is up; folded away they
-   * stack, clear of Hide / Show.
-   */
+.lq-belt-compact .lq-belt-switch {
+  /* Pouch and star side by side on a sideways phone. */
   flex-direction: row;
   align-items: center;
 }
 .lq-belt-tiny,
-.lq-belt-more,
-.lq-belt-put-away {
+.lq-belt-more {
   position: relative;
   flex: none;
-  border: 1px solid var(--lq-line2);
-  background: color-mix(in srgb, var(--lq-surface) 93%, transparent);
-  color: var(--lq-fg);
+  border: 1px solid #4a3110;
+  background: radial-gradient(circle at 35% 30%, #f3d28a, #b9862f 60%, #7a5317);
+  color: #3a250b;
   font: inherit;
   cursor: pointer;
-  box-shadow: 0 4px 16px rgb(0 0 0 / 0.2);
+  box-shadow: 0 2px 4px rgb(0 0 0 / 0.5);
 }
 .lq-belt-tiny {
-  width: 32px;
-  height: 32px;
+  width: var(--lq-stud);
+  height: var(--lq-stud);
   padding: 6px;
   border-radius: 999px;
 }
 .lq-belt-compact .lq-belt-tiny {
-  width: 28px;
-  height: 28px;
   padding: 5px;
 }
 .lq-belt-tiny svg {
@@ -480,9 +629,9 @@ defineExpose({ focusBelt, focusPicture, has, root })
   height: 100%;
 }
 .lq-belt-tiny.lq-lit {
-  border-color: var(--lq-accent);
-  background: var(--lq-accent-soft);
-  color: var(--lq-accent-text);
+  box-shadow:
+    0 0 0 2px #ffe3a3,
+    0 0 16px rgb(255 200 90 / 0.7);
 }
 .lq-dot {
   position: absolute;
@@ -491,23 +640,41 @@ defineExpose({ focusBelt, focusPicture, has, root })
   width: 9px;
   height: 9px;
   border-radius: 50%;
-  background: var(--lq-accent);
+  background: #ffa914;
+  box-shadow: 0 0 0 2px #3e2716;
 }
-.lq-belt-more,
-.lq-belt-put-away {
+.lq-belt-more {
   pointer-events: auto;
-  align-self: center;
-  width: 32px;
-  height: 44px;
-  border-radius: 10px;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  font:
+    700 18px/1 system-ui,
+    sans-serif;
+}
+.lq-belt-reel {
+  /* The strap's length: its pictures unfurl sideways out of the tab. */
+  display: grid;
+  grid-template-columns: 1fr;
+  flex: 0 1 auto;
+  min-width: 0;
+  pointer-events: none;
+  transition: grid-template-columns var(--lq-strap-ms)
+    cubic-bezier(0.3, 0.7, 0.2, 1);
+}
+.lq-belt-folded .lq-belt-reel {
+  grid-template-columns: 0fr;
 }
 .lq-belt-strip {
-  /* Floats on the picture: only the pictures themselves take a press. */
+  /* Floats on the leather: only the pictures themselves take a press. */
   pointer-events: none;
-  flex: 1;
   display: flex;
+  align-items: center;
   gap: 10px;
   min-width: 0;
+  /* Room for the lift of a pocket and its tag. */
+  padding: 6px 4px;
+  margin: -6px -4px;
   overflow-x: auto;
   scrollbar-width: none;
   scroll-behavior: smooth;
@@ -517,91 +684,103 @@ defineExpose({ focusBelt, focusPicture, has, root })
 }
 .lq-belt-empty {
   margin: 0;
+  padding: 0 14px 0 6px;
   align-self: center;
-  /* Lies on the picture: on paper, as the names under the pictures do, so a dark room cannot swallow it. */
-  padding: 2px 8px;
-  border-radius: 8px;
-  background: color-mix(in srgb, var(--lq-surface) 88%, transparent);
-  color: var(--lq-fg);
-  font-size: 14px;
+  white-space: nowrap;
+  /* Tooled into the leather. */
+  color: #f0d9a8;
+  font: italic 600 14px var(--lq-font-display);
+  text-shadow: 0 1px 0 #000;
 }
 .lq-belt-pic {
   pointer-events: auto;
   flex: none;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  width: 72px;
+  display: block;
+  width: var(--lq-pocket);
+  height: var(--lq-pocket);
   padding: 0;
   border: none;
   background: none;
-  font: 600 12px/1.15 var(--lq-font-ui);
-  text-align: center;
+  font: inherit;
   cursor: pointer;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  transition:
+    opacity calc(300ms * var(--lq-motion))
+      calc(var(--i) * 30ms * var(--lq-motion)),
+    translate calc(300ms * var(--lq-motion))
+      calc(var(--i) * 30ms * var(--lq-motion));
 }
-.lq-belt-compact .lq-belt-pic {
-  width: 48px;
+.lq-belt-folded .lq-belt-pic {
+  opacity: 0;
+  translate: -16px 0;
+  transition-delay: 0s;
 }
 .lq-belt-square {
   position: relative;
   box-sizing: border-box;
   width: 100%;
-  aspect-ratio: 1;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 10px;
-  border: 1px solid;
-  font: 600 26px var(--lq-font-display);
+  /* A round pocket with a brass rim; the painting is cropped to the circle. */
+  border-radius: 999px;
+  border: 3px solid #c8963d;
+  box-shadow:
+    0 0 0 1px #4a3110,
+    inset 0 2px 6px rgb(0 0 0 / 0.5),
+    0 3px 6px rgb(0 0 0 / 0.5);
+  font: 600 24px var(--lq-font-display);
+  transition:
+    transform calc(150ms * var(--lq-motion)),
+    box-shadow calc(150ms * var(--lq-motion)),
+    border-color calc(150ms * var(--lq-motion));
 }
 .lq-belt-face {
-  /* The painted picture fills the square, inside its coloured edge; the same even light in every act. */
   width: 100%;
   height: 100%;
-  border-radius: 9px;
+  border-radius: 999px;
   object-fit: cover;
   filter: none;
 }
 .lq-belt-item .lq-belt-square {
-  background: var(--lq-item-soft);
-  border-color: var(--lq-item-line);
-  color: var(--lq-item);
+  background: #18261b;
+  color: #8fcf7a;
 }
 .lq-belt-spell .lq-belt-square {
-  background: var(--lq-spell-soft);
-  border-color: var(--lq-spell-line);
-  color: var(--lq-spell);
-}
-.lq-belt-item .lq-belt-name {
-  color: var(--lq-item);
-}
-.lq-belt-spell .lq-belt-name {
-  color: var(--lq-spell);
-}
-.lq-belt-name {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  max-width: 100%;
-  overflow-wrap: anywhere;
-  /* Narrow sides: a word as long as Photograph fits the 72px tile whole. */
-  padding: 1px 2px;
-  border-radius: 8px;
-  background: color-mix(in srgb, var(--lq-surface) 88%, transparent);
+  background: #241a33;
+  color: #c79bf0;
 }
 .lq-belt-count {
   position: absolute;
-  right: 3px;
-  bottom: 3px;
-  padding: 1px 5px;
+  right: -5px;
+  bottom: -5px;
+  padding: 0 5px;
+  border: 1px solid #4a3110;
   border-radius: 999px;
-  background: rgb(34 32 27 / 0.82);
-  color: #fff;
-  font: 600 11px var(--lq-font-ui);
+  background: linear-gradient(#f3d28a, #b9862f);
+  color: #3a250b;
+  font: 700 11px/16px var(--lq-font-ui);
 }
-/* A gained thing has just flown in: its picture and the tiny button of its kind bump; a lost item rises out of the Bag's button, which dips. */
+.lq-belt-pic:hover .lq-belt-square,
+.lq-belt-pic:focus-visible .lq-belt-square {
+  transform: scale(1.08);
+  border-color: #ffd77a;
+  box-shadow:
+    0 0 0 1px #4a3110,
+    0 0 14px rgb(255 200 90 / 0.6);
+}
+/* The thing in hand keeps a lit, glowing rim. */
+.lq-belt-pic.lq-lit .lq-belt-square {
+  border-color: #ffd77a;
+  box-shadow:
+    0 0 0 1px #4a3110,
+    0 0 0 3px #ffe3a3,
+    0 0 16px rgb(255 200 90 / 0.8);
+}
+/* A gained thing has just flown in: its picture and the stud of its kind bump; a lost item rises out of the Bag's stud, which dips. */
 .lq-belt-pic.lq-landed .lq-belt-square,
 .lq-belt-tiny.lq-landed {
   transform: scale(1.12);
@@ -614,15 +793,10 @@ defineExpose({ focusBelt, focusPicture, has, root })
 .lq-belt-tiny:not(.lq-landed, .lq-dipped) {
   transition: transform calc(300ms * var(--lq-motion)) ease-in;
 }
-.lq-belt-pic.lq-lit .lq-belt-square {
-  outline: 3px solid var(--lq-accent);
-  outline-offset: 1px;
-}
 .lq-belt-pic:focus-visible .lq-belt-square,
 .lq-belt-tiny:focus-visible,
-.lq-belt-more:focus-visible,
-.lq-belt-put-away:focus-visible {
-  outline: 3px solid var(--lq-accent);
+.lq-belt-more:focus-visible {
+  outline: 3px solid #ffe3a3;
   outline-offset: 2px;
 }
 .lq-sr-only {
