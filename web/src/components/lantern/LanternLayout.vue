@@ -3216,6 +3216,8 @@ watch(
 }
 .lq-stage-box {
   width: 60%;
+  /* Above the belt (7) and the hand strip (8): its word list opens upwards over them. */
+  z-index: 9;
 }
 .lq-text-note {
   align-self: center;

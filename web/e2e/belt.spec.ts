@@ -99,6 +99,64 @@ test('a carried thing is used on a person from the belt: ring, hand, press', asy
   await expect(story).toContainText('Grandmother turns it over in her hands')
 })
 
+test('the No match line of the typing box lies over the belt, not under its labels (rq-su6c)', async ({
+  page,
+}): Promise<void> => {
+  await page.setViewportSize({ width: 1280, height: 800 })
+  await toTheCottage(page)
+  // A full bag, so the belt's pictures and their names run under the typing box.
+  await page.evaluate(() => {
+    /* eslint-disable @typescript-eslint/no-explicit-any */
+    const app = (document.querySelector('#app') as any).__vue_app__
+    const store = app.config.globalProperties.$pinia.state.value.game
+    store.rawInventory = [
+      'Bread',
+      'Rusty Hoe',
+      'Egg',
+      'Feather',
+      'Lantern',
+      'Rope',
+      'Old Key',
+      'Herbs',
+      'Candle',
+      'Coin',
+    ].map((name) => ({ name, description: `A ${name}.` }))
+    /* eslint-enable @typescript-eslint/no-explicit-any */
+  })
+  await expect(page.locator('[data-belt-pic]')).toHaveCount(10)
+  await page.keyboard.press('F1')
+  const input = page.getByLabel('Command', { exact: true })
+  await input.fill('xyzzy')
+  const none = page.getByRole('option', { name: 'No match for “xyzzy”' })
+  await expect(none).toBeVisible()
+  // Wherever a picture of the belt lies under the line, the line is what a look there meets.
+  const covered = await none.evaluate((el) => {
+    const line = el.getBoundingClientRect()
+    const under: string[] = []
+    for (const pic of document.querySelectorAll('[data-belt-pic]')) {
+      const box = pic.getBoundingClientRect()
+      const left = Math.max(line.left, box.left)
+      const right = Math.min(line.right, box.right)
+      const top = Math.max(line.top, box.top)
+      const bottom = Math.min(line.bottom, box.bottom)
+      if (left >= right || top >= bottom) continue
+      const hit = document.elementFromPoint(
+        (left + right) / 2,
+        (top + bottom) / 2,
+      )
+      under.push(
+        `${pic.getAttribute('data-belt-pic')}:${hit !== null && el.contains(hit)}`,
+      )
+    }
+    return under
+  })
+  expect(
+    covered.length,
+    'pictures of the belt lie under the line',
+  ).toBeGreaterThan(0)
+  expect(covered.filter((entry) => entry.endsWith(':false'))).toEqual([])
+})
+
 test('Cancel and Escape put the thing down and send nothing', async ({
   page,
 }): Promise<void> => {
