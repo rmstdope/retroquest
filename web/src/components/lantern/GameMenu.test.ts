@@ -50,6 +50,7 @@ describe('GameMenu', () => {
     const w = mountMenu()
 
     expect(w.get('.lq-dialog-layer').classes()).toContain('lq-dialog-glass')
+    expect(w.get('.lq-dialog-layer').classes()).toContain('lq-dialog-narrow')
   })
 
   it('gives every entry a quiet icon, and each window it opens an arrow', () => {

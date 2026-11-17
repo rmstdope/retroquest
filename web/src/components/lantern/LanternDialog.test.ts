@@ -50,6 +50,16 @@ describe('LanternDialog', () => {
     ).toContain('lq-dialog-glass')
   })
 
+  it('can be narrow, for a short list of choices (narrow)', () => {
+    expect(mountDialog().get('.lq-dialog-layer').classes()).not.toContain(
+      'lq-dialog-narrow',
+    )
+    wrapper?.unmount()
+    expect(
+      mountDialog({ narrow: true }).get('.lq-dialog-layer').classes(),
+    ).toContain('lq-dialog-narrow')
+  })
+
   it('is a modal dialog named by its title', () => {
     const w = mountDialog()
     const dialog = w.get('[role="dialog"]')

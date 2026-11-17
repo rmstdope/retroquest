@@ -149,6 +149,13 @@ describe('SettingsDialog', () => {
     ])
   })
 
+  it('is a pane of frosted glass, like the menu it comes from', () => {
+    const layer = mountSettings().get('.lq-dialog-layer')
+
+    expect(layer.classes()).toContain('lq-dialog-glass')
+    expect(layer.classes()).not.toContain('lq-dialog-narrow')
+  })
+
   it('picks the theme', async () => {
     const w = mountSettings()
 

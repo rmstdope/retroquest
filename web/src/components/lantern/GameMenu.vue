@@ -89,6 +89,7 @@ function onKeydown(event: KeyboardEvent): void {
     eyebrow="Paused"
     centered
     glass
+    narrow
     @close="emit('close')"
     @mousemove="ring.onMove"
   >

@@ -181,6 +181,7 @@ function volume(event: Event): number {
   <LanternDialog
     title="Settings"
     eyebrow="Game"
+    glass
     :key-line="KEYS"
     @close="emit('close')"
     @focusin="ring.onFocusIn"

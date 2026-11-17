@@ -54,6 +54,13 @@ describe('QuitDialog', () => {
     expect(w.get('.lq-dialog-layer').classes()).toContain('lq-dialog-centered')
   })
 
+  it('is a narrow pane of frosted glass, like the menu it comes from', () => {
+    const layer = mountQuit().get('.lq-dialog-layer')
+
+    expect(layer.classes()).toContain('lq-dialog-glass')
+    expect(layer.classes()).toContain('lq-dialog-narrow')
+  })
+
   it('saves, then quits to the main menu', async () => {
     const w = mountQuit()
 

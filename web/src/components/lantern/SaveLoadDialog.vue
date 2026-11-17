@@ -248,6 +248,7 @@ function cardLabel(card: SaveSlot): string {
   <LanternDialog
     :title="saving ? 'Save game' : 'Load game'"
     eyebrow="Game"
+    glass
     :key-line="keyLine"
     :start-on-panel="startKey === null && !saving"
     @close="emit('close')"

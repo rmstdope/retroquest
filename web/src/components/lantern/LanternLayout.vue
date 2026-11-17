@@ -2797,6 +2797,7 @@ watch(
             :title="INFO_TITLES[gameDialog]"
             :eyebrow="GAME_NAME"
             :key-line="HELP_KEYS"
+            glass
             start-on-panel
             scroll-keys
             @close="closeGameDialog"

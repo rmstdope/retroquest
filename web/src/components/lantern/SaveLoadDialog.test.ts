@@ -76,6 +76,15 @@ describe('SaveLoadDialog', () => {
     expect(card(w, '1').text()).toContain('Empty slot · tap to save here')
   })
 
+  it('is a pane of frosted glass, saving or loading', () => {
+    for (const mode of ['save', 'load'] as const) {
+      const layer = mountDialog(mode).get('.lq-dialog-layer')
+      expect(layer.classes()).toContain('lq-dialog-glass')
+      expect(layer.classes()).not.toContain('lq-dialog-narrow')
+      wrapper?.unmount()
+    }
+  })
+
   it('saves to an empty slot at once and marks it', async () => {
     const w = mountDialog('save')
 

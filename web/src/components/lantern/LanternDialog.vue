@@ -24,9 +24,11 @@ import KeyLine, { type KeyHint } from './KeyLine.vue'
  * so no ring shows (a screen with nothing to select). `scrollKeys` lets ↑ ↓
  * (a line), Page Up and Page Down (a page), Home and End scroll the body.
  * `glass` makes the panel a pane of frosted glass, as the title page's dock
- * is: the game shows blurred through it and through a lighter shade, the
- * panel is narrower and rounder, and it rises in as it opens (at once under
- * Reduce motion). It follows the theme like any other panel.
+ * is: the game shows blurred through it, the panel is rounder, and it rises
+ * in as it opens (at once under Reduce motion). It follows the theme like any
+ * other panel, and is solid where the device asks for less transparency or
+ * the browser cannot blur. `narrow` keeps the panel to 420px, for a short
+ * list of choices (the pause menu and the quit question).
  */
 const props = withDefaults(
   defineProps<{
@@ -40,6 +42,7 @@ const props = withDefaults(
     startOnPanel?: boolean
     scrollKeys?: boolean
     glass?: boolean
+    narrow?: boolean
   }>(),
   {
     eyebrow: '',
@@ -51,6 +54,7 @@ const props = withDefaults(
     startOnPanel: false,
     scrollKeys: false,
     glass: false,
+    narrow: false,
   },
 )
 const emit = defineEmits<{ close: [] }>()
@@ -115,7 +119,11 @@ defineExpose({ focusFirst: trap.focusFirst })
 <template>
   <div
     class="lq-dialog-layer"
-    :class="{ 'lq-dialog-centered': centered, 'lq-dialog-glass': glass }"
+    :class="{
+      'lq-dialog-centered': centered,
+      'lq-dialog-glass': glass,
+      'lq-dialog-narrow': narrow,
+    }"
   >
     <div class="lq-dialog-scrim" aria-hidden="true" @click="onBackdrop"></div>
     <section
@@ -341,16 +349,19 @@ defineExpose({ focusFirst: trap.focusFirst })
     padding: 10px 22px 14px;
   }
 }
-/* A pane of frosted glass, as on the title page: the game shows through, blurred. */
+/*
+ * A pane of frosted glass, as on the title page: the game shows through,
+ * blurred. The pane is opaque enough, over the shade, for small and coloured
+ * text to stay readable over a bright room.
+ */
 .lq-dialog-glass .lq-dialog-scrim {
-  background: rgb(5 8 11 / 0.42);
+  background: rgb(5 8 11 / 0.5);
 }
 .lq-dialog-glass .lq-dialog-panel {
-  max-width: 420px;
   border: 1px solid color-mix(in srgb, var(--lq-fg) 16%, transparent);
   border-radius: 22px;
-  background: color-mix(in srgb, var(--lq-surface) 62%, transparent);
-  backdrop-filter: blur(18px) saturate(1.3);
+  background: color-mix(in srgb, var(--lq-surface) 82%, transparent);
+  backdrop-filter: blur(20px) saturate(1.3);
   box-shadow:
     0 20px 60px rgb(0 0 0 / 0.45),
     inset 0 1px 0 rgb(255 255 255 / 0.08);
@@ -362,6 +373,30 @@ defineExpose({ focusFirst: trap.focusFirst })
 }
 .lq-dialog-glass .lq-dialog-content {
   padding-top: 14px;
+}
+.lq-dialog-glass .lq-dialog-foot {
+  border-top-color: color-mix(in srgb, var(--lq-fg) 10%, transparent);
+}
+.lq-dialog-narrow .lq-dialog-panel {
+  max-width: 420px;
+}
+/* A phone's bottom sheet keeps its shape: rounded at the top, flush below. */
+@media (max-width: 639px) {
+  .lq-dialog-glass:not(.lq-dialog-centered) .lq-dialog-panel {
+    border-bottom: none;
+    border-radius: 22px 22px 0 0;
+  }
+}
+/* Solid where the device asks for less transparency, or nothing can blur. */
+@media (prefers-reduced-transparency: reduce) {
+  .lq-dialog-glass .lq-dialog-panel {
+    background: var(--lq-surface);
+  }
+}
+@supports not (backdrop-filter: blur(1px)) {
+  .lq-dialog-glass .lq-dialog-panel {
+    background: var(--lq-surface);
+  }
 }
 @keyframes lq-dialog-rise {
   from {

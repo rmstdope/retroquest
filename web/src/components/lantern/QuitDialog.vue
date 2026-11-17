@@ -61,6 +61,8 @@ function saveAndQuit(): void {
     title="Quit to the main menu?"
     eyebrow="Menu"
     centered
+    glass
+    narrow
     :key-line="KEYS"
     @close="cancel"
     @focusin="ring.onFocusIn"
