@@ -832,7 +832,7 @@ test.describe('Lantern UI (the default)', () => {
     await waitForGame(page)
     await expect(page.locator('.lq-title-page')).toBeVisible()
     await expect(page.locator('.lq-art')).toHaveCount(0)
-    await expect(page.getByText('Welcome to')).toBeVisible()
+    await expect(page.getByText('Tales of', { exact: true })).toBeVisible()
 
     for (const size of [
       { width: 390, height: 780 },
@@ -843,9 +843,7 @@ test.describe('Lantern UI (the default)', () => {
       await expect(page.locator('.lq-wordmark')).toBeVisible()
       await expect(page.locator('.lq-credit')).toBeVisible()
       await expect(page.locator('.lq-subtitle')).toBeVisible()
-      if (size.height < 450)
-        await expect(page.locator('.lq-title-rule')).toBeHidden()
-      else await expect(page.locator('.lq-title-rule')).toBeVisible()
+      await expect(page.locator('.lq-title-dock')).toBeInViewport({ ratio: 1 })
     }
   })
 
@@ -858,6 +856,12 @@ test.describe('Lantern UI (the default)', () => {
     const start = page.getByRole('button', { name: 'Start', exact: true })
     await expect(page.locator('.lq-title-page')).toHaveClass(/is-playing/)
     await expect(page.locator('.lq-title-buttons')).toHaveAttribute('inert')
+    // The glass dock stays hidden until just before its choices fade up.
+    expect(
+      await page
+        .locator('.lq-title-dock')
+        .evaluate((el) => getComputedStyle(el).opacity),
+    ).toBe('0')
 
     await page.evaluate(() => (document.activeElement as HTMLElement).blur())
     expect(await page.evaluate(() => document.activeElement?.tagName)).toBe(
@@ -902,8 +906,8 @@ test.describe('Lantern UI (the default)', () => {
     expect(await colour('.lq-title-page')).toBe('rgb(16, 21, 26)')
     const text = await page
       .locator('.lq-wordmark')
-      .evaluate((el) => getComputedStyle(el).color)
-    expect(text).toBe('rgb(255, 184, 54)')
+      .evaluate((el) => getComputedStyle(el).backgroundImage)
+    expect(text).toContain('rgb(255, 184, 54)')
   })
 
   test('asks to save before finishing in a bottom sheet on a small phone', async ({

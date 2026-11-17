@@ -605,8 +605,9 @@ describe('LanternLayout', () => {
     game.showTitle = true
     await flushPromises()
 
-    const cont = wrapper.get('.lq-title-start')
-    expect(cont.text()).toContain('Act II · The Old Mill')
+    const cont = wrapper.get('.lq-title-continue')
+    expect(cont.get('.lq-continue-title').text()).toBe('The Old Mill')
+    expect(cont.get('.lq-continue-line').text()).toContain('Act II · ')
     await cont.trigger('click')
     await flushPromises()
 
@@ -642,14 +643,17 @@ describe('LanternLayout', () => {
     game.showTitle = true
     await flushPromises()
 
-    const labels = wrapper
-      .findAll('.lq-title-inner button')
-      .map((b) => b.text())
-    expect(labels[0]).toMatch(
-      /^Continue\s*before-the-mirrors · Act III · Mount Ember · /,
+    const cont = wrapper.get('.lq-title-continue')
+    expect(cont.get('.lq-continue-title').text()).toBe('Mount Ember')
+    expect(cont.get('.lq-continue-line').text()).toMatch(
+      /^before-the-mirrors · Act III · /,
     )
-    expect(labels.slice(1)).toEqual(['New game', 'Load game'])
-    await wrapper.get('.lq-title-start').trigger('click')
+    expect(
+      wrapper
+        .findAll('.lq-title-second')
+        .map((b) => b.text().replace(b.get('.lq-title-icon').text(), '')),
+    ).toEqual(['New game', 'Load game'])
+    await cont.trigger('click')
 
     expect(load).toHaveBeenCalledWith(-1, 'before-the-mirrors')
   })

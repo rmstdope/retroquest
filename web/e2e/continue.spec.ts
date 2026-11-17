@@ -34,7 +34,8 @@ test('Continue opens the newest save with no chapter page', async ({
 
   const cont = page.getByRole('button', { name: /^Continue/ })
   await expect(cont).toBeFocused()
-  await expect(cont).toContainText('Act I · The Dream')
+  await expect(cont.locator('.lq-continue-title')).toHaveText('The Dream')
+  await expect(cont.locator('.lq-continue-line')).toContainText('Act I · ')
   await expect(page.getByRole('button', { name: 'New game' })).toBeVisible()
   await cont.click()
 
@@ -83,7 +84,10 @@ test('a save made under a name is listed on the title page after a reload and lo
   await page.reload()
 
   const cont = page.getByRole('button', { name: /^Continue/ })
-  await expect(cont).toContainText('mysave · Act I · The Dream')
+  await expect(cont.locator('.lq-continue-title')).toHaveText('The Dream')
+  await expect(cont.locator('.lq-continue-line')).toContainText(
+    'mysave · Act I · ',
+  )
 
   await page.getByRole('button', { name: 'Load game' }).click()
   const dialog = page.getByRole('dialog', { name: 'Load game' })

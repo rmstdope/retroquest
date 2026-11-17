@@ -8,8 +8,8 @@ import {
   useId,
   watch,
 } from 'vue'
-import { GAME_FULL_NAME, GAME_NAME } from '@/engine'
-import { continueLine, filled, newestLoadable } from '@/lantern/saveCard'
+import { GAME_FULL_NAME } from '@/engine'
+import { continueCard, filled, newestLoadable } from '@/lantern/saveCard'
 import {
   pictureExists,
   roomPictureUrl,
@@ -27,9 +27,10 @@ import TitleMotion from './TitleMotion.vue'
 /**
  * The game's title page, before the first act: a full-screen picture, the
  * game's name over its upper part, one credit line for Content Studio and the
- * buttons. Unless the player wants less motion it opens in a fixed order (the
- * picture, the name, the credit, then the buttons rising one after another,
- * about 5½ seconds in all); until the opening is over the credit and the
+ * choices, all on one pane of frosted glass (the dock) near the foot of the
+ * picture. Unless the player wants less motion it opens in a fixed order (the
+ * picture, the name, the credit, the dock's glass, then the choices fading up
+ * slowly one after another, about 6½ seconds in all); until the opening is over the credit and the
  * buttons are inert (neither focusable nor pressable). Any key press or press
  * anywhere finishes the opening at once and does nothing else (a key's
  * default action, such as Enter pressing a button, is cancelled, and the
@@ -49,8 +50,8 @@ import TitleMotion from './TitleMotion.vue'
  * it walks the page's own choices rather than a dialog's stops.
  *
  * A returning player has `saves` (the quick save, the slots in use and the saves
- * made under a name): the page then offers Continue (the newest save that can be loaded, named under
- * the word), New game and Load game, and Escape does nothing. When every
+ * made under a name): the page then offers Continue (a card naming the newest
+ * save that can be loaded), New game and Load game, and Escape does nothing. When every
  * save is from an older version there is no Continue and New game is the
  * main button. `error` is why the last load from here failed.
  *
@@ -87,6 +88,12 @@ const props = withDefaults(
 const emit = defineEmits<{ start: []; continue: []; load: [] }>()
 const hasSaves = computed(() => props.saves.some(filled))
 const newest = computed(() => newestLoadable(props.saves))
+/** What the Continue card says about the newest save. */
+const card = computed(() => (newest.value ? continueCard(newest.value) : null))
+/** The Continue card's name for a screen reader, its three lines read as one: "Continue, The Old Mill, Act II · …". */
+const continueName = computed(() =>
+  ['Continue', card.value?.title, card.value?.line].filter(Boolean).join(', '),
+)
 const loadButton = ref<HTMLButtonElement | null>(null)
 const sounds = useUiSounds()
 
@@ -275,21 +282,17 @@ onBeforeUnmount(() => {
     <div class="lq-title-shade" aria-hidden="true"></div>
     <div class="lq-title-inner">
       <div class="lq-title-name">
-        <span class="lq-welcome">Welcome to</span>
         <h2 :id="titleId" class="lq-sr-only">
           {{ GAME_FULL_NAME }}
         </h2>
-        <span class="lq-wordmark" aria-hidden="true">{{ GAME_NAME }}</span>
-        <span class="lq-title-rule" aria-hidden="true"
-          ><span class="lq-title-rule-line"></span>◆<span
-            class="lq-title-rule-line"
-          ></span
-        ></span>
+        <span class="lq-title-eyebrow" aria-hidden="true">Tales of</span>
+        <span class="lq-wordmark" aria-hidden="true">Twinmoor</span>
         <span class="lq-subtitle" aria-hidden="true">Wardens of the Dawn</span>
       </div>
       <p v-if="error" class="lq-title-error" role="alert">{{ error }}</p>
       <div
-        class="lq-title-buttons"
+        class="lq-title-buttons lq-title-dock"
+        :class="{ 'is-single': !hasSaves, 'is-pair': hasSaves && !card }"
         :inert="opened ? undefined : true"
         @animationend="onRisen"
         @focusin="onChoiceFocus"
@@ -307,24 +310,30 @@ onBeforeUnmount(() => {
         </template>
         <template v-else>
           <button
-            v-if="newest"
+            v-if="card"
             type="button"
-            class="lq-title-start"
+            class="lq-title-continue"
+            :aria-label="continueName"
             data-autofocus
             @mouseenter="onChoiceHover"
             @click="press(() => emit('continue'))"
           >
-            Continue
-            <span class="lq-title-line">{{ continueLine(newest) }}</span>
+            <span class="lq-continue-text">
+              <span class="lq-continue-kicker">Continue</span>
+              <span class="lq-continue-title">{{ card.title }}</span>
+              <span class="lq-continue-line">{{ card.line }}</span>
+            </span>
+            <span class="lq-continue-play" aria-hidden="true">▶</span>
           </button>
           <button
             type="button"
-            :class="newest ? 'lq-title-second' : 'lq-title-start'"
-            :data-autofocus="newest ? undefined : ''"
+            :class="card ? 'lq-title-second' : 'lq-title-start'"
+            :data-autofocus="card ? undefined : ''"
             @mouseenter="onChoiceHover"
             @click="press(() => emit('start'))"
           >
-            New game
+            <span v-if="card" class="lq-title-icon" aria-hidden="true">✦</span
+            >New game
           </button>
           <button
             ref="loadButton"
@@ -333,7 +342,7 @@ onBeforeUnmount(() => {
             @mouseenter="onChoiceHover"
             @click="press(() => emit('load'))"
           >
-            Load game
+            <span class="lq-title-icon" aria-hidden="true">☰</span>Load game
           </button>
         </template>
       </div>
@@ -392,23 +401,26 @@ onBeforeUnmount(() => {
   inset: 0;
   background: center / cover no-repeat;
 }
+/* Darker at the top behind the name, at the foot behind the dock, and towards the corners. */
 .lq-title-shade {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  background: linear-gradient(
-    180deg,
-    rgb(16 21 26 / 0.82) 0%,
-    rgb(16 21 26 / 0.25) 38%,
-    rgb(16 21 26 / 0.19) 55%,
-    rgb(16 21 26 / 0.75) 100%
-  );
+  background:
+    radial-gradient(
+      ellipse at 50% 30%,
+      rgb(16 21 26 / 0) 30%,
+      rgb(16 21 26 / 0.55) 100%
+    ),
+    linear-gradient(180deg, rgb(16 21 26 / 0.55) 0%, rgb(16 21 26 / 0) 35%),
+    linear-gradient(0deg, rgb(16 21 26 / 0.7) 0%, rgb(16 21 26 / 0) 40%);
 }
 .lq-title-inner {
   position: relative;
   width: 100%;
+  min-height: 100%;
   margin: 0 auto;
-  padding: 9cqh 16px 64px;
+  padding: 8cqh 16px 56px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -416,120 +428,46 @@ onBeforeUnmount(() => {
 }
 .lq-title-name {
   margin-bottom: auto;
-  opacity: 0;
-}
-.lq-welcome {
-  display: block;
-  margin-bottom: 8px;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: rgb(236 230 214 / 0.8);
-  text-shadow: 0 1px 3px #000;
-}
-.lq-wordmark {
-  display: block;
-  max-width: 100%;
-  font-family: var(--lq-font-display);
-  font-size: 84px;
-  font-weight: 600;
-  line-height: 1;
-  text-align: center;
-  text-wrap: balance;
-  color: var(--lq-accent-text);
-  text-shadow:
-    0 0 22px rgb(0 0 0 / 0.8),
-    0 2px 3px #000;
-}
-.lq-title-rule {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 220px;
-  max-width: 100%;
-  margin: 10px auto;
-  color: var(--lq-accent-line);
-}
-.lq-title-rule-line {
-  flex: 1;
-  height: 1px;
-  background: var(--lq-accent-line);
-}
-.lq-subtitle {
-  display: block;
-  font-family: var(--lq-font-display);
-  font-size: 28px;
-  font-style: italic;
-  line-height: 1.15;
-  text-align: center;
-  color: #ece6d6;
-  text-shadow: 0 1px 3px #000;
-}
-.lq-title-buttons {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
-  margin-top: 24px;
-  margin-bottom: 6cqh;
-}
-.lq-title-buttons > button {
-  width: 300px;
   opacity: 0;
-  transform: translateY(6px);
 }
-.lq-credit {
-  position: absolute;
-  left: 18px;
-  bottom: 14px;
-  max-width: calc(100% - 36px);
-  margin: 0;
-  font-size: 12px;
-  color: rgb(236 230 214 / 0.73);
+.lq-title-eyebrow {
+  padding-left: 0.5em;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  color: rgb(236 230 214 / 0.85);
   text-shadow: 0 1px 3px #000;
-  opacity: 0;
 }
-.lq-credit a {
-  color: var(--lq-accent-text);
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-.lq-title-buttons > button:focus {
-  outline: 3px solid #f4ecd2;
-  outline-offset: 3px;
-}
-.lq-title-start {
-  min-height: 54px;
-  padding: 6px 28px;
-  border: none;
-  border-radius: 12px;
-  background: var(--lq-accent);
-  color: var(--lq-on-accent);
-  font: inherit;
-  font-size: 16px;
+/* The name in amber, lit from above: cream at the top, deep amber at the foot. */
+.lq-wordmark {
+  max-width: 100%;
+  font-family: var(--lq-font-display);
+  font-size: clamp(56px, 9vw, 120px);
   font-weight: 600;
-  cursor: pointer;
+  line-height: 1;
+  letter-spacing: -0.015em;
+  background: linear-gradient(
+    180deg,
+    #fff3d4 10%,
+    var(--lq-accent-text) 60%,
+    #c97a0a 100%
+  );
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 4px 18px rgb(0 0 0 / 0.55));
 }
-.lq-title-line {
-  display: block;
-  margin-top: 2px;
-  font-size: 12px;
-  font-weight: 400;
-  opacity: 0.85;
-}
-.lq-title-second {
-  height: 48px;
-  padding: 0 28px;
-  border: 1px solid var(--lq-accent-line);
-  border-radius: 12px;
-  background: rgb(16 21 26 / 0.8);
-  backdrop-filter: blur(4px);
-  color: var(--lq-accent-text);
-  font: inherit;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
+.lq-subtitle {
+  margin-top: 6px;
+  font-family: var(--lq-font-prose);
+  font-size: 22px;
+  font-style: italic;
+  line-height: 1.15;
+  color: #ece6d6;
+  text-shadow: 0 1px 6px #000;
 }
 .lq-title-error {
   margin: 0 0 14px;
@@ -540,7 +478,150 @@ onBeforeUnmount(() => {
   color: var(--lq-failure);
   font-size: 14px;
 }
-/* The opening: picture, name, credit, then the buttons one after another. */
+/* The dock: one pane of frosted glass holding every choice. */
+.lq-title-dock {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: 1fr 1fr;
+  gap: 10px;
+  width: min(720px, 100%);
+  margin-bottom: 24px;
+  padding: 10px;
+  border: 1px solid rgb(255 255 255 / 0.14);
+  border-radius: 22px;
+  background: rgb(18 22 28 / 0.5);
+  backdrop-filter: blur(18px) saturate(1.3);
+  box-shadow:
+    0 20px 60px rgb(0 0 0 / 0.45),
+    inset 0 1px 0 rgb(255 255 255 / 0.08);
+}
+.lq-title-dock.is-single {
+  display: flex;
+  width: min(420px, 100%);
+}
+.lq-title-dock > button {
+  border: 1px solid transparent;
+  border-radius: 14px;
+  color: #ece6d6;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    background 0.18s,
+    border-color 0.18s;
+}
+.lq-title-dock > button:focus {
+  outline: 2px solid #f4ecd2;
+  outline-offset: 2px;
+}
+.lq-title-continue {
+  grid-row: span 2;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 0;
+  padding: 12px 14px 12px 20px;
+  background: rgb(255 255 255 / 0.06);
+  text-align: left;
+}
+.lq-continue-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.lq-continue-kicker {
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--lq-accent-text);
+}
+.lq-continue-title {
+  overflow: hidden;
+  font-family: var(--lq-font-display);
+  font-size: 24px;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.lq-continue-line {
+  font-size: 12px;
+  font-weight: 400;
+  color: rgb(236 230 214 / 0.7);
+}
+.lq-continue-play {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding-left: 3px;
+  border-radius: 50%;
+  background: var(--lq-accent);
+  color: var(--lq-on-accent);
+  font-size: 14px;
+}
+.lq-title-second {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 170px;
+  padding: 0 18px;
+  background: rgb(255 255 255 / 0.04);
+}
+.lq-title-icon {
+  width: 16px;
+  color: var(--lq-accent-text);
+}
+/* Every save outdated: Load game fills its column beside the amber New game. */
+.lq-title-dock.is-pair > .lq-title-second {
+  grid-row: span 2;
+  justify-content: center;
+  height: auto;
+}
+/* The main choice when there is no save to continue: amber, filling its place. */
+.lq-title-dock > .lq-title-start {
+  flex: 1;
+  grid-row: span 2;
+  min-height: 58px;
+  background: var(--lq-accent);
+  color: var(--lq-on-accent);
+  font-size: 17px;
+}
+.lq-title-continue:hover,
+.lq-title-continue:focus,
+.lq-title-second:hover,
+.lq-title-second:focus {
+  border-color: rgb(255 214 140 / 0.65);
+  background: rgb(255 255 255 / 0.13);
+}
+.lq-title-dock > .lq-title-start:hover,
+.lq-title-dock > .lq-title-start:focus {
+  background: #ffbb3c;
+}
+.lq-credit {
+  position: absolute;
+  left: 50%;
+  bottom: 18px;
+  width: max-content;
+  max-width: calc(100% - 32px);
+  margin: 0;
+  font-size: 12px;
+  text-wrap: balance;
+  color: rgb(236 230 214 / 0.73);
+  text-shadow: 0 1px 3px #000;
+  transform: translateX(-50%);
+  opacity: 0;
+}
+.lq-credit a {
+  color: var(--lq-accent-text);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+/* The opening: picture, name, credit, the dock's glass, then the choices fading up one after another. */
 .is-playing .lq-title-art {
   animation: lq-title-fade 2.4s ease forwards;
 }
@@ -550,24 +631,28 @@ onBeforeUnmount(() => {
 .is-playing .lq-credit {
   animation: lq-title-fade 0.4s ease 4.4s forwards;
 }
-.is-playing .lq-title-buttons > button {
-  animation: lq-title-rise 0.35s ease forwards;
+.is-playing .lq-title-dock {
+  opacity: 0;
+  animation: lq-title-fade 0.8s ease 4s forwards;
 }
-.is-playing .lq-title-buttons > button:nth-child(1) {
-  animation-delay: 4.8s;
+.is-playing .lq-title-dock > button {
+  animation: lq-title-rise 1.1s ease forwards;
 }
-.is-playing .lq-title-buttons > button:nth-child(2) {
-  animation-delay: 4.98s;
+.is-playing .lq-title-dock > button:nth-child(1) {
+  animation-delay: 4.6s;
 }
-.is-playing .lq-title-buttons > button:nth-child(3) {
-  animation-delay: 5.16s;
+.is-playing .lq-title-dock > button:nth-child(2) {
+  animation-delay: 5s;
+}
+.is-playing .lq-title-dock > button:nth-child(3) {
+  animation-delay: 5.4s;
 }
 .is-open .lq-title-art,
 .is-open .lq-title-name,
 .is-open .lq-credit {
   opacity: 1;
 }
-.is-open .lq-title-buttons > button {
+.is-open .lq-title-dock > button {
   opacity: 1;
   transform: none;
 }
@@ -595,63 +680,101 @@ onBeforeUnmount(() => {
     transform: none;
   }
 }
-/* A phone held upright: the name sits lower, the buttons fill the width. */
-@media (max-width: 499px) {
+/* A phone held upright: the name sits lower, Continue gets a row of its own over the other two. */
+@media (max-width: 599px) {
   .lq-title-inner {
-    padding-top: 14cqh;
+    padding-top: 12cqh;
   }
   .lq-wordmark {
-    font-size: 48px;
+    font-size: 56px;
   }
   .lq-subtitle {
     font-size: 18px;
   }
-  .lq-title-buttons {
-    width: 100%;
-    max-width: 320px;
+  .lq-title-dock {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
   }
-  .lq-title-buttons > button {
-    width: 100%;
+  .lq-title-continue,
+  .lq-title-dock > .lq-title-start {
+    grid-row: auto;
+    grid-column: span 2;
   }
-  .lq-credit {
-    bottom: 12px;
+  .lq-title-dock.is-pair > .lq-title-second {
+    grid-row: auto;
+    grid-column: span 2;
+    height: 48px;
   }
-}
-/* A phone held sideways: smaller name, Continue on a row of its own. */
-@media (max-height: 449px) {
-  .lq-title-inner {
-    padding: 4cqh 16px 46px;
+  .lq-continue-title {
+    font-size: 20px;
   }
-  .lq-welcome {
-    margin-bottom: 4px;
-  }
-  .lq-wordmark {
-    font-size: 36px;
-  }
-  .lq-title-rule {
+  .lq-continue-play {
     display: none;
   }
+  .lq-title-second {
+    justify-content: center;
+    min-width: 0;
+    height: 48px;
+    padding: 0 10px;
+    white-space: nowrap;
+  }
+  .lq-credit {
+    width: auto;
+  }
+}
+/* A phone held sideways: a smaller name and a slimmer dock. */
+@media (max-height: 449px) {
+  .lq-title-inner {
+    padding: 4cqh 16px 36px;
+  }
+  .lq-title-eyebrow {
+    font-size: 11px;
+  }
+  .lq-wordmark {
+    font-size: 40px;
+  }
   .lq-subtitle {
-    margin-top: 4px;
+    margin-top: 2px;
     font-size: 14px;
   }
-  .lq-title-buttons {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    width: 100%;
-    max-width: 460px;
-    margin-bottom: 0;
+  .lq-title-dock {
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+    gap: 6px;
+    margin-bottom: 8px;
+    padding: 6px;
+    border-radius: 16px;
   }
-  .lq-title-buttons > button {
-    flex: 1;
-    width: auto;
-    height: 42px;
+  .lq-title-continue,
+  .lq-title-dock > .lq-title-start {
+    grid-row: span 2;
+    grid-column: auto;
   }
-  .lq-title-buttons > .lq-title-start {
-    flex-basis: 100%;
-    max-width: 420px;
+  .lq-title-dock.is-pair > .lq-title-second {
+    grid-row: span 2;
+    grid-column: auto;
     height: auto;
+  }
+  .lq-title-continue {
+    padding: 6px 10px 6px 14px;
+  }
+  .lq-continue-title {
+    font-size: 18px;
+  }
+  .lq-continue-play {
+    display: grid;
+    width: 36px;
+    height: 36px;
+  }
+  .lq-title-second {
+    min-width: 150px;
+    height: 38px;
+  }
+  .lq-title-dock > .lq-title-start {
+    min-height: 46px;
+  }
+  .lq-credit {
+    bottom: 10px;
   }
 }
 .lq-sr-only {

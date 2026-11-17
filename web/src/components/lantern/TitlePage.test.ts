@@ -49,12 +49,17 @@ describe('TitlePage', () => {
     expect(dialog.get(`#${dialog.attributes('aria-labelledby')}`).text()).toBe(
       GAME_FULL_NAME,
     )
-    expect(w.get('.lq-welcome').text()).toBe('Welcome to')
+    expect(w.get('.lq-title-eyebrow').attributes('aria-hidden')).toBe('true')
+    expect(w.get('.lq-title-eyebrow').text()).toBe('Tales of')
     expect(w.get('.lq-wordmark').attributes('aria-hidden')).toBe('true')
-    expect(w.get('.lq-wordmark').text()).toBe(GAME_NAME)
+    expect(w.get('.lq-wordmark').text()).toBe('Twinmoor')
+    expect(
+      `${w.get('.lq-title-eyebrow').text()} ${w.get('.lq-wordmark').text()}`,
+    ).toBe(GAME_NAME)
     expect(w.get('.lq-subtitle').attributes('aria-hidden')).toBe('true')
     expect(w.get('.lq-subtitle').text()).toBe(GAME_SUBTITLE)
-    expect(w.get('.lq-title-rule').attributes('aria-hidden')).toBe('true')
+    expect(w.find('.lq-welcome').exists()).toBe(false)
+    expect(w.find('.lq-title-rule').exists()).toBe(false)
     expect(w.get('.lq-title-name').findAll('.lq-subtitle')).toHaveLength(1)
     expect(w.find('pre').exists()).toBe(false)
   })
@@ -415,8 +420,14 @@ describe('TitlePage', () => {
   })
 
   describe('with saves', () => {
+    /** Each button's text as a screen reader names it: without what is hidden from it. */
     const labels = (w: VueWrapper): string[] =>
-      w.findAll('button').map((b) => b.text())
+      w.findAll('button').map((b) => {
+        const copy = b.element.cloneNode(true) as HTMLElement
+        for (const hidden of copy.querySelectorAll('[aria-hidden="true"]'))
+          hidden.remove()
+        return (copy.textContent ?? '').trim()
+      })
 
     it('offers only Start when there are no saves, and Escape does nothing', async () => {
       const w = mountTitle()
@@ -430,23 +441,44 @@ describe('TitlePage', () => {
       expect(labels(w)).toEqual(['Start'])
     })
 
-    it('offers Continue, New game and Load game, with Continue naming the save', async () => {
+    it('offers a Continue card naming the save, then New game and Load game', async () => {
       const w = mountTitle([save(2)])
       await flushPromises()
-      expect(
-        w.findAll('button').map((b) => b.find('.lq-title-line').exists()),
-      ).toEqual([true, false, false])
-      expect(labels(w)[0]).toMatch(/^Continue\s*Act II · The Old Mill · /)
+      const [cont] = w.findAll('button')
+      expect(cont.classes()).toContain('lq-title-continue')
+      expect(cont.get('.lq-continue-kicker').text()).toBe('Continue')
+      expect(cont.get('.lq-continue-title').text()).toBe('The Old Mill')
+      expect(cont.get('.lq-continue-line').text()).toBe(
+        'Act II · 3 Nov · 21:14',
+      )
+      expect(cont.get('.lq-continue-play').attributes('aria-hidden')).toBe(
+        'true',
+      )
+      expect(labels(w)[0]).toMatch(/^Continue\s*The Old Mill\s*Act II · /)
+      expect(cont.attributes('aria-label')).toBe(
+        'Continue, The Old Mill, Act II · 3 Nov · 21:14',
+      )
       expect(labels(w).slice(1)).toEqual(['New game', 'Load game'])
-      expect(document.activeElement).toBe(w.findAll('button')[0].element)
+      expect(document.activeElement).toBe(cont.element)
     })
 
-    it('treats a player with only named saves as returning, and names the save under Continue', () => {
+    it('treats a player with only named saves as returning, and names the save on the Continue card', () => {
       const w = mountTitle([
         save(-1, { name: 'oldrun', act: null, room: null }),
       ])
-      expect(labels(w)[0]).toMatch(/^Continue\s*oldrun · 3 Nov · 21:14$/)
+      expect(labels(w)[0]).toMatch(/^Continue\s*oldrun\s*3 Nov · 21:14$/)
       expect(labels(w).slice(1)).toEqual(['New game', 'Load game'])
+    })
+
+    it('puts every choice in the one glass dock, New game and Load game marked by an icon', () => {
+      const w = mountTitle([save(2)])
+      const dock = w.get('.lq-title-buttons')
+      expect(dock.classes()).toContain('lq-title-dock')
+      expect(dock.findAll('button')).toHaveLength(3)
+      for (const button of w.findAll('.lq-title-second'))
+        expect(button.get('.lq-title-icon').attributes('aria-hidden')).toBe(
+          'true',
+        )
     })
 
     it('keeps Escape inert while saves exist', async () => {
@@ -471,6 +503,7 @@ describe('TitlePage', () => {
       await flushPromises()
       expect(labels(w)).toEqual(['New game', 'Load game'])
       expect(w.findAll('button')[0].classes()).toContain('lq-title-start')
+      expect(w.get('.lq-title-dock').classes()).toContain('is-pair')
       expect(document.activeElement).toBe(w.findAll('button')[0].element)
       await w.get('section').trigger('keydown', { key: 'Escape' })
       expect(w.emitted('start')).toBeUndefined()
