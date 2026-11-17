@@ -195,6 +195,22 @@ describe('madeEffects', () => {
   })
 })
 
+describe('a drawn shape with no area', () => {
+  it('is no shape, even when the box around it has a size', () => {
+    const slanted = [
+      [0.2, 0.2],
+      [0.3, 0.3],
+      [0.4, 0.4],
+    ]
+    expect(
+      madeEffects(
+        { a: { effects: [{ kind: 'fire', spot: [slanted] }] } },
+        'a',
+      )[0].spot,
+    ).toBeUndefined()
+  })
+})
+
 describe('appliedMotion', () => {
   const effects: RoomEffect[] = [
     { kind: 'dust', settings: { speed: 2 } },

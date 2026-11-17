@@ -144,6 +144,22 @@ describe('the scene the studio drives', () => {
     { kind: 'dust', settings: { amount: 2 } },
     { kind: 'fire', settings: { glow: 1.5 }, spot: [SHAPE], mark: [0.35, 0.7] },
     { kind: 'water', settings: {}, spot: [SHAPE] },
+    {
+      kind: 'smoke',
+      settings: {},
+      spot: [
+        [
+          [0.6, 0.1],
+          [0.8, 0.1],
+          [0.6, 0.4],
+        ],
+        [
+          [0.8, 0.1],
+          [0.8, 0.4],
+          [0.6, 0.4],
+        ],
+      ],
+    },
   ]
 
   it('plays the effects the studio hands it exactly as the game plays the same manifest entries', () => {
@@ -172,6 +188,18 @@ describe('the scene the studio drives', () => {
     scene.resize(960, 540, { width: 1920, height: 1080 })
     scene.setEffects([{ kind: 'smoke', settings: {} }], true)
     expect(scene.isEmpty()).toBe(false)
+  })
+
+  it('plays nothing of a spot whose shapes are none of them a shape, as the game does', () => {
+    const scene = createMotionScene()
+    scene.resize(960, 540, { width: 1920, height: 1080 })
+    const flat = [
+      [0.2, 0.2],
+      [0.3, 0.3],
+      [0.4, 0.4],
+    ]
+    scene.setEffects([{ kind: 'smoke', settings: {}, spot: [flat] }], true)
+    expect(scene.isEmpty()).toBe(true)
   })
 
   it('ignores a kind it does not have', () => {

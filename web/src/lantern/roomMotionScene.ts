@@ -246,11 +246,16 @@ export function createMotionScene(): MotionScene {
     return boxRect(spec.box, { width, height }, picture)
   }
 
+  /** What tells one layer from another: its kind, box, mark, drawn shape and settings, so a shape that moves is laid anew. */
   function keyOf(spec: MotionSpec): string {
     const b = spec.box
     const at = b ? `@${b.x},${b.y},${b.width},${b.height}` : ''
+    const mark = b?.mark ? `^${b.mark.x},${b.mark.y}` : ''
+    const shape = spec.polygon
+      ? `~${spec.polygon.map((p) => `${p.x},${p.y}`).join(';')}`
+      : ''
     const set = spec.settings ? `#${JSON.stringify(spec.settings)}` : ''
-    return `${spec.kind}${at}${set}`
+    return `${spec.kind}${at}${mark}${shape}${set}`
   }
 
   /** Seed the specks that are always there (dust, fireflies, mist). */

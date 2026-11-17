@@ -166,7 +166,7 @@ function boundingBox(points: readonly PicturePoint[]): AreaBox | null {
   return width > 0 && height > 0 ? { x, y, width, height } : null
 }
 
-/** One drawn shape: at least three corners, all inside the picture, around something with a size. */
+/** One drawn shape: at least three corners, all inside the picture, enclosing some area. */
 function madeShape(value: unknown): SpotShape | undefined {
   if (!Array.isArray(value) || value.length < 3) return undefined
   const points: PicturePoint[] = []
@@ -175,7 +175,17 @@ function madeShape(value: unknown): SpotShape | undefined {
     if (!point) return undefined
     points.push(point)
   }
-  return boundingBox(points) ? points : undefined
+  return boundingBox(points) && area(points) > 0 ? points : undefined
+}
+
+/** The area a closed shape encloses (the shoelace formula), in squared picture fractions. */
+function area(points: readonly PicturePoint[]): number {
+  let twice = 0
+  points.forEach((p, i) => {
+    const next = points[(i + 1) % points.length]
+    twice += p.x * next.y - next.x * p.y
+  })
+  return Math.abs(twice) / 2
 }
 
 /** The shapes of a spot that are shapes; undefined when none is. */

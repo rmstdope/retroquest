@@ -577,3 +577,48 @@ describe("the title picture's kinds", () => {
     expect(after).not.toBe(before)
   })
 })
+
+describe('a spot drawn as several shapes', () => {
+  /** Two triangles that split one box between them. */
+  const UPPER = [
+    { x: 0.25, y: 0.25 },
+    { x: 0.75, y: 0.25 },
+    { x: 0.25, y: 0.75 },
+  ]
+  const LOWER = [
+    { x: 0.75, y: 0.25 },
+    { x: 0.75, y: 0.75 },
+    { x: 0.25, y: 0.75 },
+  ]
+
+  it('plays each shape as its own layer, even when they share a box', () => {
+    const one = sceneOf(960, 540)
+    one.setEffects([{ kind: 'smoke', box: BOX, polygon: UPPER }], true)
+    const two = sceneOf(960, 540)
+    two.setEffects(
+      [
+        { kind: 'smoke', box: BOX, polygon: UPPER },
+        { kind: 'smoke', box: BOX, polygon: LOWER },
+      ],
+      true,
+    )
+    expect(two.count('smoke')).toBe(2 * one.count('smoke'))
+  })
+
+  it('lays a shape anew when its corners move inside the same box', () => {
+    const scene = sceneOf(960, 540)
+    scene.setEffects([{ kind: 'fire', box: BOX, polygon: UPPER }], true)
+    scene.setEffects([{ kind: 'fire', box: BOX, polygon: LOWER }], true)
+    const corners: string[] = []
+    const record =
+      (name: string) =>
+      (x: number, y: number): void => {
+        corners.push(`${name} ${x},${y}`)
+      }
+    scene.draw(
+      fakeContext({ moveTo: record('moveTo'), lineTo: record('lineTo') }),
+    )
+    // LOWER's corner at (0.75, 0.75) of the picture, which UPPER does not have.
+    expect(corners).toContain('lineTo 720,405')
+  })
+})

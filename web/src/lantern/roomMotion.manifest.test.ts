@@ -124,7 +124,10 @@ describe('the movement the images manifest carries', () => {
             ...(spot && { spot }),
           }
         })
-      expect(MANIFEST[id].effects ?? [], id).toEqual(exported)
+      // Compared as text: a studio save writes the keys in this order too, so any other order is a diff.
+      expect(JSON.stringify(MANIFEST[id].effects ?? []), id).toBe(
+        JSON.stringify(exported),
+      )
     }
   })
 

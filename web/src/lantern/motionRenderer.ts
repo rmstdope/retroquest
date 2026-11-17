@@ -12,8 +12,10 @@
  * them (`{ kind, settings?, spot?, mark? }`) and turns them into what the game's
  * scene plays through the same code the game uses for the manifest
  * (`madeEffect`, `effectSpecs`), so a drawn spot is placed in the studio as it
- * is in the game. A spot kind handed no shape plays over the whole picture, for
- * a studio that clips it to the shape itself; the game never plays one so.
+ * is in the game. A spot kind handed no `spot` at all plays over the whole
+ * picture, for a studio that clips it to the shape itself; the game never
+ * plays one so. One handed a `spot` with no usable shape plays nothing, as in
+ * the game.
  * Patch ties are the studio's to apply: it hands over only what plays.
  */
 import { effectSpecs, madeEffect, type MotionSpec } from './roomMotion'
@@ -36,11 +38,17 @@ export interface StudioMotionScene extends Omit<MotionScene, 'setEffects'> {
   setEffects(effects: readonly unknown[], instant: boolean): void
 }
 
-/** What the game's scene plays for one effect the studio hands over; nothing for a broken one or a kind the renderer lacks. */
+/**
+ * What the game's scene plays for one effect the studio hands over: nothing
+ * for a broken one or a kind the renderer lacks, and, as in the game, nothing
+ * for a spot handed only shapes that are not shapes.
+ */
 function studioSpecs(value: unknown): MotionSpec[] {
   const effect = madeEffect(value)
   if (!effect) return []
-  if (effect.spot) return effectSpecs(effect)
+  const handedSpot =
+    typeof value === 'object' && value !== null && 'spot' in value
+  if (effect.spot || handedSpot) return effectSpecs(effect)
   return [
     effect.settings
       ? { kind: effect.kind, settings: effect.settings }
