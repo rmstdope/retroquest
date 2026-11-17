@@ -192,7 +192,7 @@ export function createMotionScene(): MotionScene {
 
   /**
    * How far from the light the layer's drawn shape (its polygon, else its rectangle) ends, nearest
-   * side; unbounded when the light lies outside the shape, where nothing needs holding back.
+   * side; unbounded when the layer has no shape, and nothing when the light lies outside it.
    */
   function edgeDistance(light: { x: number; y: number }, layer: Layer): number {
     const polygon = layer.spec.polygon
@@ -205,7 +205,7 @@ export function createMotionScene(): MotionScene {
         light.y - r.y,
         r.y + r.h - light.y,
       )
-      return inside < 0 ? Infinity : inside
+      return Math.max(0, inside)
     }
     const points = polygon.map((p) =>
       pointPosition(p, { width, height }, picture),
@@ -233,7 +233,7 @@ export function createMotionScene(): MotionScene {
         Math.hypot(light.x - a.x - u * dx, light.y - a.y - u * dy),
       )
     })
-    return inside ? best : Infinity
+    return inside ? best : 0
   }
 
   /** Sizes and speeds shrink a little with the canvas, never below 60% nor above the drawing's. */
@@ -729,7 +729,14 @@ export function createMotionScene(): MotionScene {
         const amount = settingValue('moonglow', layer.spec.settings, 'amount')
         const glow = settingValue('moonglow', layer.spec.settings, 'glow')
         if (amount <= 0) break
-        const light = lightOf(layer)
+        // A mark outside the drawn shape would leave the glow cut off at its edge, so the glow
+        // then shines from the middle of the shape's rectangle instead; when that middle lies
+        // outside the shape too (a hollow shape), no glow is drawn.
+        const mark = lightOf(layer)
+        const light =
+          edgeDistance(mark, layer) > 0
+            ? mark
+            : { x: rect.x + rect.w / 2, y: rect.y + rect.h / 2 }
         const a = (0.2 + 0.08 * Math.sin((t * speed) / 1800)) * glow
         // The fade ends just inside the nearest drawn edge, so no amount lights the shape evenly.
         const radius = Math.min(
