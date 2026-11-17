@@ -2,6 +2,7 @@
 import { describe, expect, it } from 'vitest'
 import { mount } from '@vue/test-utils'
 import TurnPage from './TurnPage.vue'
+import { GAME_NAME } from '@/engine'
 
 describe('TurnPage', () => {
   const page = mount(TurnPage)
@@ -10,7 +11,7 @@ describe('TurnPage', () => {
     expect(page.get('h2').text()).toBe('Turn your phone on its side')
     const lines = page.findAll('p').map((p) => p.text())
     expect(lines).toEqual([
-      'Tales of Twinmoor is played with the phone held sideways, so the whole room fits.',
+      `${GAME_NAME} is played with the phone held sideways, so the whole room fits.`,
       "If nothing happens, check that your phone's rotation lock is off.",
     ])
   })

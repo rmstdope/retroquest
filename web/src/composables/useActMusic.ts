@@ -1,5 +1,6 @@
 import { onScopeDispose, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
+import { GAME_NAME } from '@/engine'
 import { useGameStore } from '@/stores/useGameStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
@@ -29,7 +30,7 @@ import {
  * shows the first.
  */
 const CHOSEN_TAKE_CREDIT =
-  'Original music for Tales of Twinmoor\n' +
+  `Original music for ${GAME_NAME}\n` +
   'Images, narration and music made with Content Studio'
 
 const GESTURES = ['keydown', 'click', 'touchstart'] as const

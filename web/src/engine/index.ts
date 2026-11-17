@@ -14,6 +14,7 @@ export {
   type QuestChecklistItem,
 } from './Quest'
 export { Room, type RoomOptions, type Exits } from './Room'
+export { GAME_FULL_NAME, GAME_NAME, GAME_SUBTITLE } from './gameName'
 export { numberInWords } from './numberInWords'
 export { affirms, heardAs, normaliseSpokenWord, saysAnyOf } from './spokenWord'
 export { Spell, type SpellOptions } from './Spell'

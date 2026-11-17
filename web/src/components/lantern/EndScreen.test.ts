@@ -3,6 +3,7 @@ import { describe, it, expect, afterEach } from 'vitest'
 import { mount, type VueWrapper } from '@vue/test-utils'
 import { nextTick } from 'vue'
 import EndScreen from './EndScreen.vue'
+import { GAME_NAME } from '@/engine'
 
 describe('EndScreen', () => {
   let wrapper: VueWrapper | undefined
@@ -27,7 +28,7 @@ describe('EndScreen', () => {
     )
 
     expect(w.get('.lq-end-kicker').text()).toBe('The end')
-    expect(w.get('h1').text()).toBe('Thank you for playing Tales of Twinmoor')
+    expect(w.get('h1').text()).toBe(`Thank you for playing ${GAME_NAME}`)
     expect(w.find('.lq-ornament').exists()).toBe(true)
     expect(w.get('.lq-end-body').text()).toBe('The realm breathes again.')
     expect(w.get('.lq-end-body .theme-character_name').text()).toBe('realm')
@@ -51,7 +52,7 @@ describe('EndScreen', () => {
     const w = mountEnd('  \n', false)
 
     expect(w.find('.lq-end-body').exists()).toBe(false)
-    expect(w.get('h1').text()).toBe('Thank you for playing Tales of Twinmoor')
+    expect(w.get('h1').text()).toBe(`Thank you for playing ${GAME_NAME}`)
     expect(w.find('.lq-ornament').exists()).toBe(true)
     expect(w.get('.lq-end-foot').text()).toBe('This game was not saved.')
   })

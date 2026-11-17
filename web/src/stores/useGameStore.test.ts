@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 import { useGameStore, MAX_TURNS } from './useGameStore'
+import { GAME_NAME } from '@/engine'
 import type { AreaThing } from '@/lantern/areaThings'
 import type { RoomDescription, SoundFiring } from '@/engine'
 import type {
@@ -2351,7 +2352,7 @@ describe('useGameStore', () => {
       'leaves the game as it was when a save is too old to load (%s)',
       (command, answer) => {
         const OLD =
-          '[failure]That save was made by an older version of Tales of Twinmoor' +
+          `[failure]That save was made by an older version of ${GAME_NAME}` +
           ' and can no longer be loaded.[/failure]'
         answer().mockReturnValue(OLD)
         store.questsHaveNew = true

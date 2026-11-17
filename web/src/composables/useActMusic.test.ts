@@ -3,6 +3,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { effectScope, nextTick } from 'vue'
 import { createPinia, setActivePinia } from 'pinia'
 import { useActMusic } from './useActMusic'
+import { GAME_NAME } from '@/engine'
 import { useGameStore } from '@/stores/useGameStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
@@ -322,7 +323,7 @@ describe('useActMusic', () => {
       game.musicRoomKey = 'VillageSquare'
       await settle()
       expect(music?.musicInfo.value).toBe(
-        'Original music for Tales of Twinmoor\n' +
+        `Original music for ${GAME_NAME}\n` +
           'Images, narration and music made with Content Studio',
       )
       scope.stop()

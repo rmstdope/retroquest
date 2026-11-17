@@ -6,12 +6,13 @@
  * typed, with the game left where it was.
  */
 import { test, expect, type Page, enterCommand } from './fixtures'
+import { GAME_NAME } from '../src/engine/gameName'
 
 /** The menu (☰) is among the buttons on the picture. */
 const PHONE = { width: 360, height: 740 }
 const REASON = "Made by an older version · can't be loaded"
 const OLD_LINE =
-  'That save was made by an older version of Tales of Twinmoor' +
+  `That save was made by an older version of ${GAME_NAME}` +
   ' and can no longer be loaded.'
 
 /** Seed an old quick save and an old save in slot 2 (format 2, from 20 Oct). */

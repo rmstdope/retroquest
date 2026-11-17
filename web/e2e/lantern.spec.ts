@@ -1,4 +1,5 @@
 import { test, expect, enterCommand, type Page, skipTelling } from './fixtures'
+import { GAME_NAME } from '../src/engine/gameName'
 
 /** Wait for the game to start (the act chunks load after the page's load event). */
 async function waitForGame(page: Page) {
@@ -54,9 +55,7 @@ test.describe('Lantern UI (the default)', () => {
     await injectMockState(page)
 
     await expect(page.getByRole('banner')).toHaveCount(0)
-    await expect(
-      page.getByText('Tales of Twinmoor', { exact: true }),
-    ).toHaveCount(0)
+    await expect(page.getByText(GAME_NAME, { exact: true })).toHaveCount(0)
     await expect(page.getByText('bustles with life')).toBeVisible()
     await expect(page.locator('.lq-name-btn')).toBeEnabled()
     await expect(page.locator('.lq-composer, .lq-dock')).toHaveCount(0)
@@ -816,7 +815,7 @@ test.describe('Lantern UI (the default)', () => {
     })
     await page.getByText('Details', { exact: true }).click()
 
-    const title = page.getByRole('heading', { name: 'Tales of Twinmoor' })
+    const title = page.getByRole('heading', { name: GAME_NAME })
     await title.scrollIntoViewIfNeeded()
     const box = await title.boundingBox()
     expect(box!.y).toBeGreaterThanOrEqual(0)
@@ -950,7 +949,7 @@ test.describe('Lantern UI (the default)', () => {
 
     await expect(
       page.getByRole('heading', {
-        name: 'Thank you for playing Tales of Twinmoor',
+        name: `Thank you for playing ${GAME_NAME}`,
       }),
     ).toBeFocused()
     await expect(page.getByText('This game was not saved.')).toBeVisible()
@@ -976,7 +975,7 @@ test.describe('Lantern UI (the default)', () => {
     })
 
     const title = page.getByRole('heading', {
-      name: 'Thank you for playing Tales of Twinmoor',
+      name: `Thank you for playing ${GAME_NAME}`,
     })
     await expect(title).toBeInViewport()
     const foot = page.getByText('Your game is saved in the quick slot.')
@@ -1010,7 +1009,7 @@ test.describe('Lantern UI (the default)', () => {
     await expect(page.locator('.lq-title-page')).toBeVisible()
     await expect(
       page.getByRole('heading', {
-        name: 'Thank you for playing Tales of Twinmoor',
+        name: `Thank you for playing ${GAME_NAME}`,
       }),
     ).toHaveCount(0)
   })

@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { readFileSync, readdirSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
+import { GAME_FULL_NAME, GAME_NAME } from '@/engine'
 
 const read = (path: string): string =>
   readFileSync(fileURLToPath(new URL(path, import.meta.url)), 'utf8')
@@ -19,18 +20,16 @@ function sources(dir: URL = new URL('../', import.meta.url)): string[][] {
 describe('the name of the game and of its land', () => {
   it('names the browser tab and the installed app', () => {
     const html = read('../../index.html')
+    expect(html).toContain(`<title>${GAME_FULL_NAME}</title>`)
     expect(html).toContain(
-      '<title>Tales of Twinmoor: Wardens of the Dawn</title>',
-    )
-    expect(html).toContain(
-      'name="apple-mobile-web-app-title" content="Tales of Twinmoor"',
+      `name="apple-mobile-web-app-title" content="${GAME_NAME}"`,
     )
     const manifest = JSON.parse(read('../../public/manifest.json')) as {
       name: string
       short_name: string
     }
-    expect(manifest.name).toBe('Tales of Twinmoor: Wardens of the Dawn')
-    expect(manifest.short_name).toBe('Tales of Twinmoor')
+    expect(manifest.name).toBe(GAME_FULL_NAME)
+    expect(manifest.short_name).toBe(GAME_NAME)
   })
 
   it('never writes RetroQuest or Eldoria in the game, only in storage keys', () => {
@@ -38,5 +37,13 @@ describe('the name of the game and of its land', () => {
       /RetroQuest|Eldoria/.test(text),
     )
     expect(names.map(([name]) => name)).toEqual([])
+  })
+
+  it('writes the name once, in engine/gameName.ts', () => {
+    const copies = sources().filter(
+      ([name, text]) =>
+        name !== 'gameName.ts' && text.replace(/\s+/g, ' ').includes(GAME_NAME),
+    )
+    expect(copies.map(([name]) => name)).toEqual([])
   })
 })

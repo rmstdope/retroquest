@@ -3,6 +3,7 @@ import { describe, it, expect } from 'vitest'
 import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 import LanternLoading from './LanternLoading.vue'
+import { GAME_NAME } from '@/engine'
 
 describe('LanternLoading', () => {
   it('shows the full status, file count included', () => {
@@ -37,7 +38,7 @@ describe('LanternLoading', () => {
 
     expect(w.find('.lq-loading-spinner').exists()).toBe(false)
     expect(w.get('[role="alert"]').text()).toBe(
-      'Tales of Twinmoor could not start. Try again, or open Details to see what went wrong.',
+      `${GAME_NAME} could not start. Try again, or open Details to see what went wrong.`,
     )
     const details = w.get('details')
     expect(details.attributes('open')).toBeUndefined()
