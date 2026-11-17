@@ -234,7 +234,12 @@ describe('the default placement the renderer reports', () => {
       const points = effectType(type)?.defaultSpot?.[0] ?? []
       const xs = points.map((p) => p[0])
       const ys = points.map((p) => p[1])
-      return [Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys)]
+      return [
+        Math.min(...xs),
+        Math.min(...ys),
+        Math.max(...xs),
+        Math.max(...ys),
+      ]
     }
     for (const type of ['dust', 'leaves', 'embers'])
       expect(box(type)).toEqual([0, 0, 1, 1])
