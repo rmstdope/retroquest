@@ -375,6 +375,39 @@ describe("the title picture's kinds", () => {
     }
   })
 
+  it("fades the moon's glow to nothing inside the drawn shape at every amount", () => {
+    for (const amount of [0.5, 1, 2, 3]) {
+      const scene = sceneOf(1280, 720)
+      scene.setEffects(
+        [{ kind: 'moonglow', settings: { amount }, ...SPOT }],
+        true,
+      )
+      const createRadialGradient = vi.fn(() => ({ addColorStop: vi.fn() }))
+      scene.draw(fakeContext({ createRadialGradient }))
+      const [x, y, , , , radius] = createRadialGradient.mock
+        .calls[0] as unknown as number[]
+      const edge = nearestEdge(x, y)
+      expect(radius).toBeLessThan(edge)
+    }
+  })
+
+  /** The distance from (x, y) to the nearest side of the title polygon on a 1280 by 720 canvas, cover-fitted like the scene's picture. */
+  function nearestEdge(x: number, y: number): number {
+    const points = POLYGON.map((p) => ({ x: p.x * 1280, y: p.y * 720 }))
+    let best = Infinity
+    points.forEach((a, i) => {
+      const b = points[(i + 1) % points.length]
+      const dx = b.x - a.x
+      const dy = b.y - a.y
+      const u = Math.max(
+        0,
+        Math.min(1, ((x - a.x) * dx + (y - a.y) * dy) / (dx * dx + dy * dy)),
+      )
+      best = Math.min(best, Math.hypot(x - a.x - u * dx, y - a.y - u * dy))
+    })
+    return best
+  }
+
   it('moves the clouds across the picture', () => {
     const scene = run(['clouds'], undefined, 1)
     const before = JSON.stringify(
