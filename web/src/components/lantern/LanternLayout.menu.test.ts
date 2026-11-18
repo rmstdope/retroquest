@@ -207,6 +207,98 @@ describe('LanternLayout: the Escape menu', () => {
       expect(heading()).toBe('Map')
     })
 
+    it('leaves J, Q and M alone while the quit question is up', async () => {
+      await press('Escape')
+      entry('Quit').click()
+      await flushPromises()
+      for (const key of ['j', 'q', 'm'])
+        await press(key, document.activeElement!)
+      expect(heading()).toBe('Quit to the main menu?')
+      expect(w.find('[aria-label="Quests drawer"]').exists()).toBe(false)
+      expect(w.find('[aria-label="Journal drawer"]').exists()).toBe(false)
+      entry('Cancel').click()
+      await flushPromises()
+      expect(heading()).toBe('Menu')
+    })
+
+    it('keeps the voice paused while what the menu opened is up, the map and the drawers alike', async () => {
+      const narration = useNarrationStore()
+      const resume = vi.spyOn(narration, 'resume')
+      await press('Escape')
+      tile('Map').click()
+      await flushPromises()
+      await press('Escape', document.activeElement!)
+      tile('Journal').click()
+      await flushPromises()
+      expect(w.find('[aria-label="Journal drawer"]').exists()).toBe(true)
+      expect(resume).not.toHaveBeenCalled()
+      await press('Escape', document.activeElement!)
+      expect(heading()).toBe('Menu')
+      expect(resume).not.toHaveBeenCalled()
+    })
+
+    it('does not bring the menu back when a drawer it opened goes some other way', async () => {
+      await press('Escape')
+      tile('Journal').click()
+      await flushPromises()
+      useGameStore().submitCommand('look')
+      await flushPromises()
+      expect(w.find('[aria-label="Journal drawer"]').exists()).toBe(false)
+      expect(heading()).toBeUndefined()
+      await press('j')
+      await press('Escape', document.activeElement!)
+      expect(heading()).toBeUndefined()
+    })
+
+    it('gives focus back to the Quests tile when Q switched the journal opened from the menu', async () => {
+      await press('Escape')
+      tile('Journal').click()
+      await flushPromises()
+      await press('q', document.activeElement!)
+      expect(w.find('[aria-label="Quests drawer"]').exists()).toBe(true)
+      await press('Escape', document.activeElement!)
+      expect(heading()).toBe('Menu')
+      expect(label()).toBe('Quests')
+    })
+
+    it('forgets the menu when ☰ opens it again over a drawer it opened', async () => {
+      await press('Escape')
+      tile('Journal').click()
+      await flushPromises()
+      w.get('[data-button="menu"]').element.dispatchEvent(
+        new MouseEvent('click', { bubbles: true }),
+      )
+      await flushPromises()
+      expect(heading()).toBe('Menu')
+      await press('Escape', document.activeElement!)
+      expect(heading()).toBeUndefined()
+      expect(w.find('[aria-label="Journal drawer"]').exists()).toBe(false)
+    })
+
+    it('puts a drawer away when the menu opens the map', async () => {
+      await press('q')
+      expect(w.find('[aria-label="Quests drawer"]').exists()).toBe(true)
+      w.get('[data-button="menu"]').element.dispatchEvent(
+        new MouseEvent('click', { bubbles: true }),
+      )
+      await flushPromises()
+      tile('Map').click()
+      await flushPromises()
+      expect(heading()).toBe('Map')
+      expect(w.find('[aria-label="Quests drawer"]').exists()).toBe(false)
+    })
+
+    it('gives focus back to what had it before the drawer when M follows Q', async () => {
+      const typing = w.get<HTMLElement>('[data-button="hint"]').element
+      typing.focus()
+      await press('q', typing)
+      await press('m', document.activeElement!)
+      expect(heading()).toBe('Map')
+      await press('Escape', document.activeElement!)
+      expect(heading()).toBeUndefined()
+      expect(document.activeElement).toBe(typing)
+    })
+
     it('J switches from the quests to the journal', async () => {
       await press('q')
       await press('j')

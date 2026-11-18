@@ -392,6 +392,9 @@ function toggleDrawer(tab: 'quests' | 'story'): void {
       document.activeElement !== document.body
         ? document.activeElement
         : null
+  // A drawer the menu opened, switched for the other: its closing comes back to the other's tile.
+  if (drawerFromMenu.value)
+    menuEntry.value = tab === 'story' ? 'journal' : 'quests'
   drawerTab.value = tab
 }
 
@@ -1403,10 +1406,8 @@ function onPanelPress(event: MouseEvent): void {
   if (!target?.closest('[data-panel] :is(button, a, [role="button"])')) return
   // A press during a change of scene (or before a talk's) brings the new room up first.
   presentation.bringSceneUp()
-  // Opening the bigger map changes nothing the voice holds: it never waits for it.
   // The room name's pills and Hint act on the first press, wherever they stand: a pill or Hint cuts an arrival short and sends its command.
-  if (target.closest('.lq-name-btn, .lq-pill, .lq-hint-btn, [data-bigger-map]'))
-    return
+  if (target.closest('.lq-name-btn, .lq-pill, .lq-hint-btn')) return
   if (!presentation.catchUpPanels()) return
   event.stopPropagation()
   event.preventDefault()
@@ -1981,6 +1982,8 @@ const menuEntry = ref<MenuEntry | null>(null)
 
 /** Open the menu (a button, Escape), or a window from it (then its entry is remembered). */
 function openGameDialog(kind: 'menu' | MenuKind): void {
+  // ☰ over a drawer the menu opened: the menu is opened afresh, and that drawer goes.
+  if (kind === 'menu' && drawerFromMenu.value) putDrawerAway()
   if (!gameDialog.value)
     dialogOpener = document.activeElement as HTMLElement | null
   menuEntry.value = kind === 'menu' ? null : kind
@@ -1994,23 +1997,49 @@ function openGameDialog(kind: 'menu' | MenuKind): void {
  * menu waits; closing either comes back to the menu, focus on its entry.
  */
 function openFromMenu(kind: MenuKind): void {
+  if (kind === 'map' && drawerTab.value) putDrawerAway()
   if (kind !== 'journal' && kind !== 'quests') {
     openGameDialog(kind)
+    return
+  }
+  const tab = kind === 'journal' ? 'story' : 'quests'
+  if (!drawerFor(tab)) {
+    // A section of the page, which stays: nothing to come back from.
+    void closeAllGameDialogs()
+    section.value = tab
     return
   }
   menuEntry.value = kind
   gameDialog.value = null
   drawerFromMenu.value = true
-  drawerTab.value = kind === 'journal' ? 'story' : 'quests'
+  drawerTab.value = tab
 }
 
-/** M in the game: the bigger map, which closes back to the game. */
+/**
+ * Whether the journal or the quests open as a drawer here: both on the
+ * laptop's (and the sideways phone's) stage; on a tall screen's stage the
+ * journal does (over the stage, as its plate button opens it) and the quests
+ * are a section; on the text page both are sections.
+ */
+function drawerFor(tab: 'quests' | 'story'): boolean {
+  return tab === 'story' ? staged.value : wide.value
+}
+
+/** Close the open drawer without coming back to anything. */
+function putDrawerAway(): void {
+  drawerFromMenu.value = false
+  drawerTab.value = null
+}
+
+/** M in the game: the bigger map, which closes back to the game (focus to what had it before a drawer it puts away). */
 function openMapFromGame(): void {
-  if (drawerTab.value) drawerTab.value = null
+  const before = drawerTab.value ? drawerOpener : null
+  if (drawerTab.value) putDrawerAway()
   dialogOpener =
-    document.activeElement instanceof HTMLElement
+    before ??
+    (document.activeElement instanceof HTMLElement
       ? document.activeElement
-      : null
+      : null)
   menuEntry.value = null
   gameDialog.value = 'map'
 }
@@ -2018,10 +2047,11 @@ function openMapFromGame(): void {
 /**
  * J, Q and M: the journal, the quests and the bigger map, as the menu's tiles
  * open them. In the game the drawers toggle (J on the quests switches to the
- * journal) and M opens the map; in the menu they open what its tile does, so
- * closing comes back to it; on the map M closes it. Not in a text field, not
- * with Ctrl, ⌘ or Alt, and not while another window, the end, a ring or a
- * page that is not the stage is up.
+ * journal) and M opens the map, and where the quests or the journal are a
+ * section of the page the key shows that section; in the menu they open what
+ * its tile does, so closing comes back to it; on the map M closes it. Not in a
+ * text field, not with Ctrl, ⌘ or Alt, and not while the title, a chapter, the
+ * quit question, a quest, a name's menu, the end or a ring is up.
  */
 function onJourneyKey(event: KeyboardEvent): void {
   const kinds: Record<string, JourneyKind> = {
@@ -2034,7 +2064,8 @@ function onJourneyKey(event: KeyboardEvent): void {
   if (event.ctrlKey || event.metaKey || event.altKey) return
   const target = event.target instanceof Element ? event.target : null
   if (target?.closest('input, textarea, select, [contenteditable]')) return
-  if (!staged.value || ring.value || game.ending) return
+  if (ring.value || game.ending || game.showModal || game.showTitle) return
+  if (game.quitAsked || game.shownQuest || nameMenu.value) return
   if (gameDialog.value === 'map' && kind === 'map') {
     event.preventDefault()
     void closeGameDialog()
@@ -2045,10 +2076,15 @@ function onJourneyKey(event: KeyboardEvent): void {
     openFromMenu(kind)
     return
   }
-  if (dialogOpen()) return
+  if (gameDialog.value) return
   event.preventDefault()
-  if (kind === 'map') openMapFromGame()
-  else toggleDrawer(kind === 'journal' ? 'story' : 'quests')
+  if (kind === 'map') {
+    openMapFromGame()
+    return
+  }
+  const tab = kind === 'journal' ? 'story' : 'quests'
+  if (drawerFor(tab)) toggleDrawer(tab)
+  else section.value = tab
 }
 
 /** Quit asked from the menu: the question takes its place, and Cancel brings it back. */
@@ -2111,13 +2147,15 @@ watch(
   },
 )
 
-// The narration waits, mid-line, while the menu or anything from it is open;
-// the music and the room's sounds play on. The map opened from the game (M)
-// is not the menu: like the drawers it lets the voice read on and catches up.
+// The narration waits, mid-line, while the menu or anything from it is open
+// (a drawer it opened too); the music and the room's sounds play on. The map
+// opened from the game (M) is not the menu: like the drawers it lets the voice
+// read on and catches up.
 watch(
   () =>
     (gameDialog.value !== null &&
       !(gameDialog.value === 'map' && menuEntry.value === null)) ||
+    drawerFromMenu.value ||
     game.quitAsked,
   (open) => (open ? narration.pause() : narration.resume()),
 )

@@ -141,6 +141,17 @@ describe('LanternLayout: panels wait for the narration', () => {
     expect(useGameStore().panelsHeld).toBe(true)
   })
 
+  it('keeps the old plate until the arrival is read, then lights it', async () => {
+    const w = await ready()
+    await goNorth()
+    expect(useNarrationStore().isNarrating).toBe(true)
+    expect(cardName(w)).toBe('Hall')
+
+    await vi.advanceTimersByTimeAsync(SCENE_PAUSE_MS)
+    expect(cardName(w)).toBe('Garden')
+    expect(w.get('.lq-plate').classes()).toContain('lq-flash')
+  })
+
   it('opens the bigger map on the first M while the voice reads on', async () => {
     await ready()
     useGameStore().showTitle = false
@@ -162,6 +173,7 @@ describe('LanternLayout: panels wait for the narration', () => {
     expect(
       document.querySelector('[data-current="true"]')?.textContent,
     ).toContain('Garden')
+    expect(useGameStore().groupHeld('place')).toBe(false)
   })
 
   it('opens the Journal on the first J while the voice reads on', async () => {

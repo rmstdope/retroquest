@@ -122,7 +122,20 @@ describe('GameMenu', () => {
       expect(quests.get('.lq-menu-journey-count').text()).toBe('2')
       expect(quests.find('.lq-menu-journey-new').exists()).toBe(true)
       expect(quests.attributes('aria-label')).toBe('Quests')
-      expect(quests.attributes('aria-description')).toBe('2 open, news')
+      const note = document.getElementById(
+        quests.attributes('aria-describedby') ?? '',
+      )
+      expect(note?.textContent).toBe('2 open, news')
+      expect(note?.classList).toContain('lq-sr-only')
+    })
+
+    it("names each tile's key for assistive technology", () => {
+      const w = mountMenu()
+      expect(
+        w
+          .findAll('.lq-menu-journey')
+          .map((t) => t.attributes('aria-keyshortcuts')),
+      ).toEqual(['J', 'Q', 'M'])
     })
 
     it('opens the journal, the quests and the map', async () => {

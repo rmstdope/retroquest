@@ -1233,6 +1233,43 @@ describe('LanternLayout', () => {
       expect(sections(w).get('[aria-current="page"]').text()).toMatch(/^Quests/)
     })
 
+    describe("the menu's journey without the laptop stage", () => {
+      const choose = async (w: VueWrapper, label: string): Promise<void> => {
+        await w.get('.lq-float-menu').trigger('click')
+        await w
+          .get(`[role="dialog"] .lq-menu-journey[aria-label="${label}"]`)
+          .trigger('click')
+        await flushPromises()
+      }
+      const current = (w: VueWrapper): string =>
+        sections(w).get('[aria-current="page"]').text()
+
+      it('on a short screen (the text page) the tiles and keys switch the section, and Map opens the map', async () => {
+        stubScreen(true)
+        const w = mountLayout()
+        await choose(w, 'Quests')
+        expect(current(w)).toMatch(/^Quests/)
+        expect(w.find('[role="dialog"]').exists()).toBe(false)
+        await choose(w, 'Journal')
+        expect(current(w)).toBe('Story')
+        await key('q')
+        expect(current(w)).toMatch(/^Quests/)
+        await key('j')
+        expect(current(w)).toBe('Story')
+        await choose(w, 'Map')
+        expect(w.get('[role="dialog"] h2').text()).toBe('Map')
+      })
+
+      it('on a tall screen Quests switches to its section and Journal opens the journal over the stage', async () => {
+        const w = mountLayout()
+        await choose(w, 'Quests')
+        expect(current(w)).toMatch(/^Quests/)
+        expect(w.find('[aria-label="Quests drawer"]').exists()).toBe(false)
+        await choose(w, 'Journal')
+        expect(w.find('[aria-label="Journal drawer"]').exists()).toBe(true)
+      })
+    })
+
     it('puts the section tabs on top of the page on a short screen, under the menu button', () => {
       stubScreen(true)
       const w = mountLayout()

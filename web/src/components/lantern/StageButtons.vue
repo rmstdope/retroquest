@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useId } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
 import HintButton from './HintButton.vue'
 
@@ -17,6 +18,8 @@ defineProps<{
 }>()
 const emit = defineEmits<{ menu: [] }>()
 const game = useGameStore()
+/** The hidden words ☰ is described by while a quest has news. */
+const newsId = useId()
 </script>
 
 <template>
@@ -35,7 +38,7 @@ const game = useGameStore()
         data-button="menu"
         title="Menu"
         aria-label="Menu"
-        :aria-description="game.questsHaveNew ? 'A quest has news' : undefined"
+        :aria-describedby="game.questsHaveNew ? newsId : undefined"
         @click="emit('menu')"
       >
         ☰<span
@@ -44,6 +47,7 @@ const game = useGameStore()
           aria-hidden="true"
         ></span>
       </button>
+      <span :id="newsId" class="lq-sr-only">A quest has news</span>
     </div>
   </div>
 </template>
@@ -105,5 +109,14 @@ const game = useGameStore()
   height: 8px;
   border-radius: 50%;
   background: var(--lq-accent);
+}
+/* Read by assistive technology only. */
+.lq-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }
 </style>

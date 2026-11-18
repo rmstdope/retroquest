@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, useId } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { useMenuRing } from '@/composables/useMenuRing'
 import LanternDialog from './LanternDialog.vue'
@@ -99,6 +99,8 @@ const JOURNEY: Array<{
   },
 ]
 
+/** The hidden text the Quests tile is described by. */
+const questsNoteId = useId()
 /** What the Quests tile says beside its name: how many are open, and whether something is new. */
 const questsNote = computed(() =>
   [`${game.activeQuests.length} open`, game.questsHaveNew ? 'news' : '']
@@ -153,7 +155,8 @@ function onKeydown(event: KeyboardEvent): void {
           class="lq-menu-entry lq-menu-journey"
           data-ring
           :aria-label="tile.label"
-          :aria-description="tile.kind === 'quests' ? questsNote : undefined"
+          :aria-describedby="tile.kind === 'quests' ? questsNoteId : undefined"
+          :aria-keyshortcuts="tile.key"
           :data-autofocus="starts(tile.kind) || undefined"
           @click="emit('open', tile.kind)"
         >
@@ -178,6 +181,7 @@ function onKeydown(event: KeyboardEvent): void {
             tile.label
           }}</span>
         </button>
+        <span :id="questsNoteId" class="lq-sr-only">{{ questsNote }}</span>
       </div>
       <div class="lq-quick">
         <button
@@ -400,5 +404,14 @@ function onKeydown(event: KeyboardEvent): void {
   .lq-menu-tile .lq-menu-icon {
     display: none;
   }
+}
+/* Read by assistive technology only. */
+.lq-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }
 </style>

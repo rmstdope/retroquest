@@ -63,6 +63,10 @@ describe('StageButtons', () => {
     useGameStore().questsHaveNew = true
     const menu = mountButtons().get('[data-button="menu"]')
     expect(menu.find('.lq-dot').exists()).toBe(true)
-    expect(menu.attributes('aria-description')).toBe('A quest has news')
+    expect(menu.attributes('aria-label')).toBe('Menu')
+    const note = document.getElementById(
+      menu.attributes('aria-describedby') ?? '',
+    )
+    expect(note?.textContent).toBe('A quest has news')
   })
 })
