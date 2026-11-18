@@ -470,14 +470,16 @@ describe('TitlePage', () => {
       expect(w.get('.lq-title-hint').text()).toBe('Tap to begin')
     })
 
-    it('takes the hint away at a press and never shows it after', async () => {
+    it('hands the hint over to its fade-out at a press, hidden from a screen reader, and shows none after', async () => {
       useSettingsStore().reduceMotion = 'on'
       const w = mountWaiting()
       await vi.advanceTimersByTimeAsync(5_000)
       document.body.dispatchEvent(new KeyboardEvent('keydown', { key: 'a' }))
       await flushPromises()
-      expect(w.get('.lq-title-hint').text()).toBe('')
       expect(w.get('.lq-title-page').classes()).toContain('is-open')
+      expect(w.get('.lq-title-hint').attributes('aria-hidden')).toBe('true')
+      await vi.advanceTimersByTimeAsync(60_000)
+      expect(w.get('.lq-title-hint').text()).toBe('Press any key')
     })
 
     it('never shows the hint when pressed before it is due', async () => {

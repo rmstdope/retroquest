@@ -37,6 +37,9 @@ test('shows only the picture and the name until a key is pressed, then the menu 
   await expect(page.locator('.lq-title-page')).toHaveClass(/is-open/)
   await expect(start).toBeFocused()
   await expect(page.locator('.lq-title-page')).toBeVisible()
+  // A press during the fade-in finishes the picture and the name at once.
+  expect(await opacity(page, '.lq-title-art')).toBe('1')
+  expect(await opacity(page, '.lq-title-name')).toBe('1')
   await expect(async () => {
     expect(await opacity(page, '.lq-title-dock')).toBe('1')
     expect(await opacity(page, '.lq-credit')).toBe('1')
@@ -74,7 +77,8 @@ test('a hint appears 5 s after the name is up, and goes at a press', async ({
   await expect(hint).toHaveText('Press any key')
   await expect(hint).toHaveCSS('text-transform', 'uppercase')
   await page.keyboard.press('Space')
-  await expect(hint).toHaveText('')
+  await expect(hint).toHaveCSS('opacity', '0')
+  expect(await hint.getAttribute('aria-hidden')).toBe('true')
 })
 
 test('with less motion the page is still, and the hint appears after 5 s', async ({
@@ -88,6 +92,15 @@ test('with less motion the page is still, and the hint appears after 5 s', async
   expect(await opacity(page, '.lq-title-dock')).toBe('0')
   await page.clock.runFor(5100)
   await expect(page.locator('.lq-title-hint')).toHaveText('Press any key')
+  await page.keyboard.press('Space')
+  // No fade under Reduce motion: the menu is there at once.
+  await expect(page.locator('.lq-title-dock')).toHaveCSS('opacity', '1', {
+    timeout: 100,
+  })
+  await expect(page.locator('.lq-credit')).toHaveCSS('opacity', '1', {
+    timeout: 100,
+  })
+  await expect(page.locator('.lq-title-hint')).toHaveCSS('opacity', '0')
 })
 
 test('waits again when the player comes back to the title from the game', async ({

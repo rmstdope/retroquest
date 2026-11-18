@@ -51,7 +51,7 @@ import SaveThumb from './SaveThumb.vue'
  * appears 5 seconds after the page shows, and a press shows the menu at once.
  * Focus then lands on the main button. Enter on Start or Escape goes on.
  *
- The ring (a cream outline) is the focus on a choice. ↑ and ↓ move it between
+ * The ring (a cream outline) is the focus on a choice. ↑ and ↓ move it between
  * the choices in the order on screen, wrapping round (from the credit link they
  * put it on the last or the first); a pointer entering a choice moves it there.
  * A ring that moves to another choice sounds a soft ting, a choice made a
@@ -134,13 +134,9 @@ const opened = ref(false)
 /** Whether the hint is showing: nothing was pressed for a while. */
 const hinted = ref(false)
 const touch = useMediaQuery(TOUCH_QUERY)
-/** The hint's words, which fit the device: a tap on a phone or tablet, a key on a computer. */
+/** The hint's words (kept while it fades out at the press), which fit the device: a tap on a phone or tablet, a key on a computer. */
 const hintText = computed(() =>
-  !hinted.value || opened.value
-    ? ''
-    : touch.value
-      ? 'Tap to begin'
-      : 'Press any key',
+  !hinted.value ? '' : touch.value ? 'Tap to begin' : 'Press any key',
 )
 let hintTimer: ReturnType<typeof setTimeout> | undefined
 
@@ -387,7 +383,13 @@ onBeforeUnmount(() => {
           </button>
         </template>
       </div>
-      <p class="lq-title-hint" role="status">{{ hintText }}</p>
+      <p
+        class="lq-title-hint"
+        role="status"
+        :aria-hidden="opened ? 'true' : undefined"
+      >
+        {{ hintText }}
+      </p>
       <p class="lq-credit" :inert="opened ? undefined : true">
         Original music, images and narration made with
         <a
@@ -717,11 +719,18 @@ onBeforeUnmount(() => {
 .is-playing .lq-title-hint:not(:empty) {
   animation:
     lq-title-fade 1.2s ease forwards,
-    lq-title-breathe 3.2s ease-in-out 1.2s infinite alternate;
+    lq-title-breathe 3.2s ease-in-out 1.2s infinite;
+}
+.is-open .lq-title-hint {
+  animation: lq-title-out 0.3s ease forwards;
 }
 .is-still .lq-title-hint:not(:empty) {
   animation: none;
   opacity: 1;
+}
+.is-still.is-open .lq-title-hint:not(:empty) {
+  animation: none;
+  opacity: 0;
 }
 @keyframes lq-title-fade {
   to {
@@ -742,11 +751,20 @@ onBeforeUnmount(() => {
   }
 }
 @keyframes lq-title-breathe {
-  from {
+  0%,
+  100% {
     opacity: 1;
   }
-  to {
+  50% {
     opacity: 0.5;
+  }
+}
+@keyframes lq-title-out {
+  from {
+    opacity: 0.8;
+  }
+  to {
+    opacity: 0;
   }
 }
 /* A phone held upright: the name sits lower, Continue gets a row of its own over the other two. */
