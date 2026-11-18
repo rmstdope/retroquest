@@ -14,10 +14,14 @@ import { useMenuRing } from '@/composables/useMenuRing'
 import type { SaveSlot } from '@/types/bridge'
 import LanternDialog from './LanternDialog.vue'
 import type { KeyHint } from './KeyLine.vue'
+import SaveThumb from './SaveThumb.vue'
 
 /**
  * Save or load a game: the 8 slots (and, when loading, the quick save
- * first) as cards with the act, room, quests and time. An empty slot saves
+ * first) as cards with the act, room, quests and time. A save that kept the
+ * picture of its room shows it first on its card, as the title page's
+ * Continue card does (`SaveThumb`), with the slot's number on its corner; a
+ * card without one shows the number alone. An empty slot saves
  * at once; replacing a save or loading one asks first, inside its card.
  * A load closes the dialog; a save stays, marked "Just saved" (or the
  * dialog says the save failed). A save from an older version is dimmed with
@@ -248,6 +252,7 @@ function cardLabel(card: SaveSlot): string {
   <LanternDialog
     :title="saving ? 'Save game' : 'Load game'"
     eyebrow="Game"
+    glass
     :key-line="keyLine"
     :start-on-panel="startKey === null && !saving"
     @close="emit('close')"
@@ -299,11 +304,21 @@ function cardLabel(card: SaveSlot): string {
               @click="pick(card)"
             >
               <span
-                class="lq-slot-badge"
-                :class="{ 'lq-slot-quick': card.slot === QUICK }"
-                aria-hidden="true"
-                >{{ badge(card) }}</span
+                class="lq-slot-lead"
+                :class="{ 'lq-slot-pictured': filled(card) && card.picture }"
               >
+                <SaveThumb
+                  v-if="filled(card)"
+                  :save="card"
+                  class="lq-slot-thumb"
+                />
+                <span
+                  class="lq-slot-badge"
+                  :class="{ 'lq-slot-quick': card.slot === QUICK }"
+                  aria-hidden="true"
+                  >{{ badge(card) }}</span
+                >
+              </span>
               <span class="lq-slot-main" aria-hidden="true">
                 <template v-if="card.name !== undefined">
                   <span class="lq-slot-room">{{ card.name }}</span>
@@ -425,7 +440,7 @@ function cardLabel(card: SaveSlot): string {
   padding: 0;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 8px;
+  gap: var(--lq-ring-gap);
 }
 .lq-named-heading {
   margin: 18px 0 8px;
@@ -435,10 +450,16 @@ function cardLabel(card: SaveSlot): string {
   text-transform: uppercase;
   color: var(--lq-muted);
 }
+/* A card as tall as its row (a snapshot card beside it) keeps its button's words in the middle. */
 .lq-slot {
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
   border-radius: 12px;
   border: 1px dashed var(--lq-line2);
+}
+.lq-slot > .lq-slot-btn {
+  flex: 1;
 }
 .lq-slot-filled {
   border-style: solid;
@@ -471,6 +492,48 @@ function cardLabel(card: SaveSlot): string {
 .lq-slot-btn:disabled {
   opacity: 0.55;
   cursor: default;
+}
+/*
+ * The card's lead: the number alone, or, on a save that kept the picture of
+ * its room, the picture's place with the number on its corner. The place is
+ * kept while the picture loads and while it is not made yet, so the cards do
+ * not shift and their words line up.
+ */
+.lq-slot-lead {
+  flex: 0 0 auto;
+  position: relative;
+  display: flex;
+}
+.lq-slot-pictured {
+  width: 84px;
+  aspect-ratio: 16 / 9;
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--lq-fg) 8%, transparent);
+}
+.lq-slot-thumb {
+  width: 100%;
+}
+.lq-slot-old .lq-slot-thumb {
+  opacity: 0.5;
+}
+.lq-slot-pictured .lq-slot-badge {
+  position: absolute;
+  left: -6px;
+  bottom: -6px;
+  width: 24px;
+  height: 24px;
+  border-radius: 12px;
+  background: var(--lq-surface);
+  font-size: 12px;
+}
+/* The quick save keeps its amber on the corner, dimmed with an older save. */
+.lq-slot-pictured .lq-slot-quick {
+  background: var(--lq-accent);
+  color: var(--lq-on-accent);
+}
+.lq-slot-old .lq-slot-pictured .lq-slot-quick {
+  background: var(--lq-line2);
+  color: var(--lq-muted);
 }
 .lq-slot-badge {
   flex: 0 0 auto;

@@ -140,7 +140,9 @@ test('The menu: only the ringed entry looks picked when the pointer rests on ano
   const help = page.getByRole('button', { name: 'Help', exact: true })
   const fill = (entry: typeof quit): Promise<string> =>
     entry.evaluate((el) => getComputedStyle(el).backgroundColor)
+  // Each entry against its own unpicked look: Quit has no glass of its own.
   const plain = await fill(help)
+  const quitPlain = await fill(quit)
   const box = await quit.boundingBox()
   if (!box) throw new Error('Quit has no box')
   await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2)
@@ -148,6 +150,6 @@ test('The menu: only the ringed entry looks picked when the pointer rests on ano
   await page.keyboard.press('ArrowDown')
   await page.keyboard.press('ArrowUp')
   await expect(save).toBeFocused()
-  expect(await fill(quit)).toBe(plain)
-  expect(await fill(save)).not.toBe(plain)
+  expect(await fill(quit)).toBe(quitPlain)
+  await expect.poll(() => fill(save)).not.toBe(plain)
 })

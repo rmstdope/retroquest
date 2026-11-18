@@ -196,6 +196,39 @@ test.describe('on a touch screen', () => {
   })
 })
 
+/** '' when the ringed row's ring keeps off every other row, else which it reaches. */
+async function ringReachesAnother(page: Page): Promise<string> {
+  return page.evaluate(() => {
+    const row = document.activeElement?.closest('[data-stop]')
+    if (!row) return 'no ringed row'
+    const style = getComputedStyle(row)
+    const reach =
+      parseFloat(style.outlineWidth) + parseFloat(style.outlineOffset)
+    const r = row.getBoundingClientRect()
+    const top = r.top - reach
+    const bottom = r.bottom + reach
+    for (const other of document.querySelectorAll('[data-stop]')) {
+      if (other === row) continue
+      const o = other.getBoundingClientRect()
+      if (o.top < bottom && o.bottom > top)
+        return `${row.getAttribute('data-stop')} reaches ${other.getAttribute('data-stop')}`
+    }
+    return ''
+  })
+}
+
+test('Settings: the ring never reaches the rows above and below it, on a phone too', async ({
+  page,
+}): Promise<void> => {
+  for (const width of [900, 390]) {
+    await openSettings(page, width)
+    for (let i = 0; i < 12; i++) {
+      await expect.poll(() => ringReachesAnother(page)).toBe('')
+      await page.keyboard.press('ArrowDown')
+    }
+  }
+})
+
 test('Settings: scrolling by hand does not nudge back', async ({
   page,
 }): Promise<void> => {

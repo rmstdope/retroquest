@@ -114,6 +114,8 @@
   --lq-accent-soft: #36270a;
   --lq-accent-line: #a8740f;
   --lq-ring: #f4ecd2;
+  /* How much of the surface a pane of frosted glass is: the rest is the blurred game */
+  --lq-glass: 82%;
   --lq-failure: #e8896b;
   --lq-failure-soft: #2a1814;
   --lq-success: #8fcf7a;
@@ -141,6 +143,8 @@
   --lq-story-line-height: 1.5;
   --lq-density: 0.7;
   --lq-radius: 14px;
+  /* Space between two stops of the selection ring: its 6px reach on both, and room to breathe */
+  --lq-ring-gap: 14px;
   /* 1 = full motion, 0 = reduced; animations scale their movement by it */
   --lq-motion: 1;
   /* Words written straight on the picture (the room's name and title): light, with a soft dark glow in both themes */
@@ -176,6 +180,7 @@
     --lq-accent-soft: #ffe0a0;
     --lq-accent-line: #eba526;
     --lq-ring: #7a4300;
+    --lq-glass: 92%;
     --lq-failure: #a63d1f;
     --lq-failure-soft: #fbe9e2;
     --lq-success: #2e6e27;
@@ -214,6 +219,7 @@
   --lq-accent-soft: #ffe0a0;
   --lq-accent-line: #eba526;
   --lq-ring: #7a4300;
+  --lq-glass: 92%;
   --lq-failure: #a63d1f;
   --lq-failure-soft: #fbe9e2;
   --lq-success: #2e6e27;

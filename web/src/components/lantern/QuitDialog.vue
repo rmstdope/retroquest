@@ -61,6 +61,8 @@ function saveAndQuit(): void {
     title="Quit to the main menu?"
     eyebrow="Menu"
     centered
+    glass
+    narrow
     :key-line="KEYS"
     @close="cancel"
     @focusin="ring.onFocusIn"
@@ -124,7 +126,7 @@ function saveAndQuit(): void {
 .lq-quit-buttons {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: var(--lq-ring-gap);
 }
 .lq-quit-primary,
 .lq-quit-plain {

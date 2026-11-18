@@ -60,6 +60,27 @@ test('the Continue card shows a small picture of the room the save was made in',
   )
 })
 
+test('the Load window shows the same small picture on the save, with its mark on the corner', async ({
+  page,
+}) => {
+  await makeSave(page)
+  await page.reload()
+
+  await page.getByRole('button', { name: 'Load game' }).click()
+  const quick = page
+    .getByRole('dialog', { name: 'Load game' })
+    .locator('[data-slot="0"]')
+  const picture = quick.locator('.lq-slot-thumb')
+  await expect(picture).toBeVisible()
+  await expect(picture).toHaveAttribute('aria-hidden', 'true')
+  await expect(picture.locator('img').first()).toHaveAttribute(
+    'src',
+    /images\/generated\/.+\.png$/,
+  )
+  await expect(quick.locator('.lq-slot-lead .lq-slot-badge')).toHaveText('Q')
+  await expect(page.locator('[data-slot="1"] .lq-slot-thumb')).toHaveCount(0)
+})
+
 test('Load game from the title page loads a card with no question', async ({
   page,
 }) => {

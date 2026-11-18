@@ -5,6 +5,7 @@ import { createPinia, setActivePinia } from 'pinia'
 import SaveLoadDialog from './SaveLoadDialog.vue'
 import { useGameStore } from '@/stores/useGameStore'
 import type { SaveSlot } from '@/types/bridge'
+import { setPictureProbe } from '@/lantern/roomPicture'
 
 function slot(n: number, filled: boolean): SaveSlot {
   return filled
@@ -74,6 +75,80 @@ describe('SaveLoadDialog', () => {
     expect(filled.text()).toContain('Forest Path')
     expect(filled.text()).toContain('3 of 12 quests')
     expect(card(w, '1').text()).toContain('Empty slot · tap to save here')
+  })
+
+  it('is a pane of frosted glass, saving or loading', () => {
+    for (const mode of ['save', 'load'] as const) {
+      const layer = mountDialog(mode).get('.lq-dialog-layer')
+      expect(layer.classes()).toContain('lq-dialog-glass')
+      expect(layer.classes()).not.toContain('lq-dialog-narrow')
+      wrapper?.unmount()
+    }
+  })
+
+  describe('the snapshot', () => {
+    const picture = {
+      actName: 'Act2',
+      roomKey: 'ForestPath',
+      variant: '',
+      patchIds: [],
+    }
+
+    beforeEach(() => setPictureProbe(() => Promise.resolve(true)))
+    afterEach(() => setPictureProbe(null))
+
+    it('shows the room a save was made in first on its card, with the slot number on it, saving or loading', async () => {
+      slots[1] = { ...slot(2, true), picture }
+      for (const mode of ['save', 'load'] as const) {
+        const w = mountDialog(mode)
+        await flushPromises()
+        const filled = card(w, '2')
+        const lead = filled.get('.lq-slot-lead')
+        expect(lead.element).toBe(
+          filled.get('.lq-slot-btn').element.firstElementChild,
+        )
+        expect(lead.get('.lq-slot-thumb img').attributes('src')).toContain(
+          'act2-forest-path',
+        )
+        expect(lead.get('.lq-slot-badge').text()).toBe('2')
+        w.unmount()
+      }
+    })
+
+    it("keeps the picture's place on a save that kept one, while it loads and when it is not made yet", async () => {
+      setPictureProbe(() => Promise.resolve(false))
+      slots[1] = { ...slot(2, true), picture }
+      const w = mountDialog('load')
+      await flushPromises()
+      expect(card(w, '2').get('.lq-slot-lead').classes()).toContain(
+        'lq-slot-pictured',
+      )
+      expect(card(w, '1').get('.lq-slot-lead').classes()).not.toContain(
+        'lq-slot-pictured',
+      )
+    })
+
+    it('shows none on an empty slot, or for a save that kept no picture', async () => {
+      const w = mountDialog('load')
+      await flushPromises()
+      expect(card(w, '1').find('.lq-slot-thumb').exists()).toBe(false)
+      expect(card(w, '2').find('.lq-slot-thumb').exists()).toBe(false)
+      expect(card(w, '2').get('.lq-slot-badge').text()).toBe('2')
+    })
+
+    it('leaves the slot named as before for a screen reader', async () => {
+      const before = mountDialog('load')
+      const label = card(before, '2')
+        .get('.lq-slot-btn')
+        .attributes('aria-label')
+      before.unmount()
+      slots[1] = { ...slot(2, true), picture }
+      const w = mountDialog('load')
+      await flushPromises()
+      expect(card(w, '2').get('.lq-slot-btn').attributes('aria-label')).toBe(
+        label,
+      )
+    })
   })
 
   it('saves to an empty slot at once and marks it', async () => {

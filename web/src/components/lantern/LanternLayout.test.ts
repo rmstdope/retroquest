@@ -1634,6 +1634,7 @@ describe('LanternLayout', () => {
 
       expect(w.get('[role="dialog"] h2').text()).toBe('Help')
       expect(w.get('[role="dialog"]').text()).toContain('Available Commands:')
+      expect(w.get('.lq-dialog-layer').classes()).toContain('lq-dialog-glass')
     })
   })
 
