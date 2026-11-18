@@ -12,8 +12,9 @@ import {
 /**
  * A thing the player has just gained, flown from the picture to its button
  * (`useFlightStore` keeps the queue and the clock): its name, in the item's
- * green or the spell's purple with a bag or a sparkle, comes up in the middle
- * of the picture, rests, then shrinks and flies into the Bag or Spells button
+ * green or the spell's purple with a bag or a sparkle, comes up where the
+ * thing lay in the picture (its pressable box, `data-area-press`), else in the
+ * middle of the picture, rests, then shrinks and flies into the Bag or Spells button
  * (or tab on a phone) that carries `data-flight-target` of its kind and is
  * shown. On the belt of pictures it lands on its own picture
  * (`data-belt-pic`) when that is in view along the belt, else on the tiny
@@ -69,6 +70,11 @@ watch(
       x: window.innerWidth / 2,
       y: window.innerHeight / 2,
     }
+    // A thing that lay in the picture comes up where it lay, if its spot is marked and shown.
+    const lay = flight.areaId
+      ? centre(document.querySelector(`[data-area-press="${flight.areaId}"]`))
+      : null
+    if (lay) start.value = lay
     end.value = start.value
     // A loss rises from its button; with none shown, it starts on the picture.
     if (flight.leaving) {

@@ -20,6 +20,7 @@ import {
   type RoomDescription,
   type SoundFiring,
 } from '@/engine'
+import { withHeldAreas } from '@/lantern/heldPicture'
 import { inventoryChanges, type Chip } from '@/lantern/inventoryChanges'
 import { routeTo } from '@/lantern/mapRoute'
 import { toQuestNews, type QuestNews } from '@/lantern/questNews'
@@ -331,6 +332,7 @@ export const useGameStore = defineStore('game', () => {
     roomKey: '',
     variant: '',
     patchIds: [],
+    patchAreas: {},
     things: [],
   })
   /** The same as the engine says now, which `shownPicture` takes on release. */
@@ -338,8 +340,19 @@ export const useGameStore = defineStore('game', () => {
     roomKey: '',
     variant: '',
     patchIds: [],
+    patchAreas: {},
     things: [],
   })
+  /**
+   * The areas of the room picture whose things the player has gained this turn
+   * and whose names have not come up yet: they stay painted, with their own
+   * patches, until `releaseGain`. Only a narrated command holds any.
+   */
+  const heldGains = ref<string[]>([])
+  /** Lets a command wait for the gains still to fly (`setGainFlusher`). */
+  let gainFlusher: ((then: () => void) => boolean) | null = null
+  /** The picture shown before the turn that holds `heldGains`. */
+  let heldBase: PictureState | null = null
   /** What the engine showed at the last refresh; held groups apply it on release. */
   let latest: PanelSnapshot | null = null
   /** Dots earned while their group is held. */
@@ -719,9 +732,11 @@ export const useGameStore = defineStore('game', () => {
     const showChips = chips && actRunning
     const itemChanges = inventoryChanges(lastBag, bag, 'item')
     const spellChanges = inventoryChanges(lastSpells, spellList, 'spell')
-    const gained = showChips
-      ? [...itemChanges.gained, ...spellChanges.gained]
-      : []
+    const itemsGained =
+      showChips && hold && panelHoldEnabled
+        ? holdGainAreas(itemChanges.gained, b)
+        : itemChanges.gained
+    const gained = showChips ? [...itemsGained, ...spellChanges.gained] : []
     const lost = showChips ? [...itemChanges.lost, ...spellChanges.lost] : []
     // A new act starts a new bag: nothing in it is "new" yet.
     if (!actRunning) clearNewDots()
@@ -761,6 +776,64 @@ export const useGameStore = defineStore('game', () => {
     if (turns.value.length > MAX_TURNS) {
       turns.value.splice(0, turns.value.length - MAX_TURNS)
     }
+  }
+
+  /**
+   * The gained items that lay in the room picture, each tagged with the area it
+   * lay in (the shown picture had a thing of that name that the engine's has
+   * not), and those areas held painted until their names come up
+   * (`releaseGain`); the rest are returned as they are.
+   */
+  function holdGainAreas(items: Chip[], b: GameBridge): Chip[] {
+    const before = shownPicture.value
+    const after = b.pictureState()
+    const left = before.things.filter(
+      (thing) =>
+        thing.kind === 'item' &&
+        !after.things.some((now) => now.areaId === thing.areaId),
+    )
+    const taken: string[] = []
+    const tagged = items.map((chip) => {
+      const thing = left.find(
+        (entry) =>
+          !taken.includes(entry.areaId) &&
+          entry.name.toLowerCase() === chip.name.toLowerCase(),
+      )
+      if (!thing) return chip
+      taken.push(thing.areaId)
+      return { ...chip, areaId: thing.areaId }
+    })
+    if (taken.length) {
+      heldBase = before
+      heldGains.value = taken
+    }
+    return tagged
+  }
+
+  /** The picture group shows the latest picture, but for the areas still held. */
+  function showPicture(): void {
+    if (!latest) return
+    shownPicture.value = heldBase
+      ? withHeldAreas(latest.picture, heldBase, heldGains.value)
+      : latest.picture
+  }
+
+  /**
+   * The name of the thing in `areaId` comes up: it leaves the picture now,
+   * with its patches (unless the narration has not yet released the picture
+   * group, which then shows it as it releases).
+   */
+  function releaseGain(areaId: string): void {
+    if (!heldGains.value.includes(areaId)) return
+    heldGains.value = heldGains.value.filter((id) => id !== areaId)
+    if (!held.value.picture) showPicture()
+  }
+
+  /** Every held gain leaves the picture at once (a new command, a load, a skip). */
+  function releaseGains(): void {
+    if (!heldGains.value.length) return
+    heldGains.value = []
+    if (!held.value.picture) showPicture()
   }
 
   /** The news of the spells a command taught: their names as the bag lists them, with the descriptions. */
@@ -803,6 +876,7 @@ export const useGameStore = defineStore('game', () => {
     if (!panelHoldEnabled) return
     if (heldTurn.value !== null)
       releasePanels(heldTurn.value, [...PANEL_GROUPS], false)
+    releaseGains()
     // A newer command brings the older one's picture up at once.
     releasePicture()
     heldTurn.value = turnId
@@ -888,7 +962,7 @@ export const useGameStore = defineStore('game', () => {
         actNumber: questProgress.value?.actNumber ?? quests.progress.actNumber,
       }
     } else if (group === 'picture') {
-      shownPicture.value = latest.picture
+      showPicture()
     } else {
       const stock = latest.stock
       rawInventory.value = stock.bag
@@ -945,6 +1019,8 @@ export const useGameStore = defineStore('game', () => {
       picture: false,
     }
     pendingDots = { bag: false, spells: false, quests: false }
+    heldGains.value = []
+    heldBase = null
     musicHeld = false
     pictureHeld = false
     // The firings of an abandoned turn never sound.
@@ -1223,6 +1299,26 @@ export const useGameStore = defineStore('game', () => {
   }
 
   function submitCommand(cmd: string): void {
+    // Gained things still to fly (their narration is cut short) go first; a
+    // load replaces the game they belong to, so it does not wait for them.
+    if (!LOAD_COMMAND.test(cmd.trim()) && gainFlusher?.(() => submitNow(cmd)))
+      return
+    submitNow(cmd)
+  }
+
+  /**
+   * Register what lets a typed command wait for the gains still to fly: it
+   * returns true when it took the command (it cuts the telling short, flies
+   * every gain at once and calls `then`), false when nothing is pending.
+   */
+  function setGainFlusher(
+    flusher: ((then: () => void) => boolean) | null,
+  ): void {
+    gainFlusher = flusher
+  }
+
+  /** Run a typed command now, whatever is still told. */
+  function submitNow(cmd: string): void {
     // The old screen's command is not run in the new game: while it fades out, only a load goes.
     if (passage.phase === 'out' && !takesDuringFadeOut(cmd)) return
     // A command during a passage brings the new screen up first, then goes on. A
@@ -2039,6 +2135,11 @@ export const useGameStore = defineStore('game', () => {
     heldTurn,
     panelsHeld,
     groupHeld,
+    heldGains,
+    releaseGain,
+    releaseGains,
+    setGainFlusher,
+    shownPicture,
     panelFlash,
     // Actions
     setPanelHold,

@@ -1304,7 +1304,8 @@ watch(
   () => flights.clear(),
 )
 // On the picture stage, a turn's lost items leave the Bag first, then its
-// gained items and spells fly to the Bag and Spells buttons, once the turn
+// gained items and spells (each after the narration, as its thing leaves the
+// picture) fly to the Bag and Spells buttons, once the turn
 // lets go of them (as their counts change) and the middle of the picture is
 // clear: no news or arrival told or waiting there, no change of scene, and no
 // pop-up over it.
@@ -1326,9 +1327,22 @@ watch(
       !turn.restored &&
       (turn.gained.length || leaving.length)
     )
-      flights.launch(turn.gained, leaving, motionReduced())
+      // A thing that lay in the picture leaves it as its own name comes up.
+      flights.launch(turn.gained, leaving, motionReduced(), (flight) => {
+        if (flight.areaId) game.releaseGain(flight.areaId)
+      })
+    else game.releaseGains()
   },
 )
+// A command typed while gains are still to fly cuts the telling short, flies
+// them one after another at once, and only then runs.
+game.setGainFlusher((then) => {
+  if (!game.heldGains.length && !flights.current) return false
+  presentation.skipTelling()
+  void nextTick(() => flights.whenIdle(then))
+  return true
+})
+onUnmounted(() => game.setGainFlusher(null))
 
 // The picture and music follow the room at once on the picture stage.
 watch(staged, (on) => game.setScenePicture(on), { immediate: true })

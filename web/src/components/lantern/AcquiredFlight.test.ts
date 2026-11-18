@@ -310,4 +310,42 @@ describe('AcquiredFlight', () => {
       expect(flight.find('svg').exists()).toBe(false)
     })
   })
+
+  /** A pressable box of a thing in the picture, centred at (x, y). */
+  function pressBox(areaId: string, x: number, y: number): HTMLElement {
+    const box = document.createElement('button')
+    box.dataset.areaPress = areaId
+    box.getBoundingClientRect = (): DOMRect =>
+      ({ left: x - 20, top: y - 20, width: 40, height: 40 }) as DOMRect
+    document.body.appendChild(box)
+    return box
+  }
+
+  it('comes up where the thing lay when its spot is marked (rq-sm83)', async () => {
+    pressBox('bread', 300, 410)
+    w = mount(AcquiredFlight, { attachTo: document.body })
+    useFlightStore().launch([
+      { kind: 'item', name: 'bread', count: 1, areaId: 'bread' },
+    ])
+    await w.vm.$nextTick()
+    const style = w.get('[data-testid="flight"]').attributes('style') ?? ''
+    expect(style).toContain('left: 300px')
+    expect(style).toContain('top: 410px')
+  })
+
+  it('comes up in the middle of the picture when its spot is not marked (rq-sm83)', async () => {
+    const stage = document.createElement('div')
+    stage.className = 'lq-stage-picture'
+    stage.getBoundingClientRect = (): DOMRect =>
+      ({ left: 0, top: 0, width: 1000, height: 600 }) as DOMRect
+    document.body.appendChild(stage)
+    w = mount(AcquiredFlight, { attachTo: document.body })
+    useFlightStore().launch([
+      { kind: 'item', name: 'bread', count: 1, areaId: 'bread' },
+    ])
+    await w.vm.$nextTick()
+    const style = w.get('[data-testid="flight"]').attributes('style') ?? ''
+    expect(style).toContain('left: 500px')
+    expect(style).toContain('top: 300px')
+  })
 })

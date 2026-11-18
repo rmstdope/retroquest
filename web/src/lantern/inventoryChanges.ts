@@ -10,6 +10,8 @@ export interface Chip {
   kind: ChipKind
   name: string
   count: number
+  /** For an item that lay in the room picture, the id of the area it lay in; where its name starts flying from. */
+  areaId?: string
 }
 
 export interface Changes {

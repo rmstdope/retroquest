@@ -5,6 +5,7 @@ import { createPinia, setActivePinia } from 'pinia'
 import LanternLayout from './LanternLayout.vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
+import { useFlightStore } from '@/stores/useFlightStore'
 import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
 import { useBridge, type ActClass } from '@/composables/useBridge'
 import { Act1 } from '@/act1/Act1'
@@ -108,6 +109,9 @@ describe('LanternLayout: patches of the room picture', () => {
     await w.vm.$nextTick()
     await w.get('img.lq-patch-loading').trigger('load')
     expect(patches()).toHaveLength(1)
+    // The bread's name has flown (a command waits for that).
+    game.releaseGains()
+    useFlightStore().clear()
     // Loading the earlier save in this room takes the bread's patch away at once.
     game.submitCommand('load')
     await w.vm.$nextTick()
@@ -129,6 +133,8 @@ describe('LanternLayout: patches of the room picture', () => {
     game.submitCommand('take bread')
     await w.vm.$nextTick()
     await w.get('img.lq-patch-loading').trigger('load')
+    game.releaseGains()
+    useFlightStore().clear()
     game.submitCommand('save')
     await w.vm.$nextTick()
     game.submitCommand('drop bread')

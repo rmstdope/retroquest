@@ -169,4 +169,46 @@ describe('useFlightStore', () => {
     expect(flights.phase).toBe('show')
     expect(flights.landed).toBeNull()
   })
+
+  it('tells each gain when its name comes up, one after another (rq-sm83)', () => {
+    const flights = useFlightStore()
+    const shown: string[] = []
+    const first = { ...lantern, areaId: 'lantern' }
+    flights.launch([first, revive], [], false, (flight) =>
+      shown.push(flight.name),
+    )
+    expect(shown).toEqual(['lantern'])
+    vi.advanceTimersByTime(FLIGHT_SHOW_MS + FLIGHT_HOLD_MS + FLIGHT_FLY_MS)
+    expect(shown).toEqual(['lantern', 'revive'])
+  })
+
+  it('tells a gain when it comes up under Reduce motion too (rq-sm83)', () => {
+    const flights = useFlightStore()
+    const shown: string[] = []
+    flights.launch([lantern], [], true, (flight) => shown.push(flight.name))
+    expect(shown).toEqual(['lantern'])
+  })
+
+  it('runs what waits for the flights once the last has landed, at once when idle (rq-sm83)', () => {
+    const flights = useFlightStore()
+    const ran: number[] = []
+    flights.whenIdle(() => ran.push(1))
+    expect(ran).toEqual([1])
+    flights.launch([lantern, revive])
+    flights.whenIdle(() => ran.push(2))
+    vi.advanceTimersByTime(FLIGHT_SHOW_MS + FLIGHT_HOLD_MS + FLIGHT_FLY_MS)
+    expect(ran).toEqual([1])
+    vi.advanceTimersByTime(FLIGHT_SHOW_MS + FLIGHT_HOLD_MS + FLIGHT_FLY_MS)
+    expect(ran).toEqual([1, 2])
+  })
+
+  it('does not run what waits when cleared (rq-sm83)', () => {
+    const flights = useFlightStore()
+    const ran: number[] = []
+    flights.launch([lantern])
+    flights.whenIdle(() => ran.push(1))
+    flights.clear()
+    vi.advanceTimersByTime(10000)
+    expect(ran).toEqual([])
+  })
 })

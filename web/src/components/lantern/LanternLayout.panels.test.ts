@@ -4,7 +4,12 @@ import { mount, type VueWrapper } from '@vue/test-utils'
 import { createPinia, getActivePinia, setActivePinia } from 'pinia'
 import LanternLayout from './LanternLayout.vue'
 import { useGameStore } from '@/stores/useGameStore'
-import { useFlightStore } from '@/stores/useFlightStore'
+import {
+  FLIGHT_FLY_MS,
+  FLIGHT_HOLD_MS,
+  FLIGHT_SHOW_MS,
+  useFlightStore,
+} from '@/stores/useFlightStore'
 import { useArrivalStore } from '@/stores/useArrivalStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import {
@@ -118,6 +123,53 @@ describe('LanternLayout: panels wait for the narration', () => {
     useArrivalStore().clear()
     await vi.advanceTimersByTimeAsync(0)
     expect(useFlightStore().current?.name).toBe(GEM)
+  })
+
+  it('keeps a taken thing painted until the narrator is done, then lets it go as its name comes up (rq-sm83)', async () => {
+    vi.spyOn(HTMLMediaElement.prototype, 'play').mockResolvedValue()
+    await ready()
+    const narration = useNarrationStore()
+    const game = useGameStore()
+    const clip = { file: 'x.mp3', speaker: 'narrator', duration: 5, words: [] }
+    vi.spyOn(narration, 'manifestFor').mockReturnValue(
+      new Proxy({}, { get: () => clip }),
+    )
+    game.submitCommand(`take ${GEM.toLowerCase()}`)
+    await vi.advanceTimersByTimeAsync(0)
+    const gem = game.turns.at(-1)!.gained[0]
+    expect(gem.areaId).toBe('chiming-gem')
+    expect(game.heldGains).toEqual(['chiming-gem'])
+    narration.skipAll()
+    useArrivalStore().clear()
+    await vi.advanceTimersByTimeAsync(0)
+    // Its name has come up, and the thing has left the picture in the same moment.
+    expect(useFlightStore().current?.name).toBe(GEM)
+    expect(game.heldGains).toEqual([])
+  })
+
+  it('cuts the narration short, flies the gain, and only then runs a command typed meanwhile (rq-sm83)', async () => {
+    vi.spyOn(HTMLMediaElement.prototype, 'play').mockResolvedValue()
+    await ready()
+    const narration = useNarrationStore()
+    const game = useGameStore()
+    const clip = { file: 'x.mp3', speaker: 'narrator', duration: 5, words: [] }
+    vi.spyOn(narration, 'manifestFor').mockReturnValue(
+      new Proxy({}, { get: () => clip }),
+    )
+    game.submitCommand(`take ${GEM.toLowerCase()}`)
+    await vi.advanceTimersByTimeAsync(0)
+    expect(narration.isNarrating).toBe(true)
+    const turns = game.turns.length
+    game.submitCommand('go north')
+    expect(game.turns).toHaveLength(turns)
+    await vi.advanceTimersByTimeAsync(0)
+    expect(narration.isNarrating).toBe(false)
+    useArrivalStore().clear()
+    await vi.advanceTimersByTimeAsync(FLIGHT_SHOW_MS + FLIGHT_HOLD_MS)
+    expect(game.turns).toHaveLength(turns)
+    await vi.advanceTimersByTimeAsync(FLIGHT_FLY_MS)
+    expect(game.turns).toHaveLength(turns + 1)
+    expect(game.turns.at(-1)!.command).toBe('go north')
   })
 
   /** A key pressed on the page. */

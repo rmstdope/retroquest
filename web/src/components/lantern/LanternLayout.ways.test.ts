@@ -120,8 +120,10 @@ describe('LanternLayout: leaving by pressing a way out in the picture', () => {
       'talk to grandmother',
       'use journal',
       'talk to grandmother',
-    ])
+    ]) {
       store.submitCommand(command)
+      store.releaseGains()
+    }
     store.releasePanels(store.turns.at(-1)!.id, [...PANEL_GROUPS], false)
     await w.vm.$nextTick()
     const submit = vi.spyOn(store, 'submitCommand')
@@ -140,8 +142,10 @@ describe('LanternLayout: leaving by pressing a way out in the picture', () => {
       'talk to grandmother',
       'use journal',
       'talk to grandmother',
-    ])
+    ]) {
       store.submitCommand(command)
+      store.releaseGains()
+    }
     store.releasePanels(store.turns.at(-1)!.id, [...PANEL_GROUPS], false)
     useAreaNamesStore().showing = true
     await w.vm.$nextTick()
@@ -160,8 +164,10 @@ describe('LanternLayout: leaving by pressing a way out in the picture', () => {
       'talk to grandmother',
       'use journal',
       'talk to grandmother',
-    ])
+    ]) {
       store.submitCommand(command)
+      store.releaseGains()
+    }
     store.releasePanels(store.turns.at(-1)!.id, [...PANEL_GROUPS], false)
     useAreaNamesStore().showing = true
     await w.vm.$nextTick()
@@ -185,8 +191,10 @@ describe('LanternLayout: leaving by pressing a way out in the picture', () => {
       'talk to grandmother',
       'use journal',
       'talk to grandmother',
-    ])
+    ]) {
       store.submitCommand(command)
+      store.releaseGains()
+    }
     store.releasePanels(store.turns.at(-1)!.id, [...PANEL_GROUPS], false)
     await w.vm.$nextTick()
   }

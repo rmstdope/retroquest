@@ -841,6 +841,7 @@ describe('useBridge', () => {
         roomKey: '',
         variant: '',
         patchIds: [],
+        patchAreas: {},
         things: [],
       })
     })
