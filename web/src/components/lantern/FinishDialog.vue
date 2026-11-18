@@ -21,6 +21,8 @@ function saveAndFinish(): void {
   <LanternDialog
     title="Save before you finish?"
     eyebrow="The end"
+    glass
+    narrow
     @close="game.cancelFinish()"
   >
     <p class="lq-finish-text">

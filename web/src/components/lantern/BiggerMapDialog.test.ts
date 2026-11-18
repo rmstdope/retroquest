@@ -57,6 +57,13 @@ describe('BiggerMapDialog', () => {
     return wrapper
   }
 
+  it('is a wide pane of frosted glass, like the menus', () => {
+    const layer = mountMap().get('.lq-dialog-layer')
+
+    expect(layer.classes()).toContain('lq-dialog-glass')
+    expect(layer.get('.lq-dialog-panel').classes()).toContain('lq-dialog-wide')
+  })
+
   it('has the act above the title Map', () => {
     const w = mountMap()
     expect(w.get('.lq-dialog-eyebrow').text()).toBe('Act II')

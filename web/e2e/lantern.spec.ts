@@ -910,6 +910,52 @@ test.describe('Lantern UI (the default)', () => {
     expect(text).toContain('rgb(255, 184, 54)')
   })
 
+  for (const [width, height] of [
+    [500, 800],
+    [1440, 900],
+  ]) {
+    test(`the finish question at ${width}px: a whole-width sheet on a phone, its buttons on one line each`, async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width, height })
+      await page.goto('/')
+      await injectMockState(page)
+      await page.evaluate(() => {
+        /* eslint-disable @typescript-eslint/no-explicit-any */
+        const app = (document.querySelector('#app') as any).__vue_app__
+        const store = app.config.globalProperties.$pinia.state.value.game
+        store.modalChapter = {
+          kind: 'complete',
+          act: 'Act IV',
+          title: 'The Long Night Ends',
+          body: 'Congratulations — you have completed Act IV!',
+          stats: { questsCompleted: 6, questsTotal: 6, spells: 14, places: 18 },
+          final: true,
+        }
+        store.showModal = true
+        /* eslint-enable @typescript-eslint/no-explicit-any */
+      })
+      await page.getByRole('button', { name: 'Finish the game' }).click()
+      const dialog = page.getByRole('dialog', {
+        name: 'Save before you finish?',
+      })
+      await expect(dialog).toBeVisible()
+      if (width < 640)
+        expect(Math.round((await dialog.boundingBox())!.width)).toBe(width)
+      const lines = (name: string): Promise<number> =>
+        dialog.getByRole('button', { name }).evaluate((el) => {
+          const style = getComputedStyle(el)
+          const range = document.createRange()
+          range.selectNodeContents(el)
+          return Math.round(
+            range.getBoundingClientRect().height / parseFloat(style.lineHeight),
+          )
+        })
+      expect(await lines('Save and finish')).toBe(1)
+      expect(await lines('Finish without saving')).toBe(1)
+    })
+  }
+
   test('asks to save before finishing in a bottom sheet on a small phone', async ({
     page,
   }) => {

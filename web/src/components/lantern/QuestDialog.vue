@@ -43,7 +43,12 @@ const checks = computed(() => {
 </script>
 
 <template>
-  <LanternDialog :title="quest.name" eyebrow="Quest" @close="emit('close')">
+  <LanternDialog
+    :title="quest.name"
+    eyebrow="Quest"
+    glass
+    @close="emit('close')"
+  >
     <div class="lq-tags">
       <span
         v-for="(tag, index) in tags"
