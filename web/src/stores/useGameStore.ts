@@ -229,6 +229,9 @@ type CommandPlace = Pick<
   'roomName' | 'characters' | 'items' | 'exits' | 'roomWares' | 'completions'
 >
 
+/** A typed load (`load`, or `load <name>`), told apart before it runs. */
+const LOAD_COMMAND = /^load(?:\s|$)/i
+
 export const useGameStore = defineStore('game', () => {
   // --- Bridge reference ---
   let bridge: GameBridge | null = null
@@ -1213,8 +1216,14 @@ export const useGameStore = defineStore('game', () => {
   function submitCommand(cmd: string): void {
     // The old screen's command is not run in the new game: while it fades out, nothing goes.
     if (passage.phase === 'out') return
-    // A command as the new screen rises brings it up first, then goes on.
-    passage.skipThen(() => runCommand(cmd))
+    // A command as the new screen rises brings it up first, then goes on. A
+    // load holds the risen game's notice until it has run: one that begins its
+    // own passage drops it, so it never shows over the new dark.
+    if (LOAD_COMMAND.test(cmd.trim())) passage.skipThen(() => runCommand(cmd))
+    else {
+      passage.skip()
+      runCommand(cmd)
+    }
   }
 
   /** Run a typed command once no passage holds it back. */

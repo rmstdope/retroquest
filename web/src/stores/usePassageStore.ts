@@ -15,7 +15,8 @@ export type PassagePhase = 'idle' | 'out' | 'dark' | 'in'
  * screen fades out (`PASSAGE_HALF_MS`), `apply` swaps in the new game while it
  * is dark, and the new screen rises (`PASSAGE_HALF_MS`); `up` runs once it is
  * fully up, by time or by `skip`, and is where the words, narrator, notice and
- * focus come. A picture slow to load keeps the dark for at most
+ * focus come (`skipThen` holds it until a command has run, and drops it when
+ * that command begins a passage of its own). A picture slow to load keeps the dark for at most
  * `PASSAGE_WAIT_MS` more (`pictureReady` ends the wait). The layout draws the
  * phases as a dark overlay; this keeps the clock. Nothing here is saved.
  */
@@ -104,8 +105,8 @@ export const usePassageStore = defineStore('passage', () => {
   }
 
   /**
-   * A typed command while the new screen rises: bring it up at once, then run
-   * the command. The passage's `up` comes after the command, unless the
+   * A typed command that may begin a passage (a load) while the new screen
+   * rises: bring it up at once, then run the command. The passage's `up` comes after the command, unless the
    * command began a passage of its own (a load), whose `up` replaces it, so
    * the old one's words never show over the new dark.
    */

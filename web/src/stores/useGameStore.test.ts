@@ -793,6 +793,30 @@ describe('useGameStore', () => {
       expect(store.notice?.text).toBe('Game loaded')
     })
 
+    it('a save typed as the new screen rises is the notice that stays', () => {
+      store.dismissModal()
+      store.loadGame()
+      vi.advanceTimersByTime(PASSAGE_HALF_MS)
+      passage.pictureReady()
+      store.submitCommand('save')
+      expect(passage.phase).toBe('idle')
+      expect(store.notice?.text).toBe('Game saved')
+    })
+
+    it('a failed load typed as the new screen rises keeps the risen game and its notice', () => {
+      store.dismissModal()
+      store.loadGame()
+      vi.advanceTimersByTime(PASSAGE_HALF_MS)
+      passage.pictureReady()
+      bridge.quickLoadGame.mockReturnValue(
+        '[failure]No save file found.[/failure]',
+      )
+      store.submitCommand('load')
+      expect(passage.phase).toBe('idle')
+      expect(store.loadNumber).toBe(1)
+      expect(store.notice?.text).toBe('Game loaded')
+    })
+
     it('a press that skips brings the loaded game up at once', () => {
       store.loadFromTitle(3)
       passage.skip()
