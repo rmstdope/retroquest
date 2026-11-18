@@ -72,6 +72,40 @@ describe('SaveThumb', () => {
     expect(sources[1]).toContain('lamp')
   })
 
+  it('keeps its picture, asking nothing again, when given a new card for the same save', async () => {
+    const w = await mountThumb(save(PICTURE))
+    setPictureProbe(() => new Promise<boolean>(() => {}))
+    await w.setProps({ save: { ...save(PICTURE), timestamp: 'later' } })
+    await flushPromises()
+    expect(w.find('.lq-save-thumb').exists()).toBe(true)
+  })
+
+  it('shows the latest save given, even when an earlier one answers last', async () => {
+    const arrivals: Record<string, (found: boolean) => void> = {}
+    setPictureProbe(
+      (url) => new Promise<boolean>((resolve) => (arrivals[url] = resolve)),
+    )
+    wrapper = mount(SaveThumb, { props: { save: save(PICTURE) } })
+    await flushPromises()
+    const other = { ...PICTURE, roomKey: 'Mill' }
+    await wrapper.setProps({ save: save(other) })
+    await flushPromises()
+    for (const [url, arrive] of Object.entries(arrivals))
+      if (url.includes('mill')) arrive(true)
+    await flushPromises()
+    for (const [url, arrive] of Object.entries(arrivals))
+      if (url.includes('forge')) arrive(true)
+    await flushPromises()
+    expect(wrapper.get('img').attributes('src')).toContain('mill')
+  })
+
+  it('loads its picture lazily, so a list of saves does not hold up the window', async () => {
+    const w = await mountThumb(save(PICTURE))
+    const img = w.get('img')
+    expect(img.attributes('loading')).toBe('lazy')
+    expect(img.attributes('decoding')).toBe('async')
+  })
+
   it('follows a new save given to it', async () => {
     const w = await mountThumb(save())
     await w.setProps({ save: save(PICTURE) })

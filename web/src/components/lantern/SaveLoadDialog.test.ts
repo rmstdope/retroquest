@@ -115,6 +115,19 @@ describe('SaveLoadDialog', () => {
       }
     })
 
+    it("keeps the picture's place on a save that kept one, while it loads and when it is not made yet", async () => {
+      setPictureProbe(() => Promise.resolve(false))
+      slots[1] = { ...slot(2, true), picture }
+      const w = mountDialog('load')
+      await flushPromises()
+      expect(card(w, '2').get('.lq-slot-lead').classes()).toContain(
+        'lq-slot-pictured',
+      )
+      expect(card(w, '1').get('.lq-slot-lead').classes()).not.toContain(
+        'lq-slot-pictured',
+      )
+    })
+
     it('shows none on an empty slot, or for a save that kept no picture', async () => {
       const w = mountDialog('load')
       await flushPromises()

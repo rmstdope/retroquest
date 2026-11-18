@@ -303,7 +303,10 @@ function cardLabel(card: SaveSlot): string {
               :data-autofocus="startKey === cardKey(card) ? '' : undefined"
               @click="pick(card)"
             >
-              <span class="lq-slot-lead">
+              <span
+                class="lq-slot-lead"
+                :class="{ 'lq-slot-pictured': filled(card) && card.picture }"
+              >
                 <SaveThumb
                   v-if="filled(card)"
                   :save="card"
@@ -490,19 +493,30 @@ function cardLabel(card: SaveSlot): string {
   opacity: 0.55;
   cursor: default;
 }
-/* The card's lead: the snapshot, with the number on its corner, or the number alone. */
+/*
+ * The card's lead: the number alone, or, on a save that kept the picture of
+ * its room, the picture's place with the number on its corner. The place is
+ * kept while the picture loads and while it is not made yet, so the cards do
+ * not shift and their words line up.
+ */
 .lq-slot-lead {
   flex: 0 0 auto;
   position: relative;
   display: flex;
 }
-.lq-slot-thumb {
+.lq-slot-pictured {
   width: 84px;
+  aspect-ratio: 16 / 9;
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--lq-fg) 8%, transparent);
+}
+.lq-slot-thumb {
+  width: 100%;
 }
 .lq-slot-old .lq-slot-thumb {
   opacity: 0.5;
 }
-.lq-slot-lead:has(.lq-slot-thumb) .lq-slot-badge {
+.lq-slot-pictured .lq-slot-badge {
   position: absolute;
   left: -6px;
   bottom: -6px;
@@ -513,11 +527,11 @@ function cardLabel(card: SaveSlot): string {
   font-size: 12px;
 }
 /* The quick save keeps its amber on the corner, dimmed with an older save. */
-.lq-slot-lead:has(.lq-slot-thumb) .lq-slot-quick {
+.lq-slot-pictured .lq-slot-quick {
   background: var(--lq-accent);
   color: var(--lq-on-accent);
 }
-.lq-slot-old .lq-slot-lead:has(.lq-slot-thumb) .lq-slot-quick {
+.lq-slot-old .lq-slot-pictured .lq-slot-quick {
   background: var(--lq-line2);
   color: var(--lq-muted);
 }

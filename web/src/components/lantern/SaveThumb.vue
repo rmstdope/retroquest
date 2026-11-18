@@ -14,7 +14,9 @@ import type { SaveSlot } from '@/types/bridge'
  * picture falls back to its plain one, without the other one's patches, as on
  * the stage. It fades in as it arrives (at once under Reduce motion) and is
  * hidden from a screen reader: the card around it names the save. The class
- * it is given sets its size.
+ * it is given sets its size. The pictures are the rooms' full paintings, so
+ * they load lazily and decode off the main thread, and a list of saves never
+ * holds up the window it is in.
  */
 defineOptions({ inheritAttrs: false })
 const props = defineProps<{ save: SaveSlot }>()
@@ -64,8 +66,15 @@ watch(
     :class="{ 'is-still': reduced }"
     aria-hidden="true"
   >
-    <img :src="thumb.base" alt="" />
-    <img v-for="url in thumb.patches" :key="url" :src="url" alt="" />
+    <img :src="thumb.base" alt="" loading="lazy" decoding="async" />
+    <img
+      v-for="url in thumb.patches"
+      :key="url"
+      :src="url"
+      alt=""
+      loading="lazy"
+      decoding="async"
+    />
   </span>
 </template>
 
