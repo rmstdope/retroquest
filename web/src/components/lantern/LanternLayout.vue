@@ -450,8 +450,12 @@ watch(
 )
 onUnmounted(() => document.removeEventListener('pointerdown', onOutsidePress))
 
-/** The height the belt of pictures takes at the foot of the picture (0 while it is put away). */
-const beltHeight = ref(0)
+/** What the belt of pictures last measured at the foot of the picture (the folded tab's height while it is put away). */
+const beltMeasured = ref(0)
+/** The height the story keeps clear of: the belt's, and the folded tab's too except on the phone layouts, which keep their own room for it. */
+const beltHeight = computed(() =>
+  belt.away && (sideways.value || phoneStage.value) ? 0 : beltMeasured.value,
+)
 /** The room the typing box takes at the foot of the picture, with its gap. */
 const BOX_ROOM = 64
 /** How far above the foot of the picture the belt stands: above the typing box while it is up, else at the foot (a sideways phone keeps 8px). */
@@ -460,9 +464,9 @@ const beltBottom = computed(() =>
 )
 /** The belt starts at the picture's left edge. */
 const beltLeft = computed(() => 0)
-/** How far up from the foot of the picture the belt's top lies: what the names and press areas must keep clear of (0 while the belt is away, then the action row alone on a laptop). */
+/** How far up from the foot of the picture the belt's top lies: what the names and press areas must keep clear of (none while the belt is away: the picture's foot is then the floor, then the action row alone on a laptop). */
 const footCover = computed(() =>
-  beltHeight.value > 0
+  beltHeight.value > 0 && !belt.away
     ? beltBottom.value + beltHeight.value
     : laptop.value
       ? boxRoom.value
@@ -2463,7 +2467,7 @@ watch(
                 ring?.from === 'belt' ? ring.thing.areaId.slice(5) : null
               "
               @press="onBeltPress"
-              @measure="beltHeight = $event"
+              @measure="beltMeasured = $event"
               @caption="beltCaption = $event"
             />
             <HandStrip
@@ -3061,7 +3065,7 @@ watch(
     var(--lq-hide-line) + var(--lq-belt-h, 0px) + var(--lq-actions-h, 0px)
   );
 }
-/* The belt stands at the foot of the picture, and the words and the buttons over them rise above it (nothing rises while it is put away). */
+/* The belt stands at the foot of the picture, and the words and the buttons over them rise above it. */
 .lq-staged .lq-paper-tabrow {
   transform: translateY(
     calc(-1 * (var(--lq-belt-h, 0px) + var(--lq-actions-h, 0px)))

@@ -128,6 +128,56 @@ describe('BeltOfPictures', () => {
       expect(tiles()).toEqual(['spell:light'])
     })
 
+    it('keeps reporting the height of the folded tab, so the story stays clear of it', async () => {
+      const original = Object.getOwnPropertyDescriptor(
+        HTMLElement.prototype,
+        'offsetHeight',
+      )
+      Object.defineProperty(HTMLElement.prototype, 'offsetHeight', {
+        configurable: true,
+        get: () => 52,
+      })
+      try {
+        useBeltStore().putAway()
+        mountBelt()
+        await nextTick()
+        const heights = w!.emitted<[number]>('measure')!.map((e) => e[0])
+        expect(heights.at(-1)).toBe(52)
+      } finally {
+        if (original) {
+          Object.defineProperty(HTMLElement.prototype, 'offsetHeight', original)
+        } else {
+          Reflect.deleteProperty(HTMLElement.prototype, 'offsetHeight')
+        }
+      }
+    })
+
+    it('keeps reporting the folded tab when the strap is folded during play', async () => {
+      const original = Object.getOwnPropertyDescriptor(
+        HTMLElement.prototype,
+        'offsetHeight',
+      )
+      Object.defineProperty(HTMLElement.prototype, 'offsetHeight', {
+        configurable: true,
+        get: () => 52,
+      })
+      try {
+        mountBelt()
+        await stud('bag').trigger('click')
+        vi.advanceTimersByTime(600)
+        await nextTick()
+        await nextTick()
+        const heights = w!.emitted<[number]>('measure')!.map((e) => e[0])
+        expect(heights.at(-1)).toBe(52)
+      } finally {
+        if (original) {
+          Object.defineProperty(HTMLElement.prototype, 'offsetHeight', original)
+        } else {
+          Reflect.deleteProperty(HTMLElement.prototype, 'offsetHeight')
+        }
+      }
+    })
+
     it('folds the open list away, then unfurls the other, 0.6 s each, ignoring presses meanwhile', async () => {
       mountBelt()
       await stud('spells').trigger('click')
