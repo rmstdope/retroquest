@@ -1,6 +1,8 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 import { useGameStore, MAX_TURNS } from './useGameStore'
+import { usePassageStore, PASSAGE_HALF_MS } from './usePassageStore'
+import { useSettingsStore } from './useSettingsStore'
 import { GAME_NAME } from '@/engine'
 import type { AreaThing } from '@/lantern/areaThings'
 import type { RoomDescription, SoundFiring } from '@/engine'
@@ -674,6 +676,83 @@ describe('useGameStore', () => {
       store.loadFromTitle(2)
       store.loadFromTitle(2)
       expect(store.titleLoadError).toBe('')
+    })
+  })
+
+  describe('the passage into a loaded game', () => {
+    let passage: ReturnType<typeof usePassageStore>
+
+    beforeEach(async () => {
+      vi.useFakeTimers()
+      useSettingsStore().reduceMotion = 'off'
+      passage = usePassageStore()
+      await store.initGame()
+      bridge.controller.getRoomName.mockReturnValue('Saved Room')
+    })
+    afterEach(() => vi.useRealTimers())
+
+    it('keeps the title page while it fades out, swaps in the saved game in the dark, and gives the notice once it is up', () => {
+      expect(store.loadFromTitle(3)).toBe(true)
+      expect(passage.phase).toBe('out')
+      expect(store.showTitle).toBe(true)
+      vi.advanceTimersByTime(PASSAGE_HALF_MS)
+      expect(store.showTitle).toBe(false)
+      expect(store.showModal).toBe(false)
+      expect(store.notice).toBeNull()
+      passage.pictureReady()
+      vi.advanceTimersByTime(PASSAGE_HALF_MS)
+      expect(passage.phase).toBe('idle')
+      expect(store.notice?.text).toBe('Game loaded · Slot 3')
+    })
+
+    it('does not fade when the save cannot be read', () => {
+      bridge.loadFromSlot.mockReturnValue(
+        '[failure]No save file found.[/failure]',
+      )
+      expect(store.loadFromTitle(2)).toBe(false)
+      expect(passage.phase).toBe('idle')
+      expect(store.showTitle).toBe(true)
+      expect(store.titleLoadError).toBe('No save file found.')
+    })
+
+    it('fades a load during play: the story stays until dark, the notice comes when it is up', () => {
+      store.dismissModal()
+      const before = store.turns.length
+      store.loadGame()
+      expect(passage.phase).toBe('out')
+      expect(store.loadNumber).toBe(0)
+      expect(store.turns.length).toBe(before)
+      vi.advanceTimersByTime(PASSAGE_HALF_MS)
+      expect(store.loadNumber).toBe(1)
+      expect(store.notice).toBeNull()
+      passage.pictureReady()
+      vi.advanceTimersByTime(PASSAGE_HALF_MS)
+      expect(store.notice?.text).toBe('Game loaded')
+    })
+
+    it('shows a failed load during play at once, with no fade', () => {
+      store.dismissModal()
+      bridge.quickLoadGame.mockReturnValue(
+        '[failure]No save file found.[/failure]',
+      )
+      store.loadGame('load')
+      expect(passage.phase).toBe('idle')
+      expect(store.loadNumber).toBe(0)
+    })
+
+    it('a press that skips brings the loaded game up at once', () => {
+      store.loadFromTitle(3)
+      passage.skip()
+      expect(store.showTitle).toBe(false)
+      expect(store.notice?.text).toBe('Game loaded · Slot 3')
+    })
+
+    it('loads at once when motion is reduced', () => {
+      useSettingsStore().reduceMotion = 'on'
+      store.loadFromTitle(3)
+      expect(passage.phase).toBe('idle')
+      expect(store.showTitle).toBe(false)
+      expect(store.notice?.text).toBe('Game loaded · Slot 3')
     })
   })
 

@@ -49,6 +49,8 @@ import {
   type MotionSpec,
 } from '@/lantern/roomMotion'
 import { TITLE_IMAGE_ID } from '@/lantern/imageLists'
+import { usePassageStore } from './usePassageStore'
+import { useSettingsStore } from './useSettingsStore'
 import { ELIOR } from '@/lantern/stageSpeech'
 import type { Chapter } from '@/lantern/chapter'
 
@@ -230,6 +232,33 @@ type CommandPlace = Pick<
 export const useGameStore = defineStore('game', () => {
   // --- Bridge reference ---
   let bridge: GameBridge | null = null
+
+  // --- The passage into a started or loaded game ---
+  const passage = usePassageStore()
+  const passageSettings = useSettingsStore()
+
+  /** Whether a passage goes straight through, with no fade: Reduce motion on, or the device asks for less. */
+  function passageInstant(): boolean {
+    if (passageSettings.reduceMotion === 'on') return true
+    if (passageSettings.reduceMotion === 'off') return false
+    return (
+      typeof globalThis.matchMedia !== 'function' ||
+      globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches
+    )
+  }
+
+  /** The screen is fading into a started or loaded game: its music goes through the dark too. */
+  const passageThrough = computed(
+    () => passage.phase !== 'idle' && !passageInstant(),
+  )
+
+  /**
+   * Go into a started or loaded game through the dark: the screen fades out,
+   * `apply` swaps the game in, and `up` runs once the new screen is fully up.
+   */
+  function passInto(apply: () => void, up: () => void): void {
+    passage.begin(apply, up, true, passageInstant())
+  }
 
   // --- Audio player reference ---
   let audioPlayer: QuestAudioPlayer | null = null
@@ -1046,23 +1075,33 @@ export const useGameStore = defineStore('game', () => {
       titleLoadError.value = result.replace(/\[[^\]]*\]/g, '').trim()
       return false
     }
-    modalQueue.value = []
-    showModal.value = false
-    modalChapter.value = null
-    pendingLookOnDismiss = false
-    afterLoad(
-      b,
-      null,
-      result,
+    const text =
       name !== undefined
         ? `Game loaded · ${name}`
         : slot === 0
           ? 'Game loaded'
-          : `Game loaded · Slot ${slot}`,
+          : `Game loaded · Slot ${slot}`
+    passInto(
+      () => {
+        modalQueue.value = []
+        showModal.value = false
+        modalChapter.value = null
+        pendingLookOnDismiss = false
+        applyLoad(b, null)
+        acceptInput.value = b.controller.isAcceptingInput()
+        dismissTitle()
+      },
+      () => showNotice(result, text),
     )
-    acceptInput.value = b.controller.isAcceptingInput()
-    dismissTitle()
     return true
+  }
+
+  /**
+   * New game from the title page: the title fades out and the first act's
+   * intro rises; `up` runs once it is fully up (focus lands then).
+   */
+  function startFromTitle(up: () => void): void {
+    passInto(dismissTitle, up)
   }
 
   /** From the game's logo to the first act's intro pop-up (input waits for it). */
@@ -1505,10 +1544,18 @@ export const useGameStore = defineStore('game', () => {
     result: string,
     text: string,
   ): void {
-    if (!showNotice(result, text)) {
+    if (result.includes('[failure]')) {
       showOutput(command, result, { chips: false })
       return
     }
+    passInto(
+      () => applyLoad(b, command),
+      () => showNotice(result, text),
+    )
+  }
+
+  /** The saved game goes in, in the dark: the story, panels and dots are the save's. */
+  function applyLoad(b: GameBridge, command: string | null): void {
     dropHold()
     rememberLoadedAct(b)
     loadNumber.value++
@@ -1907,6 +1954,8 @@ export const useGameStore = defineStore('game', () => {
     showTitle,
     titleLoadError,
     loadFromTitle,
+    startFromTitle,
+    passageThrough,
     dismissTitle,
     gameNumber,
     loadNumber,
