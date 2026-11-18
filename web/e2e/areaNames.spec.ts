@@ -303,7 +303,6 @@ test.describe('a dot under the faded edge of a card (rq-riv9)', () => {
     await command(page, 'talk to grandmother')
     await command(page, 'talk to grandmother')
     await showNames(page)
-    await page.getByRole('button', { name: /Show$/ }).click()
     await expect(page.locator('.lq-story-wrap .lq-cl')).not.toHaveCount(0)
     // Scroll the words up a few pixels at a time to the first spot where a thing's dot shows with its name left off.
     const dot = await page
@@ -315,6 +314,10 @@ test.describe('a dot under the faded edge of a card (rq-riv9)', () => {
           top -= 3
         ) {
           story.scrollTop = top
+          // A key keeps the marks up (they leave 4 seconds after the last input).
+          document.dispatchEvent(
+            new KeyboardEvent('keydown', { key: 'Shift', bubbles: true }),
+          )
           for (let i = 0; i < 3; i++)
             await new Promise((done) => requestAnimationFrame(done))
           for (const mark of document.querySelectorAll<HTMLElement>(
@@ -354,6 +357,7 @@ test.describe('a dot under the faded edge of a card (rq-riv9)', () => {
     const dot = await dotUnderCardEdge(page)
     await page.mouse.move(5, 300)
     await page.mouse.move(dot.x, dot.y, { steps: 5 })
+    await page.keyboard.press('Shift')
     expect(
       await page.evaluate(
         ({ x, y }) =>
@@ -370,6 +374,7 @@ test.describe('a dot under the faded edge of a card (rq-riv9)', () => {
     const dot = await dotUnderCardEdge(page)
     await page.mouse.move(5, 300)
     await page.mouse.move(dot.x, dot.y, { steps: 5 })
+    await page.keyboard.press('Shift')
     expect(
       await page
         .locator('.lq-story-wrap')

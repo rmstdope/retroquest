@@ -112,7 +112,7 @@ test('every button of the ring can be pressed: none lies under the command bar o
   expect(covered).toBe(0)
 })
 
-test('Tab never reaches the things on the picture, and draws no box, mark or name over it', async ({
+test('Tab never reaches the things on the picture, and draws no box over it', async ({
   page,
 }): Promise<void> => {
   await page.setViewportSize({ width: 1280, height: 800 })
@@ -127,8 +127,6 @@ test('Tab never reaches the things on the picture, and draws no box, mark or nam
           false,
       ),
     ).toBe(false)
-    await expect(page.locator('.lq-area-mark')).toHaveCount(0)
-    await expect(page.locator('.lq-area-name')).toHaveCount(0)
   }
   // A thing given focus some other way still draws no box round itself.
   const bread = page.locator('[data-area-press="bread"]')
@@ -136,7 +134,6 @@ test('Tab never reaches the things on the picture, and draws no box, mark or nam
   expect(await bread.evaluate((el) => getComputedStyle(el).outlineStyle)).toBe(
     'none',
   )
-  await expect(page.locator('.lq-area-mark')).toHaveCount(0)
 })
 
 test('Escape closes the ring and focus goes back to the thing', async ({

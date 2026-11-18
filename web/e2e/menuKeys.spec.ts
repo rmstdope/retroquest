@@ -63,10 +63,14 @@ test('Settings: ↑ ↓ move between rows and ← → change them', async ({
   ).toHaveAttribute('aria-pressed', 'true')
   await page.keyboard.press('ArrowUp')
   expect(await row()).toBe('reduceMotion')
-  await page.keyboard.press('Enter')
+  // The suite runs with reduced motion on, so the switch starts on and Enter turns it off.
   await expect(
     page.getByRole('switch', { name: 'Reduce motion' }),
   ).toHaveAttribute('aria-checked', 'true')
+  await page.keyboard.press('Enter')
+  await expect(
+    page.getByRole('switch', { name: 'Reduce motion' }),
+  ).toHaveAttribute('aria-checked', 'false')
   await page.keyboard.press('Escape')
   await expect(
     page.getByRole('button', { name: 'Settings', exact: true }),
