@@ -731,14 +731,13 @@ function onNamesEscape(event: KeyboardEvent): void {
   }
   const onBelt = beltEl.value?.root?.contains(document.activeElement)
   if (onBelt) {
-    // Back to where focus was before the belt; with nothing there, the first thing in the room, else the show button.
+    // Back to where focus was before the belt; with nothing there, the show button (the things on the picture take no keyboard focus).
     event.preventDefault()
     event.stopImmediatePropagation()
     const back =
       beltReturn?.isConnected && beltReturn !== document.body
         ? beltReturn
-        : (stageEl.value?.querySelector<HTMLElement>('[data-area-press]') ??
-          mainEl.value?.querySelector<HTMLElement>('.lq-show-names'))
+        : mainEl.value?.querySelector<HTMLElement>('.lq-show-names')
     beltReturn = null
     back?.focus({ preventScroll: true })
     return
@@ -1813,7 +1812,7 @@ function sendHand(command: string): void {
   sendFrom(command, handFrom ?? undefined)
 }
 
-/** The ring's Use with…, Give… or Cast on…: close it and put the thing or spell in hand; focus goes to the first thing in the room, or ✕ Cancel when there is none. */
+/** The ring's Use with…, Give… or Cast on…: close it and put the thing or spell in hand; focus goes to ✕ Cancel (the picture's things take no keyboard focus). */
 function takeInHand(verb: HandVerb): void {
   const open = ring.value
   ring.value = null
@@ -1825,14 +1824,13 @@ function takeInHand(verb: HandVerb): void {
     verb,
   })
   handFrom = open.thing.areaId
+  // The things on the picture take no keyboard focus, so the keyboard waits on the hand's Cancel.
   void nextTick(() =>
-    nextTick(() => {
-      const first =
-        stageEl.value?.querySelector<HTMLElement>('[data-area-press]')
-      const target =
-        first ?? stageEl.value?.querySelector<HTMLElement>('[data-hand-cancel]')
-      target?.focus({ preventScroll: true })
-    }),
+    nextTick(() =>
+      stageEl.value
+        ?.querySelector<HTMLElement>('[data-hand-cancel]')
+        ?.focus({ preventScroll: true }),
+    ),
   )
 }
 
