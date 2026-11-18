@@ -68,8 +68,8 @@ describe('LanternLayout', () => {
     vi.unstubAllGlobals()
   })
 
-  function mountLayout() {
-    wrapper = mount(LanternLayout)
+  function mountLayout(options: { attachTo?: HTMLElement } = {}) {
+    wrapper = mount(LanternLayout, options)
     return wrapper
   }
 
@@ -1121,7 +1121,8 @@ describe('LanternLayout', () => {
     }
 
     it('starts on the story with the section tabs at the bottom', () => {
-      const w = mountLayout()
+      // Inside the document, so the stage's computed style counts.
+      const w = mountLayout({ attachTo: document.body })
 
       // The plate on the picture names the room, so the header does not.
       expect(w.find('header .lq-compact-room').exists()).toBe(false)
@@ -1131,12 +1132,19 @@ describe('LanternLayout', () => {
     })
 
     it('shows the bag in place of the story and keeps the story', async () => {
-      const w = mountLayout()
+      // Inside the document, so the story section's hidden parent counts:
+      // an element outside it has no computed style (jsdom 31 and browsers).
+      const w = mountLayout({ attachTo: document.body })
+      // A story with a turn in it, since an empty one is not shown at all.
+      useGameStore().turns = [{ ...TURN, id: 1 }]
+      await w.vm.$nextTick()
+      const story = () => w.get('section[aria-label="Story"]')
+      expect(story().isVisible()).toBe(true)
 
       await open(w, 'Bag')
 
       expect(w.get('[aria-label="Journal"] h2').text()).toBe('Bag')
-      expect(w.get('section[aria-label="Story"]').isVisible()).toBe(false)
+      expect(story().isVisible()).toBe(false)
     })
 
     it('shows the map', async () => {
