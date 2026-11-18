@@ -328,6 +328,12 @@ describe("the title picture's kinds", () => {
     }
   })
 
+  it('lets the water fall denser at amount 5 than at amount 3', () => {
+    const at3 = run(['water'], { amount: 3 }, 20).count('water')
+    const at5 = run(['water'], { amount: 5 }, 20).count('water')
+    expect(at5).toBeGreaterThan(at3)
+  })
+
   it('redraws the picture for the ripples only when it has the picture', () => {
     for (const [source, drawn] of [
       [SOURCE, true],

@@ -150,13 +150,18 @@ function floatCount(base: number, area: number, amount: number): number {
   )
 }
 
-/** Whether something is due on tick `k` when it comes once every `interval` ticks at amount 1 (and so on tick 0, `interval`, ...), `amount` times as often. */
-function due(k: number, interval: number, amount: number): boolean {
-  if (amount <= 0) return false
+/** How many of something are due on tick `k` when one comes every `interval` ticks at amount 1 (and so on tick 0, `interval`, ...), `amount` times as often; more than one when `amount` is more than `interval`. */
+function dueCount(k: number, interval: number, amount: number): number {
+  if (amount <= 0) return 0
   return (
-    Math.floor((k * amount) / interval) >
+    Math.floor((k * amount) / interval) -
     Math.floor(((k - 1) * amount) / interval)
   )
+}
+
+/** Whether something is due on tick `k` when it comes once every `interval` ticks at amount 1, `amount` times as often. */
+function due(k: number, interval: number, amount: number): boolean {
+  return dueCount(k, interval, amount) > 0
 }
 
 /**
@@ -692,7 +697,7 @@ export function createMotionScene(): MotionScene {
         break
       case 'water': {
         const side = rnd() < 0.5 ? -1 : 1
-        if (due(n, 2, amount))
+        for (let d = dueCount(n, 2, amount); d > 0; d--)
           parts.push({
             x: rect.x + rect.w * (0.5 + side * rnd() * 0.3),
             y: rect.y + rect.h * 0.1,
