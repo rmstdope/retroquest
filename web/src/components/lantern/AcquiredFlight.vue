@@ -87,7 +87,8 @@ watch(
       entered.value = true
     }, 20)
   },
-  { immediate: true },
+  // Sync: it measures where the thing lay before the room picture lets the thing go (the same moment).
+  { immediate: true, flush: 'sync' },
 )
 
 // Every gain is told as it is queued, whether or not it gets to fly; emptied

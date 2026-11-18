@@ -442,6 +442,15 @@ describe('useGameStore: panels held while a turn is narrated', () => {
       )
     })
 
+    it('lets a held gain go when a newer command starts (rq-sm83)', async () => {
+      const store = await cottage()
+      store.submitCommand('take bread')
+      store.releasePanels(store.turns.at(-1)!.id, [...PANEL_GROUPS], false)
+      expect(store.heldGains).toEqual(['bread'])
+      store.submitCommand('look')
+      expect(store.heldGains).toEqual([])
+    })
+
     it('lists the movement the manifest gives the room, the spots with the shape the navigator drew', async () => {
       const store = await cottage()
       expect(store.roomMotion).toEqual([])

@@ -10,7 +10,8 @@ import type { PictureState } from '@/composables/useBridge'
 /**
  * The picture to show: `latest`, except that the things in `held` areas (and
  * the patches that belong to those areas) stay as `before` showed them. A
- * different room or picture is shown as `latest` is.
+ * different room or picture is shown as `latest` is: a turn that also changes
+ * the picture lets its things go with it (the change of scene is the moment).
  */
 export function withHeldAreas(
   latest: PictureState,

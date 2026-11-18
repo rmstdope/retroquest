@@ -333,6 +333,21 @@ describe('AcquiredFlight', () => {
     expect(style).toContain('top: 410px')
   })
 
+  it('measures where the thing lay even as the picture lets it go in the same moment (rq-sm83)', async () => {
+    const box = pressBox('bread', 300, 410)
+    w = mount(AcquiredFlight, { attachTo: document.body })
+    useFlightStore().launch(
+      [{ kind: 'item', name: 'bread', count: 1, areaId: 'bread' }],
+      [],
+      false,
+      () => box.remove(),
+    )
+    await w.vm.$nextTick()
+    const style = w.get('[data-testid="flight"]').attributes('style') ?? ''
+    expect(style).toContain('left: 300px')
+    expect(style).toContain('top: 410px')
+  })
+
   it('comes up in the middle of the picture when its spot is not marked (rq-sm83)', async () => {
     const stage = document.createElement('div')
     stage.className = 'lq-stage-picture'

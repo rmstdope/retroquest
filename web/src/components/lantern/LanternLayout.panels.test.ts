@@ -172,6 +172,31 @@ describe('LanternLayout: panels wait for the narration', () => {
     expect(game.turns.at(-1)!.command).toBe('go north')
   })
 
+  it('also waits for the flight of a gain with no spot in the picture, such as a given item or a spell (rq-sm83)', async () => {
+    vi.spyOn(HTMLMediaElement.prototype, 'play').mockResolvedValue()
+    await ready()
+    const narration = useNarrationStore()
+    const game = useGameStore()
+    const clip = { file: 'x.mp3', speaker: 'narrator', duration: 5, words: [] }
+    vi.spyOn(narration, 'manifestFor').mockReturnValue(
+      new Proxy({}, { get: () => clip }),
+    )
+    game.submitCommand(`take ${GEM.toLowerCase()}`)
+    await vi.advanceTimersByTimeAsync(0)
+    // Stand in for a gain that never lay in the picture.
+    game.releaseGain('chiming-gem')
+    const turns = game.turns.length
+    game.submitCommand('look')
+    expect(game.turns).toHaveLength(turns)
+    await vi.advanceTimersByTimeAsync(0)
+    useArrivalStore().clear()
+    await vi.advanceTimersByTimeAsync(FLIGHT_SHOW_MS + FLIGHT_HOLD_MS)
+    expect(useFlightStore().current?.name).toBe(GEM)
+    expect(game.turns).toHaveLength(turns)
+    await vi.advanceTimersByTimeAsync(FLIGHT_FLY_MS)
+    expect(game.turns).toHaveLength(turns + 1)
+  })
+
   /** A key pressed on the page. */
   async function key(name: string): Promise<void> {
     document.body.dispatchEvent(

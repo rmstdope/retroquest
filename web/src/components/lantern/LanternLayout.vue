@@ -1337,7 +1337,15 @@ watch(
 // A command typed while gains are still to fly cuts the telling short, flies
 // them one after another at once, and only then runs.
 game.setGainFlusher((then) => {
-  if (!game.heldGains.length && !flights.current) return false
+  const turn = game.turns.at(-1)
+  // The newest turn's gains that have not flown yet (its narration is still told, or its news).
+  const unflown =
+    !!turn &&
+    staged.value &&
+    !turn.restored &&
+    turn.id !== flownTurn &&
+    (turn.gained.length > 0 || turn.lost.some((chip) => chip.kind === 'item'))
+  if (!game.heldGains.length && !flights.current && !unflown) return false
   presentation.skipTelling()
   void nextTick(() => flights.whenIdle(then))
   return true
