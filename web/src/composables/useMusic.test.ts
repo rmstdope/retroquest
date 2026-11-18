@@ -607,6 +607,17 @@ describe('useMusic', () => {
         expect(el.volume).toBeCloseTo(0.5)
       })
 
+      it('cancels a fade-in still waiting for the sound', async () => {
+        const el = playing()
+        const { loadTrack, fadeOut } = useMusic(
+          el as unknown as HTMLAudioElement,
+        )
+        loadTrack('a.mp3', '', 2000)
+        fadeOut(PASSAGE_MS)
+        await vi.advanceTimersByTimeAsync(PASSAGE_MS)
+        expect(el.volume).toBe(0)
+      })
+
       it('lift raises the loop again when no track followed', async () => {
         const { el, lift } = await fadedOut()
         lift()
@@ -812,6 +823,14 @@ describe('useMusic on Web Audio', () => {
       await vi.advanceTimersByTimeAsync(PASSAGE_MS)
       expect(second.gain.value).toBeCloseTo(1)
       expect(ctx.sources[0].stop).toHaveBeenCalled()
+    })
+
+    it('raises the playing loop when the player goes back to its room while the next track still decodes', async () => {
+      const { music, first } = await fadedOutWithSlowNext()
+      music.lift()
+      music.loadTrack('a.mp3', 'A')
+      await vi.advanceTimersByTimeAsync(PASSAGE_MS)
+      expect(first.gain.value).toBeCloseTo(1)
     })
 
     it('holds a track decoded in the dark silent until the room comes up', async () => {

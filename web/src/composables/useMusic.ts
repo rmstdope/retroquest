@@ -144,6 +144,8 @@ export function useMusic(
     if (file === currentMusicFile.value) {
       // Back to the music that is playing: drop the load under way.
       request++
+      // Back to the loop faded out with the screen, the room already up: raise it.
+      if (roomUp) lift()
       applyScene()
       return
     }
@@ -306,6 +308,10 @@ export function useMusic(
   function fadeOut(ms: number): void {
     fadedOutMs = ms
     roomUp = false
+    // A rise still scheduled must not swell the loop under the fade-out.
+    pendingFadeIn = 0
+    clearTimeout(rise)
+    rise = undefined
     if (currentMusicFile.value !== '' && !active.paused) fadeTo(0, ms)
   }
 

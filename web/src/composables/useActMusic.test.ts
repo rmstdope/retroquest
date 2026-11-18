@@ -278,9 +278,10 @@ describe('useActMusic', () => {
     await vi.advanceTimersByTimeAsync(0)
     const el = FakeAudio.last
     useSettingsStore().reduceMotion = 'on'
-    usePassageStore().begin(() => {}, vi.fn(), true, true)
+    usePassageStore().begin(() => {}, vi.fn(), true)
     await nextTick()
-    await vi.advanceTimersByTimeAsync(PASSAGE_HALF_MS)
+    expect(usePassageStore().phase).toBe('out')
+    await vi.advanceTimersByTimeAsync(PASSAGE_HALF_MS / 2)
     expect(el.volume).toBe(1)
     scope.stop()
     vi.useRealTimers()
