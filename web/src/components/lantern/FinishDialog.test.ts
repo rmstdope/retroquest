@@ -47,6 +47,13 @@ describe('FinishDialog', () => {
     expect(w.find('[role="alert"]').exists()).toBe(false)
   })
 
+  it('is a narrow pane of frosted glass, like the quit question', () => {
+    const layer = mountFinish().get('.lq-dialog-layer')
+
+    expect(layer.classes()).toContain('lq-dialog-glass')
+    expect(layer.classes()).toContain('lq-dialog-narrow')
+  })
+
   it('puts focus on Save and finish', async () => {
     const w = mountFinish()
     await nextTick()

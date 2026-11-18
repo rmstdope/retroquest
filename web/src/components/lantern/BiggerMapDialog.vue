@@ -114,7 +114,13 @@ onMounted(() => {
 </script>
 
 <template>
-  <LanternDialog title="Map" :eyebrow="eyebrow" wide @close="emit('close')">
+  <LanternDialog
+    title="Map"
+    :eyebrow="eyebrow"
+    wide
+    glass
+    @close="emit('close')"
+  >
     <div class="lq-bigmap-scroll">
       <div
         ref="map"

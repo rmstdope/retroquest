@@ -27,6 +27,13 @@ describe('QuestDialog', () => {
     },
   }
 
+  it('is a pane of frosted glass, like the menus', () => {
+    const layer = mountQuest(JOURNAL).get('.lq-dialog-layer')
+
+    expect(layer.classes()).toContain('lq-dialog-glass')
+    expect(layer.classes()).not.toContain('lq-dialog-narrow')
+  })
+
   it('names the quest and tells what kind it is', () => {
     const w = mountQuest(JOURNAL)
 

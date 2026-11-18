@@ -21,6 +21,8 @@ function saveAndFinish(): void {
   <LanternDialog
     title="Save before you finish?"
     eyebrow="The end"
+    glass
+    narrow
     @close="game.cancelFinish()"
   >
     <p class="lq-finish-text">
@@ -70,7 +72,7 @@ function saveAndFinish(): void {
 .lq-finish-buttons {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: var(--lq-ring-gap);
 }
 .lq-finish-primary,
 .lq-finish-plain {
