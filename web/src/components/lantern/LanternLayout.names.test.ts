@@ -230,9 +230,25 @@ describe('LanternLayout: what is here, named on the picture', () => {
 
   it('counts nothing over the arrival words, the typing box or the plate, only over the picture', async () => {
     await cottage()
-    for (const sel of ['.lq-stage-box', '.lq-stage-plate', '.lq-belt']) {
+    useArrivalStore().show(
+      99,
+      [
+        {
+          kind: 'description',
+          lines: [{ unit: 0, markup: 'A fire crackles.' }],
+          voiced: true,
+        },
+      ],
+      true,
+    )
+    await w.vm.$nextTick()
+    for (const sel of [
+      '.lq-stage-plate',
+      '.lq-belt',
+      '[data-testid="arrival-on-picture"]',
+    ]) {
       const el = w.find(sel)
-      if (!el.exists()) continue
+      expect(el.exists(), sel).toBe(true)
       await pointer(el.element, 'pointermove')
       await tap(el.element)
       expect(useAreaNamesStore().showing).toBe(false)
@@ -285,14 +301,34 @@ describe('LanternLayout: what is here, named on the picture', () => {
     expect(useAreaNamesStore().showing).toBe(false)
   })
 
-  it('keeps the marks away when the ring closes on a choice that starts a scene change', async () => {
+  it('keeps the marks away when a ring choice starts a conversation, and brings them in for one that does not', async () => {
+    const store = await cottage(true, true, true)
+    store.acceptInput = true
+    await tap(w.get('[data-area-press="grandmother"]').element)
+    expect(w.find('.lq-press-ring').exists()).toBe(true)
+    await w.get('.lq-press-ring [data-ring-action="talk"]').trigger('click')
+    await flushPromises()
+    expect(useAreaNamesStore().showing).toBe(false)
+    useStageSpeechStore().revealAll()
+    await flushPromises()
+    store.acceptInput = true
+    await tap(w.get('[data-area-press="bread"]').element)
+    await w.get('.lq-press-ring [data-ring-action="examine"]').trigger('click')
+    await flushPromises()
+    expect(useAreaNamesStore().showing).toBe(true)
+  })
+
+  it('keeps the marks away when a ring choice changes the room', async () => {
     const store = await cottage(true, true, true)
     store.acceptInput = true
     await tap(w.get('[data-area-press="bread"]').element)
-    useSceneStore().phase = 'dark'
-    await w.vm.$nextTick()
-    await w.vm.$nextTick()
-    expect(w.find('.lq-press-ring').exists()).toBe(false)
+    const click = w.get('.lq-press-ring [data-ring-action="examine"]')
+    // The choice's answer moves the player on (as a talk that moves Elior does).
+    vi.spyOn(store, 'submitCommand').mockImplementation(() => {
+      store.roomName = 'Somewhere else'
+    })
+    await click.trigger('click')
+    await flushPromises()
     expect(useAreaNamesStore().showing).toBe(false)
   })
 

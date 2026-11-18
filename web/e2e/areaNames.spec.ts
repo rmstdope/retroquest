@@ -107,9 +107,9 @@ test('with reduced motion the marks vanish at once when the 4 seconds are up', a
   await page.emulateMedia({ reducedMotion: 'reduce' })
   await showNames(page)
   await expect(page.locator('[data-area-mark]')).toHaveCount(3)
-  // No leave fade: gone right after the wait (4 s), not 1.5 s later.
+  // No leave fade: gone right after the wait (4 s), well before a 1.5 s fade would end.
   await expect(page.locator('[data-area-mark]')).toHaveCount(0, {
-    timeout: 5_500,
+    timeout: 4_700,
   })
 })
 

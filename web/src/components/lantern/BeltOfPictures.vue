@@ -558,7 +558,7 @@ defineExpose({ focusBelt, focusPicture, has, root })
   --lq-strap-ms: calc(600ms * var(--lq-motion));
   position: absolute;
   left: var(--lq-belt-left, 0px);
-  /* Stops short of the picture's foot-right corner, as it always has. */
+  /* Stops short of the picture's foot-right corner (the width the belt has always left; the agreed experience changes no layout). */
   right: var(--lq-belt-right, 180px);
   bottom: var(--lq-belt-bottom, 0px);
   z-index: var(--lq-z-stage-belt);

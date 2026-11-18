@@ -1634,9 +1634,26 @@ function tapOnPicture(): void {
   if (counts && !ring.value) bumpNames()
 }
 
-/** A thing's ring has closed (a tap or click outside it, Escape, or a choice in it): the marks and names come in, unless the choice began a talk, a change of scene or the ending. */
-function ringClosed(): void {
-  void nextTick(bumpNames)
+/** The room and the conversation as they are now: what a ring's choice may change. */
+function whereWeAre(): { room: string; talk: typeof speech.conversation } {
+  return { room: game.roomName, talk: speech.conversation }
+}
+
+/**
+ * A thing's ring has closed (a tap or click outside it, Escape, or a choice in
+ * it): the marks and names come in, unless the choice began a talk, a change of
+ * scene or the ending, or moved the player to another room (which arrives
+ * clean). `before` is where we were when a choice sent its command.
+ */
+function ringClosed(before?: ReturnType<typeof whereWeAre>): void {
+  void nextTick(() => {
+    if (before) {
+      const now = whereWeAre()
+      if (now.room !== before.room) return
+      if (now.talk !== null && now.talk !== before.talk) return
+    }
+    bumpNames()
+  })
 }
 /** The belt of pictures, for focus. */
 const beltEl = ref<InstanceType<typeof BeltOfPictures> | null>(null)
@@ -1828,13 +1845,14 @@ function closeRing(byKey: boolean): void {
   if (byKey && id) void nextTick(() => nextTick(() => focusAfterRing(id)))
 }
 
-/** Send a command as a typed one, with the ring and the hand put away, and put focus back on `id`'s thing (or the show button, or the belt's first picture, once it has gone). */
+/** Send a command as a typed one, with the ring and the hand put away, and put focus back on `id`'s thing (or the belt's first picture, once it has gone). */
 function sendFrom(command: string, id: string | undefined): void {
   const wasOpen = ring.value !== null
+  const before = whereWeAre()
   ring.value = null
   belt.emptyHand()
   game.submitCommand(command)
-  if (wasOpen) ringClosed()
+  if (wasOpen) ringClosed(before)
   if (!id) return
   void nextTick(() => nextTick(() => focusAfterRing(id)))
   // The thing may go with the answer (taken, used up): focus then moves on.
