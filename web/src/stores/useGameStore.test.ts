@@ -740,6 +740,30 @@ describe('useGameStore', () => {
       expect(store.loadNumber).toBe(0)
     })
 
+    it('runs no command while the old screen fades out, and one as the new screen rises brings it up first', () => {
+      store.dismissModal()
+      store.loadGame()
+      bridge.controller.handleCommand.mockClear()
+      store.submitCommand('look')
+      expect(bridge.controller.handleCommand).not.toHaveBeenCalled()
+      expect(passage.phase).toBe('out')
+      vi.advanceTimersByTime(PASSAGE_HALF_MS)
+      store.submitCommand('look')
+      expect(passage.phase).toBe('idle')
+      expect(store.loadNumber).toBe(1)
+      expect(store.notice?.text).toBe('Game loaded')
+    })
+
+    it('loading again during the fade skips the first and starts its own', () => {
+      store.dismissModal()
+      store.loadGame()
+      store.loadNamedGame('second')
+      expect(store.loadNumber).toBe(1)
+      expect(passage.phase).toBe('out')
+      vi.advanceTimersByTime(PASSAGE_HALF_MS)
+      expect(store.loadNumber).toBe(2)
+    })
+
     it('a press that skips brings the loaded game up at once', () => {
       store.loadFromTitle(3)
       passage.skip()

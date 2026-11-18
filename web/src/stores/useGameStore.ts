@@ -1211,7 +1211,9 @@ export const useGameStore = defineStore('game', () => {
   }
 
   function submitCommand(cmd: string): void {
-    // A command during the fade into a game brings the new screen up first.
+    // The old screen's command is not run in the new game: while it fades out, nothing goes.
+    if (passage.phase === 'out') return
+    // A command as the new screen rises brings it up first, then goes on.
     passage.skip()
     if (!acceptInput.value) return
     if (!cmd || !cmd.trim()) return

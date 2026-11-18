@@ -85,6 +85,31 @@ describe('LanternLayout: the passage into a new game', () => {
     expect(game.showModal).toBe(true)
   })
 
+  it('Enter with focus on the page itself (the Start button is gone) still skips', async () => {
+    await title()
+    await w.get('.lq-title-start').trigger('pointerdown')
+    await w.get('.lq-title-start').trigger('click')
+    await vi.advanceTimersByTimeAsync(PASSAGE_HALF_MS + 200)
+    expect(usePassageStore().phase).toBe('in')
+    document.body.dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }),
+    )
+    expect(usePassageStore().phase).toBe('idle')
+  })
+
+  it('a press on the old screen while it fades out only skips: it is not carried out in the new game', async () => {
+    await title()
+    await w.get('.lq-title-start').trigger('pointerdown')
+    await w.get('.lq-title-start').trigger('click')
+    await vi.advanceTimersByTimeAsync(300)
+    const pressed = vi.fn()
+    document.body.addEventListener('click', pressed)
+    document.body.click()
+    document.body.removeEventListener('click', pressed)
+    expect(usePassageStore().phase).toBe('idle')
+    expect(pressed).not.toHaveBeenCalled()
+  })
+
   it('goes straight to the intro with no fade when motion is reduced', async () => {
     await title()
     useSettingsStore().reduceMotion = 'on'

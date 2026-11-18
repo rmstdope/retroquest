@@ -18,7 +18,7 @@ import { useArrivalStore } from '@/stores/useArrivalStore'
 import { useCommandBox } from '@/composables/useCommandBox'
 import { useRoomTitleStore } from '@/stores/useRoomTitleStore'
 import { useSceneStore } from '@/stores/useSceneStore'
-import { usePassageStore } from '@/stores/usePassageStore'
+import { usePassageStore, PASSAGE_HALF_MS } from '@/stores/usePassageStore'
 import { useAreaNamesStore } from '@/stores/useAreaNamesStore'
 import { useFlightStore } from '@/stores/useFlightStore'
 import { useBeltStore } from '@/stores/useBeltStore'
@@ -2410,35 +2410,48 @@ function startGame(): void {
 const PASSAGE_ONLY_SKIPS =
   '.lq-title-page, .lq-chapter-dialog, .lq-stage-picture'
 
-/** A click while the screen is fading into a game brings it up at once, and does only that on the title, the intro or the picture. */
-function onPassageClick(event: MouseEvent): void {
-  if (!passage.skip()) return
-  const target = event.target instanceof Element ? event.target : null
-  if (target?.closest(PASSAGE_ONLY_SKIPS)) {
-    event.preventDefault()
-    event.stopPropagation()
-  }
-}
-
-/** Enter while the screen is fading into a game brings it up at once, and does nothing else (not even the intro's button). */
-function onPassageKey(event: KeyboardEvent): void {
-  if (event.key !== 'Enter') return
-  const target = event.target instanceof Element ? event.target : null
-  if (target?.closest('input, textarea, select, [contenteditable]')) return
-  if (!passage.skip()) return
+/** Stop a press from reaching what is under it. */
+function swallow(event: Event): void {
   event.preventDefault()
   event.stopPropagation()
 }
 
+/**
+ * A click while the screen is fading into a game brings the new one up at
+ * once. While the old screen is still fading out it does only that; once the
+ * new one rises it does only that on the title, the intro or the picture, and
+ * goes on to what was pressed elsewhere.
+ */
+function onPassageClick(event: MouseEvent): void {
+  const fadingOut = passage.phase === 'out'
+  if (!passage.skip()) return
+  const target = event.target instanceof Element ? event.target : null
+  if (fadingOut || target?.closest(PASSAGE_ONLY_SKIPS)) swallow(event)
+}
+
+/** Enter while the screen is fading into a game brings the new one up at once and does nothing else (a typed command rising with the new screen goes on). */
+function onPassageKey(event: KeyboardEvent): void {
+  if (event.key !== 'Enter') return
+  const target = event.target instanceof Element ? event.target : null
+  const fadingOut = passage.phase === 'out'
+  const typing = !!target?.closest('input, textarea, select, [contenteditable]')
+  if (typing && !fadingOut) return
+  if (passage.skip()) swallow(event)
+}
+
 // Plain listeners, in the capture phase, so they run before every other press handler.
+// On the window, so a key pressed with focus on the page itself (the button it was on is gone) is heard too.
 onMounted(() => {
-  rootEl.value?.addEventListener('click', onPassageClick, true)
-  rootEl.value?.addEventListener('keydown', onPassageKey, true)
+  window.addEventListener('click', onPassageClick, true)
+  window.addEventListener('keydown', onPassageKey, true)
 })
 onUnmounted(() => {
-  rootEl.value?.removeEventListener('click', onPassageClick, true)
-  rootEl.value?.removeEventListener('keydown', onPassageKey, true)
+  window.removeEventListener('click', onPassageClick, true)
+  window.removeEventListener('keydown', onPassageKey, true)
 })
+
+/** Counts the pictures a passage has waited for, so only the latest one's answer counts. */
+let pictureAsk = 0
 
 // The dark reached: the new room's picture is awaited, so the dark lifts only when it is ready (or the paper backdrop, none).
 watch(
@@ -2447,8 +2460,12 @@ watch(
     if (phase !== 'dark') return
     const src = game.roomPicture
     if (!src) return passage.pictureReady()
+    // A picture asked for by an earlier passage, answering late, is ignored.
+    const mine = ++pictureAsk
     const picture = new Image()
-    picture.onload = picture.onerror = (): void => passage.pictureReady()
+    picture.onload = picture.onerror = (): void => {
+      if (mine === pictureAsk) passage.pictureReady()
+    }
     picture.src = src
   },
 )
@@ -2499,6 +2516,8 @@ function openTitleLoad(): void {
 /** The Load game window closed: back to the title page, focus on Load game. */
 async function closeTitleLoad(): Promise<void> {
   titleLoad.value = false
+  // A pick that loads fades the title out: nothing takes focus then.
+  if (passage.phase !== 'idle') return
   await nextTick()
   titlePage.value?.focusLoad()
 }
@@ -3056,6 +3075,7 @@ watch(
     <div
       class="lq-passage"
       :class="`lq-passage-${passage.phase}`"
+      :style="{ '--lq-passage-ms': `${PASSAGE_HALF_MS}ms` }"
       aria-hidden="true"
     ></div>
     <!-- A phone held upright: the game waits behind this page. -->
@@ -3075,14 +3095,14 @@ watch(
 }
 .lq-passage-out {
   opacity: 1;
-  transition: opacity calc(1.5s * var(--lq-motion)) linear;
+  transition: opacity calc(var(--lq-passage-ms) * var(--lq-motion)) linear;
 }
 .lq-passage-dark {
   opacity: 1;
 }
 .lq-passage-in {
   opacity: 0;
-  transition: opacity calc(1.5s * var(--lq-motion)) linear;
+  transition: opacity calc(var(--lq-passage-ms) * var(--lq-motion)) linear;
 }
 .lq-root {
   height: 100vh;
