@@ -452,9 +452,9 @@ onUnmounted(() => document.removeEventListener('pointerdown', onOutsidePress))
 
 /** What the belt of pictures last measured at the foot of the picture (the folded tab's height while it is put away). */
 const beltMeasured = ref(0)
-/** The height the story keeps clear of: the belt's, and the folded tab's too except on the phone layouts, which keep their own room for it. */
+/** The height the story keeps clear of: the belt's, and the folded tab's too except on a sideways phone, which keeps its own room for it. */
 const beltHeight = computed(() =>
-  belt.away && (sideways.value || phoneStage.value) ? 0 : beltMeasured.value,
+  belt.away && sideways.value ? 0 : beltMeasured.value,
 )
 /** The room the typing box takes at the foot of the picture, with its gap. */
 const BOX_ROOM = 64
