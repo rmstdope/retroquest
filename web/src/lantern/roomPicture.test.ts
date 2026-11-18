@@ -2,6 +2,7 @@ import { describe, it, expect, vi } from 'vitest'
 import {
   eliorPortraitUrl,
   madePatches,
+  pictureThumbUrl,
   pictureExists,
   portraitUrl,
   roomPatchUrl,
@@ -144,5 +145,23 @@ describe('titlePictureUrl', () => {
     expect(titlePictureUrl()).toBe(
       `${import.meta.env.BASE_URL}images/generated/title-screen.png`,
     )
+  })
+})
+
+describe('pictureThumbUrl', () => {
+  const base = `${import.meta.env.BASE_URL}images/generated/`
+
+  it('names the small copy of a room picture, a variant and a patch', () => {
+    expect(pictureThumbUrl(`${base}act1-forge.png`)).toBe(
+      `${base}thumbs/act1-forge.webp`,
+    )
+    expect(pictureThumbUrl(`${base}act1-forge-night.lamp.png`)).toBe(
+      `${base}thumbs/act1-forge-night.lamp.webp`,
+    )
+  })
+
+  it('leaves a url that is not a generated picture as it is', () => {
+    expect(pictureThumbUrl('/elsewhere/a.png')).toBe('/elsewhere/a.png')
+    expect(pictureThumbUrl('')).toBe('')
   })
 })

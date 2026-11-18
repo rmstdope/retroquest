@@ -22,6 +22,18 @@ export function roomPictureUrl(
   return `${import.meta.env.BASE_URL}images/generated/${variant ? `${id}-${variant}` : id}.png`
 }
 
+/**
+ * The URL of the small copy of a generated picture (a room's, a variant's or
+ * a patch's): `images/generated/<name>.png` becomes
+ * `images/generated/thumbs/<name>.webp`, the file the build writes beside the
+ * full one (`thumbnails.config.ts`). Any other URL comes back as it is. The
+ * copy may not exist (the dev server has none); callers fall back to the full
+ * picture.
+ */
+export function pictureThumbUrl(url: string): string {
+  return url.replace(/(\/images\/generated\/)([^/]+)\.png$/, '$1thumbs/$2.webp')
+}
+
 /** Whether the file at a URL is a picture that loads. */
 type PictureProbe = (url: string) => Promise<boolean>
 
