@@ -128,6 +128,22 @@ describe('BeltOfPictures', () => {
       expect(tiles()).toEqual(['spell:light'])
     })
 
+    it('keeps reporting the height of the folded tab, so the story stays clear of it', async () => {
+      Object.defineProperty(HTMLElement.prototype, 'offsetHeight', {
+        configurable: true,
+        get: () => 52,
+      })
+      try {
+        useBeltStore().putAway()
+        mountBelt()
+        await nextTick()
+        const heights = w!.emitted<[number]>('measure')!.map((e) => e[0])
+        expect(heights.at(-1)).toBe(52)
+      } finally {
+        Reflect.deleteProperty(HTMLElement.prototype, 'offsetHeight')
+      }
+    })
+
     it('folds the open list away, then unfurls the other, 0.6 s each, ignoring presses meanwhile', async () => {
       mountBelt()
       await stud('spells').trigger('click')

@@ -38,7 +38,7 @@ const props = defineProps<{
 }>()
 const emit = defineEmits<{
   press: [picture: BeltPicture, at: { x: number; y: number }]
-  /** The height the strap takes at the foot of the picture (0 while folded away). */
+  /** The height the strap takes at the foot of the picture (the folded tab's height while folded away). */
   measure: [height: number]
   /** The picture whose caption shows (null: none). The layout draws it, over the words. */
   caption: [picture: BeltPicture | null]
@@ -330,15 +330,20 @@ watch(
 
 watch(pictures, () => void nextTick(measureScroll))
 
+/** Tell the layout how tall the belt stands now: the folded tab too, so the story keeps clear of it. */
+function reportHeight(): void {
+  emit('measure', root.value?.offsetHeight ?? 0)
+}
+
 /** A new size is applied on the next frame, so the layout it moves is not measured in the same one. */
 const sizeWatch = useSizeWatch(() => {
   measureScroll()
-  emit('measure', phase.value === 'away' ? 0 : (root.value?.offsetHeight ?? 0))
+  reportHeight()
 })
 onMounted(() => {
   measureScroll()
   if (root.value) sizeWatch.observe(root.value)
-  emit('measure', phase.value === 'away' ? 0 : (root.value?.offsetHeight ?? 0))
+  reportHeight()
 })
 onUnmounted(() => {
   clearTimeout(moveTimer)
@@ -349,7 +354,7 @@ onUnmounted(() => {
 })
 watch(phase, async () => {
   await nextTick()
-  emit('measure', phase.value === 'away' ? 0 : (root.value?.offsetHeight ?? 0))
+  reportHeight()
   measureScroll()
 })
 

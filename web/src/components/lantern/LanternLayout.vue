@@ -450,7 +450,7 @@ watch(
 )
 onUnmounted(() => document.removeEventListener('pointerdown', onOutsidePress))
 
-/** The height the belt of pictures takes at the foot of the picture (0 while it is put away). */
+/** The height the belt of pictures takes at the foot of the picture (the folded tab's height while it is put away). */
 const beltHeight = ref(0)
 /** The room the typing box takes at the foot of the picture, with its gap. */
 const BOX_ROOM = 64
@@ -460,7 +460,7 @@ const beltBottom = computed(() =>
 )
 /** The belt starts at the picture's left edge. */
 const beltLeft = computed(() => 0)
-/** How far up from the foot of the picture the belt's top lies: what the names and press areas must keep clear of (0 while the belt is away, then the action row alone on a laptop). */
+/** How far up from the foot of the picture the belt's top lies: what the names and press areas must keep clear of (the folded tab while the belt is away). */
 const footCover = computed(() =>
   beltHeight.value > 0
     ? beltBottom.value + beltHeight.value
@@ -3061,7 +3061,7 @@ watch(
     var(--lq-hide-line) + var(--lq-belt-h, 0px) + var(--lq-actions-h, 0px)
   );
 }
-/* The belt stands at the foot of the picture, and the words and the buttons over them rise above it (nothing rises while it is put away). */
+/* The belt stands at the foot of the picture, and the words and the buttons over them rise above it. */
 .lq-staged .lq-paper-tabrow {
   transform: translateY(
     calc(-1 * (var(--lq-belt-h, 0px) + var(--lq-actions-h, 0px)))
