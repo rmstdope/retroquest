@@ -764,6 +764,59 @@ describe('useGameStore', () => {
       expect(store.loadNumber).toBe(2)
     })
 
+    it('a load typed as the new screen rises gives no notice for the first load, only its own once up (rq-r9ax)', () => {
+      store.dismissModal()
+      store.loadGame()
+      vi.advanceTimersByTime(PASSAGE_HALF_MS)
+      passage.pictureReady()
+      expect(passage.phase).toBe('in')
+      vi.advanceTimersByTime(200)
+      store.submitCommand('load')
+      expect(store.loadNumber).toBe(1)
+      expect(passage.phase).toBe('out')
+      expect(store.notice).toBeNull()
+      vi.advanceTimersByTime(PASSAGE_HALF_MS)
+      passage.pictureReady()
+      vi.advanceTimersByTime(PASSAGE_HALF_MS)
+      expect(passage.phase).toBe('idle')
+      expect(store.loadNumber).toBe(2)
+      expect(store.notice?.text).toBe('Game loaded')
+    })
+
+    it('a command typed as the new screen rises still gets the notice', () => {
+      store.dismissModal()
+      store.loadGame()
+      vi.advanceTimersByTime(PASSAGE_HALF_MS)
+      passage.pictureReady()
+      store.submitCommand('look')
+      expect(passage.phase).toBe('idle')
+      expect(store.notice?.text).toBe('Game loaded')
+    })
+
+    it('a save typed as the new screen rises is the notice that stays', () => {
+      store.dismissModal()
+      store.loadGame()
+      vi.advanceTimersByTime(PASSAGE_HALF_MS)
+      passage.pictureReady()
+      store.submitCommand('save')
+      expect(passage.phase).toBe('idle')
+      expect(store.notice?.text).toBe('Game saved')
+    })
+
+    it('a failed load typed as the new screen rises keeps the risen game and its notice', () => {
+      store.dismissModal()
+      store.loadGame()
+      vi.advanceTimersByTime(PASSAGE_HALF_MS)
+      passage.pictureReady()
+      bridge.quickLoadGame.mockReturnValue(
+        '[failure]No save file found.[/failure]',
+      )
+      store.submitCommand('load')
+      expect(passage.phase).toBe('idle')
+      expect(store.loadNumber).toBe(1)
+      expect(store.notice?.text).toBe('Game loaded')
+    })
+
     it('a press that skips brings the loaded game up at once', () => {
       store.loadFromTitle(3)
       passage.skip()
