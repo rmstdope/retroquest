@@ -2437,13 +2437,24 @@ function onPassageClick(event: MouseEvent): void {
   if (fadingOut || target?.closest(PASSAGE_ONLY_SKIPS)) swallow(event)
 }
 
-/** Enter while the screen is fading into a game brings the new one up at once and does nothing else (a typed command rising with the new screen goes on). */
+/**
+ * Enter while the screen is fading into a game brings the new one up at once
+ * and does nothing else. A typed command rising with the new screen goes on,
+ * and so does a load typed in the typing box while the old one fades out (it
+ * starts its own fade).
+ */
 function onPassageKey(event: KeyboardEvent): void {
   if (event.key !== 'Enter') return
   const target = event.target instanceof Element ? event.target : null
   const fadingOut = passage.phase === 'out'
   const typing = !!target?.closest('input, textarea, select, [contenteditable]')
   if (typing && !fadingOut) return
+  if (
+    target instanceof HTMLInputElement &&
+    target.matches('.lq-type-input') &&
+    game.takesDuringFadeOut(target.value)
+  )
+    return
   if (passage.skip()) swallow(event)
 }
 
