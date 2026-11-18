@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Starting fade</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=DM+Sans:wght@400;500;600&family=Source+Serif+4:ital,wght@0,400;1,400&display=swap">
+<style>
+:root{--bg:#10151a;--fg:#ece6d6;--muted:#a39d8e;--accent:#ffa914;--on-accent:#1a1408;--accent-text:#ffb836;--accent-line:#a8740f;--line:#26313b;--surface:#161d24;--paper:#f3ecdb;--ink:#2b2418}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0d10;color:var(--fg);font-family:'DM Sans',system-ui,sans-serif;min-height:100vh}
+.bar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;padding:12px 16px;background:var(--surface);border-bottom:1px solid var(--line);font-size:13px}
+.bar h1{font-family:Fraunces,serif;font-size:17px;font-weight:600;color:var(--accent-text)}
+.bar button{border:1px solid var(--line);background:#1c242c;color:var(--fg);padding:6px 11px;border-radius:7px;cursor:pointer;font:inherit}
+.bar button.go{background:var(--accent);color:var(--on-accent);border:none;font-weight:600}
+.bar label{color:var(--muted);display:flex;gap:6px;align-items:center}
+.note{padding:10px 16px;color:var(--muted);font-size:14px;max-width:880px;line-height:1.55}
+.note b{color:var(--fg)}
+.wrap{padding:12px 16px;display:flex;flex-direction:column;align-items:center;gap:14px}
+.device{position:relative;width:min(760px,100%);aspect-ratio:16/9;overflow:hidden;border:1px solid var(--line);border-radius:12px;background:#05070a;cursor:pointer}
+.layer{position:absolute;inset:0;opacity:0}
+.cover{background-size:cover;background-position:center}
+/* title */
+.title .shade{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,#10151a00 30%,#10151a8c 100%),linear-gradient(0deg,#10151ab3 0%,#10151a00 40%)}
+.title .nm{position:absolute;top:9%;left:0;right:0;text-align:center}
+.title .eb{font-size:11px;letter-spacing:.5em;text-transform:uppercase;color:#ece6d6d9}
+.title .wd{font-family:Fraunces,serif;font-weight:600;font-size:clamp(34px,8vw,64px);background:linear-gradient(180deg,#fff3d4 10%,var(--accent-text) 60%,#c97a0a 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.title .dock{position:absolute;bottom:9%;left:0;right:0;display:flex;justify-content:center;gap:10px;flex-wrap:wrap;padding:0 12px}
+.title .dock span{padding:7px 14px;border-radius:8px;background:#10151acc;border:1px solid var(--line);font-size:13px}
+.title .dock span.p{background:var(--accent);color:var(--on-accent);border:none;font-weight:600}
+/* room (title flows) */
+.plate{position:absolute;left:14px;top:12px;padding:5px 12px;border-radius:8px;background:#10151acc;font-family:Fraunces,serif;font-size:15px}
+.words{position:absolute;left:8%;right:8%;bottom:10%;padding:12px 16px;border-radius:10px;background:#10151ad9;font-family:'Source Serif 4',serif;font-size:15px;line-height:1.5;opacity:0;transition:opacity .4s}
+/* intro chapter page */
+.intro{background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6% 12%;text-align:center}
+.intro h2{font-family:Fraunces,serif;color:var(--accent-text);font-size:clamp(20px,4vw,30px);margin-bottom:12px}
+.intro p{font-family:'Source Serif 4',serif;font-size:15px;line-height:1.6;color:var(--fg);opacity:0;transition:opacity .4s}
+.intro .btn{margin-top:16px;padding:7px 16px;border-radius:8px;background:var(--accent);color:var(--on-accent);font-weight:600;font-size:13px}
+/* in-game screen */
+.game{background:var(--bg);display:grid;grid-template-columns:1.25fr 1fr}
+.game .gp{position:relative;background-size:cover;background-position:center}
+.game .gs{padding:14px;display:flex;flex-direction:column;gap:8px;font-family:'Source Serif 4',serif;font-size:13px;line-height:1.5}
+.game .gs .acts{margin-top:auto;display:flex;flex-wrap:wrap;gap:6px;font-family:'DM Sans';font-size:12px}
+.game .gs .acts span{padding:4px 10px;border-radius:999px;border:1px solid var(--line);background:#1c242c}
+.game .gs .new{opacity:0;transition:opacity .4s;color:var(--fg)}
+.game .gs .old{color:var(--muted)}
+.menu{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#0008}
+.menu div{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 18px;font-size:13px;min-width:220px}
+.menu b{display:block;font-family:Fraunces,serif;font-size:16px;margin-bottom:8px}
+.menu i{display:block;font-style:normal;padding:6px 8px;border-radius:6px;margin-top:4px;background:#1c242c}
+.menu i.hit{outline:2px solid var(--accent)}
+.toast{position:absolute;right:12px;bottom:12px;padding:6px 10px;border-radius:8px;background:#000c;font-size:12px;color:var(--muted);opacity:0;transition:opacity .25s}
+/* timeline */
+.tl{width:min(760px,100%);background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:12px;color:var(--muted)}
+.row{display:grid;grid-template-columns:120px 1fr;gap:10px;align-items:center;margin:6px 0}
+.track{position:relative;height:16px;border-radius:4px;background:#0e1318;overflow:hidden}
+.fill{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--accent-line)}
+.seg{position:absolute;top:0;bottom:0;display:flex;align-items:center;justify-content:center;color:#ece6d699;font-size:11px}
+.cursor{position:absolute;top:0;bottom:0;width:2px;background:var(--accent)}
+.lvl{height:16px;border-radius:4px;background:#0e1318;position:relative;overflow:hidden}
+.lvl .fill{background:#5f8fb0}
+.lvl .fill.b{background:#8fb05f}
+.spk{display:inline-block;padding:2px 8px;border-radius:999px;background:#0e1318}
+.spk.on{background:#36270a;color:var(--accent-text)}
+@media (max-width:520px){.row{grid-template-columns:84px 1fr}.game{grid-template-columns:1fr;grid-template-rows:1.2fr 1fr}}
+</style></head><body>
+<div class="bar">
+  <h1>Fading into the game</h1>
+  <button class="go" data-flow="continue">Continue</button><button data-flow="new">New game</button><button data-flow="ingame">Load a save in the game</button><button data-flow="typed">Type “load”</button>
+  <button id="press">Click on the picture now</button>
+  <label><input type="checkbox" id="same"> Saved room plays the title's music</label>
+</div>
+<p class="note"><b>Agreed.</b> Continue, a picked save, New game, and every load during play (the Load window, Quick load, typing <i>load</i>): what is on screen fades to dark over 1.5 s, then the room or intro rises over 1.5 s. The music follows the screen (the same music carries on untouched). The words and narrator start once it is fully up; the “Game loaded” notice comes with them. A click on the picture or Enter skips it. Press a button above to replay.</p>
+<div class="wrap">
+  <div class="device" id="dev">
+    <div class="layer title cover" id="L-title" style="background-image:url('../../web/public/images/generated/title-screen.png');opacity:1">
+      <div class="shade"></div>
+      <div class="nm"><div class="eb">A retro adventure</div><div class="wd">RetroQuest</div></div>
+      <div class="dock"><span class="p">Continue</span><span>New game</span><span>Load game</span></div>
+    </div>
+    <div class="layer room cover" id="L-room" style="background-image:url('../../web/public/images/generated/act1-old-mill.png')">
+      <div class="plate">The Old Mill</div>
+      <div class="words" id="roomWords">The mill wheel creaks in the slow stream. Flour dust hangs in the shafts of light…</div>
+    </div>
+    <div class="layer intro" id="L-intro">
+      <h2>Act I — The Village</h2>
+      <p id="introWords">Willowbrook sleeps under a grey sky. Somewhere beyond the mill, something old has woken…</p>
+      <div class="btn">Begin</div>
+    </div>
+    <div class="layer game" id="L-gameOld" style="opacity:1;display:none">
+      <div class="gp" style="background-image:url('../../web/public/images/generated/act1-forest-path.png')"><div class="plate">Forest Path</div></div>
+      <div class="gs"><div class="old">You follow the path between the birches. A crow watches you go.</div><div class="acts"><span>Look</span><span>Take</span><span>Talk</span><span>Use</span></div></div>
+    </div>
+    <div class="layer game" id="L-gameNew" style="display:none">
+      <div class="gp" id="newPic" style="background-image:url('../../web/public/images/generated/act1-old-mill.png')"><div class="plate">The Old Mill</div></div>
+      <div class="gs" id="newSide"><div class="new" id="gameWords">The mill wheel creaks in the slow stream. Flour dust hangs in the shafts of light…</div><div class="acts"><span>Look</span><span>Take</span><span>Talk</span><span>Use</span></div></div>
+    </div>
+    <div class="menu" id="menu" style="display:none"><div><b>Load game</b><i>Quick save · Forest Path</i><i class="hit">Slot 2 · The Old Mill</i><i>Slot 3 · Mira's Hut</i></div></div>
+    <div class="toast" id="toast"></div>
+  </div>
+  <div class="tl">
+    <div class="row"><span>Screen</span><div class="track" id="trk"><div class="seg" style="left:0;width:50%">fade out · 1.5 s</div><div class="seg" style="left:50%;width:50%">fade in · 1.5 s</div><div class="cursor" id="cur" style="left:0"></div></div></div>
+    <div class="row"><span id="lblA">Title's music</span><div class="lvl"><div class="fill" id="mA"></div></div></div>
+    <div class="row"><span id="lblB">Room's music</span><div class="lvl"><div class="fill b" id="mB"></div></div></div>
+    <div class="row"><span>Narrator</span><div><span class="spk" id="spk">silent</span></div></div>
+  </div>
+</div>
+<script>
+const CFG = {"music": "follow", "scope": "whole", "skip": true, "narr": "after", "first": "continue", "newSame": true, "typedFade": true, "notice": "after"};
+const OUT=1500, IN=1500, T=OUT+IN;
+const $=id=>document.getElementById(id);
+let flow=null, t0=0, raf=0, skipped=false;
+const ease=x=>x<0?0:x>1?1:x*x*(3-2*x);
+function toast(s){const e=$('toast');e.textContent=s;e.style.opacity=1;setTimeout(()=>e.style.opacity=0,1400)}
+function reset(f){
+  cancelAnimationFrame(raf);flow=f;skipped=false;
+  ['L-title','L-room','L-intro','L-gameOld','L-gameNew'].forEach(i=>{$(i).style.opacity=0;$(i).style.display=''});
+  $('roomWords').style.opacity=0;$('introWords').style.opacity=0;$('gameWords').style.opacity=0;
+  const game=f==='ingame';
+  $('L-gameOld').style.display=game?'':'none';$('L-gameNew').style.display=game?'':'none';
+  $('L-title').style.display=game?'none':'';
+  $('lblA').textContent=game?"Old room's music":"Title's music";
+  $('lblB').textContent=f==='new'?"Intro's music":"Saved room's music";
+  $('menu').style.display='none';
+}
+function run(f){
+  if(f==='typed'){reset('ingame');$('L-gameOld').style.opacity=1;toast('> load');setTimeout(()=>{if(CFG.typedFade){start()}else{flow=null;$('L-gameOld').style.opacity=0;$('L-gameNew').style.opacity=1;$('gameWords').style.opacity=1;$('mA').style.width='0';$('mB').style.width='100%';$('cur').style.left='0';$('spk').textContent='reading the room';$('spk').className='spk on';notice()}},900);return}
+  reset(f);
+  if(f==='ingame'){ $('L-gameOld').style.opacity=1; $('menu').style.display='flex'; setTimeout(()=>{$('menu').style.display='none';start()},900);}
+  else { $('L-title').style.opacity=1; setTimeout(start,500); }
+}
+function start(){t0=performance.now();noticed=false;if(flow==='ingame'&&CFG.notice==='start')notice();tick()}
+function frame(t){
+  const pOut=ease(t/OUT), pIn=ease((t-OUT)/IN);
+  const same=$('same').checked || (flow==='new' && CFG.newSame);
+  $('cur').style.left=(Math.min(t,T)/T*100)+'%';
+  if(flow==='ingame'){
+    if(CFG.scope==='whole'){ $('L-gameOld').style.opacity=1-pOut; $('L-gameNew').style.opacity=pIn; }
+    else { // picture only: sides swap at the darkest moment
+      $('L-gameOld').style.opacity=t<OUT?1:0; $('L-gameNew').style.opacity=t<OUT?0:1;
+      $('L-gameOld').querySelector('.gp').style.opacity=1-pOut; $('newPic').style.opacity=pIn;
+    }
+  } else {
+    $('L-title').style.opacity=1-pOut;
+    $(flow==='new'?'L-intro':'L-room').style.opacity=pIn;
+  }
+  // music
+  let a,b;
+  if(same){a=1;b=0;}
+  else if(CFG.music==='follow'){a=1-pOut;b=pIn;}
+  else {a=t<OUT?1:1-pIn;b=t<OUT?0:pIn;}
+  $('mA').style.width=(a*100)+'%';$('mB').style.width=(b*100)+'%';
+  if(same){$('lblA').textContent='Same music, untouched';}
+  // narrator
+  const start=CFG.narr==='after'?T:OUT;
+  const speaking=t>=start;
+  $('spk').textContent=speaking?'reading the room':'silent';$('spk').className='spk'+(speaking?' on':'');
+  const w=speaking?1:0;
+  $('roomWords').style.opacity=w;$('introWords').style.opacity=w;$('gameWords').style.opacity=w;
+}
+let noticed=false;function notice(){if(!noticed){noticed=true;const e=$('toast');e.textContent=CFG.noticeText||'Game loaded';e.style.color='var(--accent-text)';e.style.opacity=1;setTimeout(()=>e.style.opacity=0,2200)}}
+function tick(){const t=skipped?T:performance.now()-t0;frame(t);if(flow==='ingame'&&CFG.notice==='after'&&t>=T)notice();if(t<T+400)raf=requestAnimationFrame(tick)}
+function press(){
+  if(!flow)return;const t=performance.now()-t0;
+  if(t>=T||t<0)return;
+  if(CFG.skip){skipped=true;toast('Skipped — up at once');}
+  else toast('Press ignored until the fade ends');
+}
+$('press').onclick=press;$('dev').onclick=press;
+document.querySelectorAll('[data-flow]').forEach(b=>b.onclick=()=>run(b.dataset.flow));
+run(CFG.first);
+</script>
+</body></html>
