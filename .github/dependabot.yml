@@ -1,0 +1,63 @@
+# Dependabot opens pull requests that keep RetroQuest's dependencies current.
+#
+# Policy:
+# - Minor and patch updates arrive together, once a week, in one grouped pull
+#   request per ecosystem. CI is the safety net.
+# - Each major update arrives in its own pull request. Read its changelog or
+#   migration guide before merging; a major that needs code changes becomes a
+#   bead.
+# - A release must be at least a few days old before Dependabot proposes it,
+#   so a broken release has time to be pulled.
+# - Security updates ignore the schedule and the cooldown. Turn them on under
+#   Settings → Code security → Dependabot security updates.
+#
+# Nothing here merges on its own: every Dependabot pull request goes through
+# the same review and checks as any other change.
+version: 2
+updates:
+  # The web application: its npm dependencies and dev tools.
+  - package-ecosystem: npm
+    directory: /web
+    schedule:
+      interval: weekly
+      day: monday
+    cooldown:
+      default-days: 5
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: chore(deps)
+    groups:
+      minor-and-patch:
+        update-types:
+          - minor
+          - patch
+
+  # The actions the CI workflow uses.
+  - package-ecosystem: github-actions
+    directory: /
+    # The gh-aw compiler generates issue-enhancer.lock.yml; edit
+    # issue-enhancer.md and recompile instead of bumping the lock file.
+    exclude-paths:
+      - .github/workflows/issue-enhancer.lock.yml
+    schedule:
+      interval: weekly
+      day: monday
+    cooldown:
+      default-days: 5
+    commit-message:
+      prefix: chore(ci)
+    groups:
+      minor-and-patch:
+        update-types:
+          - minor
+          - patch
+
+  # The base images in the Dockerfile (node for the build, caddy to serve).
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: monthly
+    cooldown:
+      default-days: 5
+    commit-message:
+      prefix: chore(docker)
