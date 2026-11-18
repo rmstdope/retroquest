@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import { continuePictureUrls } from '@/lantern/saveCard'
-import { pictureExists } from '@/lantern/roomPicture'
+import { pictureExists, pictureThumbUrl } from '@/lantern/roomPicture'
 import { useReducedMotion } from '@/composables/useReducedMotion'
 import type { SaveSlot } from '@/types/bridge'
 
@@ -14,13 +14,21 @@ import type { SaveSlot } from '@/types/bridge'
  * picture falls back to its plain one, without the other one's patches, as on
  * the stage. It fades in as it arrives (at once under Reduce motion) and is
  * hidden from a screen reader: the card around it names the save. The class
- * it is given sets its size. The pictures are the rooms' full paintings, so
- * they load lazily and decode off the main thread, and a list of saves never
- * holds up the window it is in.
+ * it is given sets its size. It draws the small copies the build writes beside
+ * the rooms' full paintings, and the full painting where there is no small
+ * copy (the dev server has none); they load lazily and decode off the main
+ * thread, and a list of saves never holds up the window it is in.
  */
 defineOptions({ inheritAttrs: false })
 const props = defineProps<{ save: SaveSlot }>()
 const reduced = useReducedMotion()
+
+/** What to draw for a picture: its small copy when that loads, else the full picture when that does, else ''. */
+async function drawable(url: string): Promise<string> {
+  const small = pictureThumbUrl(url)
+  if (small !== url && (await pictureExists(small))) return small
+  return (await pictureExists(url)) ? url : ''
+}
 
 /** The files the save's picture is made of, as one key: a card rebuilt for the same save keeps its picture. */
 const files = computed(() => JSON.stringify(continuePictureUrls(props.save)))
@@ -35,8 +43,9 @@ watch(
     let base = ''
     let first = false
     for (const [index, url] of urls.base.entries()) {
-      if (await pictureExists(url)) {
-        base = url
+      const found = await drawable(url)
+      if (found) {
+        base = found
         first = index === 0
         break
       }
@@ -44,13 +53,7 @@ watch(
     if (!base || files.value !== key) return
     // The patches belong to the picture they were made for, as on the stage:
     // none over the plain picture that stands in for an unmade other one.
-    const found = first
-      ? await Promise.all(
-          urls.patches.map(async (url) =>
-            (await pictureExists(url)) ? url : '',
-          ),
-        )
-      : []
+    const found = first ? await Promise.all(urls.patches.map(drawable)) : []
     if (files.value !== key) return
     thumb.value = { base, patches: found.filter(Boolean) }
   },

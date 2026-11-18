@@ -112,4 +112,30 @@ describe('SaveThumb', () => {
     await flushPromises()
     expect(w.find('.lq-save-thumb').exists()).toBe(true)
   })
+
+  it('shows the small copy of the picture and of its patches when they exist', async () => {
+    const w = await mountThumb(save({ ...PICTURE, patchIds: ['lamp'] }))
+    const sources = w.findAll('img').map((img) => img.attributes('src'))
+    expect(sources).toHaveLength(2)
+    for (const src of sources) expect(src).toMatch(/thumbs\/.*\.webp$/)
+  })
+
+  it('falls back to the full picture where there is no small copy', async () => {
+    setPictureProbe((url) => Promise.resolve(!url.includes('/thumbs/')))
+    const w = await mountThumb(save({ ...PICTURE, patchIds: ['lamp'] }))
+    const sources = w.findAll('img').map((img) => img.attributes('src'))
+    expect(sources).toHaveLength(2)
+    for (const src of sources) expect(src).toMatch(/generated\/[^/]+\.png$/)
+  })
+
+  it('asks for the small copy first and never loads the full one when the small one exists', async () => {
+    const asked: string[] = []
+    setPictureProbe((url) => {
+      asked.push(url)
+      return Promise.resolve(true)
+    })
+    await mountThumb(save(PICTURE))
+    expect(asked).toHaveLength(1)
+    expect(asked[0]).toContain('/thumbs/')
+  })
 })

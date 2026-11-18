@@ -534,7 +534,9 @@ describe('TitlePage', () => {
       await flushPromises()
       const thumb = w.get('.lq-continue-picture')
       expect(thumb.attributes('aria-hidden')).toBe('true')
-      expect(thumb.find('img').attributes('src')).toMatch(/\.png$/)
+      expect(thumb.find('img').attributes('src')).toMatch(
+        /thumbs\/act1-forge\.webp$/,
+      )
       expect(w.get('.lq-title-continue').element.firstElementChild).toBe(
         thumb.element,
       )
