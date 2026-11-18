@@ -1134,7 +1134,14 @@ export function createMotionScene(): MotionScene {
     },
     draw(ctx) {
       ctx.clearRect(0, 0, width, height)
-      for (const layer of layers) if (layer.alpha > 0) drawLayer(ctx, layer)
+      // The ripples redraw the painting itself, so they lie under every other
+      // layer, whatever order the manifest lists them in; else they would
+      // paint over the glints, mist and specks drawn before them.
+      const shown = layers.filter((l) => l.alpha > 0)
+      for (const layer of shown)
+        if (layer.spec.kind === 'ripples') drawLayer(ctx, layer)
+      for (const layer of shown)
+        if (layer.spec.kind !== 'ripples') drawLayer(ctx, layer)
     },
     isEmpty() {
       return layers.length === 0
