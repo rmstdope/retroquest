@@ -450,8 +450,12 @@ watch(
 )
 onUnmounted(() => document.removeEventListener('pointerdown', onOutsidePress))
 
-/** The height the belt of pictures takes at the foot of the picture (the folded tab's height while it is put away). */
-const beltHeight = ref(0)
+/** What the belt of pictures last measured at the foot of the picture (the folded tab's height while it is put away). */
+const beltMeasured = ref(0)
+/** The height the story keeps clear of: the belt's, and the folded tab's too except on the phone layouts, which keep their own room for it. */
+const beltHeight = computed(() =>
+  belt.away && (sideways.value || phoneStage.value) ? 0 : beltMeasured.value,
+)
 /** The room the typing box takes at the foot of the picture, with its gap. */
 const BOX_ROOM = 64
 /** How far above the foot of the picture the belt stands: above the typing box while it is up, else at the foot (a sideways phone keeps 8px). */
@@ -2463,7 +2467,7 @@ watch(
                 ring?.from === 'belt' ? ring.thing.areaId.slice(5) : null
               "
               @press="onBeltPress"
-              @measure="beltHeight = $event"
+              @measure="beltMeasured = $event"
               @caption="beltCaption = $event"
             />
             <HandStrip
