@@ -96,19 +96,19 @@ describe('LanternLayout: one thing open on the stage', () => {
   })
 
   it('hands focus back to what had it when the drawer opened', async () => {
-    const hint = w.get<HTMLElement>('[data-button="hint"]').element
-    hint.focus()
+    const menu = w.get<HTMLElement>('[data-button="menu"]').element
+    menu.focus()
     await key('q')
     await w.get('.lq-drawer-close').trigger('click')
     await flushPromises()
     expect(w.find('.lq-drawer').exists()).toBe(false)
-    expect(document.activeElement).toBe(hint)
+    expect(document.activeElement).toBe(menu)
 
-    hint.focus()
+    menu.focus()
     await key('j')
     await w.get('.lq-story-drawer .lq-drawer-close').trigger('click')
     await flushPromises()
-    expect(document.activeElement).toBe(hint)
+    expect(document.activeElement).toBe(menu)
   })
 
   it('closes a drawer on a press outside, but not on a press inside', async () => {
@@ -133,12 +133,12 @@ describe('LanternLayout: one thing open on the stage', () => {
   })
 
   it('closes the map on Escape and gives focus back to what had it', async () => {
-    const hint = w.get<HTMLElement>('[data-button="hint"]').element
-    hint.focus()
+    const menu = w.get<HTMLElement>('[data-button="menu"]').element
+    menu.focus()
     await key('m')
     expect(mapOpen()).toBe(true)
     await key('Escape')
     expect(mapOpen()).toBe(false)
-    expect(document.activeElement).toBe(hint)
+    expect(document.activeElement).toBe(menu)
   })
 })

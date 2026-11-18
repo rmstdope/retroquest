@@ -68,7 +68,7 @@ test.describe('Lantern UI (the default)', () => {
     await expect(page.locator('.lq-composer, .lq-dock')).toHaveCount(0)
   })
 
-  test('has no action bar: the room name fans out Look, Search and Rest, and F1 brings up the typing box', async ({
+  test('has no action bar: the room name fans out Look, Search, Rest and Hint, and F1 brings up the typing box', async ({
     page,
   }) => {
     await page.setViewportSize({ width: 1280, height: 800 })
@@ -108,6 +108,7 @@ test.describe('Lantern UI (the default)', () => {
       '👁 Look',
       '🔍 Search',
       '💤 Rest',
+      '💡 Hint',
     ])
     const before = await turns()
     await page.locator('.lq-pill', { hasText: 'Look' }).click()
@@ -351,11 +352,18 @@ test.describe('Lantern UI (the default)', () => {
     const plate = page.getByRole('region', { name: 'Current location' })
     await expect(plate).toContainText('Village Square')
     await expect(plate).not.toContainText('You are in')
-    // Only Hint and ☰ stand in the corner: the journey and the map are in the menu, and on J, Q and M.
-    await expect(page.getByRole('button', { name: /Hint/ })).toBeVisible()
+    // Only ☰ stands in the corner: the journey and the map are in the menu, and on J, Q and M; Hint is in the room menu.
     await expect(page.getByRole('button', { name: 'Menu' })).toBeVisible()
-    for (const name of [/^Quests/, /Story so far/, /Map/])
+    for (const name of [/^Quests/, /Story so far/, /Map/, /^Hint/])
       await expect(page.getByRole('button', { name })).toHaveCount(0)
+    await page.locator('.lq-name-btn').first().click()
+    await expect(page.locator('.lq-pill')).toHaveText([
+      '👁 Look',
+      '🔍 Search',
+      '💤 Rest',
+      '💡 Hint',
+    ])
+    await page.keyboard.press('Escape')
     // The Bag and Spells are the belt of pictures at the foot of the picture.
     await expect(page.getByRole('button', { name: /^Bag · / })).toHaveCount(0)
     await expect(page.locator('[data-belt-pic="item:bread"]')).toBeVisible()

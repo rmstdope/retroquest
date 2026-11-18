@@ -1,19 +1,17 @@
 <script setup lang="ts">
 import { useId } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
-import HintButton from './HintButton.vue'
 
 /**
- * The buttons in the stage's top-right corner: "💡 Hint" (the round 💡 when
- * `compact`) sends `hint`, and the round ☰ opens the menu, which holds the
- * journey (Journal, Quests and Map, also on J, Q and M) and the game's
- * windows. ☰ carries the amber dot while a quest has news, since the Quests
- * it is about now lie inside the menu. (The Bag and Spells are the belt of
- * pictures at the picture's foot.) The buttons are press-only: nothing opens
- * on hover.
+ * The button in the stage's top-right corner: the round ☰, which opens the
+ * menu, holding the journey (Journal, Quests and Map, also on J, Q and M) and
+ * the game's windows. It carries the amber dot while a quest has news, since
+ * the Quests lie inside the menu. (Hint is the last of the room menu's pills,
+ * top left; the Bag and Spells are the belt of pictures at the picture's
+ * foot.) It is press-only: nothing opens on hover.
  */
 defineProps<{
-  /** A sideways phone: smaller buttons, Hint its symbol alone. */
+  /** A sideways phone: a smaller button. */
   compact?: boolean
 }>()
 const emit = defineEmits<{ menu: [] }>()
@@ -25,12 +23,6 @@ const newsId = useId()
 <template>
   <div class="lq-buttons" :class="{ 'lq-compact': compact }">
     <div class="lq-button-row">
-      <HintButton
-        class="lq-stage-btn"
-        data-lq-obstacle="panel"
-        data-button="hint"
-        :compact="compact"
-      />
       <button
         type="button"
         class="lq-stage-btn lq-menu-btn"

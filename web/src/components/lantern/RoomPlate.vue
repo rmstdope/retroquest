@@ -3,7 +3,6 @@ import { nextTick, onUnmounted, ref, watch } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { usePanelFlash } from '@/composables/usePanelFlash'
 import { useSendCommand } from '@/composables/useSendCommand'
-import HintButton from './HintButton.vue'
 
 /**
  * The room's name in the stage's top-left corner, written on the picture: no
@@ -15,23 +14,21 @@ import HintButton from './HintButton.vue'
  * room's name and description are read in the story.
  *
  * The name is a button ("<name> ▾"). Pressed, it is outlined, shows ▴ and fans
- * out three pills beneath it (in a row to its right when `compact`, a phone on
- * its side): "👁 Look", "🔍 Search" and "💤 Rest", which send those existing
- * commands. The pills fold on a pill press, on the name again, on Escape, on a
+ * out four pills beneath it (in one row when `compact`, a phone on
+ * its side): "👁 Look", "🔍 Search", "💤 Rest" and "💡 Hint", which send those
+ * existing commands. The pills fold on a pill press, on the name again, on Escape, on a
  * press anywhere outside the plate, and when the room changes, a game begins
  * or a pop-up opens. While the game is busy they are dimmed (`aria-disabled`,
  * still focusable); the name still opens. Opened by keyboard, focus goes to
  * Look; ↑ ↓ ← → move between the pills and Escape gives focus back to the name.
  *
  * On the tall-screen stage (`storyButton`) "⟲ Journal" (the story so far) stands to the
- * right of the name, and stays while the name is away; with `hintButton` a
- * round 💡 Hint stands beside it (that stage has no top-right row of buttons).
+ * right of the name, and stays while the name is away.
  * The plate lets presses through to the picture beneath; only its buttons take
  * them (the name is not inert text: it is a button). Compact (a phone on its side) is smaller.
  */
 const props = defineProps<{
   storyButton?: boolean
-  hintButton?: boolean
   compact?: boolean
   away?: boolean
   bare?: boolean
@@ -50,6 +47,7 @@ const PILLS: ReadonlyArray<{ label: string; command: string }> = [
   { label: '👁 Look', command: 'look' },
   { label: '🔍 Search', command: 'search' },
   { label: '💤 Rest', command: 'rest' },
+  { label: '💡 Hint', command: 'hint' },
 ]
 
 /** Put focus on "⟲ Journal" (the journal has just been closed). */
@@ -158,7 +156,7 @@ defineExpose({ focusStoryButton, focusName })
           ref="nameEl"
           type="button"
           class="lq-name-btn"
-          :aria-label="`${game.roomName} — Look, Search, Rest`"
+          :aria-label="`${game.roomName} — Look, Search, Rest, Hint`"
           :aria-expanded="open ? 'true' : 'false'"
           @click="toggle"
         >
@@ -196,12 +194,6 @@ defineExpose({ focusStoryButton, focusName })
     >
       ⟲ Journal
     </button>
-    <HintButton
-      v-if="props.hintButton"
-      compact
-      class="lq-story-so-far lq-plate-hint"
-      data-button="hint"
-    />
   </section>
 </template>
 
@@ -258,11 +250,9 @@ defineExpose({ focusStoryButton, focusName })
   margin-top: 8px;
   pointer-events: auto;
 }
+/* A phone on its side: one row under the name, which leaves the four whole and clear of ☰ however long the name. */
 .lq-plate-compact .lq-pills {
-  top: 0;
-  left: 100%;
   flex-direction: row;
-  margin: 0 0 0 10px;
 }
 .lq-pill {
   min-height: 36px;
@@ -280,9 +270,6 @@ defineExpose({ focusStoryButton, focusName })
 .lq-pill.lq-busy {
   opacity: 0.5;
   cursor: not-allowed;
-}
-.lq-plate-hint {
-  margin-left: 0;
 }
 .lq-name-btn:focus-visible {
   outline: 2px solid var(--lq-accent);

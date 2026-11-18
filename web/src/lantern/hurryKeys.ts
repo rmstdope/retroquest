@@ -12,8 +12,8 @@
  * `data-hurry` attribute the button (or the panel around it) carries,
  * and the pause after a telling is kept here, by `HurryKeys`.
  *
- * The modes keep deliberately different rules. A command button (Hint, a
- * pill of the room name: `data-hurry="command"`) gives up Space during
+ * The modes keep deliberately different rules. A command button (a pill of
+ * the room name, Hint among them: `data-hurry="command"`) gives up Space during
  * narration, and Enter too, so a player hurrying the answer does not send the
  * command again; any other button keeps its own Enter.
  *

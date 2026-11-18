@@ -4,7 +4,7 @@ import { useNarrationStore } from '@/stores/useNarrationStore'
 import { useArrivalStore } from '@/stores/useArrivalStore'
 
 /**
- * How a button on the stage (Hint, and the room name's Look, Search and Rest)
+ * How a button on the stage (the room name's Look, Search, Rest and Hint)
  * sends one of the game's existing commands. The button is dimmed
  * (`aria-disabled`, so it keeps focus) while the game takes no command or a
  * turn is being read aloud; an arrival on the picture does not dim it, and a

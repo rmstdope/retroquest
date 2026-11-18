@@ -39,8 +39,11 @@ for (const size of [
     await expect(page.locator('.lq-header')).toHaveCount(0)
     await expect(page.locator('.lq-nav-bottom')).toHaveCount(0)
     await expect(page.locator('.lq-dock, .lq-composer')).toHaveCount(0)
-    // Hint is the round 💡 first on the top row.
-    await expect(page.getByRole('button', { name: 'Hint' })).toHaveText('💡')
+    // ☰ stands alone top right; Hint is the last of the room menu's pills.
+    await expect(
+      page.getByRole('button', { name: 'Hint', exact: true }),
+    ).toHaveCount(0)
+    await expect(page.getByRole('button', { name: 'Menu' })).toBeVisible()
     // One compact row: it never covers the words.
     const plate = await page.locator('.lq-stage-plate').boundingBox()
     expect(plate?.height ?? 999).toBeLessThan(60)
@@ -58,7 +61,7 @@ for (const size of [
     await page.screenshot({
       path: `test-results/sideways-${size.width}x${size.height}.png`,
     })
-    // The room name fans out Look, Search and Rest in a row, over the words.
+    // The room name fans out Look, Search, Rest and Hint in a row under it, over the words.
     // The name can be pressed once the arrival has left it visible.
     await expect(async () => {
       await page.keyboard.press('Enter')
@@ -66,8 +69,32 @@ for (const size of [
         timeout: 500,
       })
     }).toPass()
+    // The longest room name of the game: its row of four pills still stays whole, clear of ☰.
+    await page.evaluate(() => {
+      const host = document.querySelector('#app') as unknown as {
+        __vue_app__: {
+          config: {
+            globalProperties: {
+              $pinia: { state: { value: { game: { roomName: string } } } }
+            }
+          }
+        }
+      }
+      host.__vue_app__.config.globalProperties.$pinia.state.value.game.roomName =
+        'Submerged Antechamber'
+    })
     await page.locator('.lq-name-btn').click()
-    await expect(page.locator('.lq-pill')).toHaveCount(3)
+    await expect(page.locator('.lq-pill')).toHaveCount(4)
+    const hint = page.locator('.lq-pill', { hasText: 'Hint' })
+    await expect(hint).toBeInViewport({ ratio: 1 })
+    const hintBox = await hint.boundingBox()
+    const menuBox = await page
+      .getByRole('button', { name: 'Menu', exact: true })
+      .boundingBox()
+    expect(
+      hintBox!.x + hintBox!.width <= menuBox!.x ||
+        hintBox!.y >= menuBox!.y + menuBox!.height,
+    ).toBe(true)
     await page.locator('.lq-pill', { hasText: 'Look' }).click()
     await expect(page.locator('.lq-pill')).toHaveCount(0)
     if (size.height <= 340)

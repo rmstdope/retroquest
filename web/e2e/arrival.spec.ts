@@ -146,7 +146,7 @@ test.describe('the arrival told on the picture', () => {
     expect(await turnCount(page)).toBe(before)
   })
 
-  test('clears when Hint is pressed, and the room name is out of reach while it is told', async ({
+  test('keeps the room name, and the Hint among its pills, out of reach while it is told, and offers Hint once it is read', async ({
     page,
   }) => {
     await startAct1(page)
@@ -155,9 +155,10 @@ test.describe('the arrival told on the picture', () => {
       'inert',
       '',
     )
-    await page.getByRole('button', { name: 'Hint' }).first().click()
+    await arrival(page).click({ position: { x: 600, y: 300 } })
     await expect(arrival(page).locator('.lq-arrival-line')).toHaveCount(0)
-    await expect(story(page)).toBeVisible()
+    await page.locator('.lq-name-btn').first().click()
+    await expect(page.locator('.lq-pill').last()).toHaveText('💡 Hint')
   })
 
   test.describe('with the narrator on', () => {

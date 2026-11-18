@@ -98,7 +98,7 @@ test('on a tall screen the menu button does not cover the Journal button', async
   expect(story!.x + story!.width).toBeLessThanOrEqual(menu!.x)
 })
 
-test('on a tall screen the longest room name keeps its ▾ beside Journal, Hint and the menu button', async ({
+test('on a tall screen the longest room name keeps its ▾ beside Journal and the menu button', async ({
   page,
 }): Promise<void> => {
   await page.setViewportSize({ width: 390, height: 844 })

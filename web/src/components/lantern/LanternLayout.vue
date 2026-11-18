@@ -130,12 +130,12 @@ import type { SaveSlot } from '@/types/bridge'
  * Shell of the Lantern UI (the only UI; old `?ui=` links open it too): no top bar, story (one
  * StoryTurn per turn) and, on a keyboard, the typing box (F1). On laptops (≥1024 × 560) the
  * room is played on its picture, which fills the play area: the room's name
- * top-left (`RoomPlate`; who and what is here are marked on the picture), 💡 Hint and the round ☰
+ * top-left (`RoomPlate`; who and what is here are marked on the picture), the round ☰
  * (the menu) top-right, the narrator's words up the left side. The menu opens
  * the journey first: the Journal (the story so far) and the Quests open as a
  * drawer from the right, the Map as the bigger map's window; J, Q and M open
  * them from the game as well, and what the menu opened comes back to it when
- * it closes. There is no action bar: Look, Search and Rest open from the room's name, and F1 brings up a typing box at the foot of the picture (not on a phone).
+ * it closes. There is no action bar: Look, Search, Rest and Hint open from the room's name, and F1 brings up a typing box at the foot of the picture (not on a phone).
  * The left side is the narration paper: the turns since the last room change
  * (`useNarrationPaper`), each told as one bubble per paragraph like the speech
  * on the right (`StoryTurn`); every bubble and line on the picture fades away
@@ -162,14 +162,14 @@ import type { SaveSlot } from '@/types/bridge'
  * sideways: held upright it shows only the turn page (`TurnPage`) over the
  * game, which waits behind it, inert and unchanged (the layout does not
  * depend on how the phone is held); on its side it is the laptop stage made
- * small: the plate top left, the buttons (Hint first) and ☰ top right, and
+ * small: the plate top left, ☰ top right, and
  * the words up the left side.
  * Other smaller screens that are not short (a tablet upright, a narrow window)
  * play the same stage arranged for a tall screen: the plate across the top
- * with "⟲ Journal" (the whole story over the stage) and a round 💡 Hint,
+ * with "⟲ Journal" (the whole story over the stage),
  * and the one column over the picture above the section tabs (Story, Bag,
  * Spells, Quests, Map). A short mouse window keeps the text page, with the
- * tabs on top (and ☰ in the corner), the room's plate with its Hint, and the
+ * tabs on top (and ☰ in the corner), the room's plate, and the
  * typing box at the foot.
  * A new turn opens at its start, with a "More below" pill while the story
  * goes on below the visible part; in the one column each line said after
@@ -272,7 +272,7 @@ function onFocusChange(event: FocusEvent): void {
 const section = ref<Section>('story')
 /** The drawer open beside the stage (the quests, or the journal: the story so far), or null. */
 const drawerTab = ref<'quests' | 'story' | null>(null)
-/** The buttons in the stage's corner (Hint and ☰), measured for a sideways phone's plate. */
+/** The button in the stage's corner (☰), measured for a sideways phone's plate. */
 const stageButtons = ref<InstanceType<typeof StageButtons> | null>(null)
 /** Whether the open drawer was opened from the menu, which its closing brings back. */
 const drawerFromMenu = ref(false)
@@ -1408,8 +1408,8 @@ function onPanelPress(event: MouseEvent): void {
   if (!target?.closest('[data-panel] :is(button, a, [role="button"])')) return
   // A press during a change of scene (or before a talk's) brings the new room up first.
   presentation.bringSceneUp()
-  // The room name's pills and Hint act on the first press, wherever they stand: a pill or Hint cuts an arrival short and sends its command.
-  if (target.closest('.lq-name-btn, .lq-pill, .lq-hint-btn')) return
+  // The room name and its pills (Hint among them) act on the first press, wherever they stand: a pill cuts an arrival short and sends its command.
+  if (target.closest('.lq-name-btn, .lq-pill')) return
   if (!presentation.catchUpPanels()) return
   event.stopPropagation()
   event.preventDefault()
@@ -2697,7 +2697,6 @@ watch(
             class="lq-text-plate"
             data-panel
             bare
-            hint-button
           />
           <RoomPlate
             v-if="phoneStage"
@@ -2707,7 +2706,6 @@ watch(
             data-lq-obstacle="panel"
             data-panel
             story-button
-            hint-button
             :bare="!pictured"
             :away="plateAway"
             @story="drawerTab = 'story'"
