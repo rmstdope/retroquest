@@ -14,7 +14,7 @@ import { blockVoice } from '@/lantern/narrationScript'
  * act, and, for a turn that stays in its room, what the command box and target chips offer) when the turn's arrival is revealed, the quest count when its last
  * quest card is, the patches of the room's picture when the narrator reaches the
  * turn's last spoken block (so nobody leaves the picture while the story still
- * has them there), and Bag and Spells when the turn is over. The room's music
+ * has them there), and Bag and Spells when the turn is over (or when the narrator stops at its gate, for a learnt spell's name to fly before the quest news). The room's music
  * moves with the new scene: at the answer's last spoken block when the turn
  * arrives somewhere (the dream's "You wake…"), else at the arrival itself;
  * never later than the place. A turn that ends
@@ -68,6 +68,7 @@ export function usePanelHold(): {
         scene: scene >= 0 && narration.revealed(turn.id, scene),
         quests: quests >= 0 && narration.revealed(turn.id, quests),
         picture: narration.revealed(turn.id, lastLine),
+        gate: narration.atGate(turn.id),
       }),
       (now) => {
         if (!now.live) {
@@ -84,6 +85,8 @@ export function usePanelHold(): {
         if (now.place) game.releasePanels(turn.id, ['place'], true)
         if (now.quests) game.releasePanels(turn.id, ['quests'], true)
         if (now.picture) game.releasePanels(turn.id, ['picture'], true)
+        // The narrator waits for a learnt spell's name to fly to the list: it is in the list by then.
+        if (now.gate) game.releasePanels(turn.id, ['stock'], true)
       },
       { immediate: true, flush: 'sync' },
     )

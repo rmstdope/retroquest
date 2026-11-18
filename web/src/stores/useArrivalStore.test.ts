@@ -78,6 +78,8 @@ function lineOf(markup: string): NarrationUnit {
   return { kind: 'block', parts: [{ markup, clip: null }] }
 }
 
+const last = (): FakeAudio => FakeAudio.all[FakeAudio.all.length - 1]
+
 describe('useArrivalStore', () => {
   let arrival: ReturnType<typeof useArrivalStore>
   let narration: ReturnType<typeof useNarrationStore>
@@ -436,6 +438,76 @@ describe('useArrivalStore', () => {
       expect(arrival.newsUp).toEqual({ turnId: 1, index: 1, spell: false })
       arrival.next()
       expect(arrival.active).toBe(false)
+    })
+
+    describe('with a gate between the spells and the quest news', () => {
+      it('clears after the spells, keeps the quest news waiting, and tells it on release', () => {
+        arrival.show(1, [spell(0, false), quest(1, false)], false, 1)
+        expect(arrival.newsUp).toEqual({ turnId: 1, index: 0, spell: true })
+        arrival.next()
+        expect(arrival.active).toBe(false)
+        expect(arrival.newsPending(1)).toBe(true)
+        vi.advanceTimersByTime(60000)
+        expect(arrival.active).toBe(false)
+        arrival.releaseNews()
+        expect(arrival.newsUp).toEqual({ turnId: 1, index: 0, spell: false })
+        vi.advanceTimersByTime(6000)
+        expect(arrival.active).toBe(false)
+        expect(arrival.newsPending(1)).toBe(false)
+      })
+
+      it('lets the spells clear by their reading time before the gate', () => {
+        arrival.show(1, [spell(0, false), quest(1, false)], false, 1)
+        vi.advanceTimersByTime(6000)
+        expect(arrival.active).toBe(false)
+        expect(arrival.newsPending(1)).toBe(true)
+      })
+
+      it('drops the waiting quest news when the arrival is cleared from outside', () => {
+        arrival.show(1, [spell(0, false), quest(1, false)], false, 1)
+        arrival.clear()
+        expect(arrival.newsPending(1)).toBe(false)
+        arrival.releaseNews()
+        expect(arrival.active).toBe(false)
+      })
+
+      it('drops the waiting quest news when another arrival is shown', () => {
+        arrival.show(1, [spell(0, false), quest(1, false)], false, 1)
+        arrival.next()
+        arrival.show(2, parts(false, false), false)
+        arrival.releaseNews()
+        expect(arrival.turnId).toBe(2)
+        expect(arrival.newsPending(1)).toBe(false)
+      })
+
+      it('lets the narrator go when the held news is dropped while it waits at the gate', async () => {
+        narration.begin(1, [voiced, newsUnit], 'act1', false, -1, null, 1)
+        arrival.show(1, [spell(0, true), quest(1, true)], true, 1)
+        last().onended?.()
+        await vi.advanceTimersByTimeAsync(400 + ARRIVAL_CLEAR_AFTER_MS)
+        expect(narration.atGate(1)).toBe(true)
+        expect(arrival.active).toBe(false)
+        arrival.clear()
+        expect(narration.narrates(1)).toBe(false)
+        expect(arrival.newsPending(1)).toBe(false)
+      })
+
+      it('lets a narrated narrator wait at the gate, and tells the quest news once it goes on', async () => {
+        narration.begin(1, [voiced, newsUnit], 'act1', false, -1, null, 1)
+        arrival.show(1, [spell(0, true), quest(1, true)], true, 1)
+        last().onended?.()
+        await vi.advanceTimersByTimeAsync(400)
+        expect(narration.atGate(1)).toBe(true)
+        await vi.advanceTimersByTimeAsync(ARRIVAL_CLEAR_AFTER_MS)
+        // The spell has cleared, the narrator still waits, the quest news waits.
+        expect(arrival.active).toBe(false)
+        expect(narration.narrates(1)).toBe(true)
+        expect(arrival.newsPending(1)).toBe(true)
+        arrival.releaseNews()
+        await nextTick()
+        expect(narration.atGate(1)).toBe(false)
+        expect(arrival.newsUp).toEqual({ turnId: 1, index: 0, spell: false })
+      })
     })
 
     it('marks the turn told once its spell news is up, and pending until it has cleared', () => {

@@ -1305,7 +1305,8 @@ watch(
 )
 // On the picture stage, a turn's lost items leave the Bag first, then its
 // gained items and spells (each after the narration, as its thing leaves the
-// picture) fly to the Bag and Spells buttons, once the turn
+// picture) fly to the Bag and Spells buttons (the quest news after a learnt
+// spell waits until they have landed), once the turn
 // lets go of them (as their counts change) and the middle of the picture is
 // clear: no news or arrival told or waiting there, no change of scene, and no
 // pop-up over it.
@@ -1332,6 +1333,9 @@ watch(
         if (flight.areaId) game.releaseGain(flight.areaId)
       })
     else game.releaseGains()
+    // The quest news (and the narrator) held back for a learnt spell's name
+    // to fly come on once every name has landed.
+    flights.whenIdle(() => arrival.releaseNews())
   },
 )
 // A command typed while gains are still to fly cuts the telling short, flies

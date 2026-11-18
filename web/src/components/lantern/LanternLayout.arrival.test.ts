@@ -7,6 +7,13 @@ import { createPinia, setActivePinia, type Pinia } from 'pinia'
 import LanternLayout from './LanternLayout.vue'
 import { useGameStore, type Turn } from '@/stores/useGameStore'
 import { useArrivalStore } from '@/stores/useArrivalStore'
+import {
+  FLIGHT_FLY_MS,
+  FLIGHT_HOLD_MS,
+  FLIGHT_LAND_MS,
+  FLIGHT_SHOW_MS,
+  useFlightStore,
+} from '@/stores/useFlightStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import {
   useNarrationStore,
@@ -641,6 +648,34 @@ describe('LanternLayout: the arrival on the picture', () => {
       expect(w.get('.lq-story').text()).toContain('She smiles.')
       expect(w.get('.lq-story').text()).not.toContain('You have learned')
       expect(game.turns.at(-1)?.fullText).toContain('You have learned')
+    })
+
+    it("tells the quest news only after the spell's name has flown to the list", async () => {
+      const w = await ready(true, false)
+      useSettingsStore(pinia).narrationVolume = 0
+      const game = useGameStore(pinia)
+      game.setAudioPlayer({
+        playNewQuest: vi.fn(),
+        playQuestComplete: vi.fn(),
+        playNewSpell: vi.fn(),
+      })
+      pushSpellTurn()
+      const turn = game.turns.at(-1)
+      if (turn) turn.gained = [{ kind: 'spell', name: 'Revive', count: 1 }]
+      await vi.advanceTimersByTimeAsync(0)
+      expect(card(w)).toContain('Revive')
+      await w.get('[data-testid="arrival-on-picture"]').trigger('click')
+      // The spell's text is gone, its name flies, the quest news waits.
+      await vi.advanceTimersByTimeAsync(0)
+      expect(card(w)).toBe('')
+      expect(useFlightStore(pinia).current?.name).toBe('Revive')
+      expect(useArrivalStore(pinia).newsPending(90)).toBe(true)
+      await vi.advanceTimersByTimeAsync(FLIGHT_SHOW_MS + FLIGHT_HOLD_MS)
+      expect(card(w)).toBe('')
+      await vi.advanceTimersByTimeAsync(FLIGHT_FLY_MS + 1)
+      await vi.advanceTimersByTimeAsync(FLIGHT_LAND_MS + 1)
+      await nextTick()
+      expect(card(w)).toContain('Side quest complete')
     })
 
     it('tells nothing in the middle and rings nothing for a turn a load brought back', async () => {
