@@ -1,49 +1,54 @@
 import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
 import { useGameStore } from './useGameStore'
-import { useSettingsStore } from './useSettingsStore'
+
+/** How long after the last input over the picture the marks and names leave. */
+export const NAMES_HIDE_AFTER_MS = 4000
 
 /**
  * Whether the marks and names of what is in the room's picture are showing,
  * and where the pointer is over the picture (for the one name that follows
- * it). Showing is for the room Elior stands in: walking to another room, a
- * load or a new act starts it afresh, off unless the Always setting is on;
- * turning that setting on puts the names up at once. Nothing here is saved:
- * only the Always setting is, with the other Settings.
+ * it). They come in with `bump` (an input that counts, decided by the layout)
+ * and leave by themselves 4 seconds after the last one. Walking to another
+ * room, a load or a new act starts afresh: a clean painting. Nothing here is
+ * saved.
  */
 export const useAreaNamesStore = defineStore('areaNames', () => {
   const game = useGameStore()
-  const settings = useSettingsStore()
 
   /** Whether the marks and names are showing in this room. */
-  const showing = ref(settings.alwaysShowNames)
+  const showing = ref(false)
   /** The pointer over the picture, in the screen's pixels (client coordinates); null when it is not over it. */
   const pointer = ref<{ x: number; y: number } | null>(null)
+  let timer: ReturnType<typeof setTimeout> | null = null
 
-  /** Show them, or take them away, for this room. */
-  function toggle(): void {
-    showing.value = !showing.value
+  /** Forget the wait for the marks to leave. */
+  function clearTimer(): void {
+    if (timer !== null) clearTimeout(timer)
+    timer = null
   }
 
-  /** Take them away for this room. */
+  /** An input that counts: show them (or keep them up) and start the wait again. */
+  function bump(): void {
+    showing.value = true
+    clearTimer()
+    timer = setTimeout(turnOff, NAMES_HIDE_AFTER_MS)
+  }
+
+  /** Take them away now. */
   function turnOff(): void {
+    clearTimer()
     showing.value = false
   }
 
-  // Each room arrives as a clean painting (with the Always setting, a named one).
+  // Each room arrives as a clean painting.
   watch(
     () => [game.gameNumber, game.loadNumber, game.roomName] as const,
     () => {
-      showing.value = settings.alwaysShowNames
+      turnOff()
       pointer.value = null
     },
   )
-  watch(
-    () => settings.alwaysShowNames,
-    (always) => {
-      showing.value = always
-    },
-  )
 
-  return { showing, pointer, toggle, turnOff }
+  return { showing, pointer, bump, turnOff }
 })

@@ -67,10 +67,10 @@ describe('SettingsDialog from the keyboard', () => {
     expect(ringed()).toBe('theme')
   })
 
-  it('goes round 7 stops (8 with full screen), skipping the headings', async () => {
+  it('goes round 6 stops (7 with full screen), skipping the headings', async () => {
     await open()
     const seen = [ringed()]
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < 5; i++) {
       press('ArrowDown')
       seen.push(ringed())
     }
@@ -81,13 +81,12 @@ describe('SettingsDialog from the keyboard', () => {
       'effectsVolume',
       'narrationVolume',
       'reduceMotion',
-      'alwaysShowNames',
     ])
     press('ArrowDown')
     expect(ringed()).toBe('theme')
     press('ArrowUp')
-    expect(ringed()).toBe('alwaysShowNames')
-    expect(sounds.move).toHaveBeenCalledTimes(8)
+    expect(ringed()).toBe('reduceMotion')
+    expect(sounds.move).toHaveBeenCalledTimes(7)
   })
 
   it('has a Full screen stop between Text size and Music volume where it works', async () => {
@@ -145,14 +144,13 @@ describe('SettingsDialog from the keyboard', () => {
     await open()
     const settings = useSettingsStore()
     press('ArrowUp')
-    expect(ringed()).toBe('alwaysShowNames')
-    const was = settings.alwaysShowNames
+    expect(ringed()).toBe('reduceMotion')
     press('Enter')
-    expect(settings.alwaysShowNames).toBe(!was)
+    expect(settings.reduceMotion).toBe('on')
     press(' ')
-    expect(settings.alwaysShowNames).toBe(was)
+    expect(settings.reduceMotion).toBe('off')
     press('ArrowRight')
-    expect(settings.alwaysShowNames).toBe(!was)
+    expect(settings.reduceMotion).toBe('on')
     expect(sounds.choose).toHaveBeenCalledTimes(3)
     expect(sounds.move).toHaveBeenCalledTimes(1)
   })
@@ -206,17 +204,17 @@ describe('SettingsDialog from the keyboard', () => {
 
     it('draws a ringed row it moved whole again', async () => {
       const w = await open()
-      w.get<HTMLElement>('[data-stop="alwaysShowNames"]').element.focus()
+      w.get<HTMLElement>('[data-stop="reduceMotion"]').element.focus()
       scrolled = []
       await w.setProps({ musicInfo: 'Market by Conquest' })
       await flushPromises()
       expect(w.find('.lq-now-playing').exists()).toBe(true)
-      expect(scrolled).toEqual(['alwaysShowNames'])
+      expect(scrolled).toEqual(['reduceMotion'])
     })
 
     it('leaves a ringed row scrolled out of view by hand where it is', async () => {
       const w = await open()
-      const row = w.get<HTMLElement>('[data-stop="alwaysShowNames"]').element
+      const row = w.get<HTMLElement>('[data-stop="reduceMotion"]').element
       row.focus()
       row.getBoundingClientRect = (): DOMRect => new DOMRect(0, 500, 100, 52)
       scrolled = []

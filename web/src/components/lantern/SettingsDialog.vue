@@ -50,7 +50,7 @@ const KEYS: KeyHint[] = [
   { keys: ['Esc'], word: 'back' },
 ]
 /** The rows that are switches. */
-const SWITCHES = ['fullscreen', 'reduceMotion', 'alwaysShowNames']
+const SWITCHES = ['fullscreen', 'reduceMotion']
 /** A volume moves this much for each ← or →. */
 const VOLUME_STEP = 5
 
@@ -75,8 +75,6 @@ function flip(kind: string): void {
   if (kind === 'fullscreen') fullscreen.toggle()
   else if (kind === 'reduceMotion')
     settings.reduceMotion = motionReduced.value ? 'off' : 'on'
-  else if (kind === 'alwaysShowNames')
-    settings.alwaysShowNames = !settings.alwaysShowNames
 }
 
 /** A choice picked with the pointer (or Enter on a control reached with Tab), with the latch. */
@@ -374,29 +372,6 @@ function volume(event: Event): number {
             aria-label="Reduce motion"
             :aria-checked="motionReduced ? 'true' : 'false'"
             @click="flip('reduceMotion')"
-          >
-            <span class="lq-knob"></span>
-          </button>
-        </div>
-        <div
-          class="lq-row lq-stop"
-          data-ring="within"
-          data-stop="alwaysShowNames"
-          tabindex="-1"
-        >
-          <span class="lq-row-text"
-            ><span class="lq-row-label">Always show what's here</span
-            ><span class="lq-note"
-              >Marks and names stay on the picture in every room.</span
-            ></span
-          >
-          <button
-            type="button"
-            role="switch"
-            class="lq-switch"
-            aria-label="Always show what's here"
-            :aria-checked="settings.alwaysShowNames ? 'true' : 'false'"
-            @click="flip('alwaysShowNames')"
           >
             <span class="lq-knob"></span>
           </button>

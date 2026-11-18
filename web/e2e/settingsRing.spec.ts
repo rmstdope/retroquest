@@ -74,7 +74,7 @@ test('Settings: the ring stays whole on the last row when the music arrives late
   await openSettings(page)
   await expect(page.locator('.lq-now-playing')).toHaveCount(0)
   await page.keyboard.press('ArrowUp')
-  await expect.poll(() => ringed(page)).toBe('alwaysShowNames')
+  await expect.poll(() => ringed(page)).toBe('reduceMotion')
   await expect.poll(() => clipped(page)).toBe('0')
   release()
   await expect(page.locator('.lq-now-playing')).toBeVisible()

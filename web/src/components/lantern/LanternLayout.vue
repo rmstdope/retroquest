@@ -484,6 +484,7 @@ function goWay(direction: string): void {
 function onPicturePress(event: MouseEvent): void {
   if (!(event.target instanceof Element)) return
   if (!event.target.closest('.lq-stage-picture')) return
+  tapOnPicture()
   const way = wayPressed(event)
   pressOn('picture', { way: way !== null }, way)
 }
@@ -649,20 +650,10 @@ function onPaperKey(event: KeyboardEvent): void {
 /** The picture's size when the manifest does not say (the studio's default). */
 const DEFAULT_PICTURE_SIZE = { width: 1920, height: 1080 }
 
-/** The "◎ Show what's here": a placed thing in the room and no change of scene under way. */
-const showNamesButton = computed(
-  () =>
-    staged.value &&
-    game.roomAreas.things.length > 0 &&
-    scene.phase === 'idle' &&
-    !game.ending,
-)
 /** Whether the marks and names are up (and the picture is steady enough to hold them). */
-const namesUp = computed(() => names.showing && scene.phase === 'idle')
-/** The arrival words were folded away by showing the names, and come back when the names go. */
-const arrivalFolded = ref(false)
-/** The words were folded away by showing the names, and come back when the names go. */
-const foldedForNames = ref(false)
+const namesUp = computed(
+  () => names.showing && scene.phase === 'idle' && !namesBlocked(),
+)
 /** Changes when what the names keep clear of moves: the words, a drawer, the names' own count. */
 const namesRelayout = computed(() =>
   [
@@ -676,47 +667,6 @@ const namesRelayout = computed(() =>
     game.roomAreas.things.length,
     settings.textSize,
   ].join('|'),
-)
-
-/** Show the marks and names, or take them away. Showing them folds the words away (not under the Always setting), and the words come back with taking them away. */
-function toggleNames(): void {
-  if (names.showing) {
-    names.turnOff()
-    return
-  }
-  names.toggle()
-  // Arrival words on the picture are words over it: they fold away as to Hide, still read aloud, and come back.
-  if (!settings.alwaysShowNames && arrival.active) arrivalFolded.value = true
-  if (!settings.alwaysShowNames && showHide.value) {
-    paper.hide()
-    foldedForNames.value = true
-  }
-}
-
-// The words come back when the names go, by whatever way they went.
-watch(
-  () => names.showing,
-  (up) => {
-    if (up) return
-    arrivalFolded.value = false
-    if (!foldedForNames.value) return
-    foldedForNames.value = false
-    if (paper.hidden.value) paper.show()
-  },
-)
-// An arrival that ended has nothing left to fold.
-watch(
-  () => arrival.active,
-  (active) => {
-    if (!active) arrivalFolded.value = false
-  },
-)
-// Bringing the words back oneself ends the fold.
-watch(
-  () => paper.hidden.value,
-  (hidden) => {
-    if (!hidden) foldedForNames.value = false
-  },
 )
 
 /** Where focus was before B took it to the belt, for Escape to give it back. */
@@ -753,19 +703,7 @@ function onBeltKey(event: KeyboardEvent): void {
   void beltEl.value?.focusBelt()
 }
 
-/** S shows or hides the names (the laptop only, where there is a button, never while typing or with a dialog up). */
-function onNamesKey(event: KeyboardEvent): void {
-  if (event.key !== 's' && event.key !== 'S') return
-  if (event.defaultPrevented || event.repeat) return
-  if (event.ctrlKey || event.metaKey || event.altKey) return
-  if (!laptop.value || !showNamesButton.value || dialogOpen()) return
-  const target = event.target instanceof Element ? event.target : null
-  if (target?.closest('input, textarea, select, [contenteditable]')) return
-  event.preventDefault()
-  toggleNames()
-}
-
-/** Escape steps back from what is in hand and from the belt (S, not Escape, takes the names away); a dialog that is up shuts first. */
+/** Escape steps back from what is in hand and from the belt (Escape leaves the names to fade by themselves); a dialog that is up shuts first. */
 function onNamesEscape(event: KeyboardEvent): void {
   if (event.key !== 'Escape') return
   if (dialogOpen() || ring.value) return
@@ -778,15 +716,17 @@ function onNamesEscape(event: KeyboardEvent): void {
   }
   const onBelt = beltEl.value?.root?.contains(document.activeElement)
   if (onBelt) {
-    // Back to where focus was before the belt; with nothing there, the show button (the things on the picture take no keyboard focus).
+    // Back to where focus was before the belt; with nothing there, nowhere (the things on the picture take no keyboard focus).
     event.preventDefault()
     event.stopImmediatePropagation()
     const back =
       beltReturn?.isConnected && beltReturn !== document.body
         ? beltReturn
-        : mainEl.value?.querySelector<HTMLElement>('.lq-show-names')
+        : null
     beltReturn = null
-    back?.focus({ preventScroll: true })
+    if (back) back.focus({ preventScroll: true })
+    else if (document.activeElement instanceof HTMLElement)
+      document.activeElement.blur()
     return
   }
 }
@@ -808,6 +748,8 @@ function onStagePointer(event: PointerEvent): void {
   const target = event.target instanceof Element ? event.target : null
   nameWay.value =
     target?.closest<HTMLElement>('[data-way]')?.dataset.way ?? null
+  if (event.pointerType !== 'touch' && target?.closest('.lq-stage-picture'))
+    bumpNames()
   if (event.pointerType === 'touch' || !target?.closest('.lq-stage-picture')) {
     names.pointer = null
     return
@@ -1173,7 +1115,7 @@ onMounted(() => {
   document.addEventListener('keydown', noteEmptyBoxEnter, true)
   document.addEventListener('keydown', onNarrationKey)
   document.addEventListener('keydown', onPaperKey)
-  document.addEventListener('keydown', onNamesKey)
+  document.addEventListener('keydown', onNamesInputKey)
   document.addEventListener('keydown', onBeltKey)
   document.addEventListener('keydown', onJourneyKey)
   document.addEventListener('focusin', onFocusIn)
@@ -1260,7 +1202,7 @@ onUnmounted(() => {
   document.removeEventListener('keydown', noteEmptyBoxEnter, true)
   document.removeEventListener('keydown', onNarrationKey)
   document.removeEventListener('keydown', onPaperKey)
-  document.removeEventListener('keydown', onNamesKey)
+  document.removeEventListener('keydown', onNamesInputKey)
   document.removeEventListener('keydown', onBeltKey)
   document.removeEventListener('keydown', onJourneyKey)
   document.removeEventListener('focusin', onFocusIn)
@@ -1646,6 +1588,73 @@ const ring = ref<{
   layer: { left: number; top: number; width: number; height: number }
 } | null>(null)
 const stageEl = ref<HTMLElement | null>(null)
+
+/**
+ * Something holds the marks and names away: no placed thing, a change of
+ * scene, the ending, or a dialog, menu or ring that is open.
+ */
+function namesBlocked(): boolean {
+  return (
+    !staged.value ||
+    game.roomAreas.things.length === 0 ||
+    scene.phase !== 'idle' ||
+    !!game.ending ||
+    dialogOpen() ||
+    !!ring.value
+  )
+}
+
+/** An input over the picture that counts (a mouse move, a tap, a key): the marks and names come in, or stay up another 4 seconds. */
+function bumpNames(): void {
+  if (!namesBlocked()) names.bump()
+}
+
+/** A key outside the command line brings the marks and names in. */
+function onNamesInputKey(event: KeyboardEvent): void {
+  const target = event.target instanceof Element ? event.target : null
+  if (target?.closest('input, textarea, select, [contenteditable]')) return
+  bumpNames()
+}
+
+/** The touch press that began on the picture itself; its click decides whether it was a tap that counts. */
+let touchOnPicture = false
+
+/** A touch press on the stage: a tap on the picture counts, once its click shows it opened no ring. */
+function onStageTouch(event: PointerEvent): void {
+  touchOnPicture =
+    event.pointerType === 'touch' &&
+    event.target instanceof Element &&
+    !!event.target.closest('.lq-stage-picture')
+}
+
+/** A tap on the picture (touch, on a phone or a touch laptop) brings the marks and names in, unless it opened a thing's ring: then only the ring, and the marks come in as it closes. */
+function tapOnPicture(): void {
+  const counts = touchOnPicture
+  touchOnPicture = false
+  if (counts && !ring.value) bumpNames()
+}
+
+/** The room and the conversation as they are now: what a ring's choice may change. */
+function whereWeAre(): { room: string; talk: typeof speech.conversation } {
+  return { room: game.roomName, talk: speech.conversation }
+}
+
+/**
+ * A thing's ring has closed (a tap or click outside it, Escape, or a choice in
+ * it): the marks and names come in, unless the choice began a talk, a change of
+ * scene or the ending, or moved the player to another room (which arrives
+ * clean). `before` is where we were when a choice sent its command.
+ */
+function ringClosed(before?: ReturnType<typeof whereWeAre>): void {
+  void nextTick(() => {
+    if (before) {
+      const now = whereWeAre()
+      if (now.room !== before.room) return
+      if (now.talk !== null && now.talk !== before.talk) return
+    }
+    bumpNames()
+  })
+}
 /** The belt of pictures, for focus. */
 const beltEl = ref<InstanceType<typeof BeltOfPictures> | null>(null)
 /** What the Actions row would offer now: the ring reads the same lists. */
@@ -1825,23 +1834,25 @@ function focusAfterRing(areaId: string): void {
   const thing = stageEl.value?.querySelector<HTMLElement>(
     `[data-area-press="${areaId}"]`,
   )
-  const target =
-    thing ?? mainEl.value?.querySelector<HTMLElement>('.lq-show-names')
-  target?.focus({ preventScroll: true })
+  thing?.focus({ preventScroll: true })
 }
 
 /** Close the ring; Escape (or Tab) puts focus back on the thing. */
 function closeRing(byKey: boolean): void {
   const id = ring.value?.thing.areaId
   ring.value = null
+  ringClosed()
   if (byKey && id) void nextTick(() => nextTick(() => focusAfterRing(id)))
 }
 
-/** Send a command as a typed one, with the ring and the hand put away, and put focus back on `id`'s thing (or the show button, or the belt's first picture, once it has gone). */
+/** Send a command as a typed one, with the ring and the hand put away, and put focus back on `id`'s thing (or the belt's first picture, once it has gone). */
 function sendFrom(command: string, id: string | undefined): void {
+  const wasOpen = ring.value !== null
+  const before = whereWeAre()
   ring.value = null
   belt.emptyHand()
   game.submitCommand(command)
+  if (wasOpen) ringClosed(before)
   if (!id) return
   void nextTick(() => nextTick(() => focusAfterRing(id)))
   // The thing may go with the answer (taken, used up): focus then moves on.
@@ -1865,6 +1876,7 @@ function takeInHand(verb: HandVerb): void {
   const open = ring.value
   ring.value = null
   if (!open) return
+  ringClosed()
   belt.takeInHand({
     kind: open.thing.kind === 'spell' ? 'spell' : 'item',
     name: open.thing.name,
@@ -2239,9 +2251,6 @@ const FULLSCREEN_KEY_HELP = '\nF — full screen on or off\n'
 /** Help's line for the key that hides the narration paper (laptop only). */
 const NARRATION_KEY_HELP = '\nN — hide or show the words\n'
 
-/** Help's line for the key that shows or hides the names on the picture (laptop only). */
-const NAMES_KEY_HELP = "\nS — show or hide what's here\n"
-
 /** Help's line for the room's name, which opens Look, Search and Rest. */
 const ROOM_NAME_HELP = "\nPress the room's name for Look, Search and Rest.\n"
 
@@ -2260,8 +2269,7 @@ const infoHtml = computed(() => {
     (laptop.value
       ? renderMarkup(ESCAPE_KEY_HELP) +
         (fullscreen.supported ? renderMarkup(FULLSCREEN_KEY_HELP) : '') +
-        renderMarkup(NARRATION_KEY_HELP) +
-        renderMarkup(NAMES_KEY_HELP)
+        renderMarkup(NARRATION_KEY_HELP)
       : '') +
     music.buildAttributionHtml()
   )
@@ -2560,6 +2568,11 @@ watch(
   },
   { flush: 'post' },
 )
+
+// Whatever holds them away takes them away at once, and the wait with them.
+watch(namesBlocked, (blocked) => {
+  if (blocked) names.turnOff()
+})
 </script>
 
 <template>
@@ -2619,13 +2632,13 @@ watch(
             }"
             @click="onPicturePress"
             @pointermove="onStagePointer"
+            @pointerdown="onStageTouch"
             @pointerleave="onStageLeave"
           >
             <ArrivalOnPicture
               :pictured="pictured"
               :phone="phoneStage"
               :sideways="sideways"
-              :away="arrivalFolded"
               :lift="beltHeight"
             />
             <RoomPlate
@@ -2898,22 +2911,6 @@ watch(
               @click="showPaper"
             >
               ▴ Show
-            </button>
-            <button
-              v-if="showNamesButton"
-              type="button"
-              class="lq-show-names"
-              data-lq-obstacle="panel"
-              :class="{
-                'lq-show-names-on': namesUp,
-                'lq-show-names-typing': typingOpen,
-              }"
-              :aria-pressed="namesUp ? 'true' : 'false'"
-              :title="laptop ? 'Show what\'s here (S)' : undefined"
-              :aria-keyshortcuts="laptop ? 'S' : undefined"
-              @click="toggleNames"
-            >
-              {{ namesUp ? '◎ Showing' : "◎ Show what's here" }}
             </button>
           </div>
 
@@ -3383,40 +3380,6 @@ watch(
   font-size: 13px;
   cursor: pointer;
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
-}
-/* The show button: the same line as Hide, in the foot-right corner on every screen. */
-.lq-show-names {
-  position: absolute;
-  right: 8px;
-  bottom: 6px;
-  height: 28px;
-  padding: 0 14px;
-  border: 1px solid var(--lq-line);
-  border-radius: 14px;
-  background: var(--lq-raised);
-  color: var(--lq-muted);
-  font: inherit;
-  font-size: 13px;
-  cursor: pointer;
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
-}
-/* At phone width the typing box's word list spans the whole box and would run under the pill, so the pill steps aside while the box is open (rq-ttg0). */
-@media (max-width: 639px) {
-  .lq-show-names-typing {
-    visibility: hidden;
-  }
-}
-.lq-show-names:hover {
-  color: var(--lq-fg);
-}
-.lq-show-names-on {
-  border-color: var(--lq-accent-line);
-  background: var(--lq-accent-soft);
-  color: var(--lq-accent-text);
-}
-.lq-show-names:focus-visible {
-  outline: 2px solid var(--lq-accent);
-  outline-offset: 2px;
 }
 .lq-words-hide:hover {
   color: var(--lq-fg);

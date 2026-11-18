@@ -10,6 +10,7 @@ import {
   enterCommand,
   type Page,
   skipTelling,
+  showNames,
   closeTypingBox,
 } from './fixtures'
 
@@ -78,25 +79,38 @@ async function toTheCottage(
   await expect(page.locator('.lq-name-text')).toHaveText("Elior's Cottage")
 }
 
-test('the button and S show and take away the marks and names on a laptop', async ({
+test('the marks and names come in on a mouse move and fade 4 seconds after the last one, on a laptop', async ({
   page,
 }): Promise<void> => {
   await page.setViewportSize({ width: 1280, height: 800 })
   await toTheCottage(page)
-  const button = page.getByRole('button', { name: /Show what's here/ })
-  await expect(button).toBeVisible()
+  await expect(
+    page.getByRole('button', { name: /Show what's here/ }),
+  ).toHaveCount(0)
   await expect(page.locator('[data-area-mark]')).toHaveCount(0)
-  await button.click()
-  await expect(page.getByRole('button', { name: '◎ Showing' })).toBeFocused()
+  await showNames(page)
   await expect(page.locator('[data-area-mark]')).toHaveCount(3)
   await expect(page.locator('[data-area-name="bread"]')).toHaveText('Bread')
-  // Escape leaves them be (it opens the menu); S takes them away.
-  await page.keyboard.press('s')
-  await expect(page.locator('[data-area-mark]')).toHaveCount(0)
-  await page.keyboard.press('s')
+  // Left alone, they go by themselves (4 seconds, then a slow fade out).
+  await expect(page.locator('[data-area-mark]')).toHaveCount(0, {
+    timeout: 10_000,
+  })
+  await showNames(page)
   await expect(page.locator('[data-area-mark]')).toHaveCount(3)
-  await page.keyboard.press('s')
-  await expect(page.locator('[data-area-mark]')).toHaveCount(0)
+})
+
+test('with reduced motion the marks vanish at once when the 4 seconds are up', async ({
+  page,
+}): Promise<void> => {
+  await page.setViewportSize({ width: 1280, height: 800 })
+  await toTheCottage(page)
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await showNames(page)
+  await expect(page.locator('[data-area-mark]')).toHaveCount(3)
+  // No leave fade: gone right after the wait (4 s), well before a 1.5 s fade would end.
+  await expect(page.locator('[data-area-mark]')).toHaveCount(0, {
+    timeout: 4_700,
+  })
 })
 
 test('the name follows the mouse over a thing, and no name shows over nothing', async ({
@@ -166,7 +180,7 @@ test.describe('at the edges of a laptop picture (rq-5hs1)', () => {
     await page.locator('[data-belt-switch="bag"]').click()
     await expect(page.locator('[data-belt-pic]')).toHaveCount(0)
     await holdDriftAtPeak(page)
-    await page.getByRole('button', { name: /Show what's here/ }).click()
+    await showNames(page)
     const marks = page.locator('[data-area-mark]')
     await expect(marks).toHaveCount(3)
     const stage = await page.locator('.lq-stage').boundingBox()
@@ -205,9 +219,7 @@ test.describe('on the smallest sideways phone', () => {
   }): Promise<void> => {
     await page.setViewportSize({ width: 568, height: 320 })
     await toTheCottage(page)
-    const button = page.getByRole('button', { name: /Show what's here/ })
-    await expect(button).toBeVisible()
-    await button.click()
+    await showNames(page)
     await expect(page.locator('[data-area-name]')).toHaveCount(3)
     const stage = await page.locator('.lq-stage').boundingBox()
     for (const name of await page.locator('[data-area-name]').all()) {
@@ -229,13 +241,13 @@ test('the marks and names come back with the picture after a layout without one 
 }): Promise<void> => {
   await page.setViewportSize({ width: 1000, height: 700 })
   await toTheCottage(page)
-  await page.getByRole('button', { name: /Show what's here/ }).click()
+  await showNames(page)
   await expect(page.locator('[data-area-mark]')).toHaveCount(3)
   // A short window has no picture: the text page.
   await page.setViewportSize({ width: 568, height: 320 })
   await expect(page.locator('.lq-stage')).toHaveCount(0)
   await page.setViewportSize({ width: 1000, height: 700 })
-  await expect(page.getByRole('button', { name: '◎ Showing' })).toBeVisible()
+  await showNames(page)
   await expect(page.locator('[data-area-mark]')).toHaveCount(3)
   await expect(page.locator('[data-area-name]')).toHaveCount(3)
 })
@@ -304,8 +316,7 @@ test.describe('a dot under the faded edge of a card (rq-riv9)', () => {
     await toTheCottage(page, PLACED)
     await command(page, 'talk to grandmother')
     await command(page, 'talk to grandmother')
-    await page.getByRole('button', { name: /Show what's here/ }).click()
-    await page.getByRole('button', { name: /Show$/ }).click()
+    await showNames(page)
     await expect(page.locator('.lq-story-wrap .lq-cl')).not.toHaveCount(0)
     // Scroll the words up a few pixels at a time to the first spot where a thing's dot shows with its name left off.
     const dot = await page
@@ -317,6 +328,10 @@ test.describe('a dot under the faded edge of a card (rq-riv9)', () => {
           top -= 3
         ) {
           story.scrollTop = top
+          // A key keeps the marks up (they leave 4 seconds after the last input).
+          document.dispatchEvent(
+            new KeyboardEvent('keydown', { key: 'Shift', bubbles: true }),
+          )
           for (let i = 0; i < 3; i++)
             await new Promise((done) => requestAnimationFrame(done))
           for (const mark of document.querySelectorAll<HTMLElement>(
@@ -356,6 +371,7 @@ test.describe('a dot under the faded edge of a card (rq-riv9)', () => {
     const dot = await dotUnderCardEdge(page)
     await page.mouse.move(5, 300)
     await page.mouse.move(dot.x, dot.y, { steps: 5 })
+    await page.keyboard.press('Shift')
     expect(
       await page.evaluate(
         ({ x, y }) =>
@@ -372,6 +388,7 @@ test.describe('a dot under the faded edge of a card (rq-riv9)', () => {
     const dot = await dotUnderCardEdge(page)
     await page.mouse.move(5, 300)
     await page.mouse.move(dot.x, dot.y, { steps: 5 })
+    await page.keyboard.press('Shift')
     expect(
       await page
         .locator('.lq-story-wrap')

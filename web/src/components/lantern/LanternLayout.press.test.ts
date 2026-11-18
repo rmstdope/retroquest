@@ -15,7 +15,6 @@ import { useNarrationStore } from '@/stores/useNarrationStore'
 import { useArrivalStore } from '@/stores/useArrivalStore'
 import { HOLD_TO_SKIP_MS } from '@/composables/useHoldToSkip'
 import { useSceneStore } from '@/stores/useSceneStore'
-import { useSettingsStore } from '@/stores/useSettingsStore'
 import { setPictureProbe } from '@/lantern/roomPicture'
 
 /**
@@ -37,7 +36,6 @@ describe('LanternLayout: pressing a thing on the picture', () => {
 
   async function cottage(): Promise<ReturnType<typeof useGameStore>> {
     setActivePinia(createPinia())
-    useSettingsStore().alwaysShowNames = false
     setPictureProbe(() => Promise.resolve(true))
     vi.stubGlobal(
       'matchMedia',
@@ -331,29 +329,15 @@ describe('LanternLayout: pressing a thing on the picture', () => {
     expect(ring().exists()).toBe(false)
   })
 
-  it('puts focus on the show button once the thing taken is gone', async () => {
+  it('takes the names away while a ring is open, and brings them back as Escape shuts it', async () => {
     await cottage()
-    await press('bread')
-    await coin('take').trigger('click')
-    await flushPromises()
-    expect(hit('bread').exists()).toBe(false)
-    expect(document.activeElement).toBe(w.get('.lq-show-names').element)
-  })
-
-  it('shuts the ring on Escape first, leaving the names showing', async () => {
-    await cottage()
-    await w.get('.lq-show-names').trigger('click')
+    useAreaNamesStore().bump()
     expect(useAreaNamesStore().showing).toBe(true)
     await press('bread')
+    expect(useAreaNamesStore().showing).toBe(false)
     await key('Escape')
+    await w.vm.$nextTick()
     expect(ring().exists()).toBe(false)
     expect(useAreaNamesStore().showing).toBe(true)
-  })
-
-  it('lets S and the words key alone while focus is in the ring', async () => {
-    await cottage()
-    await press('bread')
-    await key('s')
-    expect(useAreaNamesStore().showing).toBe(false)
   })
 })
