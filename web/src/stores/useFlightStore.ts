@@ -64,6 +64,10 @@ export const useFlightStore = defineStore('flight', () => {
   /** What a screen reader is told of the latest changes ("Lost …", "Gained …", "Learned …"), all of them as they are queued. */
   const told = ref<string[]>([])
   let queue: Flight[] = []
+  /** What waits for every flight to land (`whenIdle`). */
+  let waiting: (() => void)[] = []
+  /** Told when a gain's name comes up (`launch`). */
+  let onShow: ((flight: Flight) => void) | undefined
   let nextKey = 1
   let timers: ReturnType<typeof setTimeout>[] = []
 
@@ -76,9 +80,15 @@ export const useFlightStore = defineStore('flight', () => {
   function next(): void {
     const flight = queue.shift() ?? null
     current.value = flight
-    if (!flight) return
+    if (!flight) {
+      const done = waiting
+      waiting = []
+      done.forEach((run) => run())
+      return
+    }
     if (flight.leaving) return leave(flight)
     phase.value = 'show'
+    onShow?.(flight)
     after(FLIGHT_SHOW_MS + FLIGHT_HOLD_MS, () => {
       phase.value = 'fly'
       after(FLIGHT_FLY_MS, () => land(flight.kind, flight.name))
@@ -119,9 +129,16 @@ export const useFlightStore = defineStore('flight', () => {
   /**
    * Fly the items a turn lost out of the Bag button, then these gained things
    * to their buttons, after any still flying; each is told at once. Only items
-   * leave. With `reduced` they do not move.
+   * leave. With `reduced` they do not move. `shown` is told, as each gain's name
+   * comes up, which flight it is (the room picture lets that thing go then).
    */
-  function launch(chips: Chip[], lost: Chip[] = [], reduced = false): void {
+  function launch(
+    chips: Chip[],
+    lost: Chip[] = [],
+    reduced = false,
+    shown?: (flight: Flight) => void,
+  ): void {
+    onShow = shown
     const leaving = lost.filter((chip) => chip.kind === 'item')
     still = reduced
     told.value = [
@@ -138,6 +155,12 @@ export const useFlightStore = defineStore('flight', () => {
     if (!current.value) next()
   }
 
+  /** Run `run` once every flight has landed: at once when none is in hand or queued. `clear` forgets it. */
+  function whenIdle(run: () => void): void {
+    if (!current.value && !queue.length) run()
+    else waiting.push(run)
+  }
+
   // The store's own timers end with its scope; no caller has to clear them.
   onScopeDispose(() => timers.forEach(clearTimeout))
 
@@ -146,6 +169,7 @@ export const useFlightStore = defineStore('flight', () => {
     timers.forEach(clearTimeout)
     timers = []
     queue = []
+    waiting = []
     current.value = null
     landed.value = null
     landedName.value = null
@@ -153,5 +177,15 @@ export const useFlightStore = defineStore('flight', () => {
     told.value = []
   }
 
-  return { current, phase, landed, landedName, dipped, told, launch, clear }
+  return {
+    current,
+    phase,
+    landed,
+    landedName,
+    dipped,
+    told,
+    launch,
+    whenIdle,
+    clear,
+  }
 })

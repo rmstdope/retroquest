@@ -403,6 +403,7 @@ describe('useGameStore: panels held while a turn is narrated', () => {
       expect(store.roomPatchUrls).toEqual([])
       store.submitCommand('take bread')
       store.releasePanels(store.turns.at(-1)!.id, [...PANEL_GROUPS], false)
+      store.releaseGains()
       expect(store.roomPatchUrls).toEqual([
         expect.stringContaining('act1-eliors-cottage.bread-taken.png'),
       ])
@@ -417,7 +418,37 @@ describe('useGameStore: panels held while a turn is narrated', () => {
       store.releasePanels(id, ['place'], true)
       expect(store.roomPatchUrls).toEqual([])
       store.releasePanels(id, ['picture'], true)
+      // The taken thing waits for its name (rq-sm83).
+      expect(store.roomPatchUrls).toEqual([])
+      store.releaseGains()
       expect(store.roomPatchUrls).toHaveLength(1)
+    })
+
+    it('keeps a taken thing painted until its gain is released (rq-sm83)', async () => {
+      const store = await cottage()
+      made(store, ['bread-taken'])
+      store.submitCommand('take bread')
+      const turn = store.turns.at(-1)!
+      expect(turn.gained[0].areaId).toBe('bread')
+      store.releasePanels(turn.id, [...PANEL_GROUPS], true)
+      expect(store.heldGains).toEqual(['bread'])
+      expect(store.roomPatchUrls).toEqual([])
+      expect(store.shownPicture.things.map((t) => t.areaId)).toContain('bread')
+      store.releaseGain('bread')
+      expect(store.heldGains).toEqual([])
+      expect(store.roomPatchUrls).toHaveLength(1)
+      expect(store.shownPicture.things.map((t) => t.areaId)).not.toContain(
+        'bread',
+      )
+    })
+
+    it('lets a held gain go when a newer command starts (rq-sm83)', async () => {
+      const store = await cottage()
+      store.submitCommand('take bread')
+      store.releasePanels(store.turns.at(-1)!.id, [...PANEL_GROUPS], false)
+      expect(store.heldGains).toEqual(['bread'])
+      store.submitCommand('look')
+      expect(store.heldGains).toEqual([])
     })
 
     it('lists the movement the manifest gives the room, the spots with the shape the navigator drew', async () => {
@@ -465,6 +496,7 @@ describe('useGameStore: panels held while a turn is narrated', () => {
       expect(store.roomAreas.boxes.bread).toEqual(bread)
       store.submitCommand('take bread')
       store.releasePanels(store.turns.at(-1)!.id, [...PANEL_GROUPS], false)
+      store.releaseGains()
       expect(store.roomAreas.things).toEqual([])
     })
 

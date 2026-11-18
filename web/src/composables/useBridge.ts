@@ -144,6 +144,8 @@ export interface PictureState {
   roomKey: string
   variant: string
   patchIds: string[]
+  /** The area each of the room's patches is about, by patch id (a patch of the whole picture has none). */
+  patchAreas: Record<string, string>
   things: AreaThing[]
 }
 
@@ -249,7 +251,14 @@ export function useBridge(loader: () => Promise<ActClass[]> = loadActs) {
   function pictureState(): PictureState {
     const { game } = requireGame()
     const { roomKey, pictureVariant } = game.currentMusicPlace()
-    if (!roomKey) return { roomKey: '', variant: '', patchIds: [], things: [] }
+    if (!roomKey)
+      return {
+        roomKey: '',
+        variant: '',
+        patchIds: [],
+        patchAreas: {},
+        things: [],
+      }
     return {
       roomKey,
       variant: pictureVariant,
@@ -264,6 +273,13 @@ export function useBridge(loader: () => Promise<ActClass[]> = loadActs) {
         roomKey,
         game.state,
         pictureVariant,
+      ),
+      patchAreas: Object.fromEntries(
+        game.acts[game.currentAct]
+          .roomPatches(roomKey, pictureVariant)
+          .flatMap((patch) =>
+            patch.area === undefined ? [] : [[patch.id, patch.area]],
+          ),
       ),
     }
   }

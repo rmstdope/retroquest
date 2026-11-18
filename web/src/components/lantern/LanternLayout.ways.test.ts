@@ -54,6 +54,8 @@ describe('LanternLayout: leaving by pressing a way out in the picture', () => {
     store.imageManifest = PLACED
     w = mount(LanternLayout, { attachTo: document.body })
     await w.vm.$nextTick()
+    // These are about ways out, not about commands waiting for gains to fly.
+    store.setGainFlusher(null)
     return store
   }
 
@@ -120,8 +122,9 @@ describe('LanternLayout: leaving by pressing a way out in the picture', () => {
       'talk to grandmother',
       'use journal',
       'talk to grandmother',
-    ])
+    ]) {
       store.submitCommand(command)
+    }
     store.releasePanels(store.turns.at(-1)!.id, [...PANEL_GROUPS], false)
     await w.vm.$nextTick()
     const submit = vi.spyOn(store, 'submitCommand')
@@ -140,8 +143,9 @@ describe('LanternLayout: leaving by pressing a way out in the picture', () => {
       'talk to grandmother',
       'use journal',
       'talk to grandmother',
-    ])
+    ]) {
       store.submitCommand(command)
+    }
     store.releasePanels(store.turns.at(-1)!.id, [...PANEL_GROUPS], false)
     useAreaNamesStore().showing = true
     await w.vm.$nextTick()
@@ -160,8 +164,9 @@ describe('LanternLayout: leaving by pressing a way out in the picture', () => {
       'talk to grandmother',
       'use journal',
       'talk to grandmother',
-    ])
+    ]) {
       store.submitCommand(command)
+    }
     store.releasePanels(store.turns.at(-1)!.id, [...PANEL_GROUPS], false)
     useAreaNamesStore().showing = true
     await w.vm.$nextTick()
@@ -185,8 +190,9 @@ describe('LanternLayout: leaving by pressing a way out in the picture', () => {
       'talk to grandmother',
       'use journal',
       'talk to grandmother',
-    ])
+    ]) {
       store.submitCommand(command)
+    }
     store.releasePanels(store.turns.at(-1)!.id, [...PANEL_GROUPS], false)
     await w.vm.$nextTick()
   }
