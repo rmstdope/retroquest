@@ -34,8 +34,16 @@ describe('TitlePage keyboard choice', () => {
     setPictureProbe(null)
   })
 
-  async function mountTitle(saves: SaveSlot[] = []): Promise<VueWrapper> {
+  /** Mount the page, pressing a key first so the menu is up, unless it is to be left waiting. */
+  async function mountTitle(
+    saves: SaveSlot[] = [],
+    waiting = false,
+  ): Promise<VueWrapper> {
     wrapper = mount(TitlePage, { props: { saves }, attachTo: document.body })
+    if (!waiting)
+      document.body.dispatchEvent(
+        new KeyboardEvent('keydown', { key: 'Shift' }),
+      )
     await flushPromises()
     return wrapper
   }
@@ -124,7 +132,7 @@ describe('TitlePage keyboard choice', () => {
 
   it('does not latch on the click of the press that skipped the opening', async () => {
     useSettingsStore().reduceMotion = 'off'
-    const w = await mountTitle([save(2)])
+    const w = await mountTitle([save(2)], true)
     window.dispatchEvent(new Event('pointerdown'))
     await w.get('.lq-title-buttons > button').trigger('click')
     expect(sounds.playChoose).not.toHaveBeenCalled()
@@ -132,7 +140,7 @@ describe('TitlePage keyboard choice', () => {
 
   it('does not move the ring or sound while the opening plays; a key only finishes it', async () => {
     useSettingsStore().reduceMotion = 'off'
-    const w = await mountTitle([save(2)])
+    const w = await mountTitle([save(2)], true)
     const event = new KeyboardEvent('keydown', {
       key: 'ArrowDown',
       bubbles: true,

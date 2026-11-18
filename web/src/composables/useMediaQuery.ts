@@ -6,6 +6,8 @@ export const WIDE_QUERY = '(min-width: 1024px) and (min-height: 560px)'
 export const SIDES_QUERY = '(min-width: 1100px)'
 /** A mouse or trackpad and a keyboard: the player has keys to press, not taps. */
 export const KEYBOARD_QUERY = '(hover: hover) and (pointer: fine)'
+/** The device's main input is touch (a phone or tablet): the player taps, there are no keys to press. A touchscreen laptop with a mouse or trackpad does not match. */
+export const TOUCH_QUERY = '(pointer: coarse)'
 /** Short screens (phone landscape): the section tabs move into the header. */
 export const SHORT_QUERY = '(max-height: 519px)'
 

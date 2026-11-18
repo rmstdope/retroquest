@@ -865,49 +865,6 @@ test.describe('Lantern UI (the default)', () => {
     }
   })
 
-  test('opens the title screen in steps, and a key press finishes it without pressing Start', async ({
-    page,
-  }) => {
-    await page.emulateMedia({ reducedMotion: 'no-preference' })
-    await page.goto('/')
-    await waitForGame(page)
-    const start = page.getByRole('button', { name: 'Start', exact: true })
-    await expect(page.locator('.lq-title-page')).toHaveClass(/is-playing/)
-    await expect(page.locator('.lq-title-buttons')).toHaveAttribute('inert')
-    // The glass dock stays hidden until just before its choices fade up.
-    expect(
-      await page
-        .locator('.lq-title-dock')
-        .evaluate((el) => getComputedStyle(el).opacity),
-    ).toBe('0')
-
-    await page.evaluate(() => (document.activeElement as HTMLElement).blur())
-    expect(await page.evaluate(() => document.activeElement?.tagName)).toBe(
-      'BODY',
-    )
-    await page.keyboard.press('Enter')
-    await expect(page.locator('.lq-title-page')).toHaveClass(/is-open/)
-    await expect(start).toBeFocused()
-    await expect(page.locator('.lq-title-page')).toBeVisible()
-  })
-
-  test('a press where Start will appear only finishes the opening', async ({
-    page,
-  }) => {
-    await page.emulateMedia({ reducedMotion: 'no-preference' })
-    await page.goto('/')
-    await waitForGame(page)
-    const box = (await page.locator('.lq-title-buttons').boundingBox())!
-    await page.mouse.click(box.x + box.width / 2, box.y + 20)
-    await expect(page.locator('.lq-title-page')).toHaveClass(/is-open/)
-    await expect(page.locator('.lq-title-page')).toBeVisible()
-    await expect(
-      page.getByRole('button', { name: 'Start', exact: true }),
-    ).toBeFocused()
-    await page.getByRole('button', { name: 'Start', exact: true }).click()
-    await expect(page.locator('.lq-title-page')).toHaveCount(0)
-  })
-
   test('keeps the title screen on its dark scheme in the light theme', async ({
     page,
   }) => {

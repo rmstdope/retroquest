@@ -13,6 +13,7 @@ import {
 import type { SaveSlot } from '@/types/bridge'
 import { setPictureProbe } from '@/lantern/roomPicture'
 import type { ImageZoom, MotionSpec } from '@/lantern/roomMotion'
+import { TOUCH_QUERY } from '@/composables/useMediaQuery'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 
 const CREDIT = 'Original music, images and narration made with Content Studio'
@@ -40,13 +41,29 @@ describe('TitlePage', () => {
     setPictureProbe(null)
   })
 
-  function mountTitle(saves: SaveSlot[] = [], error = ''): VueWrapper {
+  /** Mount the page and, unless it is to be left waiting, press a key so the menu is up. */
+  function mountTitle(
+    saves: SaveSlot[] = [],
+    error = '',
+    waiting = false,
+  ): VueWrapper {
     wrapper = mount(TitlePage, {
       props: { saves, error },
       attachTo: document.body,
     })
+    if (!waiting)
+      document.body.dispatchEvent(
+        new KeyboardEvent('keydown', {
+          key: 'Shift',
+          bubbles: true,
+          cancelable: true,
+        }),
+      )
     return wrapper
   }
+  /** The page as it first shows: nothing pressed yet. */
+  const mountWaiting = (saves: SaveSlot[] = [], error = ''): VueWrapper =>
+    mountTitle(saves, error, true)
 
   it("is a page named by the game's full name, with the name written over the picture", () => {
     const w = mountTitle()
@@ -211,7 +228,7 @@ describe('TitlePage', () => {
     })
 
     it('hides the credit and the buttons from focus until it has finished', async () => {
-      const w = mountTitle()
+      const w = mountWaiting()
       await flushPromises()
       expect(w.get('.lq-title-page').classes()).toContain('is-playing')
       expect(w.get('.lq-credit').attributes('inert')).toBeDefined()
@@ -219,17 +236,8 @@ describe('TitlePage', () => {
       expect(document.activeElement).not.toBe(w.get('button').element)
     })
 
-    it('finishes when the last button has risen, and focuses the main button', async () => {
-      const w = mountTitle([save(2)])
-      await w.findAll('button')[2].trigger('animationend')
-      await flushPromises()
-      expect(w.get('.lq-title-page').classes()).toContain('is-open')
-      expect(w.get('.lq-title-buttons').attributes('inert')).toBeUndefined()
-      expect(document.activeElement).toBe(w.findAll('button')[0].element)
-    })
-
     it('is skipped by a key press, which presses nothing and starts nothing', async () => {
-      const w = mountTitle()
+      const w = mountWaiting()
       const event = new KeyboardEvent('keydown', {
         key: 'Enter',
         bubbles: true,
@@ -245,7 +253,7 @@ describe('TitlePage', () => {
     })
 
     it('is skipped by a key press while focus is on the body, outside the page', async () => {
-      const w = mountTitle()
+      const w = mountWaiting()
       ;(document.activeElement as HTMLElement | null)?.blur()
       const event = new KeyboardEvent('keydown', {
         key: 'Enter',
@@ -262,7 +270,7 @@ describe('TitlePage', () => {
     })
 
     it('is skipped by Tab while focus is on the body', async () => {
-      const w = mountTitle()
+      const w = mountWaiting()
       document.body.dispatchEvent(
         new KeyboardEvent('keydown', { key: 'Tab', bubbles: true }),
       )
@@ -271,7 +279,7 @@ describe('TitlePage', () => {
     })
 
     it('keeps the press that skipped it from moving focus off the main button', async () => {
-      const w = mountTitle()
+      const w = mountWaiting()
       document.body.dispatchEvent(
         new Event('pointerdown', { bubbles: true, cancelable: true }),
       )
@@ -295,7 +303,7 @@ describe('TitlePage', () => {
     })
 
     it('swallows the click that ends the skipping press, once', async () => {
-      const w = mountTitle()
+      const w = mountWaiting()
       document.body.dispatchEvent(
         new Event('pointerdown', { bubbles: true, cancelable: true }),
       )
@@ -311,7 +319,7 @@ describe('TitlePage', () => {
     })
 
     it('lets the skipping click reach a bubble-phase window listener, as the music does', async () => {
-      const w = mountTitle()
+      const w = mountWaiting()
       document.body.dispatchEvent(
         new Event('pointerdown', { bubbles: true, cancelable: true }),
       )
@@ -327,7 +335,7 @@ describe('TitlePage', () => {
     })
 
     it('ends its guard at a key press when the gesture never clicked', async () => {
-      const w = mountTitle()
+      const w = mountWaiting()
       document.body.dispatchEvent(
         new Event('pointerdown', { bubbles: true, cancelable: true }),
       )
@@ -340,7 +348,7 @@ describe('TitlePage', () => {
     })
 
     it('ends its guard at the next press when the gesture never clicked', async () => {
-      const w = mountTitle()
+      const w = mountWaiting()
       document.body.dispatchEvent(
         new Event('pointerdown', { bubbles: true, cancelable: true }),
       )
@@ -359,7 +367,7 @@ describe('TitlePage', () => {
     })
 
     it('stops listening on the window once it is unmounted', async () => {
-      const w = mountTitle()
+      const w = mountWaiting()
       w.unmount()
       wrapper = undefined
       const event = new KeyboardEvent('keydown', {
@@ -371,14 +379,8 @@ describe('TitlePage', () => {
       expect(event.defaultPrevented).toBe(false)
     })
 
-    it('is not finished by a button other than the last one rising', async () => {
-      const w = mountTitle([save(2)])
-      await w.findAll('button')[0].trigger('animationend')
-      expect(w.get('.lq-title-page').classes()).toContain('is-playing')
-    })
-
     it('is skipped by Space, which presses nothing', async () => {
-      const w = mountTitle()
+      const w = mountWaiting()
       const event = new KeyboardEvent('keydown', {
         key: ' ',
         bubbles: true,
@@ -390,7 +392,7 @@ describe('TitlePage', () => {
     })
 
     it('does not start on Escape, and Escape does not skip the opening', async () => {
-      const w = mountTitle()
+      const w = mountWaiting()
       await w.get('section').trigger('keydown', { key: 'Escape' })
       expect(w.emitted('start')).toBeUndefined()
       await w.get('section').trigger('keydown', { key: 'Escape' })
@@ -398,7 +400,7 @@ describe('TitlePage', () => {
     })
 
     it('is skipped by a press, and presses after it behave as normal', async () => {
-      const w = mountTitle()
+      const w = mountWaiting()
       await w.get('.lq-title-page').trigger('pointerdown')
       expect(w.get('.lq-title-page').classes()).toContain('is-open')
       await w.get('button').trigger('pointerdown')
@@ -407,12 +409,115 @@ describe('TitlePage', () => {
     })
   })
 
-  it('shows everything from the first frame with less motion', async () => {
-    const w = mountTitle()
-    await flushPromises()
-    expect(w.get('.lq-title-page').classes()).toContain('is-open')
-    expect(w.get('.lq-credit').attributes('inert')).toBeUndefined()
-    expect(document.activeElement?.textContent?.trim()).toBe('Start')
+  describe('the wait', () => {
+    beforeEach(() => {
+      vi.useFakeTimers()
+    })
+    afterEach(() => {
+      vi.useRealTimers()
+    })
+    const touch = (matches: boolean): void => {
+      vi.stubGlobal('matchMedia', (query: string) => ({
+        matches: matches && query === TOUCH_QUERY,
+        addEventListener: () => undefined,
+        removeEventListener: () => undefined,
+      }))
+    }
+    afterEach(() => {
+      vi.unstubAllGlobals()
+    })
+
+    it('waits for a press, with the menu and the credit out of reach, even with less motion', async () => {
+      for (const reduce of ['off', 'on'] as const) {
+        useSettingsStore().reduceMotion = reduce
+        const w = mountWaiting([save(2)])
+        await vi.advanceTimersByTimeAsync(60_000)
+        expect(w.get('.lq-title-page').classes()).toContain('is-playing')
+        expect(w.get('.lq-title-buttons').attributes('inert')).toBeDefined()
+        expect(w.get('.lq-credit').attributes('inert')).toBeDefined()
+        expect(w.find('.lq-title-name').exists()).toBe(true)
+        w.unmount()
+        wrapper = undefined
+      }
+    })
+
+    it('shows the hint 5 s after the name is fully up, and only then', async () => {
+      useSettingsStore().reduceMotion = 'off'
+      const w = mountWaiting()
+      const hint = w.get('.lq-title-hint')
+      expect(hint.attributes('role')).toBe('status')
+      await vi.advanceTimersByTimeAsync(9_499)
+      expect(hint.text()).toBe('')
+      await vi.advanceTimersByTimeAsync(1)
+      expect(hint.text()).toBe('Press any key')
+    })
+
+    it('shows the hint 5 s after the screen shows under Reduce motion, the page still', async () => {
+      useSettingsStore().reduceMotion = 'on'
+      const w = mountWaiting()
+      expect(w.get('.lq-title-page').classes()).toContain('is-still')
+      await vi.advanceTimersByTimeAsync(4_999)
+      expect(w.get('.lq-title-hint').text()).toBe('')
+      await vi.advanceTimersByTimeAsync(1)
+      expect(w.get('.lq-title-hint').text()).toBe('Press any key')
+    })
+
+    it('says "Tap to begin" on a device whose main input is touch', async () => {
+      touch(true)
+      useSettingsStore().reduceMotion = 'on'
+      const w = mountWaiting()
+      await vi.advanceTimersByTimeAsync(5_000)
+      expect(w.get('.lq-title-hint').text()).toBe('Tap to begin')
+    })
+
+    it('hands the hint over to its fade-out at a press, hidden from a screen reader, and shows none after', async () => {
+      useSettingsStore().reduceMotion = 'on'
+      const w = mountWaiting()
+      await vi.advanceTimersByTimeAsync(5_000)
+      document.body.dispatchEvent(new KeyboardEvent('keydown', { key: 'a' }))
+      await flushPromises()
+      expect(w.get('.lq-title-page').classes()).toContain('is-open')
+      expect(w.get('.lq-title-hint').attributes('aria-hidden')).toBe('true')
+      await vi.advanceTimersByTimeAsync(60_000)
+      expect(w.get('.lq-title-hint').text()).toBe('Press any key')
+    })
+
+    it('never shows the hint when pressed before it is due', async () => {
+      useSettingsStore().reduceMotion = 'on'
+      const w = mountWaiting()
+      document.body.dispatchEvent(new KeyboardEvent('keydown', { key: 'a' }))
+      await vi.advanceTimersByTimeAsync(60_000)
+      expect(w.get('.lq-title-hint').text()).toBe('')
+    })
+
+    it('stops its timer when the page goes', async () => {
+      useSettingsStore().reduceMotion = 'on'
+      mountWaiting().unmount()
+      wrapper = undefined
+      expect(vi.getTimerCount()).toBe(0)
+    })
+
+    it('brings the menu and focuses the main button at a press, whatever the saves', async () => {
+      const w = mountWaiting([save(2)])
+      document.body.dispatchEvent(new Event('pointerdown', { bubbles: true }))
+      await flushPromises()
+      expect(w.get('.lq-title-buttons').attributes('inert')).toBeUndefined()
+      expect(w.get('.lq-credit').attributes('inert')).toBeUndefined()
+      expect(document.activeElement).toBe(w.findAll('button')[0].element)
+    })
+
+    it('waits again when the page is shown again', async () => {
+      mountWaiting().unmount()
+      const w = mountWaiting()
+      expect(w.get('.lq-title-page').classes()).toContain('is-playing')
+    })
+
+    it('keeps the load error above the menu once it is up', async () => {
+      const w = mountTitle([save(2)], 'Could not load')
+      await flushPromises()
+      expect(w.get('.lq-title-error').text()).toBe('Could not load')
+      expect(w.get('.lq-title-page').classes()).toContain('is-open')
+    })
   })
 
   it('starts with the Start button', async () => {

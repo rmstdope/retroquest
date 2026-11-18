@@ -24,6 +24,7 @@ import type { SaveSlot } from '@/types/bridge'
 import { useFocusTrap } from '@/composables/useFocusTrap'
 import { useReducedMotion } from '@/composables/useReducedMotion'
 import { useUiSounds } from '@/composables/useUiSounds'
+import { TOUCH_QUERY, useMediaQuery } from '@/composables/useMediaQuery'
 import { DEFAULT_TITLE_ZOOM } from '@/lantern/roomMotion'
 import type { ImageZoom, MotionSpec } from '@/lantern/roomMotion'
 import type { PictureSize } from '@/lantern/roomMotionScene'
@@ -32,17 +33,22 @@ import SaveThumb from './SaveThumb.vue'
 
 /**
  * The game's title page, before the first act: a full-screen picture, the
- * game's name over its upper part, one credit line for Content Studio and the
- * choices, all on one pane of frosted glass (the dock) near the foot of the
- * picture. Unless the player wants less motion it opens in a fixed order (the
- * picture, the name, the credit, the dock's glass, then the choices fading up
- * slowly one after another, about 6½ seconds in all); until the opening is over the credit and the
- * buttons are inert (neither focusable nor pressable). Any key press or press
- * anywhere finishes the opening at once and does nothing else (a key's
- * default action, such as Enter pressing a button, is cancelled, and the
- * press neither takes focus nor presses what has appeared under it); it is heard on the window, since during the
- * opening focus is on the body, outside the page. The press still reaches the
- * other listeners, so the music starts on it.
+ * game's name over its upper part, and, once the player asks for it, one
+ * credit line for Content Studio and the choices, all on one pane of frosted
+ * glass (the dock) near the foot of the picture. Every time it shows it opens
+ * calmly and waits: the picture fades in, then the name over it, and nothing
+ * else is on screen. If nothing is pressed 5 seconds after the name is fully
+ * up, a quiet hint ("Press any key", or "Tap to begin" where the main input
+ * is touch) fades in and breathes. Any key press, click or touch brings the
+ * menu: the hint goes and the dock and the credit fade in together, half a
+ * second. Until then the credit and the buttons are inert (neither focusable
+ * nor pressable). The press does nothing else (a key's default action, such as
+ * Enter pressing a button, is cancelled, and the press neither takes focus nor
+ * presses what has appeared under it); it is heard on the window, since while
+ * waiting focus is on the body, outside the page. The press still reaches the
+ * other listeners, so the music starts on it. Under Reduce motion the same
+ * screen is still: the picture and the name are there at once, the hint
+ * appears 5 seconds after the page shows, and a press shows the menu at once.
  * Focus then lands on the main button. Enter on Start or Escape goes on.
  *
  * The ring (a cream outline) is the focus on a choice. ↑ and ↓ move it between
@@ -117,12 +123,33 @@ const titleId = useId()
 const page = ref<HTMLElement | null>(null)
 const trap = useFocusTrap(page)
 
+/** When the name is fully up, in milliseconds after the page shows (the picture fades in for 2.4 s, the name for 2.4 s from 2 s in). */
+const NAME_UP_MS = 4500
+/** How long after the name is fully up, with nothing pressed, the hint fades in. */
+const HINT_DELAY_MS = 5000
+
 const reduced = useReducedMotion()
-/** Whether the opening is over: the credit and the buttons are there to use. */
-const opened = ref(reduced.value)
-watch(reduced, (now) => {
-  if (now) opened.value = true
-})
+/** Whether the player has pressed: the menu (the dock and the credit) is up and there to use. */
+const opened = ref(false)
+/** Whether the hint is showing: nothing was pressed for a while. */
+const hinted = ref(false)
+const touch = useMediaQuery(TOUCH_QUERY)
+/** The hint's words (kept while it fades out at the press), which fit the device: a tap on a phone or tablet, a key on a computer. */
+const hintText = computed(() =>
+  !hinted.value ? '' : touch.value ? 'Tap to begin' : 'Press any key',
+)
+let hintTimer: ReturnType<typeof setTimeout> | undefined
+
+/** Start the wait for the hint; under Reduce motion the name is up at once. */
+function startHintTimer(): void {
+  clearTimeout(hintTimer)
+  hintTimer = setTimeout(
+    () => {
+      hinted.value = true
+    },
+    (reduced.value ? 0 : NAME_UP_MS) + HINT_DELAY_MS,
+  )
+}
 watch(opened, (now) => {
   if (now) void nextTick(trap.focusFirst)
 })
@@ -147,6 +174,7 @@ let skippedBy: Event | null = null
 function skip(event: Event): void {
   if (opened.value) return
   opened.value = true
+  clearTimeout(hintTimer)
   skippedBy = event
   if (event.type === 'keydown') event.preventDefault()
   else guardGesture()
@@ -223,12 +251,6 @@ function onChoiceHover(event: MouseEvent): void {
     event.currentTarget.focus({ preventScroll: true })
 }
 
-/** The opening is over once the last button has risen. */
-function onRisen(event: AnimationEvent): void {
-  const buttons = event.currentTarget as HTMLElement
-  if (event.target === buttons.lastElementChild) opened.value = true
-}
-
 function onKeydown(event: KeyboardEvent): void {
   if (event === skippedBy) return
   if (event.key === 'Escape') event.stopPropagation()
@@ -239,11 +261,12 @@ function onKeydown(event: KeyboardEvent): void {
 }
 
 onMounted(() => {
-  if (opened.value) void nextTick(trap.focusFirst)
+  startHintTimer()
   window.addEventListener('keydown', skip, true)
   window.addEventListener('pointerdown', skip, true)
 })
 onBeforeUnmount(() => {
+  clearTimeout(hintTimer)
   window.removeEventListener('keydown', skip, true)
   window.removeEventListener('pointerdown', skip, true)
   releaseGesture()
@@ -254,7 +277,7 @@ onBeforeUnmount(() => {
   <section
     ref="page"
     class="lq-title-page"
-    :class="opened ? 'is-open' : 'is-playing'"
+    :class="[opened ? 'is-open' : 'is-playing', { 'is-still': reduced }]"
     role="dialog"
     aria-modal="true"
     :aria-labelledby="titleId"
@@ -304,7 +327,6 @@ onBeforeUnmount(() => {
         class="lq-title-buttons lq-title-dock"
         :class="{ 'is-single': !hasSaves, 'is-pair': hasSaves && !card }"
         :inert="opened ? undefined : true"
-        @animationend="onRisen"
         @focusin="onChoiceFocus"
       >
         <template v-if="!hasSaves">
@@ -361,6 +383,13 @@ onBeforeUnmount(() => {
           </button>
         </template>
       </div>
+      <p
+        class="lq-title-hint"
+        role="status"
+        :aria-hidden="opened ? 'true' : undefined"
+      >
+        {{ hintText }}
+      </p>
       <p class="lq-credit" :inert="opened ? undefined : true">
         Original music, images and narration made with
         <a
@@ -506,6 +535,8 @@ onBeforeUnmount(() => {
   border-radius: 22px;
   background: rgb(18 22 28 / 0.5);
   backdrop-filter: blur(18px) saturate(1.3);
+  opacity: 0;
+  transition: opacity 0.5s ease;
   box-shadow:
     0 20px 60px rgb(0 0 0 / 0.45),
     inset 0 1px 0 rgb(255 255 255 / 0.08);
@@ -522,8 +553,6 @@ onBeforeUnmount(() => {
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
-  opacity: 0;
-  transform: translateY(6px);
   transition:
     background 0.18s,
     border-color 0.18s;
@@ -637,46 +666,71 @@ onBeforeUnmount(() => {
   text-shadow: 0 1px 3px #000;
   transform: translateX(-50%);
   opacity: 0;
+  transition: opacity 0.5s ease;
 }
 .lq-credit a {
   color: var(--lq-accent-text);
   text-decoration: underline;
   text-underline-offset: 2px;
 }
-/* The opening: picture, name, credit, the dock's glass, then the choices fading up one after another. */
+/* The wait: the picture fades in, then the name over it; nothing else is up until the player presses. */
 .is-playing .lq-title-art {
   animation: lq-title-fade 2.4s ease forwards;
 }
 .is-playing .lq-title-name {
   animation: lq-title-fade 2.4s ease 2s forwards;
 }
-.is-playing .lq-credit {
-  animation: lq-title-fade 0.4s ease 4.4s forwards;
-}
-.is-playing .lq-title-dock {
-  opacity: 0;
-  animation: lq-title-fade 0.8s ease 4s forwards;
-}
-.is-playing .lq-title-dock > button {
-  animation: lq-title-rise 1.1s ease forwards;
-}
-.is-playing .lq-title-dock > button:nth-child(1) {
-  animation-delay: 4.6s;
-}
-.is-playing .lq-title-dock > button:nth-child(2) {
-  animation-delay: 5s;
-}
-.is-playing .lq-title-dock > button:nth-child(3) {
-  animation-delay: 5.4s;
-}
+/* A press finishes the picture and the name at once and fades the menu up, all together. */
 .is-open .lq-title-art,
 .is-open .lq-title-name,
-.is-open .lq-credit {
+.is-open .lq-credit,
+.is-open .lq-title-dock {
   opacity: 1;
 }
-.is-open .lq-title-dock > button {
+.is-still .lq-title-art,
+.is-still .lq-title-name {
   opacity: 1;
-  transform: none;
+  animation: none;
+}
+.is-still .lq-credit,
+.is-still .lq-title-dock {
+  transition: none;
+}
+/* The hint, where the menu will appear; it fades in, breathes until the press, then fades out. */
+.lq-title-hint {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: max(70px, 12cqh);
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  text-indent: 0.32em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: #ece6d6;
+  text-shadow:
+    0 1px 4px #000,
+    0 0 14px #000;
+  pointer-events: none;
+  opacity: 0;
+}
+.is-playing .lq-title-hint:not(:empty) {
+  animation:
+    lq-title-fade 1.2s ease forwards,
+    lq-title-breathe 3.2s ease-in-out 1.2s infinite;
+}
+.is-open .lq-title-hint {
+  animation: lq-title-out 0.3s ease forwards;
+}
+.is-still .lq-title-hint:not(:empty) {
+  animation: none;
+  opacity: 1;
+}
+.is-still.is-open .lq-title-hint:not(:empty) {
+  animation: none;
+  opacity: 0;
 }
 @keyframes lq-title-fade {
   to {
@@ -696,10 +750,21 @@ onBeforeUnmount(() => {
       );
   }
 }
-@keyframes lq-title-rise {
-  to {
+@keyframes lq-title-breathe {
+  0%,
+  100% {
     opacity: 1;
-    transform: none;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+@keyframes lq-title-out {
+  from {
+    opacity: 0.8;
+  }
+  to {
+    opacity: 0;
   }
 }
 /* A phone held upright: the name sits lower, Continue gets a row of its own over the other two. */
