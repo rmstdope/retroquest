@@ -464,9 +464,9 @@ const beltBottom = computed(() =>
 )
 /** The belt starts at the picture's left edge. */
 const beltLeft = computed(() => 0)
-/** How far up from the foot of the picture the belt's top lies: what the names and press areas must keep clear of (the folded tab while the belt is away). */
+/** How far up from the foot of the picture the belt's top lies: what the names and press areas must keep clear of (none while the belt is away: the picture's foot is then the floor, then the action row alone on a laptop). */
 const footCover = computed(() =>
-  beltHeight.value > 0
+  beltHeight.value > 0 && !belt.away
     ? beltBottom.value + beltHeight.value
     : laptop.value
       ? boxRoom.value
