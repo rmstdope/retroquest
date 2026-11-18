@@ -108,11 +108,12 @@ describe('BiggerMapDialog', () => {
     expect(w.get('[data-tag]').text()).toBe('↑ Up')
   })
 
-  it('travels and closes when a place is pressed', async () => {
+  it('travels and says it is done when a place is pressed: the walk ends in the game, not where the map came from', async () => {
     const w = mountMap()
     await w.get('[data-place="Forest Path"]').trigger('click')
     expect(travel).toHaveBeenCalledWith('Forest Path')
-    expect(w.emitted('close')).toHaveLength(1)
+    expect(w.emitted('done')).toHaveLength(1)
+    expect(w.emitted('close')).toBeUndefined()
   })
 
   it('closes without travelling on × and on Escape', async () => {

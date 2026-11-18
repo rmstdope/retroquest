@@ -4,6 +4,7 @@ import {
   type Page,
   skipTelling,
   enterCommand as enter,
+  openJournal,
 } from './fixtures'
 
 /**
@@ -74,10 +75,10 @@ for (const command of ['talk to voice', 'say who are you to voice']) {
     await expect(card).not.toContainText('You are in')
     await expect(voice).toHaveCount(0)
 
-    // Story so far keeps every line, the command and the closing one too.
-    await page.getByRole('button', { name: /Story so far/ }).click()
+    // The journal keeps every line, the command and the closing one too.
+    await openJournal(page)
     const record = page.getByRole('complementary', {
-      name: 'Story so far drawer',
+      name: 'Journal drawer',
     })
     await expect(record).toContainText(`› ${command}`)
     await expect(record).toContainText('The whisper comes once more')

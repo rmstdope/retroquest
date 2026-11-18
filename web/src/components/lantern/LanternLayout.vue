@@ -90,6 +90,7 @@ import type { AreaThing } from '@/lantern/areaThings'
 import AcquiredFlight from './AcquiredFlight.vue'
 import ChapterPage from './ChapterPage.vue'
 import CompassPanel from './CompassPanel.vue'
+import BiggerMapDialog from './BiggerMapDialog.vue'
 import EndScreen from './EndScreen.vue'
 import FinishDialog from './FinishDialog.vue'
 import JournalDrawer from './JournalDrawer.vue'
@@ -97,6 +98,7 @@ import JournalPanel from './JournalPanel.vue'
 import LanternDialog from './LanternDialog.vue'
 import GameMenu, {
   type InfoKind,
+  type JourneyKind,
   type MenuEntry,
   type MenuKind,
 } from './GameMenu.vue'
@@ -128,15 +130,17 @@ import type { SaveSlot } from '@/types/bridge'
  * Shell of the Lantern UI (the only UI; old `?ui=` links open it too): no top bar, story (one
  * StoryTurn per turn) and, on a keyboard, the typing box (F1). On laptops (≥1024 × 560) the
  * room is played on its picture, which fills the play area: the room's name
- * top-left (`RoomPlate`; who and what is here are marked on the picture), the buttons Quests, Story
- * so far and Map and the round ☰ (the menu) top-right (the journal and the story open as a drawer from
- * the right, the map beneath its button), the narrator's words up the left
- * side. There is no action bar: Look, Search and Rest open from the room's name, Hint is the first of the buttons, and F1 brings up a typing box at the foot of the picture (not on a phone).
+ * top-left (`RoomPlate`; who and what is here are marked on the picture), 💡 Hint and the round ☰
+ * (the menu) top-right, the narrator's words up the left side. The menu opens
+ * the journey first: the Journal (the story so far) and the Quests open as a
+ * drawer from the right, the Map as the bigger map's window; J, Q and M open
+ * them from the game as well, and what the menu opened comes back to it when
+ * it closes. There is no action bar: Look, Search and Rest open from the room's name, and F1 brings up a typing box at the foot of the picture (not on a phone).
  * The left side is the narration paper: the turns since the last room change
  * (`useNarrationPaper`), each told as one bubble per paragraph like the speech
  * on the right (`StoryTurn`); every bubble and line on the picture fades away
  * 5 s after it has been read, its room closing (`useFadeOnceRead`), and the
- * Hide goes once none is left; the command is not echoed (Story so far keeps it), and
+ * Hide goes once none is left; the command is not echoed (the journal keeps it), and
  * quest news told in the middle leaves nothing here. The newest turn grows as
  * the narrator reaches each part and, when it is taller than the room under
  * the plate, scrolls with a "More below" pill. One "▾ Hide" on its own line at the bottom centre of the picture (or N)
@@ -162,7 +166,7 @@ import type { SaveSlot } from '@/types/bridge'
  * the words up the left side.
  * Other smaller screens that are not short (a tablet upright, a narrow window)
  * play the same stage arranged for a tall screen: the plate across the top
- * with "⟲ Story so far" (the whole story over the stage) and a round 💡 Hint,
+ * with "⟲ Journal" (the whole story over the stage) and a round 💡 Hint,
  * and the one column over the picture above the section tabs (Story, Bag,
  * Spells, Quests, Map). A short mouse window keeps the text page, with the
  * tabs on top (and ☰ in the corner), the room's plate with its Hint, and the
@@ -266,9 +270,14 @@ function onFocusChange(event: FocusEvent): void {
     next instanceof Element && next.matches('input, textarea')
 }
 const section = ref<Section>('story')
-/** What is open on the stage (a journal tab, the story or the map), or null. */
-const drawerTab = ref<'quests' | 'story' | 'map' | null>(null)
+/** The drawer open beside the stage (the quests, or the journal: the story so far), or null. */
+const drawerTab = ref<'quests' | 'story' | null>(null)
+/** The buttons in the stage's corner (Hint and ☰), measured for a sideways phone's plate. */
 const stageButtons = ref<InstanceType<typeof StageButtons> | null>(null)
+/** Whether the open drawer was opened from the menu, which its closing brings back. */
+const drawerFromMenu = ref(false)
+/** What had focus when a drawer was opened from the game, which gets it back when the drawer closes. */
+let drawerOpener: HTMLElement | null = null
 const plate = ref<InstanceType<typeof RoomPlate> | null>(null)
 /** Whether the room's picture is up (otherwise the paper backdrop), for the arrival's ink. */
 const pictured = ref(false)
@@ -371,23 +380,54 @@ function clearShownArrival(): void {
   if (arrival.active) arrival.clear()
 }
 
-/** A stage button: opens its drawer or the map (closing what was open), or closes it if lit. */
-function toggleDrawer(tab: 'quests' | 'story' | 'map'): void {
-  if (drawerTab.value === tab) closeDrawer()
-  else drawerTab.value = tab
+/** J or Q in the game: opens that drawer (closing the other), or closes it if it is the one open. */
+function toggleDrawer(tab: 'quests' | 'story'): void {
+  if (drawerTab.value === tab) {
+    closeDrawer()
+    return
+  }
+  if (!drawerTab.value)
+    drawerOpener =
+      document.activeElement instanceof HTMLElement &&
+      document.activeElement !== document.body
+        ? document.activeElement
+        : null
+  drawerTab.value = tab
 }
 
-/** Close the drawer; focus goes back to the typing box when it is up, else to its lit button (the tab it was on). */
+/**
+ * Close the drawer. One opened from the menu brings the menu back, focus on
+ * its tile; otherwise focus goes back to the typing box when it is up, else to
+ * what had it when the drawer opened (on a phone, the plate's story button).
+ */
 function closeDrawer(): void {
   const tab = drawerTab.value
+  if (drawerFromMenu.value) {
+    drawerFromMenu.value = false
+    drawerTab.value = null
+    focusMenuEntry.value = menuEntry.value
+    gameDialog.value = 'menu'
+    return
+  }
   drawerTab.value = null
   if (!tab) return
   if (typingOpen.value) void nextTick(focusActions)
   // On a phone the story so far was opened from the plate.
   else if (phoneStage.value)
     void nextTick(() => plate.value?.focusStoryButton())
-  else void stageButtons.value?.focusButton(tab)
+  else if (drawerOpener?.isConnected) {
+    const back = drawerOpener
+    void nextTick(() => back.focus({ preventScroll: true }))
+  }
+  drawerOpener = null
 }
+
+// A drawer that goes some other way (a turn played, a press outside it) leaves the menu behind for good.
+watch(drawerTab, (tab) => {
+  if (tab || !drawerFromMenu.value) return
+  drawerFromMenu.value = false
+  menuEntry.value = null
+})
 
 // A turn played closes the story drawer; the turn then plays on the stage.
 watch(
@@ -1127,6 +1167,7 @@ onMounted(() => {
   document.addEventListener('keydown', onPaperKey)
   document.addEventListener('keydown', onNamesKey)
   document.addEventListener('keydown', onBeltKey)
+  document.addEventListener('keydown', onJourneyKey)
   document.addEventListener('focusin', onFocusIn)
   document.addEventListener('keydown', onNamesEscape, true)
   document.addEventListener('keyup', onSpaceUp)
@@ -1213,6 +1254,7 @@ onUnmounted(() => {
   document.removeEventListener('keydown', onPaperKey)
   document.removeEventListener('keydown', onNamesKey)
   document.removeEventListener('keydown', onBeltKey)
+  document.removeEventListener('keydown', onJourneyKey)
   document.removeEventListener('focusin', onFocusIn)
   document.removeEventListener('keydown', onNamesEscape, true)
   document.removeEventListener('keyup', onSpaceUp)
@@ -1946,6 +1988,69 @@ function openGameDialog(kind: 'menu' | MenuKind): void {
   gameDialog.value = kind
 }
 
+/**
+ * An entry of the menu: a window opens in its place (the map among them), or
+ * the journal or the quests open as their drawer beside the stage while the
+ * menu waits; closing either comes back to the menu, focus on its entry.
+ */
+function openFromMenu(kind: MenuKind): void {
+  if (kind !== 'journal' && kind !== 'quests') {
+    openGameDialog(kind)
+    return
+  }
+  menuEntry.value = kind
+  gameDialog.value = null
+  drawerFromMenu.value = true
+  drawerTab.value = kind === 'journal' ? 'story' : 'quests'
+}
+
+/** M in the game: the bigger map, which closes back to the game. */
+function openMapFromGame(): void {
+  if (drawerTab.value) drawerTab.value = null
+  dialogOpener =
+    document.activeElement instanceof HTMLElement
+      ? document.activeElement
+      : null
+  menuEntry.value = null
+  gameDialog.value = 'map'
+}
+
+/**
+ * J, Q and M: the journal, the quests and the bigger map, as the menu's tiles
+ * open them. In the game the drawers toggle (J on the quests switches to the
+ * journal) and M opens the map; in the menu they open what its tile does, so
+ * closing comes back to it; on the map M closes it. Not in a text field, not
+ * with Ctrl, ⌘ or Alt, and not while another window, the end, a ring or a
+ * page that is not the stage is up.
+ */
+function onJourneyKey(event: KeyboardEvent): void {
+  const kinds: Record<string, JourneyKind> = {
+    j: 'journal',
+    q: 'quests',
+    m: 'map',
+  }
+  const kind = kinds[event.key.toLowerCase()]
+  if (!kind || event.defaultPrevented || event.repeat) return
+  if (event.ctrlKey || event.metaKey || event.altKey) return
+  const target = event.target instanceof Element ? event.target : null
+  if (target?.closest('input, textarea, select, [contenteditable]')) return
+  if (!staged.value || ring.value || game.ending) return
+  if (gameDialog.value === 'map' && kind === 'map') {
+    event.preventDefault()
+    void closeGameDialog()
+    return
+  }
+  if (gameDialog.value === 'menu') {
+    event.preventDefault()
+    openFromMenu(kind)
+    return
+  }
+  if (dialogOpen()) return
+  event.preventDefault()
+  if (kind === 'map') openMapFromGame()
+  else toggleDrawer(kind === 'journal' ? 'story' : 'quests')
+}
+
 /** Quit asked from the menu: the question takes its place, and Cancel brings it back. */
 function askQuitFromMenu(): void {
   menuEntry.value = 'quit'
@@ -2007,9 +2112,13 @@ watch(
 )
 
 // The narration waits, mid-line, while the menu or anything from it is open;
-// the music and the room's sounds play on.
+// the music and the room's sounds play on. The map opened from the game (M)
+// is not the menu: like the drawers it lets the voice read on and catches up.
 watch(
-  () => gameDialog.value !== null || game.quitAsked,
+  () =>
+    (gameDialog.value !== null &&
+      !(gameDialog.value === 'map' && menuEntry.value === null)) ||
+    game.quitAsked,
   (open) => (open ? narration.pause() : narration.resume()),
 )
 
@@ -2402,12 +2511,7 @@ watch(
               ref="stageButtons"
               :compact="sideways"
               class="lq-stage-buttons"
-              :drawer="drawerTab"
-              @journal="toggleDrawer"
-              @story="toggleDrawer('story')"
-              @map="toggleDrawer('map')"
               @menu="openGameDialog('menu')"
-              @close="closeDrawer"
             />
             <!-- The typing box (F1) and the note about F1 stand at the foot of the picture, where the action bar used to be. -->
             <CommandBox
@@ -2775,8 +2879,13 @@ watch(
             v-else-if="gameDialog === 'menu'"
             :focus="focusMenuEntry"
             @close="closeAllGameDialogs"
-            @open="openGameDialog"
+            @open="openFromMenu"
             @quit="askQuitFromMenu"
+          />
+          <BiggerMapDialog
+            v-else-if="gameDialog === 'map'"
+            @close="closeGameDialog"
+            @done="closeAllGameDialogs"
           />
           <SettingsDialog
             v-else-if="gameDialog === 'settings'"
@@ -2790,7 +2899,7 @@ watch(
             @done="closeAllGameDialogs"
           />
           <LanternDialog
-            v-else-if="gameDialog"
+            v-else-if="gameDialog === 'help'"
             :key="gameDialog"
             :title="INFO_TITLES[gameDialog]"
             :eyebrow="GAME_NAME"
@@ -3035,10 +3144,10 @@ watch(
   position: relative;
   z-index: var(--lq-z-page-phone-plate);
   flex: 0 0 auto;
-  /* The right margin leaves the corner to the menu button, so "Story so far" sits beside it. */
+  /* The right margin leaves the corner to the menu button, so "⟲ Journal" sits beside it. */
   margin: 8px 60px 0 8px;
 }
-/* What is left beside "Story so far" is narrow, so a long room name wraps rather than being cut off. */
+/* What is left beside "⟲ Journal" is narrow, so a long room name wraps rather than being cut off. */
 .lq-phone-plate :deep(.lq-room-name) {
   white-space: normal;
 }

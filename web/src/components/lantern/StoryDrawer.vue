@@ -92,11 +92,11 @@ function onKeydown(event: KeyboardEvent): void {
   <aside
     class="lq-story-drawer"
     :class="{ 'lq-phone-drawer': phone }"
-    aria-label="Story so far drawer"
+    aria-label="Journal drawer"
     @keydown="onKeydown"
   >
     <header class="lq-story-drawer-head">
-      <h2>Story so far</h2>
+      <h2>Journal</h2>
       <button
         type="button"
         class="lq-drawer-close"
@@ -110,7 +110,7 @@ function onKeydown(event: KeyboardEvent): void {
       ref="body"
       class="lq-story-drawer-body"
       role="region"
-      aria-label="Story so far"
+      aria-label="Journal"
       tabindex="-1"
       @lq-follow.prevent
       @keydown="onBodyKeydown"

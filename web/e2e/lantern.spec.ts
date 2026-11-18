@@ -1,4 +1,11 @@
-import { test, expect, enterCommand, type Page, skipTelling } from './fixtures'
+import {
+  test,
+  expect,
+  enterCommand,
+  gameKey,
+  type Page,
+  skipTelling,
+} from './fixtures'
 import { GAME_NAME } from '../src/engine/gameName'
 
 /** Wait for the game to start (the act chunks load after the page's load event). */
@@ -344,39 +351,24 @@ test.describe('Lantern UI (the default)', () => {
     const plate = page.getByRole('region', { name: 'Current location' })
     await expect(plate).toContainText('Village Square')
     await expect(plate).not.toContainText('You are in')
-    for (const name of [/Quests · 0/, /Story so far/])
-      await expect(page.getByRole('button', { name })).toBeVisible()
+    // Only Hint and ☰ stand in the corner: the journey and the map are in the menu, and on J, Q and M.
+    await expect(page.getByRole('button', { name: /Hint/ })).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Menu' })).toBeVisible()
+    for (const name of [/^Quests/, /Story so far/, /Map/])
+      await expect(page.getByRole('button', { name })).toHaveCount(0)
     // The Bag and Spells are the belt of pictures at the foot of the picture.
     await expect(page.getByRole('button', { name: /^Bag · / })).toHaveCount(0)
     await expect(page.locator('[data-belt-pic="item:bread"]')).toBeVisible()
     await expect(page.getByRole('complementary')).toHaveCount(0)
 
-    const exit = page.getByRole('button', { name: "Go north to Mira's Hut" })
-    await expect(exit).toHaveCount(0)
-    await page.getByRole('button', { name: /Map/ }).hover()
-    await expect(exit).toHaveCount(0)
-    await page.getByRole('button', { name: /Map/ }).click()
-    await expect(exit).toBeVisible()
-
-    // The bug's own direction: with Quests open, Map replaces it and is pressable.
-    await page.getByRole('button', { name: /Quests · 0/ }).click()
-    await page.getByRole('button', { name: /Map/ }).click()
-    await expect(
-      page.getByRole('complementary', { name: 'Journal drawer' }),
-    ).toHaveCount(0)
-    await expect(exit).toBeVisible()
-    await expect(exit).toBeEnabled()
-
-    await page.getByRole('button', { name: /Quests · 0/ }).click()
-    const drawer = page.getByRole('complementary', { name: 'Journal drawer' })
+    await gameKey(page, 'q')
+    const drawer = page.getByRole('complementary', { name: 'Quests drawer' })
     await expect(drawer.getByRole('heading', { name: 'Quests' })).toBeVisible()
     await expect(drawer.getByRole('tab')).toHaveCount(0)
-    // The lit button stays in sight, and pressing it again closes the drawer.
-    await expect(page.getByRole('button', { name: /Quests · 0/ })).toBeVisible()
-    await page.getByRole('button', { name: /Quests · 0/ }).click()
+    // Q again closes the drawer, and opens it once more.
+    await gameKey(page, 'q')
     await expect(drawer).toHaveCount(0)
-    await expect(page.getByRole('button', { name: /Quests · 0/ })).toBeFocused()
-    await page.getByRole('button', { name: /Quests · 0/ }).click()
+    await gameKey(page, 'q')
     await expect(drawer).toBeVisible()
     await page.keyboard.press('Escape')
     await expect(drawer).toHaveCount(0)
@@ -386,20 +378,19 @@ test.describe('Lantern UI (the default)', () => {
     await expect(page.locator('.lq-phone-plate')).toBeVisible()
   })
 
-  test('opens the story so far as a drawer beside the stage on a laptop', async ({
+  test('opens the journal as a drawer beside the stage on a laptop', async ({
     page,
   }) => {
     await page.setViewportSize({ width: 1280, height: 800 })
     await page.goto('/')
     await injectMockState(page)
 
-    const button = page.getByRole('button', { name: /Story so far/ })
-    await button.click()
+    await gameKey(page, 'j')
     const drawer = page.getByRole('complementary', {
-      name: 'Story so far drawer',
+      name: 'Journal drawer',
     })
     await expect(drawer).toBeVisible()
-    await expect(button).toHaveAttribute('aria-pressed', 'true')
+    await expect(drawer.getByRole('heading', { name: 'Journal' })).toBeVisible()
     const box = await drawer.boundingBox()
     expect(Math.abs(box!.width - 640)).toBeLessThanOrEqual(2)
     // It reaches the foot of the picture: no action bar is left to stop above.
@@ -410,20 +401,47 @@ test.describe('Lantern UI (the default)', () => {
 
     await page.keyboard.press('Escape')
     await expect(drawer).toHaveCount(0)
-    await expect(button).toBeFocused()
 
-    // Quests swaps it, and pressing the picture closes it.
-    await button.click()
-    await page.getByRole('button', { name: /Quests · / }).click()
+    // Q swaps it for the quests, J back, and pressing the picture closes it.
+    await gameKey(page, 'j')
+    await gameKey(page, 'q')
     await expect(drawer).toHaveCount(0)
     await expect(
-      page.getByRole('complementary', { name: 'Journal drawer' }),
+      page.getByRole('complementary', { name: 'Quests drawer' }),
     ).toBeVisible()
-    await button.click()
+    await gameKey(page, 'j')
+    await expect(drawer).toBeVisible()
     await page
       .locator('.lq-stage-picture')
       .click({ position: { x: 20, y: 300 } })
     await expect(drawer).toHaveCount(0)
+  })
+
+  test('opens the journal and the quests from the menu, and closing them goes back to the menu', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1280, height: 800 })
+    await page.goto('/')
+    await injectMockState(page)
+    const menu = page.getByRole('dialog', { name: 'Menu' })
+    for (const [tile, drawerName] of [
+      ['Journal', 'Journal drawer'],
+      ['Quests', 'Quests drawer'],
+    ]) {
+      await page.getByRole('button', { name: 'Menu', exact: true }).click()
+      await menu.getByRole('button', { name: tile, exact: true }).click()
+      await expect(menu).toHaveCount(0)
+      const drawer = page.getByRole('complementary', { name: drawerName })
+      await expect(drawer).toBeVisible()
+      await page.keyboard.press('Escape')
+      await expect(drawer).toHaveCount(0)
+      await expect(menu).toBeVisible()
+      await expect(
+        menu.getByRole('button', { name: tile, exact: true }),
+      ).toBeFocused()
+      await page.keyboard.press('Escape')
+      await expect(menu).toHaveCount(0)
+    }
   })
 
   test('puts speech on the picture on a laptop: the grandmother on the right, Elior on the left, cleared by ✕ and walking', async ({

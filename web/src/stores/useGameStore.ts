@@ -115,7 +115,7 @@ export interface Turn {
   /**
    * The answer as the engine wrote it, kept only when `text` had the learned
    * spells' lines taken off because they are told in the middle
-   * (`tellSpellsInMiddle`); Story so far shows this one.
+   * (`tellSpellsInMiddle`); the journal shows this one.
    */
   fullText?: string
   /** Set on a player's command and on the arrival that opens an act: its answer is narrated (never on a load). */
@@ -745,7 +745,7 @@ export const useGameStore = defineStore('game', () => {
   /**
    * The turn's learned spells are told in the middle of the picture: take
    * their "You have learned …" lines off the turn the narrator's card shows
-   * and keep the whole text for Story so far. Once is enough.
+   * and keep the whole text for the journal. Once is enough.
    */
   function tellSpellsInMiddle(turnId: number): void {
     const turn = turns.value.find((entry) => entry.id === turnId)

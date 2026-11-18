@@ -15,7 +15,6 @@ const DECLARED: Array<[file: string, cls: string, kind: string]> = [
   ['LanternLayout.vue', 'lq-show-names', 'panel'],
   ['LanternLayout.vue', 'lq-stage-box', 'keep-clear'],
   ['StageButtons.vue', 'lq-stage-btn', 'panel'],
-  ['StageButtons.vue', 'lq-map-pop', 'panel'],
   ['ArrivalOnPicture.vue', 'lq-arrival-card', 'words'],
   ['StageSpeech.vue', 'lq-ln', 'words'],
   ['StageSpeech.vue', 'lq-line-name', 'words'],

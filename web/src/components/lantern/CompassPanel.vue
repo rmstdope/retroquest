@@ -129,7 +129,11 @@ function go(direction: string): void {
       <span class="lq-bigger-icon" aria-hidden="true">⤢</span> Bigger map
     </button>
     <Teleport to="body">
-      <BiggerMapDialog v-if="biggerOpen" @close="closeBigger" />
+      <BiggerMapDialog
+        v-if="biggerOpen"
+        @close="closeBigger"
+        @done="closeBigger"
+      />
     </Teleport>
   </section>
 </template>

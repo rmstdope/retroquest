@@ -15,7 +15,7 @@ import LanternDialog from './LanternDialog.vue'
  * places dim while the game is busy, and a visited place that no open way
  * leads to from here (a hut with no door) is drawn but cannot be pressed. It opens with "You are here" in view.
  */
-const emit = defineEmits<{ close: [] }>()
+const emit = defineEmits<{ close: []; done: [] }>()
 const game = useGameStore()
 
 const ROMAN = ['I', 'II', 'III', 'IV', 'V']
@@ -97,11 +97,11 @@ const map = ref<HTMLElement | null>(null)
  */
 const busy = computed(() => !game.acceptInput || game.groupHeld('place'))
 
-/** Press a place: walk there, and the window closes. */
+/** Press a place: walk there, and the window is done (the walk ends in the game, even when the menu opened the map). */
 function go(key: string): void {
   if (busy.value) return
   game.travelTo(key)
-  emit('close')
+  emit('done')
 }
 
 onMounted(() => {

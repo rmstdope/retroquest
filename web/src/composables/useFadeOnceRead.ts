@@ -60,7 +60,7 @@ export interface FadeOnceRead {
  * until the lines above it are gone.
  * So a line going never moves the lines still showing in a column resting at
  * its foot. The marks follow the DOM as lines come and go and as their reading
- * starts and stops; Story so far keeps every line.
+ * starts and stops; the journal keeps every line.
  *
  * While `held` says so (the words are hidden), no line fades: a fading one is
  * live again (a spent one stays out of sight) and nothing waits its time to

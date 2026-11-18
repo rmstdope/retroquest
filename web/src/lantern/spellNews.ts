@@ -3,7 +3,7 @@
  * picture the way quest news is (`stageArrival`). It is made from the spell's
  * name and the description the Spells list gives, and it takes the engine's
  * "You have learned …" sentence off the narrator's card, since the middle
- * tells it (Story so far keeps the whole text).
+ * tells it (the journal keeps the whole text).
  */
 
 /** A spell learned in a turn, ready to be told. */

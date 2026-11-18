@@ -30,7 +30,7 @@ function onKeydown(event: KeyboardEvent): void {
   <aside
     ref="root"
     class="lq-drawer"
-    aria-label="Journal drawer"
+    aria-label="Quests drawer"
     data-panel
     @keydown="onKeydown"
   >

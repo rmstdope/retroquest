@@ -120,19 +120,17 @@ describe('LanternLayout: panels wait for the narration', () => {
     expect(useFlightStore().current?.name).toBe(GEM)
   })
 
-  it('keeps the old plate and map until the arrival is read, then lights them', async () => {
-    const w = await ready()
-    await w.get('[data-button="map"]').trigger('click')
-    await goNorth()
-    expect(useNarrationStore().isNarrating).toBe(true)
-    expect(cardName(w)).toBe('Hall')
-    expect(w.find('.lq-exit').exists()).toBe(true)
-
-    await vi.advanceTimersByTimeAsync(SCENE_PAUSE_MS)
-    expect(cardName(w)).toBe('Garden')
-    expect(w.get('.lq-plate').classes()).toContain('lq-flash')
-    expect(w.get('.lq-compass').classes()).toContain('lq-flash')
-  })
+  /** A key pressed on the page. */
+  async function key(name: string): Promise<void> {
+    document.body.dispatchEvent(
+      new KeyboardEvent('keydown', {
+        key: name,
+        bubbles: true,
+        cancelable: true,
+      }),
+    )
+    await vi.advanceTimersByTimeAsync(0)
+  }
 
   it('holds the old room until the arrival is told, also at narration volume 0', async () => {
     const w = await ready()
@@ -143,23 +141,11 @@ describe('LanternLayout: panels wait for the narration', () => {
     expect(useGameStore().panelsHeld).toBe(true)
   })
 
-  it('catches up, and does nothing else, when a held map exit is pressed', async () => {
-    const w = await ready()
-    await w.get('[data-button="map"]').trigger('click')
+  it('opens the bigger map on the first M while the voice reads on', async () => {
+    await ready()
+    useGameStore().showTitle = false
     await goNorth()
-    const turns = useGameStore().turns.length
-    await w.get('.lq-compass .lq-exit').trigger('click')
-    expect(useNarrationStore().isNarrating).toBe(false)
-    expect(cardName(w)).toBe('Garden')
-    expect(useGameStore().turns).toHaveLength(turns)
-    expect(w.get('.lq-plate').classes()).not.toContain('lq-flash')
-  })
-
-  it('opens the bigger map on the first press while the voice reads on', async () => {
-    const w = await ready()
-    await w.get('[data-button="map"]').trigger('click')
-    await goNorth()
-    await w.get('[data-bigger-map]').trigger('click')
+    await key('m')
     expect(document.querySelector('.lq-dialog-layer')).not.toBeNull()
     expect(useNarrationStore().isNarrating).toBe(true)
     // The window shows the place the voice is still reading from, dimmed.
@@ -171,33 +157,31 @@ describe('LanternLayout: panels wait for the narration', () => {
     expect(
       document.querySelector('[data-current="true"]')?.textContent,
     ).toContain('Hall')
-    // Once the arrival is read the map catches up.
+    // M is not the menu: the voice reads on under the map, and once the arrival is read the map catches up.
     await vi.advanceTimersByTimeAsync(SCENE_PAUSE_MS)
     expect(
       document.querySelector('[data-current="true"]')?.textContent,
     ).toContain('Garden')
-    expect(useGameStore().groupHeld('place')).toBe(false)
   })
 
-  it('opens Story so far on the first press while the voice reads on', async () => {
+  it('opens the Journal on the first J while the voice reads on', async () => {
     const w = await ready()
+    useGameStore().showTitle = false
     await goNorth()
-    await w.get('[data-button="story"]').trigger('click')
+    await key('j')
     expect(w.find('.lq-story-drawer').exists()).toBe(true)
     expect(useNarrationStore().isNarrating).toBe(true)
     expect(cardName(w)).toBe('Hall')
   })
 
-  it.each(['quests'])(
-    'opens the %s drawer on the first press while the voice reads on',
-    async (tab) => {
-      const w = await ready()
-      await goNorth()
-      await w.get(`[data-button="${tab}"]`).trigger('click')
-      expect(w.find('.lq-drawer').exists()).toBe(true)
-      expect(useNarrationStore().isNarrating).toBe(true)
-    },
-  )
+  it('opens the Quests drawer on the first Q while the voice reads on', async () => {
+    const w = await ready()
+    useGameStore().showTitle = false
+    await goNorth()
+    await key('q')
+    expect(w.find('.lq-drawer').exists()).toBe(true)
+    expect(useNarrationStore().isNarrating).toBe(true)
+  })
 
   it.each([
     ['the stage buttons', true, '[data-button="hint"]'],
@@ -221,14 +205,6 @@ describe('LanternLayout: panels wait for the narration', () => {
       expect(game.turns.at(-1)?.command).toBe('hint')
     },
   )
-
-  it('opens the map on the first press while the voice reads on', async () => {
-    const w = await ready()
-    await goNorth()
-    await w.get('[data-button="map"]').trigger('click')
-    expect(w.find('.lq-map-pop').exists()).toBe(true)
-    expect(useNarrationStore().isNarrating).toBe(true)
-  })
 
   it('clears the arrival on the picture, and the voice, when a pill is pressed', async () => {
     const w = await ready()

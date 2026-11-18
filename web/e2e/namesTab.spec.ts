@@ -10,6 +10,7 @@ import {
   skipTelling,
   enterCommand,
   closeTypingBox,
+  gameKey,
 } from './fixtures'
 
 /** Let the browser report the scroll that focusing a name causes. */
@@ -112,7 +113,7 @@ test("Tab reaches the newest turn's names between the stage buttons and the acti
   await expect(stop).not.toBeFocused()
 })
 
-test('in the Story so far drawer, Enter at once on a name just scrolled into view opens its menu', async ({
+test('in the Journal drawer, Enter at once on a name just scrolled into view opens its menu', async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1280, height: 800 })
@@ -122,7 +123,7 @@ test('in the Story so far drawer, Enter at once on a name just scrolled into vie
   for (const command of ['talk to voice', 'look', 'look', 'look', 'look']) {
     await enterCommand(page, command)
   }
-  await page.getByRole('button', { name: /Story so far/ }).click()
+  await gameKey(page, 'j')
   const drawer = page.locator('.lq-story-drawer')
   const body = drawer.locator('.lq-story-drawer-body')
   await expect(body).toBeFocused()

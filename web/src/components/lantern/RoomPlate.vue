@@ -23,7 +23,7 @@ import HintButton from './HintButton.vue'
  * still focusable); the name still opens. Opened by keyboard, focus goes to
  * Look; ↑ ↓ ← → move between the pills and Escape gives focus back to the name.
  *
- * On the tall-screen stage (`storyButton`) "⟲ Story so far" stands to the
+ * On the tall-screen stage (`storyButton`) "⟲ Journal" (the story so far) stands to the
  * right of the name, and stays while the name is away; with `hintButton` a
  * round 💡 Hint stands beside it (that stage has no top-right row of buttons).
  * The plate lets presses through to the picture beneath; only its buttons take
@@ -52,7 +52,7 @@ const PILLS: ReadonlyArray<{ label: string; command: string }> = [
   { label: '💤 Rest', command: 'rest' },
 ]
 
-/** Put focus on "⟲ Story so far" (the story so far has just been closed). */
+/** Put focus on "⟲ Journal" (the journal has just been closed). */
 function focusStoryButton(): void {
   storyEl.value?.focus()
 }
@@ -194,7 +194,7 @@ defineExpose({ focusStoryButton, focusName })
       class="lq-story-so-far"
       @click="emit('story')"
     >
-      ⟲ Story so far
+      ⟲ Journal
     </button>
     <HintButton
       v-if="props.hintButton"

@@ -4,6 +4,7 @@ import { mount, type VueWrapper } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import GameMenu, { type MenuEntry } from './GameMenu.vue'
 import { useGameStore } from '@/stores/useGameStore'
+import type { QuestSummary } from '@/engine'
 
 describe('GameMenu', () => {
   let wrapper: VueWrapper | undefined
@@ -69,11 +70,16 @@ describe('GameMenu', () => {
     }
   })
 
-  it('lists plain one-word entries in the agreed order', () => {
+  it('lists plain one-word entries in the agreed order, the journey first', () => {
     const w = mountMenu()
 
-    const labels = w.findAll('.lq-menu-entry').map((entry) => entry.text())
+    const labels = w
+      .findAll('.lq-menu-entry')
+      .map((entry) => entry.attributes('aria-label') ?? entry.text())
     expect(labels).toEqual([
+      'Journal',
+      'Quests',
+      'Map',
       'Quick save',
       'Quick load',
       'Save',
@@ -83,6 +89,58 @@ describe('GameMenu', () => {
       'Quit',
     ])
     expect(w.text()).not.toContain('Stats')
+  })
+
+  describe('the journey tiles', () => {
+    it('shows Journal, Quests and Map as tiles, each with its key', () => {
+      const w = mountMenu()
+      const tiles = w.findAll('.lq-menu-journey')
+
+      expect(tiles.map((t) => t.get('.lq-menu-journey-name').text())).toEqual([
+        'Journal',
+        'Quests',
+        'Map',
+      ])
+      expect(tiles.map((t) => t.get('kbd').text())).toEqual(['J', 'Q', 'M'])
+      for (const tile of tiles)
+        expect(tile.get('kbd').attributes('aria-hidden')).toBe('true')
+    })
+
+    it('counts the open quests on the Quests tile, and marks news', () => {
+      const game = useGameStore()
+      const quest = (name: string): QuestSummary => ({
+        name,
+        main: false,
+        done: false,
+        details: { kind: 'journal', earlier: [], latest: '' },
+      })
+      game.activeQuests = [quest('One'), quest('Two')]
+      game.questsHaveNew = true
+      const w = mountMenu()
+      const quests = w.findAll('.lq-menu-journey')[1]
+
+      expect(quests.get('.lq-menu-journey-count').text()).toBe('2')
+      expect(quests.find('.lq-menu-journey-new').exists()).toBe(true)
+      expect(quests.attributes('aria-label')).toBe('Quests')
+      expect(quests.attributes('aria-description')).toBe('2 open, news')
+    })
+
+    it('opens the journal, the quests and the map', async () => {
+      const w = mountMenu()
+      for (const label of ['Journal', 'Quests', 'Map'])
+        await w.get(`[aria-label="${label}"]`).trigger('click')
+
+      expect(w.emitted('open')).toEqual([['journal'], ['quests'], ['map']])
+    })
+
+    it('starts focus on the tile it is given back to', async () => {
+      mountMenu({ focus: 'quests' })
+      await vi.waitFor(() =>
+        expect(document.activeElement?.getAttribute('aria-label')).toBe(
+          'Quests',
+        ),
+      )
+    })
   })
 
   it('starts focus on Save, or on the entry it is given back to', async () => {
@@ -170,6 +228,7 @@ describe('GameMenu', () => {
     })
     const w = mountMenu()
     const focused = (): string | undefined =>
+      document.activeElement?.getAttribute('aria-label') ??
       document.activeElement?.textContent?.trim()
     await vi.waitFor(() => expect(focused()).toBe('Save'))
 
@@ -180,9 +239,14 @@ describe('GameMenu', () => {
     // Quick load is dimmed and passed over.
     expect(focused()).toBe('Quick save')
     key(document.activeElement!, 'ArrowUp')
+    expect(focused()).toBe('Map')
+    key(document.activeElement!, 'ArrowUp')
+    key(document.activeElement!, 'ArrowUp')
+    expect(focused()).toBe('Journal')
+    key(document.activeElement!, 'ArrowUp')
     expect(focused()).toBe('Quit')
     key(document.activeElement!, 'ArrowDown')
-    expect(focused()).toBe('Quick save')
+    expect(focused()).toBe('Journal')
     expect(w.emitted('open')).toBeUndefined()
   })
 
@@ -212,7 +276,7 @@ describe('GameMenu', () => {
     const w = mountMenu()
     const entries = w.findAll('.lq-menu-entry')
 
-    expect(entries).toHaveLength(7)
+    expect(entries).toHaveLength(10)
     for (const entry of entries) {
       expect(entry.attributes('data-ring')).toBeDefined()
     }
