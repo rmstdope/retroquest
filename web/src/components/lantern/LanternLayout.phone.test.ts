@@ -159,7 +159,7 @@ describe('LanternLayout: the stage on a phone', () => {
       expect(w.find('.lq-type-input').exists()).toBe(false)
     })
 
-    it('opens Look, Search, Rest and Hint in a row to the right of the name', async () => {
+    it('opens Look, Search, Rest and Hint in a row under the name', async () => {
       await w.get('.lq-stage-plate .lq-name-btn').trigger('click')
       expect(
         w.findAll('.lq-stage-plate .lq-pill').map((b) => b.text()),

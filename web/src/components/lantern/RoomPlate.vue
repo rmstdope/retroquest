@@ -14,7 +14,7 @@ import { useSendCommand } from '@/composables/useSendCommand'
  * room's name and description are read in the story.
  *
  * The name is a button ("<name> ▾"). Pressed, it is outlined, shows ▴ and fans
- * out four pills beneath it (in a row to its right when `compact`, a phone on
+ * out four pills beneath it (in one row when `compact`, a phone on
  * its side): "👁 Look", "🔍 Search", "💤 Rest" and "💡 Hint", which send those
  * existing commands. The pills fold on a pill press, on the name again, on Escape, on a
  * press anywhere outside the plate, and when the room changes, a game begins
@@ -250,11 +250,9 @@ defineExpose({ focusStoryButton, focusName })
   margin-top: 8px;
   pointer-events: auto;
 }
+/* A phone on its side: one row under the name, which leaves the four whole and clear of ☰ however long the name. */
 .lq-plate-compact .lq-pills {
-  top: 0;
-  left: 100%;
   flex-direction: row;
-  margin: 0 0 0 10px;
 }
 .lq-pill {
   min-height: 36px;
