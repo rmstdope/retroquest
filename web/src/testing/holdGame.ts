@@ -7,6 +7,7 @@ import { Act, Character, Item, Quest, Room, type GameState } from '@/engine'
 import type { Pinia } from 'pinia'
 import { useBridge, type ActClass } from '@/composables/useBridge'
 import { useGameStore } from '@/stores/useGameStore'
+import { useSettingsStore } from '@/stores/useSettingsStore'
 
 /** The item whose pick-up changes the bag and starts the second quest. */
 export const GEM = 'Gem'
@@ -144,6 +145,8 @@ export async function startedHoldStore(
   const bridge = useBridge(async (): Promise<ActClass[]> => [HoldAct])
   const store = useGameStore(pinia)
   store.setBridge(bridge)
+  // These games load and start at once, with no fade into them.
+  useSettingsStore(pinia).reduceMotion = 'on'
   await store.initGame()
   store.dismissModal()
   store.setPanelHold(true)

@@ -4,6 +4,7 @@ import { mount, type VueWrapper } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import LanternLayout from './LanternLayout.vue'
 import { useGameStore } from '@/stores/useGameStore'
+import { useSettingsStore } from '@/stores/useSettingsStore'
 import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
 import { useBridge, type ActClass } from '@/composables/useBridge'
 import { Act1 } from '@/act1/Act1'
@@ -35,6 +36,8 @@ describe('LanternLayout: patches of the room picture', () => {
       removeItem: (): void => {},
     })
     game = useGameStore()
+    // A load here is instant: its fade is not what these tests are about.
+    useSettingsStore().reduceMotion = 'on'
     game.setBridge(useBridge(async (): Promise<ActClass[]> => [Act1]))
     await game.initGame()
     game.dismissModal()

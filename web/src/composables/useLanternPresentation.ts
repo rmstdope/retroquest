@@ -3,6 +3,7 @@ import { useGameStore, type Turn } from '@/stores/useGameStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
 import { useArrivalStore } from '@/stores/useArrivalStore'
 import { useSceneStore } from '@/stores/useSceneStore'
+import { usePassageStore } from '@/stores/usePassageStore'
 import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
 import {
   POPUP_NARRATION_ID,
@@ -98,6 +99,7 @@ export function useLanternPresentation(
   const narration = useNarrationStore()
   const arrival = useArrivalStore()
   const scene = useSceneStore()
+  const passage = usePassageStore()
   const speech = useStageSpeechStore()
   const panelHold = usePanelHold()
 
@@ -410,11 +412,18 @@ export function useLanternPresentation(
   // watch above so the old voice is cut first, and before the render so
   // nothing flashes unspoken.
   watch(
-    () => [game.showModal, game.modalChapter, game.showTitle] as const,
-    async ([open, chapter, title]) => {
+    () =>
+      [
+        game.showModal,
+        game.modalChapter,
+        game.showTitle,
+        passage.phase,
+      ] as const,
+    async ([open, chapter, title, passing]) => {
       narration.skipAll()
       // The game's first chapter page waits under the title page.
-      if (!open || title || !chapter) return
+      // The first page's voice starts once the screen is fully up, not in the dark.
+      if (!open || title || !chapter || passing !== 'idle') return
       const folder = actFolder(chapter.act)
       if (!folder) return
       await narration.preload(folder)

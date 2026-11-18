@@ -80,6 +80,7 @@ export function useActMusic(): ReturnType<typeof useMusic> {
     musicSoundFirings,
     showTitle,
     scenePicture,
+    passageThrough,
   } = storeToRefs(useGameStore())
   const chosen = ref<ChosenManifest | null>(null)
   void loadChosenManifest().then((manifest) => {
@@ -203,14 +204,15 @@ export function useActMusic(): ReturnType<typeof useMusic> {
       // The title page's music rises over two seconds; no other starts so.
       const fadeInMs = !started && showTitle.value ? MUSIC_FADE_IN_MS : 0
       started = true
-      // A walk to another room of the act on the picture stage goes through the dark.
+      // A walk to another room of the act on the picture stage, or a load, goes through the dark.
       const through =
-        scenePicture.value &&
-        !motionReduced() &&
-        played.act === musicActName.value &&
-        played.room !== '' &&
-        musicRoomKey.value !== '' &&
-        played.room !== musicRoomKey.value
+        (scenePicture.value &&
+          !motionReduced() &&
+          played.act === musicActName.value &&
+          played.room !== '' &&
+          musicRoomKey.value !== '' &&
+          played.room !== musicRoomKey.value) ||
+        passageThrough.value
       played = { act: musicActName.value, room: musicRoomKey.value }
       const at = { scene, level }
       if (musicFile.value === '') music.loadTrack('', '')

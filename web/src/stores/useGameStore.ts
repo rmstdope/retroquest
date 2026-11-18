@@ -1211,6 +1211,8 @@ export const useGameStore = defineStore('game', () => {
   }
 
   function submitCommand(cmd: string): void {
+    // A command during the fade into a game brings the new screen up first.
+    passage.skip()
     if (!acceptInput.value) return
     if (!cmd || !cmd.trim()) return
 
