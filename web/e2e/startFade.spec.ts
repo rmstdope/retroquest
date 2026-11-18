@@ -74,4 +74,21 @@ test.describe('loading again during the fade into a loaded game', () => {
     })
     await expect(page.locator('.lq-toast')).toHaveText('Game loaded')
   })
+
+  test('a load typed while the screen goes dark is taken and starts its own fade (rq-6fs0)', async ({
+    page,
+  }): Promise<void> => {
+    await enterCommand(page, 'load')
+    await expect(page.locator('.lq-passage-out')).toBeAttached()
+    await enterCommand(page, 'load')
+    await expect(page.getByLabel('Command', { exact: true })).toHaveValue('')
+    await expect(page.locator('.lq-passage-out')).toBeAttached()
+    await expect(
+      page.locator('.lq-toast', { hasText: 'Game loaded' }),
+    ).toHaveCount(0)
+    await expect(page.locator('.lq-passage-idle')).toBeAttached({
+      timeout: 6000,
+    })
+    await expect(page.locator('.lq-toast')).toHaveText('Game loaded')
+  })
 })

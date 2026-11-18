@@ -1213,10 +1213,19 @@ export const useGameStore = defineStore('game', () => {
     openFirstAct(b)
   }
 
+  /**
+   * Whether a typed command is taken while the old screen fades out: only a
+   * load is, which skips that fade and starts its own; any other command is not
+   * run in the new game.
+   */
+  function takesDuringFadeOut(cmd: string): boolean {
+    return LOAD_COMMAND.test(cmd.trim())
+  }
+
   function submitCommand(cmd: string): void {
-    // The old screen's command is not run in the new game: while it fades out, nothing goes.
-    if (passage.phase === 'out') return
-    // A command as the new screen rises brings it up first, then goes on. A
+    // The old screen's command is not run in the new game: while it fades out, only a load goes.
+    if (passage.phase === 'out' && !takesDuringFadeOut(cmd)) return
+    // A command during a passage brings the new screen up first, then goes on. A
     // load holds the risen game's notice until it has run: one that begins its
     // own passage drops it, so it never shows over the new dark.
     if (LOAD_COMMAND.test(cmd.trim())) passage.skipThen(() => runCommand(cmd))
@@ -1973,6 +1982,7 @@ export const useGameStore = defineStore('game', () => {
     loadFromTitle,
     startFromTitle,
     passageThrough,
+    takesDuringFadeOut,
     dismissTitle,
     gameNumber,
     loadNumber,

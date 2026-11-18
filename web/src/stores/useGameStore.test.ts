@@ -764,6 +764,23 @@ describe('useGameStore', () => {
       expect(store.loadNumber).toBe(2)
     })
 
+    it('a load typed while the old screen fades out skips that fade and starts its own, with no notice in the dark (rq-6fs0)', () => {
+      store.dismissModal()
+      store.loadGame()
+      expect(passage.phase).toBe('out')
+      vi.advanceTimersByTime(200)
+      store.submitCommand('load')
+      expect(store.loadNumber).toBe(1)
+      expect(passage.phase).toBe('out')
+      expect(store.notice).toBeNull()
+      vi.advanceTimersByTime(PASSAGE_HALF_MS)
+      expect(store.loadNumber).toBe(2)
+      passage.pictureReady()
+      vi.advanceTimersByTime(PASSAGE_HALF_MS)
+      expect(passage.phase).toBe('idle')
+      expect(store.notice?.text).toBe('Game loaded')
+    })
+
     it('a load typed as the new screen rises gives no notice for the first load, only its own once up (rq-r9ax)', () => {
       store.dismissModal()
       store.loadGame()
