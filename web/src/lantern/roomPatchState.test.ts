@@ -6,6 +6,7 @@ import { describe, expect, it } from 'vitest'
 import { Act1 } from '@/act1/Act1'
 import { Key } from '@/act1/items/Key'
 import { Lantern } from '@/act1/items/Lantern'
+import { WitheredCarrot } from '@/act1/items/WitheredCarrot'
 import { Act2 } from '@/act2/Act2'
 import { Act3 } from '@/act3/Act3'
 import { Act4 } from '@/act4/Act4'
@@ -92,6 +93,38 @@ describe('appliedPatchIds', () => {
     expect(appliedPatchIds(act, 'EliorsCottage', game.state)).not.toContain(
       'lantern-lit',
     )
+  })
+
+  describe("the vegetable field's carrot", () => {
+    /** Act I with Elior in the Vegetable Field. */
+    function inField(): { act: Act1; game: Game } {
+      const act = new Act1()
+      const game = new Game([act])
+      game.state.currentRoom = game.state.allRooms.VegetableField
+      return { act, game }
+    }
+    const field = (act: Act1, game: Game): string[] =>
+      appliedPatchIds(act, 'VegetableField', game.state)
+
+    it('takes the withered carrot off the picture once it is carried', () => {
+      const { act, game } = inField()
+      expect(field(act, game)).not.toContain('withered-carrot-taken')
+      executeCommands(game, ['take carrot'])
+      expect(field(act, game)).toContain('withered-carrot-taken')
+    })
+
+    it('takes the fresh carrot off the picture once it is carried, and shows it fresh no more', () => {
+      const { act, game } = inField()
+      const carrot = game.state.currentRoom.items.find(
+        (i) => i instanceof WitheredCarrot,
+      )
+      expect(carrot).toBeInstanceOf(WitheredCarrot)
+      ;(carrot as WitheredCarrot).revive()
+      expect(field(act, game)).toContain('withered-carrot-fresh')
+      executeCommands(game, ['take carrot'])
+      expect(field(act, game)).toContain('withered-carrot-taken')
+      expect(field(act, game)).not.toContain('withered-carrot-fresh')
+    })
   })
 
   it('answers no patch for a room without any', () => {

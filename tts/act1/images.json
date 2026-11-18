@@ -857,6 +857,12 @@
         "area": "dull-knife"
       },
       {
+        "id": "withered-carrot-taken",
+        "title": "Carrot taken",
+        "text": "Remove the carrot from the picture.",
+        "area": "withered-carrot"
+      },
+      {
         "id": "withered-carrot-fresh",
         "title": "Carrot freshened",
         "text": "Make the carrot in the field green and fresh instead of withered.",
