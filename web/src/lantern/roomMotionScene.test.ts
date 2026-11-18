@@ -348,6 +348,25 @@ describe("the title picture's kinds", () => {
     }
   })
 
+  it('draws the ripples under the glints, whatever order the manifest lists them in', () => {
+    const scene = run(['glints', 'ripples'], undefined, 400)
+    const calls: string[] = []
+    const log = (name: string) => (): void => {
+      calls.push(name)
+    }
+    scene.draw(
+      fakeContext({
+        drawImage: log('drawImage'),
+        fillRect: log('fillRect'),
+        stroke: log('stroke'),
+      }),
+    )
+    const lastRipple = calls.lastIndexOf('drawImage')
+    const firstGlint = calls.findIndex((c) => c !== 'drawImage')
+    expect(lastRipple).toBeGreaterThanOrEqual(0)
+    expect(firstGlint).toBeGreaterThan(lastRipple)
+  })
+
   it('stills the ripples at amount 0', () => {
     const scene = sceneOf(1280, 720)
     scene.setSource(SOURCE)
