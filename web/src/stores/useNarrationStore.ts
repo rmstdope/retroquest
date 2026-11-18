@@ -33,6 +33,9 @@ import { readingPauseMs } from '@/lantern/stageSpeech'
  * - A talk that moves Elior can stop before the unit where its scene changes
  *   (`begin`'s `sceneAt`): `atSceneChange` says it is there, and
  *   `passSceneChange` lets it go on once the new picture is up.
+ * - A turn can have a gate (`begin`'s `gateAt`): the narrator stops before that
+ *   unit (`atGate`) until `passGate`, so a learnt spell's name can fly before
+ *   the quest news after it is told.
  * - Words of the turn shown unspoken (by a hurry, a skip, or a block with no
  *   voice, such as an event line) are owed their reading time
  *   (`readingPauseMs` per paragraph): news after them (a spell or quest unit)
@@ -104,6 +107,10 @@ interface ActiveNarration {
   sceneAt: number
   /** Whether the narrator has stopped there. */
   atScene: boolean
+  /** The unit the narrator stops before until `passGate` (the news after a learnt spell waits for its name to fly), or -1. */
+  gateAt: number
+  /** Whether the narrator has stopped at the gate. */
+  atGate: boolean
   /** Until when (`Date.now()`) the words a hurry showed unspoken are read: news waits for it. */
   owedUntil: number
   /** Elior's own words of a say command, still to be spoken before the turn's units, or null. */
@@ -404,6 +411,11 @@ export const useNarrationStore = defineStore('narration', () => {
         now.atScene = true
         return
       }
+      // The gate: the narrator waits until `passGate` lets it on.
+      if (now.gateAt >= 0 && now.unit >= now.gateAt) {
+        now.atGate = true
+        return
+      }
       const unit = now.units[now.unit]
       const index = unit.parts.findIndex((p, i) => i >= now.part && !!p.clip)
       // A unit that asks for a longer breath (a room, a chapter's text after
@@ -583,6 +595,8 @@ export const useNarrationStore = defineStore('narration', () => {
    * picture of the move is still changing). `sceneAt` (a talk that moves
    * Elior) is the unit it stops before until `passSceneChange`. `own` is
    * the recording of Elior's own words of a say command, spoken first.
+   * `gateAt` is a unit it stops before until `passGate`, when something has to
+   * happen between the units before it and the ones from there on.
    */
   function begin(
     turnId: number,
@@ -591,6 +605,7 @@ export const useNarrationStore = defineStore('narration', () => {
     held = false,
     sceneAt = -1,
     own: NarrationClip | null = null,
+    gateAt = -1,
   ): void {
     if (active.value) finish(true)
     const voiced =
@@ -609,6 +624,8 @@ export const useNarrationStore = defineStore('narration', () => {
       pausedFor: -1,
       sceneAt,
       atScene: false,
+      gateAt,
+      atGate: false,
       owedUntil: 0,
       own,
       owning: false,
@@ -640,6 +657,25 @@ export const useNarrationStore = defineStore('narration', () => {
     if (now?.turnId !== turnId || now.sceneAt < 0) return
     now.sceneAt = until
     now.atScene = false
+    step()
+  }
+
+  /** Whether the narration of turn `turnId` has stopped at its gate. */
+  function atGate(turnId: number): boolean {
+    const now = active.value
+    return now?.turnId === turnId && now.atGate
+  }
+
+  /** Let the narration of turn `turnId` go on past its gate. */
+  function passGate(turnId: number): void {
+    const now = active.value
+    if (now?.turnId !== turnId || now.gateAt < 0) return
+    const stopped = now.atGate
+    now.gateAt = -1
+    now.atGate = false
+    // A narrator that never got to the gate just goes on as it was.
+    if (!stopped) return
+    now.waited = Infinity
     step()
   }
 
@@ -739,6 +775,8 @@ export const useNarrationStore = defineStore('narration', () => {
     start,
     atSceneChange,
     passSceneChange,
+    atGate,
+    passGate,
     hurry,
     pause,
     resume,

@@ -36,6 +36,11 @@ export interface PageStart {
  * word of the next page turns it, `next` turns it (the narrator jumping to
  * it), and a part nobody speaks reads each page for its own reading time.
  *
+ * With a gate (`show`'s `gateAt`) the news from there on (the quest news, after
+ * a learnt spell) is held back: the arrival ends after the spells, the
+ * narrator waits at its gate, and `releaseNews` (once the spell's name has
+ * flown to the list) tells the rest.
+ *
  * News follows the arrival's parts as `news` parts, one for each piece: the
  * turn's learned spells first, then its quest news.
  * A turn that has only news, and an arrival after a talk told on the sides
@@ -68,6 +73,8 @@ export const useArrivalStore = defineStore('arrival', () => {
     /** Whether the middle is up: false while a turn of news alone waits for the turn's words. */
     shown: boolean
   } | null>(null)
+  /** The news held back until `releaseNews` (the quest news, while a learnt spell's name flies to the list). */
+  const waiting = ref<{ turnId: number; parts: ArrivalPart[] } | null>(null)
   /** Turns whose quest news was told in the middle or cut short (any clear), for the story's slim lines. */
   const newsTurns = ref<number[]>([])
   /** Waiting news whose turn's words are told, held while the lines a skip showed unspoken are read. */
@@ -126,11 +133,12 @@ export const useArrivalStore = defineStore('arrival', () => {
       : '',
   )
 
-  /** Whether turn `turnId` still has news to tell (waiting or up). */
+  /** Whether turn `turnId` still has news to tell (held back, waiting or up). */
   function newsPending(turnId: number): boolean {
     const now = current.value
     return (
-      now?.turnId === turnId && now.parts.some((each) => each.kind === 'news')
+      waiting.value?.turnId === turnId ||
+      (now?.turnId === turnId && now.parts.some((each) => each.kind === 'news'))
     )
   }
 
@@ -184,7 +192,7 @@ export const useArrivalStore = defineStore('arrival', () => {
       now.page = 0
       now.pages = []
       if (!now.narrated || now.ended || silentNews()) readPart()
-    } else clear()
+    } else clear(true)
   }
 
   /**
@@ -224,9 +232,38 @@ export const useArrivalStore = defineStore('arrival', () => {
     return true
   }
 
-  /** Tell an arrival: its parts, and whether the narrator is telling them. */
-  function show(id: number, parts: ArrivalPart[], narrated: boolean): void {
+  /**
+   * Tell an arrival: its parts, and whether the narrator is telling them. With
+   * `gateAt` (the narrator's gate, `useNarrationStore.begin`), the parts from
+   * there on are held back until `releaseNews`: the arrival ends after the
+   * ones before it.
+   */
+  function show(
+    id: number,
+    parts: ArrivalPart[],
+    narrated: boolean,
+    gateAt = -1,
+  ): void {
     clear()
+    if (gateAt > 0 && gateAt < parts.length) {
+      waiting.value = { turnId: id, parts: parts.slice(gateAt) }
+      parts = parts.slice(0, gateAt)
+    }
+    showNow(id, parts, narrated)
+  }
+
+  /** The held-back news comes up (the narrator goes on past its gate); nothing happens when none is held. */
+  function releaseNews(): void {
+    const held = waiting.value
+    if (!held) return
+    waiting.value = null
+    clear()
+    narration.passGate(held.turnId)
+    showNow(held.turnId, held.parts, narration.narrates(held.turnId))
+  }
+
+  /** Tell `parts` now (see `show`). */
+  function showNow(id: number, parts: ArrivalPart[], narrated: boolean): void {
     if (!parts.length) return
     // Nobody speaks the parts of an arrival that is not narrated.
     const told = narrated
@@ -283,7 +320,7 @@ export const useArrivalStore = defineStore('arrival', () => {
     // News held for the lines' reading comes up at once.
     if (holding.value) return bringUp(now)
     if (turnPage()) return
-    if (now.index >= now.parts.length - 1) return clear()
+    if (now.index >= now.parts.length - 1) return clear(true)
     if (now.narrated && !now.ended) {
       now.index++
       now.page = 0
@@ -294,15 +331,25 @@ export const useArrivalStore = defineStore('arrival', () => {
     } else advance()
   }
 
-  /** End it at once; a narrator still telling it is stopped. */
-  function clear(): void {
+  /**
+   * End it at once; a narrator still telling it is stopped, and news held back
+   * is dropped (it leaves its slim lines). `keepNews` is the arrival ending by
+   * itself before the held-back news: that is kept, and the narrator is
+   * taken only as far as its gate.
+   */
+  function clear(keepNews = false): void {
     stopTimer()
     holding.value = false
     const now = current.value
     current.value = null
+    const keep = keepNews && !!now && waiting.value?.turnId === now.turnId
+    if (!keep) waiting.value = null
     // News cut short before it came up (a new command, Escape, a tab) still leaves its slim lines.
     if (now) markTold(now)
-    if (now?.narrated && narration.narrates(now.turnId)) narration.skipAll()
+    if (!now?.narrated || !narration.narrates(now.turnId)) return
+    if (!keep) narration.skipAll()
+    else if (waiting.value && !narration.atGate(now.turnId))
+      narration.skipTo(waiting.value.parts[0].lines[0].unit)
   }
 
   // News alone, or an arrival after a talk, comes up when the turn's words are told.
@@ -392,7 +439,8 @@ export const useArrivalStore = defineStore('arrival', () => {
     () =>
       current.value?.shown &&
       current.value.narrated &&
-      !narration.narrates(current.value.turnId),
+      (!narration.narrates(current.value.turnId) ||
+        narration.atGate(current.value.turnId)),
     (over) => {
       const now = current.value
       if (!over || !now || now.ended) return
@@ -415,7 +463,7 @@ export const useArrivalStore = defineStore('arrival', () => {
         now.page = Math.max(0, now.pages.length - 1)
         later(
           ARRIVAL_CLEAR_AFTER_MS,
-          now.index < now.parts.length - 1 ? advance : clear,
+          now.index < now.parts.length - 1 ? advance : () => clear(true),
         )
       } else readPart()
     },
@@ -436,6 +484,7 @@ export const useArrivalStore = defineStore('arrival', () => {
     newsPending,
     reset,
     show,
+    releaseNews,
     next,
     setPages,
     clear,

@@ -8,6 +8,7 @@ import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
 import {
   POPUP_NARRATION_ID,
   chapterUnits,
+  firstQuestUnit,
   ownWordsClip,
   readsArrival,
   turnUnits,
@@ -160,6 +161,9 @@ export function useLanternPresentation(
             parts[0].lines.map((line) => line.markup).join(' '),
           ),
         })
+      // The quest news waits for a learnt spell's name to fly to the list (`gated`).
+      const gated = spells && !!turn?.quests?.length
+      const gateAt = gated ? parts.length + (turn?.spells?.length ?? 0) : -1
       if (turn && news) parts.push(...newsParts(turn, units))
       // A move to a room with another picture is a change of scene: the words
       // and the narrator wait until the new picture is fully up.
@@ -188,6 +192,7 @@ export function useLanternPresentation(
           changing,
           sceneAt,
           ownWordsClip(turn, manifest),
+          gated ? firstQuestUnit(turn) : -1,
         )
       if (turn && changing) scene.begin(turn.id, game.roomPicture, tellTurn)
       else tellTurn()
@@ -223,7 +228,7 @@ export function useLanternPresentation(
             unnarratedPatches ? () => panelHold.settle(turn) : null,
           )
         if (parts.length)
-          arrival.show(turn.id, parts, narration.narrates(turn.id))
+          arrival.show(turn.id, parts, narration.narrates(turn.id), gateAt)
         // Its panels wait for the voice, or, with none to wait for, change now.
         if (narration.narrates(turn.id)) panelHold.track(turn)
         else if (!unnarratedScene) panelHold.settle(turn, unnarratedPatches)

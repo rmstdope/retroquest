@@ -797,6 +797,43 @@ describe('a narrated move whose picture is still changing', () => {
     expect(FakeAudio.all).toHaveLength(2)
   })
 
+  it('stops before the gate unit until the gate is passed (a hurry does not pass it)', async () => {
+    const narration = useNarrationStore()
+    narration.begin(
+      1,
+      [voiced(), voiced(), voiced()],
+      'act1',
+      false,
+      -1,
+      null,
+      2,
+    )
+    last().onended?.()
+    await vi.advanceTimersByTimeAsync(400)
+    expect(narration.revealed(1, 1)).toBe(true)
+    last().onended?.()
+    await vi.advanceTimersByTimeAsync(400)
+    expect(narration.atGate(1)).toBe(true)
+    expect(narration.narrates(1)).toBe(true)
+    expect(narration.revealed(1, 2)).toBe(false)
+    narration.hurry()
+    narration.skipTo(2)
+    expect(narration.revealed(1, 2)).toBe(false)
+    expect(FakeAudio.all).toHaveLength(2)
+    narration.passGate(1)
+    expect(narration.atGate(1)).toBe(false)
+    expect(narration.revealed(1, 2)).toBe(true)
+    expect(FakeAudio.all).toHaveLength(3)
+  })
+
+  it('does not stop at a gate when nothing after it has a recording', async () => {
+    const narration = useNarrationStore()
+    narration.begin(1, [voiced(), silent], 'act1', false, -1, null, 1)
+    last().onended?.()
+    await vi.advanceTimersByTimeAsync(400)
+    expect(narration.narrates(1)).toBe(false)
+  })
+
   it('goes on past where the scene changes to a further stop, and stops there again', async () => {
     const narration = useNarrationStore()
     narration.begin(1, [voiced(), voiced(), voiced()], 'act1', false, 1)

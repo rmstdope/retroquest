@@ -127,6 +127,32 @@ describe('usePanelHold', () => {
     expect(game.panelsHeld).toBe(false)
   })
 
+  it("releases the bag and spells at the narrator's gate, before the quest cards", async () => {
+    game.submitCommand(`take ${GEM}`)
+    const turn = game.turns.at(-1)!
+    narration.begin(
+      turn.id,
+      unitsOf(turn),
+      'act1',
+      false,
+      -1,
+      null,
+      firstQuestUnit(turn),
+    )
+    hold.track(turn)
+    await vi.advanceTimersByTimeAsync(0)
+    expect(narration.atGate(turn.id)).toBe(true)
+    expect(game.rawInventory).toHaveLength(1)
+    expect(game.panelFlash.stock).toBe(1)
+    expect(game.groupHeld('quests')).toBe(true)
+    narration.passGate(turn.id)
+    await vi.advanceTimersByTimeAsync(0)
+    FakeAudio.all.at(-1)!.onended?.()
+    await vi.advanceTimersByTimeAsync(0)
+    expect(game.groupHeld('quests')).toBe(false)
+    expect(game.panelFlash.stock).toBe(1)
+  })
+
   it('shows everything at once, without a flash, when the turn is skipped', async () => {
     narrate('go north')
     narration.skipAll()
