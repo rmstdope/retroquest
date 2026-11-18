@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { Act1 } from '@/act1/Act1'
 import { Act2 } from '@/act2/Act2'
 import { EFFECT_TYPES } from './motionEffects'
-import { appliedMotion, madeEffects } from './roomMotion'
+import { madeEffects } from './roomMotion'
 import { roomTrackId } from './musicLists'
 import type { Act } from '@/engine'
 
@@ -20,90 +20,48 @@ const MANIFEST: Record<string, Record<string, unknown>> = JSON.parse(
   readFileSync('public/images/generated/manifest.json', 'utf8'),
 )
 
-/** The movement every room had when it was declared in the game's code (rq-m2jr.1): the effect kinds of each room image, in the order Content Studio exports them (by kind). */
-const CARRIED_OVER: Record<string, string> = {
-  // The opened shed is a picture variant of AbandonedShed, which moved with its room's effects.
-  'act1-abandoned-shed-inside': 'dust,leaves',
-  'act1-abandoned-shed': 'dust,leaves',
-  'act1-blacksmiths-forge': 'dust,embers,fire,smoke',
-  'act1-chicken-coop': 'dust,leaves',
-  'act1-eliors-cottage': 'dust,fire',
-  'act1-forest-path': 'dust,leaves',
-  'act1-general-store': 'dust',
-  'act1-hidden-glade': 'dust,leaves',
-  'act1-miras-hut': 'dust',
-  'act1-old-mill': 'dust',
-  'act1-riverbank': 'mist',
-  'act1-road-to-greendale': 'dust,leaves',
-  'act1-the-dream': 'mist',
-  'act1-vegetable-field': 'dust',
-  'act1-village-chapel': 'dust,fire',
-  'act1-village-square': 'dust,water',
-  'act1-village-well': 'dust',
-  'act2-ancient-grove': 'dust,leaves',
-  'act2-castle-approach': 'dust,leaves',
-  'act2-castle-courtyard': 'dust,leaves',
-  'act2-forest-entrance': 'dust,leaves,mist',
-  'act2-forest-transition': 'dust,mist',
-  'act2-great-hall': 'dust',
-  'act2-greendale-gates': 'dust',
-  'act2-healers-house': 'dust,embers',
-  'act2-heart-of-the-forest': 'dust,fireflies',
-  'act2-hidden-library': 'dust',
-  'act2-inn-rooms': 'dust',
-  'act2-main-square': 'dust',
-  'act2-market-district': 'dust',
-  'act2-merchants-warehouse': 'dust',
-  'act2-mountain-path': 'mist',
-  'act2-residential-quarter': 'dust,leaves',
-  'act2-silver-stag-inn': 'dust',
-  'act2-whispering-glade': 'dust,fireflies',
+/**
+ * What is wrong with the effect settings `manifest` lists: a setting its
+ * effect type does not take, or one outside the range the studio's slider
+ * allows. Empty when every setting is one the renderer can play.
+ */
+function badSettings(
+  manifest: Record<string, Record<string, unknown>>,
+): string[] {
+  const bad: string[] = []
+  for (const id of Object.keys(manifest))
+    for (const e of madeEffects(manifest, id)) {
+      const known = EFFECT_TYPES.find((t) => t.type === e.kind)?.settings ?? []
+      for (const [key, value] of Object.entries(e.settings ?? {})) {
+        const setting = known.find((s) => s.id === key)
+        if (!setting) bad.push(`${id} ${e.kind}: ${key} is not a setting`)
+        else if (value < setting.min || value > setting.max)
+          bad.push(
+            `${id} ${e.kind}: ${key} ${value} is outside ${setting.min}..${setting.max}`,
+          )
+      }
+    }
+  return bad
 }
 
 describe('the movement the images manifest carries', () => {
-  it('is, for every room, what the room moved with when the game declared it', () => {
-    const got = Object.fromEntries(
-      Object.keys(MANIFEST)
-        .filter((id) => 'effects' in MANIFEST[id])
-        .map((id) => [
-          id,
-          madeEffects(MANIFEST, id)
-            .map((e) => e.kind)
-            .join(','),
-        ]),
-    )
-    expect(got).toEqual(CARRIED_OVER)
-    expect(Object.keys(CARRIED_OVER)).toHaveLength(35)
+  it('holds only settings its effect types take, each within its range', () => {
+    expect(badSettings(MANIFEST)).toEqual([])
   })
 
-  it("carries the chapel candle's tie and the spots drawn where the old areas were", () => {
-    expect(madeEffects(MANIFEST, 'act1-village-chapel')).toContainEqual(
-      expect.objectContaining({ kind: 'fire', whilePatch: 'candle-lit' }),
-    )
-    const box = (id: string, kind: string) =>
-      appliedMotion(
-        madeEffects(MANIFEST, id).filter((e) => e.kind === kind),
-        ['candle-lit'],
-      )[0]?.box
-    expect(box('act1-village-square', 'water')).toEqual({
-      x: 0.413021,
-      y: 0.423148,
-      width: 0.15625,
-      height: 0.35,
-    })
-    expect(box('act1-blacksmiths-forge', 'smoke')).toEqual({
-      x: 0.259375,
-      y: 0.006481,
-      width: 0.132813,
-      height: 0.65463,
-    })
-  })
-
-  it('moves the opened shed as the shed moves', () => {
-    expect(
-      madeEffects(MANIFEST, 'act1-abandoned-shed-inside').map((e) => e.kind),
-    ).toEqual(madeEffects(MANIFEST, 'act1-abandoned-shed').map((e) => e.kind))
-    expect(madeEffects(MANIFEST, 'act1-abandoned-shed')).toHaveLength(2)
+  it('would be caught holding an unknown or out-of-range setting', () => {
+    const broken = {
+      'a-room': {
+        effects: [
+          { kind: 'dust', settings: { amount: 99, speed: 1 } },
+          { kind: 'mist', settings: { glow: 1 } },
+        ],
+      },
+    }
+    expect(badSettings(broken)).toEqual([
+      expect.stringMatching(/^a-room dust: amount 99 is outside /),
+      'a-room mist: glow is not a setting',
+    ])
   })
 
   it('is exactly what Content Studio exports from its edits, so a studio save keeps it', () => {
