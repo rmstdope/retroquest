@@ -1121,7 +1121,8 @@ describe('LanternLayout', () => {
     }
 
     it('starts on the story with the section tabs at the bottom', () => {
-      const w = mountLayout()
+      // Inside the document, so the stage's computed style counts.
+      const w = mountLayout({ attachTo: document.body })
 
       // The plate on the picture names the room, so the header does not.
       expect(w.find('header .lq-compact-room').exists()).toBe(false)
