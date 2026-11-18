@@ -35,7 +35,7 @@ import type { PictureSize, Rect } from '@/lantern/roomMotionScene'
  * below (on their nearest edge, half over them, where no free picture lies
  * near), and hiding the words puts it back on its thing. A mark whose spot lies under the room
  * plate, a button in the picture's corner, the story's Hide/Show tab or the
- * Show what's here button steps to the nearest spot just outside that panel
+ * corner button steps to the nearest spot just outside that panel
  * (out from under the words when it can; its name and line follow it, and a
  * press on it is a press on its thing), so no mark is ever hidden; the plate
  * growing or folding moves it at once. Otherwise the one thing under the `pointer` has its name just under
@@ -100,7 +100,7 @@ const root = ref<HTMLElement | null>(null)
 const view = ref<PictureSize>({ width: 0, height: 0 })
 const obstacles = ref<Rect[]>([])
 const covers = ref<Rect[]>([])
-/** The panels (plate, corner buttons, the story's Hide/Show tab and the Show what's here button) the marks keep clear of. */
+/** The panels (plate, corner buttons, and the story's Hide/Show tab) the marks keep clear of. */
 const panels = ref<Rect[]>([])
 /** The panel elements the size watch has been given (it watches a new one from the next frame), so a plate that grows or folds moves the marks at once. */
 let watched: HTMLElement[] = []
@@ -556,9 +556,13 @@ const pointed = computed<Hung | null>(() => {
 .lq-area-lines line {
   transition: opacity calc(0.2s * var(--lq-motion)) ease;
 }
-.lq-area-enter-active,
+.lq-area-enter-active {
+  transition: opacity calc(0.25s * var(--lq-motion)) ease;
+}
+/* They come in quickly and leave slowly, and a mark that is leaving can no longer be pressed. */
 .lq-area-leave-active {
-  transition: opacity calc(0.2s * var(--lq-motion)) ease;
+  transition: opacity calc(1.5s * var(--lq-motion)) ease;
+  pointer-events: none;
 }
 .lq-area-enter-from,
 .lq-area-leave-to {

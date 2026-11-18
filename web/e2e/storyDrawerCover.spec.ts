@@ -2,9 +2,9 @@
  * The open drawers of the stage (rq-q3x4): nothing from the stage is drawn
  * over them. On a tall screen (a phone-sized window, 390 × 844) the Journal
  * drawer covers the whole stage, so the belt of pictures, the Hide / Show
- * what's here buttons, the folded Actions bar and the room's title must all lie
+ * button, the folded Actions bar and the room's title must all lie
  * under it; on a laptop neither it nor the Quests drawer has the belt or
- * Hide / Show what's here over its foot.
+ * Hide over its foot.
  */
 import {
   test,

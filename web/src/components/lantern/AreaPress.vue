@@ -13,7 +13,7 @@ import type { PictureSize } from '@/lantern/roomMotionScene'
  * drifts with the picture. The buttons are for the pointer and the finger:
  * they are never Tab stops (a player at the keyboard has F1 and the typing
  * box), and taking focus shows nothing, neither a box nor a mark, since the
- * names show only when the player asks for them (Show what's here). They read
+ * names come in only when the player moves over the picture, taps it or presses a key. They read
  * their thing's name as a menu opener; where one thing lies on another the
  * smaller lies over, so a press goes to it. A press says which thing and where
  * (the screen's pixels); one made by a key on a thing that holds focus, as

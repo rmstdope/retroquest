@@ -13,7 +13,6 @@ import {
 import { useSceneStore } from '@/stores/useSceneStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
 import { useBeltStore } from '@/stores/useBeltStore'
-import { useSettingsStore } from '@/stores/useSettingsStore'
 import { setPictureProbe } from '@/lantern/roomPicture'
 
 /**
@@ -36,7 +35,6 @@ describe('LanternLayout: the belt of pictures', () => {
 
   async function cottage(): Promise<ReturnType<typeof useGameStore>> {
     setActivePinia(createPinia())
-    useSettingsStore().alwaysShowNames = false
     setPictureProbe(() => Promise.resolve(true))
     vi.stubGlobal(
       'matchMedia',
@@ -516,13 +514,15 @@ describe('LanternLayout: the belt of pictures', () => {
     expect(useBeltStore().hand).toBeNull()
   })
 
-  it("goes to Show what's here when Escape leaves a belt that had no focus before, not onto the picture", async () => {
+  it('lets focus go when Escape leaves a belt that had no focus before, not onto the picture', async () => {
     await cottage()
     ;(document.activeElement as HTMLElement | null)?.blur()
     await key('b')
     expect(document.activeElement).toBe(tile('item:bread').element)
     await key('Escape')
-    expect(document.activeElement).toBe(w.get('.lq-show-names').element)
+    expect(w.get('.lq-belt').element.contains(document.activeElement)).toBe(
+      false,
+    )
   })
 
   it('gives Escape on a belt reached by Tab the same way out, and forgets a stale place', async () => {
@@ -533,7 +533,6 @@ describe('LanternLayout: the belt of pictures', () => {
     ;(w.get('.lq-stage-btn').element as HTMLElement).focus()
     ;(tile('item:bread').element as HTMLElement).focus()
     await key('Escape')
-    expect(document.activeElement).toBe(w.get('.lq-show-names').element)
     expect(w.get('.lq-belt').element.contains(document.activeElement)).toBe(
       false,
     )

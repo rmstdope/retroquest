@@ -1064,9 +1064,8 @@ describe('AreaNames', () => {
     it.each([
       ['lq-words-hide', 'tab'],
       ['lq-paper-tab', 'tab'],
-      ['lq-show-names', 'show-names'],
     ])(
-      'steps a mark under the story’s Hide/Show tab or the Showing button (%s) clear of it too',
+      'steps a mark under the story’s Hide/Show tab (%s) clear of it too',
       async (cls, relayout) => {
         const w = mountNames({ showing: true })
         plateOver(cls)
@@ -1079,8 +1078,8 @@ describe('AreaNames', () => {
       },
     )
 
-    it('steps a mark under the Showing button in the picture’s foot corner up or aside, never off the picture', async () => {
-      // The button sits at the foot's right (780..950, 506..534); the villager's mark lies under it.
+    it('steps a mark under a button in the picture’s foot corner up or aside, never off the picture', async () => {
+      // A button sits at the foot's right (780..950, 506..534); the villager's mark lies under it.
       const w = mountNames({
         showing: true,
         boxes: {
@@ -1089,7 +1088,7 @@ describe('AreaNames', () => {
         },
       })
       const button = document.createElement('button')
-      button.className = 'lq-show-names'
+      button.className = 'lq-corner-button'
       mark(button, 'panel')
       document.querySelector('.lq-stage')!.append(button)
       vi.spyOn(button, 'getBoundingClientRect').mockReturnValue({
@@ -1103,7 +1102,7 @@ describe('AreaNames', () => {
         y: 506,
         toJSON: () => ({}),
       })
-      await w.setProps({ relayout: 'show-names' })
+      await w.setProps({ relayout: 'corner' })
       await vi.advanceTimersByTimeAsync(400)
       await nextTick()
       const style = w.get('[data-area-mark="villager"]').attributes('style')

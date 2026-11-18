@@ -9,6 +9,7 @@ import {
   enterCommand,
   type Page,
   closeTypingBox,
+  showNames,
 } from './fixtures'
 
 /** A one-pixel transparent PNG, standing for a picture the studio made. */
@@ -190,9 +191,6 @@ test('Take on scenery is answered as typing it would, and a person fans out the 
   const breadRing = page.getByRole('menu', { name: 'Bread' })
   await breadRing.getByRole('menuitem', { name: /Take/ }).click()
   await expect(page.locator('[data-area-press="bread"]')).toHaveCount(0)
-  await expect(
-    page.getByRole('button', { name: /Show what's here/ }),
-  ).toBeFocused()
   // The answer is told first; presses hurry it, and once told the ring opens (not under the words).
   const person = page.getByRole('menu', { name: 'Grandmother' })
   await expect(async () => {
@@ -212,7 +210,7 @@ test('a press on a name or mark while names are showing is a press on its thing'
 }): Promise<void> => {
   await page.setViewportSize({ width: 1280, height: 800 })
   await toTheCottage(page)
-  await page.getByRole('button', { name: /Show what's here/ }).click()
+  await showNames(page)
   const name = page.locator('[data-area-name="grandmother"]')
   await expect(name).toBeVisible()
   const box = (await name.boundingBox())!

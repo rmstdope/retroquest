@@ -665,10 +665,7 @@ describe('the narration paper', () => {
     const laptopHelp = await helpText()
     expect(laptopHelp).toContain("Esc — close what's open, or open the menu")
     expect(laptopHelp).toContain('N — hide or show the words')
-    expect(laptopHelp).toContain("S — show or hide what's here")
-    expect(laptopHelp.indexOf('S — show')).toBeGreaterThan(
-      laptopHelp.indexOf('N — hide'),
-    )
+    expect(laptopHelp).not.toContain("show or hide what's here")
     w?.unmount()
     document.body.innerHTML = ''
     stubScreen(false)

@@ -62,10 +62,10 @@ test('Settings: ↑ ↓ move between rows and ← → change them', async ({
     page.getByRole('button', { name: 'Light', exact: true }),
   ).toHaveAttribute('aria-pressed', 'true')
   await page.keyboard.press('ArrowUp')
-  expect(await row()).toBe('alwaysShowNames')
+  expect(await row()).toBe('reduceMotion')
   await page.keyboard.press('Enter')
   await expect(
-    page.getByRole('switch', { name: "Always show what's here" }),
+    page.getByRole('switch', { name: 'Reduce motion' }),
   ).toHaveAttribute('aria-checked', 'true')
   await page.keyboard.press('Escape')
   await expect(

@@ -145,3 +145,22 @@ export async function gameKey(page: Page, key: string): Promise<void> {
   })
   await page.keyboard.press(key)
 }
+
+/**
+ * Do what brings the marks and names in: a tap near the picture's top-left
+ * corner where the input is touch, else the mouse moved over the picture (the
+ * marks leave 4 seconds after the last such input).
+ */
+export async function showNames(page: Page): Promise<void> {
+  const box = await page.locator('.lq-stage').boundingBox()
+  if (!box) throw new Error('no picture stage to show the names over')
+  const touch = await page.evaluate(
+    () => window.matchMedia('(pointer: coarse)').matches,
+  )
+  if (touch) {
+    await page.touchscreen.tap(box.x + 6, box.y + 6)
+    return
+  }
+  await page.mouse.move(box.x + 6, box.y + 6)
+  await page.mouse.move(box.x + 14, box.y + 10)
+}

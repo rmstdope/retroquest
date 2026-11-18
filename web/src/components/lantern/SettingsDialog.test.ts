@@ -269,17 +269,9 @@ describe('SettingsDialog', () => {
     expect(w.text()).not.toContain('Follows your device')
   })
 
-  it('has a switch for keeping the names of what is here on in every room', async () => {
+  it('has no switch for keeping the names of what is here on', () => {
     const w = mountSettings()
-    const names = w.get(
-      '[role="switch"][aria-label="Always show what\'s here"]',
-    )
-    expect(names.attributes('aria-checked')).toBe('false')
-    expect(w.text()).toContain(
-      'Marks and names stay on the picture in every room.',
-    )
-    await names.trigger('click')
-    expect(useSettingsStore().alwaysShowNames).toBe(true)
-    expect(names.attributes('aria-checked')).toBe('true')
+    expect(w.text()).not.toContain("Always show what's here")
+    expect(w.find('[data-stop="alwaysShowNames"]').exists()).toBe(false)
   })
 })

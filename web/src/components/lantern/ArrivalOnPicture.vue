@@ -58,8 +58,6 @@ const props = defineProps<{
   phone?: boolean
   /** A phone held sideways: the card uses the free height between the top and bottom rows, takes smaller type on the smallest phones and keeps the seal beside the heading. */
   sideways?: boolean
-  /** The words are folded away (to show the names on the picture): out of sight and reach, still being read (a press on the picture or the belt hurries the voice, as for any narrated turn, but nothing pages the words), and back when it is false. */
-  away?: boolean
   /** The height the belt of pictures takes at the foot (px): the words end above it (the stage's `--lq-belt-h`). */
   lift?: number
 }>()
@@ -298,7 +296,6 @@ watch(
       'lq-on': arrival.active,
       'lq-phone-arrival': phone,
       'lq-sideways-arrival': sideways,
-      'lq-arrival-away': away,
     }"
     aria-live="polite"
     data-testid="arrival-on-picture"
@@ -534,14 +531,6 @@ watch(
 .lq-arrival-stage.lq-bare {
   --lq-arrival-ink: var(--lq-arrival-bare-ink);
   --lq-arrival-glow: var(--lq-arrival-bare-glow);
-}
-.lq-arrival-away {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transition:
-    opacity calc(0.2s * var(--lq-motion)) ease,
-    visibility 0s linear calc(0.2s * var(--lq-motion));
 }
 .lq-arrival-card {
   width: min(760px, 100%);

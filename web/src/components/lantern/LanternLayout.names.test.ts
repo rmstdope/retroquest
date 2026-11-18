@@ -10,12 +10,11 @@ import { useAreaNamesStore } from '@/stores/useAreaNamesStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
 import { useArrivalStore } from '@/stores/useArrivalStore'
 import { useSceneStore } from '@/stores/useSceneStore'
-import { useSettingsStore } from '@/stores/useSettingsStore'
 import { setPictureProbe } from '@/lantern/roomPicture'
 
 /**
- * The marks and names of Elior's cottage over the real engine: the button,
- * S, Escape, the Always setting and the words folding away.
+ * The marks and names of Elior's cottage over the real engine: the inputs
+ * that bring them in, the 4 seconds, and what holds them away.
  */
 describe('LanternLayout: what is here, named on the picture', () => {
   let w: VueWrapper
@@ -34,10 +33,8 @@ describe('LanternLayout: what is here, named on the picture', () => {
   async function cottage(
     placed = true,
     laptop = true,
-    always = false,
   ): Promise<ReturnType<typeof useGameStore>> {
     setActivePinia(createPinia())
-    useSettingsStore().alwaysShowNames = always
     setPictureProbe(() => Promise.resolve(true))
     vi.stubGlobal(
       'matchMedia',
@@ -64,7 +61,20 @@ describe('LanternLayout: what is here, named on the picture', () => {
     return store
   }
 
-  const button = (): ReturnType<VueWrapper['find']> => w.find('.lq-show-names')
+  /** A pointer event of a kind (mouse or touch) on an element. */
+  const pointer = async (
+    el: Element,
+    type: 'pointermove' | 'pointerdown',
+    pointerType = 'mouse',
+  ): Promise<void> => {
+    const event = new MouseEvent(type, { bubbles: true, cancelable: true })
+    Object.defineProperty(event, 'pointerType', { value: pointerType })
+    el.dispatchEvent(event)
+    await w.vm.$nextTick()
+  }
+  const picture = (): Element => w.get('.lq-stage-picture').element
+  const marks = (): number => w.findAll('[data-area-mark]').length
+
   const key = async (
     k: string,
     init: KeyboardEventInit = {},
@@ -87,50 +97,76 @@ describe('LanternLayout: what is here, named on the picture', () => {
     vi.restoreAllMocks()
   })
 
-  it('has no button when nothing is placed', async () => {
-    await cottage(false)
-    expect(button().exists()).toBe(false)
+  it('has no button and no S key, and arrives clean', async () => {
+    await cottage()
+    expect(w.find('.lq-show-names').exists()).toBe(false)
+    expect(marks()).toBe(0)
     await key('s')
-    expect(w.find('[data-area-mark]').exists()).toBe(false)
+    expect(useAreaNamesStore().showing).toBe(true)
   })
 
-  it('names only the things the studio has placed, as the corner names them', async () => {
+  it('shows nothing when nothing is placed', async () => {
+    await cottage(false)
+    await pointer(picture(), 'pointermove')
+    await key('x')
+    expect(marks()).toBe(0)
+  })
+
+  it('names only the things the studio has placed, when the mouse moves over the picture', async () => {
     await cottage()
-    expect(button().attributes('title')).toBe("Show what's here (S)")
-    await button().trigger('click')
-    expect(button().text()).toBe('◎ Showing')
-    expect(button().attributes('title')).toBe("Show what's here (S)")
+    await pointer(picture(), 'pointermove')
     expect(w.get('[data-area-name="bread"]').text()).toBe('Bread')
     expect(w.find('[data-area-name="hearth"]').exists()).toBe(false)
-    await button().trigger('click')
-    expect(w.find('[data-area-mark]').exists()).toBe(false)
   })
 
-  it('answers S, but not while typing, with a modifier, or off the laptop', async () => {
+  it('goes 4 seconds after the last input, and a new input brings them back', async () => {
+    vi.useFakeTimers()
     await cottage()
-    await key('s')
+    await pointer(picture(), 'pointermove')
+    vi.advanceTimersByTime(3000)
+    await pointer(picture(), 'pointermove')
+    vi.advanceTimersByTime(3000)
     expect(useAreaNamesStore().showing).toBe(true)
-    await key('S')
+    vi.advanceTimersByTime(1000)
     expect(useAreaNamesStore().showing).toBe(false)
-    await key('s', { ctrlKey: true })
-    expect(useAreaNamesStore().showing).toBe(false)
+    await pointer(picture(), 'pointermove')
+    expect(useAreaNamesStore().showing).toBe(true)
+    vi.useRealTimers()
+  })
+
+  it('answers a key, but not one typed in the command line', async () => {
+    await cottage()
     const box = document.createElement('input')
     document.body.append(box)
-    await key('s', {}, box)
+    await key('a', {}, box)
     expect(useAreaNamesStore().showing).toBe(false)
+    await key('a')
+    expect(useAreaNamesStore().showing).toBe(true)
   })
 
-  it('ignores S on a phone, which has the button alone', async () => {
+  it('does not answer the mouse over the story words, but does a tap on the picture', async () => {
+    await cottage()
+    await pointer(w.get('.lq-story-wrap').element, 'pointermove')
+    expect(useAreaNamesStore().showing).toBe(false)
+    await pointer(w.get('.lq-story-wrap').element, 'pointerdown', 'touch')
+    expect(useAreaNamesStore().showing).toBe(false)
+    await pointer(picture(), 'pointermove', 'touch')
+    expect(useAreaNamesStore().showing).toBe(false)
+    await pointer(picture(), 'pointerdown', 'touch')
+    expect(useAreaNamesStore().showing).toBe(true)
+  })
+
+  it('answers a tap on a phone too, and a mouse press does not count by itself', async () => {
     await cottage(true, false)
-    await key('s')
+    await pointer(picture(), 'pointerdown', 'mouse')
     expect(useAreaNamesStore().showing).toBe(false)
-    expect(button().attributes('title')).toBeUndefined()
+    await pointer(picture(), 'pointerdown', 'touch')
+    expect(useAreaNamesStore().showing).toBe(true)
   })
 
-  it('leaves the names showing on Escape (S takes them away)', async () => {
+  it('leaves the names showing on Escape, to fade by themselves', async () => {
     await cottage()
     await key('s')
-    expect(useAreaNamesStore().showing).toBe(true)
     const escape = new KeyboardEvent('keydown', {
       key: 'Escape',
       bubbles: true,
@@ -140,56 +176,59 @@ describe('LanternLayout: what is here, named on the picture', () => {
     expect(useAreaNamesStore().showing).toBe(true)
   })
 
-  it('folds the words away while the names show, and brings them back after', async () => {
+  it('never folds the words away for the names', async () => {
     await cottage()
     expect(w.find('.lq-words-hide').exists()).toBe(true)
-    await button().trigger('click')
-    expect(w.find('.lq-words-hide').exists()).toBe(false)
-    await button().trigger('click')
+    await pointer(picture(), 'pointermove')
+    expect(marks()).toBe(2)
     expect(w.find('.lq-words-hide').exists()).toBe(true)
   })
 
-  it('keeps the words where they are under the Always setting, names beside them', async () => {
-    const store = await cottage(true, true, true)
-    expect(store.roomAreas.things.length).toBeGreaterThan(0)
-    expect(useAreaNamesStore().showing).toBe(true)
-    expect(w.find('.lq-words-hide').exists()).toBe(true)
-    await button().trigger('click')
-    expect(useAreaNamesStore().showing).toBe(false)
-    expect(w.find('.lq-words-hide').exists()).toBe(true)
-  })
-
-  it('takes the button and the names away during a change of scene, and brings them back after', async () => {
+  it('takes the names away during a change of scene and gives none to input then', async () => {
     await cottage()
-    await button().trigger('click')
-    expect(w.findAll('[data-area-mark]')).toHaveLength(2)
+    await pointer(picture(), 'pointermove')
+    expect(marks()).toBe(2)
     const scene = useSceneStore()
     scene.phase = 'dark'
     await w.vm.$nextTick()
-    expect(button().exists()).toBe(false)
-    expect(w.find('[data-area-mark]').exists()).toBe(false)
+    expect(marks()).toBe(0)
+    await pointer(picture(), 'pointermove')
     scene.phase = 'idle'
     await w.vm.$nextTick()
-    expect(button().exists()).toBe(true)
-    expect(w.findAll('[data-area-mark]')).toHaveLength(2)
+    expect(marks()).toBe(0)
+    await pointer(picture(), 'pointermove')
+    expect(marks()).toBe(2)
+  })
+
+  it('shows none while a dialog is open, at the ending, and hides them when one opens', async () => {
+    const store = await cottage()
+    await pointer(picture(), 'pointermove')
+    store.showModal = true
+    await w.vm.$nextTick()
+    expect(marks()).toBe(0)
+    await pointer(picture(), 'pointermove')
+    expect(useAreaNamesStore().showing).toBe(false)
+    store.showModal = false
+    await w.vm.$nextTick()
+    await pointer(picture(), 'pointermove')
+    expect(marks()).toBe(2)
   })
 
   it('starts the next room clean, and a load too', async () => {
     const store = await cottage()
-    await button().trigger('click')
+    await pointer(picture(), 'pointermove')
     store.loadNumber++
     await w.vm.$nextTick()
-    expect(w.find('[data-area-mark]').exists()).toBe(false)
-    await button().trigger('click')
+    expect(marks()).toBe(0)
+    await pointer(picture(), 'pointermove')
     store.roomName = 'Somewhere else'
     await w.vm.$nextTick()
     expect(useAreaNamesStore().showing).toBe(false)
   })
 
-  it('folds an arrival away for the names without ending it, and brings it back', async () => {
+  it('leaves an arrival where it is when the names come in', async () => {
     await cottage()
-    const arrival = useArrivalStore()
-    arrival.show(
+    useArrivalStore().show(
       99,
       [
         {
@@ -201,36 +240,9 @@ describe('LanternLayout: what is here, named on the picture', () => {
       true,
     )
     await w.vm.$nextTick()
-    const card = (): ReturnType<VueWrapper['get']> =>
-      w.get('[data-testid="arrival-on-picture"]')
-    expect(card().classes()).not.toContain('lq-arrival-away')
-    await button().trigger('click')
-    expect(card().classes()).toContain('lq-arrival-away')
-    expect(arrival.active).toBe(true)
-    await button().trigger('click')
-    expect(card().classes()).not.toContain('lq-arrival-away')
-    expect(arrival.active).toBe(true)
-  })
-
-  it('leaves an arrival where it is under the Always setting', async () => {
-    await cottage(true, true, true)
-    useArrivalStore().show(
-      99,
-      [
-        {
-          kind: 'description',
-          lines: [{ unit: 0, markup: 'A fire crackles.' }],
-          voiced: false,
-        },
-      ],
-      false,
-    )
-    await w.vm.$nextTick()
-    await button().trigger('click')
-    await button().trigger('click')
-    expect(w.get('[data-testid="arrival-on-picture"]').classes()).not.toContain(
-      'lq-arrival-away',
-    )
+    await pointer(picture(), 'pointermove')
+    expect(marks()).toBe(2)
+    expect(useArrivalStore().active).toBe(true)
   })
 
   it('takes a press on a dot that shows through the words as a press on its thing, and never hurries the narration (rq-njoa)', async () => {

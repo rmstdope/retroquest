@@ -10,7 +10,6 @@ import { useAreaNamesStore } from '@/stores/useAreaNamesStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
 import { useSceneStore } from '@/stores/useSceneStore'
 import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
-import { useSettingsStore } from '@/stores/useSettingsStore'
 import { setPictureProbe } from '@/lantern/roomPicture'
 
 describe('LanternLayout: leaving by pressing a way out in the picture', () => {
@@ -31,7 +30,6 @@ describe('LanternLayout: leaving by pressing a way out in the picture', () => {
     laptop = true,
   ): Promise<ReturnType<typeof useGameStore>> {
     setActivePinia(createPinia())
-    useSettingsStore().alwaysShowNames = false
     setPictureProbe(() => Promise.resolve(true))
     vi.stubGlobal(
       'matchMedia',

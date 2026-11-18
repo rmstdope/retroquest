@@ -7,7 +7,6 @@ import { useBridge, type ActClass } from '@/composables/useBridge'
 import { Act1 } from '@/act1/Act1'
 import { PANEL_GROUPS, useGameStore } from '@/stores/useGameStore'
 import { useBeltStore } from '@/stores/useBeltStore'
-import { useSettingsStore } from '@/stores/useSettingsStore'
 import { setPictureProbe } from '@/lantern/roomPicture'
 
 /** The height the belt and its folded tab measure in this test (px). */
@@ -23,7 +22,6 @@ describe('LanternLayout: the folded leather tab on a narrow desktop window', () 
 
   beforeEach(async () => {
     setActivePinia(createPinia())
-    useSettingsStore().alwaysShowNames = false
     setPictureProbe(() => Promise.resolve(true))
     // No query matches: not a laptop, not a phone, not short: the phone stage.
     vi.stubGlobal(

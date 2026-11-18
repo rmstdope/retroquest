@@ -24,8 +24,6 @@ export interface Settings {
   /** 0–100 */
   narrationVolume: number
   reduceMotion: ReduceMotionSetting
-  /** Whether the marks and names of what is in a room's picture stay on in every room. */
-  alwaysShowNames: boolean
 }
 
 export const SETTINGS_STORAGE_KEY = 'retroquest_settings'
@@ -45,7 +43,6 @@ export const DEFAULT_SETTINGS: Readonly<Settings> = {
   effectsVolume: 100,
   narrationVolume: 100,
   reduceMotion: 'device',
-  alwaysShowNames: false,
 }
 
 const THEMES: readonly ThemeSetting[] = ['device', 'light', 'dark']
@@ -61,10 +58,6 @@ function readStorage(key: string): string | null {
 
 function oneOf<T>(value: unknown, allowed: readonly T[], fallback: T): T {
   return allowed.includes(value as T) ? (value as T) : fallback
-}
-
-function bool(value: unknown, fallback: boolean): boolean {
-  return typeof value === 'boolean' ? value : fallback
 }
 
 function volume(value: unknown, fallback: number): number {
@@ -129,7 +122,6 @@ function loadSettings(): Settings {
       REDUCE_MOTION,
       defaults.reduceMotion,
     ),
-    alwaysShowNames: bool(stored.alwaysShowNames, defaults.alwaysShowNames),
   }
 }
 
@@ -141,7 +133,6 @@ export const useSettingsStore = defineStore('settings', () => {
   const effectsVolume = ref(initial.effectsVolume)
   const narrationVolume = ref(initial.narrationVolume)
   const reduceMotion = ref(initial.reduceMotion)
-  const alwaysShowNames = ref(initial.alwaysShowNames)
 
   function snapshot(): Settings {
     return {
@@ -151,7 +142,6 @@ export const useSettingsStore = defineStore('settings', () => {
       effectsVolume: effectsVolume.value,
       narrationVolume: narrationVolume.value,
       reduceMotion: reduceMotion.value,
-      alwaysShowNames: alwaysShowNames.value,
     }
   }
 
@@ -170,7 +160,6 @@ export const useSettingsStore = defineStore('settings', () => {
     effectsVolume.value = DEFAULT_SETTINGS.effectsVolume
     narrationVolume.value = DEFAULT_SETTINGS.narrationVolume
     reduceMotion.value = DEFAULT_SETTINGS.reduceMotion
-    alwaysShowNames.value = DEFAULT_SETTINGS.alwaysShowNames
   }
 
   return {
@@ -180,7 +169,6 @@ export const useSettingsStore = defineStore('settings', () => {
     effectsVolume,
     narrationVolume,
     reduceMotion,
-    alwaysShowNames,
     resetToDefaults,
   }
 })
