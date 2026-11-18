@@ -69,7 +69,7 @@ const AMOUNT: EffectSetting = {
   id: 'amount',
   title: 'Amount',
   min: 0,
-  max: 3,
+  max: 5,
   step: 0.05,
   default: 1,
 }
@@ -78,7 +78,7 @@ const SPEED: EffectSetting = {
   id: 'speed',
   title: 'Speed',
   min: 0,
-  max: 3,
+  max: 5,
   step: 0.05,
   default: 1,
 }
@@ -87,7 +87,7 @@ const GLOW: EffectSetting = {
   id: 'glow',
   title: 'Glow',
   min: 0,
-  max: 2,
+  max: 4,
   step: 0.05,
   default: 1,
 }
@@ -97,7 +97,7 @@ const STRENGTH: EffectSetting = {
   id: 'strength',
   title: 'Strength',
   min: 0,
-  max: 2,
+  max: 4,
   step: 0.05,
   default: 1,
 }
