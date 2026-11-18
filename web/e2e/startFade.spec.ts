@@ -80,9 +80,14 @@ test.describe('loading again during the fade into a loaded game', () => {
   }): Promise<void> => {
     await enterCommand(page, 'load')
     await expect(page.locator('.lq-passage-out')).toBeAttached()
+    // Late in the first fade-out, so a fade still going after it is the second load's.
+    await page.waitForTimeout(1000)
     await enterCommand(page, 'load')
     await expect(page.getByLabel('Command', { exact: true })).toHaveValue('')
-    await expect(page.locator('.lq-passage-out')).toBeAttached()
+    await page.waitForTimeout(800)
+    expect(await page.locator('.lq-passage').getAttribute('class')).toContain(
+      'lq-passage-out',
+    )
     await expect(
       page.locator('.lq-toast', { hasText: 'Game loaded' }),
     ).toHaveCount(0)

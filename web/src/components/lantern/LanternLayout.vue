@@ -2440,7 +2440,8 @@ function onPassageClick(event: MouseEvent): void {
 /**
  * Enter while the screen is fading into a game brings the new one up at once
  * and does nothing else. A typed command rising with the new screen goes on,
- * and so does a load typed while the old one fades out (it starts its own fade).
+ * and so does a load typed in the typing box while the old one fades out (it
+ * starts its own fade).
  */
 function onPassageKey(event: KeyboardEvent): void {
   if (event.key !== 'Enter') return
@@ -2450,6 +2451,7 @@ function onPassageKey(event: KeyboardEvent): void {
   if (typing && !fadingOut) return
   if (
     target instanceof HTMLInputElement &&
+    target.matches('.lq-type-input') &&
     game.takesDuringFadeOut(target.value)
   )
     return
