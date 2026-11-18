@@ -155,9 +155,9 @@ export function characterImages(act: Act, acts: Act[] = [act]): GameImage[] {
     const owner = SHARED_PORTRAITS.includes(key)
       ? (acts.find((a) => key in a.classes) ?? act)
       : act
-    const character = new (owner.classes[
-      key
-    ] as unknown as new () => Character)()
+    const character = new (
+      owner.classes[key] as unknown as new () => Character
+    )()
     images.push({
       id: portraitId(act.name, key),
       title: displayName(character.name),

@@ -61,8 +61,7 @@ function locate(
   target: ContentClass,
 ): Record<string, unknown> | undefined {
   return contentObjects(state).find((object) => object instanceof target) as
-    | Record<string, unknown>
-    | undefined
+    Record<string, unknown> | undefined
 }
 
 /** The value with every string in it, however deep, replaced by the stale marker. */
