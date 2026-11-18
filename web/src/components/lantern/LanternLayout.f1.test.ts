@@ -100,6 +100,9 @@ describe('LanternLayout: F1 and the typing box', () => {
     game.showTitle = true
     w = mount(LanternLayout, { attachTo: document.body })
     await flushPromises()
+    // The first press only brings the title menu; F1 after it is left alone.
+    window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Shift' }))
+    await flushPromises()
     const event = new KeyboardEvent('keydown', {
       key: 'F1',
       bubbles: true,

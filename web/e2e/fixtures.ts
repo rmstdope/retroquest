@@ -7,6 +7,11 @@
  * recording yet), unless the spec sets the `narrationRecordings` option with
  * `test.use({ narrationRecordings: true })` to get the real recordings.
  *
+ * The title page waits for a press before it shows its menu, so this `page`
+ * also presses a key for the spec each time the title page appears (as a
+ * player would), unless the spec is about the wait and sets the `titleWaits`
+ * option with `test.use({ titleWaits: true })`.
+ *
  * `E2E_CPU_THROTTLE=<rate>` slows the page's CPU by that factor (Chromium's
  * own throttling), to bring out on a laptop the races a busy CI runner shows:
  * `E2E_CPU_THROTTLE=10 npx playwright test <spec> --repeat-each 10`.
@@ -15,10 +20,30 @@ import { test as base, type Page } from '@playwright/test'
 
 export * from '@playwright/test'
 
-/** Playwright's `test`, with the narration recordings withheld unless asked for. */
-export const test = base.extend<{ narrationRecordings: boolean }>({
+/** Playwright's `test`, with the narration recordings withheld unless asked for and the title page pressed past unless the spec waits on it. */
+export const test = base.extend<{
+  narrationRecordings: boolean
+  titleWaits: boolean
+}>({
   narrationRecordings: [false, { option: true }],
-  page: async ({ page, narrationRecordings }, use): Promise<void> => {
+  titleWaits: [false, { option: true }],
+  page: async (
+    { page, narrationRecordings, titleWaits },
+    use,
+  ): Promise<void> => {
+    if (!titleWaits)
+      await page.addInitScript(() => {
+        const press = (): void => {
+          if (document.querySelector('.lq-title-page.is-playing'))
+            window.dispatchEvent(
+              new KeyboardEvent('keydown', { key: 'Shift', cancelable: true }),
+            )
+        }
+        new MutationObserver(press).observe(document, {
+          childList: true,
+          subtree: true,
+        })
+      })
     if (!narrationRecordings)
       await page.route('**/audio/narration/*/manifest.json', (route) =>
         route.fulfill({ json: {} }),
