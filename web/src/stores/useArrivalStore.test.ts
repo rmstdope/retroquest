@@ -641,13 +641,11 @@ describe('useArrivalStore', () => {
       expect(arrival.newsUp?.index).toBe(0)
     })
 
-    it('after a hurry, waits for the rest of the hurried speech to be read before the news is up', async () => {
+    it('after a hurry, the news is up at once, not after the hurried speech would have been read', async () => {
       narration.begin(1, [speech, newsUnit], 'act1')
       arrival.show(1, [quest(1, true)], true)
       narration.hurry()
       await vi.advanceTimersByTimeAsync(200)
-      expect(arrival.active).toBe(false)
-      await vi.advanceTimersByTimeAsync(readingPauseMs(SPEECH_REST))
       expect(arrival.newsUp?.index).toBe(0)
       expect(narration.speaking(1)?.unit).toBe(1)
     })

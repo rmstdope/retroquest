@@ -204,39 +204,34 @@ describe('useNarrationStore', () => {
       )
     })
 
-    it('a hurry holds the news after it until the rest of the block is read', async () => {
+    it('a hurry brings the news after it at once, not after the hurried words would have been read', async () => {
       narration.begin(1, [twoParts, quest], 'act1')
       narration.hurry()
-      const owed =
-        readingPauseMs('w0 w1 w2 w3') +
-        readingPauseMs('Forgive me if I am short with you.')
-      await vi.advanceTimersByTimeAsync(owed - 1)
-      expect(narration.revealed(1, 1)).toBe(false)
-      await vi.advanceTimersByTimeAsync(1)
+      await vi.advanceTimersByTimeAsync(80)
       expect(narration.revealed(1, 1)).toBe(true)
       expect(narration.speaking(1)?.unit).toBe(1)
     })
 
-    it('a hurry that passes an event line on its way to the news holds the news for it too', async () => {
+    it('a hurry that passes an event line on its way to the news holds the news for the event line only', async () => {
       narration.begin(1, [twoParts, event, quest], 'act1')
       narration.hurry()
-      const owed =
-        readingPauseMs('w0 w1 w2 w3') +
-        readingPauseMs('Forgive me if I am short with you.') +
-        readingPauseMs('You receive a coin.')
-      await vi.advanceTimersByTimeAsync(owed - 1)
+      // The event line shows after the short gap that follows a hurry, and is read from there.
+      await vi.advanceTimersByTimeAsync(80)
       expect(narration.revealed(1, 1)).toBe(true)
+      const owed = readingPauseMs('You receive a coin.')
+      await vi.advanceTimersByTimeAsync(owed - 1)
       expect(narration.revealed(1, 2)).toBe(false)
       await vi.advanceTimersByTimeAsync(1)
       expect(narration.revealed(1, 2)).toBe(true)
     })
 
     it('a second hurry while the news is held brings it now', async () => {
-      narration.begin(1, [twoParts, quest], 'act1')
+      narration.begin(1, [twoParts, event, quest], 'act1')
       narration.hurry()
       await vi.advanceTimersByTimeAsync(100)
+      expect(narration.revealed(1, 2)).toBe(false)
       narration.hurry()
-      expect(narration.revealed(1, 1)).toBe(true)
+      expect(narration.revealed(1, 2)).toBe(true)
     })
 
     it('a hurry holds nothing but news: the next block of the turn follows at once', async () => {
@@ -246,14 +241,11 @@ describe('useNarrationStore', () => {
       expect(narration.revealed(1, 1)).toBe(true)
     })
 
-    it('a hurry on the last voice keeps what it owes after the turn ends', () => {
+    it('a hurry on the last voice owes nothing after the turn ends', () => {
       narration.begin(1, [twoParts, { ...quest, parts: [] }], 'act1')
       narration.hurry()
       expect(narration.isNarrating).toBe(false)
-      expect(narration.owedReadingMs(1)).toBe(
-        readingPauseMs('w0 w1 w2 w3') +
-          readingPauseMs('Forgive me if I am short with you.'),
-      )
+      expect(narration.owedReadingMs(1)).toBe(0)
     })
   })
 
