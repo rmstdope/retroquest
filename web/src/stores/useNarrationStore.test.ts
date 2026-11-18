@@ -212,6 +212,14 @@ describe('useNarrationStore', () => {
       expect(narration.speaking(1)?.unit).toBe(1)
     })
 
+    it('a hurry brings a learnt spell after it at once too', async () => {
+      narration.begin(1, [twoParts, { ...voiced(), kind: 'spell' }], 'act1')
+      narration.hurry()
+      await vi.advanceTimersByTimeAsync(80)
+      expect(narration.revealed(1, 1)).toBe(true)
+      expect(narration.speaking(1)?.unit).toBe(1)
+    })
+
     it('a hurry that passes an event line on its way to the news holds the news for the event line only', async () => {
       narration.begin(1, [twoParts, event, quest], 'act1')
       narration.hurry()
