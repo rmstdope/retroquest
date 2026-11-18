@@ -1,4 +1,4 @@
-import { test, expect, type Page } from './fixtures'
+import { test, expect, type Page, openJournal } from './fixtures'
 
 /** Open the game and close the opening chapter page and the first arrival. */
 async function startAct1(
@@ -81,10 +81,10 @@ test.describe('a learned spell told in the middle of the picture', () => {
       'You have learned',
     )
 
-    // Story so far keeps the full record, learned line included.
-    await page.getByRole('button', { name: /Story so far/ }).click()
+    // The journal keeps the full record, learned line included.
+    await openJournal(page)
     await expect(
-      page.getByRole('complementary', { name: 'Story so far drawer' }),
+      page.getByRole('complementary', { name: 'Journal drawer' }),
     ).toContainText('You have learned revive.')
   })
 

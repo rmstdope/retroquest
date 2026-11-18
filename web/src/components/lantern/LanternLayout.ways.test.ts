@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { mount, type VueWrapper } from '@vue/test-utils'
+import { flushPromises, mount, type VueWrapper } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import LanternLayout from './LanternLayout.vue'
 import { useBridge, type ActClass } from '@/composables/useBridge'
@@ -307,10 +307,17 @@ describe('LanternLayout: leaving by pressing a way out in the picture', () => {
   it('closes an open panel and goes on the same press', async () => {
     const store = await cottage()
     await openTheWays(store)
-    const quests = w
-      .findAll('.lq-buttons button')
-      .find((b) => /Quests/.test(b.text()))
-    await quests!.trigger('click')
+    store.showTitle = false
+    await flushPromises()
+    document.body.dispatchEvent(
+      new KeyboardEvent('keydown', {
+        key: 'q',
+        bubbles: true,
+        cancelable: true,
+      }),
+    )
+    await flushPromises()
+    expect(w.find('.lq-drawer').exists()).toBe(true)
     const submit = vi.spyOn(store, 'submitCommand')
     const picture = w.get('.lq-stage-picture').element
     picture.dispatchEvent(

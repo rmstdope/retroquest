@@ -103,3 +103,20 @@ export async function closeTypingBox(page: Page): Promise<void> {
   if (await page.getByLabel('Command', { exact: true }).isVisible())
     await page.keyboard.press('F1')
 }
+
+/** Open the journal (the story so far): the plate's ⟲ Journal on a phone, J anywhere else. */
+export async function openJournal(page: Page): Promise<void> {
+  const onPlate = page.getByRole('button', { name: /^⟲ Journal/ })
+  if (await onPlate.isVisible()) await onPlate.click()
+  else await gameKey(page, 'j')
+}
+
+/** Press one of the game's own keys (J journal, Q quests, M map…) with focus off any text field. */
+export async function gameKey(page: Page, key: string): Promise<void> {
+  await page.evaluate(() => {
+    const active = document.activeElement
+    if (active instanceof HTMLElement && active.matches('input, textarea'))
+      active.blur()
+  })
+  await page.keyboard.press(key)
+}

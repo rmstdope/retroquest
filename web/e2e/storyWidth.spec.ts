@@ -3,7 +3,14 @@
  * other story text does, so it reads as part of the same story. Checked in
  * the first room (The Dream) and in Elior's Cottage, on desktop and on a phone.
  */
-import { test, expect, type Locator, type Page, enterCommand } from './fixtures'
+import {
+  test,
+  expect,
+  type Locator,
+  type Page,
+  enterCommand,
+  openJournal,
+} from './fixtures'
 
 /** The right edge of a block, where its lines can reach. */
 async function rightEdge(block: Locator): Promise<number> {
@@ -43,11 +50,11 @@ async function expectAsWideAsStory(
     .toBeLessThan(0.5)
 }
 
-/** Where the whole story is read: the drawer on a laptop, the story itself on a phone. */
+/** Where the whole story is read: the journal (its drawer on a laptop, its page on a phone). */
 function storyOf(page: Page, width: number): Locator {
   return width > 600
-    ? page.getByRole('complementary', { name: 'Story so far drawer' })
-    : page.getByRole('region', { name: 'Story' })
+    ? page.getByRole('complementary', { name: 'Journal drawer' })
+    : page.getByRole('region', { name: 'Journal', exact: true })
 }
 
 for (const width of [1280, 360]) {
@@ -61,9 +68,8 @@ for (const width of [1280, 360]) {
       // The waking is told in the middle of the dark first; Enter brings the cottage up.
       await page.getByTestId('scene-interlude').waitFor()
       await page.keyboard.press('Enter')
-      // On the laptop the paper holds the last turn only: open the whole story.
-      const storyButton = page.getByRole('button', { name: /Story so far/ })
-      if (await storyButton.isVisible()) await storyButton.click()
+      // The paper holds the last turn only: open the journal (J, or ⟲ Journal on a phone).
+      await openJournal(page)
     })
 
     test('the Dream description is as wide as the story', async ({ page }) => {

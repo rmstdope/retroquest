@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref, useId } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { useMenuRing } from '@/composables/useMenuRing'
 import LanternDialog from './LanternDialog.vue'
@@ -8,10 +8,14 @@ import type { KeyHint } from './KeyLine.vue'
 /**
  * The pause menu, a pane of frosted glass in the middle of the screen over the
  * dimmed game (the same on a phone), in the title page's design: a small
- * "Paused", the heading "Menu", Quick save and Quick load side by side as
+ * "Paused", the heading "Menu", then the journey first, as three tiles:
+ * Journal, Quests (with the open quests counted, and the amber dot while
+ * something is new) and Map, each with its key in the corner (J, Q, M, which
+ * open them from the game too). Then Quick save and Quick load side by side as
  * amber tiles, then Save, Load, Settings and Help as glass rows that each end
  * in an arrow (they open a window), then Quit. Every entry has a quiet icon,
- * hidden from screen readers, so each is named by its word alone.
+ * hidden from screen readers, so each is named by its word alone (a tile's
+ * count is its description).
  * Quick load is dimmed, and says why, when the quick save is from an older
  * version. Focus starts on Save, or on `focus` when a window opened from the
  * menu closes and hands it back; Tab and the up and down arrows move between
@@ -22,7 +26,9 @@ import type { KeyHint } from './KeyLine.vue'
  * line at its foot names the keys, as in the windows it opens.
  */
 export type InfoKind = 'help'
-export type MenuKind = 'save' | 'load' | 'settings' | InfoKind
+/** The journey the menu opens first: the journal (the story so far), the quests and the map. */
+export type JourneyKind = 'journal' | 'quests' | 'map'
+export type MenuKind = 'save' | 'load' | 'settings' | InfoKind | JourneyKind
 /** The entries that hand focus back to themselves: a window's kind, or `quit`. */
 export type MenuEntry = MenuKind | 'quit'
 
@@ -52,8 +58,11 @@ function quickLoad(): void {
   emit('close')
 }
 
-/** The icons' outlines (24×24, drawn with a 2px line). */
-const ICONS: Record<MenuEntry | 'quickSave' | 'quickLoad', string> = {
+/** The icons' outlines (24×24, drawn with a 2px line); the journey's are with its tiles. */
+const ICONS: Record<
+  Exclude<MenuEntry, JourneyKind> | 'quickSave' | 'quickLoad',
+  string
+> = {
   quickSave: 'M12 4v11M8 11l4 4 4-4M5 20h14',
   quickLoad: 'M4 12a8 8 0 1 0 2.4-5.7L4 8.5M4 4v4.5h4.5',
   save: 'M5 4h11l3 3v13H5zM8 4v5h7V4M8 20v-6h8v6',
@@ -63,8 +72,44 @@ const ICONS: Record<MenuEntry | 'quickSave' | 'quickLoad', string> = {
   quit: 'M10 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4M15 16l4-4-4-4M19 12H9',
 }
 
+/** The journey's tiles, in order: what each opens, its word, its key and its icon's outline. */
+const JOURNEY: Array<{
+  kind: JourneyKind
+  label: string
+  key: string
+  icon: string
+}> = [
+  {
+    kind: 'journal',
+    label: 'Journal',
+    key: 'J',
+    icon: 'M5 4h11a2 2 0 0 1 2 2v14H7a2 2 0 0 1-2-2zM5 18a2 2 0 0 1 2-2h11M9 8h5M9 11h5',
+  },
+  {
+    kind: 'quests',
+    label: 'Quests',
+    key: 'Q',
+    icon: 'M6 21V4M6 4h11l-2.5 4L17 12H6',
+  },
+  {
+    kind: 'map',
+    label: 'Map',
+    key: 'M',
+    icon: 'M9 4 3 6v14l6-2 6 2 6-2V4l-6 2zM9 4v14M15 6v14',
+  },
+]
+
+/** The hidden text the Quests tile is described by. */
+const questsNoteId = useId()
+/** What the Quests tile says beside its name: how many are open, and whether something is new. */
+const questsNote = computed(() =>
+  [`${game.activeQuests.length} open`, game.questsHaveNew ? 'news' : '']
+    .filter(Boolean)
+    .join(', '),
+)
+
 /** The entries that open a window, in order. */
-const ROWS: Array<{ kind: MenuKind; label: string }> = [
+const ROWS: Array<{ kind: Exclude<MenuKind, JourneyKind>; label: string }> = [
   { kind: 'save', label: 'Save' },
   { kind: 'load', label: 'Load' },
   { kind: 'settings', label: 'Settings' },
@@ -102,6 +147,42 @@ function onKeydown(event: KeyboardEvent): void {
     @mousemove="ring.onMove"
   >
     <div ref="list" class="lq-menu" @keydown="onKeydown">
+      <div class="lq-journey">
+        <button
+          v-for="tile in JOURNEY"
+          :key="tile.kind"
+          type="button"
+          class="lq-menu-entry lq-menu-journey"
+          data-ring
+          :aria-label="tile.label"
+          :aria-describedby="tile.kind === 'quests' ? questsNoteId : undefined"
+          :aria-keyshortcuts="tile.key"
+          :data-autofocus="starts(tile.kind) || undefined"
+          @click="emit('open', tile.kind)"
+        >
+          <kbd class="lq-menu-key" aria-hidden="true">{{ tile.key }}</kbd>
+          <span
+            v-if="tile.kind === 'quests'"
+            class="lq-menu-journey-tally"
+            aria-hidden="true"
+            ><span class="lq-menu-journey-count">{{
+              game.activeQuests.length
+            }}</span
+            ><i v-if="game.questsHaveNew" class="lq-menu-journey-new"></i
+          ></span>
+          <svg
+            class="lq-menu-icon lq-menu-journey-icon"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path :d="tile.icon" />
+          </svg>
+          <span class="lq-menu-journey-name" aria-hidden="true">{{
+            tile.label
+          }}</span>
+        </button>
+        <span :id="questsNoteId" class="lq-sr-only">{{ questsNote }}</span>
+      </div>
       <div class="lq-quick">
         <button
           type="button"
@@ -170,6 +251,53 @@ function onKeydown(event: KeyboardEvent): void {
   display: flex;
   flex-direction: column;
   gap: var(--lq-ring-gap);
+}
+/* The journey: three tiles across the top, the key in each one's corner. */
+.lq-journey {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--lq-ring-gap);
+}
+.lq-journey .lq-menu-journey {
+  position: relative;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+  min-height: 92px;
+  font-weight: 600;
+}
+.lq-journey .lq-menu-journey-icon {
+  width: 26px;
+  height: 26px;
+}
+.lq-menu-key {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  min-width: 22px;
+  padding: 2px 6px;
+  border: 1px solid color-mix(in srgb, var(--lq-fg) 25%, transparent);
+  border-bottom-width: 2px;
+  border-radius: 6px;
+  color: var(--lq-muted);
+  font: 600 12px var(--lq-font-mono);
+  text-align: center;
+}
+.lq-menu-journey-tally {
+  position: absolute;
+  top: 8px;
+  left: 10px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--lq-accent-text);
+  font-size: 13px;
+}
+.lq-menu-journey-new {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--lq-accent);
 }
 .lq-quick {
   display: grid;
@@ -266,11 +394,24 @@ function onKeydown(event: KeyboardEvent): void {
   .lq-menu-tile {
     min-height: 48px;
   }
+  .lq-journey .lq-menu-journey {
+    min-height: 72px;
+    gap: 4px;
+  }
 }
 /* A narrow phone: the Quick tiles drop their icons so the words stay on one line. */
 @media (max-width: 359px) {
   .lq-menu-tile .lq-menu-icon {
     display: none;
   }
+}
+/* Read by assistive technology only. */
+.lq-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }
 </style>

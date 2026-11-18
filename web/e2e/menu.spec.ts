@@ -80,7 +80,7 @@ test('Escape does nothing on the title page', async ({
   await expect(page.getByRole('dialog', { name: 'Menu' })).toHaveCount(0)
 })
 
-test('on a tall screen the menu button does not cover Story so far', async ({
+test('on a tall screen the menu button does not cover the Journal button', async ({
   page,
 }): Promise<void> => {
   await page.setViewportSize({ width: 390, height: 844 })
@@ -91,14 +91,14 @@ test('on a tall screen the menu button does not cover Story so far', async ({
     .getByRole('button', { name: 'Menu', exact: true })
     .boundingBox()
   const story = await page
-    .getByRole('button', { name: /Story so far/ })
+    .getByRole('button', { name: /^⟲ Journal/ })
     .boundingBox()
   expect(menu).not.toBeNull()
   expect(story).not.toBeNull()
   expect(story!.x + story!.width).toBeLessThanOrEqual(menu!.x)
 })
 
-test('on a tall screen the longest room name keeps its ▾ beside Story so far, Hint and the menu button', async ({
+test('on a tall screen the longest room name keeps its ▾ beside Journal, Hint and the menu button', async ({
   page,
 }): Promise<void> => {
   await page.setViewportSize({ width: 390, height: 844 })
@@ -126,7 +126,7 @@ test('on a tall screen the longest room name keeps its ▾ beside Story so far, 
   await expect(caret).toBeVisible()
   const nameBox = await caret.boundingBox()
   const story = await page
-    .getByRole('button', { name: /Story so far/ })
+    .getByRole('button', { name: /^⟲ Journal/ })
     .boundingBox()
   const menu = await page
     .getByRole('button', { name: 'Menu', exact: true })

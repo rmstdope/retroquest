@@ -100,11 +100,11 @@ describe('LanternLayout: the stage on a phone', () => {
       expect(w.find('.lq-story-drawer').exists()).toBe(false)
     })
 
-    it('has the room name, "⟲ Story so far" and a round 💡 Hint on the plate: no one and nothing is listed', () => {
+    it('has the room name, "⟲ Journal" and a round 💡 Hint on the plate: no one and nothing is listed', () => {
       const buttons = w.get('.lq-plate').findAll('button')
       expect(buttons.map((b) => b.text())).toEqual([
         expect.stringContaining(useGameStore().roomName),
-        '⟲ Story so far',
+        '⟲ Journal',
         '💡',
       ])
     })
@@ -144,19 +144,13 @@ describe('LanternLayout: the stage on a phone', () => {
       expect(w.find('.lq-phone-plate').exists()).toBe(false)
     })
 
-    it('has one plate top left, and Hint, the three buttons and ☰ top right', () => {
+    it('has one plate top left, and Hint and ☰ top right', () => {
       expect(w.find('.lq-float-menu').exists()).toBe(false)
       expect(w.get('.lq-stage-plate').classes()).toContain('lq-plate-compact')
       const labels = w
         .findAll('.lq-stage-buttons .lq-stage-btn')
         .map((b) => b.text().replace(/\s+/g, ' '))
-      expect(labels).toEqual([
-        '💡',
-        expect.stringMatching(/^Quests · \d+$/),
-        '⟲',
-        '🧭',
-        '☰',
-      ])
+      expect(labels).toEqual(['💡', '☰'])
     })
 
     it('has no action bar and no typing box: a phone plays by pointing only', async () => {
@@ -202,8 +196,17 @@ describe('LanternLayout: the stage on a phone', () => {
       })),
     )
     await startedHoldStore()
+    useGameStore().showTitle = false
     w = mount(LanternLayout, { attachTo: document.body })
-    await w.get('[data-button="story"]').trigger('click')
+    await flushPromises()
+    document.body.dispatchEvent(
+      new KeyboardEvent('keydown', {
+        key: 'j',
+        bubbles: true,
+        cancelable: true,
+      }),
+    )
+    await flushPromises()
     expect(w.find('.lq-story-drawer').exists()).toBe(true)
 
     state.portrait = true

@@ -2,6 +2,7 @@ import {
   test,
   expect,
   enterCommand,
+  gameKey,
   type Locator,
   type Page,
   skipTelling,
@@ -181,10 +182,10 @@ test('opens a journal drawer at once while the voice reads, and a press inside i
   // name changes there; the rest of the panels still wait.
   await expect(roomName).not.toHaveText(before ?? '')
 
-  // A stage button is not a held panel: it opens its drawer, the voice reads on.
+  // Q is not a held panel: it opens its drawer, the voice reads on.
   const commands = await turnCount(page)
-  await page.getByRole('button', { name: /^Quests/ }).click()
-  const drawer = page.getByRole('complementary', { name: 'Journal drawer' })
+  await gameKey(page, 'q')
+  const drawer = page.getByRole('complementary', { name: 'Quests drawer' })
   await expect(drawer).toHaveCount(1)
   // The voice reads on: on the sides, or the waking in the middle of the dark.
   const reading = page.locator(

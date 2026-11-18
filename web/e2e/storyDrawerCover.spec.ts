@@ -1,12 +1,19 @@
 /**
  * The open drawers of the stage (rq-q3x4): nothing from the stage is drawn
- * over them. On a tall screen (a phone-sized window, 390 × 844) the Story so
- * far drawer covers the whole stage, so the belt of pictures, the Hide / Show
+ * over them. On a tall screen (a phone-sized window, 390 × 844) the Journal
+ * drawer covers the whole stage, so the belt of pictures, the Hide / Show
  * what's here buttons, the folded Actions bar and the room's title must all lie
  * under it; on a laptop neither it nor the Quests drawer has the belt or
  * Hide / Show what's here over its foot.
  */
-import { test, expect, type Page, enterCommand } from './fixtures'
+import {
+  test,
+  expect,
+  type Page,
+  enterCommand,
+  gameKey,
+  openJournal,
+} from './fixtures'
 
 interface VueHost {
   __vue_app__: {
@@ -75,10 +82,10 @@ async function playTurns(page: Page): Promise<void> {
 /** Press the stage button named `button` and wait for the drawer called `name` to finish sliding in. */
 async function openDrawer(
   page: Page,
-  button: RegExp,
+  open: (page: Page) => Promise<void>,
   name: string,
 ): Promise<void> {
-  await page.getByRole('button', { name: button }).first().click()
+  await open(page)
   const drawer = page.getByRole('complementary', { name })
   await expect(drawer).toBeVisible()
   await expect
@@ -90,13 +97,13 @@ for (const size of [
   { width: 390, height: 844 },
   { width: 1280, height: 800 },
 ]) {
-  test(`at ${size.width}×${size.height} nothing from the stage covers the open Story so far drawer`, async ({
+  test(`at ${size.width}×${size.height} nothing from the stage covers the open Journal drawer`, async ({
     page,
   }): Promise<void> => {
     await page.setViewportSize(size)
     await openGame(page)
     await playTurns(page)
-    await openDrawer(page, /Story so far/, 'Story so far drawer')
+    await openDrawer(page, openJournal, 'Journal drawer')
     expect(await coveringDrawer(page, '.lq-story-drawer')).toEqual([])
   })
 }
@@ -107,6 +114,6 @@ test('at 1280×800 nothing from the stage covers the open Quests drawer', async 
   await page.setViewportSize({ width: 1280, height: 800 })
   await openGame(page)
   await playTurns(page)
-  await openDrawer(page, /^Quests/, 'Journal drawer')
+  await openDrawer(page, (p) => gameKey(p, 'q'), 'Quests drawer')
   expect(await coveringDrawer(page, '.lq-drawer')).toEqual([])
 })

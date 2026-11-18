@@ -1,9 +1,16 @@
 /**
- * The bigger map (rq-7ql3): on a laptop the open map has a "⤢ Bigger map"
- * button; its window shows the visited places, and pressing one walks Elior
- * there, step by step, leaving an arrival per step. A phone has no button.
+ * The bigger map (rq-7ql3): on a laptop M, or Map in the Escape menu, opens
+ * it; its window shows the visited places, and pressing one walks Elior
+ * there, step by step, leaving an arrival per step. Every layout opens it,
+ * a tall window from its menu as well.
  */
-import { test, expect, type Page, enterCommand as enter } from './fixtures'
+import {
+  test,
+  expect,
+  type Page,
+  enterCommand as enter,
+  gameKey as key,
+} from './fixtures'
 
 /** Open the game and close the opening chapter page. */
 async function start(page: Page): Promise<void> {
@@ -39,7 +46,7 @@ async function placeName(page: Page): Promise<string> {
   return (await plate.locator('.lq-name-text').innerText()).trim()
 }
 
-test('a laptop walks to a visited place from the bigger map', async ({
+test('a laptop walks to a visited place from the bigger map, opened with M', async ({
   page,
 }): Promise<void> => {
   await page.setViewportSize({ width: 1440, height: 800 })
@@ -47,45 +54,73 @@ test('a laptop walks to a visited place from the bigger map', async ({
   await wake(page)
   const home = await placeName(page)
 
-  await page.getByRole('button', { name: '🧭 Map' }).click()
-  await page.locator('.lq-map-pop .lq-exit').first().click()
+  await enter(page, 'go south')
+  await page.keyboard.press('Escape')
   await expect.poll(() => placeName(page)).not.toBe(home)
 
-  await page.getByRole('button', { name: 'Bigger map', exact: true }).click()
+  await key(page, 'm')
   const dialog = page.getByRole('dialog', { name: 'Map' })
   await expect(dialog).toContainText('You are here')
   await dialog.getByRole('button', { name: `Go to ${home}` }).click()
   await expect(dialog).toHaveCount(0)
   await expect.poll(() => placeName(page)).toBe(home)
-  await expect(
-    page.getByRole('button', { name: 'Bigger map', exact: true }),
-  ).toBeFocused()
 })
 
-test('Escape closes the bigger map and leaves the small map open', async ({
+test('the bigger map opened from the menu walks straight into the game, and Escape on it goes back to the menu', async ({
   page,
 }): Promise<void> => {
   await page.setViewportSize({ width: 1440, height: 800 })
   await start(page)
   await wake(page)
-  await page.getByRole('button', { name: '🧭 Map' }).click()
-  await page.getByRole('button', { name: 'Bigger map', exact: true }).click()
-  await expect(page.getByRole('dialog', { name: 'Map' })).toBeVisible()
+  const home = await placeName(page)
+  await enter(page, 'go south')
   await page.keyboard.press('Escape')
-  await expect(page.getByRole('dialog', { name: 'Map' })).toHaveCount(0)
+  await expect.poll(() => placeName(page)).not.toBe(home)
+
+  const menu = page.getByRole('dialog', { name: 'Menu' })
+  const map = page.getByRole('dialog', { name: 'Map' })
+  await page.getByRole('button', { name: 'Menu', exact: true }).click()
+  await menu.getByRole('button', { name: 'Map', exact: true }).click()
+  await expect(map).toBeVisible()
+  await page.keyboard.press('Escape')
+  await expect(menu).toBeVisible()
   await expect(
-    page.getByRole('button', { name: 'Bigger map', exact: true }),
-  ).toBeVisible()
+    menu.getByRole('button', { name: 'Map', exact: true }),
+  ).toBeFocused()
+
+  await page.keyboard.press('m')
+  await map.getByRole('button', { name: `Go to ${home}` }).click()
+  await expect(map).toHaveCount(0)
+  await expect(menu).toHaveCount(0)
+  await expect.poll(() => placeName(page)).toBe(home)
 })
 
-test('a phone has no bigger map', async ({ page }): Promise<void> => {
+test('M closes the bigger map it opened, back to the game', async ({
+  page,
+}): Promise<void> => {
+  await page.setViewportSize({ width: 1440, height: 800 })
+  await start(page)
+  await key(page, 'm')
+  await expect(page.getByRole('dialog', { name: 'Map' })).toBeVisible()
+  await page.keyboard.press('m')
+  await expect(page.getByRole('dialog', { name: 'Map' })).toHaveCount(0)
+  await expect(page.getByRole('dialog', { name: 'Menu' })).toHaveCount(0)
+})
+
+test('a tall narrow window opens the bigger map from the menu too, and its Map tab keeps the small one', async ({
+  page,
+}): Promise<void> => {
   await page.setViewportSize({ width: 390, height: 800 })
   await start(page)
   await page.getByRole('button', { name: 'Map', exact: true }).click()
   await expect(page.getByRole('region', { name: 'Map' })).toBeVisible()
-  await expect(
-    page.getByRole('button', { name: 'Bigger map', exact: true }),
-  ).toHaveCount(0)
+
+  await page.getByRole('button', { name: 'Menu', exact: true }).click()
+  const menu = page.getByRole('dialog', { name: 'Menu' })
+  await menu.getByRole('button', { name: 'Map', exact: true }).click()
+  await expect(page.getByRole('dialog', { name: 'Map' })).toContainText(
+    'You are here',
+  )
 })
 
 test('every place of Act I fits across the bigger map (rq-7319)', async ({
@@ -95,8 +130,7 @@ test('every place of Act I fits across the bigger map (rq-7319)', async ({
   await start(page)
   await enter(page, 'debug act1')
   await expect(page.getByText("Debug script 'act1' played")).toBeVisible()
-  await page.getByRole('button', { name: '🧭 Map' }).click()
-  await page.getByRole('button', { name: 'Bigger map', exact: true }).click()
+  await key(page, 'm')
   const dialog = page.getByRole('dialog', { name: 'Map' })
   await expect(dialog.locator('[data-place="Road to Greendale"]')).toHaveCount(
     1,

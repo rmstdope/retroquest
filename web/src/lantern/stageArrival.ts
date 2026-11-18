@@ -121,10 +121,10 @@ export function sceneBlock(
 
 /**
  * The first block of a talk that took Elior to another room that only the
- * record (Story so far) tells: every event line it ends on, after its words
+ * record (the journal) tells: every event line it ends on, after its words
  * on the sides (`sideBlocks`), which today is only the dream's closing "You
  * are in …". The stage tells neither them nor, in the middle, anything but
- * the room, so a new event at the end of such a talk is only in Story so far
+ * the room, so a new event at the end of such a talk is only in the journal
  * too. `blocks.length` (every block is told on the stage) for any other turn.
  */
 export function recordOnlyFrom(

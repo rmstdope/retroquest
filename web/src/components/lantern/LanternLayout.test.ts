@@ -73,6 +73,18 @@ describe('LanternLayout', () => {
     return wrapper
   }
 
+  /** A key pressed on the page: J the journal, Q the quests. */
+  async function key(name: string): Promise<void> {
+    document.body.dispatchEvent(
+      new KeyboardEvent('keydown', {
+        key: name,
+        bubbles: true,
+        cancelable: true,
+      }),
+    )
+    await flushPromises()
+  }
+
   describe('chapter pages', () => {
     const INTRO = {
       kind: 'intro' as const,
@@ -343,16 +355,13 @@ describe('LanternLayout', () => {
       })),
     )
     const w = mountLayout()
-    await w.get('[data-button="quests"]').trigger('click')
-    expect(w.get('[aria-label="Journal drawer"]').text()).toContain('Quests')
-    await w.get('[data-button="map"]').trigger('click')
-    expect(w.find('.lq-compass').exists()).toBe(true)
+    await key('q')
+    expect(w.get('[aria-label="Quests drawer"]').text()).toContain('Quests')
 
     useGameStore().gameNumber++
     await w.vm.$nextTick()
 
-    expect(w.find('[aria-label="Journal drawer"]').exists()).toBe(false)
-    expect(w.find('.lq-compass').exists()).toBe(false)
+    expect(w.find('[aria-label="Quests drawer"]').exists()).toBe(false)
     vi.unstubAllGlobals()
   })
 
@@ -825,9 +834,6 @@ describe('LanternLayout', () => {
       )
       expect(w.findAll('.lq-stage-btn').map((b) => b.text())).toEqual([
         '💡 Hint',
-        'Quests · 0',
-        '⟲ Story so far',
-        '🧭 Map',
         '☰',
       ])
       expect(w.find('section[aria-label="Story"]').exists()).toBe(true)
@@ -846,21 +852,19 @@ describe('LanternLayout', () => {
       const w = mountLayout()
       const game = useGameStore()
 
-      await w.get('[data-button="quests"]').trigger('click')
-      await w.get('[data-button="map"]').trigger('click')
+      await key('q')
       game.loadNumber++
       await w.vm.$nextTick()
-      expect(w.find('[aria-label="Journal drawer"]').exists()).toBe(false)
-      expect(w.find('.lq-compass').exists()).toBe(false)
+      expect(w.find('[aria-label="Quests drawer"]').exists()).toBe(false)
 
-      await w.get('[data-button="quests"]').trigger('click')
+      await key('q')
       game.musicActName = 'Act2'
       await w.vm.$nextTick()
-      expect(w.find('[aria-label="Journal drawer"]').exists()).toBe(false)
+      expect(w.find('[aria-label="Quests drawer"]').exists()).toBe(false)
     })
 
     describe('the story drawer', () => {
-      const STORY = '[aria-label="Story so far drawer"]'
+      const STORY = '[aria-label="Journal drawer"]'
       const stageTurns = () => {
         useGameStore().turns = [
           { ...TURN, id: 1, command: 'look' },
@@ -868,28 +872,25 @@ describe('LanternLayout', () => {
         ]
       }
 
-      it('opens from Story so far with every turn, lights the button, and closes on a second press', async () => {
+      it('opens on J with every turn, and closes on a second J', async () => {
         stageTurns()
         const w = mountLayout()
-        await w.get('[data-button="story"]').trigger('click')
+        await key('j')
 
         const drawer = w.get(STORY)
         expect(drawer.findAll('[data-testid="command"]')).toHaveLength(2)
-        expect(w.get('[data-button="story"]').attributes('aria-pressed')).toBe(
-          'true',
-        )
 
-        await w.get('[data-button="story"]').trigger('click')
+        await key('j')
         expect(w.find(STORY).exists()).toBe(false)
       })
 
       it('closes with ✕ and Escape', async () => {
         const w = mountLayout()
-        await w.get('[data-button="story"]').trigger('click')
+        await key('j')
         await w.get(`${STORY} .lq-drawer-close`).trigger('click')
         expect(w.find(STORY).exists()).toBe(false)
 
-        await w.get('[data-button="story"]').trigger('click')
+        await key('j')
         await w.get(STORY).trigger('keydown', { key: 'Escape' })
         expect(w.find(STORY).exists()).toBe(false)
       })
@@ -898,12 +899,12 @@ describe('LanternLayout', () => {
         stageTurns()
         const w = mountLayout()
         const game = useGameStore()
-        await w.get('[data-button="story"]').trigger('click')
+        await key('j')
         game.turns = [...game.turns, { ...TURN, id: 3 }]
         await w.vm.$nextTick()
         expect(w.find(STORY).exists()).toBe(false)
 
-        await w.get('[data-button="story"]').trigger('click')
+        await key('j')
         game.loadNumber++
         await w.vm.$nextTick()
         expect(w.find(STORY).exists()).toBe(false)
@@ -911,19 +912,17 @@ describe('LanternLayout', () => {
 
       it('is swapped for the Quests drawer by Open in journal', async () => {
         const w = mountLayout()
-        await w.get('[data-button="story"]').trigger('click')
+        await key('j')
         useGameStore().questToOpen = 'Whispers'
         await w.vm.$nextTick()
         expect(w.find(STORY).exists()).toBe(false)
-        expect(w.get('[aria-label="Journal drawer"]').text()).toContain(
-          'Quests',
-        )
+        expect(w.get('[aria-label="Quests drawer"]').text()).toContain('Quests')
       })
 
       it('stays open for a press in the name menu', async () => {
         wrapper = mount(LanternLayout, { attachTo: document.body })
         const w = wrapper
-        await w.get('[data-button="story"]').trigger('click')
+        await key('j')
         const menu = document.createElement('div')
         menu.className = 'lq-name-menu'
         document.body.appendChild(menu)
@@ -935,7 +934,7 @@ describe('LanternLayout', () => {
 
       it('closes in a new game', async () => {
         const w = mountLayout()
-        await w.get('[data-button="story"]').trigger('click')
+        await key('j')
         useGameStore().gameNumber++
         await w.vm.$nextTick()
         expect(w.find(STORY).exists()).toBe(false)
@@ -969,7 +968,7 @@ describe('LanternLayout', () => {
         const w = mountLayout()
         const story = w.get('section[aria-label="Story"]').element
         story.scrollTop = 300
-        await w.get('[data-button="story"]').trigger('click')
+        await key('j')
         expect(story.scrollTop).toBe(300)
       })
     })
@@ -1056,11 +1055,11 @@ describe('LanternLayout', () => {
     it('lets Escape close an open drawer and leaves the words alone', async () => {
       const w = mountLayout()
       await say(w, WORDS, 'Grandmother')
-      await w.get('[data-button="quests"]').trigger('click')
+      await key('q')
       await w
-        .get('[aria-label="Journal drawer"]')
+        .get('[aria-label="Quests drawer"]')
         .trigger('keydown', { key: 'Escape' })
-      expect(w.find('[aria-label="Journal drawer"]').exists()).toBe(false)
+      expect(w.find('[aria-label="Quests drawer"]').exists()).toBe(false)
       expect(w.find('[data-testid="speech-line"]').exists()).toBe(true)
 
       document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }))
@@ -1240,6 +1239,53 @@ describe('LanternLayout', () => {
       await flushPromises()
 
       expect(sections(w).get('[aria-current="page"]').text()).toMatch(/^Quests/)
+    })
+
+    describe("the menu's journey without the laptop stage", () => {
+      const choose = async (w: VueWrapper, label: string): Promise<void> => {
+        await w.get('.lq-float-menu').trigger('click')
+        await w
+          .get(`[role="dialog"] .lq-menu-journey[aria-label="${label}"]`)
+          .trigger('click')
+        await flushPromises()
+      }
+      const current = (w: VueWrapper): string =>
+        sections(w).get('[aria-current="page"]').text()
+
+      it('on a short screen (the text page) the tiles and keys switch the section, and Map opens the map', async () => {
+        stubScreen(true)
+        const w = mountLayout()
+        await choose(w, 'Quests')
+        expect(current(w)).toMatch(/^Quests/)
+        expect(w.find('[role="dialog"]').exists()).toBe(false)
+        await choose(w, 'Journal')
+        expect(current(w)).toBe('Story')
+        await key('q')
+        expect(current(w)).toMatch(/^Quests/)
+        await key('j')
+        expect(current(w)).toBe('Story')
+        await choose(w, 'Map')
+        expect(w.get('[role="dialog"] h2').text()).toBe('Map')
+      })
+
+      it('on a tall screen Quests switches to its section and Journal opens the journal over the story', async () => {
+        const w = mountLayout()
+        await choose(w, 'Quests')
+        expect(current(w)).toMatch(/^Quests/)
+        expect(w.find('[aria-label="Quests drawer"]').exists()).toBe(false)
+        await choose(w, 'Journal')
+        expect(current(w)).toBe('Story')
+        expect(w.find('[aria-label="Journal drawer"]').exists()).toBe(true)
+      })
+
+      it('on a tall screen J from another section goes back to the story and opens the journal there', async () => {
+        const w = mountLayout()
+        await key('q')
+        expect(current(w)).toMatch(/^Quests/)
+        await key('j')
+        expect(current(w)).toBe('Story')
+        expect(w.find('[aria-label="Journal drawer"]').exists()).toBe(true)
+      })
     })
 
     it('puts the section tabs on top of the page on a short screen, under the menu button', () => {

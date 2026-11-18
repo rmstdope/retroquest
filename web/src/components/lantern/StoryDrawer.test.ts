@@ -44,9 +44,9 @@ describe('StoryDrawer', () => {
 
   const open = () => (w = mount(StoryDrawer, { attachTo: document.body }))
 
-  it('is headed "Story so far" and holds every turn, oldest first', () => {
+  it('is headed "Journal" and holds every turn, oldest first', () => {
     const drawer = open()
-    expect(drawer.get('h2').text()).toBe('Story so far')
+    expect(drawer.get('h2').text()).toBe('Journal')
     expect(
       drawer.findAll('[data-testid="command"]').map((c) => c.text()),
     ).toEqual(['› look', '› take bread'])
@@ -126,6 +126,6 @@ describe('StoryDrawer', () => {
   it('covers the whole stage on a phone', () => {
     w = mount(StoryDrawer, { props: { phone: true } })
     expect(w.get('.lq-story-drawer').classes()).toContain('lq-phone-drawer')
-    expect(w.get('h2').text()).toBe('Story so far')
+    expect(w.get('h2').text()).toBe('Journal')
   })
 })

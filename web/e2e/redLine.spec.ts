@@ -187,7 +187,11 @@ interface AppRoot extends Element {
     config: {
       globalProperties: {
         $pinia: {
-          state: { value: { game: { turns: { command: string | null }[] } } }
+          state: {
+            value: {
+              game: { turns: { command: string | null; text: string }[] }
+            }
+          }
         }
       }
     }
@@ -215,7 +219,6 @@ test('plays the red line from Act I to the Willowbrook epilogue', async ({
 }): Promise<void> => {
   test.setTimeout(120_000)
   await startGame(page)
-  const story = page.getByRole('region', { name: 'Story' })
 
   for (const [index, act] of ACTS.entries()) {
     if (index === 0) await expect(page.locator('.lq-chapter')).toBeVisible()
@@ -232,18 +235,22 @@ test('plays the red line from Act I to the Willowbrook epilogue', async ({
     await expect(page.getByText(act.played)).toBeVisible({ timeout: 60_000 })
     for (const command of act.completing) await type(page, command)
 
-    // On the laptop the story drawer holds all the turns (the paper only the
-    // last); the act-complete page covers its button, so press it from the page.
-    const recap = page.getByRole('button', { name: /Story so far/ })
-    let text: string
-    if (await recap.isVisible()) {
-      await recap.evaluate((button) => (button as HTMLElement).click())
-      text = await page
-        .getByRole('complementary', { name: 'Story so far drawer' })
-        .innerText()
-    } else text = await story.innerText()
+    // The journal holds every turn (the paper only the last), but the
+    // act-complete page is up and nothing opens under it; read the turns the
+    // journal shows, their markup taken off, as it does.
+    const text = await page.evaluate(() => {
+      const root: AppRoot | null = document.querySelector('#app')
+      const turns: Array<{ text: string }> =
+        root?.__vue_app__?.config.globalProperties.$pinia.state.value.game
+          .turns ?? []
+      return turns
+        .map((turn) => turn.text.replace(/\[\/?[a-z_]+(?:[:=][^\]]*)?\]/g, ''))
+        .join('\n')
+    })
+    // The raw turns break lines where the journal lays them out: compare the words, spaces collapsed.
+    const words = (s: string): string => s.replace(/\s+/g, ' ').trim()
     for (const beat of act.beats) {
-      expect(text, beat.name).toContain(beat.text)
+      expect(words(text), beat.name).toContain(words(beat.text))
     }
   }
 

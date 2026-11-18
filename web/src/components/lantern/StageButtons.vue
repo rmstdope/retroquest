@@ -1,83 +1,29 @@
 <script setup lang="ts">
-import { computed, nextTick, onUnmounted, ref, watch } from 'vue'
+import { useId } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
-import CompassPanel from './CompassPanel.vue'
 import HintButton from './HintButton.vue'
 
 /**
- * The buttons in the stage's top-right corner: Quests (with its count and
- * today's amber dot while something is new) opens the journal drawer,
- * "⟲ Story so far" opens the story drawer, "💡 Hint" (the round 💡 when `compact`) comes first in the row and sends `hint`, and "🧭 Map" opens the map of the
- * ways out beneath it. (The Bag and Spells are the belt of pictures at the
- * picture's foot.) They are controlled by the layout, which lets only one of
- * the three be open (`drawer`), and press-only: nothing opens on
- * hover. The round ☰ at the end of the row opens the menu. The button of
- * the open one stays lit. Walking from the map keeps it open. Escape closes the map (asking the layout to, which returns focus to
- * the button) and nothing else hears it. The buttons open their drawers at
- * once, even while a turn is read aloud; only the map's ways out are a held
- * panel (`data-panel`), where a first press catches up.
+ * The buttons in the stage's top-right corner: "💡 Hint" (the round 💡 when
+ * `compact`) sends `hint`, and the round ☰ opens the menu, which holds the
+ * journey (Journal, Quests and Map, also on J, Q and M) and the game's
+ * windows. ☰ carries the amber dot while a quest has news, since the Quests
+ * it is about now lie inside the menu. (The Bag and Spells are the belt of
+ * pictures at the picture's foot.) The buttons are press-only: nothing opens
+ * on hover.
  */
-type Tab = 'quests'
-
-const props = defineProps<{
-  drawer: Tab | 'story' | 'map' | null
-  /** A sideways phone: Story so far and Map are their symbols alone. */
+defineProps<{
+  /** A sideways phone: smaller buttons, Hint its symbol alone. */
   compact?: boolean
 }>()
-const emit = defineEmits<{
-  journal: [tab: Tab]
-  story: []
-  map: []
-  menu: []
-  close: []
-}>()
+const emit = defineEmits<{ menu: [] }>()
 const game = useGameStore()
-
-const root = ref<HTMLElement | null>(null)
-const mapOpen = computed(() => props.drawer === 'map')
-
-const journalButtons = computed(() => [
-  {
-    tab: 'quests' as const,
-    name: 'Quests',
-    count: game.activeQuests.length,
-    dot: game.questsHaveNew,
-  },
-])
-
-/**
- * Escape closes the map, if it is open, and nothing else hears it; but not
- * while a dialog is up (the bigger map), which takes the key itself.
- */
-function onDocumentKey(event: KeyboardEvent): void {
-  if (event.key !== 'Escape' || !mapOpen.value) return
-  if (document.querySelector('.lq-dialog-layer')) return
-  event.stopPropagation()
-  event.preventDefault()
-  emit('close')
-}
-
-watch(
-  mapOpen,
-  (open) => {
-    // Capture, so the layout's narration keys do not also hear this Escape.
-    if (open) document.addEventListener('keydown', onDocumentKey, true)
-    else document.removeEventListener('keydown', onDocumentKey, true)
-  },
-  { immediate: true },
-)
-onUnmounted(() => document.removeEventListener('keydown', onDocumentKey, true))
-
-/** Focus a button: a journal button, Story so far, or the Map button. */
-async function focusButton(which: Tab | 'story' | 'map'): Promise<void> {
-  await nextTick()
-  root.value?.querySelector<HTMLElement>(`[data-button="${which}"]`)?.focus()
-}
-defineExpose({ focusButton })
+/** The hidden words ☰ is described by while a quest has news. */
+const newsId = useId()
 </script>
 
 <template>
-  <div ref="root" class="lq-buttons" :class="{ 'lq-compact': compact }">
+  <div class="lq-buttons" :class="{ 'lq-compact': compact }">
     <div class="lq-button-row">
       <HintButton
         class="lq-stage-btn"
@@ -86,68 +32,22 @@ defineExpose({ focusButton })
         :compact="compact"
       />
       <button
-        v-for="button in journalButtons"
-        :key="button.tab"
-        type="button"
-        class="lq-stage-btn"
-        data-lq-obstacle="panel"
-        :class="{
-          'lq-lit': props.drawer === button.tab,
-        }"
-        :data-button="button.tab"
-        :aria-pressed="props.drawer === button.tab ? 'true' : 'false'"
-        @click="emit('journal', button.tab)"
-      >
-        {{ button.name }}<span class="lq-count-sep"> ·</span>
-        {{ button.count }}
-        <span v-if="button.dot" class="lq-dot" aria-label="new"></span>
-      </button>
-      <button
-        type="button"
-        class="lq-stage-btn"
-        data-lq-obstacle="panel"
-        :class="{ 'lq-lit': props.drawer === 'story' }"
-        data-button="story"
-        :aria-label="compact ? 'Story so far' : undefined"
-        :aria-pressed="props.drawer === 'story' ? 'true' : 'false'"
-        @click="emit('story')"
-      >
-        ⟲<template v-if="!compact"> Story so far</template>
-      </button>
-      <div class="lq-map-wrap">
-        <button
-          type="button"
-          class="lq-stage-btn"
-          data-lq-obstacle="panel"
-          :class="{ 'lq-lit': mapOpen }"
-          data-button="map"
-          :aria-label="compact ? 'Map' : undefined"
-          aria-haspopup="true"
-          :aria-expanded="mapOpen ? 'true' : 'false'"
-          @click="emit('map')"
-        >
-          🧭<template v-if="!compact"> Map</template>
-        </button>
-        <div
-          v-if="mapOpen"
-          class="lq-map-pop"
-          data-lq-obstacle="panel"
-          data-panel
-        >
-          <CompassPanel stage />
-        </div>
-      </div>
-      <button
         type="button"
         class="lq-stage-btn lq-menu-btn"
         data-lq-obstacle="panel"
         data-button="menu"
         title="Menu"
         aria-label="Menu"
+        :aria-describedby="game.questsHaveNew ? newsId : undefined"
         @click="emit('menu')"
       >
-        ☰
+        ☰<span
+          v-if="game.questsHaveNew"
+          class="lq-dot"
+          aria-hidden="true"
+        ></span>
       </button>
+      <span :id="newsId" class="lq-sr-only">A quest has news</span>
     </div>
   </div>
 </template>
@@ -186,12 +86,7 @@ defineExpose({ focusButton })
   padding: 0;
   font-size: 18px;
 }
-.lq-stage-btn.lq-lit {
-  border-color: var(--lq-accent);
-  background: var(--lq-accent-soft);
-  color: var(--lq-accent-text);
-}
-/* A sideways phone: smaller buttons; on the smallest screens "Bag 2", no dot between, and the amber dot sits in the button's corner, taking no width from the room's name. */
+/* A sideways phone: smaller buttons. */
 .lq-compact .lq-button-row {
   gap: 4px;
 }
@@ -205,37 +100,23 @@ defineExpose({ focusButton })
   padding: 0;
   font-size: 16px;
 }
-@media (max-height: 340px) {
-  .lq-compact .lq-count-sep {
-    display: none;
-  }
-}
+/* A quest's news: the amber dot in ☰'s corner. */
 .lq-dot {
-  display: inline-block;
+  position: absolute;
+  top: 4px;
+  right: 4px;
   width: 8px;
   height: 8px;
-  margin-left: 6px;
   border-radius: 50%;
   background: var(--lq-accent);
 }
-@media (max-height: 340px) {
-  .lq-compact .lq-dot {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    margin-left: 0;
-  }
-}
-.lq-map-wrap {
-  position: relative;
-}
-/* Starts at the button's edge. */
-.lq-map-pop {
+/* Read by assistive technology only. */
+.lq-sr-only {
   position: absolute;
-  top: 100%;
-  right: 0;
-  z-index: 5; /* local */
-  width: 300px;
-  padding-top: 6px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }
 </style>

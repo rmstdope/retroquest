@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { mount, type VueWrapper } from '@vue/test-utils'
+import { flushPromises, mount, type VueWrapper } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import LanternLayout from './LanternLayout.vue'
 import { useGameStore, type Turn } from '@/stores/useGameStore'
@@ -58,6 +58,19 @@ describe('LanternLayout: names reached with Tab', () => {
     w = mount(LanternLayout, { attachTo: document.body })
     await w.vm.$nextTick()
     await w.vm.$nextTick()
+  }
+  /** Open the Journal with J, the title page put away first. */
+  async function openJournal(): Promise<void> {
+    game.showTitle = false
+    await flushPromises()
+    document.body.dispatchEvent(
+      new KeyboardEvent('keydown', {
+        key: 'j',
+        bubbles: true,
+        cancelable: true,
+      }),
+    )
+    await flushPromises()
   }
   afterEach(() => {
     w.unmount()
@@ -139,7 +152,7 @@ describe('LanternLayout: names reached with Tab', () => {
     })
 
     it('has a stop on every reachable name in the drawer, and Tab from the drawer lands on the newest turn', async () => {
-      await w.get('[data-button="story"]').trigger('click')
+      await openJournal()
       await w.vm.$nextTick()
       await w.vm.$nextTick()
       const found = stops('.lq-story-drawer')
@@ -173,7 +186,7 @@ describe('LanternLayout: names reached with Tab', () => {
     it('keeps the reader near the newest turn when it has no stops', async () => {
       game.turns.push(turn(903, 'Nothing to name here.'))
       await w.vm.$nextTick()
-      await w.get('[data-button="story"]').trigger('click')
+      await openJournal()
       await w.vm.$nextTick()
       await w.vm.$nextTick()
       const found = stops('.lq-story-drawer')

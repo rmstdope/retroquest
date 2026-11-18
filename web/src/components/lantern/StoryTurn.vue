@@ -41,7 +41,7 @@ import { readingPauseMs, toldAsSpeech } from '@/lantern/stageSpeech'
  * right, as `useStageSpeechStore` decides), the description of a room told in
  * the middle of the picture on a first visit (a look, a revisit and a load
  * tell the room here) and quest news, which the stage tells in the middle of
- * the picture (`useArrivalStore`) and Story so far and the journal keep. A
+ * the picture (`useArrivalStore`) and the journal and the quests keep. A
  * card with nothing to tell renders nothing. Each bubble fades away once it
  * has been read (`useFadeOnceRead`, run by the layout): it says when it is
  * being read aloud, and in a turn that is not, how long it takes to read.
@@ -61,7 +61,7 @@ const props = defineProps<{
   card?: boolean
   /** Tell only this piece of the turn (the single column's card). */
   piece?: CardPiece
-  /** The full record (Story so far): quest news is always shown as its cards, and the learned spells' lines stay. */
+  /** The full record (the journal): quest news is always shown as its cards, and the learned spells' lines stay. */
   record?: boolean
 }>()
 const narration = useNarrationStore()

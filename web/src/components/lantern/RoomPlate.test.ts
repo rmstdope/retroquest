@@ -39,13 +39,13 @@ describe('RoomPlate', () => {
     expect(w.classes()).toContain('lq-plate-away')
   })
 
-  it('has no Story so far button unless the phone stage asks for it', () => {
+  it('has no Journal button unless the phone stage asks for it', () => {
     expect(mount(RoomPlate).find('.lq-story-so-far').exists()).toBe(false)
   })
 
-  it('shows "⟲ Story so far" beside the name on the phone stage, and says when it is pressed', async () => {
+  it('shows "⟲ Journal" beside the name on the phone stage, and says when it is pressed', async () => {
     const w = mount(RoomPlate, { props: { storyButton: true } })
-    expect(w.get('.lq-story-so-far').text()).toBe('⟲ Story so far')
+    expect(w.get('.lq-story-so-far').text()).toBe('⟲ Journal')
     await w.get('.lq-story-so-far').trigger('click')
     expect(w.emitted('story')).toHaveLength(1)
   })
@@ -220,7 +220,7 @@ describe('RoomPlate', () => {
     })
   })
 
-  it('carries a round 💡 Hint beside Story so far when asked (the phone stage)', async () => {
+  it('carries a round 💡 Hint beside Journal when asked (the phone stage)', async () => {
     const w = mount(RoomPlate, {
       props: { storyButton: true, hintButton: true },
     })
