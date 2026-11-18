@@ -56,7 +56,7 @@ test('the Continue card shows a small picture of the room the save was made in',
   await expect(picture).toHaveAttribute('aria-hidden', 'true')
   await expect(picture.locator('img').first()).toHaveAttribute(
     'src',
-    /images\/generated\/.+\.png$/,
+    /images\/generated\/thumbs\/.+\.webp$/,
   )
 })
 
@@ -75,10 +75,30 @@ test('the Load window shows the same small picture on the save, with its mark on
   await expect(picture).toHaveAttribute('aria-hidden', 'true')
   await expect(picture.locator('img').first()).toHaveAttribute(
     'src',
-    /images\/generated\/.+\.png$/,
+    /images\/generated\/thumbs\/.+\.webp$/,
   )
   await expect(quick.locator('.lq-slot-lead .lq-slot-badge')).toHaveText('Q')
   await expect(page.locator('[data-slot="1"] .lq-slot-thumb')).toHaveCount(0)
+})
+
+test('opening Load fetches the small copies of the pictures, never the full paintings', async ({
+  page,
+}) => {
+  await makeSave(page)
+  await page.reload()
+  // The title page's own backdrop is not the snapshot: let it settle first.
+  await page.waitForLoadState('networkidle')
+  const fetched: string[] = []
+  page.on('request', (request) => fetched.push(request.url()))
+
+  await page.getByRole('button', { name: 'Load game' }).click()
+  const quick = page
+    .getByRole('dialog', { name: 'Load game' })
+    .locator('[data-slot="0"]')
+  await expect(quick.locator('.lq-slot-thumb img').first()).toBeVisible()
+
+  const pictures = fetched.filter((url) => url.includes('/images/generated/'))
+  for (const url of pictures) expect(url).toMatch(/\/thumbs\/.+\.webp$/)
 })
 
 test('Load game from the title page loads a card with no question', async ({
