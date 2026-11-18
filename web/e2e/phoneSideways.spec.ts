@@ -39,8 +39,11 @@ for (const size of [
     await expect(page.locator('.lq-header')).toHaveCount(0)
     await expect(page.locator('.lq-nav-bottom')).toHaveCount(0)
     await expect(page.locator('.lq-dock, .lq-composer')).toHaveCount(0)
-    // Hint is the round 💡 first on the top row.
-    await expect(page.getByRole('button', { name: 'Hint' })).toHaveText('💡')
+    // ☰ stands alone top right; Hint is the last of the room menu's pills.
+    await expect(
+      page.getByRole('button', { name: 'Hint', exact: true }),
+    ).toHaveCount(0)
+    await expect(page.getByRole('button', { name: 'Menu' })).toBeVisible()
     // One compact row: it never covers the words.
     const plate = await page.locator('.lq-stage-plate').boundingBox()
     expect(plate?.height ?? 999).toBeLessThan(60)
@@ -67,7 +70,11 @@ for (const size of [
       })
     }).toPass()
     await page.locator('.lq-name-btn').click()
-    await expect(page.locator('.lq-pill')).toHaveCount(3)
+    await expect(page.locator('.lq-pill')).toHaveCount(4)
+    // The fourth, Hint, still fits beside the name on the smallest phone.
+    await expect(page.locator('.lq-pill', { hasText: 'Hint' })).toBeInViewport({
+      ratio: 1,
+    })
     await page.locator('.lq-pill', { hasText: 'Look' }).click()
     await expect(page.locator('.lq-pill')).toHaveCount(0)
     if (size.height <= 340)

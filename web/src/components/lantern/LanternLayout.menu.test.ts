@@ -110,11 +110,11 @@ describe('LanternLayout: the Escape menu', () => {
     const label = (): string | null | undefined =>
       document.activeElement?.getAttribute('aria-label')
 
-    it('has no Quests, Story so far or Map button on the picture, only Hint and ☰', () => {
+    it('has no Hint, Quests, Story so far or Map button on the picture, only ☰', () => {
       const buttons = w
         .findAll('.lq-stage-buttons [data-button]')
         .map((b) => b.attributes('data-button'))
-      expect(buttons).toEqual(['hint', 'menu'])
+      expect(buttons).toEqual(['menu'])
       expect(w.find('.lq-map-pop').exists()).toBe(false)
     })
 
@@ -271,7 +271,7 @@ describe('LanternLayout: the Escape menu', () => {
     )
 
     it('forgets what had focus before a drawer that went some other way', async () => {
-      const before = w.get<HTMLElement>('[data-button="hint"]').element
+      const before = w.get<HTMLElement>('[data-button="menu"]').element
       before.focus()
       await press('q', before)
       // The drawer goes with a press outside it, not by its own closing.
@@ -371,7 +371,7 @@ describe('LanternLayout: the Escape menu', () => {
     })
 
     it('gives focus back to what had it before the drawer when M follows Q', async () => {
-      const typing = w.get<HTMLElement>('[data-button="hint"]').element
+      const typing = w.get<HTMLElement>('[data-button="menu"]').element
       typing.focus()
       await press('q', typing)
       await press('m', document.activeElement!)

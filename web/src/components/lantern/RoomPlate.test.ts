@@ -71,15 +71,15 @@ describe('RoomPlate', () => {
       const name = w.get('.lq-name-btn')
       expect(name.text()).toBe('Village Square ▾')
       expect(name.attributes('aria-label')).toBe(
-        'Village Square — Look, Search, Rest',
+        'Village Square — Look, Search, Rest, Hint',
       )
       expect(name.attributes('aria-expanded')).toBe('false')
       expect(w.findAll('.lq-pill')).toHaveLength(0)
     })
 
-    it('fans out Look, Search and Rest, outlines the name and shows ▴', async () => {
+    it('fans out Look, Search, Rest and Hint, outlines the name and shows ▴', async () => {
       const w = await open()
-      expect(pills(w)).toEqual(['👁 Look', '🔍 Search', '💤 Rest'])
+      expect(pills(w)).toEqual(['👁 Look', '🔍 Search', '💤 Rest', '💡 Hint'])
       expect(w.get('.lq-name-btn').text()).toBe('Village Square ▴')
       expect(w.get('.lq-name-btn').attributes('aria-expanded')).toBe('true')
       expect(w.classes()).toContain('lq-plate-open')
@@ -91,6 +91,13 @@ describe('RoomPlate', () => {
       await w.findAll('.lq-pill')[1].trigger('click')
       expect(submit).toHaveBeenCalledWith('search')
       expect(w.findAll('.lq-pill')).toHaveLength(0)
+      w.unmount()
+    })
+
+    it('asks for a hint from its last pill, as the Hint button did', async () => {
+      const w = await open()
+      await w.findAll('.lq-pill')[3].trigger('click')
+      expect(submit).toHaveBeenCalledWith('hint')
       w.unmount()
     })
 
@@ -123,7 +130,7 @@ describe('RoomPlate', () => {
         new Event('pointerdown', { bubbles: true }),
       )
       await w.vm.$nextTick()
-      expect(w.findAll('.lq-pill')).toHaveLength(3)
+      expect(w.findAll('.lq-pill')).toHaveLength(4)
       document.body.dispatchEvent(new Event('pointerdown', { bubbles: true }))
       await w.vm.$nextTick()
       expect(w.findAll('.lq-pill')).toHaveLength(0)
@@ -158,7 +165,7 @@ describe('RoomPlate', () => {
       await items[1].trigger('keydown', { key: 'ArrowUp' })
       expect(document.activeElement).toBe(items[0].element)
       await items[0].trigger('keydown', { key: 'ArrowUp' })
-      expect(document.activeElement).toBe(items[2].element)
+      expect(document.activeElement).toBe(items[3].element)
       w.unmount()
     })
 
@@ -169,7 +176,7 @@ describe('RoomPlate', () => {
       )
       await w.vm.$nextTick()
       await w.vm.$nextTick()
-      expect(w.findAll('.lq-pill')).toHaveLength(3)
+      expect(w.findAll('.lq-pill')).toHaveLength(4)
       expect(document.activeElement).not.toBe(w.get('.lq-pill').element)
       w.unmount()
     })
@@ -215,18 +222,13 @@ describe('RoomPlate', () => {
 
     it('opens for a room with no picture the same way', async () => {
       const w = await open({ bare: true })
-      expect(pills(w)).toHaveLength(3)
+      expect(pills(w)).toHaveLength(4)
       w.unmount()
     })
   })
 
-  it('carries a round 💡 Hint beside Journal when asked (the phone stage)', async () => {
-    const w = mount(RoomPlate, {
-      props: { storyButton: true, hintButton: true },
-    })
-    const hint = w.get('[data-button="hint"]')
-    expect(hint.text()).toBe('💡')
-    await hint.trigger('click')
-    expect(submit).toHaveBeenCalledWith('hint')
+  it('has no Hint of its own beside Journal: Hint is in the room menu', () => {
+    const w = mount(RoomPlate, { props: { storyButton: true } })
+    expect(w.find('[data-button="hint"]').exists()).toBe(false)
   })
 })

@@ -96,7 +96,7 @@ describe('LanternLayout: one thing open on the stage', () => {
   })
 
   it('hands focus back to what had it when the drawer opened', async () => {
-    const hint = w.get<HTMLElement>('[data-button="hint"]').element
+    const hint = w.get<HTMLElement>('[data-button="menu"]').element
     hint.focus()
     await key('q')
     await w.get('.lq-drawer-close').trigger('click')
@@ -133,7 +133,7 @@ describe('LanternLayout: one thing open on the stage', () => {
   })
 
   it('closes the map on Escape and gives focus back to what had it', async () => {
-    const hint = w.get<HTMLElement>('[data-button="hint"]').element
+    const hint = w.get<HTMLElement>('[data-button="menu"]').element
     hint.focus()
     await key('m')
     expect(mapOpen()).toBe(true)

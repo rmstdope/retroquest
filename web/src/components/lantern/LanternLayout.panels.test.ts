@@ -196,17 +196,19 @@ describe('LanternLayout: panels wait for the narration', () => {
   })
 
   it.each([
-    ['the stage buttons', true, '[data-button="hint"]'],
-    ['the phone plate', false, '[data-button="hint"]'],
+    ['on the laptop', true],
+    ['on the phone plate', false],
   ])(
-    'offers Hint on %s during an arrival, and a press cuts it short with one hint',
-    async (_surface, wide, selector) => {
+    'offers Hint in the room menu %s during an arrival, and a press cuts it short with one hint',
+    async (_surface, wide) => {
       const w = await ready(wide)
       const game = useGameStore()
       await goNorth()
       expect(useArrivalStore().active).toBe(true)
       expect(useNarrationStore().isNarrating).toBe(true)
-      const hint = w.get(selector)
+      await w.get('.lq-name-btn').trigger('click')
+      const hint = w.findAll('.lq-pill').at(-1)!
+      expect(hint.text()).toBe('💡 Hint')
       expect(hint.attributes('aria-disabled')).toBe('false')
       expect(hint.classes()).not.toContain('lq-busy')
       const turns = game.turns.length

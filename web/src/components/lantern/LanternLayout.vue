@@ -1408,8 +1408,8 @@ function onPanelPress(event: MouseEvent): void {
   if (!target?.closest('[data-panel] :is(button, a, [role="button"])')) return
   // A press during a change of scene (or before a talk's) brings the new room up first.
   presentation.bringSceneUp()
-  // The room name's pills and Hint act on the first press, wherever they stand: a pill or Hint cuts an arrival short and sends its command.
-  if (target.closest('.lq-name-btn, .lq-pill, .lq-hint-btn')) return
+  // The room name and its pills (Hint among them) act on the first press, wherever they stand: a pill cuts an arrival short and sends its command.
+  if (target.closest('.lq-name-btn, .lq-pill')) return
   if (!presentation.catchUpPanels()) return
   event.stopPropagation()
   event.preventDefault()
@@ -2697,7 +2697,6 @@ watch(
             class="lq-text-plate"
             data-panel
             bare
-            hint-button
           />
           <RoomPlate
             v-if="phoneStage"
@@ -2707,7 +2706,6 @@ watch(
             data-lq-obstacle="panel"
             data-panel
             story-button
-            hint-button
             :bare="!pictured"
             :away="plateAway"
             @story="drawerTab = 'story'"

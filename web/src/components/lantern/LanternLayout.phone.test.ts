@@ -100,12 +100,11 @@ describe('LanternLayout: the stage on a phone', () => {
       expect(w.find('.lq-story-drawer').exists()).toBe(false)
     })
 
-    it('has the room name, "⟲ Journal" and a round 💡 Hint on the plate: no one and nothing is listed', () => {
+    it('has the room name and "⟲ Journal" on the plate (Hint is in the room menu): no one and nothing is listed', () => {
       const buttons = w.get('.lq-plate').findAll('button')
       expect(buttons.map((b) => b.text())).toEqual([
         expect.stringContaining(useGameStore().roomName),
         '⟲ Journal',
-        '💡',
       ])
     })
 
@@ -144,13 +143,13 @@ describe('LanternLayout: the stage on a phone', () => {
       expect(w.find('.lq-phone-plate').exists()).toBe(false)
     })
 
-    it('has one plate top left, and Hint and ☰ top right', () => {
+    it('has one plate top left, and ☰ alone top right', () => {
       expect(w.find('.lq-float-menu').exists()).toBe(false)
       expect(w.get('.lq-stage-plate').classes()).toContain('lq-plate-compact')
       const labels = w
         .findAll('.lq-stage-buttons .lq-stage-btn')
         .map((b) => b.text().replace(/\s+/g, ' '))
-      expect(labels).toEqual(['💡', '☰'])
+      expect(labels).toEqual(['☰'])
     })
 
     it('has no action bar and no typing box: a phone plays by pointing only', async () => {
@@ -160,11 +159,11 @@ describe('LanternLayout: the stage on a phone', () => {
       expect(w.find('.lq-type-input').exists()).toBe(false)
     })
 
-    it('opens Look, Search and Rest in a row to the right of the name', async () => {
+    it('opens Look, Search, Rest and Hint in a row to the right of the name', async () => {
       await w.get('.lq-stage-plate .lq-name-btn').trigger('click')
       expect(
         w.findAll('.lq-stage-plate .lq-pill').map((b) => b.text()),
-      ).toEqual(['👁 Look', '🔍 Search', '💤 Rest'])
+      ).toEqual(['👁 Look', '🔍 Search', '💤 Rest', '💡 Hint'])
     })
 
     it('opens the same centred menu from ☰', async () => {
