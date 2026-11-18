@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Title screen wait</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=DM+Sans:wght@400;500;600&family=Source+Serif+4:ital@1&display=swap">
+<style>
+:root{--bg:#10151a;--fg:#ece6d6;--muted:#a39d8e;--accent:#ffa914;--on-accent:#1a1408;--accent-text:#ffb836;--accent-line:#a8740f;--line:#26313b;--surface:#161d24}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0d10;color:var(--fg);font-family:'DM Sans',system-ui,sans-serif;min-height:100vh}
+.bar{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;padding:12px 16px;background:var(--surface);border-bottom:1px solid var(--line);font-size:13px}
+.bar h1{font-family:Fraunces,serif;font-size:17px;font-weight:600;color:var(--accent-text)}
+.grp{display:flex;gap:4px;align-items:center;flex-wrap:wrap}.grp>span{color:var(--muted);margin-right:4px}
+.bar button{border:1px solid var(--line);background:#1c242c;color:var(--fg);padding:5px 10px;border-radius:7px;cursor:pointer;font:inherit}
+.bar button.on{background:#36270a;border-color:var(--accent-line);color:var(--accent-text)}
+.bar .replay{background:var(--accent);color:var(--on-accent);border:none;font-weight:600}
+.note{padding:10px 16px;color:var(--muted);font-size:13px;max-width:960px;line-height:1.5}
+.note b{color:var(--fg)}
+.wrap{padding:16px;display:flex;justify-content:center}
+.device{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:14px;background:var(--bg);box-shadow:0 10px 40px #0008;cursor:pointer}
+.scr{position:absolute;inset:0;container-type:size}
+.pic{position:absolute;inset:0;background:url('../../web/public/images/generated/title-screen.png') center/cover no-repeat;opacity:0;animation:fade 2.4s ease forwards, drift 16s ease-in-out infinite alternate}
+.shade{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 30%,#10151a00 30%,#10151a8c 100%),linear-gradient(180deg,#10151a8c 0%,#10151a00 35%),linear-gradient(0deg,#10151ab3 0%,#10151a00 40%)}
+.col{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;text-align:center;padding:8cqh 16px 56px}
+.name{margin-bottom:auto;display:flex;flex-direction:column;align-items:center;opacity:0;animation:fade 2.4s ease 2s forwards}
+.eyebrow{padding-left:.5em;font-size:13px;font-weight:600;letter-spacing:.5em;text-transform:uppercase;color:#ece6d6d9;text-shadow:0 1px 3px #000}
+.word{font-family:Fraunces,serif;font-weight:600;line-height:1;letter-spacing:-.015em;background:linear-gradient(180deg,#fff3d4 10%,var(--accent-text) 60%,#c97a0a 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 4px 18px #0008)}
+.sub{margin-top:6px;font-family:'Source Serif 4',serif;font-size:22px;font-style:italic;color:#ece6d6;text-shadow:0 1px 6px #000}
+.dock{display:grid;grid-template-columns:1fr auto;grid-template-rows:1fr 1fr;gap:10px;width:min(720px,100%);margin-bottom:24px;padding:10px;border:1px solid #ffffff24;border-radius:22px;background:#12161c80;backdrop-filter:blur(18px) saturate(1.3);box-shadow:0 20px 60px #0007,inset 0 1px 0 #ffffff14;opacity:0;visibility:hidden}
+.dock.single{display:flex;width:min(420px,100%)}
+.dock button{border:1px solid transparent;border-radius:14px;color:#ece6d6;font:inherit;font-size:15px;font-weight:600;opacity:0;transform:translateY(6px)}
+.start{flex:1;grid-row:span 2;min-height:58px;background:var(--accent)!important;color:var(--on-accent)!important;font-size:17px!important;outline:2px solid #f4ecd2;outline-offset:2px}
+.cont{grid-row:span 2;display:flex;align-items:center;gap:16px;padding:12px 14px 12px 12px;background:#ffffff0f;text-align:left;outline:2px solid #f4ecd2;outline-offset:2px}
+.thumb{width:112px;height:63px;border-radius:8px;background:url('../../web/public/images/generated/title-screen.png') center/cover;flex:none}
+.ct{flex:1;display:flex;flex-direction:column;min-width:0}.ct i{font-style:normal;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent-text)}.ct b{font-family:Fraunces,serif;font-size:24px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ct small{font-size:12px;font-weight:400;color:#ece6d6b3}
+.play{flex:none;display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:var(--accent);color:var(--on-accent);font-size:14px}
+.sec{display:flex;align-items:center;gap:10px;min-width:170px;padding:0 18px;background:#ffffff0a}.sec span{color:var(--accent-text);width:16px}
+.credit{position:absolute;left:50%;bottom:18px;width:max-content;max-width:calc(100% - 32px);font-size:12px;color:#ece6d6ba;text-shadow:0 1px 3px #000;transform:translateX(-50%);opacity:0}
+.credit a{color:var(--accent-text)}
+.hint{position:absolute;left:0;right:0;font-size:13px;font-weight:600;letter-spacing:.32em;text-transform:uppercase;color:#ece6d6;text-shadow:0 1px 4px #000,0 0 14px #000;opacity:0;pointer-events:none}
+/* waiting */
+.waiting.credit-early .credit{animation:fade .8s ease 4.4s forwards}
+.waiting.hint-line .hint{animation:fade 1.2s ease 4.6s forwards, breathe 3.2s ease-in-out 5.8s infinite}
+.waiting.hint-late .hint{animation:fade 1.6s ease var(--hd) forwards, breathe 3.2s ease-in-out calc(var(--hd) + 1.6s) infinite}
+.scr{--hd:14.4s}.d-5{--hd:9.4s}.rm.d-5{--hd:5s}.rm.d-10{--hd:10s}
+/* shown */
+.shown .pic{opacity:1;animation:drift 16s ease-in-out infinite alternate}
+.shown .name{opacity:1;animation:none}
+.shown .hint{animation:out .3s ease forwards}
+.shown .dock{visibility:visible;animation:fade .6s ease forwards}
+.shown .credit{animation:fade .6s ease forwards}
+.shown.credit-early .credit{opacity:1;animation:none}
+.shown.menu-together .dock button{animation:rise .6s ease .15s forwards}
+.shown.menu-stagger .dock button{animation:rise .9s ease forwards}
+.shown.menu-stagger .dock button:nth-child(1){animation-delay:.3s}.shown.menu-stagger .dock button:nth-child(2){animation-delay:.6s}.shown.menu-stagger .dock button:nth-child(3){animation-delay:.9s}
+.rm .pic,.rm .name{opacity:1;animation:none}.rm.waiting .hint{animation:fade 0s linear var(--hd) forwards!important}.rm.waiting.credit-early .credit{animation:none;opacity:1}
+.rm.shown .dock,.rm.shown .dock button,.rm.shown .credit{animation:none;opacity:1;transform:none}.rm.shown .hint{animation:none;opacity:0}
+@keyframes fade{to{opacity:1}}@keyframes out{from{opacity:.85}to{opacity:0}}
+@keyframes rise{to{opacity:1;transform:none}}
+@keyframes breathe{0%,100%{opacity:1}50%{opacity:.45}}
+@keyframes drift{from{transform:scale(1)}to{transform:scale(1.03)}}
+</style></head><body>
+<div class="bar">
+  <h1 id="ttl">Title screen waits for a press — agreed</h1>
+  <button class="replay" onclick="replay()">▶ Show the title screen again</button>
+  <div class="grp"><span>Screen</span><button data-k="dev" data-v="desk">Computer</button><button data-k="dev" data-v="phone">Phone</button><button data-k="dev" data-v="side">Phone sideways</button></div>
+  <div class="grp"><span>Player</span><button data-k="who" data-v="new">First time</button><button data-k="who" data-v="back">Returning</button></div>
+  <div class="grp"><span>Reduce motion</span><button data-k="rm" data-v="off">Off</button><button data-k="rm" data-v="on">On</button></div>
+</div>
+<p class="note" id="note"></p>
+<div class="wrap"><div class="device" id="dev"><div class="scr" id="scr"></div></div></div>
+<script>
+const S={hint:'late',credit:'late',menu:'together',d:'5',words:'device',early:'skip',dev:'desk',who:'new',rm:'off'};
+for(const [k,v] of new URLSearchParams(location.hash.slice(1)))S[k]=v;
+const SIZES={desk:[1024,600],phone:[390,780],side:[780,390]};
+const HINTS={none:'No hint at all: the player has to guess that a press brings the menu.',line:'A quiet hint fades in just after the name, where the menu will appear, and breathes slowly.',late:''};
+const CREDIT={early:'The Content Studio credit line comes in with the name, at the foot of the picture.',late:'The Content Studio credit line waits and comes in with the menu.'};
+const MENU={together:'The menu fades up as one, all buttons at once (about half a second).',stagger:'The menu fades up one button after another, as it does today (about 1½ seconds).'};
+function render(){
+  const [w,h]=SIZES[S.dev];const d=document.getElementById('dev');d.style.width=w+'px';d.style.height=h+'px';
+  const narrow=w<500;
+  const touch=S.dev!=='desk';
+  const word=S.hint==='none'?'':S.words==='press'?'Press to begin':(touch?'Tap to begin':'Press any key');
+  const btns=S.who==='new'?`<div class="dock single"><button class="start">Start</button></div>`
+   :`<div class="dock"><button class="cont"><div class="thumb"></div><div class="ct"><i>Continue</i><b>The Old Mill</b><small>Act II · Quick save · 2 hours ago</small></div><div class="play">▶</div></button><button class="sec"><span>✦</span>New game</button><button class="sec"><span>☰</span>Load game</button></div>`;
+  document.getElementById('scr').innerHTML=`<div class="pic"></div><div class="shade"></div><div class="col"><div class="name"><span class="eyebrow">Tales of</span><span class="word" style="font-size:${narrow?56:h<450?64:110}px">Twinmoor</span><span class="sub">Wardens of the Dawn</span></div>${btns}</div><div class="hint" style="bottom:${h<450?70:S.who==='new'?Math.round(h*0.12):Math.round(h*0.14)}px">${word}</div><div class="credit">Original music, images and narration made with <a>Content Studio</a></div>`;
+  document.querySelectorAll('.bar [data-k]').forEach(x=>x.classList.toggle('on',S[x.dataset.k]===x.dataset.v));
+  const W=S.words==='press'?'“Press to begin” on every screen':'“Press any key” on a computer, “Tap to begin” on a phone';const E=S.early==='skip'?'A press while the name is still fading in brings the menu at once (the name is finished in the same moment).':'A press while the name is still fading in does nothing; presses count only once the name is fully up.';document.getElementById('note').innerHTML=`<b>This drawing:</b> If nothing is pressed for about ${S.d} seconds after the name is fully up, the hint fades in (${W}) and breathes slowly. ${E} With Reduce motion on, the name is there at once and nothing fades or breathes. ${HINTS[S.hint]} ${CREDIT[S.credit]} ${MENU[S.menu]} <b>Click or press any key on the screen</b> to bring the menu up; the button above shows the title screen again from the start.`;
+  replay();
+}
+let t0=0;function replay(){t0=performance.now();const s=document.getElementById('scr');s.className='scr';void s.offsetWidth;s.className=`scr waiting d-${S.d} hint-${S.hint} credit-${S.credit} menu-${S.menu} ${S.rm==='on'?'rm':''}`;}
+function reveal(){const s=document.getElementById('scr');if(S.early==='ignore'&&S.rm!=='on'&&performance.now()-t0<4400)return;if(s.classList.contains('waiting')){s.classList.replace('waiting','shown');}}
+document.getElementById('dev').addEventListener('pointerdown',reveal);
+document.addEventListener('keydown',e=>{if(!e.target.closest('.bar'))reveal();});
+document.querySelectorAll('.bar [data-k]').forEach(b=>b.onclick=()=>{S[b.dataset.k]=b.dataset.v;render();});
+render();
+</script></body></html>
