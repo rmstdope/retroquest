@@ -789,6 +789,8 @@ describe('useMusic on Web Audio', () => {
     music.loadTrack('a.mp3', 'A')
     await ready()
     ctx.state = 'suspended'
+    // Starting the music woke it once already; only the input's call counts.
+    ctx.resume.mockClear()
     music.ensureMusicStarted()
     expect(ctx.resume).toHaveBeenCalled()
   })
