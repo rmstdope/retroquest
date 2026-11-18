@@ -329,14 +329,15 @@ describe('LanternLayout: pressing a thing on the picture', () => {
     expect(ring().exists()).toBe(false)
   })
 
-  it('takes the names away while a ring is open, and shuts the ring on Escape', async () => {
+  it('takes the names away while a ring is open, and brings them back as Escape shuts it', async () => {
     await cottage()
     useAreaNamesStore().bump()
     expect(useAreaNamesStore().showing).toBe(true)
     await press('bread')
     expect(useAreaNamesStore().showing).toBe(false)
     await key('Escape')
+    await w.vm.$nextTick()
     expect(ring().exists()).toBe(false)
-    expect(useAreaNamesStore().showing).toBe(false)
+    expect(useAreaNamesStore().showing).toBe(true)
   })
 })

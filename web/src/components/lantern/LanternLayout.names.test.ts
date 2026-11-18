@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { mount, type VueWrapper } from '@vue/test-utils'
+import { flushPromises, mount, type VueWrapper } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import LanternLayout from './LanternLayout.vue'
 import { useBridge, type ActClass } from '@/composables/useBridge'
@@ -9,6 +9,8 @@ import { PANEL_GROUPS, useGameStore } from '@/stores/useGameStore'
 import { useAreaNamesStore } from '@/stores/useAreaNamesStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
 import { useArrivalStore } from '@/stores/useArrivalStore'
+import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
+import { useBeltStore } from '@/stores/useBeltStore'
 import { useSceneStore } from '@/stores/useSceneStore'
 import { setPictureProbe } from '@/lantern/roomPicture'
 
@@ -33,6 +35,7 @@ describe('LanternLayout: what is here, named on the picture', () => {
   async function cottage(
     placed = true,
     laptop = true,
+    settled = false,
   ): Promise<ReturnType<typeof useGameStore>> {
     setActivePinia(createPinia())
     setPictureProbe(() => Promise.resolve(true))
@@ -46,6 +49,18 @@ describe('LanternLayout: what is here, named on the picture', () => {
     )
     vi.spyOn(HTMLElement.prototype, 'clientWidth', 'get').mockReturnValue(960)
     vi.spyOn(HTMLElement.prototype, 'clientHeight', 'get').mockReturnValue(540)
+    if (settled)
+      vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockReturnValue({
+        left: 0,
+        top: 0,
+        width: 960,
+        height: 540,
+        right: 960,
+        bottom: 540,
+        x: 0,
+        y: 0,
+        toJSON: () => ({}),
+      })
     const store = useGameStore()
     store.setBridge(useBridge(async (): Promise<ActClass[]> => [Act1]))
     await store.initGame()
@@ -58,6 +73,12 @@ describe('LanternLayout: what is here, named on the picture', () => {
     if (placed) store.imageManifest = PLACED
     w = mount(LanternLayout, { attachTo: document.body })
     await w.vm.$nextTick()
+    if (settled) {
+      // The turn's words are settled (a press while they are told only hurries them).
+      useNarrationStore().skipAll()
+      useStageSpeechStore().revealAll()
+      await flushPromises()
+    }
     return store
   }
 
@@ -70,6 +91,12 @@ describe('LanternLayout: what is here, named on the picture', () => {
     const event = new MouseEvent(type, { bubbles: true, cancelable: true })
     Object.defineProperty(event, 'pointerType', { value: pointerType })
     el.dispatchEvent(event)
+    await w.vm.$nextTick()
+  }
+  /** A tap with a finger: the touch press, then the click that follows it. */
+  const tap = async (el: Element): Promise<void> => {
+    await pointer(el, 'pointerdown', 'touch')
+    el.dispatchEvent(new MouseEvent('click', { bubbles: true, detail: 1 }))
     await w.vm.$nextTick()
   }
   const picture = (): Element => w.get('.lq-stage-picture').element
@@ -90,6 +117,7 @@ describe('LanternLayout: what is here, named on the picture', () => {
     vi.spyOn(HTMLMediaElement.prototype, 'play').mockResolvedValue()
   })
   afterEach(() => {
+    vi.useRealTimers()
     w.unmount()
     setPictureProbe(null)
     document.body.innerHTML = ''
@@ -148,11 +176,11 @@ describe('LanternLayout: what is here, named on the picture', () => {
     await cottage()
     await pointer(w.get('.lq-story-wrap').element, 'pointermove')
     expect(useAreaNamesStore().showing).toBe(false)
-    await pointer(w.get('.lq-story-wrap').element, 'pointerdown', 'touch')
+    await tap(w.get('.lq-story-wrap').element)
     expect(useAreaNamesStore().showing).toBe(false)
     await pointer(picture(), 'pointermove', 'touch')
     expect(useAreaNamesStore().showing).toBe(false)
-    await pointer(picture(), 'pointerdown', 'touch')
+    await tap(picture())
     expect(useAreaNamesStore().showing).toBe(true)
   })
 
@@ -160,7 +188,7 @@ describe('LanternLayout: what is here, named on the picture', () => {
     await cottage(true, false)
     await pointer(picture(), 'pointerdown', 'mouse')
     expect(useAreaNamesStore().showing).toBe(false)
-    await pointer(picture(), 'pointerdown', 'touch')
+    await tap(picture())
     expect(useAreaNamesStore().showing).toBe(true)
   })
 
@@ -198,6 +226,74 @@ describe('LanternLayout: what is here, named on the picture', () => {
     expect(marks()).toBe(0)
     await pointer(picture(), 'pointermove')
     expect(marks()).toBe(2)
+  })
+
+  it('counts nothing over the arrival words, the typing box or the plate, only over the picture', async () => {
+    await cottage()
+    for (const sel of ['.lq-stage-box', '.lq-stage-plate', '.lq-belt']) {
+      const el = w.find(sel)
+      if (!el.exists()) continue
+      await pointer(el.element, 'pointermove')
+      await tap(el.element)
+      expect(useAreaNamesStore().showing).toBe(false)
+    }
+  })
+
+  it('counts a move of the mouse over the picture while something is held from the belt', async () => {
+    await cottage()
+    useBeltStore().takeInHand({
+      kind: 'item',
+      name: 'bread',
+      label: 'Bread',
+      verb: 'usewith',
+    })
+    await w.vm.$nextTick()
+    await pointer(picture(), 'pointermove')
+    expect(useAreaNamesStore().showing).toBe(true)
+  })
+
+  it('opens only the ring on a tap on a thing, and brings the marks in as the ring closes', async () => {
+    const store = await cottage(true, true, true)
+    store.acceptInput = true
+    await tap(w.get('[data-area-press="bread"]').element)
+    expect(w.find('.lq-press-ring').exists()).toBe(true)
+    expect(useAreaNamesStore().showing).toBe(false)
+    vi.useFakeTimers()
+    ;(document.activeElement ?? document).dispatchEvent(
+      new KeyboardEvent('keydown', {
+        key: 'Escape',
+        bubbles: true,
+        cancelable: true,
+      }),
+    )
+    await w.vm.$nextTick()
+    await w.vm.$nextTick()
+    expect(w.find('.lq-press-ring').exists()).toBe(false)
+    expect(useAreaNamesStore().showing).toBe(true)
+    vi.advanceTimersByTime(4000)
+    expect(useAreaNamesStore().showing).toBe(false)
+    vi.useRealTimers()
+  })
+
+  it('lets the marks leave, not stay hidden for good, when a ring opens over them', async () => {
+    const store = await cottage(true, true, true)
+    store.acceptInput = true
+    await pointer(picture(), 'pointermove')
+    expect(marks()).toBe(2)
+    await tap(w.get('[data-area-press="bread"]').element)
+    expect(w.find('.lq-press-ring').exists()).toBe(true)
+    expect(useAreaNamesStore().showing).toBe(false)
+  })
+
+  it('keeps the marks away when the ring closes on a choice that starts a scene change', async () => {
+    const store = await cottage(true, true, true)
+    store.acceptInput = true
+    await tap(w.get('[data-area-press="bread"]').element)
+    useSceneStore().phase = 'dark'
+    await w.vm.$nextTick()
+    await w.vm.$nextTick()
+    expect(w.find('.lq-press-ring').exists()).toBe(false)
+    expect(useAreaNamesStore().showing).toBe(false)
   })
 
   it('shows none while a dialog is open, at the ending, and hides them when one opens', async () => {

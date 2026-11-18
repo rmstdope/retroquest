@@ -99,6 +99,20 @@ test('the marks and names come in on a mouse move and fade 4 seconds after the l
   await expect(page.locator('[data-area-mark]')).toHaveCount(3)
 })
 
+test('with reduced motion the marks vanish at once when the 4 seconds are up', async ({
+  page,
+}): Promise<void> => {
+  await page.setViewportSize({ width: 1280, height: 800 })
+  await toTheCottage(page)
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await showNames(page)
+  await expect(page.locator('[data-area-mark]')).toHaveCount(3)
+  // No leave fade: gone right after the wait (4 s), not 1.5 s later.
+  await expect(page.locator('[data-area-mark]')).toHaveCount(0, {
+    timeout: 5_500,
+  })
+})
+
 test('the name follows the mouse over a thing, and no name shows over nothing', async ({
   page,
 }): Promise<void> => {

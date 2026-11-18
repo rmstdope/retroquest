@@ -484,6 +484,7 @@ function goWay(direction: string): void {
 function onPicturePress(event: MouseEvent): void {
   if (!(event.target instanceof Element)) return
   if (!event.target.closest('.lq-stage-picture')) return
+  tapOnPicture()
   const way = wayPressed(event)
   pressOn('picture', { way: way !== null }, way)
 }
@@ -747,7 +748,8 @@ function onStagePointer(event: PointerEvent): void {
   const target = event.target instanceof Element ? event.target : null
   nameWay.value =
     target?.closest<HTMLElement>('[data-way]')?.dataset.way ?? null
-  if (event.pointerType !== 'touch') bumpNames()
+  if (event.pointerType !== 'touch' && target?.closest('.lq-stage-picture'))
+    bumpNames()
   if (event.pointerType === 'touch' || !target?.closest('.lq-stage-picture')) {
     names.pointer = null
     return
@@ -1614,9 +1616,27 @@ function onNamesInputKey(event: KeyboardEvent): void {
   bumpNames()
 }
 
-/** A tap on the picture (touch, on a phone or a touch laptop) brings the marks and names in. */
+/** The touch press that began on the picture itself; its click decides whether it was a tap that counts. */
+let touchOnPicture = false
+
+/** A touch press on the stage: a tap on the picture counts, once its click shows it opened no ring. */
 function onStageTouch(event: PointerEvent): void {
-  if (event.pointerType === 'touch') bumpNames()
+  touchOnPicture =
+    event.pointerType === 'touch' &&
+    event.target instanceof Element &&
+    !!event.target.closest('.lq-stage-picture')
+}
+
+/** A tap on the picture (touch, on a phone or a touch laptop) brings the marks and names in, unless it opened a thing's ring: then only the ring, and the marks come in as it closes. */
+function tapOnPicture(): void {
+  const counts = touchOnPicture
+  touchOnPicture = false
+  if (counts && !ring.value) bumpNames()
+}
+
+/** A thing's ring has closed (a tap or click outside it, Escape, or a choice in it): the marks and names come in, unless the choice began a talk, a change of scene or the ending. */
+function ringClosed(): void {
+  void nextTick(bumpNames)
 }
 /** The belt of pictures, for focus. */
 const beltEl = ref<InstanceType<typeof BeltOfPictures> | null>(null)
@@ -1804,14 +1824,17 @@ function focusAfterRing(areaId: string): void {
 function closeRing(byKey: boolean): void {
   const id = ring.value?.thing.areaId
   ring.value = null
+  ringClosed()
   if (byKey && id) void nextTick(() => nextTick(() => focusAfterRing(id)))
 }
 
 /** Send a command as a typed one, with the ring and the hand put away, and put focus back on `id`'s thing (or the show button, or the belt's first picture, once it has gone). */
 function sendFrom(command: string, id: string | undefined): void {
+  const wasOpen = ring.value !== null
   ring.value = null
   belt.emptyHand()
   game.submitCommand(command)
+  if (wasOpen) ringClosed()
   if (!id) return
   void nextTick(() => nextTick(() => focusAfterRing(id)))
   // The thing may go with the answer (taken, used up): focus then moves on.
@@ -1835,6 +1858,7 @@ function takeInHand(verb: HandVerb): void {
   const open = ring.value
   ring.value = null
   if (!open) return
+  ringClosed()
   belt.takeInHand({
     kind: open.thing.kind === 'spell' ? 'spell' : 'item',
     name: open.thing.name,
