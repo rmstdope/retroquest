@@ -59,16 +59,14 @@ describe('LanternLayout: panels wait for the narration', () => {
       'fetch',
       vi.fn(async () => ({ ok: true, json: async () => manifest })),
     )
-    useNarrationStore().setAudioFactory(
-      (): NarrationAudio => ({
-        volume: 1,
-        currentTime: 0,
-        onended: null,
-        onerror: null,
-        play: () => Promise.resolve(),
-        pause: () => undefined,
-      }),
-    )
+    useNarrationStore().setAudioFactory((): NarrationAudio => ({
+      volume: 1,
+      currentTime: 0,
+      onended: null,
+      onerror: null,
+      play: () => Promise.resolve(),
+      pause: () => undefined,
+    }))
     const game = await startedHoldStore()
     game.actLabel = 'Act I'
     wrapper = mount(LanternLayout, { attachTo: document.body })

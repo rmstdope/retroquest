@@ -19,12 +19,7 @@
 
 /** What a press landed on. */
 export type PressKind =
-  | 'picture'
-  | 'thing'
-  | 'belt'
-  | 'exit-dot'
-  | 'speech'
-  | 'story'
+  'picture' | 'thing' | 'belt' | 'exit-dot' | 'speech' | 'story'
 
 /** A press as the layout hears it: what it landed on, and what is going on. */
 export interface PointerPress {

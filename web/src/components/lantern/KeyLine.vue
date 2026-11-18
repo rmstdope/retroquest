@@ -21,8 +21,9 @@ const keyboardPlayer = useMediaQuery(KEYBOARD_QUERY)
 <template>
   <p v-if="keyboardPlayer" class="lq-keyline">
     <span v-for="hint in hints" :key="hint.word" class="lq-keygroup">
-      <kbd v-for="key in hint.keys" :key="key" class="lq-key">{{ key }}</kbd
-      >{{ hint.word }}
+      <kbd v-for="key in hint.keys" :key="key" class="lq-key">{{ key }}</kbd>{{
+        hint.word
+      }}
     </span>
   </p>
 </template>
