@@ -10,6 +10,18 @@ import { createMotionScene as gameScene } from './roomMotionScene'
 import { appliedMotion, madeEffects } from './roomMotion'
 
 describe('the motion renderer the studio loads', () => {
+  it('ranges Amount and Speed to 5 and Glow and Strength to 4', () => {
+    const maxima: Record<string, number> = {
+      amount: 5,
+      speed: 5,
+      glow: 4,
+      strength: 4,
+    }
+    for (const t of EFFECT_TYPES)
+      for (const s of t.settings)
+        expect(s.max, `${t.type} ${s.id}`).toBe(maxima[s.id])
+  })
+
   it('lists every effect type, spots first marked as needing a spot', () => {
     expect(EFFECT_TYPES.map((t) => t.type).sort()).toEqual(
       [
