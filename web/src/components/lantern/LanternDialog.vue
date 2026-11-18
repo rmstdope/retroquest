@@ -28,7 +28,9 @@ import KeyLine, { type KeyHint } from './KeyLine.vue'
  * in as it opens (at once under Reduce motion). It follows the theme like any
  * other panel, and is solid where the device asks for less transparency or
  * the browser cannot blur. `narrow` keeps the panel to 420px, for a short
- * list of choices (the pause menu and the quit question).
+ * question or list of choices (the pause menu, the quit and finish
+ * questions); on a phone a narrow sheet that is not `centered` still spans
+ * the whole width.
  */
 const props = withDefaults(
   defineProps<{
@@ -398,6 +400,10 @@ defineExpose({ focusFirst: trap.focusFirst })
     box-shadow:
       0 -20px 40px rgb(0 0 0 / 0.45),
       inset 0 1px 0 rgb(255 255 255 / 0.08);
+  }
+  /* A narrow sheet is still a sheet: the whole width of the phone. */
+  .lq-dialog-narrow:not(.lq-dialog-centered) .lq-dialog-panel {
+    max-width: none;
   }
 }
 /* Solid where the device asks for less transparency, or nothing can blur. */

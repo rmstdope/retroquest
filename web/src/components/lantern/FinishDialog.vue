@@ -72,7 +72,7 @@ function saveAndFinish(): void {
 .lq-finish-buttons {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--lq-ring-gap);
+  gap: 8px;
 }
 .lq-finish-primary,
 .lq-finish-plain {
