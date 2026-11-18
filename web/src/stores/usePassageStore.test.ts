@@ -1,0 +1,102 @@
+import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest'
+import { createPinia, setActivePinia } from 'pinia'
+import {
+  usePassageStore,
+  PASSAGE_HALF_MS,
+  PASSAGE_WAIT_MS,
+} from './usePassageStore'
+
+describe('usePassageStore', () => {
+  beforeEach(() => {
+    setActivePinia(createPinia())
+    vi.useFakeTimers()
+  })
+  afterEach(() => vi.useRealTimers())
+
+  it('fades out, applies in the dark, rises, then runs up once', () => {
+    const passage = usePassageStore()
+    const apply = vi.fn()
+    const up = vi.fn()
+    passage.begin(apply, up)
+    expect(passage.phase).toBe('out')
+    vi.advanceTimersByTime(PASSAGE_HALF_MS - 1)
+    expect(apply).not.toHaveBeenCalled()
+    vi.advanceTimersByTime(1)
+    expect(apply).toHaveBeenCalledTimes(1)
+    expect(passage.phase).toBe('in')
+    expect(up).not.toHaveBeenCalled()
+    vi.advanceTimersByTime(PASSAGE_HALF_MS)
+    expect(passage.phase).toBe('idle')
+    expect(up).toHaveBeenCalledTimes(1)
+  })
+
+  it('stays dark for a picture that is not ready, then gives it up', () => {
+    const passage = usePassageStore()
+    const up = vi.fn()
+    passage.begin(vi.fn(), up, true)
+    vi.advanceTimersByTime(PASSAGE_HALF_MS)
+    expect(passage.phase).toBe('dark')
+    vi.advanceTimersByTime(PASSAGE_WAIT_MS)
+    expect(passage.phase).toBe('in')
+    vi.advanceTimersByTime(PASSAGE_HALF_MS)
+    expect(up).toHaveBeenCalledTimes(1)
+  })
+
+  it('rises at once when the picture becomes ready in the dark', () => {
+    const passage = usePassageStore()
+    passage.begin(vi.fn(), vi.fn(), true)
+    vi.advanceTimersByTime(PASSAGE_HALF_MS)
+    expect(passage.phase).toBe('dark')
+    passage.pictureReady()
+    expect(passage.phase).toBe('in')
+  })
+
+  it('skips mid-fade: applies, comes fully up and runs up once', () => {
+    const passage = usePassageStore()
+    const apply = vi.fn()
+    const up = vi.fn()
+    passage.begin(apply, up)
+    vi.advanceTimersByTime(500)
+    expect(passage.skip()).toBe(true)
+    expect(apply).toHaveBeenCalledTimes(1)
+    expect(up).toHaveBeenCalledTimes(1)
+    expect(passage.phase).toBe('idle')
+    vi.advanceTimersByTime(5000)
+    expect(apply).toHaveBeenCalledTimes(1)
+    expect(up).toHaveBeenCalledTimes(1)
+  })
+
+  it('skip does nothing when idle', () => {
+    expect(usePassageStore().skip()).toBe(false)
+  })
+
+  it('a new begin skips the one under way', () => {
+    const passage = usePassageStore()
+    const first = { apply: vi.fn(), up: vi.fn() }
+    passage.begin(first.apply, first.up)
+    passage.begin(vi.fn(), vi.fn())
+    expect(first.apply).toHaveBeenCalledTimes(1)
+    expect(first.up).toHaveBeenCalledTimes(1)
+    expect(passage.phase).toBe('out')
+  })
+
+  it('goes straight through with no fade when motion is reduced', () => {
+    const passage = usePassageStore()
+    const apply = vi.fn()
+    const up = vi.fn()
+    passage.begin(apply, up, false, true)
+    expect(apply).toHaveBeenCalledTimes(1)
+    expect(up).toHaveBeenCalledTimes(1)
+    expect(passage.phase).toBe('idle')
+  })
+
+  it('reset forgets the passage without running anything', () => {
+    const passage = usePassageStore()
+    const up = vi.fn()
+    passage.begin(vi.fn(), up)
+    passage.reset()
+    vi.advanceTimersByTime(5000)
+    expect(up).not.toHaveBeenCalled()
+    expect(passage.phase).toBe('idle')
+  })
+})
