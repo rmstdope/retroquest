@@ -1214,7 +1214,11 @@ export const useGameStore = defineStore('game', () => {
     // The old screen's command is not run in the new game: while it fades out, nothing goes.
     if (passage.phase === 'out') return
     // A command as the new screen rises brings it up first, then goes on.
-    passage.skip()
+    passage.skipThen(() => runCommand(cmd))
+  }
+
+  /** Run a typed command once no passage holds it back. */
+  function runCommand(cmd: string): void {
     if (!acceptInput.value) return
     if (!cmd || !cmd.trim()) return
 

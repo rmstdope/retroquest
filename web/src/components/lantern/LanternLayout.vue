@@ -3084,7 +3084,11 @@ watch(
 </template>
 
 <style scoped>
-/* The dark of a passage into a game: over the whole screen, down over the old one and lifting off the new. */
+/*
+ * The dark of a passage into a game: over the whole screen, down over the old
+ * one and lifting off the new. Each fade is an animation from its own start,
+ * so a passage begun while another rises starts from a screen fully up.
+ */
 .lq-passage {
   position: fixed;
   inset: 0;
@@ -3095,14 +3099,31 @@ watch(
 }
 .lq-passage-out {
   opacity: 1;
-  transition: opacity calc(var(--lq-passage-ms) * var(--lq-motion)) linear;
+  animation: lq-passage-down calc(var(--lq-passage-ms) * var(--lq-motion))
+    linear;
 }
 .lq-passage-dark {
   opacity: 1;
 }
 .lq-passage-in {
   opacity: 0;
-  transition: opacity calc(var(--lq-passage-ms) * var(--lq-motion)) linear;
+  animation: lq-passage-up calc(var(--lq-passage-ms) * var(--lq-motion)) linear;
+}
+@keyframes lq-passage-down {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes lq-passage-up {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }
 .lq-root {
   height: 100vh;

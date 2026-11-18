@@ -103,6 +103,20 @@ export const usePassageStore = defineStore('passage', () => {
     return true
   }
 
+  /**
+   * A typed command while the new screen rises: bring it up at once, then run
+   * the command. The passage's `up` comes after the command, unless the
+   * command began a passage of its own (a load), whose `up` replaces it, so
+   * the old one's words never show over the new dark.
+   */
+  function skipThen(run: () => void): void {
+    const up = upNow
+    upNow = null
+    skip()
+    run()
+    if (phase.value === 'idle') up?.()
+  }
+
   /** Forget a passage without running anything (the game is being torn down). */
   function reset(): void {
     stopTimer()
@@ -115,5 +129,5 @@ export const usePassageStore = defineStore('passage', () => {
   // The store's own timer ends with its scope.
   onScopeDispose(stopTimer)
 
-  return { phase, begin, pictureReady, skip, reset }
+  return { phase, begin, pictureReady, skip, skipThen, reset }
 })
