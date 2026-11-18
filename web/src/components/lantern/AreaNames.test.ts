@@ -265,35 +265,6 @@ describe('AreaNames', () => {
       for (const x of starts) expect(marksX).toContain(x)
       expect(Number(w.get('line').attributes('y1'))).toBeCloseTo(270, 3)
     })
-
-    it('shows a focused thing at the same spot as when all are shown', async () => {
-      const all = mountNames({ showing: true, boxes: marked })
-      const one = mountNames({ focused: 'bucket', boxes: marked })
-      await nextTick()
-      expect(one.get('[data-area-mark="bucket"]').attributes('style')).toBe(
-        all.get('[data-area-mark="bucket"]').attributes('style'),
-      )
-      expect(one.get('[data-area-name="bucket"]').attributes('style')).toBe(
-        all.get('[data-area-name="bucket"]').attributes('style'),
-      )
-    })
-  })
-
-  it('shows a focused thing where its neighbours put it, not alone', async () => {
-    const pair: AreaThing[] = [
-      { areaId: 'a', name: 'a', label: 'Notice Board', kind: 'scenery' },
-      { areaId: 'b', name: 'b', label: 'Old Notice', kind: 'item' },
-    ]
-    const boxes = {
-      a: { x: 0.5, y: 0.5, width: 0.02, height: 0.02 },
-      b: { x: 0.505, y: 0.505, width: 0.02, height: 0.02 },
-    }
-    const all = mountNames({ showing: true, things: pair, boxes })
-    const one = mountNames({ focused: 'b', things: pair, boxes })
-    await nextTick()
-    expect(one.get('[data-area-name="b"]').attributes('style')).toBe(
-      all.get('[data-area-name="b"]').attributes('style'),
-    )
   })
 
   it('names the one thing under the pointer, and nothing over nothing', async () => {
@@ -652,14 +623,6 @@ describe('AreaNames', () => {
       expect(w2.get('[data-area-pointer]').text()).toBe('Tilda')
     })
 
-    it('shows a focused covered thing’s dot and name at the stepped spot while not showing', async () => {
-      const w = mountNames({ showing: false, focused: 'villager' })
-      cardsOver([0, 540], [0, 540], [20, 300])
-      await settle(w, 'words')
-      expect(markAt(w, 'villager')!.y).toBeGreaterThan(300)
-      expect(w.find('[data-area-name="villager"]').exists()).toBe(true)
-    })
-
     it('moves the dots back onto their things when the words go, and again when they come', async () => {
       const w = mountNames({ showing: true })
       cardsOver([0, 540], [0, 540], [20, 300])
@@ -948,16 +911,6 @@ describe('AreaNames', () => {
       const top = parseFloat(/top: ([\d.]+)px/.exec(style)![1])
       expect(top).toBeGreaterThanOrEqual(255)
       expect(top + 25).toBeLessThanOrEqual(285)
-    })
-
-    it('hangs the name of a focused left-off dot clear of the card, never behind it', async () => {
-      clearOfCard(await boxedIn({ focused: 'villager' }))
-    })
-
-    it('names a left-off thing that has keyboard focus', async () => {
-      const w = await boxedIn({ focused: 'villager' })
-      expect(w.find('[data-area-name="villager"]').exists()).toBe(false)
-      expect(w.get('[data-area-pointer]').text()).toBe('Tilda')
     })
 
     it('brings every left-off name back beside its dot when the words go', async () => {
@@ -1283,43 +1236,6 @@ describe('AreaNames', () => {
         )
         expect(left(w, 'books') - left(w, 'shelves')).toBeGreaterThanOrEqual(24)
       })
-
-      it('show the focused one alone at the same spot as with everything showing', async () => {
-        const all = mountNames({
-          showing: true,
-          things: pair,
-          boxes: pairBoxes,
-        })
-        plateOver('lq-phone-plate')
-        await all.setProps({ relayout: 'plate' })
-        await vi.advanceTimersByTimeAsync(400)
-        await nextTick()
-        const spot = left(all, 'books')
-        all.unmount()
-        document.body.innerHTML = ''
-        const one = mountNames({
-          showing: false,
-          focused: 'books',
-          things: pair,
-          boxes: pairBoxes,
-        })
-        plateOver('lq-phone-plate')
-        await one.setProps({ relayout: 'plate' })
-        await vi.advanceTimersByTimeAsync(400)
-        await nextTick()
-        expect(left(one, 'books')).toBe(spot)
-      })
-    })
-
-    it('marks the thing with keyboard focus clear of the plate as well', async () => {
-      const w = mountNames({ showing: false, focused: 'villager' })
-      plateOver('lq-phone-plate')
-      await w.setProps({ relayout: 'plate' })
-      await vi.advanceTimersByTimeAsync(400)
-      await nextTick()
-      expect(top(w, '[data-area-mark="villager"]')).toBeGreaterThanOrEqual(
-        340 + 8,
-      )
     })
   })
 
@@ -1341,36 +1257,6 @@ describe('AreaNames', () => {
     await w.setProps({ pointer: { x: -14.4 + 195 * 1.03, y: -8 + 250 * 1.03 } })
     expect(w.find('[data-area-pointer]').exists()).toBe(false)
     await w.setProps({ pointer: { x: -14.4 + 150 * 1.03, y: -8 + 250 * 1.03 } })
-    expect(w.get('[data-area-pointer]').text()).toBe('Tilda')
-  })
-
-  it('shows the mark and name of the thing that has keyboard focus, names or not', async () => {
-    const w = mountNames({ focused: 'bucket' })
-    await nextTick()
-    expect(w.findAll('[data-area-mark]')).toHaveLength(1)
-    expect(w.get('[data-area-name="bucket"]').text()).toBe('Bucket')
-    await w.setProps({ focused: null })
-    await nextTick()
-    expect(w.find('[data-area-name]').exists()).toBe(false)
-  })
-
-  it('names a thing once when it has keyboard focus and the pointer is on it', async () => {
-    const w = mountNames({ focused: 'villager', pointer: { x: 140, y: 250 } })
-    await nextTick()
-    expect(w.findAll('.lq-area-name').map((name) => name.text())).toEqual([
-      'Tilda',
-    ])
-    expect(w.find('[data-area-pointer]').exists()).toBe(false)
-  })
-
-  it('still names what the pointer is on when focus is on something else, and once focus has left', async () => {
-    const w = mountNames({ focused: 'bucket', pointer: { x: 140, y: 250 } })
-    await nextTick()
-    expect(w.get('[data-area-pointer]').text()).toBe('Tilda')
-    expect(w.get('[data-area-name="bucket"]').text()).toBe('Bucket')
-    await w.setProps({ focused: 'villager' })
-    expect(w.find('[data-area-pointer]').exists()).toBe(false)
-    await w.setProps({ focused: null })
     expect(w.get('[data-area-pointer]').text()).toBe('Tilda')
   })
 

@@ -1601,8 +1601,6 @@ const ring = ref<{
 const stageEl = ref<HTMLElement | null>(null)
 /** The belt of pictures, for focus. */
 const beltEl = ref<InstanceType<typeof BeltOfPictures> | null>(null)
-/** The thing that has keyboard focus on the picture, whose mark and name show. */
-const focusedArea = ref<string | null>(null)
 /** What the Actions row would offer now: the ring reads the same lists. */
 const ringContext = computed<ActionContext>(() => ({
   roomItems: game.items,
@@ -2445,7 +2443,6 @@ watch(
                 :showing="namesUp"
                 :pointer="scene.phase === 'idle' ? names.pointer : null"
                 :foot-cover="footCover"
-                :focused="scene.phase === 'idle' ? focusedArea : null"
                 :ring-open="ring !== null"
                 :relayout="namesRelayout"
                 @pointing="pointingWay = $event"
@@ -2456,7 +2453,6 @@ watch(
                 :boxes="game.roomAreas.boxes"
                 :picture-size="game.roomPictureSize ?? DEFAULT_PICTURE_SIZE"
                 @press="onAreaPress"
-                @focused="focusedArea = $event"
               />
             </StagePicture>
             <BeltOfPictures

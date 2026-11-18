@@ -10,12 +10,15 @@ import type { PictureSize } from '@/lantern/roomMotionScene'
  * What can be pressed on the room's picture: one transparent button over each
  * placed person, thing and piece of scenery (not ways out, which are their
  * own piece of work), in the layer the marks and names are drawn in, so it
- * drifts with the picture. The buttons are always Tab stops, left to right,
- * and read their thing's name as a menu opener; where one thing lies on
- * another the smaller lies over, so a press goes to it. A press says which
- * thing, where (the screen's pixels) and whether a key made it; focus says
- * which thing has it, for the marks and names to show it. The words and
- * buttons over the picture cover it as they cover the picture.
+ * drifts with the picture. The buttons are for the pointer and the finger:
+ * they are never Tab stops (a player at the keyboard has F1 and the typing
+ * box), and taking focus shows nothing, neither a box nor a mark, since the
+ * names show only when the player asks for them (Show what's here). They read
+ * their thing's name as a menu opener; where one thing lies on another the
+ * smaller lies over, so a press goes to it. A press says which thing and where
+ * (the screen's pixels); one made by a key on a thing that holds focus, as
+ * when a ring closes and gives it back, opens at the middle of the thing. The
+ * words and buttons over the picture cover it as they cover the picture.
  */
 const props = defineProps<{
   things: AreaThing[]
@@ -24,7 +27,6 @@ const props = defineProps<{
 }>()
 const emit = defineEmits<{
   press: [thing: AreaThing, at: { x: number; y: number }]
-  focused: [areaId: string | null]
 }>()
 
 const root = ref<HTMLElement | null>(null)
@@ -60,22 +62,6 @@ const stops = computed(() => {
     .map((entry) => ({ entry, layer: bySize.indexOf(entry) + 1 }))
 })
 
-/**
- * A thing took focus: its mark and name show when a key put focus there, not
- * when a press did (the mark would then lie under the pointer and take the click).
- */
-function onFocus(areaId: string, event: FocusEvent): void {
-  const el =
-    event.currentTarget instanceof HTMLElement ? event.currentTarget : null
-  let byKey: boolean
-  try {
-    byKey = el?.matches(':focus-visible') ?? true
-  } catch {
-    byKey = true
-  }
-  if (byKey) emit('focused', areaId)
-}
-
 /** A press or a key on a thing; a key (no pointer, `detail` 0) opens at the middle of the thing. */
 function onClick(entry: PlacedName, event: MouseEvent): void {
   const byKey = event.detail === 0
@@ -101,6 +87,7 @@ function onClick(entry: PlacedName, event: MouseEvent): void {
       :data-area-press="stop.entry.areaId"
       :aria-label="stop.entry.label"
       aria-haspopup="menu"
+      tabindex="-1"
       :style="{
         left: `${stop.entry.rect.x}px`,
         top: `${stop.entry.rect.y}px`,
@@ -109,8 +96,6 @@ function onClick(entry: PlacedName, event: MouseEvent): void {
         zIndex: stop.layer /* local */,
       }"
       @click="onClick(stop.entry, $event)"
-      @focus="onFocus(stop.entry.areaId, $event)"
-      @blur="emit('focused', null)"
     ></button>
   </div>
 </template>
@@ -134,8 +119,8 @@ function onClick(entry: PlacedName, event: MouseEvent): void {
   cursor: pointer;
   pointer-events: auto;
 }
-.lq-area-press-hit:focus-visible {
-  outline: 3px solid var(--lq-accent);
-  outline-offset: 2px;
+/* Focus draws no box round the thing: the picture shows only the names asked for. */
+.lq-area-press-hit:focus {
+  outline: none;
 }
 </style>
