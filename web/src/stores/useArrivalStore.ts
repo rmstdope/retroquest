@@ -343,9 +343,12 @@ export const useArrivalStore = defineStore('arrival', () => {
     const now = current.value
     current.value = null
     const keep = keepNews && !!now && waiting.value?.turnId === now.turnId
+    const dropped = keep ? null : waiting.value
     if (!keep) waiting.value = null
     // News cut short before it came up (a new command, Escape, a tab) still leaves its slim lines.
     if (now) markTold(now)
+    // The narrator waiting at its gate for news that is dropped goes on, silently.
+    if (dropped && narration.atGate(dropped.turnId)) narration.skipAll()
     if (!now?.narrated || !narration.narrates(now.turnId)) return
     if (!keep) narration.skipAll()
     else if (waiting.value && !narration.atGate(now.turnId))

@@ -480,6 +480,18 @@ describe('useArrivalStore', () => {
         expect(arrival.newsPending(1)).toBe(false)
       })
 
+      it('lets the narrator go when the held news is dropped while it waits at the gate', async () => {
+        narration.begin(1, [voiced, newsUnit], 'act1', false, -1, null, 1)
+        arrival.show(1, [spell(0, true), quest(1, true)], true, 1)
+        last().onended?.()
+        await vi.advanceTimersByTimeAsync(400 + ARRIVAL_CLEAR_AFTER_MS)
+        expect(narration.atGate(1)).toBe(true)
+        expect(arrival.active).toBe(false)
+        arrival.clear()
+        expect(narration.narrates(1)).toBe(false)
+        expect(arrival.newsPending(1)).toBe(false)
+      })
+
       it('lets a narrated narrator wait at the gate, and tells the quest news once it goes on', async () => {
         narration.begin(1, [voiced, newsUnit], 'act1', false, -1, null, 1)
         arrival.show(1, [spell(0, true), quest(1, true)], true, 1)
