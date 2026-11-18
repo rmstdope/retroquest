@@ -17,7 +17,7 @@ Browser-based frontend for Tales of Twinmoor: Wardens of the Dawn: the game engi
 
 ## Prerequisites
 
-- Node.js 22 LTS or later
+- Node.js 26 LTS or later
 - npm 10 or later
 
 ## Getting Started
