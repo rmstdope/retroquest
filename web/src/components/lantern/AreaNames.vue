@@ -46,13 +46,13 @@ import type { PictureSize, Rect } from '@/lantern/roomMotionScene'
  * marks and names fade in and out (not under Reduce motion, which the
  * stylesheet's `--lq-motion` carries) and are hidden from assistive
  * technology (the room's corner names list what is here, and `AreaPress` has
- * the Tab stops). A mark or name of something that can be pressed takes a
- * press as a press on its thing (`press`); one of a way out goes the way out (below). The
- * thing with keyboard focus (`focused`) has its mark and name showing even
- * when not all are, and the pointer on that same thing adds no second name.
+ * the buttons). A mark or name of something that can be pressed takes a
+ * press as a press on its thing (`press`); one of a way out goes the way out (below).
+ * Keyboard focus on a thing shows nothing here: the marks and names show only
+ * while the player asks for them, and the pointer names the one it is over.
  * While the words are open a name keeps within about 150px of its dot with its
  * line off the words; one with no free spot there is left off (its dot stays
- * and is named like a pointed or focused thing).
+ * and is named like a pointed thing).
  * `relayout` is any value that changes when something it keeps clear of
  * moves (the words coming or going); the story scrolling its words lays the
  * marks out again too, so a dot kept clear of a card stays clear as it scrolls.
@@ -79,8 +79,6 @@ const props = defineProps<{
   closedWays?: AreaThing[]
   /** How many pixels at the stage's foot lie over the picture (the action bar). */
   footCover?: number
-  /** The thing that has keyboard focus: its mark and name show whether or not all are. */
-  focused?: string | null
   /** A ring is open, with the name of its thing in the middle: the pointer has no name of its own. */
   ringOpen?: boolean
   relayout?: unknown
@@ -162,8 +160,7 @@ function measureLayer(): HTMLElement | null {
 
 /**
  * The words (or anything else in the scope) scrolled: measure again at the next
- * frame. This holds while not showing too, since the focused thing's dot is
- * stepped clear of the words then as well.
+ * frame.
  */
 function onScroll(): void {
   if (scrollFrame !== undefined) return
@@ -324,13 +321,8 @@ const allSpots = computed<NamedSpot[]>(() =>
   ),
 )
 
-/** Every mark and name when they are all showing, else those of the thing with focus. */
-const spots = computed<NamedSpot[]>(() => {
-  if (!props.showing && !props.focused) return []
-  const all = allSpots.value
-  if (props.showing) return all
-  return all.filter((spot) => spot.areaId === props.focused)
-})
+/** Every mark and name while they are all showing, else none. */
+const spots = computed<NamedSpot[]>(() => (props.showing ? allSpots.value : []))
 
 /** The spots that have a name drawn (those not left off). */
 const named = computed<NamedSpot[]>(() =>
@@ -383,16 +375,9 @@ type Hung = { label: string; kind: string } & HungName
 /**
  * The one name that hangs by the pointer: the thing it is over, when not
  * everything is shown (or, while everything is shown, when that thing's name is
- * left off for want of room near it), no ring is open and that thing is not
- * already named for having focus. A focused thing whose name is left off is
- * named the same way, under its dot, and while it is the focused thing's name
- * that is shown the pointer adds none (one name hangs at a time).
+ * left off for want of room near it) and no ring is open.
  */
 const pointed = computed<Hung | null>(() => {
-  const focus = props.focused
-    ? spots.value.find((s) => s.areaId === props.focused && s.leftOff)
-    : undefined
-  if (focus && !props.ringOpen) return hangAt(focus, focus.x, focus.y)
   if (props.ringOpen || !props.pointer) return null
   const frame = frameOf()
   const x = (props.pointer.x - frame.left) / frame.ratio
@@ -402,12 +387,10 @@ const pointed = computed<Hung | null>(() => {
     const dot = allSpots.value.find(
       (s) => s.leftOff && Math.hypot(s.x - x, s.y - y) <= DOT_HIT,
     )
-    return dot && dot.areaId !== props.focused
-      ? hangAt(dot, dot.x, dot.y)
-      : null
+    return dot ? hangAt(dot, dot.x, dot.y) : null
   }
   const entry = nameAt(inView.value, x, y)
-  if (!entry || entry.areaId === props.focused) return null
+  if (!entry) return null
   return hangAt(entry, x, y)
 })
 </script>

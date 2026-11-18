@@ -197,12 +197,12 @@ describe('LanternLayout: the belt of pictures', () => {
     expect(store.turns.at(-1)?.command).toBe('give bread to grandmother')
   })
 
-  it('moves focus to the first thing in the room when something is taken in hand', async () => {
+  it("moves focus to the hand's Cancel when something is taken in hand, not onto the picture", async () => {
     await cottage()
     await click(tile('item:bread').element)
     await coin('usewith').trigger('click')
     await flushPromises()
-    expect(document.activeElement).toBe(hit('grandmother').element)
+    expect(document.activeElement).toBe(w.get('[data-hand-cancel]').element)
   })
 
   it('puts the hand down when any other command is sent', async () => {
@@ -516,13 +516,13 @@ describe('LanternLayout: the belt of pictures', () => {
     expect(useBeltStore().hand).toBeNull()
   })
 
-  it('goes back to the first thing in the room when Escape leaves a belt that had no focus before', async () => {
+  it("goes to Show what's here when Escape leaves a belt that had no focus before, not onto the picture", async () => {
     await cottage()
     ;(document.activeElement as HTMLElement | null)?.blur()
     await key('b')
     expect(document.activeElement).toBe(tile('item:bread').element)
     await key('Escape')
-    expect(document.activeElement).toBe(hit('grandmother').element)
+    expect(document.activeElement).toBe(w.get('.lq-show-names').element)
   })
 
   it('gives Escape on a belt reached by Tab the same way out, and forgets a stale place', async () => {
@@ -533,7 +533,7 @@ describe('LanternLayout: the belt of pictures', () => {
     ;(w.get('.lq-stage-btn').element as HTMLElement).focus()
     ;(tile('item:bread').element as HTMLElement).focus()
     await key('Escape')
-    expect(document.activeElement).toBe(hit('grandmother').element)
+    expect(document.activeElement).toBe(w.get('.lq-show-names').element)
     expect(w.get('.lq-belt').element.contains(document.activeElement)).toBe(
       false,
     )

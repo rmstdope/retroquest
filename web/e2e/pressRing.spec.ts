@@ -111,6 +111,33 @@ test('every button of the ring can be pressed: none lies under the command bar o
   expect(covered).toBe(0)
 })
 
+test('Tab never reaches the things on the picture, and draws no box, mark or name over it', async ({
+  page,
+}): Promise<void> => {
+  await page.setViewportSize({ width: 1280, height: 800 })
+  await toTheCottage(page)
+  await page.mouse.move(1, 1)
+  for (let i = 0; i < 40; i++) {
+    await page.keyboard.press('Tab')
+    expect(
+      await page.evaluate(
+        () =>
+          document.activeElement?.classList.contains('lq-area-press-hit') ??
+          false,
+      ),
+    ).toBe(false)
+    await expect(page.locator('.lq-area-mark')).toHaveCount(0)
+    await expect(page.locator('.lq-area-name')).toHaveCount(0)
+  }
+  // A thing given focus some other way still draws no box round itself.
+  const bread = page.locator('[data-area-press="bread"]')
+  await bread.focus()
+  expect(await bread.evaluate((el) => getComputedStyle(el).outlineStyle)).toBe(
+    'none',
+  )
+  await expect(page.locator('.lq-area-mark')).toHaveCount(0)
+})
+
 test('Escape closes the ring and focus goes back to the thing', async ({
   page,
 }): Promise<void> => {
@@ -136,8 +163,10 @@ test('a thing pressed and stepped back from, the mouse still on it, is named onc
   await page.keyboard.press('Escape')
   await expect(ring).toHaveCount(0)
   await expect(page.locator('[data-area-press="bread"]')).toBeFocused()
+  // Focus names nothing; the one name is the pointer's.
   await expect(page.locator('.lq-area-name')).toHaveText(['Bread'])
-  await expect(page.locator('[data-area-pointer]')).toHaveCount(0)
+  await expect(page.locator('[data-area-pointer]')).toHaveCount(1)
+  await expect(page.locator('.lq-area-mark')).toHaveCount(0)
 })
 
 test('Take on scenery is answered as typing it would, and a person fans out the carried things under Use with…', async ({

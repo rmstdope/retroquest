@@ -67,7 +67,7 @@ afterEach(() => {
 })
 
 describe('AreaPress', () => {
-  it('has a Tab stop for each placed thing and person, left to right, and none for a way out', async () => {
+  it('has a button for each placed thing and person, left to right, and none for a way out', async () => {
     const w = mountPress()
     await nextTick()
     const stops = w.findAll('button')
@@ -77,10 +77,8 @@ describe('AreaPress', () => {
       'Old Notice',
       'Bucket',
     ])
-    for (const stop of stops) {
-      expect(stop.attributes('tabindex')).toBeUndefined()
+    for (const stop of stops)
       expect(stop.attributes('aria-haspopup')).toBe('menu')
-    }
   })
 
   it('puts a smaller thing over the larger one it lies on', async () => {
@@ -121,26 +119,19 @@ describe('AreaPress', () => {
     expect(at).toEqual({ x: 0, y: 0 })
   })
 
-  it('says which thing a key put focus on, and when none has', async () => {
+  it('keeps the things out of the Tab order: the keyboard has F1 and the typing box', async () => {
     const w = mountPress()
     await nextTick()
-    const matches = HTMLElement.prototype.matches
-    vi.spyOn(HTMLElement.prototype, 'matches').mockImplementation(function (
-      this: HTMLElement,
-      selector: string,
-    ) {
-      return selector === ':focus-visible' ? true : matches.call(this, selector)
-    })
-    await w.get('[data-area-press="bucket"]').trigger('focus')
-    await w.get('[data-area-press="bucket"]').trigger('blur')
-    expect(w.emitted('focused')).toEqual([['bucket'], [null]])
+    const hits = w.findAll('.lq-area-press-hit')
+    expect(hits.length).toBeGreaterThan(0)
+    for (const hit of hits) expect(hit.attributes('tabindex')).toBe('-1')
   })
 
-  it('does not show a name for a thing a press put focus on', async () => {
+  it('says nothing when a thing takes focus, so no mark or name shows for it', async () => {
     const w = mountPress()
     await nextTick()
-    vi.spyOn(HTMLElement.prototype, 'matches').mockImplementation(() => false)
     await w.get('[data-area-press="bucket"]').trigger('focus')
+    await w.get('[data-area-press="bucket"]').trigger('blur')
     expect(w.emitted('focused')).toBeUndefined()
   })
 
