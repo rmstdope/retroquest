@@ -63,6 +63,13 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       when: 'absent',
     },
     {
+      id: 'withered-carrot-taken',
+      title: 'Carrot taken',
+      text: 'Remove the carrot from the picture.',
+      area: 'withered-carrot',
+      when: 'absent',
+    },
+    {
       id: 'withered-carrot-fresh',
       title: 'Carrot freshened',
       text: 'Make the carrot in the field green and fresh instead of withered.',
