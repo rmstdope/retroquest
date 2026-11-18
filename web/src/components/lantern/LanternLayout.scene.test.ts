@@ -51,7 +51,7 @@ describe('LanternLayout: change of scene', () => {
     phone = false,
   ): Promise<ReturnType<typeof useGameStore>> {
     // Settings an earlier test saved would carry over where the test window
-    // keeps storage (Node 22, as on CI).
+    // keeps storage (Node 26, as on CI).
     setAppStorage(createMemoryStorage())
     setActivePinia(createPinia())
     vi.stubGlobal(
