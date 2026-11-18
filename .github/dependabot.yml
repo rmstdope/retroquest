@@ -61,3 +61,9 @@ updates:
       default-days: 5
     commit-message:
       prefix: chore(docker)
+    # CI pins node-version in ci.yml, which Dependabot never touches. Move to
+    # a new Node major by hand, changing the Dockerfile and ci.yml together.
+    ignore:
+      - dependency-name: node
+        update-types:
+          - version-update:semver-major
