@@ -601,6 +601,9 @@ describe('useMusic on Web Audio', () => {
       ),
     )
     ctx = sharedAudioContext() as unknown as FakeAudioContext
+    // The context is shared across tests; each starts before the first
+    // gesture, as a page load does.
+    ctx.state = 'suspended'
     ctx.failDecode = false
     ctx.sources.length = 0
     ctx.gains.length = 0
