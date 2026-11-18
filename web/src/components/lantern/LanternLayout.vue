@@ -18,6 +18,7 @@ import { useArrivalStore } from '@/stores/useArrivalStore'
 import { useCommandBox } from '@/composables/useCommandBox'
 import { useRoomTitleStore } from '@/stores/useRoomTitleStore'
 import { useSceneStore } from '@/stores/useSceneStore'
+import { usePassageStore, PASSAGE_HALF_MS } from '@/stores/usePassageStore'
 import { useAreaNamesStore } from '@/stores/useAreaNamesStore'
 import { useFlightStore } from '@/stores/useFlightStore'
 import { useBeltStore } from '@/stores/useBeltStore'
@@ -208,6 +209,7 @@ const narration = useNarrationStore()
 const speech = useStageSpeechStore()
 const arrival = useArrivalStore()
 const scene = useSceneStore()
+const passage = usePassageStore()
 const roomTitle = useRoomTitleStore()
 const names = useAreaNamesStore()
 const belt = useBeltStore()
@@ -907,6 +909,7 @@ function readOn(): void {
 const commandBoxEl = ref<InstanceType<typeof CommandBox> | null>(null)
 /** Put the cursor back in the typing box, when it is up. */
 function focusActions(): void {
+  if (passage.phase !== 'idle') return
   if (typingOpen.value) commandBoxEl.value?.focus()
 }
 
@@ -2393,14 +2396,88 @@ function onStoryClick(event: MouseEvent): void {
 const chapterPage = ref<InstanceType<typeof ChapterPage> | null>(null)
 
 /** Leave the title page for the first act's chapter page. */
-async function startGame(): Promise<void> {
-  game.dismissTitle()
-  await nextTick()
-  focusPopUp()
-  // A new game: tell keyboard players about F1 once its opening pop-up is read.
-  if (game.showModal) f1NotePending = true
-  else showF1Note()
+function startGame(): void {
+  // The title fades out and the intro rises; focus lands once it is up.
+  game.startFromTitle(() => {
+    focusPopUp()
+    // A new game: tell keyboard players about F1 once its opening pop-up is read.
+    if (game.showModal) f1NotePending = true
+    else showF1Note()
+  })
 }
+
+/** The first press on the fading screen only brings the new one up; a press on the title, the intro or the picture does nothing more. */
+const PASSAGE_ONLY_SKIPS =
+  '.lq-title-page, .lq-chapter-dialog, .lq-stage-picture'
+
+/** Stop a press from reaching what is under it. */
+function swallow(event: Event): void {
+  event.preventDefault()
+  event.stopPropagation()
+}
+
+/**
+ * A click while the screen is fading into a game brings the new one up at
+ * once. While the old screen is still fading out it does only that; once the
+ * new one rises it does only that on the title, the intro or the picture, and
+ * goes on to what was pressed elsewhere.
+ */
+function onPassageClick(event: MouseEvent): void {
+  const fadingOut = passage.phase === 'out'
+  if (!passage.skip()) return
+  const target = event.target instanceof Element ? event.target : null
+  if (fadingOut || target?.closest(PASSAGE_ONLY_SKIPS)) swallow(event)
+}
+
+/** Enter while the screen is fading into a game brings the new one up at once and does nothing else (a typed command rising with the new screen goes on). */
+function onPassageKey(event: KeyboardEvent): void {
+  if (event.key !== 'Enter') return
+  const target = event.target instanceof Element ? event.target : null
+  const fadingOut = passage.phase === 'out'
+  const typing = !!target?.closest('input, textarea, select, [contenteditable]')
+  if (typing && !fadingOut) return
+  if (passage.skip()) swallow(event)
+}
+
+// Plain listeners, in the capture phase, so they run before every other press handler.
+// On the window, so a key pressed with focus on the page itself (the button it was on is gone) is heard too.
+onMounted(() => {
+  window.addEventListener('click', onPassageClick, true)
+  window.addEventListener('keydown', onPassageKey, true)
+})
+onUnmounted(() => {
+  window.removeEventListener('click', onPassageClick, true)
+  window.removeEventListener('keydown', onPassageKey, true)
+})
+
+/** Counts the pictures a passage has waited for, so only the latest one's answer counts. */
+let pictureAsk = 0
+
+// The dark reached: the new room's picture is awaited, so the dark lifts only when it is ready (or the paper backdrop, none).
+watch(
+  () => passage.phase,
+  (phase) => {
+    if (phase !== 'dark') return
+    const src = game.roomPicture
+    if (!src) return passage.pictureReady()
+    // A picture asked for by an earlier passage, answering late, is ignored.
+    const mine = ++pictureAsk
+    const picture = new Image()
+    picture.onload = picture.onerror = (): void => {
+      if (mine === pictureAsk) passage.pictureReady()
+    }
+    picture.src = src
+  },
+)
+
+// Once the screen is fully up, focus lands where it does today (nothing takes it during the fade).
+watch(
+  () => passage.phase,
+  (phase, was) => {
+    if (phase !== 'idle' || was === 'idle' || game.showTitle) return
+    void nextTick(() => (game.showModal ? focusPopUp() : focusActions()))
+  },
+)
 const titlePage = ref<InstanceType<typeof TitlePage> | null>(null)
 /** The Load game window is open over the title page. */
 const titleLoad = ref(false)
@@ -2439,6 +2516,8 @@ function openTitleLoad(): void {
 /** The Load game window closed: back to the title page, focus on Load game. */
 async function closeTitleLoad(): Promise<void> {
   titleLoad.value = false
+  // A pick that loads fades the title out: nothing takes focus then.
+  if (passage.phase !== 'idle') return
   await nextTick()
   titlePage.value?.focusLoad()
 }
@@ -2466,7 +2545,7 @@ watch(
 /** Focus the open chapter page's button. */
 function focusPopUp(): void {
   // The title page comes first; the page under it gets focus after Start.
-  if (game.showTitle) return
+  if (game.showTitle || passage.phase !== 'idle') return
   chapterPage.value?.focus()
 }
 
@@ -2992,12 +3071,39 @@ watch(
         <FinishDialog v-if="game.showModal && game.finishAsked" />
       </template>
     </div>
+    <!-- The dark the screen goes through into a started or loaded game. -->
+    <div
+      class="lq-passage"
+      :class="`lq-passage-${passage.phase}`"
+      :style="{ '--lq-passage-ms': `${PASSAGE_HALF_MS}ms` }"
+      aria-hidden="true"
+    ></div>
     <!-- A phone held upright: the game waits behind this page. -->
     <TurnPage v-if="turnPage" />
   </div>
 </template>
 
 <style scoped>
+/* The dark of a passage into a game: over the whole screen, down over the old one and lifting off the new. */
+.lq-passage {
+  position: fixed;
+  inset: 0;
+  z-index: var(--lq-z-page-passage);
+  background: #000;
+  opacity: 0;
+  pointer-events: none;
+}
+.lq-passage-out {
+  opacity: 1;
+  transition: opacity calc(var(--lq-passage-ms) * var(--lq-motion)) linear;
+}
+.lq-passage-dark {
+  opacity: 1;
+}
+.lq-passage-in {
+  opacity: 0;
+  transition: opacity calc(var(--lq-passage-ms) * var(--lq-motion)) linear;
+}
 .lq-root {
   height: 100vh;
   height: 100dvh;

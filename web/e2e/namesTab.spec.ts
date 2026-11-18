@@ -43,6 +43,10 @@ async function start(page: Page): Promise<void> {
   await page.emulateMedia({ reducedMotion: 'no-preference' })
   await page.goto('/')
   await page.getByRole('button', { name: 'Start', exact: true }).click()
+  // The title fades out and the intro rises first (focus lands once it is up); a press before then only skips.
+  await expect(page.locator('.lq-chapter-button')).toBeFocused({
+    timeout: 6000,
+  })
   await page.locator('.lq-chapter-button').click()
 }
 

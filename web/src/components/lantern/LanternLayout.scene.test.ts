@@ -5,6 +5,7 @@ import { mount, type VueWrapper } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import LanternLayout from './LanternLayout.vue'
 import { useGameStore } from '@/stores/useGameStore'
+import { useSettingsStore } from '@/stores/useSettingsStore'
 import {
   useSceneStore,
   SCENE_HALF_MS,
@@ -212,6 +213,8 @@ describe('LanternLayout: change of scene', () => {
     vi.spyOn(HTMLMediaElement.prototype, 'play').mockResolvedValue()
     vi.spyOn(HTMLMediaElement.prototype, 'pause').mockReturnValue()
     const game = useGameStore()
+    // A load here is instant: its fade is not what these tests are about.
+    useSettingsStore().reduceMotion = 'on'
     game.setBridge(useBridge(async (): Promise<ActClass[]> => [Act1]))
     await game.initGame()
     game.dismissModal()

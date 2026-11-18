@@ -668,6 +668,8 @@ describe('LanternLayout', () => {
   })
 
   it('shows the title page over the first chapter, then the chapter', async () => {
+    // The start is instant here: its fade has its own tests.
+    useSettingsStore().reduceMotion = 'on'
     wrapper = mount(LanternLayout, { attachTo: document.body })
     const game = useGameStore()
     game.modalChapter = {
