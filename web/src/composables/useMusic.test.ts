@@ -535,6 +535,90 @@ describe('useMusic', () => {
       expect(FadeAudio.made).toHaveLength(0)
       expect(el.volume).toBe(0.5)
     })
+
+    describe('a fade-out with the screen (fadeOut)', () => {
+      const PASSAGE_MS = 1500
+
+      it('fades the playing loop to silence over the given time', () => {
+        const el = playing()
+        const { loadTrack, fadeOut } = useMusic(
+          el as unknown as HTMLAudioElement,
+        )
+        loadTrack('a.mp3', '')
+        el.volume = 0.5
+        fadeOut(PASSAGE_MS)
+        vi.advanceTimersByTime(PASSAGE_MS / 2)
+        expect(el.volume).toBeGreaterThan(0)
+        expect(el.volume).toBeLessThan(0.5)
+        vi.advanceTimersByTime(PASSAGE_MS / 2)
+        expect(el.volume).toBe(0)
+      })
+
+      it('raises the next track from silence over the same time, with no wait', async () => {
+        const el = playing()
+        const { loadTrack, fadeOut } = useMusic(
+          el as unknown as HTMLAudioElement,
+        )
+        loadTrack('a.mp3', '')
+        el.volume = 0.5
+        fadeOut(PASSAGE_MS)
+        vi.advanceTimersByTime(PASSAGE_MS)
+        loadTrack('b.mp3', '', 0, true)
+        const next = FadeAudio.made.at(-1) as FadeAudio
+        expect(next.src).toContain('b.mp3')
+        expect(next.volume).toBe(0)
+        await vi.advanceTimersByTimeAsync(0)
+        vi.advanceTimersByTime(PASSAGE_MS / 2)
+        expect(next.volume).toBeGreaterThan(0)
+        expect(next.volume).toBeLessThan(0.5)
+        vi.advanceTimersByTime(PASSAGE_MS / 2)
+        expect(next.volume).toBeCloseTo(0.5)
+      })
+
+      it('raises a track that starts with nothing playing', async () => {
+        const el = playing()
+        el.paused = true
+        const { loadTrack, fadeOut } = useMusic(
+          el as unknown as HTMLAudioElement,
+        )
+        fadeOut(PASSAGE_MS)
+        loadTrack('b.mp3', '')
+        const voice = FadeAudio.made.at(-1) ?? el
+        expect(voice.volume).toBe(0)
+        await vi.advanceTimersByTimeAsync(0)
+        vi.advanceTimersByTime(PASSAGE_MS)
+        expect(voice.volume).toBeCloseTo(0.5)
+      })
+
+      it('raises the same track again without loading it again', () => {
+        const el = playing()
+        const { loadTrack, fadeOut } = useMusic(
+          el as unknown as HTMLAudioElement,
+        )
+        loadTrack('a.mp3', '')
+        el.volume = 0.5
+        fadeOut(PASSAGE_MS)
+        vi.advanceTimersByTime(PASSAGE_MS)
+        loadTrack('a.mp3', '', 0, true)
+        expect(el.srcSets).toHaveLength(1)
+        vi.advanceTimersByTime(PASSAGE_MS)
+        expect(el.volume).toBeCloseTo(0.5)
+      })
+
+      it('lift raises the loop again when no track followed', () => {
+        const el = playing()
+        const { loadTrack, fadeOut, lift } = useMusic(
+          el as unknown as HTMLAudioElement,
+        )
+        loadTrack('a.mp3', '')
+        el.volume = 0.5
+        fadeOut(PASSAGE_MS)
+        vi.advanceTimersByTime(PASSAGE_MS)
+        lift()
+        vi.advanceTimersByTime(PASSAGE_MS)
+        expect(el.volume).toBeCloseTo(0.5)
+      })
+    })
   })
 
   // --- Settings ---

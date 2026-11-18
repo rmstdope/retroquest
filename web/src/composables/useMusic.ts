@@ -70,6 +70,9 @@ const NO_AMBIENCE: AmbienceSource = () => Promise.resolve(null)
  * the dark (a change of scene) fades the old loop out over the first half of
  * `MUSIC_THROUGH_MS` and raises the new one over the second. A track loaded with
  * a fade-in time, with nothing playing, rises from silence once it sounds.
+ * `fadeOut(ms)` fades the loop to silence with the screen; the next track then
+ * rises from silence over the same `ms` (the same track again rises, not
+ * reloaded), and `lift` raises the loop if no track follows.
  *
  * Loops play on Web Audio (see `musicVoice.ts`): a track is decoded first, the
  * music already playing goes on until it is ready, and the loop then comes
@@ -121,6 +124,7 @@ export function useMusic(
       request++
       requestedFile = ''
       pendingFadeIn = 0
+      fadedOutMs = 0
       stopCrossfade()
       currentMusicFile.value = ''
       musicInfo.value = ''
@@ -133,6 +137,7 @@ export function useMusic(
     }
 
     if (file === requestedFile) {
+      if (file === currentMusicFile.value) lift()
       applyScene()
       return
     }
@@ -140,9 +145,12 @@ export function useMusic(
     if (file === currentMusicFile.value) {
       // Back to the music that is playing: drop the load under way.
       request++
+      lift()
       applyScene()
       return
     }
+    // After a fade-out with the screen, the new music rises over the same time.
+    if (fadedOutMs > 0 && fadeInMs === 0) fadeInMs = fadedOutMs
     const id = ++request
 
     const returning = takeFadingOut(file)
@@ -243,7 +251,12 @@ export function useMusic(
     fadeInMs: number = 0,
     through: boolean = false,
   ): void {
-    const crossfade = currentMusicFile.value !== '' && !active.paused
+    // A loop already faded out with the screen is let go of, not crossfaded.
+    const crossfade =
+      fadedOutMs === 0 && currentMusicFile.value !== '' && !active.paused
+    // The fade-out's last step may still be due: the loop is silent now.
+    if (fadedOutMs > 0) active.volume = 0
+    fadedOutMs = 0
     const fadeIn = fadeInMs > 0 && !crossfade && !comingBack
     if (crossfade) {
       fadeOutActive(through ? MUSIC_THROUGH_MS / 2 : MUSIC_CROSSFADE_MS)
@@ -275,6 +288,31 @@ export function useMusic(
       }, MUSIC_THROUGH_MS / 2)
     } else if (crossfade) fadeTo(targetVolume.value, MUSIC_CROSSFADE_MS)
     playActive()
+  }
+
+  /**
+   * How long the loop was faded out with the screen (`fadeOut`), in ms; 0 when
+   * it was not. The next track rises over the same time.
+   */
+  let fadedOutMs = 0
+
+  /**
+   * Fades the playing loop (and its effects) to silence over `ms`, as the
+   * screen fades out into a started or loaded game, and keeps it silent until
+   * the next track comes, which rises from silence over the same `ms`, or
+   * until `lift`. With nothing playing, the next track still rises over `ms`.
+   */
+  function fadeOut(ms: number): void {
+    fadedOutMs = ms
+    if (currentMusicFile.value !== '' && !active.paused) fadeTo(0, ms)
+  }
+
+  /** Raises a loop faded out by `fadeOut` that no new track followed (the same track, or none). */
+  function lift(): void {
+    if (fadedOutMs === 0) return
+    const ms = fadedOutMs
+    fadedOutMs = 0
+    if (currentMusicFile.value !== '') fadeTo(targetVolume.value, ms)
   }
 
   /** The fade-in still to run, in ms; 0 when none waits for the sound. */
@@ -406,11 +444,13 @@ export function useMusic(
   // A voice starting or ending fades the music; a settings change applies at once.
   watch(narrating, () => {
     // A music not yet sounding keeps its silence for the fade-in to rise from.
-    if (pendingFadeIn === 0 && !rise) fadeTo(targetVolume.value)
+    if (pendingFadeIn === 0 && !rise && fadedOutMs === 0)
+      fadeTo(targetVolume.value)
   })
   watch(
     () => settings.musicVolume,
     () => {
+      if (fadedOutMs > 0) return
       if (fade) clearInterval(fade)
       fade = null
       active.volume = targetVolume.value
@@ -464,6 +504,8 @@ export function useMusic(
     currentMusicFile,
     musicInfo,
     loadTrack,
+    fadeOut,
+    lift,
     stopCrossfade,
     ensureMusicStarted,
     buildAttributionHtml,

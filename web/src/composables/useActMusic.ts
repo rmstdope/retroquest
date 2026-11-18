@@ -4,6 +4,7 @@ import { GAME_NAME } from '@/engine'
 import { useGameStore } from '@/stores/useGameStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
+import { PASSAGE_HALF_MS, usePassageStore } from '@/stores/usePassageStore'
 import {
   MUSIC_FADE_IN_MS,
   SILENCE,
@@ -54,7 +55,10 @@ const MEDIA_KEYS: readonly MediaSessionAction[] = ['play', 'pause', 'stop']
  * starts on the file and then swaps.
  *
  * The first track, when it loads under the game's title page, fades in over
- * `MUSIC_FADE_IN_MS`.
+ * `MUSIC_FADE_IN_MS`. When a load or a new game passes through the dark, the
+ * playing music fades out over the screen's fade-out (`PASSAGE_HALF_MS`) and
+ * the new room's music rises over the same time as the room comes up; the same
+ * track again is not reloaded, it rises again.
  *
  * A room plays the chosen sound effects its scene's mix lists, through one
  * effects bus at the player's effects volume, with its music or with none:
@@ -204,15 +208,14 @@ export function useActMusic(): ReturnType<typeof useMusic> {
       // The title page's music rises over two seconds; no other starts so.
       const fadeInMs = !started && showTitle.value ? MUSIC_FADE_IN_MS : 0
       started = true
-      // A walk to another room of the act on the picture stage, or a load, goes through the dark.
+      // A walk to another room of the act on the picture stage goes through the dark.
       const through =
-        (scenePicture.value &&
-          !motionReduced() &&
-          played.act === musicActName.value &&
-          played.room !== '' &&
-          musicRoomKey.value !== '' &&
-          played.room !== musicRoomKey.value) ||
-        passageThrough.value
+        scenePicture.value &&
+        !motionReduced() &&
+        played.act === musicActName.value &&
+        played.room !== '' &&
+        musicRoomKey.value !== '' &&
+        played.room !== musicRoomKey.value
       played = { act: musicActName.value, room: musicRoomKey.value }
       const at = { scene, level }
       if (musicFile.value === '') music.loadTrack('', '')
@@ -230,6 +233,18 @@ export function useActMusic(): ReturnType<typeof useMusic> {
         )
     },
     { immediate: true },
+  )
+
+  // A load or a new game fades the playing music out with the screen; the new
+  // room's music then rises with the room, over the same time.
+  // Declared after the track's watcher, so a new track has taken its fade first.
+  const passage = usePassageStore()
+  watch(
+    () => (passageThrough.value ? passage.phase : 'idle'),
+    (phase) => {
+      if (phase === 'out') music.fadeOut(PASSAGE_HALF_MS)
+      else if (phase === 'in' || phase === 'idle') music.lift()
+    },
   )
 
   function resume(): void {

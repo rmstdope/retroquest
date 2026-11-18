@@ -7,7 +7,11 @@ import { GAME_NAME } from '@/engine'
 import { useGameStore } from '@/stores/useGameStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
-import { usePassageStore, PASSAGE_HALF_MS } from '@/stores/usePassageStore'
+import {
+  usePassageStore,
+  PASSAGE_HALF_MS,
+  PASSAGE_WAIT_MS,
+} from '@/stores/usePassageStore'
 import { FakeAudioContext } from '@/testing/fakeAudioContext'
 import type * as SceneMixModule from '@/lantern/sceneMix'
 import { SCENE_MIX, type SceneEntry } from '@/lantern/sceneMix'
@@ -164,7 +168,7 @@ describe('useActMusic', () => {
     vi.useRealTimers()
   })
 
-  it('goes through the dark when a load brings another act', async () => {
+  it('fades the old music out with the screen and the new one in with the room', async () => {
     vi.useFakeTimers()
     const scope = effectScope()
     scope.run(() => useActMusic())
@@ -175,22 +179,57 @@ describe('useActMusic', () => {
     await vi.advanceTimersByTimeAsync(0)
     await nextTick()
     await vi.advanceTimersByTimeAsync(0)
+    const old = FakeAudio.last
+    expect(old.volume).toBe(1)
     useSettingsStore().reduceMotion = 'off'
     usePassageStore().begin(() => {
       game.musicActName = 'Other'
       game.musicRoomKey = 'Yard'
       game.musicFile = 'b.mp3'
     }, vi.fn())
-    await vi.advanceTimersByTimeAsync(PASSAGE_HALF_MS)
+    await nextTick()
+    // The old loop falls with the screen.
+    await vi.advanceTimersByTimeAsync(PASSAGE_HALF_MS / 2)
+    expect(old.volume).toBeGreaterThan(0)
+    expect(old.volume).toBeLessThan(1)
+    await vi.advanceTimersByTimeAsync(PASSAGE_HALF_MS / 2)
     await nextTick()
     await vi.advanceTimersByTimeAsync(0)
     const next = FakeAudio.last
+    expect(old.volume).toBe(0)
     expect(next.src).toContain('b.mp3')
-    // Silent while the old loop fades out, then rising.
-    await vi.advanceTimersByTimeAsync(MUSIC_THROUGH_MS / 2 - 100)
+    // The new one rises with the room, over the same time.
     expect(next.volume).toBe(0)
-    await vi.advanceTimersByTimeAsync(MUSIC_THROUGH_MS / 2 + 200)
+    await vi.advanceTimersByTimeAsync(PASSAGE_HALF_MS / 2)
+    expect(next.volume).toBeGreaterThan(0)
+    expect(next.volume).toBeLessThan(1)
+    await vi.advanceTimersByTimeAsync(PASSAGE_HALF_MS / 2)
     expect(next.volume).toBeCloseTo(1)
+    scope.stop()
+    vi.useRealTimers()
+  })
+
+  it('raises the music again when the load brings the same track', async () => {
+    vi.useFakeTimers()
+    const scope = effectScope()
+    scope.run(() => useActMusic())
+    const game = useGameStore()
+    game.musicActName = 'Act'
+    game.musicRoomKey = 'Hall'
+    game.musicFile = 'a.mp3'
+    await vi.advanceTimersByTimeAsync(0)
+    await nextTick()
+    await vi.advanceTimersByTimeAsync(0)
+    const el = FakeAudio.last
+    useSettingsStore().reduceMotion = 'off'
+    usePassageStore().begin(() => {}, vi.fn())
+    await nextTick()
+    await vi.advanceTimersByTimeAsync(PASSAGE_HALF_MS)
+    expect(el.volume).toBeLessThan(0.15)
+    // It stays down through the dark, and rises as the room comes up.
+    await vi.advanceTimersByTimeAsync(PASSAGE_WAIT_MS + PASSAGE_HALF_MS + 200)
+    expect(el.volume).toBeCloseTo(1)
+    expect(FakeAudio.last).toBe(el)
     scope.stop()
     vi.useRealTimers()
   })
