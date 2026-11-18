@@ -7,6 +7,7 @@ import { GAME_NAME } from '@/engine'
 import { useGameStore } from '@/stores/useGameStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
+import { usePassageStore, PASSAGE_HALF_MS } from '@/stores/usePassageStore'
 import { FakeAudioContext } from '@/testing/fakeAudioContext'
 import type * as SceneMixModule from '@/lantern/sceneMix'
 import { SCENE_MIX, type SceneEntry } from '@/lantern/sceneMix'
@@ -150,6 +151,37 @@ describe('useActMusic', () => {
     game.musicRoomKey = 'Garden'
     game.musicFile = 'b.mp3'
     await vi.advanceTimersByTimeAsync(0)
+    await nextTick()
+    await vi.advanceTimersByTimeAsync(0)
+    const next = FakeAudio.last
+    expect(next.src).toContain('b.mp3')
+    // Silent while the old loop fades out, then rising.
+    await vi.advanceTimersByTimeAsync(MUSIC_THROUGH_MS / 2 - 100)
+    expect(next.volume).toBe(0)
+    await vi.advanceTimersByTimeAsync(MUSIC_THROUGH_MS / 2 + 200)
+    expect(next.volume).toBeCloseTo(1)
+    scope.stop()
+    vi.useRealTimers()
+  })
+
+  it('goes through the dark when a load brings another act', async () => {
+    vi.useFakeTimers()
+    const scope = effectScope()
+    scope.run(() => useActMusic())
+    const game = useGameStore()
+    game.musicActName = 'Act'
+    game.musicRoomKey = 'Hall'
+    game.musicFile = 'a.mp3'
+    await vi.advanceTimersByTimeAsync(0)
+    await nextTick()
+    await vi.advanceTimersByTimeAsync(0)
+    useSettingsStore().reduceMotion = 'off'
+    usePassageStore().begin(() => {
+      game.musicActName = 'Other'
+      game.musicRoomKey = 'Yard'
+      game.musicFile = 'b.mp3'
+    }, vi.fn())
+    await vi.advanceTimersByTimeAsync(PASSAGE_HALF_MS)
     await nextTick()
     await vi.advanceTimersByTimeAsync(0)
     const next = FakeAudio.last
