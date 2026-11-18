@@ -56,7 +56,7 @@ export const useBeltStore = defineStore('belt', () => {
   function show(which: BeltList): void {
     list.value = which
   }
-  /** Put the belt away; the two tiny buttons stay. */
+  /** Put the belt away: the strap folds into its leather tab, and the two studs stay. */
   function putAway(): void {
     away.value = true
   }

@@ -84,7 +84,7 @@ test('a press on someone in the picture goes through the title, opens their ring
     >
     manifest['act1-village-chapel'] = {
       ...manifest['act1-village-chapel'],
-      areas: { priest: { x: 0.36, y: 0.5, width: 0.1, height: 0.3 } },
+      areas: { priest: { x: 0.36, y: 0.62, width: 0.1, height: 0.26 } },
     }
     await route.fulfill({ json: manifest })
   })

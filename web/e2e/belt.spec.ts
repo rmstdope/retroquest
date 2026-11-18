@@ -353,7 +353,11 @@ test('B goes to the belt, the belt can be put away and is remembered across a re
   await expect(page.locator('[data-belt-pic="item:bread"]')).toBeFocused()
   await expect(page.locator('.lq-belt-caption')).toContainText('Bread')
   await expectCaptionClear(page)
-  await page.getByRole('button', { name: 'Put the belt away' }).click()
+  await expect(
+    page.getByRole('button', { name: 'Put the belt away' }),
+  ).toHaveCount(0)
+  // The lit stud folds the strap away into its tab.
+  await page.locator('[data-belt-switch="bag"]').click()
   await expect(page.locator('[data-belt-pic="item:bread"]')).toHaveCount(0)
   await expect(page.getByRole('button', { name: 'Bag' })).toBeVisible()
   const kept = await page.evaluate(() =>
@@ -361,62 +365,6 @@ test('B goes to the belt, the belt can be put away and is remembered across a re
   )
   expect(JSON.parse(kept ?? '{}').away).toBe(true)
 })
-
-/**
- * What a name under a picture looks like laid out: the tile's width, the lines
- * it takes, whether any word is broken across lines and whether any is cut.
- */
-async function nameLayout(
-  page: Page,
-  name: string,
-): Promise<{
-  tileWidth: number
-  lines: number
-  brokenWords: string[]
-  cut: boolean
-}> {
-  return page.locator('[data-belt-pic="item:bread"]').evaluate((tile, text) => {
-    const label = tile.querySelector('.lq-belt-name')!
-    label.textContent = text
-    const node = label.firstChild!
-    const tops = new Set<number>()
-    const brokenWords: string[] = []
-    let at = 0
-    for (const word of text.split(' ')) {
-      const range = document.createRange()
-      range.setStart(node, at)
-      range.setEnd(node, at + word.length)
-      const rects = [...range.getClientRects()]
-      if (rects.length !== 1) brokenWords.push(word)
-      for (const rect of rects) tops.add(Math.round(rect.top))
-      at += word.length + 1
-    }
-    return {
-      tileWidth: tile.getBoundingClientRect().width,
-      lines: tops.size,
-      brokenWords,
-      cut:
-        label.scrollHeight > label.clientHeight ||
-        label.scrollWidth > label.clientWidth,
-    }
-  }, name)
-}
-
-for (const name of ['Wandering Boots', 'Faded Photograph']) {
-  test(`${name} shows whole on two lines at the belt's usual width`, async ({
-    page,
-  }): Promise<void> => {
-    await page.setViewportSize({ width: 1280, height: 800 })
-    await toTheCottage(page)
-    await page.evaluate(() => document.fonts.ready.then(() => undefined))
-    expect(await nameLayout(page, name)).toEqual({
-      tileWidth: 72,
-      lines: 2,
-      brokenWords: [],
-      cut: false,
-    })
-  })
-}
 
 test.describe('on a phone held sideways', () => {
   test.use({ hasTouch: true, isMobile: true })
@@ -452,29 +400,28 @@ test('a thing whose picture has been made shows it in place of its letter', asyn
 })
 
 for (const colorScheme of ['light', 'dark'] as const) {
-  test(`an empty list says so on the names' paper, readable over the picture (${colorScheme})`, async ({
+  test(`an empty list is tooled into the leather, the same in both themes (${colorScheme})`, async ({
     page,
   }): Promise<void> => {
     await page.emulateMedia({ colorScheme })
     await page.setViewportSize({ width: 1280, height: 800 })
     await toTheCottage(page)
-    // The paper the names under the pictures lie on, as the bread shows it.
-    const paper = await page
-      .locator('[data-belt-pic="item:bread"] .lq-belt-name')
-      .evaluate((el) => getComputedStyle(el).backgroundColor)
     await page.getByRole('button', { name: 'Spells' }).click()
+    await expect(page.locator('.lq-belt-pic')).toHaveCount(0)
     const empty = page.locator('.lq-belt-empty')
     await expect(empty).toHaveText('You know no spells yet.')
-    // The words lie on that same paper, not straight on a dark picture, in
-    // the page's own text colour rather than the muted one.
+    // The leather and the lettering on it are fixed, so a bright painting cannot wash them out.
     const style = await empty.evaluate((el) => {
       const computed = getComputedStyle(el)
-      return { background: computed.backgroundColor, colour: computed.color }
+      const bar = getComputedStyle(el.closest('.lq-belt-bar')!)
+      return {
+        colour: computed.color,
+        italic: computed.fontStyle,
+        leather: bar.backgroundImage,
+      }
     })
-    expect(style.background).toBe(paper)
-    const pageText = await page
-      .locator('.lq-root')
-      .evaluate((el) => getComputedStyle(el).color)
-    expect(style.colour).toBe(pageText)
+    expect(style.colour).toBe('rgb(240, 217, 168)')
+    expect(style.italic).toBe('italic')
+    expect(style.leather).toContain('linear-gradient')
   })
 }

@@ -293,10 +293,18 @@ describe('LanternLayout: the belt of pictures', () => {
     expect(document.activeElement).toBe(first)
   })
 
+  it('folds the strap with the lit stud, and has no ▾ button', async () => {
+    await cottage()
+    expect(w.find('[data-belt-away]').exists()).toBe(false)
+    await w.get('[data-belt-switch="bag"]').trigger('click')
+    expect(useBeltStore().away).toBe(true)
+    await vi.waitFor(() => expect(tile('item:bread').exists()).toBe(false))
+  })
+
   it('brings the belt back with B when it was put away', async () => {
     await cottage()
-    await w.get('[data-belt-away]').trigger('click')
-    expect(tile('item:bread').exists()).toBe(false)
+    useBeltStore().putAway()
+    await vi.waitFor(() => expect(tile('item:bread').exists()).toBe(false))
     ;(hit('grandmother').element as HTMLElement).focus()
     await key('b')
     expect(useBeltStore().away).toBe(false)
@@ -372,7 +380,8 @@ describe('LanternLayout: the belt of pictures', () => {
     await flushPromises()
     await takeBreadIn('usewith')
     const before = store.turns.length
-    await w.get('[data-belt-switch="spells"]').trigger('click')
+    useBeltStore().show('spells')
+    await flushPromises()
     await click(tile('spell:light').element)
     expect(store.turns.length).toBe(before)
     expect(useBeltStore().hand).not.toBeNull()
@@ -383,7 +392,7 @@ describe('LanternLayout: the belt of pictures', () => {
     const store = await cottage()
     carryMore(store)
     await flushPromises()
-    await w.get('[data-belt-switch="spells"]').trigger('click')
+    useBeltStore().show('spells')
     useNarrationStore().skipAll()
     useStageSpeechStore().revealAll()
     await flushPromises()
