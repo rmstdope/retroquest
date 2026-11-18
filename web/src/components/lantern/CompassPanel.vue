@@ -10,8 +10,8 @@ import { usePanelFlash } from '@/composables/usePanelFlash'
  * window): the exits laid out around the current room in a 3 × 3 grid
  * (up/down in the top/bottom-right corners), other named exits listed below.
  * Each exit is a button that moves there. As a section it gets a "Map"
- * heading (`heading`). (On the laptop's stage the menu's Map, and M, open the
- * bigger map, `BiggerMapDialog`, instead.)
+ * heading (`heading`). (The menu's Map, and M, open the bigger map,
+ * `BiggerMapDialog`, on every screen.)
  */
 defineProps<{ heading?: boolean }>()
 const game = useGameStore()

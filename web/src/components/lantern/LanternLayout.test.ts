@@ -1260,12 +1260,22 @@ describe('LanternLayout', () => {
         expect(w.get('[role="dialog"] h2').text()).toBe('Map')
       })
 
-      it('on a tall screen Quests switches to its section and Journal opens the journal over the stage', async () => {
+      it('on a tall screen Quests switches to its section and Journal opens the journal over the story', async () => {
         const w = mountLayout()
         await choose(w, 'Quests')
         expect(current(w)).toMatch(/^Quests/)
         expect(w.find('[aria-label="Quests drawer"]').exists()).toBe(false)
         await choose(w, 'Journal')
+        expect(current(w)).toBe('Story')
+        expect(w.find('[aria-label="Journal drawer"]').exists()).toBe(true)
+      })
+
+      it('on a tall screen J from another section goes back to the story and opens the journal there', async () => {
+        const w = mountLayout()
+        await key('q')
+        expect(current(w)).toMatch(/^Quests/)
+        await key('j')
+        expect(current(w)).toBe('Story')
         expect(w.find('[aria-label="Journal drawer"]').exists()).toBe(true)
       })
     })

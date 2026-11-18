@@ -425,9 +425,11 @@ function closeDrawer(): void {
   drawerOpener = null
 }
 
-// A drawer that goes some other way (a turn played, a press outside it) leaves the menu behind for good.
+// A drawer that goes some other way (a turn played, a press outside it) leaves the menu, and what had focus, behind for good.
 watch(drawerTab, (tab) => {
-  if (tab || !drawerFromMenu.value) return
+  if (tab) return
+  drawerOpener = null
+  if (!drawerFromMenu.value) return
   drawerFromMenu.value = false
   menuEntry.value = null
 })
@@ -2012,6 +2014,8 @@ function openFromMenu(kind: MenuKind): void {
   menuEntry.value = kind
   gameDialog.value = null
   drawerFromMenu.value = true
+  // On a tall screen the journal lies over the story: the story is the section shown.
+  section.value = 'story'
   drawerTab.value = tab
 }
 
@@ -2029,11 +2033,12 @@ function drawerFor(tab: 'quests' | 'story'): boolean {
 function putDrawerAway(): void {
   drawerFromMenu.value = false
   drawerTab.value = null
+  drawerOpener = null
 }
 
-/** M in the game: the bigger map, which closes back to the game (focus to what had it before a drawer it puts away). */
+/** M in the game: the bigger map, which closes back to the game (focus to what had it before a drawer the game opened and the map puts away). */
 function openMapFromGame(): void {
-  const before = drawerTab.value ? drawerOpener : null
+  const before = drawerTab.value && !drawerFromMenu.value ? drawerOpener : null
   if (drawerTab.value) putDrawerAway()
   dialogOpener =
     before ??
@@ -2083,8 +2088,13 @@ function onJourneyKey(event: KeyboardEvent): void {
     return
   }
   const tab = kind === 'journal' ? 'story' : 'quests'
-  if (drawerFor(tab)) toggleDrawer(tab)
-  else section.value = tab
+  if (!drawerFor(tab)) {
+    section.value = tab
+    return
+  }
+  // On a tall screen the journal lies over the story: J from another section goes back to it.
+  if (tab === 'story' && section.value !== 'story') section.value = 'story'
+  toggleDrawer(tab)
 }
 
 /** Quit asked from the menu: the question takes its place, and Cancel brings it back. */

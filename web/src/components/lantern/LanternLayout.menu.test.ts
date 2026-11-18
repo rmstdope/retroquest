@@ -221,6 +221,37 @@ describe('LanternLayout: the Escape menu', () => {
       expect(heading()).toBe('Menu')
     })
 
+    it.each([
+      ['a quest window', () => (useGameStore().shownQuest = 'Hint of magic')],
+      [
+        'a chapter page',
+        () => {
+          const game = useGameStore()
+          game.modalChapter = {
+            kind: 'intro',
+            act: 'Act I',
+            title: 'T',
+            body: 'B',
+          }
+          game.showModal = true
+        },
+      ],
+      ['the title page', () => (useGameStore().showTitle = true)],
+      [
+        'the end',
+        () => (useGameStore().ending = { text: 'The end.', saved: true }),
+      ],
+    ])('leaves J, Q and M alone under %s', async (_name, raise) => {
+      raise()
+      await flushPromises()
+      for (const key of ['j', 'q', 'm']) await press(key)
+      expect(w.find('[aria-label="Quests drawer"]').exists()).toBe(false)
+      expect(w.find('[aria-label="Journal drawer"]').exists()).toBe(false)
+      expect(
+        document.querySelector('[role="dialog"] h2')?.textContent,
+      ).not.toBe('Map')
+    })
+
     it('keeps the voice paused while what the menu opened is up, the map and the drawers alike', async () => {
       const narration = useNarrationStore()
       const resume = vi.spyOn(narration, 'resume')
