@@ -234,6 +234,58 @@ describe('useActMusic', () => {
     vi.useRealTimers()
   })
 
+  it('keeps the same track down in the dark when the load brings another room, and raises it with the room', async () => {
+    vi.useFakeTimers()
+    const scope = effectScope()
+    scope.run(() => useActMusic())
+    const game = useGameStore()
+    game.musicActName = 'Act'
+    game.musicRoomKey = 'Hall'
+    game.musicFile = 'a.mp3'
+    await vi.advanceTimersByTimeAsync(0)
+    await nextTick()
+    await vi.advanceTimersByTimeAsync(0)
+    const el = FakeAudio.last
+    useSettingsStore().reduceMotion = 'off'
+    usePassageStore().begin(
+      () => {
+        game.musicRoomKey = 'Yard'
+      },
+      vi.fn(),
+      true,
+    )
+    await nextTick()
+    await vi.advanceTimersByTimeAsync(PASSAGE_HALF_MS + 500)
+    // In the dark: still silent, not reloaded.
+    expect(el.volume).toBeLessThan(0.15)
+    expect(FakeAudio.last).toBe(el)
+    await vi.advanceTimersByTimeAsync(PASSAGE_WAIT_MS + PASSAGE_HALF_MS + 200)
+    expect(el.volume).toBeCloseTo(1)
+    scope.stop()
+    vi.useRealTimers()
+  })
+
+  it('does not fade the music when the screen does not (reduced motion)', async () => {
+    vi.useFakeTimers()
+    const scope = effectScope()
+    scope.run(() => useActMusic())
+    const game = useGameStore()
+    game.musicActName = 'Act'
+    game.musicRoomKey = 'Hall'
+    game.musicFile = 'a.mp3'
+    await vi.advanceTimersByTimeAsync(0)
+    await nextTick()
+    await vi.advanceTimersByTimeAsync(0)
+    const el = FakeAudio.last
+    useSettingsStore().reduceMotion = 'on'
+    usePassageStore().begin(() => {}, vi.fn(), true, true)
+    await nextTick()
+    await vi.advanceTimersByTimeAsync(PASSAGE_HALF_MS)
+    expect(el.volume).toBe(1)
+    scope.stop()
+    vi.useRealTimers()
+  })
+
   it('starts at full volume when there is no title page', async () => {
     const scope = effectScope()
     scope.run(() => useActMusic())

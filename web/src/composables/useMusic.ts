@@ -70,9 +70,9 @@ const NO_AMBIENCE: AmbienceSource = () => Promise.resolve(null)
  * the dark (a change of scene) fades the old loop out over the first half of
  * `MUSIC_THROUGH_MS` and raises the new one over the second. A track loaded with
  * a fade-in time, with nothing playing, rises from silence once it sounds.
- * `fadeOut(ms)` fades the loop to silence with the screen; the next track then
- * rises from silence over the same `ms` (the same track again rises, not
- * reloaded), and `lift` raises the loop if no track follows.
+ * `fadeOut(ms)` fades the loop to silence with the screen and holds the music
+ * silent; `lift` (the room comes up) raises it over the same `ms`: the next
+ * track from silence, or the same track again, not reloaded.
  *
  * Loops play on Web Audio (see `musicVoice.ts`): a track is decoded first, the
  * music already playing goes on until it is ready, and the loop then comes
@@ -137,7 +137,6 @@ export function useMusic(
     }
 
     if (file === requestedFile) {
-      if (file === currentMusicFile.value) lift()
       applyScene()
       return
     }
@@ -145,12 +144,9 @@ export function useMusic(
     if (file === currentMusicFile.value) {
       // Back to the music that is playing: drop the load under way.
       request++
-      lift()
       applyScene()
       return
     }
-    // After a fade-out with the screen, the new music rises over the same time.
-    if (fadedOutMs > 0 && fadeInMs === 0) fadeInMs = fadedOutMs
     const id = ++request
 
     const returning = takeFadingOut(file)
@@ -251,12 +247,15 @@ export function useMusic(
     fadeInMs: number = 0,
     through: boolean = false,
   ): void {
-    // A loop already faded out with the screen is let go of, not crossfaded.
-    const crossfade =
-      fadedOutMs === 0 && currentMusicFile.value !== '' && !active.paused
+    // After a fade-out with the screen the old loop is let go of, not
+    // crossfaded; the new track rises over the same time once the room comes
+    // up (`lift`), and waits, silent, until then.
+    const faded = fadedOutMs > 0
+    const crossfade = !faded && currentMusicFile.value !== '' && !active.paused
     // The fade-out's last step may still be due: the loop is silent now.
-    if (fadedOutMs > 0) active.volume = 0
-    fadedOutMs = 0
+    if (faded) active.volume = 0
+    if (faded) fadeInMs = roomUp ? fadedOutMs : 0
+    if (!faded || roomUp) fadedOutMs = 0
     const fadeIn = fadeInMs > 0 && !crossfade && !comingBack
     if (crossfade) {
       fadeOutActive(through ? MUSIC_THROUGH_MS / 2 : MUSIC_CROSSFADE_MS)
@@ -271,7 +270,7 @@ export function useMusic(
     }
     // The element in hand may be the one that plays on: silence it first.
     pendingFadeIn = fadeIn ? fadeInMs : 0
-    if (fadeIn) next.volume = 0
+    if (fadeIn || faded) next.volume = 0
     active = next
     currentMusicFile.value = file
     musicInfo.value = info
@@ -292,24 +291,33 @@ export function useMusic(
 
   /**
    * How long the loop was faded out with the screen (`fadeOut`), in ms; 0 when
-   * it was not. The next track rises over the same time.
+   * it was not, or the room is up and the music with it.
    */
   let fadedOutMs = 0
+  /** Whether the room has come up since `fadeOut` (`lift`). */
+  let roomUp = false
 
   /**
    * Fades the playing loop (and its effects) to silence over `ms`, as the
-   * screen fades out into a started or loaded game, and keeps it silent until
-   * the next track comes, which rises from silence over the same `ms`, or
-   * until `lift`. With nothing playing, the next track still rises over `ms`.
+   * screen fades out into a started or loaded game, and keeps the music silent
+   * until `lift`. A track that comes meanwhile waits, silent; with nothing
+   * playing, the next track is held the same way.
    */
   function fadeOut(ms: number): void {
     fadedOutMs = ms
+    roomUp = false
     if (currentMusicFile.value !== '' && !active.paused) fadeTo(0, ms)
   }
 
-  /** Raises a loop faded out by `fadeOut` that no new track followed (the same track, or none). */
+  /**
+   * The room comes up: raises the music over the time it was faded out. A
+   * track still being prepared rises when it is ready, from silence; the loop
+   * playing (the same track again) rises at once.
+   */
   function lift(): void {
     if (fadedOutMs === 0) return
+    roomUp = true
+    if (requestedFile !== currentMusicFile.value) return
     const ms = fadedOutMs
     fadedOutMs = 0
     if (currentMusicFile.value !== '') fadeTo(targetVolume.value, ms)

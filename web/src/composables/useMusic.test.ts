@@ -539,7 +539,18 @@ describe('useMusic', () => {
     describe('a fade-out with the screen (fadeOut)', () => {
       const PASSAGE_MS = 1500
 
-      it('fades the playing loop to silence over the given time', () => {
+      /** A playing loop at half volume, faded out and down. */
+      async function fadedOut() {
+        const el = playing()
+        const music = useMusic(el as unknown as HTMLAudioElement)
+        music.loadTrack('a.mp3', '')
+        el.volume = 0.5
+        music.fadeOut(PASSAGE_MS)
+        await vi.advanceTimersByTimeAsync(PASSAGE_MS)
+        return { el, ...music }
+      }
+
+      it('fades the playing loop to silence over the given time', async () => {
         const el = playing()
         const { loadTrack, fadeOut } = useMusic(
           el as unknown as HTMLAudioElement,
@@ -554,68 +565,52 @@ describe('useMusic', () => {
         expect(el.volume).toBe(0)
       })
 
-      it('raises the next track from silence over the same time, with no wait', async () => {
-        const el = playing()
-        const { loadTrack, fadeOut } = useMusic(
-          el as unknown as HTMLAudioElement,
-        )
-        loadTrack('a.mp3', '')
-        el.volume = 0.5
-        fadeOut(PASSAGE_MS)
-        vi.advanceTimersByTime(PASSAGE_MS)
+      it('holds the next track silent until lift, then raises it over the same time', async () => {
+        const { loadTrack, lift } = await fadedOut()
         loadTrack('b.mp3', '', 0, true)
         const next = FadeAudio.made.at(-1) as FadeAudio
         expect(next.src).toContain('b.mp3')
+        await vi.advanceTimersByTimeAsync(PASSAGE_MS)
         expect(next.volume).toBe(0)
-        await vi.advanceTimersByTimeAsync(0)
-        vi.advanceTimersByTime(PASSAGE_MS / 2)
+        lift()
+        await vi.advanceTimersByTimeAsync(PASSAGE_MS / 2)
         expect(next.volume).toBeGreaterThan(0)
         expect(next.volume).toBeLessThan(0.5)
-        vi.advanceTimersByTime(PASSAGE_MS / 2)
+        await vi.advanceTimersByTimeAsync(PASSAGE_MS / 2)
         expect(next.volume).toBeCloseTo(0.5)
       })
 
-      it('raises a track that starts with nothing playing', async () => {
+      it('raises a track that starts with nothing playing when lifted', async () => {
         const el = playing()
         el.paused = true
-        const { loadTrack, fadeOut } = useMusic(
+        const { loadTrack, fadeOut, lift } = useMusic(
           el as unknown as HTMLAudioElement,
         )
         fadeOut(PASSAGE_MS)
         loadTrack('b.mp3', '')
         const voice = FadeAudio.made.at(-1) ?? el
+        await vi.advanceTimersByTimeAsync(PASSAGE_MS)
         expect(voice.volume).toBe(0)
-        await vi.advanceTimersByTimeAsync(0)
-        vi.advanceTimersByTime(PASSAGE_MS)
+        lift()
+        await vi.advanceTimersByTimeAsync(PASSAGE_MS)
         expect(voice.volume).toBeCloseTo(0.5)
       })
 
-      it('raises the same track again without loading it again', () => {
-        const el = playing()
-        const { loadTrack, fadeOut } = useMusic(
-          el as unknown as HTMLAudioElement,
-        )
-        loadTrack('a.mp3', '')
-        el.volume = 0.5
-        fadeOut(PASSAGE_MS)
-        vi.advanceTimersByTime(PASSAGE_MS)
+      it('keeps the same track down until lift, without loading it again', async () => {
+        const { el, loadTrack, lift } = await fadedOut()
         loadTrack('a.mp3', '', 0, true)
+        await vi.advanceTimersByTimeAsync(PASSAGE_MS)
+        expect(el.volume).toBe(0)
         expect(el.srcSets).toHaveLength(1)
-        vi.advanceTimersByTime(PASSAGE_MS)
+        lift()
+        await vi.advanceTimersByTimeAsync(PASSAGE_MS)
         expect(el.volume).toBeCloseTo(0.5)
       })
 
-      it('lift raises the loop again when no track followed', () => {
-        const el = playing()
-        const { loadTrack, fadeOut, lift } = useMusic(
-          el as unknown as HTMLAudioElement,
-        )
-        loadTrack('a.mp3', '')
-        el.volume = 0.5
-        fadeOut(PASSAGE_MS)
-        vi.advanceTimersByTime(PASSAGE_MS)
+      it('lift raises the loop again when no track followed', async () => {
+        const { el, lift } = await fadedOut()
         lift()
-        vi.advanceTimersByTime(PASSAGE_MS)
+        await vi.advanceTimersByTimeAsync(PASSAGE_MS)
         expect(el.volume).toBeCloseTo(0.5)
       })
     })
@@ -770,6 +765,66 @@ describe('useMusic on Web Audio', () => {
     expect(second.gain.value).toBeCloseTo(MUSIC_DUCK)
     expect(ctx.sources[0].stop).toHaveBeenCalled()
     expect(music.currentMusicFile.value).toBe('b.mp3')
+  })
+
+  describe('a fade-out with the screen', () => {
+    const PASSAGE_MS = 1500
+
+    /** Music a.mp3 playing at full volume and faded out; b.mp3's fetch is held until `release`. */
+    async function fadedOutWithSlowNext() {
+      vi.useFakeTimers()
+      useSettingsStore().musicVolume = 100
+      const music = useMusic(audio)
+      music.loadTrack('a.mp3', 'A')
+      await vi.advanceTimersByTimeAsync(0)
+      const first = ctx.gains.at(-1)!
+      music.fadeOut(PASSAGE_MS)
+      await vi.advanceTimersByTimeAsync(PASSAGE_MS)
+      let release: () => void = () => {}
+      vi.stubGlobal(
+        'fetch',
+        vi.fn(
+          () =>
+            new Promise((resolve) => {
+              release = () =>
+                resolve({
+                  ok: true,
+                  arrayBuffer: () => Promise.resolve(new ArrayBuffer(1)),
+                })
+            }),
+        ),
+      )
+      music.loadTrack('b.mp3', 'B', 0, true)
+      return { music, first, release: () => release() }
+    }
+
+    it('keeps the old loop down when the room comes up before the new track has decoded, then rises the new one from silence', async () => {
+      const { music, first, release } = await fadedOutWithSlowNext()
+      expect(first.gain.value).toBe(0)
+      music.lift()
+      await vi.advanceTimersByTimeAsync(PASSAGE_MS)
+      expect(first.gain.value).toBe(0)
+      release()
+      await vi.advanceTimersByTimeAsync(0)
+      const second = ctx.gains.at(-1)!
+      expect(second).not.toBe(first)
+      expect(second.gain.value).toBe(0)
+      await vi.advanceTimersByTimeAsync(PASSAGE_MS)
+      expect(second.gain.value).toBeCloseTo(1)
+      expect(ctx.sources[0].stop).toHaveBeenCalled()
+    })
+
+    it('holds a track decoded in the dark silent until the room comes up', async () => {
+      const { music, release } = await fadedOutWithSlowNext()
+      release()
+      await vi.advanceTimersByTimeAsync(0)
+      const second = ctx.gains.at(-1)!
+      await vi.advanceTimersByTimeAsync(PASSAGE_MS)
+      expect(second.gain.value).toBe(0)
+      music.lift()
+      await vi.advanceTimersByTimeAsync(PASSAGE_MS)
+      expect(second.gain.value).toBeCloseTo(1)
+    })
   })
 
   it('plays the room the player is in now when they move on before it is ready', async () => {
