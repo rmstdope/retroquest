@@ -222,7 +222,11 @@ describe('LanternLayout: the Escape menu', () => {
     })
 
     it.each([
-      ['a quest window', () => (useGameStore().shownQuest = 'Hint of magic')],
+      [
+        'a quest window',
+        () => (useGameStore().shownQuest = 'Hint of magic'),
+        () => (useGameStore().shownQuest = null),
+      ],
       [
         'a chapter page',
         () => {
@@ -235,21 +239,68 @@ describe('LanternLayout: the Escape menu', () => {
           }
           game.showModal = true
         },
+        () => {
+          const game = useGameStore()
+          game.showModal = false
+          game.modalChapter = null
+        },
       ],
-      ['the title page', () => (useGameStore().showTitle = true)],
+      [
+        'the title page',
+        () => (useGameStore().showTitle = true),
+        () => (useGameStore().showTitle = false),
+      ],
       [
         'the end',
         () => (useGameStore().ending = { text: 'The end.', saved: true }),
+        () => (useGameStore().ending = null),
       ],
-    ])('leaves J, Q and M alone under %s', async (_name, raise) => {
-      raise()
+    ])(
+      'leaves J, Q and M alone under %s, with nothing waiting under it',
+      async (_name, raise, lower) => {
+        raise()
+        await flushPromises()
+        for (const key of ['j', 'q', 'm']) await press(key)
+        // Nothing opened behind it shows once it is gone.
+        lower()
+        await flushPromises()
+        expect(w.find('[aria-label="Quests drawer"]').exists()).toBe(false)
+        expect(w.find('[aria-label="Journal drawer"]').exists()).toBe(false)
+        expect(heading()).toBeUndefined()
+      },
+    )
+
+    it('forgets what had focus before a drawer that went some other way', async () => {
+      const before = w.get<HTMLElement>('[data-button="hint"]').element
+      before.focus()
+      await press('q', before)
+      // The drawer goes with a press outside it, not by its own closing.
+      document.body.dispatchEvent(new Event('pointerdown', { bubbles: true }))
       await flushPromises()
-      for (const key of ['j', 'q', 'm']) await press(key)
       expect(w.find('[aria-label="Quests drawer"]').exists()).toBe(false)
-      expect(w.find('[aria-label="Journal drawer"]').exists()).toBe(false)
-      expect(
-        document.querySelector('[role="dialog"] h2')?.textContent,
-      ).not.toBe('Map')
+      ;(document.activeElement as HTMLElement | null)?.blur()
+      await press('Escape')
+      tile('Journal').click()
+      await flushPromises()
+      await press('m', document.activeElement!)
+      expect(heading()).toBe('Map')
+      await press('Escape', document.activeElement!)
+      expect(document.activeElement).not.toBe(before)
+    })
+
+    it('gives focus back to what opened the menu when M follows a drawer the menu opened', async () => {
+      const opener = w.get<HTMLElement>('[data-button="menu"]').element
+      opener.focus()
+      opener.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+      await flushPromises()
+      tile('Journal').click()
+      await flushPromises()
+      await press('m', document.activeElement!)
+      expect(heading()).toBe('Map')
+      // M is a key in the game: the map closes back to the game, focus where the menu was opened from.
+      await press('Escape', document.activeElement!)
+      expect(heading()).toBeUndefined()
+      expect(document.activeElement).toBe(opener)
     })
 
     it('keeps the voice paused while what the menu opened is up, the map and the drawers alike', async () => {

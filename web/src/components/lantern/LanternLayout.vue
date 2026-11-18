@@ -2015,7 +2015,7 @@ function openFromMenu(kind: MenuKind): void {
   gameDialog.value = null
   drawerFromMenu.value = true
   // On a tall screen the journal lies over the story: the story is the section shown.
-  section.value = 'story'
+  if (tab === 'story') section.value = 'story'
   drawerTab.value = tab
 }
 
@@ -2036,15 +2036,21 @@ function putDrawerAway(): void {
   drawerOpener = null
 }
 
-/** M in the game: the bigger map, which closes back to the game (focus to what had it before a drawer the game opened and the map puts away). */
+/**
+ * M in the game: the bigger map, which closes back to the game. Focus then
+ * goes to what had it before a drawer the map puts away: before one the game
+ * opened, what had focus then; before one the menu opened, what opened the menu.
+ */
 function openMapFromGame(): void {
-  const before = drawerTab.value && !drawerFromMenu.value ? drawerOpener : null
+  const fromMenu = drawerFromMenu.value
+  const before = drawerTab.value && !fromMenu ? drawerOpener : null
   if (drawerTab.value) putDrawerAway()
-  dialogOpener =
-    before ??
-    (document.activeElement instanceof HTMLElement
-      ? document.activeElement
-      : null)
+  if (!fromMenu)
+    dialogOpener =
+      before ??
+      (document.activeElement instanceof HTMLElement
+        ? document.activeElement
+        : null)
   menuEntry.value = null
   gameDialog.value = 'map'
 }
