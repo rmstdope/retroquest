@@ -76,8 +76,8 @@ const REST_VERBS = formOf('sleep').verbs
 
 const SAY_USAGE = 'Use say <word> to <character>'
 const USE_WITH_USAGE =
-  'You need to specify two items to use with each other. ' +
-  'Format: use <item1> with <item2>'
+  'You need to say what to use it with, an item or a character. ' +
+  'Format: use <item> with <item or character>'
 
 function afterPrefix(command: string, prefixes: string[]): string | null {
   const prefix = prefixes.find((p) => command.startsWith(p))

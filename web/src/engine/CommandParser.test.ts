@@ -225,8 +225,9 @@ describe('CommandParser', () => {
   it('asks what to use', () => {
     expect(parser.parse('use')).toBe('What do you want to use?')
     expect(parser.parse('use   ')).toBe('What do you want to use?')
-    expect(parser.parse('use key with   ')).toContain(
-      'You need to specify two items to use with each other',
+    expect(parser.parse('use key with   ')).toBe(
+      'You need to say what to use it with, an item or a character. ' +
+        'Format: use <item> with <item or character>',
     )
     expect(game.calls).toEqual([])
   })
