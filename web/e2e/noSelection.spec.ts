@@ -61,7 +61,8 @@ test('the picture, the interface and the story cannot be selected', async ({
   await enterCommand(page, 'look')
   await openJournal(page)
   const drawer = page.getByRole('complementary', { name: 'Journal drawer' })
-  await expectUnselectable(page, drawer.locator('.lq-block-text').first())
+  // The story told in the drawer: the arrival and the look, whatever the presses on the picture did.
+  await expectUnselectable(page, drawer.locator('article p').first())
   await page.mouse.click(5, 5, { clickCount: 3 })
   expect(await selectionShows(page), 'triple-click on the page').toBe(false)
 })
