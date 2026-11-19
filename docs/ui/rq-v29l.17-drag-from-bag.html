@@ -1,0 +1,78 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Drag from the bag</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600&family=Source+Serif+4:wght@400&family=DM+Sans:wght@500;600&display=swap" rel="stylesheet">
+<style>:root{--bg:#10151a;--surface:#161d24;--line:#26313b;--fg:#ece6d6;--prose:#d9d3c3;--muted:#a39d8e;--accent:#ffa914;--blue:#7cc4ff;--green:#8fe08a}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:'DM Sans',system-ui,sans-serif;padding:16px}
+h1{font-family:Fraunces,serif;font-size:22px;margin:0 0 4px}.note{color:var(--muted);font-size:14px;max-width:860px;line-height:1.5}
+.lbl{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:18px 0 6px}
+.stage{position:relative;width:860px;max-width:100%;aspect-ratio:16/9;background:url(../../web/public/images/generated/act1-eliors-cottage.png) center/cover;border-radius:14px;overflow:hidden;user-select:none;touch-action:none}
+.small .stage{width:420px}
+.belt{position:absolute;left:0;bottom:0;display:flex;gap:8px;margin-left:8px;padding:8px;background:linear-gradient(#5b3b22,#3e2714);border-radius:14px 14px 0 0;border:2px dashed #a07a4a;border-bottom:none}
+.small .belt{gap:5px;padding:5px}
+.pk{width:56px;height:56px;border-radius:50%;border:3px solid #c9a35a;background:#2a1a0e center/cover;box-shadow:inset 0 2px 6px #000a;cursor:grab}
+.small .pk{width:36px;height:36px;border-width:2px}
+.pk.lit{border-color:var(--accent);box-shadow:0 0 0 3px #ffa91466,0 0 16px var(--accent)}.pk.empty{opacity:.25;background-image:none!important}
+.spot{position:absolute;transform:translate(-50%,-50%)}
+.dot{width:12px;height:12px;border-radius:50%;background:var(--c);box-shadow:0 0 10px var(--c);opacity:0;transition:.12s}
+.name{position:absolute;left:16px;top:-9px;white-space:nowrap;font:600 13px 'DM Sans';color:var(--c);text-shadow:0 1px 3px #000,0 0 6px #000;opacity:0}
+.stage.dragging .dot{opacity:.55}
+.spot.on .dot{opacity:1;transform:scale(1.6);box-shadow:0 0 0 3px #0008,0 0 18px var(--c)}
+.spot.on .name{opacity:1}
+.Y .stage.dragging .spot .name{opacity:.85}.X .spot.on .ring{display:none}.spot.on .ring{position:absolute;left:50%;top:50%;width:var(--w);height:var(--h);transform:translate(-50%,-50%);border:2px solid var(--c);border-radius:40%;box-shadow:0 0 20px var(--c);opacity:.8}
+.ghost{position:absolute;pointer-events:none;width:64px;height:64px;border-radius:50%;border:3px solid var(--accent);background:center/cover;box-shadow:0 10px 24px #000c;transform:translate(-50%,-60%) scale(1.05);z-index:5}
+.small .ghost{width:42px;height:42px}
+.pill{position:absolute;pointer-events:none;transform:translate(-50%,0);white-space:nowrap;padding:4px 12px;border-radius:999px;border:1px solid var(--accent);background:#3a2a0ccc;color:#ffd58a;font:600 13px 'DM Sans';z-index:6;box-shadow:0 4px 12px #0008}
+.strip{position:absolute;top:8px;left:0;right:0;margin:0 auto;width:max-content;max-width:calc(100% - 16px);display:flex;gap:10px;align-items:center;padding:4px 4px 4px 16px;border-radius:999px;border:1px solid var(--accent);background:#3a2a0ccc;color:#ffd58a;font:600 14px 'DM Sans';z-index:6}
+.strip button{min-height:36px;padding:0 14px;border-radius:999px;border:1px solid var(--accent);background:transparent;color:inherit;font:inherit}
+.small .strip{font-size:12px}.small .strip button{min-height:28px;padding:0 10px}
+.story{margin-top:8px;width:860px;max-width:100%;font-family:'Source Serif 4',serif;color:var(--prose);font-size:15px;line-height:1.5;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px;box-sizing:border-box;min-height:48px}
+.small .story{width:420px;font-size:13px}
+.story .cmd{color:var(--muted);font-family:'DM Sans';font-size:13px}
+.finger{position:absolute;width:34px;height:44px;border-radius:17px 17px 14px 14px;background:#e8c7a6cc;transform:translate(-50%,0);z-index:7;pointer-events:none}.phone .stage{width:360px}.frames{display:flex;gap:20px;flex-wrap:wrap}
+.cap{font-size:13px;color:var(--muted);max-width:420px;margin-top:6px;line-height:1.45}
+.back{position:absolute;width:42px;height:42px;border-radius:50%;border:2px dashed var(--accent);opacity:.7}
+.arrow{position:absolute;border-top:2px dashed var(--accent);transform-origin:0 0;opacity:.7}
+@media (max-width:900px){.small .stage,.small .story{width:100%}}
+</style></head><body class="X">
+<h1>Drag from the bag onto the picture (agreed)</h1><p class="note">Agreed: the pill rides under the pointer; a miss glides back; a finger can drag after a hold; spells and bag-onto-bag drags work too. <b>In X</b>, while dragging, every mark in the picture shows faintly with no names; only what is under the pointer glows and shows its name.<br>Try it: drag a thing from the bag at the bottom onto Grandmother, the fireplace or the table, or let go over nothing.</p>
+<div class="lbl">Try it (laptop, with a mouse)</div>
+<div class="stage" id="st"></div><div class="story" id="story"><span class="cmd">The story appears here.</span></div>
+<div class="lbl">The moments, still</div><div class="frames" id="frames"></div>
+<script>
+const V="x",IMG="../../web/public/images/generated/",R2=V==="x"||V==="y";
+const SPELLS=[["Light","spell-light.png"],["Bless","spell-bless.png"],["Grow","spell-grow.png"]];
+const ITEMS=[["Bread","item-bread.png"],["Feather","item-feather.png"],["Egg","item-egg.png"],["Key","item-key.png"]];
+const SPOTS=[["Grandmother",72,47,"var(--blue)","110px","260px"],["Fireplace",27,64,"#e9e2cf","130px","100px"],["Table",48,70,"#e9e2cf","170px","80px"],["Bookshelf",8,30,"#e9e2cf","90px","150px"]];
+function build(el,o){
+  el.innerHTML="";
+  SPOTS.forEach(s=>{const d=document.createElement("div");d.className="spot"+(o.over===s[0]?" on":"");d.dataset.n=s[0];d.style.left=s[1]+"%";d.style.top=s[2]+"%";d.style.setProperty("--c",s[3]);d.style.setProperty("--w",s[4]);d.style.setProperty("--h",s[5]);d.innerHTML='<div class="ring"></div><div class="dot"></div><div class="name">'+s[0]+'</div>';el.appendChild(d)});
+  const b=document.createElement("div");b.className="belt";(o.spells?SPELLS:ITEMS).forEach(i=>{const p=document.createElement("div");p.className="pk"+(o.lifted===i[0]?" empty":"")+(o.over===i[0]?" lit":"");p.dataset.i=i[0];p.title=i[0];p.style.backgroundImage="url("+IMG+i[1]+")";b.appendChild(p)});el.appendChild(b);
+  el.classList.toggle("dragging",!!o.lifted);if(o.finger&&o.at){const f=document.createElement("div");f.className="finger";f.style.left=o.at[0]+"px";f.style.top=(o.at[1]+14)+"px";el.appendChild(f)}
+  if(o.lifted&&o.at){const it=(o.spells?SPELLS:ITEMS).find(i=>i[0]===o.lifted);const g=document.createElement("div");g.className="ghost";g.style.left=o.at[0]+"px";g.style.top=o.at[1]+"px";g.style.backgroundImage="url("+IMG+it[1]+")";el.appendChild(g);
+    const t=(o.spells?"Cast "+o.lifted+" on":"Use "+o.lifted+" with")+(o.over?" "+o.over:"…");
+    if(V!=="b"){const p=document.createElement("div");p.className="pill";p.textContent=t;p.style.left=o.at[0]+"px";p.style.top=(o.finger?(o.at[1]-(el.closest(".small")?52:70)):(o.at[1]+(el.closest(".small")?14:24)))+"px";el.appendChild(p);const W=el.clientWidth,pw=p.offsetWidth;p.style.left=Math.min(Math.max(o.at[0],pw/2+6),W-pw/2-6)+"px"}
+    else{const s=document.createElement("div");s.className="strip";s.innerHTML="<span>"+t+"</span>";el.appendChild(s)}}
+}
+const st=document.getElementById("st"),story=document.getElementById("story");let drag=null;
+build(st,{});
+function spotAt(x,y){const r=st.getBoundingClientRect();let best=null;SPOTS.forEach(s=>{const sx=s[1]/100*r.width,sy=s[2]/100*r.height;const w=parseInt(s[4])/2+10,h=parseInt(s[5])/2+10;if(Math.abs(x-sx)<w&&Math.abs(y-sy)<h)best=s[0]});return best}
+st.addEventListener("pointerdown",e=>{const p=e.target.closest(".pk");if(!p)return;e.preventDefault();drag={i:p.dataset.i,sx:e.clientX,sy:e.clientY,moved:false};st.setPointerCapture(e.pointerId)});
+st.addEventListener("pointermove",e=>{if(!drag)return;if(!drag.moved&&Math.hypot(e.clientX-drag.sx,e.clientY-drag.sy)<6)return;drag.moved=true;const r=st.getBoundingClientRect();const x=e.clientX-r.left,y=e.clientY-r.top;drag.over=spotAt(x,y);build(st,{lifted:drag.i,at:[x,y],over:drag.over})});
+st.addEventListener("pointerup",e=>{if(!drag)return;const d=drag;drag=null;if(!d.moved){story.innerHTML='<span class="cmd">(A click without a drag opens the wheel, as today.)</span>';build(st,{});return}
+ if(d.over){story.innerHTML='<div class="cmd">&gt; use '+d.i.toLowerCase()+' with '+d.over.toLowerCase()+'</div>'+(d.over==="Grandmother"&&d.i==="Bread"?"Grandmother takes the bread and smiles. (The game answers exactly as if you had chosen Use with… and pressed her.)":"(The game answers exactly as if you had chosen Use with… and pressed "+d.over+".)");build(st,{})}
+ else{story.innerHTML='<span class="cmd">Let go over nothing: the '+d.i.toLowerCase()+' glides back to its pocket. Nothing is sent.</span>';build(st,{})}});
+st.addEventListener("pointercancel",()=>{drag=null;build(st,{})});
+const F=R2?[
+ ["1 · Lifted, over nothing","The picture leaves its pocket. "+(V==="x"?"Every mark shows faintly, without names.":"Every mark and name shows."),{lifted:"Bread",at:[230,90]}],
+ ["2 · Over Grandmother","Her mark glows and her name shows"+(V==="y"?", with an outline round her":"")+". Letting go sends Use Bread with Grandmother.",{lifted:"Bread",at:[300,100],over:"Grandmother"}],
+ ["3 · A spell over the fireplace","From the spell list: the pill reads Cast Light on Fireplace. Letting go sends it.",{spells:1,lifted:"Light",at:[120,140],over:"Fireplace"}],
+ ["4 · A thing onto a thing in the bag","The pocket under the pointer lights. Letting go sends Use Bread with Feather. A spell let go over the bag glides back.",{lifted:"Bread",at:[84,150],over:"Feather"}],
+ ["5 · Phone: a finger, after a hold","Hold until the name shows, then drag. The pill sits above the finger so the finger does not cover it. A quick swipe still scrolls the bag.",{lifted:"Bread",at:[250,120],over:"Grandmother",finger:1},"phone"],
+ ["6 · Let go over nothing","The picture glides back to its pocket. Nothing is sent and nothing is written.",{back:true}],
+]:[
+ ["1 · Lifted, over nothing","The picture leaves its pocket (an empty ring stays). Every mark in the picture shows faintly, so you see what can take it.",{lifted:"Bread",at:[230,90]}],
+ ["2 · Over Grandmother","Her mark glows, an outline lights around her and her name shows. Letting go here sends Use Bread with Grandmother.",{lifted:"Bread",at:[300,100],over:"Grandmother"}],
+ ["3 · Let go over nothing","The picture glides back to its pocket. Nothing is sent and nothing is written in the story.",{back:true}],
+];
+const fr=document.getElementById("frames");F.forEach(f=>{const w=document.createElement("div");w.className="small "+(f[3]||"");w.innerHTML='<div class="lbl">'+f[0]+'</div><div class="stage"></div><div class="cap">'+f[1]+'</div>';fr.appendChild(w);const s=w.querySelector(".stage");build(s,f[2]);
+ if(f[2].back){const a=document.createElement("div");a.className="back";a.style.left="169px";a.style.top="69px";s.appendChild(a);const l=document.createElement("div");l.className="arrow";l.style.left="190px";l.style.top="90px";l.style.width="190px";l.style.transform="rotate(144deg)";s.appendChild(l)}});
+</script></body></html>
