@@ -23,7 +23,8 @@
  * A small reset under the components' own styles (a layer, so any unlayered
  * rule wins): no default margins, padding or borders, border-box sizing, a
  * full-height page, and headings, links, lists, icons and form controls
- * that take their look from the component instead of the browser.
+ * that take their look from the component instead of the browser. Nothing
+ * but a text field can be selected.
  */
 @layer base {
   *,
@@ -44,6 +45,15 @@
     font-family: system-ui, sans-serif;
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent;
+    /* Nothing in the game is selected by a click or a drag: no blue picture or text */
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  /* The one place a player types keeps working as a text field */
+  input,
+  textarea {
+    -webkit-user-select: text;
+    user-select: text;
   }
   h1,
   h2,
