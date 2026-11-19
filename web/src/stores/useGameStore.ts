@@ -355,6 +355,14 @@ export const useGameStore = defineStore('game', () => {
   let heldBase: PictureState | null = null
   /** What the engine showed at the last refresh; held groups apply it on release. */
   let latest: PanelSnapshot | null = null
+  /** Tells whether a gain for this tab will fly (`setDotGate`): its dot waits for the landing. */
+  let dotGate: ((tab: JournalTab) => boolean) | null = null
+  /** Dots whose gain is still flying: they light when it lands (`showLandedDots`). */
+  let landingDots: Record<JournalTab, boolean> = {
+    bag: false,
+    spells: false,
+    quests: false,
+  }
   /** Dots earned while their group is held. */
   let pendingDots: Record<JournalTab, boolean> = {
     bag: false,
@@ -996,7 +1004,8 @@ export const useGameStore = defineStore('game', () => {
       for (const tab of ['bag', 'spells', 'quests'] as const)
         if (groupOf(tab) === group && pendingDots[tab]) {
           pendingDots[tab] = false
-          setDot(tab, true)
+          if (dotGate?.(tab)) landingDots[tab] = true
+          else setDot(tab, true)
         }
       // Only a panel that changed lights up.
       if (flash && shownState(group) !== before) panelFlash.value[group]++
@@ -1072,6 +1081,7 @@ export const useGameStore = defineStore('game', () => {
   /** A loaded save or a new act: no item or spell is "new" any more. */
   function clearNewDots(): void {
     pendingDots = { bag: false, spells: false, quests: false }
+    landingDots = { bag: false, spells: false, quests: false }
     bagHasNew.value = false
     spellsHaveNew.value = false
     questsHaveNew.value = false
@@ -1315,6 +1325,24 @@ export const useGameStore = defineStore('game', () => {
     flusher: ((then: () => void) => boolean) | null,
   ): void {
     gainFlusher = flusher
+  }
+
+  /**
+   * Register what tells whether a gain for a tab will fly to its button: that
+   * tab's new-thing dot then waits for `showLandedDots`, so it never gives the
+   * thing away before its picture arrives.
+   */
+  function setDotGate(gate: ((tab: JournalTab) => boolean) | null): void {
+    dotGate = gate
+  }
+
+  /** The gains that were flying have landed (or will not fly): light the dots they held back. */
+  function showLandedDots(): void {
+    for (const tab of ['bag', 'spells', 'quests'] as const)
+      if (landingDots[tab]) {
+        landingDots[tab] = false
+        setDot(tab, true)
+      }
   }
 
   /** Run a typed command now, whatever is still told. */
@@ -2139,6 +2167,8 @@ export const useGameStore = defineStore('game', () => {
     releaseGain,
     releaseGains,
     setGainFlusher,
+    setDotGate,
+    showLandedDots,
     shownPicture,
     panelFlash,
     // Actions

@@ -94,27 +94,6 @@ describe('JournalPanel', () => {
     expect(tab(w, /Spells/).text()).toContain('Spells · 1')
   })
 
-  it('lights the Spells tab dot only once the gained spell has landed', async () => {
-    const game = useGameStore()
-    const flights = useFlightStore()
-    game.spellsHaveNew = true
-    const w = mountJournal()
-    flights.owe([{ kind: 'spell', name: 'revive', count: 1 }])
-    await flushPromises()
-    expect(
-      tab(w, /Spells/)
-        .find('.lq-dot')
-        .exists(),
-    ).toBe(false)
-    flights.clear()
-    await flushPromises()
-    expect(
-      tab(w, /Spells/)
-        .find('.lq-dot')
-        .exists(),
-    ).toBe(true)
-  })
-
   it('shows Bag, Spells and Quests tabs with counts', () => {
     const tabs = mountJournal()
       .findAll('[role="tab"]')

@@ -56,21 +56,6 @@ describe('SectionNav', () => {
     expect(w.emitted('update:modelValue')).toEqual([['spells']])
   })
 
-  it('lights the Bag and Spells dots only once the gained thing has landed', async () => {
-    const game = useGameStore()
-    const flights = useFlightStore()
-    game.bagHasNew = true
-    game.spellsHaveNew = true
-    flights.owe([{ kind: 'spell', name: 'revive', count: 1 }])
-    const w = mountNav()
-    const buttons = w.findAll('button')
-    expect(buttons[1].find('.lq-dot').exists()).toBe(true)
-    expect(buttons[2].find('.lq-dot').exists()).toBe(false)
-    flights.forgive([{ kind: 'spell', name: 'revive', count: 1 }])
-    await w.vm.$nextTick()
-    expect(buttons[2].find('.lq-dot').exists()).toBe(true)
-  })
-
   it('shows a dot on Bag and Spells when something is new', () => {
     const game = useGameStore()
     game.bagHasNew = true

@@ -199,6 +199,30 @@ describe('useGameStore: panels held while a turn is narrated', () => {
     expect(store.heldTurn).toBe(null)
   })
 
+  it('keeps the bag dot back for a gain that will fly until it lands, and never dims an earlier dot (rq-xxd8)', async () => {
+    const store = await startedStore()
+    store.setDotGate((tab) => tab === 'bag')
+    store.submitCommand(`take ${GEM}`)
+    const id = store.turns.at(-1)!.id
+    store.releasePanels(id, ['stock'], true)
+    expect(store.rawInventory).toHaveLength(1)
+    expect(store.bagHasNew).toBe(false)
+    store.showLandedDots()
+    expect(store.bagHasNew).toBe(true)
+    // Later news while a dot is lit leaves it lit.
+    store.submitCommand('look')
+    store.releasePanels(store.turns.at(-1)!.id, ['stock'], true)
+    expect(store.bagHasNew).toBe(true)
+  })
+
+  it('lights the dot at once for a gain that will not fly', async () => {
+    const store = await startedStore()
+    store.setDotGate(() => false)
+    store.submitCommand(`take ${GEM}`)
+    store.releasePanels(store.turns.at(-1)!.id, ['stock'], true)
+    expect(store.bagHasNew).toBe(true)
+  })
+
   it('releases without a flash when asked, and ignores another turn', async () => {
     const store = await startedStore()
     store.submitCommand('go north')

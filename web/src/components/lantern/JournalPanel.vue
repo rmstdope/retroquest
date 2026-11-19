@@ -60,12 +60,12 @@ const tabs = computed(() => [
   {
     id: 'bag' as const,
     label: `Bag · ${bag.value.length}`,
-    dot: game.bagHasNew && !flights.owes('item'),
+    dot: game.bagHasNew,
   },
   {
     id: 'spells' as const,
     label: `Spells · ${spells.value.length}`,
-    dot: game.spellsHaveNew && !flights.owes('spell'),
+    dot: game.spellsHaveNew,
   },
   {
     id: 'quests' as const,

@@ -451,11 +451,7 @@ defineExpose({ focusBelt, focusPicture, has, root })
             />
           </svg>
           <span
-            v-if="
-              (belt.away || belt.list !== 'bag') &&
-              game.bagHasNew &&
-              !flights.owes('item')
-            "
+            v-if="(belt.away || belt.list !== 'bag') && game.bagHasNew"
             class="lq-dot"
             aria-hidden="true"
           ></span>
@@ -491,11 +487,7 @@ defineExpose({ focusBelt, focusPicture, has, root })
             <path d="M19 17l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7z" />
           </svg>
           <span
-            v-if="
-              (belt.away || belt.list !== 'spells') &&
-              game.spellsHaveNew &&
-              !flights.owes('spell')
-            "
+            v-if="(belt.away || belt.list !== 'spells') && game.spellsHaveNew"
             class="lq-dot"
             aria-hidden="true"
           ></span>
