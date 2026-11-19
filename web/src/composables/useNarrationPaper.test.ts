@@ -43,6 +43,19 @@ describe('useNarrationPaper', () => {
     expect(paper.hidden.value).toBe(false)
   })
 
+  it('holds nothing for a turn a load brought back, on the phone or the laptop', () => {
+    const restored = [turn(1), { ...turn(2), restored: true as const }]
+    const phone = setup(restored).paper
+    expect(phone.visible.value).toBe(false)
+    expect(phone.shownTurns.value).toEqual([])
+    const laptop = setup(
+      restored.map((entry) => ({ ...entry, restored: true as const })),
+      true,
+    ).paper
+    expect(laptop.visible.value).toBe(false)
+    expect(laptop.shownTurns.value).toEqual([])
+  })
+
   it('is not visible for a turn with nothing to tell, hidden or not', async () => {
     const { list, paper } = setup()
     paper.hide()
