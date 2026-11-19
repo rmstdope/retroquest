@@ -8,6 +8,7 @@ import { useSceneStore } from './useSceneStore'
 import type { NarrationUnit } from '@/lantern/narrationUnits'
 import {
   ARRIVAL_CLEAR_AFTER_MS,
+  ARRIVAL_LINGER_MS,
   type ArrivalPart,
 } from '@/lantern/stageArrival'
 import { readingPauseMs } from '@/lantern/stageSpeech'
@@ -124,6 +125,27 @@ describe('useArrivalStore', () => {
       expect(arrival.active).toBe(true)
       vi.advanceTimersByTime(1)
       expect(arrival.active).toBe(false)
+    })
+
+    it('lingers for a press a moment after it goes by itself, and not after a press or a clear (rq-v29l.4)', () => {
+      arrival.show(1, parts(false, false), false)
+      vi.advanceTimersByTime(12000)
+      expect(arrival.active).toBe(false)
+      expect(arrival.lingering).toBe(true)
+      vi.advanceTimersByTime(ARRIVAL_LINGER_MS)
+      expect(arrival.lingering).toBe(false)
+      // A new arrival, or a clear, ends the linger at once.
+      arrival.show(2, parts(false, false), false)
+      vi.advanceTimersByTime(12000)
+      arrival.show(3, parts(false, false), false)
+      expect(arrival.lingering).toBe(false)
+      vi.advanceTimersByTime(12000)
+      arrival.clear()
+      expect(arrival.lingering).toBe(false)
+      arrival.show(4, parts(false, false), false)
+      arrival.next()
+      expect(arrival.active).toBe(false)
+      expect(arrival.lingering).toBe(false)
     })
 
     it('tells the events first, each for its own reading time', () => {

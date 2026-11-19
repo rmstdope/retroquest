@@ -150,7 +150,7 @@ export const ACT1_ROOM_AREAS: Record<string, ImageArea[]> = {
     { id: 'stick', title: 'Stick' },
     { id: 'snare', title: 'Snare' },
     { id: 'scenery-forest-path-alcove', title: 'Alcove' },
-    { id: 'scenery-forest-path-cut-vines', title: 'Vines' },
+    { id: 'scenery-forest-path-cut-vines', title: 'Cut Vines' },
     { id: 'wild-berries', title: 'Wild Berries' },
   ],
   HiddenGlade: [

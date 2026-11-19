@@ -56,6 +56,7 @@ function onKeydown(event: KeyboardEvent): void {
   right: 0;
   bottom: var(--lq-actions-h, 0px);
   z-index: var(--lq-z-page-drawers);
+  /* The layout's `drawerWidth` keeps the bag tray clear of this width: change both. */
   width: min(380px, 92%);
   display: flex;
   flex-direction: column;

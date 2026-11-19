@@ -22,6 +22,8 @@ export const ARRIVAL_WORDS_PER_SECOND = 4
 export const ARRIVAL_MIN_SECONDS = 6
 /** How long the arrival stays after the narrator has finished its last part (ms). */
 export const ARRIVAL_CLEAR_AFTER_MS = 1500
+/** How long after an arrival went by itself a press on the bare picture is taken as one meant for its words, and does nothing (ms). */
+export const ARRIVAL_LINGER_MS = 600
 
 /** One line of an arrival part, the narration unit it is spoken as, and its markup. */
 export interface ArrivalLine {

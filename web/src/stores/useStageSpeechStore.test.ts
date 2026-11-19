@@ -416,6 +416,18 @@ describe('useStageSpeechStore while the turn is narrated', () => {
     expect(speech.visible).toHaveLength(2)
   })
 
+  it('has a line still to show while the narrator reads, and none once it has read them all (rq-v29l.4)', () => {
+    const speech = useStageSpeechStore()
+    const t = turn(TEXT, 'Mira')
+    useNarrationStore().begin(t.id, turnUnits(t, true, manifest), 'act1')
+    speech.observe(t)
+    expect(speech.stillToShow).toBe(true)
+    useNarrationStore().skipAll()
+    // The narrated lines keep `shown` false: what counts is that they are on the picture.
+    expect(speech.conversation?.lines.some((l) => !l.shown)).toBe(true)
+    expect(speech.stillToShow).toBe(false)
+  })
+
   it('shows the paragraphs of one narrated quote as the narrator reaches each, ringing the newest', async () => {
     const speech = useStageSpeechStore()
     const words = 'One two.\nThree four five.\nSix seven.'
@@ -601,6 +613,19 @@ describe('useStageSpeechStore: a talk that changes the scene partway', () => {
     scene.cut(moving.id, 3)
     expect(speech.visible).toEqual([])
     expect(speech.told(moving.id)).toBe(true)
+  })
+
+  it('has nothing still to show once the lines said before the room changed are gone from the picture (rq-v29l.4)', () => {
+    const speech = useStageSpeechStore()
+    const scene = useSceneStore()
+    const moving = waking()
+    speech.observe(moving)
+    // The voice's line had not appeared yet when the room changed (as the dream's last line, cut short).
+    speech.conversation!.lines[0].shown = false
+    expect(speech.stillToShow).toBe(true)
+    scene.cut(moving.id, 3)
+    // Never on the new picture, and never to be: not words still being told.
+    expect(speech.stillToShow).toBe(false)
   })
 
   it('changes the scene at once when the turn is shown whole', () => {

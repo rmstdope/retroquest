@@ -227,6 +227,44 @@ describe('LanternLayout: pressing a thing on the picture', () => {
     expect(ring().exists()).toBe(true)
   })
 
+  it('opens the ring on the first press once a narrated talk has been told (rq-v29l.4)', async () => {
+    await cottage()
+    const speech = useStageSpeechStore()
+    // Grandmother's narrated line, read to its end: the narrator is done with its turn.
+    const line = {
+      shown: false,
+      turnId: 1,
+      unit: 0,
+      firstWord: 0,
+      key: 1,
+      narrated: true,
+      seen: false,
+      carried: false,
+      speaker: 'Grandmother',
+      markup: 'Mind the bread.',
+    } as unknown as StageLine
+    speech.conversation = { with: 'grandmother', lines: [line] }
+    await w.vm.$nextTick()
+    expect(speech.visible).toHaveLength(1)
+    expect(useNarrationStore().isNarrating).toBe(false)
+    await press('bread')
+    expect(ring().exists()).toBe(true)
+  })
+
+  it("opens no ring from a press on a thing just as the arrival went by itself, but opens it from the thing's mark (rq-v29l.4)", async () => {
+    await cottage()
+    useArrivalStore().lingering = true
+    await press('bread')
+    expect(ring().exists()).toBe(false)
+    useAreaNamesStore().showing = true
+    await flushPromises()
+    w.get('[data-area-mark="bread"]').element.dispatchEvent(
+      new MouseEvent('click', { bubbles: true, clientX: 400, clientY: 300 }),
+    )
+    await flushPromises()
+    expect(ring().exists()).toBe(true)
+  })
+
   /** Press `id` down for `ms` of real time, then let go: the browser's click follows. */
   const holdOn = async (id: string, ms: number): Promise<void> => {
     const pointer = (type: string): void => {

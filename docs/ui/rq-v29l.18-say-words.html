@@ -1,0 +1,62 @@
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Say… fans out words</title><style>:root{--bg:#10151a;--surface:#161d24;--raised:#1c242c;--line:#26313b;--line2:#34404b;--fg:#ece6d6;--prose:#d9d3c3;--muted:#a39d8e;--accent:#ffa914;--accentText:#ffb836;--accentSoft:#36270a;--accentLine:#a8740f;--char:#9fc3ff}
+*{box-sizing:border-box}body{margin:0;background:#0b0f13;color:var(--fg);font-family:'DM Sans',system-ui,sans-serif;padding:0 16px 40px}
+h1{max-width:1100px;margin:20px auto 4px;font-family:Georgia,serif;font-weight:500;font-size:26px}
+.lead{max-width:1100px;margin:0 auto 18px;color:var(--muted);font-size:15px;line-height:1.5}
+.row{max-width:1100px;margin:0 auto 26px}
+.cap{font-size:14px;color:var(--muted);margin:0 0 8px;line-height:1.45}.cap b{color:var(--fg);font-size:17px;display:block;margin-bottom:2px}
+.app{position:relative;height:440px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:linear-gradient(160deg,#4a3a2a,#2e2418 55%,#16110b)}
+.app.dream{background:radial-gradient(circle at 60% 40%,#2c2a44,#121222 60%,#08080f)}
+.plate{position:absolute;left:18px;top:16px;background:rgba(22,29,36,.9);border:1px solid var(--line2);border-radius:12px;padding:8px 14px;font-family:Georgia,serif;font-size:20px}
+.who{position:absolute;width:90px;height:150px;border-radius:45px 45px 10px 10px;background:rgba(255,255,255,.08);border:1px dashed rgba(255,255,255,.25)}
+.coin{position:absolute;width:62px;height:62px;border-radius:50%;border:1px solid var(--line2);background:var(--raised);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px;gap:2px;box-shadow:0 4px 16px rgba(0,0,0,.3)}
+.coin span{font-size:18px}.coin.on{background:var(--accentSoft);border-color:var(--accent);color:var(--accentText)}.coin.dim{opacity:.55}
+.name{position:absolute;transform:translate(-50%,-50%);font-family:Georgia,serif;color:var(--char);font-size:15px;background:rgba(0,0,0,.45);padding:2px 8px;border-radius:8px}
+.fan{position:absolute;display:flex;flex-direction:column;gap:4px;align-items:flex-start}
+.pill{height:32px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:var(--raised);font-size:13px;display:flex;align-items:center;box-shadow:0 4px 16px rgba(0,0,0,.2);white-space:nowrap}
+.pill.other{color:var(--muted);font-style:italic;border-style:dashed}
+.pill.go{background:var(--accentSoft);border-color:var(--accent);color:var(--accentText)}
+.inp{height:32px;width:150px;border-radius:999px;border:1px solid var(--accent);background:var(--raised);font-size:15px;display:flex;align-items:center;padding:0 12px;color:var(--muted)}
+.note{position:absolute;font-size:12px;color:var(--accent);background:#000c;padding:4px 8px;border-radius:6px;border:1px dashed var(--accent);max-width:240px;line-height:1.35}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}.three{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media (max-width:860px){.two,.three{grid-template-columns:1fr}}
+.list{background:var(--surface);border:1px solid var(--line2);border-radius:12px;padding:14px}
+.list h3{margin:0 0 6px;font-family:Georgia,serif;font-weight:500;font-size:18px}
+.list p{color:var(--muted);font-size:13px;line-height:1.45;margin:0 0 10px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--accent);margin-left:7px;display:inline-block}
+.rd{position:absolute;right:6px;top:6px;width:8px;height:8px;border-radius:50%;background:var(--accent)}
+</style></head><body>
+<h1>Say… fans out the words Elior has met</h1>
+<p class=lead>Pressing <b>Say…</b> on a person opens a column of word pills beside it, the same way Buy…, Use with… and Cast on… open theirs. Pressing a word says it at once, exactly as typing <i>say stay to grandmother</i> would. There is no typing box in the ring (the command line still takes typed words). The column holds <b>Yes</b> and <b>No</b>, then every word Elior has met in this act, A to Z. A word not yet said carries a dot, and so does Say… while any word is unsaid.</p>
+<div class="row two">
+<div><p class=cap><b>1 · Say… on Grandmother, carrying Patches</b><i>Stay</i> is new and unsaid, so it has a dot and Say… has one too. Pressing <i>Stay</i> says it and closes the ring.</p>
+<div class=app><div class=plate>Elior's Cottage</div><div class=who style="left:330px;top:150px"></div><div class=name style="left:375px;top:225px">Grandmother</div>
+<div class=coin style="left:344px;top:95px"><span>☺</span>Talk to</div>
+<div class="coin on" style="left:425px;top:155px"><span>❝</span>Say…<i class=rd></i></div>
+<div class="coin dim" style="left:400px;top:255px"><span>⚯</span>Use with…</div>
+<div class="coin dim" style="left:290px;top:255px"><span>✦</span>Cast on…</div>
+<div class="coin dim" style="left:264px;top:155px"><span>◉</span>Examine</div>
+<div class=fan style="left:500px;top:110px"><div class=pill>Yes</div><div class=pill>No</div><div class=pill>Dream</div><div class=pill>Father</div><div class=pill>Mira</div><div class=pill>Patches</div><div class="pill go">Stay<span class=dot></span></div></div></div></div>
+<div><p class=cap><b>2 · The dream: nothing met yet</b>Only Yes and No. Either one answers the voice. The column is never empty, and no dot shows.</p>
+<div class="app dream"><div class=plate>Dream</div>
+<div class=who style="left:330px;top:150px;opacity:.5"></div><div class=name style="left:375px;top:225px">voice</div>
+<div class=coin style="left:344px;top:95px"><span>☺</span>Talk to</div><div class="coin on" style="left:425px;top:155px"><span>❝</span>Say…</div><div class="coin dim" style="left:344px;top:255px"><span>◉</span>Examine</div>
+<div class=fan style="left:500px;top:150px"><div class=pill>Yes</div><div class=pill>No</div></div></div></div>
+<div><p class=cap><b>3 · Many words</b>The column scrolls inside the picture, like a long Buy… list.</p>
+<div class=app><div class=plate>Elior's Cottage</div><div class=who style="left:330px;top:150px"></div><div class=name style="left:375px;top:225px">Grandmother</div>
+<div class=coin style="left:344px;top:95px"><span>☺</span>Talk to</div>
+<div class="coin on" style="left:425px;top:155px"><span>❝</span>Say…<i class=rd></i></div>
+<div class="coin dim" style="left:400px;top:255px"><span>⚯</span>Use with…</div>
+<div class="coin dim" style="left:290px;top:255px"><span>✦</span>Cast on…</div>
+<div class="coin dim" style="left:264px;top:155px"><span>◉</span>Examine</div>
+<div class=fan style="left:500px;top:40px;height:330px;overflow:hidden;border-bottom:2px dashed var(--line2)"><div class=pill>Yes</div><div class=pill>No</div><div class=pill>Dream</div><div class=pill>Father</div><div class=pill>Malakar</div><div class=pill>Mira</div><div class=pill>Patches</div><div class=pill>Revive<span class=dot></span></div><div class=pill>Stay</div><div class=pill>Truth</div></div>
+<div class=note style="left:20px;top:340px">The list scrolls; the order is always Yes, No, then A to Z.</div></div></div>
+<div><p class=cap><b>4 · Every word said</b>No dots anywhere, and Say… looks the same as it does today.</p>
+<div class=app><div class=plate>Elior's Cottage</div><div class=who style="left:330px;top:150px"></div><div class=name style="left:375px;top:225px">Grandmother</div>
+<div class=coin style="left:344px;top:95px"><span>☺</span>Talk to</div>
+<div class="coin on" style="left:425px;top:155px"><span>❝</span>Say…</div>
+<div class="coin dim" style="left:400px;top:255px"><span>⚯</span>Use with…</div>
+<div class="coin dim" style="left:290px;top:255px"><span>✦</span>Cast on…</div>
+<div class="coin dim" style="left:264px;top:155px"><span>◉</span>Examine</div>
+<div class=fan style="left:500px;top:110px"><div class=pill>Yes</div><div class=pill>No</div><div class=pill>Dream</div><div class=pill>Father</div><div class=pill>Mira</div><div class=pill>Patches</div><div class=pill>Stay</div></div></div></div>
+</div></body></html>

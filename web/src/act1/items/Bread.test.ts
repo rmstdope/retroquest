@@ -26,6 +26,16 @@ describe('Bread and the chickens', () => {
     expect(answer).toContain('hidden')
     expect(findMarkupProblems(answer)).toEqual([])
   })
+  it('feeds the chickens by the plural the coop itself uses', () => {
+    const game = cottageGame()
+    game.state.currentRoom = game.state.allRooms.ChickenCoop
+    game.state.addItemToInventory(new Bread())
+
+    const answer = game.commandParser.parse('use bread with chickens')
+
+    expect(answer).toContain('[item_name]small key[/item_name]')
+    expect(game.state.hasItem('bread')).toBe(false)
+  })
 })
 
 describe("Bread and grandmother's fresh loaf", () => {

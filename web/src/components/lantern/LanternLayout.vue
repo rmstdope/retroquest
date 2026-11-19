@@ -275,6 +275,15 @@ function onFocusChange(event: FocusEvent): void {
 const section = ref<Section>('story')
 /** The drawer open beside the stage (the quests, or the journal: the story so far), or null. */
 const drawerTab = ref<'quests' | 'story' | null>(null)
+/**
+ * How wide an open drawer is (the `width` of `JournalDrawer` and `StoryDrawer`),
+ * which the bag tray leaves free at its right so no picture of it lies under the drawer.
+ * A phone's story drawer covers the whole stage (`.lq-phone-drawer`), tray and all,
+ * so its width here does not matter.
+ */
+function drawerWidth(tab: 'quests' | 'story'): string {
+  return tab === 'story' ? '50%' : 'min(380px, 92%)'
+}
 /** The button in the stage's corner (☰), measured for a sideways phone's plate. */
 const stageButtons = ref<InstanceType<typeof StageButtons> | null>(null)
 /** Whether the open drawer was opened from the menu, which its closing brings back. */
@@ -470,6 +479,18 @@ function wayPressed(event: MouseEvent): string | null {
   )
 }
 
+/**
+ * Whether a press on `target` was meant for the room's words, which went by
+ * themselves a moment ago (`useArrivalStore.lingering`): it does nothing,
+ * neither a ring nor a walk (rq-v29l.4). A press on a mark or name the
+ * player can see is meant for its thing or way, and acts.
+ */
+function meantForArrival(target: Element): boolean {
+  return (
+    arrival.lingering && !target.closest('[data-area-mark], [data-area-name]')
+  )
+}
+
 /** Go the way out in `direction` at once, as a press on its dot or its painted place does. */
 function goWay(direction: string): void {
   narration.skipAll()
@@ -485,6 +506,7 @@ function goWay(direction: string): void {
 function onPicturePress(event: MouseEvent): void {
   if (!(event.target instanceof Element)) return
   if (!event.target.closest('.lq-stage-picture')) return
+  if (meantForArrival(event.target)) return
   tapOnPicture()
   const way = wayPressed(event)
   pressOn('picture', { way: way !== null }, way)
@@ -513,12 +535,19 @@ const beltBottom = computed(() =>
 )
 /** The belt starts at the picture's left edge. */
 const beltLeft = computed(() => 0)
-/** How far up from the foot of the picture the belt's top lies: what the names and press areas must keep clear of (none while the belt is away: the picture's foot is then the floor, then the action row alone on a laptop). */
+/**
+ * How far up from the foot of the picture the names and marks keep clear of,
+ * across its whole width: on a laptop only the typing box's room, since the
+ * belt's bar covers only its own width and is a panel the marks step out from
+ * under (rq-v29l.11), so a thing at the foot beside it keeps its name; elsewhere
+ * up to the belt's top while it is up (none while it is away: the picture's
+ * foot is then the floor).
+ */
 const footCover = computed(() =>
-  beltHeight.value > 0 && !belt.away
-    ? beltBottom.value + beltHeight.value
-    : laptop.value
-      ? boxRoom.value
+  laptop.value
+    ? boxRoom.value
+    : beltHeight.value > 0 && !belt.away
+      ? beltBottom.value + beltHeight.value
       : 0,
 )
 
@@ -655,11 +684,20 @@ const DEFAULT_PICTURE_SIZE = { width: 1920, height: 1080 }
 const namesUp = computed(
   () => names.showing && scene.phase === 'idle' && !namesBlocked(),
 )
-/** Changes when what the names keep clear of moves: the words, a drawer, the names' own count. */
+/**
+ * Changes when what the names keep clear of moves: the words, the Hide or Show
+ * that comes and goes with them (new words bring the Hide back without the
+ * paper changing), the "Use … with" strip, a bag picture's caption, a drawer,
+ * the names' own count.
+ */
 const namesRelayout = computed(() =>
   [
     paper.visible.value,
     paper.hidden.value,
+    showHide.value,
+    showTab.value,
+    !!belt.hand,
+    beltCaption.value?.label ?? '',
     arrival.active,
     speech.visible.length,
     drawerTab.value,
@@ -1761,12 +1799,8 @@ const ringItems = computed(() => {
   }
   return ringActions(open.thing as AreaThing, ringContext.value)
 })
-/** The words are still being told: a press hurries them and opens no ring. */
-const telling = computed(
-  () =>
-    narration.isNarrating ||
-    (speech.conversation?.lines.some((line) => !line.shown) ?? false),
-)
+/** The words are still being told (the narrator reads, or a line on the picture is still to appear): a press hurries them and opens no ring. */
+const telling = computed(() => narration.isNarrating || speech.stillToShow)
 /** A press of `kind` as `decidePointerPress` hears it: the story's state now, with the details of this press in `over`. */
 function pressOf(
   kind: PressKind,
@@ -1843,13 +1877,15 @@ function ringPlacement(
   }
 }
 
-/** Bumped when the window is resized, so the caption is placed again. */
+/** Bumped when the window is resized or a drawer opens or closes, so the caption is placed again. */
 const windowTick = ref(0)
 /** The window changed size: the caption follows the belt. */
 function onWindowResize(): void {
   windowTick.value++
 }
 onMounted(() => window.addEventListener('resize', onWindowResize))
+// A drawer opening or closing narrows or widens the belt once it is drawn: the caption follows it then.
+watch(drawerTab, onWindowResize, { flush: 'post' })
 onUnmounted(() => window.removeEventListener('resize', onWindowResize))
 /** The belt picture whose caption shows, as the belt says. */
 const beltCaption = ref<BeltPicture | null>(null)
@@ -1890,6 +1926,8 @@ function onAreaPress(
 ): void {
   const box = stageEl.value?.getBoundingClientRect()
   if (!box || !staged.value) return
+  // Just after the room's words went by themselves, only a press on a mark or name acts (`meantForArrival`).
+  if (arrival.lingering && !onMark) return
   // A way out smaller than the thing it lies on is the press's: the stage takes it (`onPicturePress`).
   // A press on a thing's own mark or name is its thing's, wherever the mark stands.
   const wayUnder = !onMark && !!areaNamesEl.value?.wayAt(at.x, at.y)
@@ -2354,21 +2392,44 @@ const FULLSCREEN_KEY_HELP = '\nF — full screen on or off\n'
 /** Help's line for the key that hides the narration paper (laptop only). */
 const NARRATION_KEY_HELP = '\nN — hide or show the words\n'
 
-/** Help's line for the room's name, which opens Look, Search and Rest. */
-const ROOM_NAME_HELP = "\nPress the room's name for Look, Search and Rest.\n"
+/** Help's heading for the section that teaches playing without typing. */
+const PLAYING_WITHOUT_TYPING_HEADING = '[bold]Playing without typing:[/bold]\n'
 
-/** Help's line for F1, the typing box (where a keyboard can type). */
+/** Help's first line where a mouse hovers (laptop): the names on the picture. */
+const HOVER_NAMES_HELP =
+  '  Move the mouse over the picture to see the names of what is here.\n'
+
+/** Help's first line anywhere else (phone, tablet): the names on the picture. */
+const TAP_NAMES_HELP = '  Tap the picture to see the names of what is here.\n'
+
+/** Help's lines 2 to 7 of "Playing without typing:", the same in every act. */
+const PLAYING_WITHOUT_TYPING_HELP =
+  '  Press a thing or a person for a wheel of what you can do with it.\n' +
+  '  Press a name in the story for the same choices.\n' +
+  '  In the wheel, Use with… takes the thing in hand; ' +
+  'then press what to use it with, or ✕ Cancel.\n' +
+  '  Press a thing in your bag for its wheel.\n' +
+  '  Press a way out of the picture to walk there, ' +
+  'or a place on the map to travel to it.\n' +
+  "  Press the room's name for Look, Search and Rest.\n"
+
+/** Help's last line of that section, F1 (where a keyboard can type). */
 const TYPING_BOX_HELP =
-  '\nPress F1 to type commands instead; F1 again hides the box.\n'
+  '  Press F1 to show or hide the command bar; type commands there instead.\n'
 
 /** Stats or Help as HTML (Help ends with the music credits). */
 const infoHtml = computed(() => {
   if (gameDialog.value !== 'help') return ''
   return (
+    renderMarkup(
+      PLAYING_WITHOUT_TYPING_HEADING +
+        (laptop.value ? HOVER_NAMES_HELP : TAP_NAMES_HELP) +
+        PLAYING_WITHOUT_TYPING_HELP +
+        (canType.value ? TYPING_BOX_HELP : '') +
+        '\n',
+    ) +
     renderMarkup(game.readInfo('help')) +
     renderMarkup(NARRATION_HELP) +
-    renderMarkup(ROOM_NAME_HELP) +
-    (canType.value ? renderMarkup(TYPING_BOX_HELP) : '') +
     (laptop.value
       ? renderMarkup(ESCAPE_KEY_HELP) +
         (fullscreen.supported ? renderMarkup(FULLSCREEN_KEY_HELP) : '') +
@@ -2741,6 +2802,9 @@ watch(namesBlocked, (blocked) => {
               '--lq-stage-buttons-w': `${stageButtonsWidth}px`,
               '--lq-belt-bottom': `${beltBottom}px`,
               '--lq-belt-left': `${beltLeft}px`,
+              ...(drawerTab
+                ? { '--lq-belt-right': drawerWidth(drawerTab) }
+                : {}),
               ...(belt.hand ? { cursor: 'crosshair' } : {}),
               ...(wayArrow ? { cursor: wayCursor(wayArrow) } : {}),
             }"
@@ -2833,6 +2897,7 @@ watch(namesBlocked, (blocked) => {
               :hand="belt.hand"
               :ghost="laptop"
               class="lq-hand-strip"
+              data-lq-obstacle="panel"
               @cancel="cancelHand"
             />
           </div>
@@ -2850,10 +2915,11 @@ watch(namesBlocked, (blocked) => {
             @keydown="onNameKeydown"
             @close="closeDrawer"
           />
-          <!-- The caption of the picture pointed at: over the words, above the belt and the Hide or Show button. -->
+          <!-- The caption of the picture pointed at: over the words, above the belt and the Hide or Show button; the marks and names keep clear of it. -->
           <div
             v-if="beltCaption"
             class="lq-belt-caption"
+            data-lq-obstacle="panel"
             :style="captionStyle()"
           >
             <b :class="`lq-belt-cap-${beltCaption.kind}`">{{
@@ -2979,8 +3045,9 @@ watch(namesBlocked, (blocked) => {
                 </template>
               </div>
             </section>
+            <!-- None while an arrival is told on the picture: it says how to go on and skip itself. -->
             <p
-              v-if="narration.hintVisible && hintText"
+              v-if="narration.hintVisible && hintText && !arrival.active"
               class="lq-narration-hint"
               data-lq-obstacle="words"
               :class="{ 'lq-hint-raised': moreBelow && !storyHeld }"
