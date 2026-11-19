@@ -42,7 +42,8 @@ import type { PictureSize, Rect } from '@/lantern/roomMotionScene'
  * the pointer, above it near the foot of what can be seen, and has none while a ring is open (`ringOpen`): the ring
  * has the name. Marks and names stay on the part of the picture that can
  * be seen at every moment of its drift, above the `footCover` pixels the
- * action bar lies over; a thing wholly outside that part has neither. The
+ * action bar lies over; a thing wholly outside that part has its mark and
+ * name on the nearest spot of it, so it can still be found and pressed. The
  * marks and names fade in and out (not under Reduce motion, which the
  * stylesheet's `--lq-motion` carries) and are hidden from assistive
  * technology (the room's corner names list what is here, and `AreaPress` has
@@ -226,7 +227,8 @@ const visible = computed<Rect>(() =>
 )
 
 /**
- * The placed things with a part that can be seen, their marks stepped clear of
+ * The placed things in view, each marked on the part that can be seen (one
+ * wholly behind the bar on its nearest spot, `markInside`), their marks stepped clear of
  * the panels and of the words (just outside them, or on their nearest edge
  * where no free picture lies near) and kept apart from each other.
  */

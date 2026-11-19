@@ -451,8 +451,11 @@ describe('markInside', () => {
     expect(placed.y).toBeLessThanOrEqual(460 - 8)
   })
 
-  it('has no mark for a thing wholly behind the bar', () => {
-    expect(markInside([entry(100, 470, 40, 40)], visible)).toEqual([])
+  it('stands the mark of a thing wholly behind the bar at the foot of what can be seen, above its middle (rq-v29l.2)', () => {
+    const [placed] = markInside([entry(100, 470, 40, 40)], visible)
+    expect(placed).toMatchObject({ areaId: 'a', x: 120, y: 460 - 8 })
+    expect(placed.from).toEqual({ x: 120, y: 490 })
+    expect(placed.rect).toEqual({ x: 100, y: 470, w: 40, h: 40 })
   })
 
   it('stands the mark of a way out wholly behind the bar at the foot of what can be seen, above its middle', () => {
