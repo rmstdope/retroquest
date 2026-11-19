@@ -75,6 +75,7 @@ const QUIT_VERBS = formOf('quit').verbs
 const REST_VERBS = formOf('sleep').verbs
 
 const SAY_USAGE = 'Use say <word> to <character>'
+const USE_USAGE = 'What do you want to use?'
 const USE_WITH_USAGE =
   'You need to say what to use it with, an item or a character. ' +
   'Format: use <item> with <item or character>'
@@ -195,17 +196,17 @@ export class CommandParser {
   private use(command: string): string {
     const tail = command.trim().slice(USE_PREFIXES[0].length)
     const stripped = tail.trim()
-    if (!stripped) return 'What do you want to use?'
-    if (tail.toLowerCase().trimEnd().endsWith(USE_WITH.trimEnd()))
-      return USE_WITH_USAGE
-    const lower = stripped.toLowerCase()
+    if (!stripped) return USE_USAGE
+    // Padded so a joining word typed first ("use with") is still found as one
+    const lower = ` ${stripped.toLowerCase()} `
     // "on" reads the same as "with" when the command has no "with"
     const joiner = lower.includes(USE_WITH) ? USE_WITH : USE_ON
     const split = lower.indexOf(joiner)
-    if (split < 0) return this.game.use(lower)
+    if (split < 0) return this.game.use(lower.trim())
     const item = lower.slice(0, split).trim()
     const other = lower.slice(split + joiner.length).trim()
-    if (!item || !other) return USE_WITH_USAGE
+    if (!item) return USE_USAGE
+    if (!other) return USE_WITH_USAGE
     return this.game.use(item, other)
   }
 

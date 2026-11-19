@@ -232,6 +232,13 @@ describe('CommandParser', () => {
     expect(game.calls).toEqual([])
   })
 
+  it('asks what to use when only the joining word is typed', () => {
+    expect(parser.parse('use with')).toBe('What do you want to use?')
+    expect(parser.parse('use on')).toBe('What do you want to use?')
+    expect(parser.parse('use with chest')).toBe('What do you want to use?')
+    expect(game.calls).toEqual([])
+  })
+
   it('dispatches magic commands', () => {
     expectCalls(game, parser, {
       'cast fireball': ['cast', 'fireball'],
