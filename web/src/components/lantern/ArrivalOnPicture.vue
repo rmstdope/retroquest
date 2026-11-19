@@ -25,9 +25,7 @@ import { useSettingsStore } from '@/stores/useSettingsStore'
  * the narrator says it), the spoken word lit while the narrator tells it. Under it a
  * small dark pill holds the hint and, while nobody speaks the part, a thin bar
  * that empties over its reading time. A click anywhere on the picture goes on
- * (`useArrivalStore`); for a moment after the arrival went by itself
- * (`lingering`) a click there still lands here and does nothing, so one aimed
- * at its words as they went never opens a ring or walks out.
+ * (`useArrivalStore`).
  * Names and other inline tags keep the dark theme's light colours on the
  * picture. With no picture (`pictured` false) the text is dark ink on the
  * paper in the light theme. The text is also in the story, which waits aside:
@@ -295,7 +293,7 @@ watch(
     :style="{ '--lq-checklist-width': `${checklistWidth}px` }"
     :class="{
       'lq-bare': !pictured,
-      'lq-on': arrival.active || arrival.lingering,
+      'lq-on': arrival.active,
       'lq-phone-arrival': phone,
       'lq-sideways-arrival': sideways,
     }"

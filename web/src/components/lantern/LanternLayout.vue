@@ -470,6 +470,18 @@ function wayPressed(event: MouseEvent): string | null {
   )
 }
 
+/**
+ * Whether a press on `target` was meant for the room's words, which went by
+ * themselves a moment ago (`useArrivalStore.lingering`): it does nothing,
+ * neither a ring nor a walk (rq-v29l.4). A press on a mark or name the
+ * player can see is meant for its thing or way, and acts.
+ */
+function meantForArrival(target: Element): boolean {
+  return (
+    arrival.lingering && !target.closest('[data-area-mark], [data-area-name]')
+  )
+}
+
 /** Go the way out in `direction` at once, as a press on its dot or its painted place does. */
 function goWay(direction: string): void {
   narration.skipAll()
@@ -485,6 +497,7 @@ function goWay(direction: string): void {
 function onPicturePress(event: MouseEvent): void {
   if (!(event.target instanceof Element)) return
   if (!event.target.closest('.lq-stage-picture')) return
+  if (meantForArrival(event.target)) return
   tapOnPicture()
   const way = wayPressed(event)
   pressOn('picture', { way: way !== null }, way)
@@ -1870,6 +1883,8 @@ function onAreaPress(
 ): void {
   const box = stageEl.value?.getBoundingClientRect()
   if (!box || !staged.value) return
+  // Just after the room's words went by themselves, only a press on a mark or name acts (`meantForArrival`).
+  if (arrival.lingering && !onMark) return
   // A way out smaller than the thing it lies on is the press's: the stage takes it (`onPicturePress`).
   // A press on a thing's own mark or name is its thing's, wherever the mark stands.
   const wayUnder = !onMark && !!areaNamesEl.value?.wayAt(at.x, at.y)

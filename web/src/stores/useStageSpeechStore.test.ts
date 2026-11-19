@@ -615,6 +615,19 @@ describe('useStageSpeechStore: a talk that changes the scene partway', () => {
     expect(speech.told(moving.id)).toBe(true)
   })
 
+  it('has nothing still to show once the lines said before the room changed are gone from the picture (rq-v29l.4)', () => {
+    const speech = useStageSpeechStore()
+    const scene = useSceneStore()
+    const moving = waking()
+    speech.observe(moving)
+    // The voice's line had not appeared yet when the room changed (as the dream's last line, cut short).
+    speech.conversation!.lines[0].shown = false
+    expect(speech.stillToShow).toBe(true)
+    scene.cut(moving.id, 3)
+    // Never on the new picture, and never to be: not words still being told.
+    expect(speech.stillToShow).toBe(false)
+  })
+
   it('changes the scene at once when the turn is shown whole', () => {
     const speech = useStageSpeechStore()
     const reached = vi.fn()

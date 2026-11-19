@@ -251,6 +251,20 @@ describe('LanternLayout: pressing a thing on the picture', () => {
     expect(ring().exists()).toBe(true)
   })
 
+  it("opens no ring from a press on a thing just as the arrival went by itself, but opens it from the thing's mark (rq-v29l.4)", async () => {
+    await cottage()
+    useArrivalStore().lingering = true
+    await press('bread')
+    expect(ring().exists()).toBe(false)
+    useAreaNamesStore().showing = true
+    await flushPromises()
+    w.get('[data-area-mark="bread"]').element.dispatchEvent(
+      new MouseEvent('click', { bubbles: true, clientX: 400, clientY: 300 }),
+    )
+    await flushPromises()
+    expect(ring().exists()).toBe(true)
+  })
+
   /** Press `id` down for `ms` of real time, then let go: the browser's click follows. */
   const holdOn = async (id: string, ms: number): Promise<void> => {
     const pointer = (type: string): void => {

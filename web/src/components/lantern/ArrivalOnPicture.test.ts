@@ -6,7 +6,7 @@ import { createPinia, setActivePinia } from 'pinia'
 import ArrivalOnPicture from './ArrivalOnPicture.vue'
 import { useArrivalStore } from '@/stores/useArrivalStore'
 import { FOLLOW_EVENT } from '@/composables/useStoryFollow'
-import { ARRIVAL_LINGER_MS, type ArrivalPart } from '@/lantern/stageArrival'
+import type { ArrivalPart } from '@/lantern/stageArrival'
 import type { QuestNews } from '@/lantern/questNews'
 import {
   LANTERN_PALETTES,
@@ -117,29 +117,6 @@ describe('ArrivalOnPicture', () => {
     )
     await w.trigger('click')
     expect(w.find('.lq-arrival-card').exists()).toBe(false)
-  })
-
-  it('still takes a press for a moment after it goes by itself, so a click meant for its words never reaches the picture (rq-v29l.4)', async () => {
-    const w = mount(ArrivalOnPicture, { props: { pictured: true } })
-    const arrival = useArrivalStore()
-    arrival.show(1, [description], false)
-    await w.vm.$nextTick()
-    vi.advanceTimersByTime(arrival.barMs)
-    await w.vm.$nextTick()
-    expect(arrival.active).toBe(false)
-    expect(w.find('.lq-arrival-card').exists()).toBe(false)
-    expect(w.classes()).toContain('lq-on')
-    vi.advanceTimersByTime(ARRIVAL_LINGER_MS)
-    await w.vm.$nextTick()
-    expect(w.classes()).not.toContain('lq-on')
-  })
-
-  it('lets the next press through at once when a click took it away', async () => {
-    const w = mount(ArrivalOnPicture, { props: { pictured: true } })
-    useArrivalStore().show(1, [description], false)
-    await w.vm.$nextTick()
-    await w.trigger('click')
-    expect(w.classes()).not.toContain('lq-on')
   })
 
   it('shows no bar when the narrator tells it', async () => {
