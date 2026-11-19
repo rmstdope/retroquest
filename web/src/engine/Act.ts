@@ -24,6 +24,12 @@ export interface ActOptions {
    * `cheat act N` command and by the act's integration test. Defaults to none.
    */
   goldenPath?: string[]
+  /**
+   * The words the act's people listen for, each as written on a Say… pill
+   * ("Stay", "Patches"). Say… offers one once a line of the story puts it in
+   * front of Elior. Defaults to none.
+   */
+  words?: string[]
 }
 
 /** An act: its rooms, quests, music and act-level hooks. */
@@ -36,6 +42,8 @@ export class Act {
   classes: Record<string, SerializableClass>
   /** The commands that play the act through; empty until the act has a path. */
   goldenPath: string[]
+  /** The words the act's people listen for, as written on a Say… pill. */
+  words: string[]
 
   constructor({
     name,
@@ -45,6 +53,7 @@ export class Act {
     musicInfo,
     classes,
     goldenPath,
+    words,
   }: ActOptions) {
     this.name = name
     this.rooms = rooms
@@ -53,6 +62,7 @@ export class Act {
     this.musicInfo = musicInfo
     this.classes = classes ?? {}
     this.goldenPath = goldenPath ?? []
+    this.words = words ?? []
   }
 
   getActIntro(): string {

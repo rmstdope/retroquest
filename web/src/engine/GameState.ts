@@ -1,5 +1,6 @@
 import type { Item } from './Item'
 import { isNamed } from './itemNames'
+import { mentionedWords } from './spokenWord'
 import type { Quest } from './Quest'
 import type { Room } from './Room'
 import type { Spell } from './Spell'
@@ -19,6 +20,15 @@ export interface SoundFiring {
   roomKey: string
   trigger: string
 }
+
+/** A word offered under Say…: as written on its pill, and whether it is new (met, not yet said). */
+export interface SayWord {
+  word: string
+  isNew: boolean
+}
+
+/** The two words always offered under Say…, in this order. */
+export const FIXED_SAY_WORDS: readonly string[] = ['Yes', 'No']
 
 /**
  * The mutable state of the act being played: where the player is, what they
@@ -47,6 +57,14 @@ export class GameState {
    * value so that saves made before it existed still load; `fireSound` makes it.
    */
   firedSounds?: SoundFiring[]
+  /**
+   * The words of the act's vocabulary the story has put in front of Elior, as
+   * the vocabulary writes them. Declared without a value so that saves made
+   * before it existed still load; a new act's state starts without any.
+   */
+  wordsMet?: string[]
+  /** The words of the act's vocabulary Elior has said at least once, to anyone. */
+  wordsSaid?: string[]
 
   constructor(
     startingRoom: Room,
@@ -80,6 +98,38 @@ export class GameState {
     const fired = this.firedSounds ?? []
     this.firedSounds = undefined
     return fired
+  }
+
+  /** Notes every word of `vocabulary` that `text` (a line of the story) puts in front of Elior. */
+  meetWords(text: string, vocabulary: readonly string[]): void {
+    const met = this.wordsMet ?? []
+    const fresh = mentionedWords(text, vocabulary).filter(
+      (word) => !met.includes(word),
+    )
+    if (fresh.length > 0) this.wordsMet = [...met, ...fresh]
+  }
+
+  /** Notes every word of `vocabulary` that Elior says in `words`, met yet or not. */
+  sayWords(words: string, vocabulary: readonly string[]): void {
+    const said = this.wordsSaid ?? []
+    const fresh = mentionedWords(words, vocabulary).filter(
+      (word) => !said.includes(word),
+    )
+    if (fresh.length > 0) this.wordsSaid = [...said, ...fresh]
+  }
+
+  /**
+   * What Say… offers: Yes and No, then every word met, A to Z. A met word
+   * not yet said is new. Yes and No are never new and never listed twice.
+   */
+  wordsToSay(): SayWord[] {
+    const fixed = FIXED_SAY_WORDS.map((word) => word.toLowerCase())
+    const said = this.wordsSaid ?? []
+    const met = (this.wordsMet ?? [])
+      .filter((word) => !fixed.includes(word.toLowerCase()))
+      .sort((a, b) => a.localeCompare(b))
+      .map((word) => ({ word, isNew: !said.includes(word) }))
+    return [...FIXED_SAY_WORDS.map((word) => ({ word, isNew: false })), ...met]
   }
 
   markVisited(room: Room): void {

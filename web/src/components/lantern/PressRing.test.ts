@@ -15,6 +15,10 @@ const ctx: ActionContext = {
   spells: ['light'],
   exits: {},
   wares: [{ name: 'Rope', price: 1, seller: 'tilda' }],
+  sayWords: [
+    { word: 'Yes', isNew: false },
+    { word: 'No', isNew: false },
+  ],
 }
 const tilda: AreaThing = {
   areaId: 'tilda',
@@ -157,17 +161,44 @@ describe('PressRing', () => {
     expect(w.get('.lq-ring-fan [role="menuitem"]').text()).toBe('Rope · 1 coin')
   })
 
-  it('opens a words box for Say…, and sends nothing while it is empty', async () => {
+  it('fans Say… out as word pills, with no box to type in, and a pill says its word at once', async () => {
     const w = await ring()
     await coin(w, 'say').trigger('click')
-    const input = w.get<HTMLInputElement>('.lq-ring-say input')
-    expect(input.attributes('placeholder')).toBe('words…')
-    expect(document.activeElement).toBe(input.element)
-    await w.get('.lq-ring-say').trigger('submit')
-    expect(w.emitted('pick')).toBeUndefined()
-    await input.setValue('hello there')
-    await w.get('.lq-ring-say').trigger('submit')
-    expect(w.emitted('pick')).toEqual([['say hello there to tilda']])
+    const pills = w.findAll('.lq-ring-fan [role="menuitem"]')
+    expect(pills.map((p) => p.text())).toEqual(['Yes', 'No'])
+    expect(w.find('input').exists()).toBe(false)
+    expect(document.activeElement).toBe(pills[0].element)
+    await pills[1].trigger('click')
+    expect(w.emitted('pick')).toEqual([['say no to tilda']])
+  })
+
+  it('puts a dot on a new word and on Say…, and none when every word was said', async () => {
+    const fresh: ActionContext = {
+      ...ctx,
+      sayWords: [...ctx.sayWords, { word: 'Stay', isNew: true }],
+    }
+    const w = mount(PressRing, {
+      attachTo: document.body,
+      props: {
+        thing: tilda,
+        actions: ringActions(tilda, fresh),
+        at: { x: 300, y: 160 },
+        bounds: { w: 568, h: 320 },
+      },
+    })
+    wrappers.push(w)
+    await nextTick()
+    expect(coin(w, 'say').find('.lq-ring-dot').exists()).toBe(true)
+    await coin(w, 'say').trigger('click')
+    const pills = w.findAll('.lq-ring-fan [role="menuitem"]')
+    expect(pills.map((p) => p.find('.lq-ring-dot').exists())).toEqual([
+      false,
+      false,
+      true,
+    ])
+    expect(pills[2].attributes('aria-label')).toBe('Stay, new')
+    const quiet = await ring()
+    expect(coin(quiet, 'say').find('.lq-ring-dot').exists()).toBe(false)
   })
 
   it('steps back from a fan to the ring with Escape, then closes', async () => {

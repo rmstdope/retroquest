@@ -39,6 +39,7 @@ import {
 import { ENDING_HOOKS, endingPlayed } from './endings'
 import { ACT4_CLASSES } from './classes'
 import { ACT4_GOLDEN_PATH } from './Act4GoldenPath'
+import { ACT4_WORDS } from './Act4Words'
 
 /** Act 4 of the game: The Final Confrontation. */
 export class Act4 extends Act {
@@ -84,6 +85,7 @@ export class Act4 extends Act {
         'Music for Videos (Free Download)\n',
       classes: ACT4_CLASSES,
       goldenPath: ACT4_GOLDEN_PATH,
+      words: ACT4_WORDS,
     })
   }
 

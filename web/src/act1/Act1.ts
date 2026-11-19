@@ -42,6 +42,7 @@ import {
 } from './Act1StoryFlags'
 import { ACT1_CLASSES } from './classes'
 import { ACT1_GOLDEN_PATH } from './Act1GoldenPath'
+import { ACT1_WORDS } from './Act1Words'
 import { Shopkeeper } from './characters/Shopkeeper'
 import { Blacksmith } from './characters/Blacksmith'
 import { Villager } from './characters/Villager'
@@ -89,6 +90,7 @@ export class Act1 extends Act {
         'Market by Conquest\nSource: https://freetouse.com/music\nCopyright Free Background Music',
       classes: ACT1_CLASSES,
       goldenPath: ACT1_GOLDEN_PATH,
+      words: ACT1_WORDS,
     })
   }
 

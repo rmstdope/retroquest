@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest'
-import { affirms, heardAs, normaliseSpokenWord, saysAnyOf } from './spokenWord'
+import {
+  affirms,
+  heardAs,
+  mentionedWords,
+  normaliseSpokenWord,
+  saysAnyOf,
+} from './spokenWord'
 
 describe('normaliseSpokenWord', () => {
   it('trims and lower-cases', () => {
@@ -141,5 +147,36 @@ describe('heardAs', () => {
 
   it('hears nothing in an utterance without letters', () => {
     expect(heardAs('...')).toBe('')
+  })
+})
+
+describe('mentionedWords', () => {
+  const vocabulary = ['Stay', 'Patches', 'Sir Cedric']
+
+  it('finds listed words whole, whatever the case and punctuation', () => {
+    expect(
+      mentionedWords('"If you would have her STAY, say so."', vocabulary),
+    ).toEqual(['Stay'])
+  })
+
+  it('does not find a word inside another word', () => {
+    expect(
+      mentionedWords('Stayed here; the patchesy ground', vocabulary),
+    ).toEqual([])
+  })
+
+  it('finds a several-word entry as those words in a row', () => {
+    expect(mentionedWords('Sir Cedric nods.', vocabulary)).toEqual([
+      'Sir Cedric',
+    ])
+  })
+
+  it('ignores markup tags', () => {
+    expect(
+      mentionedWords(
+        '[character_name]Patches[/character_name] purrs',
+        vocabulary,
+      ),
+    ).toEqual(['Patches'])
   })
 })

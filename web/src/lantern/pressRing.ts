@@ -38,6 +38,8 @@ export interface RingSubject {
 export interface RingChoice {
   label: string
   command: string
+  /** A small dot on the pill: a word met and not yet said. */
+  dot?: boolean
 }
 
 /** One button of the ring. */
@@ -50,8 +52,8 @@ export interface RingAction {
   command?: string
   /** The second choices it fans out (absent when it does not). */
   choices?: RingChoice[]
-  /** It opens a words box (Say…). */
-  say?: boolean
+  /** A small dot on the button: one of its choices is new (Say…). */
+  dot?: boolean
   /** It closes the ring and takes the subject in hand for the next press. */
   hand?: HandVerb
 }
@@ -160,7 +162,7 @@ export function ringActions(
       : null
     return [
       plain('talk', 'Talk to', commandOf('talk', [name])),
-      { id: 'say', label: 'Say…', icon: ICONS.say, say: true },
+      sayAction(name, ctx),
       ...present(buy),
       ...present(useWith),
       ...present(castOn),
@@ -179,12 +181,25 @@ export function ringActions(
   ]
 }
 
-/** The command that says `words` to `person`; null while the box is empty. */
-export function sayCommand(
-  words: string,
-  person: { name: string },
-): string | null {
-  return buildCommand(verbById('say'), [words, person.name])
+/**
+ * Say… for the person called `name`: a fan of the words on offer (Yes, No,
+ * then the words met), each saying itself to the person at once. A word met
+ * and not yet said carries a dot, and so does the button while any does.
+ */
+function sayAction(name: string, ctx: ActionContext): RingAction {
+  const choices = ctx.sayWords.map((entry) => ({
+    label: entry.word,
+    command: commandOf('say', [entry.word.toLowerCase(), name]),
+    ...(entry.isNew ? { dot: true } : {}),
+  }))
+  const fresh = ctx.sayWords.some((entry) => entry.isNew)
+  return {
+    id: 'say',
+    label: 'Say…',
+    icon: ICONS.say,
+    choices,
+    ...(fresh ? { dot: true } : {}),
+  }
 }
 
 /** The diameter of a ring button. */

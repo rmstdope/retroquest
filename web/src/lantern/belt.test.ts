@@ -20,6 +20,7 @@ const EMPTY: ActionContext = {
   spells: [],
   exits: {},
   wares: [],
+  sayWords: [],
 }
 const bread: RingSubject = {
   areaId: 'belt:item:bread',

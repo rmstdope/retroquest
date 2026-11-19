@@ -4,7 +4,7 @@
  */
 import { Character } from './Character'
 import type { CompletionTree, Game } from './Game'
-import type { SoundFiring } from './GameState'
+import type { SayWord, SoundFiring } from './GameState'
 import { RING_VERBS, type Item, type RingVerb } from './Item'
 import type { Quest, QuestDetails } from './Quest'
 
@@ -206,7 +206,9 @@ export class GameController {
 
   /** Parse a command and answer it, without starting a new turn (stats, help). */
   handleCommand(command: string): string {
-    return this.game.commandParser.parse(command)
+    const result = this.game.commandParser.parse(command)
+    this.game.noticeWords(result)
+    return result
   }
 
   /**
@@ -228,8 +230,33 @@ export class GameController {
       moved || this.game.hasChangedRoom
         ? { moved, firstVisit: moved && !visitedBefore.includes(roomAfter) }
         : null
+    if (this.roomDescription) this.noticeRoom()
     this.game.newTurn()
     return result
+  }
+
+  /**
+   * The room the player is in is shown: the people standing in it are met,
+   * so a name of the act's word list that is a person's whole name is in
+   * front of Elior. Words inside a longer name ("water nymphs") are not.
+   */
+  private noticeRoom(): void {
+    const state = this.game.state
+    const names = state.currentRoom.characters.map((character) =>
+      character.name.toLowerCase(),
+    )
+    const known = this.game.acts[this.game.currentAct].words.filter((word) =>
+      names.includes(word.toLowerCase()),
+    )
+    state.meetWords(known.join(' . '), known)
+  }
+
+  /**
+   * What Say… offers: Yes and No, then the words met in the act, A to Z,
+   * each with whether it is new (met and not yet said).
+   */
+  getSayWords(): SayWord[] {
+    return this.game.state.wordsToSay()
   }
 
   /**
@@ -404,6 +431,7 @@ export class GameController {
   /** Look around: the room is described again without a move. */
   look(): string {
     this.roomDescription = { moved: false, firstVisit: false }
+    this.noticeRoom()
     return this.game.look()
   }
 
@@ -411,6 +439,7 @@ export class GameController {
   openRoom(): string {
     const text = this.game.look()
     this.roomDescription = { moved: true, firstVisit: true }
+    this.noticeRoom()
     return text
   }
 

@@ -305,6 +305,7 @@ export class Game implements CommandTarget {
       this.runState === GameRunState.ActRunning
         ? this.commandParser.parse(data)
         : ''
+    this.noticeWords(this.commandResult)
   }
 
   isActRunning(): boolean {
@@ -721,12 +722,24 @@ Welcome to
     )
   }
 
+  /**
+   * Notes the words of the act's vocabulary that the answer to a command, a
+   * line said to him or text he reads, puts in front of Elior. The room's own
+   * description is not an answer (see `GameController`).
+   */
+  noticeWords(text: string): void {
+    this.state.meetWords(text, this.acts[this.currentAct].words)
+  }
+
   say(words: string, characterName: string): string {
     if (!words) return '[failure]What do you want to say?[/failure]'
     if (!characterName)
       return '[failure]Who do you want to say that to?[/failure]'
     const character = this.findCharacter(characterName)
-    if (character) return character.sayTo(this.state, words)
+    if (character) {
+      this.state.sayWords(words, this.acts[this.currentAct].words)
+      return character.sayTo(this.state, words)
+    }
     return (
       `[failure]There is no character named ` +
       `'[character_name]${characterName}[/character_name]' here to speak to.[/failure]`
