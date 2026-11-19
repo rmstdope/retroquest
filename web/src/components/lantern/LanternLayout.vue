@@ -1872,12 +1872,12 @@ function onBeltPress(picture: BeltPicture, at: { x: number; y: number }): void {
   }
 }
 
-/** Where focus returns to when the ring or the hand is gone: the thing or picture, or if it has gone the show button (for the belt, its first picture). */
-function focusAfterRing(areaId: string): void {
+/** Where focus returns to when the ring or the hand is gone: the thing or picture, or if it has gone the show button (for the belt, its first picture). `quiet` (a command was sent) brings back no belt caption. */
+function focusAfterRing(areaId: string, quiet = false): void {
   if (areaId.startsWith('belt:')) {
     const key = areaId.slice('belt:'.length)
-    if (beltEl.value?.has(key)) void beltEl.value.focusPicture(key)
-    else void beltEl.value?.focusBelt()
+    if (beltEl.value?.has(key)) void beltEl.value.focusPicture(key, quiet)
+    else void beltEl.value?.focusBelt(quiet)
     return
   }
   const thing = stageEl.value?.querySelector<HTMLElement>(
@@ -1894,7 +1894,7 @@ function closeRing(byKey: boolean): void {
   if (byKey && id) void nextTick(() => nextTick(() => focusAfterRing(id)))
 }
 
-/** Send a command as a typed one, with the ring and the hand put away, and put focus back on `id`'s thing (or the belt's first picture, once it has gone). */
+/** Send a command as a typed one, with the ring and the hand put away, and put focus back on `id`'s thing (or the belt's first picture, once it has gone), quietly: no belt caption stands over what the command does. */
 function sendFrom(command: string, id: string | undefined): void {
   const wasOpen = ring.value !== null
   const before = whereWeAre()
@@ -1903,7 +1903,7 @@ function sendFrom(command: string, id: string | undefined): void {
   game.submitCommand(command)
   if (wasOpen) ringClosed(before)
   if (!id) return
-  void nextTick(() => nextTick(() => focusAfterRing(id)))
+  void nextTick(() => nextTick(() => focusAfterRing(id, true)))
   // The thing may go with the answer (taken, used up): focus then moves on.
   pendingFocus = id
   clearTimeout(pendingTimer)
@@ -1962,7 +1962,7 @@ watch(
     if (pendingFocus === null) return
     const active = document.activeElement
     if (!active || active === document.body || !active.isConnected)
-      focusAfterRing(pendingFocus)
+      focusAfterRing(pendingFocus, true)
   },
   { flush: 'post' },
 )
