@@ -3,7 +3,8 @@
  * (`tts/act<N>/images.json`): one image per room of each act, then one portrait
  * per character the act registers (one portrait, in every act, for a character
  * who appears in several). An image's words (`text`) are the room's base
- * description with the markup removed, or the character's hand-written face
+ * description with the markup removed (or the act's own words for the picture,
+ * `Act.pictureText`), or the character's hand-written face
  * portrait prompt, the studio's starting prompt; the shared style is the
  * studio's, in `content-studio/images/edits.json`. A room image also lists its
  * named areas (`roomAreas.ts`) and its patches (`roomPatches.ts`). The tts script
@@ -79,8 +80,9 @@ export interface GameImage {
  * One image for each room of the act, described by the room's own
  * description, then one for each other picture a room has
  * (`Room.pictureVariants`): the id adds `-<variant>`, the title is
- * "<room>, <variant>", the words are the room's description to start from and
- * the areas those declared for that picture.
+ * "<room>, <variant>", the words are the room's description (or the act's own
+ * words for that picture, `Act.pictureText`) to start from and the areas those
+ * declared for that picture.
  */
 export function roomImages(act: Act): GameImage[] {
   const rooms = Object.entries(act.rooms)
@@ -104,7 +106,7 @@ export function roomImages(act: Act): GameImage[] {
     image(
       roomTrackId(act.name, key),
       room.name,
-      narrationText(room.description),
+      act.pictureText(key) ?? narrationText(room.description),
       declaredAreas(act.name, key),
       act.roomPatches(key),
     ),
@@ -116,7 +118,7 @@ export function roomImages(act: Act): GameImage[] {
         image(
           `${roomTrackId(act.name, key)}-${variant}`,
           `${room.name}, ${variant}`,
-          narrationText(room.description),
+          act.pictureText(key, variant) ?? narrationText(room.description),
           declaredAreas(act.name, key, variant),
           act.roomPatches(key, variant),
         ),

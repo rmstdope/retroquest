@@ -570,7 +570,7 @@ export const useGameStore = defineStore('game', () => {
     return shown.roomKey === room ? shown : null
   })
 
-  /** The manifest id of the picture the player sees: the room's own, or `<room>-<variant>`; null while the held picture and the room's picture are not the same one. */
+  /** The manifest id of the picture the player sees: the room's own, or `<room>-<variant>`, or the room's own while its other picture is not made yet and the stage falls back to it; null while the held picture and the room's picture are not the same one. */
   const shownPictureId = computed<string | null>(() => {
     const room = musicRoomKey.value
     const shown = roomPictureState.value
@@ -578,12 +578,13 @@ export const useGameStore = defineStore('game', () => {
     // The patches and the movement belong to one picture: they show only over that picture.
     const variant = shown.variant
     if (variant !== musicPicture.value) return null
+    const id = roomTrackId(musicActName.value, room)
+    // The other picture is not made yet: the room's own shows, with its areas and movement.
     if (
       variant &&
       roomPicture.value !== roomPictureUrl(musicActName.value, room, variant)
     )
-      return null
-    const id = roomTrackId(musicActName.value, room)
+      return id
     return variant ? `${id}-${variant}` : id
   })
 
@@ -675,6 +676,8 @@ export const useGameStore = defineStore('game', () => {
     const id = shownPictureId.value
     if (!room || !shown || id === null) return []
     const variant = shown.variant
+    // Patches belong to their own picture: none lie over the room's own while it stands in for a variant not made yet.
+    if (variant && id === roomTrackId(musicActName.value, room)) return []
     const made = madePatches(imageManifest.value, id)
     return shown.patchIds
       .filter((patch) => made.includes(patch))

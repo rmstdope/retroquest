@@ -79,6 +79,17 @@ export class Act {
   }
 
   /**
+   * The words of the picture of room `roomKey` (or of its other picture,
+   * `variant`) on the image list, where they differ from the room's own
+   * description: a picture whose scenery the room's words leave to the
+   * painter, or that shows a state the description does not. Undefined for
+   * a picture described by the room's description.
+   */
+  pictureText(_roomKey: string, _variant = ''): string | undefined {
+    return undefined
+  }
+
+  /**
    * A line that opens the act-complete page before the words every act
    * shares, to leave the player on a hook. Empty for an act without one. The
    * state is the finished act's, so the hook can follow the player's choices.

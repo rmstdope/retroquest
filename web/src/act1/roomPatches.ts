@@ -2,6 +2,7 @@ import type { ImagePatch } from '@/engine'
 import { Candle } from './items/Candle'
 import { Lantern } from './items/Lantern'
 import { Mechanism } from './items/Mechanism'
+import { Snare } from './items/Snare'
 import { Well } from './items/Well'
 import { WitheredCarrot } from './items/WitheredCarrot'
 
@@ -35,14 +36,16 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
     {
       id: 'patches-appears',
       title: 'Patches appears',
-      text: 'Add Patches to the picture.',
+      text: 'Add Patches, a small cat with ginger, black and white patchwork fur.',
       area: 'patches',
       when: 'present',
     },
     {
       id: 'faded-photograph-appears',
       title: 'Faded Photograph appears',
-      text: 'Add the faded photograph to the picture.',
+      text:
+        'Add a small faded photograph lying in an opened drawer, showing two ' +
+        'adults and a child.',
       area: 'faded-photograph',
       when: 'present',
     },
@@ -98,7 +101,7 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
     {
       id: 'key-appears',
       title: 'Key appears',
-      text: 'Add the key to the picture.',
+      text: 'Add the key lying in the straw on the floor, where it fell.',
       area: 'key',
       when: 'present',
     },
@@ -148,7 +151,7 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
     {
       id: 'patches-appears',
       title: 'Patches appears',
-      text: 'Add Patches to the picture.',
+      text: 'Add Patches, a small cat with ginger, black and white patchwork fur.',
       area: 'patches',
       when: 'present',
     },
@@ -176,7 +179,9 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
     {
       id: 'mothers-letter-appears',
       title: "Mother's Letter appears",
-      text: "Add the mother's letter to the picture.",
+      text:
+        'Tip the smooth stone askew beside a hole dug in the mud, with a ' +
+        'small open tin.',
       area: 'mothers-letter',
       when: 'present',
     },
@@ -199,9 +204,20 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
     {
       id: 'snare-appears',
       title: 'Snare appears',
-      text: 'Add the snare to the picture.',
+      text: 'Add the snare in the alcove, with a fox kit caught in it.',
       area: 'snare',
       when: 'present',
+    },
+    {
+      id: 'snare-cut',
+      title: 'Snare cut',
+      text: 'Show the snare cut and empty, the fox kit gone.',
+      area: 'snare',
+      layer: 1,
+      when: (c) => {
+        const snare = c.things.get('snare')
+        return snare instanceof Snare && snare.freed
+      },
     },
     {
       id: 'wild-berries-appears',
@@ -222,7 +238,9 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
     {
       id: 'rare-flower-appears',
       title: 'Rare Flower appears',
-      text: 'Add the rare flower to the picture.',
+      text:
+        'Add the rare flower: deep purple petals with gold at the centre, ' +
+        'faintly glowing.',
       area: 'rare-flower',
       when: 'present',
     },
@@ -299,21 +317,21 @@ export const ACT1_VARIANT_PATCHES: Readonly<
       {
         id: 'patches-gone',
         title: 'Patches gone',
-        text: 'Take Patches out of the picture.',
+        text: 'Take the eyes behind the crates out of the picture.',
         area: 'patches',
         when: 'absent',
       },
       {
         id: 'fishing-rod-appears',
         title: 'Fishing Rod appears',
-        text: 'Add the fishing rod to the picture.',
+        text: 'Add the fishing rod up on the dusty shelves.',
         area: 'fishing-rod',
         when: 'present',
       },
       {
         id: 'magnet-appears',
         title: 'Magnet appears',
-        text: 'Add the magnet to the picture.',
+        text: 'Add the magnet up on the dusty shelves.',
         area: 'magnet',
         when: 'present',
       },

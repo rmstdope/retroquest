@@ -78,8 +78,8 @@ export class Mechanism extends Item {
         'The gears grind, catch, and jam. ' +
         'The whirring dies, and the hum in the floorboards fades away, ' +
         'as whatever it was drawing from beneath the mill is left in peace.\n' +
-        'With a clunk, a hidden compartment slides open, ' +
-        'revealing a fragment of the old millstone!'
+        'With a clunk, a hidden compartment springs open, ' +
+        'and a fragment of the old millstone drops to the ground at your feet!'
       )
     }
     return super.useWith(gameState, other)

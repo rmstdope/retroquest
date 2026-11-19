@@ -154,8 +154,8 @@ export class AbandonedShed extends Room {
     if (itemsFoundMessages.length > 0) {
       return (
         `${this.lightSource(gameState)}, you rummage through the clutter of ` +
-        'rusty tools and broken crates. Tucked away in ' +
-        `dusty corners, you find ${itemsFoundMessages.join(', and ')}!`
+        'rusty tools and broken crates. Up on the dusty ' +
+        `shelves, you find ${itemsFoundMessages.join(', and ')}!`
       )
     }
     return (

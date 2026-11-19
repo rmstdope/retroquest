@@ -35,7 +35,7 @@ function openText(shelves: string): string {
 }
 
 const CAT_CLAUSE =
-  ', and every so often looks at the counter, where his cat sleeps'
+  ', and every so often looks down by the counter, where his cat sleeps'
 
 /**
  * General Store room: early merchant hub with multi-category items.
@@ -68,6 +68,19 @@ export class GeneralStore extends Room {
         south: 'BlacksmithsForge',
       },
     })
+  }
+
+  /** The store's second picture, the shut shop. */
+  static readonly PICTURE_SHUT = 'shut'
+
+  /** The shut shop while the store is shut; the room's own picture, the open shop, once it opens. */
+  override pictureVariant(gameState: GameState): string {
+    return Shopkeeper.isStoreOpen(gameState) ? '' : GeneralStore.PICTURE_SHUT
+  }
+
+  /** The shut shop is the store's second picture. */
+  override pictureVariants(): readonly string[] {
+    return [GeneralStore.PICTURE_SHUT]
   }
 
   /** Give a save made before the lane to the chapel the store's current ways out. */

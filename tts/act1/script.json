@@ -75,11 +75,6 @@
     "text": "You focus your will, a faint warmth spreads from your fingertips, and nothing answers it. The warmth is yours; the door it wants is not open yet."
   },
   {
-    "id": "007ceb3ed3f3ce",
-    "speaker": "narrator",
-    "text": "A creaky windmill towers above, its sails turning slowly in the breeze. Dusty gears and cobwebs fill the interior, and the scent of flour hangs in the air. Sunlight streams through broken windows, illuminating sacks of grain and a heavy millstone. Amidst the old workings, the black-iron mechanism stands jammed with a rope, silent at last. At your side, the ancient amulet hums softly, as if answering something stirring beneath the floor."
-  },
-  {
     "id": "007f20494b67b2",
     "speaker": "narrator",
     "text": "Magic for real: The rare flower opened for you. Mira will know what holds your magic back once she has it."
@@ -160,9 +155,19 @@
     "text": "Mira holds it by the edges, the way you do, and looks at it a long time."
   },
   {
+    "id": "00dfa3ee35bf05",
+    "speaker": "narrator",
+    "text": "Patches curls up on the floor by the counter and begins to purr."
+  },
+  {
     "id": "00e004cb1e103e",
     "speaker": "hemlock",
     "text": "Not something I carry, lad. Not since the caravans stopped, anyway."
+  },
+  {
+    "id": "00e4071146dcfd",
+    "speaker": "narrator",
+    "text": "A creaky windmill towers above, its sails turning slowly in the breeze. In the yard below, sacks of grain slump against a stone wall beside a heavy millstone, and the scent of flour hangs in the air. Under the lean-to by the wall, you notice a strange mechanism of black iron, whirring to itself, that doesn't belong to the mill's original design."
   },
   {
     "id": "00f29403875661",
@@ -250,11 +255,6 @@
     "text": "Mira? My mother swore by her for a cough. Folk say she knows things she oughtn't, love, but nobody's ever turned her from their door."
   },
   {
-    "id": "0169571959bc2e",
-    "speaker": "narrator",
-    "text": "A creaky windmill towers above, its sails turning slowly in the breeze. Dusty gears and cobwebs fill the interior, and the scent of flour hangs in the air. Sunlight streams through broken windows, illuminating sacks of grain and a heavy millstone. Amidst the old workings, the black-iron mechanism stands jammed with a rope, silent at last."
-  },
-  {
     "id": "016c9dd37a8c59",
     "speaker": "narrator",
     "text": "The anvil is bright on top and black everywhere else. It rings for a long time after each blow."
@@ -268,6 +268,11 @@
     "id": "017e832c934bd2",
     "speaker": "mira",
     "text": "I have told you what I know of it. Keep it hidden, and keep your eyes open."
+  },
+  {
+    "id": "0181abb708f394",
+    "speaker": "narrator",
+    "text": "The heart of Willowbrook: cobblestones around an old stone fountain, and a weathered notice board covered in faded announcements. The market is busy, but the talk at the stalls is low, and it stops when you pass."
   },
   {
     "id": "019c14b217e7b0",
@@ -1050,11 +1055,6 @@
     "text": "The earth is dark and gives under your boot. Water still shines in the furrows."
   },
   {
-    "id": "0694a27d2ff576",
-    "speaker": "narrator",
-    "text": "With a clunk, a hidden compartment slides open, revealing a fragment of the old millstone!"
-  },
-  {
     "id": "069677785bd63f",
     "speaker": "narrator",
     "text": "The rope is old and soft with handling. It hangs straight down from a hole in the ceiling, and nobody is touching it."
@@ -1388,11 +1388,6 @@
     "id": "087756e8d1df4c",
     "speaker": "tilda",
     "text": "Keep that one to yourself, love, or it'll be round the square by supper."
-  },
-  {
-    "id": "087a91050d11c4",
-    "speaker": "narrator",
-    "text": "The heart of Willowbrook: cobblestones around an old stone fountain, and a weathered notice board covered in faded announcements. Half the market stalls stand empty. The people at the others keep their voices down, and stop talking when you pass."
   },
   {
     "id": "087d0e7421fe92",
@@ -1935,11 +1930,6 @@
     "text": "The strange mechanism stands jammed with a rope, its gears locked and its whirring stilled. The floor no longer hums beneath it. A compartment hangs open."
   },
   {
-    "id": "0be2811e0d77d8",
-    "speaker": "narrator",
-    "text": "Holding the lantern high, you rummage through the clutter of rusty tools and broken crates. Tucked away in dusty corners, you find a discarded fishing rod, and a small magnet!"
-  },
-  {
     "id": "0be602728b182a",
     "speaker": "narrator",
     "text": "Your father's and your mother's. This was your mother's wedding ring."
@@ -2048,6 +2038,11 @@
     "id": "0c6892b6deee83",
     "speaker": "fisherman",
     "text": "By the reeds. That's where they hide. Then you wait, lad. Fish don't come to them as hurry."
+  },
+  {
+    "id": "0c7276cd96e6b5",
+    "speaker": "narrator",
+    "text": "A cluttered shop. Apples and trinkets crowd the shelves, and the air smells of fruit, wax and old wood. Outside, the lane runs east to the chapel. Hemlock dusts jars between customers, and every so often looks down by the counter, where his cat sleeps."
   },
   {
     "id": "0c7f74ad5467e1",
@@ -2695,6 +2690,11 @@
     "text": "Some voices are older than memory."
   },
   {
+    "id": "10879bfc3e7dac",
+    "speaker": "narrator",
+    "text": "A cluttered shop. Rope, apples and trinkets crowd the shelves, and the air smells of fruit, wax and old wood. Outside, the lane runs east to the chapel. Hemlock dusts jars between customers, and every so often looks down by the counter, where his cat sleeps."
+  },
+  {
     "id": "108b4faf369d64",
     "speaker": "narrator",
     "text": "A hushed clearing hidden deep within the forest, dim and overgrown. Brambles crowd its edges, and the tall grass stands grey and still beneath branches that shut out the sun. In the center, a mossy stone bears a faint inscription, too deep in shadow to read. An unnatural darkness lingers here, though the sky above the branches is clear."
@@ -2808,11 +2808,6 @@
     "id": "114c802f171e42",
     "speaker": "grandmother",
     "text": "There's a light about you since you came back from the healer's hut. You have her gift... your mother's gift. I would know it anywhere."
-  },
-  {
-    "id": "114d655e33e497",
-    "speaker": "narrator",
-    "text": "A cluttered shop. Rope, apples and trinkets crowd the shelves, and the air smells of fruit, wax and old wood. Outside, the lane runs east to the chapel. Hemlock dusts jars between customers, and every so often looks at the counter, where his cat sleeps."
   },
   {
     "id": "11540ba3f2512e",
@@ -2980,11 +2975,6 @@
     "text": "A plump river fish. It looks fresh and would make a good meal or perhaps a gift."
   },
   {
-    "id": "124ca56876b4aa",
-    "speaker": "narrator",
-    "text": "A cluttered shop. Apples and trinkets crowd the shelves, and the air smells of fruit, wax and old wood. Outside, the lane runs east to the chapel. Hemlock dusts jars between customers, and every so often looks at the counter, where his cat sleeps."
-  },
-  {
     "id": "124d5c3ce7ffcb",
     "speaker": "narrator",
     "text": "General Store"
@@ -3058,6 +3048,11 @@
     "id": "12d6d09fe880f3",
     "speaker": "narrator",
     "text": "Inside, you find a map! You take the map and place it in your inventory."
+  },
+  {
+    "id": "12e42774eb004d",
+    "speaker": "narrator",
+    "text": "A creaky windmill towers above, its sails turning slowly in the breeze. In the yard below, sacks of grain slump against a stone wall beside a heavy millstone, and the scent of flour hangs in the air. Under the lean-to by the wall, the black-iron mechanism stands jammed with a rope, silent at last."
   },
   {
     "id": "12f57266e9591b",
@@ -4045,9 +4040,9 @@
     "text": "Did you know the chapel bell rang once by itself? Years back, at midnight, with no hand on the rope. My mother knocked on wood for a week."
   },
   {
-    "id": "18d6ee66eec517",
+    "id": "18d99257314caa",
     "speaker": "narrator",
-    "text": "Patches curls up beside the till and begins to purr."
+    "text": "With a clunk, a hidden compartment springs open, and a fragment of the old millstone drops to the ground at your feet!"
   },
   {
     "id": "18dafc6bd0a2fc",
@@ -4325,11 +4320,6 @@
     "text": "Your grandmother has walked all the way out from the village. She tugs the travel cloak straight on your shoulders."
   },
   {
-    "id": "1a8eaaafa0c48b",
-    "speaker": "narrator",
-    "text": "A creaky windmill towers above, its sails turning slowly in the breeze. Dusty gears and cobwebs fill the interior, and the scent of flour hangs in the air. Sunlight streams through broken windows, illuminating sacks of grain and a heavy millstone. Amidst the old workings, you notice a strange mechanism of black iron, whirring to itself, that doesn't belong to the mill's original design."
-  },
-  {
     "id": "1a90603ec1e524",
     "speaker": "narrator",
     "text": "Heal"
@@ -4438,6 +4428,11 @@
     "id": "1b021bc216da8c",
     "speaker": "narrator",
     "text": "You dreamed of a storm, a tune, and a figure in the dark that whispered your name. You woke with three words written down: …let them rest…"
+  },
+  {
+    "id": "1b21172bca34ba",
+    "speaker": "narrator",
+    "text": "A creaky windmill towers above, its sails turning slowly in the breeze. In the yard below, sacks of grain slump against a stone wall beside a heavy millstone, and the scent of flour hangs in the air. Under the lean-to by the wall, the black-iron mechanism stands jammed with a rope, silent at last. At your side, the ancient amulet hums softly, as if answering something stirring beneath the floor."
   },
   {
     "id": "1b256ee79d87bc",
@@ -4553,6 +4548,11 @@
     "id": "1bfe451691e92b",
     "speaker": "narrator",
     "text": "Something else clings to the magnet beside it: a rune token of black iron, scored with a twisted rune. It is cold, far colder than the water it came from. Wells do not grow things like this. Someone put it there."
+  },
+  {
+    "id": "1c0182fc2898af",
+    "speaker": "narrator",
+    "text": "Holding the lantern high, you rummage through the clutter of rusty tools and broken crates. Up on the dusty shelves, you find a discarded fishing rod, and a small magnet!"
   },
   {
     "id": "1c06819587e463",
