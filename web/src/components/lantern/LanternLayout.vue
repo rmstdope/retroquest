@@ -119,6 +119,7 @@ import StageButtons from './StageButtons.vue'
 import StagePicture from './StagePicture.vue'
 import StageSpeech from './StageSpeech.vue'
 import ColumnTurn from './ColumnTurn.vue'
+import StoryAnnouncer from './StoryAnnouncer.vue'
 import StoryDrawer from './StoryDrawer.vue'
 import StoryNameMenu from './StoryNameMenu.vue'
 import { NAME_SELECTOR, useNameStops } from '@/composables/useNameStops'
@@ -3050,6 +3051,7 @@ watch(namesBlocked, (blocked) => {
                 </template>
               </div>
             </section>
+            <StoryAnnouncer :turns="game.turns" />
             <!-- None while an arrival is told on the picture: it says how to go on and skip itself. -->
             <p
               v-if="narration.hintVisible && hintText && !arrival.active"

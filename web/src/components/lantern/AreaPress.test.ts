@@ -20,7 +20,14 @@ const things: AreaThing[] = [
     label: 'Old Notice',
     kind: 'item',
   },
-  { areaId: 'exit-north', name: 'north', label: '↑ Hut', kind: 'exit' },
+  {
+    areaId: 'exit-north',
+    name: 'north',
+    label: '↑ Hut',
+    kind: 'exit',
+    direction: 'north',
+    place: 'Hut',
+  },
   { areaId: 'unplaced', name: 'unplaced', label: 'Nowhere', kind: 'item' },
 ]
 /** On a 1920×1080 picture shown at half size (960×540). */
@@ -67,7 +74,7 @@ afterEach(() => {
 })
 
 describe('AreaPress', () => {
-  it('has a button for each placed thing and person, left to right, and none for a way out', async () => {
+  it('has a button for each placed thing and person, left to right, then one for each way out', async () => {
     const w = mountPress()
     await nextTick()
     const stops = w.findAll('button')
@@ -76,9 +83,21 @@ describe('AreaPress', () => {
       'Notice Board',
       'Old Notice',
       'Bucket',
+      'Go north to Hut',
     ])
-    for (const stop of stops)
+    for (const stop of stops.slice(0, 4))
       expect(stop.attributes('aria-haspopup')).toBe('menu')
+  })
+
+  it('makes a way out a plain button that names its direction and presses nothing itself', async () => {
+    const w = mountPress()
+    await nextTick()
+    const way = w.get('[data-area-press="exit-north"]')
+    expect(way.attributes('data-way')).toBe('north')
+    expect(way.attributes('aria-haspopup')).toBeUndefined()
+    expect(way.attributes('tabindex')).toBe('-1')
+    click(w, 'exit-north', 0, 0, 0)
+    expect(w.emitted('press')).toBeUndefined()
   })
 
   it('puts a smaller thing over the larger one it lies on', async () => {

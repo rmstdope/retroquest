@@ -48,7 +48,8 @@ export function renderMarkup(text: string): string {
     html = html.replace(closeRegex, '</span>')
   }
 
-  html = html.replace(/\n/g, '<br>')
+  // A space stays with each break, so the lines are not read as one word.
+  html = html.replace(/\n/g, ' <br>')
 
   return html
 }

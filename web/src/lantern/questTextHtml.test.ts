@@ -30,7 +30,7 @@ describe('questTextHtml', () => {
 
   it('renders text without a checklist as before', () => {
     expect(questTextHtml('A [item_name]key[/item_name].\nOld door.')).toBe(
-      'A <span class="theme-item_name">key</span>.<br>Old door.',
+      'A <span class="theme-item_name">key</span>. <br>Old door.',
     )
   })
 })

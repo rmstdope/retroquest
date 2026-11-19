@@ -8,8 +8,8 @@ import type { PictureSize } from '@/lantern/roomMotionScene'
 
 /**
  * What can be pressed on the room's picture: one transparent button over each
- * placed person, thing and piece of scenery (not ways out, which are their
- * own piece of work), in the layer the marks and names are drawn in, so it
+ * placed person, thing and piece of scenery, and after them one over each
+ * open way out, in the layer the marks and names are drawn in, so it
  * drifts with the picture. The buttons are for the pointer and the finger:
  * they are never Tab stops (a player at the keyboard has F1 and the typing
  * box), and taking focus shows nothing, neither a box nor a mark, since the
@@ -19,6 +19,11 @@ import type { PictureSize } from '@/lantern/roomMotionScene'
  * (the screen's pixels); one made by a key on a thing that holds focus, as
  * when a ring closes and gives it back, opens at the middle of the thing. The
  * words and buttons over the picture cover it as they cover the picture.
+ * A way out is a plain button, "Go <direction> to <place>" (as the Map's), for
+ * a screen reader to find; it takes no pointer (the marks, names and painted
+ * places already take the presses of the sighted) and carries `data-way`, so
+ * the click a screen reader makes is the stage's press on that way: it walks
+ * there at once and opens no ring.
  */
 const props = defineProps<{
   things: AreaThing[]
@@ -49,7 +54,7 @@ onMounted(() => {
 const stops = computed(() => {
   if (view.value.width < 1 || view.value.height < 1) return []
   const placed: PlacedName[] = placeNames(
-    props.things.filter((thing) => thing.kind !== 'exit'),
+    props.things,
     props.boxes,
     view.value,
     props.pictureSize,
@@ -57,10 +62,20 @@ const stops = computed(() => {
   const bySize = [...placed].sort(
     (a, b) => b.rect.w * b.rect.h - a.rect.w * a.rect.h,
   )
-  return [...placed]
-    .sort((a, b) => a.rect.x - b.rect.x)
-    .map((entry) => ({ entry, layer: bySize.indexOf(entry) + 1 }))
+  const leftToRight = (list: PlacedName[]): PlacedName[] =>
+    [...list].sort((a, b) => a.rect.x - b.rect.x)
+  return [
+    ...leftToRight(placed.filter((entry) => entry.kind !== 'exit')),
+    ...leftToRight(placed.filter((entry) => entry.kind === 'exit')),
+  ].map((entry) => ({ entry, layer: bySize.indexOf(entry) + 1 }))
 })
+
+/** What a screen reader hears for a stop: a thing's name, or where a way out goes. */
+function labelOf(entry: PlacedName): string {
+  return entry.kind === 'exit'
+    ? `Go ${entry.direction ?? ''} to ${entry.place ?? ''}`
+    : entry.label
+}
 
 /** A press or a key on a thing; a key (no pointer, `detail` 0) opens at the middle of the thing. */
 function onClick(entry: PlacedName, event: MouseEvent): void {
@@ -85,8 +100,10 @@ function onClick(entry: PlacedName, event: MouseEvent): void {
       type="button"
       class="lq-area-press-hit"
       :data-area-press="stop.entry.areaId"
-      :aria-label="stop.entry.label"
-      aria-haspopup="menu"
+      :class="{ 'lq-area-press-way': stop.entry.kind === 'exit' }"
+      :data-way="stop.entry.kind === 'exit' ? stop.entry.direction : undefined"
+      :aria-label="labelOf(stop.entry)"
+      :aria-haspopup="stop.entry.kind === 'exit' ? undefined : 'menu'"
       tabindex="-1"
       :style="{
         left: `${stop.entry.rect.x}px`,
@@ -95,7 +112,7 @@ function onClick(entry: PlacedName, event: MouseEvent): void {
         height: `${stop.entry.rect.h}px`,
         zIndex: stop.layer /* local */,
       }"
-      @click="onClick(stop.entry, $event)"
+      @click="stop.entry.kind === 'exit' || onClick(stop.entry, $event)"
     ></button>
   </div>
 </template>
@@ -118,6 +135,10 @@ function onClick(entry: PlacedName, event: MouseEvent): void {
   background: transparent;
   cursor: pointer;
   pointer-events: auto;
+}
+/* A way out takes no pointer: the sighted press its marks, names and painted places. */
+.lq-area-press-way {
+  pointer-events: none;
 }
 /* Focus draws no box round the thing: the picture shows only the names asked for. */
 .lq-area-press-hit:focus {
