@@ -803,7 +803,7 @@ describe('Game', () => {
 
   describe('inventory', () => {
     it('lists carried items', () => {
-      expect(game.inventory()).toBe('Your inventory is empty.')
+      expect(game.inventory()).toBe('Your bag is empty.')
       game.state.inventory.push(item('apple'), item('stick'))
       expect(game.inventory()).toBe(
         '[bold]You are carrying:[/bold]\n- [item_name]apple[/item_name]\n- [item_name]stick[/item_name]',

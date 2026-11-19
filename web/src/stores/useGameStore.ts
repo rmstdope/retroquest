@@ -15,6 +15,7 @@ import type { AreaThing } from '@/lantern/areaThings'
 import { declaredAreas } from '@/lantern/roomAreas'
 import type { PictureState, useBridge } from '@/composables/useBridge'
 import {
+  formOf,
   LOADED_ROOM,
   normalizeSaveName,
   type RoomDescription,
@@ -88,6 +89,9 @@ interface TreePoint {
   start: number
   node: CompletionTree
 }
+
+/** What a typed `map` or `inventory` asks the screen to show. */
+export type LookKind = 'map' | 'bag'
 
 /** One entry in the story: what the player did and what the game answered. */
 export interface Turn {
@@ -449,6 +453,9 @@ export const useGameStore = defineStore('game', () => {
   /** The latest save/load notice (a toast); a new id shows it again. */
   const notice = ref<{ id: number; text: string } | null>(null)
   let nextNoticeId = 1
+  /** The latest typed `map` or `inventory` for the layout to answer; a new id asks again. */
+  const lookRequest = ref<{ id: number; kind: LookKind } | null>(null)
+  let nextLookId = 1
 
   /** A successful save or load is a notice, not a story line; true if shown so. */
   function showNotice(result: string, text: string): boolean {
@@ -1367,6 +1374,7 @@ export const useGameStore = defineStore('game', () => {
     requireBridge()
     const command = cmd.trim()
     if (routeSaveOrLoad(command)) return
+    if (routeLook(command)) return
     if (/^(quit|exit)$/i.test(command)) {
       quitAsked.value = true
       return
@@ -1596,6 +1604,26 @@ export const useGameStore = defineStore('game', () => {
   /** Whether an act's intro pop-up is on screen. */
   function isIntroShowing(): boolean {
     return showModal.value && modalChapter.value?.kind === 'intro'
+  }
+
+  /**
+   * Typed `map`, and `inventory` (or `i`, `inv`) with things in the bag, open
+   * the screen that already shows it instead of writing a turn: the layout
+   * answers the `lookRequest`. Only the bare word is routed; with an empty
+   * bag the game answers as an ordinary turn. True when handled here.
+   */
+  function routeLook(command: string): boolean {
+    const word = command.toLowerCase()
+    let kind: LookKind
+    if (formOf('map').verbs.includes(word)) kind = 'map'
+    else if (
+      formOf('inventory').verbs.includes(word) &&
+      requireBridge().controller.getInventory().length > 0
+    )
+      kind = 'bag'
+    else return false
+    lookRequest.value = { id: nextLookId++, kind }
+    return true
   }
 
   /**
@@ -2119,6 +2147,7 @@ export const useGameStore = defineStore('game', () => {
     actEndPending,
     getQuickSave,
     notice,
+    lookRequest,
     rawInventory,
     rawSpells,
     activeQuests,
