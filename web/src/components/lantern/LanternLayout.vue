@@ -42,6 +42,7 @@ import {
 import { useLanternPresentation } from '@/composables/useLanternPresentation'
 import { useHoldToSkip, type HoldRingSpot } from '@/composables/useHoldToSkip'
 import { useAudio } from '@/composables/useAudio'
+import { useUiSounds } from '@/composables/useUiSounds'
 import { useSizeWatch } from '@/composables/useSizeWatch'
 import { useActMusic } from '@/composables/useActMusic'
 import { useFocusTrap } from '@/composables/useFocusTrap'
@@ -2126,7 +2127,8 @@ function openMapFromGame(): void {
  * open them. In the game the drawers toggle (J on the quests switches to the
  * journal) and M opens the map, and where the quests or the journal are a
  * section of the page the key shows that section; in the menu they open what
- * its tile does, so closing comes back to it; on the map M closes it. Not in a
+ * its tile does (with the latch the tile's choice sounds), so closing comes
+ * back to it; on the map M closes it. Not in a
  * text field, not with Ctrl, ⌘ or Alt, and not while the title, a chapter, the
  * quit question, a quest, a name's menu, the end or a ring is up.
  */
@@ -2150,6 +2152,7 @@ function onJourneyKey(event: KeyboardEvent): void {
   }
   if (gameDialog.value === 'menu') {
     event.preventDefault()
+    uiSounds.playChoose()
     openFromMenu(kind)
     return
   }
@@ -2243,6 +2246,8 @@ watch(
 )
 
 const fullscreen = useFullscreen()
+/** The interface's own sounds: the latch of a journey key pressed in the menu. */
+const uiSounds = useUiSounds()
 
 /**
  * Keys that belong to no one thing: Escape opens the menu when nothing else
