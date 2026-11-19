@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, watch } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
+import { useFlightStore } from '@/stores/useFlightStore'
+import { withoutOwed } from '@/lantern/belt'
 import { usePanelFlash } from '@/composables/usePanelFlash'
 import { displayName } from '@/lantern/displayName'
 import { parseCountedName } from '@/lantern/inventoryChanges'
@@ -17,7 +19,8 @@ import { renderMarkup } from '@/utils/theme'
  * Phones show one tab at a time from their section tabs (the `tab` prop):
  * then there is no tab row, just a heading. The stage's drawer instead gives
  * the tab to open on (`start`) and keeps the tab row, and hears of every tab
- * the player turns to (`select`), so its lit button follows.
+ * the player turns to (`select`), so its lit button follows. A thing or
+ * spell just gained is listed once its flight has landed, not before.
  */
 type Tab = 'bag' | 'spells' | 'quests'
 
@@ -29,22 +32,27 @@ const TITLES: Record<Tab, string> = {
   quests: 'Quests',
 }
 const game = useGameStore()
+const flights = useFlightStore()
 const { flashing, endFlash } = usePanelFlash(['quests', 'stock'])
 const active = ref<Tab>(props.tab ?? props.start ?? 'bag')
 const expanded = ref<Set<string>>(new Set())
 const tabButtons = ref<HTMLButtonElement[]>([])
 
 const bag = computed(() =>
-  game.rawInventory.map((entry) => {
-    const { name, count } = parseCountedName(entry.name)
-    return { name, count, label: displayName(name), note: entry.description }
-  }),
+  withoutOwed(game.rawInventory, (name) => flights.owing('item', name)).map(
+    (entry) => {
+      const { name, count } = parseCountedName(entry.name)
+      return { name, count, label: displayName(name), note: entry.description }
+    },
+  ),
 )
 const spells = computed(() =>
-  game.rawSpells.map((entry) => {
-    const { name } = parseCountedName(entry.name)
-    return { name, label: displayName(name), note: entry.description }
-  }),
+  withoutOwed(game.rawSpells, (name) => flights.owing('spell', name)).map(
+    (entry) => {
+      const { name } = parseCountedName(entry.name)
+      return { name, label: displayName(name), note: entry.description }
+    },
+  ),
 )
 const quests = computed(() => [...game.activeQuests, ...game.completedQuests])
 

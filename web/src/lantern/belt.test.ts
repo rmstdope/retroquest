@@ -2,6 +2,7 @@
 import { describe, expect, it } from 'vitest'
 import type { ActionContext } from './actions'
 import {
+  withoutOwed,
   beltPictures,
   carriedRing,
   handCommand,
@@ -160,5 +161,34 @@ describe('the hand', () => {
     expect(pressedOnBelt(hand, second)).toBe("use bread with Elior's Journal")
     expect(pressedOnBelt(hand, first)).toBeNull()
     expect(pressedOnBelt(hand, spell)).toBeNull()
+  })
+})
+
+describe('withoutOwed', () => {
+  const bag = [
+    { name: '3 apple', description: 'Red.' },
+    { name: 'lantern', description: 'Lit.' },
+  ]
+  const owing =
+    (owed: Record<string, number>) =>
+    (name: string): number =>
+      owed[name] ?? 0
+
+  it('leaves everything when nothing is owed', () => {
+    expect(withoutOwed(bag, owing({}))).toEqual(bag)
+  })
+
+  it('drops a thing that is wholly owed', () => {
+    expect(withoutOwed(bag, owing({ lantern: 1 })).map((e) => e.name)).toEqual([
+      '3 apple',
+    ])
+  })
+
+  it('lowers a counted thing by what is owed, and drops it at none', () => {
+    expect(withoutOwed(bag, owing({ apple: 1 }))[0].name).toBe('2 apple')
+    expect(withoutOwed(bag, owing({ apple: 2 }))[0].name).toBe('apple')
+    expect(withoutOwed(bag, owing({ apple: 3 })).map((e) => e.name)).toEqual([
+      'lantern',
+    ])
   })
 })

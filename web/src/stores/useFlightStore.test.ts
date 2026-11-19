@@ -211,4 +211,36 @@ describe('useFlightStore', () => {
     vi.advanceTimersByTime(10000)
     expect(ran).toEqual([])
   })
+
+  describe('what is owed', () => {
+    it('owes a gained thing from the moment it is owed until it lands', () => {
+      const flights = useFlightStore()
+      flights.owe([lantern, revive])
+      expect(flights.owing('item', 'lantern')).toBe(1)
+      flights.launch([lantern, revive])
+      vi.advanceTimersByTime(
+        FLIGHT_SHOW_MS + FLIGHT_HOLD_MS + FLIGHT_FLY_MS - 1,
+      )
+      expect(flights.owing('item', 'lantern')).toBe(1)
+      vi.advanceTimersByTime(1)
+      expect(flights.owing('item', 'lantern')).toBe(0)
+      expect(flights.owing('spell', 'revive')).toBe(1)
+      vi.advanceTimersByTime(FLIGHT_SHOW_MS + FLIGHT_HOLD_MS + FLIGHT_FLY_MS)
+      expect(flights.owing('spell', 'revive')).toBe(0)
+    })
+
+    it('owes as many as were gained, and the same name of another kind separately', () => {
+      const flights = useFlightStore()
+      flights.owe([{ kind: 'item', name: 'apple', count: 3 }])
+      expect(flights.owing('item', 'apple')).toBe(3)
+      expect(flights.owing('spell', 'apple')).toBe(0)
+    })
+
+    it('forgets what is owed when cleared', () => {
+      const flights = useFlightStore()
+      flights.owe([lantern])
+      flights.clear()
+      expect(flights.owing('item', 'lantern')).toBe(0)
+    })
+  })
 })

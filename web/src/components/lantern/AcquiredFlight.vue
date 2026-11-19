@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onUnmounted, ref, watch } from 'vue'
 import BeltFace from './BeltFace.vue'
+import { displayName } from '@/lantern/displayName'
 import {
   FLIGHT_FLY_MS,
   LEAVE_RISE_MS,
@@ -11,14 +12,15 @@ import {
 
 /**
  * A thing the player has just gained, flown from the picture to its button
- * (`useFlightStore` keeps the queue and the clock): its name, in the item's
- * green or the spell's purple with a bag or a sparkle, comes up where the
- * thing lay in the picture (its pressable box, `data-area-press`), else in the
+ * (`useFlightStore` keeps the queue and the clock): only its picture, the very
+ * face the Bag or Spells list then shows (its first letter until the picture
+ * is made), comes up where the thing lay in the picture (its pressable box, `data-area-press`), else in the
  * middle of the picture, rests, then shrinks and flies into the Bag or Spells button
  * (or tab on a phone) that carries `data-flight-target` of its kind and is
  * shown. On the belt of pictures it lands on its own picture
- * (`data-belt-pic`) when that is in view along the belt, else on the tiny
- * button of its kind. Where the flight starts and lands is measured when it starts and
+ * (`data-belt-pic`) when it is already there (one more of a counted thing)
+ * and in view along the belt, else on the tiny button of its kind; the list
+ * takes the thing in as it lands (`useFlightStore.owe`). Where the flight starts and lands is measured when it starts and
  * when it flies. Under Reduce motion it does not move: it is shown, then
  * at its button. An item the turn lost goes the other way, in warm grey with a
  * minus sign: it rises out of the Bag button (or tab) to the middle of the
@@ -52,6 +54,13 @@ function centre(element: Element | null): Point | null {
   if (box.width === 0 && box.height === 0) return null
   return { x: box.left + box.width / 2, y: box.top + box.height / 2 }
 }
+
+/** The first letter of the name, which stands in for the picture until it is made (as on the belt). */
+const letter = computed(() =>
+  flights.current
+    ? displayName(flights.current.name).charAt(0).toUpperCase()
+    : '',
+)
 
 /** The name as the story shows it, with how many when more than one. */
 const label = computed(() =>
@@ -207,13 +216,27 @@ const style = computed(() => {
     data-testid="flight"
   >
     <span v-if="flights.current.leaving" class="lq-flight-minus">−</span>
+    <!-- A thing obtained flies as its picture alone, the one the list then shows. -->
+    <span
+      v-if="!flights.current.leaving"
+      class="lq-flight-pocket"
+      aria-hidden="true"
+    >
+      <BeltFace
+        :kind="flights.current.kind"
+        :name="flights.current.name"
+        picture-class="lq-flight-pic"
+      >
+        <span class="lq-flight-letter">{{ letter }}</span>
+      </BeltFace>
+    </span>
     <BeltFace
+      v-else
       :kind="flights.current.kind"
       :name="flights.current.name"
       :picture-class="`lq-flight-face lq-flight-face-${flights.current.kind}`"
     >
       <svg
-        v-if="flights.current.kind === 'item'"
         class="lq-flight-icon"
         viewBox="0 0 24 24"
         fill="none"
@@ -226,22 +249,10 @@ const style = computed(() => {
         <path d="M8 7V6a4 4 0 0 1 8 0v1" />
         <path d="M5 7h14l-1.2 12.2A2 2 0 0 1 15.8 21H8.2a2 2 0 0 1-2-1.8z" />
       </svg>
-      <svg
-        v-else
-        class="lq-flight-icon"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="1.8"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        aria-hidden="true"
-      >
-        <path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z" />
-        <path d="M19 17l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7z" />
-      </svg>
     </BeltFace>
-    <span class="lq-flight-name">{{ label }}</span>
+    <span v-if="flights.current.leaving" class="lq-flight-name">{{
+      label
+    }}</span>
   </div>
   <p class="lq-sr-only" aria-live="polite">{{ announcement }}</p>
 </template>
@@ -254,18 +265,16 @@ const style = computed(() => {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 14px 26px;
-  border-radius: 14px;
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.28);
   white-space: nowrap;
   pointer-events: none;
 }
 .lq-flight-item {
-  border: 1px solid var(--lq-item-line);
-  background: var(--lq-item-soft);
   color: var(--lq-item);
 }
 .lq-flight-lost {
+  padding: 14px 26px;
+  border-radius: 14px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.28);
   border: 1px solid var(--lq-lost-line);
   background: var(--lq-lost-soft);
   color: var(--lq-lost);
@@ -277,9 +286,37 @@ const style = computed(() => {
   margin-right: -4px;
 }
 .lq-flight-spell {
-  border: 1px solid var(--lq-spell-line);
-  background: var(--lq-spell-soft);
   color: var(--lq-spell);
+}
+/* The belt's round brass-rimmed pocket, so what flies is what then sits in the list. */
+.lq-flight-pocket {
+  box-sizing: border-box;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 3px solid #c8963d;
+  box-shadow:
+    0 0 0 1px #4a3110,
+    inset 0 2px 6px rgb(0 0 0 / 0.5),
+    0 3px 6px rgb(0 0 0 / 0.5);
+  font: 600 24px var(--lq-font-display);
+}
+.lq-flight-item .lq-flight-pocket {
+  background: #18261b;
+  color: #8fcf7a;
+}
+.lq-flight-spell .lq-flight-pocket {
+  background: #241a33;
+  color: #c79bf0;
+}
+.lq-flight-pic {
+  width: 100%;
+  height: 100%;
+  border-radius: 999px;
+  object-fit: cover;
 }
 .lq-flight-face {
   /* A small square of the picture, in the thin coloured edge of its kind (amber thing, blue spell), also on the grey card of a loss. */

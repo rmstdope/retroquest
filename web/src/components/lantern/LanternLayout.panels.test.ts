@@ -125,6 +125,30 @@ describe('LanternLayout: panels wait for the narration', () => {
     expect(useFlightStore().current?.name).toBe(GEM)
   })
 
+  it('keeps a gained thing out of the Bag from the moment the narrator lets go of it until it lands', async () => {
+    vi.spyOn(HTMLMediaElement.prototype, 'play').mockResolvedValue()
+    await ready()
+    const narration = useNarrationStore()
+    const flights = useFlightStore()
+    const clip = { file: 'x.mp3', speaker: 'narrator', duration: 5, words: [] }
+    vi.spyOn(narration, 'manifestFor').mockReturnValue(
+      new Proxy({}, { get: () => clip }),
+    )
+    useGameStore().submitCommand(`take ${GEM.toLowerCase()}`)
+    await vi.advanceTimersByTimeAsync(0)
+    expect(flights.owing('item', GEM)).toBe(0)
+    narration.skipAll()
+    await vi.advanceTimersByTimeAsync(0)
+    // The bag is let go of, the flight still waits for the news: nothing shows yet.
+    expect(flights.current).toBeNull()
+    expect(flights.owing('item', GEM)).toBe(1)
+    useArrivalStore().clear()
+    await vi.advanceTimersByTimeAsync(FLIGHT_SHOW_MS + FLIGHT_HOLD_MS)
+    expect(flights.owing('item', GEM)).toBe(1)
+    await vi.advanceTimersByTimeAsync(FLIGHT_FLY_MS)
+    expect(flights.owing('item', GEM)).toBe(0)
+  })
+
   it('keeps a taken thing painted until the narrator is done, then lets it go as its name comes up (rq-sm83)', async () => {
     vi.spyOn(HTMLMediaElement.prototype, 'play').mockResolvedValue()
     await ready()
