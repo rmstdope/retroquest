@@ -1,0 +1,42 @@
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Option A — under Sound effects</title><style>:root{--bg:#14110d;--glass:rgba(40,34,27,.86);--ink:#efe6d4;--muted:#a99c84;--amber:#e3a547;--cream:#f4e9cf;--line:rgba(239,230,212,.14)}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 30% 20%,#3a2c1c,#0d0b08 70%);color:var(--ink);font:16px/1.45 Georgia,serif;padding:24px 16px}
+h1{font:600 14px system-ui;letter-spacing:.08em;text-transform:uppercase;color:var(--amber);margin:0 0 4px}
+.lead{font:14px system-ui;color:var(--muted);max-width:760px;margin:0 0 20px}
+.wrap{display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start}
+.cap{font:600 12px system-ui;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin:0 0 8px}
+.dlg{width:min(420px,100%);background:var(--glass);border:1px solid var(--line);border-radius:20px;padding:18px 18px 12px;backdrop-filter:blur(8px);box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.dlg h2{margin:0 0 10px;font-size:22px;display:flex;justify-content:space-between}.x{font:16px system-ui;color:var(--muted)}
+.grp{font:600 11px system-ui;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);margin:14px 4px 6px}
+.row{display:flex;justify-content:space-between;align-items:center;padding:9px 10px;border-radius:14px}
+.lbl{display:block}.note{display:block;font:13px system-ui;color:var(--muted)}
+.vol{display:flex;gap:10px;align-items:center;padding:4px 10px 8px;font:13px system-ui;color:var(--muted)}
+.bar{flex:1;height:4px;border-radius:2px;background:linear-gradient(90deg,var(--amber) var(--v),var(--line) var(--v))}
+.sw{width:42px;height:24px;border-radius:12px;background:var(--line);position:relative;flex:none}.sw::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:var(--muted)}
+.sw.on{background:var(--amber)}.sw.on::after{left:21px;background:#1b150e}
+.ring{outline:2px solid var(--cream);outline-offset:-3px}
+.new{position:relative}.new::before{content:"NEW";position:absolute;left:-46px;top:12px;font:700 10px system-ui;color:#1b150e;background:var(--amber);padding:2px 5px;border-radius:4px}
+.keys{font:12px system-ui;color:var(--muted);border-top:1px solid var(--line);margin-top:10px;padding-top:8px}
+.tag{font:600 11px system-ui;padding:2px 7px;border-radius:9px;margin-left:6px}.t-ok{background:rgba(227,165,71,.2);color:var(--amber)}.t-new{background:var(--amber);color:#1b150e}.t-off{background:var(--line);color:var(--muted)}
+table{border-collapse:collapse;font:14px system-ui;width:min(760px,100%)}td,th{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{color:var(--muted);font-weight:600;font-size:12px;text-transform:uppercase}
+td small{color:var(--muted)}</style></head><body>
+<h1>Option A — under Sound effects</h1><p class=lead>The game's Settings window, opened from the Menu. The new switch is marked NEW. Left: switched on (how every player starts). Right: switched off — no menu ticks or latches anywhere, the title page's included. Turning it on plays one latch so you hear what you just turned on; turning it off is silent.</p>
+<div class=wrap>
+<div><p class=cap>Switched on</p><div class=dlg><h2>Settings <span class=x>✕</span></h2>
+<div class=grp>Appearance</div><div class=row><span class=lbl>Theme</span><span class=note>Device · Light · Dark</span></div><div class=row><span class=lbl>Text size</span><span class=note>A A A</span></div>
+<div class=grp>Sound</div><div class=row><span class=lbl>Music</span></div><div class=vol>Volume <span class=bar style="--v:60%"></span> 60</div>
+<div class=row><span><span class=lbl>Sound effects</span><span class=note>Quest chime and fanfare</span></span></div><div class=vol>Volume <span class=bar style="--v:80%"></span> 80</div>
+<div class='row new ring'><span><span class=lbl>Menu clicks</span><span class=note>The tick and latch as you move through the menus</span></span><span class='sw on'></span></div>
+<div class=row><span class=lbl>Narration</span></div><div class=vol>Volume <span class=bar style="--v:100%"></span> 100</div>
+<div class=grp>Playing</div><div class=row><span><span class=lbl>Reduce motion</span><span class=note>No shake, slide-in or moving pictures</span></span><span class=sw></span></div>
+
+<div class=keys>↑ ↓ move · ← → change · Esc back</div></div></div>
+<div><p class=cap>Switched off</p><div class=dlg><h2>Settings <span class=x>✕</span></h2>
+<div class=grp>Appearance</div><div class=row><span class=lbl>Theme</span><span class=note>Device · Light · Dark</span></div><div class=row><span class=lbl>Text size</span><span class=note>A A A</span></div>
+<div class=grp>Sound</div><div class=row><span class=lbl>Music</span></div><div class=vol>Volume <span class=bar style="--v:60%"></span> 60</div>
+<div class=row><span><span class=lbl>Sound effects</span><span class=note>Quest chime and fanfare</span></span></div><div class=vol>Volume <span class=bar style="--v:80%"></span> 80</div>
+<div class='row new ring'><span><span class=lbl>Menu clicks</span><span class=note>The tick and latch as you move through the menus</span></span><span class='sw'></span></div>
+<div class=row><span class=lbl>Narration</span></div><div class=vol>Volume <span class=bar style="--v:100%"></span> 100</div>
+<div class=grp>Playing</div><div class=row><span><span class=lbl>Reduce motion</span><span class=note>No shake, slide-in or moving pictures</span></span><span class=sw></span></div>
+
+<div class=keys>↑ ↓ move · ← → change · Esc back</div></div></div>
+</div></body></html>
