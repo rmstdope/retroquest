@@ -278,6 +278,8 @@ const drawerTab = ref<'quests' | 'story' | null>(null)
 /**
  * How wide an open drawer is (the `width` of `JournalDrawer` and `StoryDrawer`),
  * which the bag tray leaves free at its right so no picture of it lies under the drawer.
+ * A phone's story drawer covers the whole stage (`.lq-phone-drawer`), tray and all,
+ * so its width here does not matter.
  */
 function drawerWidth(tab: 'quests' | 'story'): string {
   return tab === 'story' ? '50%' : 'min(380px, 92%)'
@@ -1859,13 +1861,15 @@ function ringPlacement(
   }
 }
 
-/** Bumped when the window is resized, so the caption is placed again. */
+/** Bumped when the window is resized or a drawer opens or closes, so the caption is placed again. */
 const windowTick = ref(0)
 /** The window changed size: the caption follows the belt. */
 function onWindowResize(): void {
   windowTick.value++
 }
 onMounted(() => window.addEventListener('resize', onWindowResize))
+// A drawer opening or closing narrows or widens the belt once it is drawn: the caption follows it then.
+watch(drawerTab, onWindowResize, { flush: 'post' })
 onUnmounted(() => window.removeEventListener('resize', onWindowResize))
 /** The belt picture whose caption shows, as the belt says. */
 const beltCaption = ref<BeltPicture | null>(null)

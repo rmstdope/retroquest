@@ -13,6 +13,7 @@ import {
   showNames,
   closeTypingBox,
   enterCommand,
+  sendToGame as send,
 } from './fixtures'
 
 /** A placed area, in fractions of the picture. */
@@ -40,36 +41,6 @@ const COVERED: Record<string, AreaFractions> = {
   bread: { x: 0.48, y: 0.827, width: 0.04, height: 0.05 },
   hearth: { x: 0.45, y: 0.11, width: 0.1, height: 0.06 },
   grandmother: { x: 0.41, y: 0.835, width: 0.06, height: 0.05 },
-}
-
-/** The store call the helpers make to send a command without the typing box. */
-interface GameStoreHandle {
-  acceptInput: boolean
-  submitCommand(command: string): void
-}
-
-/** The app's Vue root, as far as this spec reaches into it. */
-interface AppRootElement extends Element {
-  __vue_app__?: {
-    config: {
-      globalProperties: { $pinia: { _s: Map<string, GameStoreHandle> } }
-    }
-  }
-}
-
-/** Send a command straight to the game (no typing box, which is itself something the names keep clear of). */
-async function send(page: Page, command: string): Promise<void> {
-  await page.waitForFunction(() => {
-    const root = document.querySelector('#app') as AppRootElement | null
-    return root?.__vue_app__?.config.globalProperties.$pinia._s.get('game')
-      ?.acceptInput
-  })
-  await page.evaluate((text) => {
-    const root = document.querySelector('#app') as AppRootElement | null
-    root?.__vue_app__?.config.globalProperties.$pinia._s
-      .get('game')
-      ?.submitCommand(text)
-  }, command)
 }
 
 /** Open the game in the cottage with its picture up and the things of `COVERED` placed on it. */
@@ -231,3 +202,20 @@ for (const [key, drawer] of [
     const tray = await page.locator('.lq-belt').boundingBox()
     expect(tray!.x + tray!.width).toBeLessThanOrEqual(open!.x)
   })
+
+test("a bag picture's caption moves beside a journal opened under it", async ({
+  page,
+}): Promise<void> => {
+  await toTheCottage(page)
+  await send(page, 'use lantern')
+  // The lantern's caption is a long one.
+  await send(page, 'take lantern')
+  await page.getByRole('button', { name: 'Lantern (lit)' }).hover()
+  await expect(page.locator('.lq-belt-caption')).toBeVisible()
+  await page.keyboard.press('j')
+  await expect(page.locator('.lq-story-drawer')).toBeVisible()
+  await nextFrames(page, 3)
+  const caption = await page.locator('.lq-belt-caption').boundingBox()
+  // The journal takes the right half of the window once it has slid in.
+  expect(caption!.x + caption!.width).toBeLessThanOrEqual(1512 / 2)
+})
