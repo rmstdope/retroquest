@@ -432,7 +432,7 @@ describe('Shadows over Willowbrook hint', () => {
 
   it('says something is wrong at the start', () => {
     expect(hintWith([])).toBe(LINE_1)
-    expect(hintWith([FLAG_VILLAGER_TALKED_TO])).toBe(LINE_1)
+    expect(hintWith([FLAG_VILLAGER_TALKED_TO])).toContain('seen part of it')
   })
 
   it('sends Elior to Mira once he has looked at all three', () => {
@@ -560,5 +560,45 @@ describe('Shadows over Willowbrook hint', () => {
 
     expect(before).toContain(LINE_8)
     expect(fresh.hint()).toBe(before)
+  })
+})
+
+describe('Shadows over Willowbrook hint on the village signs (rq-fe4g)', () => {
+  const SIGNS = [
+    [FLAG_INVESTIGATED_WITHERED_CROPS, 'fields'],
+    [FLAG_VILLAGER_TALKED_TO, 'square'],
+    [FLAG_WELL_EXAMINED, 'well'],
+  ] as const
+
+  /** The village hint with `seen` of the three signs seen. */
+  function hintWith(seen: readonly string[]): string {
+    const game = new Game([new Act1()])
+    game.state.setStoryFlag(FLAG_WOKE_FROM_DREAM, true)
+    for (const flag of seen) game.state.setStoryFlag(flag, true)
+    return new ShadowsOverWillowbrookQuest().hint(game.state) ?? ''
+  }
+
+  it('is today’s line with none seen and Mira’s with all seen', () => {
+    expect(hintWith([])).toBe(
+      'Something is wrong in Willowbrook. ' +
+        'The fields, the square and the well each hold a part of it.',
+    )
+    expect(hintWith(SIGNS.map(([flag]) => flag))).toContain(
+      'would want to hear what you have seen.',
+    )
+  })
+
+  it.each([
+    [[0], 'The square and the well hold the rest.'],
+    [[1], 'The fields and the well hold the rest.'],
+    [[2], 'The fields and the square hold the rest.'],
+    [[0, 1], 'The well holds the rest.'],
+    [[0, 2], 'The square holds the rest.'],
+    [[1, 2], 'The fields hold the rest.'],
+  ])('names only the unseen signs when %j are seen', (seen, rest) => {
+    expect(hintWith(seen.map((i) => SIGNS[i][0]))).toBe(
+      'Something is wrong in Willowbrook, and you have seen part of it. ' +
+        rest,
+    )
   })
 })

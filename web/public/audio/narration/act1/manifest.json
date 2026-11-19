@@ -42630,53 +42630,6 @@
    }
   ]
  },
- "0d1a2b0ed0ac2b": {
-  "file": "0d1a2b0ed0ac2b.mp3",
-  "speaker": "mira",
-  "duration": 3.855,
-  "words": [
-   {
-    "word": "Back",
-    "start": 0.0,
-    "end": 0.38
-   },
-   {
-    "word": "already,",
-    "start": 0.38,
-    "end": 0.92
-   },
-   {
-    "word": "Elior.",
-    "start": 1.16,
-    "end": 1.58
-   },
-   {
-    "word": "Tell",
-    "start": 1.9,
-    "end": 2.3
-   },
-   {
-    "word": "me",
-    "start": 2.3,
-    "end": 2.5
-   },
-   {
-    "word": "what",
-    "start": 2.5,
-    "end": 2.78
-   },
-   {
-    "word": "you've",
-    "start": 2.78,
-    "end": 3.06
-   },
-   {
-    "word": "seen.",
-    "start": 3.06,
-    "end": 3.46
-   }
-  ]
- },
  "0d1d08d0535a2c": {
   "file": "0d1d08d0535a2c.mp3",
   "speaker": "narrator",

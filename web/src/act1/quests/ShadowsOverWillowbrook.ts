@@ -243,9 +243,32 @@ export class ShadowsOverWillowbrookQuest extends Quest {
         'you have seen.'
       )
     }
+    return ShadowsOverWillowbrookQuest.signsLead(gameState)
+  }
+
+  /**
+   * The village hint while Elior has not seen all three signs: today's line
+   * with none seen, otherwise the places of the signs still unseen, always
+   * listed field, square, well.
+   */
+  private static signsLead(gameState: GameState): string {
+    const unseen: string[] = []
+    if (!gameState.getStoryFlag(FLAG_INVESTIGATED_WITHERED_CROPS)) {
+      unseen.push('fields')
+    }
+    if (!gameState.getStoryFlag(FLAG_VILLAGER_TALKED_TO)) unseen.push('square')
+    if (!gameState.getStoryFlag(FLAG_WELL_EXAMINED)) unseen.push('well')
+    if (unseen.length === 3) {
+      return (
+        'Something is wrong in Willowbrook. ' +
+        'The fields, the square and the well each hold a part of it.'
+      )
+    }
+    const places = unseen.map((place) => `the ${place}`).join(' and ')
     return (
-      'Something is wrong in Willowbrook. ' +
-      'The fields, the square and the well each hold a part of it.'
+      'Something is wrong in Willowbrook, and you have seen part of it. ' +
+      `${places.charAt(0).toUpperCase()}${places.slice(1)} ` +
+      `${unseen.length === 1 && unseen[0] !== 'fields' ? 'holds' : 'hold'} the rest.`
     )
   }
 

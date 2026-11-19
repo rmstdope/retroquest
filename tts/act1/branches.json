@@ -67,6 +67,11 @@
         "commands": ["talk to mira", "talk to mira"],
         "unset": ["well_examined"]
     },
+    {
+        "after": 45,
+        "commands": ["talk to mira", "talk to mira"],
+        "unset": ["investigated_withered_crops", "villager_talked_to", "well_examined"]
+    },
     { "after": 2, "commands": ["give bread to grandmother"] },
     { "after": 8, "commands": ["give faded photograph to grandmother"] },
     { "after": 23, "commands": ["use bucket on old notice"] },
