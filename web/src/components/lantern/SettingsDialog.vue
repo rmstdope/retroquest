@@ -12,8 +12,8 @@ import type { KeyHint } from './KeyLine.vue'
 /**
  * The player's settings, saved in this browser: theme and text size, music,
  * sound effects and narration (on/off and volume), the Menu clicks switch
- * (the tick and latch of the menus, after the Sound effects volume), how the actions start, and reduce
- * motion (which follows the device until it is changed here). Full screen is a
+ * (the tick and latch of the menus, after the Sound effects volume), how the
+ * actions start, and reduce motion (which follows the device until it is changed here). Full screen is a
  * switch at the end of Appearance (left out where the browser cannot do it,
  * with a line about the F key for a keyboard only).
  *

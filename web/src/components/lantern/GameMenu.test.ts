@@ -17,6 +17,8 @@ describe('GameMenu', () => {
   beforeEach(() => {
     setActivePinia(createPinia())
     vi.spyOn(useGameStore(), 'getQuickSave').mockReturnValue(null)
+    vi.spyOn(useGameStore(), 'saveGame').mockReturnValue(true)
+    vi.spyOn(useGameStore(), 'loadGame').mockImplementation(() => {})
     sounds.move.mockClear()
     sounds.choose.mockClear()
   })
@@ -74,9 +76,28 @@ describe('GameMenu', () => {
       expect(sounds.choose).toHaveBeenCalledTimes(labels.length + 3)
     })
 
+    it('ticks when Tab or the pointer moves the ring to another entry', async () => {
+      const w = mountMenu()
+      const first = item(w, 'Save').element as HTMLElement
+      first.focus()
+      const other = item(w, 'Load').element as HTMLElement
+      first.dispatchEvent(
+        new MouseEvent('mousemove', { bubbles: true, screenX: 1, screenY: 1 }),
+      )
+      other.dispatchEvent(
+        new MouseEvent('mousemove', { bubbles: true, screenX: 9, screenY: 9 }),
+      )
+      expect(document.activeElement).toBe(other)
+      expect(sounds.move).toHaveBeenCalledTimes(1)
+      item(w, 'Help').element.focus()
+      expect(sounds.move).toHaveBeenCalledTimes(2)
+    })
+
     it('is silent when the menu is closed with Esc, ✕ or the dimmed game', async () => {
       const w = mountMenu()
       await w.get('.lq-dialog-layer').trigger('keydown', { key: 'Escape' })
+      await w.get('.lq-dialog-close').trigger('click')
+      await w.get('.lq-dialog-scrim').trigger('click')
       expect(sounds.choose).not.toHaveBeenCalled()
       expect(sounds.move).not.toHaveBeenCalled()
     })

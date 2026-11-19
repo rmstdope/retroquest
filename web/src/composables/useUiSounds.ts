@@ -6,8 +6,8 @@ import type { ChosenManifest } from './chosenMusic'
 
 /**
  * Composable for the interface's own sound effects (the ring move and choose
- * sounds of the title page and the menus): the takes chosen in Content Studio's Sound effects
- * workspace, played at the player's effects volume. An effect with no chosen
+ * sounds of the title page and the menus): the takes chosen in Content
+ * Studio's Sound effects workspace, played at the player's effects volume. An effect with no chosen
  * take is silent, and so is every effect while the player's Menu clicks
  * setting is off.
  */
