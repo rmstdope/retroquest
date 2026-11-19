@@ -95,6 +95,19 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
   )
 
   /**
+   * Whether a line the picture keeps is still to appear: one waiting for its
+   * reading pause, for the narrator or for its scene. A narrated line is never
+   * marked `shown`, so its own flag says nothing once the narrator has read it
+   * (rq-v29l.4); nor does a line said before its talk's room changed, which the
+   * picture never shows.
+   */
+  const stillToShow = computed(
+    () =>
+      conversation.value?.lines.some((line) => kept(line) && !isShown(line)) ??
+      false,
+  )
+
+  /**
    * Whether everything said in turn `turnId` is on the picture (also when it
    * said nothing there): what quest news told after the words waits for. A
    * turn whose scene is still to change has not told everything yet.
@@ -362,6 +375,7 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
   return {
     conversation,
     visible,
+    stillToShow,
     isSpeaking,
     told,
     lineShown,

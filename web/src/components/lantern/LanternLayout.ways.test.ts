@@ -10,6 +10,7 @@ import { useAreaNamesStore } from '@/stores/useAreaNamesStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
 import { useSceneStore } from '@/stores/useSceneStore'
 import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
+import { useArrivalStore } from '@/stores/useArrivalStore'
 import { setPictureProbe } from '@/lantern/roomPicture'
 
 describe('LanternLayout: leaving by pressing a way out in the picture', () => {
@@ -150,6 +151,34 @@ describe('LanternLayout: leaving by pressing a way out in the picture', () => {
     useAreaNamesStore().showing = true
     await w.vm.$nextTick()
     const submit = vi.spyOn(store, 'submitCommand')
+    w.get('[data-area-name="exit-east"]').element.dispatchEvent(
+      new MouseEvent('click', { bubbles: true }),
+    )
+    expect(submit).toHaveBeenCalledWith('go east')
+  })
+
+  it('goes nowhere from a press on the bare way just as the arrival went by itself, but goes from its name (rq-v29l.4)', async () => {
+    const store = await cottage()
+    for (const command of [
+      'use lantern',
+      'take bread',
+      'take lantern',
+      'talk to grandmother',
+      'use journal',
+      'talk to grandmother',
+    ]) {
+      store.submitCommand(command)
+    }
+    store.releasePanels(store.turns.at(-1)!.id, [...PANEL_GROUPS], false)
+    await w.vm.$nextTick()
+    const submit = vi.spyOn(store, 'submitCommand')
+    // The room's words went by themselves a moment ago: a press was meant for them.
+    useArrivalStore().lingering = true
+    await press(600, 100)
+    expect(submit).not.toHaveBeenCalled()
+    // A name the player can see is pressed on purpose.
+    useAreaNamesStore().showing = true
+    await w.vm.$nextTick()
     w.get('[data-area-name="exit-east"]').element.dispatchEvent(
       new MouseEvent('click', { bubbles: true }),
     )

@@ -470,6 +470,18 @@ function wayPressed(event: MouseEvent): string | null {
   )
 }
 
+/**
+ * Whether a press on `target` was meant for the room's words, which went by
+ * themselves a moment ago (`useArrivalStore.lingering`): it does nothing,
+ * neither a ring nor a walk (rq-v29l.4). A press on a mark or name the
+ * player can see is meant for its thing or way, and acts.
+ */
+function meantForArrival(target: Element): boolean {
+  return (
+    arrival.lingering && !target.closest('[data-area-mark], [data-area-name]')
+  )
+}
+
 /** Go the way out in `direction` at once, as a press on its dot or its painted place does. */
 function goWay(direction: string): void {
   narration.skipAll()
@@ -485,6 +497,7 @@ function goWay(direction: string): void {
 function onPicturePress(event: MouseEvent): void {
   if (!(event.target instanceof Element)) return
   if (!event.target.closest('.lq-stage-picture')) return
+  if (meantForArrival(event.target)) return
   tapOnPicture()
   const way = wayPressed(event)
   pressOn('picture', { way: way !== null }, way)
@@ -1768,12 +1781,8 @@ const ringItems = computed(() => {
   }
   return ringActions(open.thing as AreaThing, ringContext.value)
 })
-/** The words are still being told: a press hurries them and opens no ring. */
-const telling = computed(
-  () =>
-    narration.isNarrating ||
-    (speech.conversation?.lines.some((line) => !line.shown) ?? false),
-)
+/** The words are still being told (the narrator reads, or a line on the picture is still to appear): a press hurries them and opens no ring. */
+const telling = computed(() => narration.isNarrating || speech.stillToShow)
 /** A press of `kind` as `decidePointerPress` hears it: the story's state now, with the details of this press in `over`. */
 function pressOf(
   kind: PressKind,
@@ -1881,6 +1890,8 @@ function onAreaPress(
 ): void {
   const box = stageEl.value?.getBoundingClientRect()
   if (!box || !staged.value) return
+  // Just after the room's words went by themselves, only a press on a mark or name acts (`meantForArrival`).
+  if (arrival.lingering && !onMark) return
   // A way out smaller than the thing it lies on is the press's: the stage takes it (`onPicturePress`).
   // A press on a thing's own mark or name is its thing's, wherever the mark stands.
   const wayUnder = !onMark && !!areaNamesEl.value?.wayAt(at.x, at.y)
