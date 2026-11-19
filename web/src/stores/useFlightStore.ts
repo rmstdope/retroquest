@@ -63,6 +63,8 @@ export const useFlightStore = defineStore('flight', () => {
   let still = false
   /** What a screen reader is told of the latest changes ("Lost …", "Gained …", "Learned …"), all of them as they are queued. */
   const told = ref<string[]>([])
+  /** What the turn gained and has not landed yet, by "kind:name": the lists do not show it before. */
+  const owed = ref<Record<string, number>>({})
   let queue: Flight[] = []
   /** What waits for every flight to land (`whenIdle`). */
   let waiting: (() => void)[] = []
@@ -74,6 +76,40 @@ export const useFlightStore = defineStore('flight', () => {
   /** Run `step` after `ms`, unless cleared first. */
   function after(ms: number, step: () => void): void {
     timers.push(setTimeout(step, ms))
+  }
+
+  /** The key a thing is owed under. */
+  function owedKey(kind: ChipKind, name: string): string {
+    return `${kind}:${name}`
+  }
+
+  /** Owe these gained things: their lists hold them back until each one lands (or `clear`). */
+  function owe(chips: Chip[]): void {
+    const now = { ...owed.value }
+    for (const chip of chips) {
+      const key = owedKey(chip.kind, chip.name)
+      now[key] = (now[key] ?? 0) + chip.count
+    }
+    owed.value = now
+  }
+
+  /** Pay these back without a flight: they will not fly, so their lists show them now. */
+  function forgive(chips: Chip[]): void {
+    for (const chip of chips) pay(chip.kind, chip.name, chip.count)
+  }
+
+  /** Take `count` of a thing off what is owed. */
+  function pay(kind: ChipKind, name: string, count: number): void {
+    const now = { ...owed.value }
+    const left = (now[owedKey(kind, name)] ?? 0) - count
+    if (left > 0) now[owedKey(kind, name)] = left
+    else delete now[owedKey(kind, name)]
+    owed.value = now
+  }
+
+  /** How many of the thing or spell are owed: gained, and still on their way to the list. */
+  function owing(kind: ChipKind, name: string): number {
+    return owed.value[owedKey(kind, name)] ?? 0
   }
 
   /** Bring up the next thing in the queue, if any. */
@@ -91,7 +127,7 @@ export const useFlightStore = defineStore('flight', () => {
     onShow?.(flight)
     after(FLIGHT_SHOW_MS + FLIGHT_HOLD_MS, () => {
       phase.value = 'fly'
-      after(FLIGHT_FLY_MS, () => land(flight.kind, flight.name))
+      after(FLIGHT_FLY_MS, () => land(flight.kind, flight.name, flight.count))
     })
   }
 
@@ -113,8 +149,9 @@ export const useFlightStore = defineStore('flight', () => {
     after(LEAVE_RISE_MS, rest)
   }
 
-  /** The thing in hand reached its picture or button: bump them, and go on. */
-  function land(kind: ChipKind, name: string): void {
+  /** The thing in hand reached its picture or button: it is in its list now; bump them, and go on. */
+  function land(kind: ChipKind, name: string, count: number): void {
+    pay(kind, name, count)
     landed.value = kind
     landedName.value = name
     after(FLIGHT_LAND_MS, () => {
@@ -170,6 +207,7 @@ export const useFlightStore = defineStore('flight', () => {
     timers = []
     queue = []
     waiting = []
+    owed.value = {}
     current.value = null
     landed.value = null
     landedName.value = null
@@ -184,6 +222,9 @@ export const useFlightStore = defineStore('flight', () => {
     landedName,
     dipped,
     told,
+    owe,
+    forgive,
+    owing,
     launch,
     whenIdle,
     clear,

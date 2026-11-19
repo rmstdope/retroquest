@@ -5,7 +5,12 @@ import { useBeltStore } from '@/stores/useBeltStore'
 import { useFlightStore } from '@/stores/useFlightStore'
 import { useSizeWatch } from '@/composables/useSizeWatch'
 import BeltFace from './BeltFace.vue'
-import { beltPictures, type BeltList, type BeltPicture } from '@/lantern/belt'
+import {
+  beltPictures,
+  withoutOwed,
+  type BeltList,
+  type BeltPicture,
+} from '@/lantern/belt'
 
 /**
  * The strap of pictures across the foot of the room's picture: a stitched
@@ -50,7 +55,11 @@ const flights = useFlightStore()
 const root = ref<HTMLElement | null>(null)
 const strip = ref<HTMLElement | null>(null)
 const pictures = computed(() =>
-  beltPictures(game.rawInventory, game.rawSpells, belt.list),
+  beltPictures(
+    withoutOwed(game.rawInventory, (name) => flights.owing('item', name)),
+    withoutOwed(game.rawSpells, (name) => flights.owing('spell', name)),
+    belt.list,
+  ),
 )
 /** The picture a key walks from: the last one focused, else the first. */
 const roving = ref<string | null>(null)

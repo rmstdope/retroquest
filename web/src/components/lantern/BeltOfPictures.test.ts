@@ -433,6 +433,25 @@ describe('BeltOfPictures', () => {
     expect(w!.get('[data-belt-switch="bag"]').classes()).toContain('lq-landed')
   })
 
+  it('holds back a gained thing and a spell until their flights land', async () => {
+    mountBelt()
+    const flights = useFlightStore()
+    flights.owe([
+      { kind: 'item', name: "Elior's Journal", count: 1 },
+      { kind: 'item', name: 'bread', count: 1 },
+      { kind: 'spell', name: 'light', count: 1 },
+    ])
+    await nextTick()
+    expect(tiles()).toEqual(['item:bread'])
+    expect(w!.get('[data-belt-pic="item:bread"]').text()).not.toContain('×')
+    useBeltStore().show('spells')
+    await nextTick()
+    expect(tiles()).toEqual([])
+    flights.clear()
+    await nextTick()
+    expect(tiles()).toEqual(['spell:light'])
+  })
+
   it('dips the Bag tiny button as a lost item rises out of it', async () => {
     mountBelt()
     useFlightStore().dipped = 'item'

@@ -4,6 +4,7 @@ import { flushPromises, mount, type VueWrapper } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import JournalPanel from './JournalPanel.vue'
 import { useGameStore } from '@/stores/useGameStore'
+import { useFlightStore } from '@/stores/useFlightStore'
 import type { QuestSummary } from '@/types/bridge'
 
 /** A journal quest as the engine's quest list hands it over. */
@@ -76,6 +77,22 @@ describe('JournalPanel', () => {
     if (!found) throw new Error(`No tab ${name}`)
     return found
   }
+
+  it('holds back a gained thing and a spell until their flights land', async () => {
+    const w = mountJournal()
+    const flights = useFlightStore()
+    flights.owe([
+      { kind: 'item', name: 'bread', count: 1 },
+      { kind: 'spell', name: 'revive', count: 1 },
+    ])
+    await flushPromises()
+    expect(tab(w, /Bag/).text()).toContain('Bag · 1')
+    expect(tab(w, /Spells/).text()).toContain('Spells · 0')
+    flights.clear()
+    await flushPromises()
+    expect(tab(w, /Bag/).text()).toContain('Bag · 2')
+    expect(tab(w, /Spells/).text()).toContain('Spells · 1')
+  })
 
   it('shows Bag, Spells and Quests tabs with counts', () => {
     const tabs = mountJournal()

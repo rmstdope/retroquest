@@ -1303,6 +1303,25 @@ watch(
   () => game.turns.at(-1)?.id,
   () => flights.clear(),
 )
+// The moment the turn lets go of its Bag and Spells (before the lists are
+// drawn, after a new command's clear above), what it gained is owed:
+// the lists hold each thing back until its flight lands (a flight that is cut
+// short, or a turn that does not fly, owes nothing).
+/** The newest turn whose gains are owed (or were let be): each turn's once. */
+let owedTurn = flownTurn
+watch(
+  () => {
+    const turn = game.turns.at(-1)
+    return turn && !game.groupHeld('stock') ? turn.id : null
+  },
+  (id) => {
+    const turn = game.turns.at(-1)
+    if (id === null || !turn || id === owedTurn) return
+    owedTurn = id
+    if (staged.value && !turn.restored && turn.id !== flownTurn)
+      flights.owe(turn.gained)
+  },
+)
 // On the picture stage, a turn's lost items leave the Bag first, then its
 // gained items and spells (each after the narration, as its thing leaves the
 // picture) fly to the Bag and Spells buttons (the quest news after a learnt
@@ -1332,7 +1351,11 @@ watch(
       flights.launch(turn.gained, leaving, motionReduced(), (flight) => {
         if (flight.areaId) game.releaseGain(flight.areaId)
       })
-    else game.releaseGains()
+    else {
+      game.releaseGains()
+      // It will not fly (the stage went away meanwhile): the lists show it now.
+      flights.forgive(turn.gained)
+    }
     // The quest news (and the narrator) held back for a learnt spell's name
     // to fly come on once every name has landed.
     flights.whenIdle(() => arrival.releaseNews())

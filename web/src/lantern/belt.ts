@@ -54,6 +54,25 @@ export interface Hand {
   verb: HandVerb
 }
 
+/**
+ * The entries a list shows while some of its things are still on their way to
+ * it: each counted entry is lowered by what `owing` says is owed for its plain
+ * name, and an entry with none left is left out. The rest is as it was.
+ */
+export function withoutOwed(
+  entries: NamedItem[],
+  owing: (name: string) => number,
+): NamedItem[] {
+  return entries.flatMap((entry) => {
+    const { name, count } = parseCountedName(entry.name)
+    const owed = owing(name)
+    if (owed === 0) return [entry]
+    if (owed >= count) return []
+    const left = count - owed
+    return [{ ...entry, name: left > 1 ? `${left} ${name}` : name }]
+  })
+}
+
 /** The pictures of the list that shows, in the order the Bag or Spells keep them. */
 export function beltPictures(
   items: NamedItem[],

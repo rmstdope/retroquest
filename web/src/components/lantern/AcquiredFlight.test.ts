@@ -42,12 +42,14 @@ describe('AcquiredFlight', () => {
     expect(w.find('[data-testid="flight"]').exists()).toBe(false)
   })
 
-  it('shows the gained thing by its name, with its count and no plus sign', async () => {
+  it("shows a gained thing as its picture alone: no name, no count, no sign, the belt's own first letter", async () => {
     w = mount(AcquiredFlight)
     useFlightStore().launch([{ kind: 'item', name: 'bread', count: 2 }])
     await w.vm.$nextTick()
     const flight = w.get('[data-testid="flight"]')
-    expect(flight.text()).toBe('Bread ×2')
+    expect(flight.text()).toBe('B')
+    expect(flight.find('.lq-flight-name').exists()).toBe(false)
+    expect(flight.find('svg').exists()).toBe(false)
     expect(flight.classes()).toContain('lq-flight-item')
   })
 
@@ -244,7 +246,7 @@ describe('AcquiredFlight', () => {
   })
 
   describe('with pictures made', () => {
-    it('shows a gained painted thing as its picture in place of the bag sign', async () => {
+    it('shows a gained painted thing as its picture alone', async () => {
       setPictureProbe(() => Promise.resolve(true))
       w = mount(AcquiredFlight)
       useFlightStore().launch([{ kind: 'item', name: 'bread', count: 2 }])
@@ -252,7 +254,7 @@ describe('AcquiredFlight', () => {
       const flight = w.get('[data-testid="flight"]')
       expect(flight.find('img').attributes('src')).toMatch(/item-bread\.png$/)
       expect(flight.find('svg').exists()).toBe(false)
-      expect(flight.text()).toBe('Bread ×2')
+      expect(flight.text()).toBe('')
     })
 
     it('shows a learnt painted spell in place of the sparkle', async () => {
@@ -266,14 +268,15 @@ describe('AcquiredFlight', () => {
       expect(flight.find('svg').exists()).toBe(false)
     })
 
-    it('keeps the bag sign and the sparkle for a thing not painted yet', async () => {
+    it('shows the first letter, as the belt does, for a thing not painted yet', async () => {
       setPictureProbe(() => Promise.resolve(false))
       w = mount(AcquiredFlight)
       useFlightStore().launch([{ kind: 'item', name: 'bread', count: 1 }])
       await flushPromises()
       const flight = w.get('[data-testid="flight"]')
       expect(flight.find('img').exists()).toBe(false)
-      expect(flight.find('svg').exists()).toBe(true)
+      expect(flight.find('svg').exists()).toBe(false)
+      expect(flight.get('.lq-flight-letter').text()).toBe('B')
     })
 
     it('shows the picture in place of the sign under Reduce motion too', async () => {
@@ -290,7 +293,7 @@ describe('AcquiredFlight', () => {
       expect(flight.find('svg').exists()).toBe(false)
     })
 
-    it('gives the picture the thin edge of its kind, on the grey loss card too', async () => {
+    it('gives the picture of a loss the thin edge of its kind on the grey card', async () => {
       setPictureProbe(() => Promise.resolve(true))
       w = mount(AcquiredFlight)
       useFlightStore().launch([], [{ kind: 'item', name: 'bread', count: 1 }])
