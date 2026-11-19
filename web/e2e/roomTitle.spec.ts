@@ -37,7 +37,9 @@ async function playedAct(page: Page): Promise<void> {
     store.acceptInput = true
   })
   await command(page, 'debug act1')
-  await expect(page.getByText("Debug script 'act1' played")).toBeVisible()
+  await expect(
+    page.locator('main').getByText("Debug script 'act1' played"),
+  ).toBeVisible()
 }
 
 /** Type `text` in the command box and send it. */
