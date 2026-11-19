@@ -24,6 +24,9 @@ import type { KeyHint } from './KeyLine.vue'
  * never leaves a second entry looking picked. Escape, ✕ and
  * a click on the dimmed game emit `close`; Quit emits `quit`. The quiet key
  * line at its foot names the keys, as in the windows it opens.
+ * The ring moving to another entry sounds the soft tick and an entry chosen
+ * the brass latch (both silent when the player has turned Menu clicks off); the
+ * menu opening, and Escape, ✕ or the dimmed game closing it, are silent.
  */
 export type InfoKind = 'help'
 /** The journey the menu opens first: the journal (the story so far), the quests and the map. */
@@ -49,11 +52,13 @@ const KEYS: KeyHint[] = [
 ]
 
 function quickSave(): void {
+  ring.choose()
   game.saveGame()
   emit('close')
 }
 
 function quickLoad(): void {
+  ring.choose()
   game.loadGame()
   emit('close')
 }
@@ -116,6 +121,13 @@ const ROWS: Array<{ kind: Exclude<MenuKind, JourneyKind>; label: string }> = [
   { kind: 'help', label: 'Help' },
 ]
 
+/** An entry chosen: the latch, then the window it opens (or `quit`). */
+function choose(event: 'quit' | MenuKind): void {
+  ring.choose()
+  if (event === 'quit') emit('quit')
+  else emit('open', event)
+}
+
 /** Whether the entry `kind` is the one focus starts on. */
 function starts(kind: MenuEntry): boolean {
   return (props.focus ?? 'save') === kind
@@ -144,6 +156,7 @@ function onKeydown(event: KeyboardEvent): void {
     narrow
     :key-line="KEYS"
     @close="emit('close')"
+    @focusin="ring.onFocusIn"
     @mousemove="ring.onMove"
   >
     <div ref="list" class="lq-menu" @keydown="onKeydown">
@@ -158,7 +171,7 @@ function onKeydown(event: KeyboardEvent): void {
           :aria-describedby="tile.kind === 'quests' ? questsNoteId : undefined"
           :aria-keyshortcuts="tile.key"
           :data-autofocus="starts(tile.kind) || undefined"
-          @click="emit('open', tile.kind)"
+          @click="choose(tile.kind)"
         >
           <kbd class="lq-menu-key" aria-hidden="true">{{ tile.key }}</kbd>
           <span
@@ -219,7 +232,7 @@ function onKeydown(event: KeyboardEvent): void {
           class="lq-menu-entry lq-menu-row"
           data-ring
           :data-autofocus="starts(row.kind) || undefined"
-          @click="emit('open', row.kind)"
+          @click="choose(row.kind)"
         >
           <svg class="lq-menu-icon" viewBox="0 0 24 24" aria-hidden="true">
             <path :d="ICONS[row.kind]" />
@@ -235,7 +248,7 @@ function onKeydown(event: KeyboardEvent): void {
         class="lq-menu-entry lq-menu-row lq-menu-quit"
         data-ring
         :data-autofocus="starts('quit') || undefined"
-        @click="emit('quit')"
+        @click="choose('quit')"
       >
         <svg class="lq-menu-icon" viewBox="0 0 24 24" aria-hidden="true">
           <path :d="ICONS.quit" />

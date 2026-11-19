@@ -54,6 +54,7 @@ describe('useSettingsStore', () => {
       effectsVolume: 100,
       narrationVolume: 100,
       reduceMotion: 'device',
+      menuClicks: true,
     })
     expect(settings.$state).not.toHaveProperty('startMode')
   })
@@ -156,6 +157,28 @@ describe('useSettingsStore', () => {
     expect(settings.musicVolume).toBe(100)
     expect(settings.effectsVolume).toBe(0)
     expect(settings.reduceMotion).toBe('device')
+  })
+
+  it('keeps a stored Menu clicks choice and defaults anything else to on', () => {
+    installLocalStorage({
+      [SETTINGS_STORAGE_KEY]: JSON.stringify({ menuClicks: false }),
+    })
+    expect(useSettingsStore().menuClicks).toBe(false)
+  })
+
+  it('turns Menu clicks on for a stored value that is not a boolean', () => {
+    installLocalStorage({
+      [SETTINGS_STORAGE_KEY]: JSON.stringify({ menuClicks: 'off' }),
+    })
+    expect(useSettingsStore().menuClicks).toBe(true)
+  })
+
+  it('turns Menu clicks back on when the settings are reset', () => {
+    installLocalStorage()
+    const settings = useSettingsStore()
+    settings.menuClicks = false
+    settings.resetToDefaults()
+    expect(settings.menuClicks).toBe(true)
   })
 
   it('falls back to defaults when the stored JSON is corrupt', () => {

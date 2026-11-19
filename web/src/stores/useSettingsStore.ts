@@ -24,6 +24,8 @@ export interface Settings {
   /** 0–100 */
   narrationVolume: number
   reduceMotion: ReduceMotionSetting
+  /** Whether the menus tick and latch (the title page's too). */
+  menuClicks: boolean
 }
 
 export const SETTINGS_STORAGE_KEY = 'retroquest_settings'
@@ -43,6 +45,7 @@ export const DEFAULT_SETTINGS: Readonly<Settings> = {
   effectsVolume: 100,
   narrationVolume: 100,
   reduceMotion: 'device',
+  menuClicks: true,
 }
 
 const THEMES: readonly ThemeSetting[] = ['device', 'light', 'dark']
@@ -122,6 +125,10 @@ function loadSettings(): Settings {
       REDUCE_MOTION,
       defaults.reduceMotion,
     ),
+    menuClicks:
+      typeof stored.menuClicks === 'boolean'
+        ? stored.menuClicks
+        : defaults.menuClicks,
   }
 }
 
@@ -133,6 +140,7 @@ export const useSettingsStore = defineStore('settings', () => {
   const effectsVolume = ref(initial.effectsVolume)
   const narrationVolume = ref(initial.narrationVolume)
   const reduceMotion = ref(initial.reduceMotion)
+  const menuClicks = ref(initial.menuClicks)
 
   function snapshot(): Settings {
     return {
@@ -142,6 +150,7 @@ export const useSettingsStore = defineStore('settings', () => {
       effectsVolume: effectsVolume.value,
       narrationVolume: narrationVolume.value,
       reduceMotion: reduceMotion.value,
+      menuClicks: menuClicks.value,
     }
   }
 
@@ -160,6 +169,7 @@ export const useSettingsStore = defineStore('settings', () => {
     effectsVolume.value = DEFAULT_SETTINGS.effectsVolume
     narrationVolume.value = DEFAULT_SETTINGS.narrationVolume
     reduceMotion.value = DEFAULT_SETTINGS.reduceMotion
+    menuClicks.value = DEFAULT_SETTINGS.menuClicks
   }
 
   return {
@@ -169,6 +179,7 @@ export const useSettingsStore = defineStore('settings', () => {
     effectsVolume,
     narrationVolume,
     reduceMotion,
+    menuClicks,
     resetToDefaults,
   }
 })

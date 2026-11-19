@@ -6,12 +6,19 @@ import GameMenu, { type MenuEntry } from './GameMenu.vue'
 import { useGameStore } from '@/stores/useGameStore'
 import type { QuestSummary } from '@/engine'
 
+const sounds = vi.hoisted(() => ({ move: vi.fn(), choose: vi.fn() }))
+vi.mock('@/composables/useUiSounds', () => ({
+  useUiSounds: () => ({ playMove: sounds.move, playChoose: sounds.choose }),
+}))
+
 describe('GameMenu', () => {
   let wrapper: VueWrapper | undefined
 
   beforeEach(() => {
     setActivePinia(createPinia())
     vi.spyOn(useGameStore(), 'getQuickSave').mockReturnValue(null)
+    sounds.move.mockClear()
+    sounds.choose.mockClear()
   })
   afterEach(() => {
     wrapper?.unmount()
@@ -38,6 +45,42 @@ describe('GameMenu', () => {
       }),
     )
   }
+
+  describe('clicks', () => {
+    it('opens silent, ticks when the ring moves, and latches on a choice', () => {
+      const w = mountMenu()
+      const save = item(w, 'Save').element as HTMLElement
+      save.focus()
+      expect(sounds.move).not.toHaveBeenCalled()
+      key(save, 'ArrowDown')
+      expect(sounds.move).toHaveBeenCalledTimes(1)
+      expect(sounds.choose).not.toHaveBeenCalled()
+    })
+
+    it('latches once for every entry chosen', async () => {
+      const w = mountMenu()
+      const labels = [
+        'Quick save',
+        'Quick load',
+        'Save',
+        'Load',
+        'Settings',
+        'Help',
+        'Quit',
+      ]
+      for (const label of labels) await item(w, label).trigger('click')
+      for (const tile of w.findAll('.lq-menu-journey'))
+        await tile.trigger('click')
+      expect(sounds.choose).toHaveBeenCalledTimes(labels.length + 3)
+    })
+
+    it('is silent when the menu is closed with Esc, ✕ or the dimmed game', async () => {
+      const w = mountMenu()
+      await w.get('.lq-dialog-layer').trigger('keydown', { key: 'Escape' })
+      expect(sounds.choose).not.toHaveBeenCalled()
+      expect(sounds.move).not.toHaveBeenCalled()
+    })
+  })
 
   it('is a pause panel: "Paused", then the heading "Menu"', () => {
     const w = mountMenu()
