@@ -14,6 +14,17 @@ import { useSceneStore } from '@/stores/useSceneStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
 import { useBeltStore } from '@/stores/useBeltStore'
 import { setPictureProbe } from '@/lantern/roomPicture'
+import type { GameState } from '@/engine'
+import { LightSpell } from '@/act1/spells/LightSpell'
+
+/** Act I with Light already known, so a real spell sits on the belt. */
+class Act1KnowingLight extends Act1 {
+  /** Act I's own setup, then Light learnt. */
+  override setupGameState(gameState: GameState): void {
+    super.setupGameState(gameState)
+    gameState.learnSpell(new LightSpell())
+  }
+}
 
 /**
  * The belt of pictures over the real engine, in Elior's cottage: the ring of a
@@ -33,7 +44,9 @@ describe('LanternLayout: the belt of pictures', () => {
     },
   }
 
-  async function cottage(): Promise<ReturnType<typeof useGameStore>> {
+  async function cottage(
+    act: ActClass = Act1,
+  ): Promise<ReturnType<typeof useGameStore>> {
     setActivePinia(createPinia())
     setPictureProbe(() => Promise.resolve(true))
     vi.stubGlobal(
@@ -58,7 +71,7 @@ describe('LanternLayout: the belt of pictures', () => {
       toJSON: () => ({}),
     })
     const store = useGameStore()
-    store.setBridge(useBridge(async (): Promise<ActClass[]> => [Act1]))
+    store.setBridge(useBridge(async (): Promise<ActClass[]> => [act]))
     await store.initGame()
     store.dismissModal()
     store.showTitle = false
@@ -410,6 +423,37 @@ describe('LanternLayout: the belt of pictures', () => {
     expect(strip()).toBe('Cast Light on…')
     await click(hit('grandmother').element)
     expect(store.turns.at(-1)?.command).toBe('cast light on grandmother')
+  })
+
+  it("drops the spell's caption with its ring as Cast is pressed, though focus goes back to the picture", async () => {
+    const store = await cottage(Act1KnowingLight)
+    useBeltStore().show('spells')
+    useNarrationStore().skipAll()
+    useStageSpeechStore().revealAll()
+    await flushPromises()
+    await vi.waitFor(async () => {
+      if (!ring().exists()) await click(tile('spell:light').element)
+      expect(ring().exists()).toBe(true)
+    })
+    expect(w.get('.lq-belt-caption').text()).toContain('Light')
+    await coin('cast').trigger('click')
+    await flushPromises()
+    expect(store.turns.at(-1)?.command).toBe('cast light')
+    expect(ring().exists()).toBe(false)
+    expect(w.find('.lq-belt-caption').exists()).toBe(false)
+    expect(document.activeElement).toBe(tile('spell:light').element)
+  })
+
+  it("drops a thing's caption with its ring as an action is pressed, and shows it again when the picture is next walked to", async () => {
+    await cottage()
+    await click(tile('item:bread').element)
+    await coin('examine').trigger('click')
+    await flushPromises()
+    expect(ring().exists()).toBe(false)
+    expect(w.find('.lq-belt-caption').exists()).toBe(false)
+    await tile('item:bread').trigger('blur')
+    await tile('item:bread').trigger('focus')
+    expect(w.get('.lq-belt-caption').text()).toContain('Bread')
   })
 
   it('fans the spells known for Cast on… on a carried thing', async () => {

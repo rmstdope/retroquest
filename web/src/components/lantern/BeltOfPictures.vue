@@ -240,12 +240,22 @@ function tiles(): HTMLElement[] {
   ]
 }
 
-/** Focus a picture (the first when no key is given) and scroll it into view. */
-async function focusPicture(key?: string): Promise<void> {
+/** The picture `focusPicture` is focusing quietly: that focus shows no caption. */
+let quietFocus: string | null = null
+
+/**
+ * Focus a picture (the first when no key is given) and scroll it into view.
+ * `quiet` focuses it without its caption (a command was just sent from its
+ * ring, and what it does is told with nothing over the words); the caption
+ * shows again when focus next comes to a picture.
+ */
+async function focusPicture(key?: string, quiet = false): Promise<void> {
   await nextTick()
   const all = tiles()
   const el = key ? all.find((t) => t.dataset.beltPic === key) : all[0]
+  quietFocus = quiet ? (el?.dataset.beltPic ?? null) : null
   el?.focus()
+  quietFocus = null
   el?.scrollIntoView?.({ block: 'nearest', inline: 'nearest' })
 }
 
@@ -254,10 +264,10 @@ function has(key: string): boolean {
   return pictures.value.some((p) => p.key === key)
 }
 
-/** A picture took focus: keys walk from it, and its caption shows. */
+/** A picture took focus: keys walk from it, and its caption shows, unless it was focused quietly. */
 function onTileFocus(key: string): void {
   roving.value = key
-  focused.value = key
+  focused.value = key === quietFocus ? null : key
 }
 
 /** Arrow keys, Home and End walk the pictures. */
@@ -359,9 +369,9 @@ watch(phase, async () => {
 })
 
 /** Focus the first picture, the stud of the list showing when none is carried. */
-async function focusBelt(): Promise<void> {
+async function focusBelt(quiet = false): Promise<void> {
   await nextTick()
-  if (pictures.value.length) return focusPicture()
+  if (pictures.value.length) return focusPicture(undefined, quiet)
   root.value
     ?.querySelector<HTMLElement>(`[data-belt-switch="${belt.list}"]`)
     ?.focus()
