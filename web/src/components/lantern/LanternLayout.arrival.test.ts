@@ -174,6 +174,14 @@ describe('LanternLayout: the arrival on the picture', () => {
     expect(w.find('.lq-words-hide').exists()).toBe(false)
   })
 
+  it('shows only its own skip hint while it is told, not the story hint as well (rq-v29l.10)', async () => {
+    const w = await ready()
+    await run('go north')
+    expect(useNarrationStore(pinia).hintVisible).toBe(true)
+    expect(card(w)).toContain('Click to continue · Hold to skip')
+    expect(w.find('.lq-narration-hint').exists()).toBe(false)
+  })
+
   it('clears 1½ s after the narrator finishes, leaving nothing of the walk on the left', async () => {
     const w = await ready()
     await run('go north')

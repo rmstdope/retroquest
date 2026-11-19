@@ -275,6 +275,13 @@ function onFocusChange(event: FocusEvent): void {
 const section = ref<Section>('story')
 /** The drawer open beside the stage (the quests, or the journal: the story so far), or null. */
 const drawerTab = ref<'quests' | 'story' | null>(null)
+/**
+ * How wide an open drawer is (the `width` of `JournalDrawer` and `StoryDrawer`),
+ * which the bag tray leaves free at its right so no picture of it lies under the drawer.
+ */
+function drawerWidth(tab: 'quests' | 'story'): string {
+  return tab === 'story' ? '50%' : 'min(380px, 92%)'
+}
 /** The button in the stage's corner (☰), measured for a sideways phone's plate. */
 const stageButtons = ref<InstanceType<typeof StageButtons> | null>(null)
 /** Whether the open drawer was opened from the menu, which its closing brings back. */
@@ -655,11 +662,20 @@ const DEFAULT_PICTURE_SIZE = { width: 1920, height: 1080 }
 const namesUp = computed(
   () => names.showing && scene.phase === 'idle' && !namesBlocked(),
 )
-/** Changes when what the names keep clear of moves: the words, a drawer, the names' own count. */
+/**
+ * Changes when what the names keep clear of moves: the words, the Hide or Show
+ * that comes and goes with them (new words bring the Hide back without the
+ * paper changing), the "Use … with" strip, a bag picture's caption, a drawer,
+ * the names' own count.
+ */
 const namesRelayout = computed(() =>
   [
     paper.visible.value,
     paper.hidden.value,
+    showHide.value,
+    showTab.value,
+    !!belt.hand,
+    beltCaption.value?.label ?? '',
     arrival.active,
     speech.visible.length,
     drawerTab.value,
@@ -2725,6 +2741,9 @@ watch(namesBlocked, (blocked) => {
               '--lq-stage-buttons-w': `${stageButtonsWidth}px`,
               '--lq-belt-bottom': `${beltBottom}px`,
               '--lq-belt-left': `${beltLeft}px`,
+              ...(drawerTab
+                ? { '--lq-belt-right': drawerWidth(drawerTab) }
+                : {}),
               ...(belt.hand ? { cursor: 'crosshair' } : {}),
               ...(wayArrow ? { cursor: wayCursor(wayArrow) } : {}),
             }"
@@ -2817,6 +2836,7 @@ watch(namesBlocked, (blocked) => {
               :hand="belt.hand"
               :ghost="laptop"
               class="lq-hand-strip"
+              data-lq-obstacle="panel"
               @cancel="cancelHand"
             />
           </div>
@@ -2834,10 +2854,11 @@ watch(namesBlocked, (blocked) => {
             @keydown="onNameKeydown"
             @close="closeDrawer"
           />
-          <!-- The caption of the picture pointed at: over the words, above the belt and the Hide or Show button. -->
+          <!-- The caption of the picture pointed at: over the words, above the belt and the Hide or Show button; the marks and names keep clear of it. -->
           <div
             v-if="beltCaption"
             class="lq-belt-caption"
+            data-lq-obstacle="panel"
             :style="captionStyle()"
           >
             <b :class="`lq-belt-cap-${beltCaption.kind}`">{{
@@ -2962,8 +2983,9 @@ watch(namesBlocked, (blocked) => {
                 </template>
               </div>
             </section>
+            <!-- None while an arrival is told on the picture: it says how to go on and skip itself. -->
             <p
-              v-if="narration.hintVisible && hintText"
+              v-if="narration.hintVisible && hintText && !arrival.active"
               class="lq-narration-hint"
               data-lq-obstacle="words"
               :class="{ 'lq-hint-raised': moreBelow && !storyHeld }"
