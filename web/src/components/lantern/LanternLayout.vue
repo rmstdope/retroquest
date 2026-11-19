@@ -2241,6 +2241,28 @@ function onJourneyKey(event: KeyboardEvent): void {
   toggleDrawer(tab)
 }
 
+/**
+ * A typed `map` or `inventory` (the game store's `lookRequest`): the map opens
+ * as M opens it, over nothing that is up already; the bag's strap comes up on
+ * the bag and is lit for a moment, with focus left in the typing box.
+ */
+watch(
+  () => game.lookRequest?.id,
+  () => {
+    const kind = game.lookRequest?.kind
+    if (kind === 'bag') {
+      belt.bringBack('bag')
+      belt.light()
+      return
+    }
+    if (kind !== 'map') return
+    if (ring.value || game.ending || game.showModal || game.showTitle) return
+    if (game.quitAsked || game.shownQuest || nameMenu.value) return
+    if (gameDialog.value) return
+    openMapFromGame()
+  },
+)
+
 /** Quit asked from the menu: the question takes its place, and Cancel brings it back. */
 function askQuitFromMenu(): void {
   menuEntry.value = 'quit'

@@ -27,6 +27,7 @@ export { Spell, type SpellOptions } from './Spell'
 export { ClassRegistry, type SerializableClass } from './ClassRegistry'
 export { serialize, deserialize, type SerializedGraph } from './Serializer'
 export { CommandParser, type CommandTarget } from './CommandParser'
+export { formOf } from './Grammar'
 export {
   Game,
   GameRunState,

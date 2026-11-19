@@ -55,6 +55,15 @@ describe('BeltOfPictures', () => {
     expect(bread.find('.lq-belt-letter').text()).toBe('B')
   })
 
+  it('lights its bar while the belt is lit, and only then', async () => {
+    mountBelt()
+    const bar = w!.get('.lq-belt-bar')
+    expect(bar.classes()).not.toContain('lq-belt-lit')
+    useBeltStore().lit = true
+    await nextTick()
+    expect(bar.classes()).toContain('lq-belt-lit')
+  })
+
   it('has two tiny buttons with no words, the lit one for the list showing', async () => {
     mountBelt()
     const bag = w!.get('[data-belt-switch="bag"]')

@@ -701,7 +701,7 @@ Welcome to
 
   /** The typed inventory: one line per item name, identical items counted (×n). */
   inventory(): string {
-    if (this.state.inventory.length === 0) return 'Your inventory is empty.'
+    if (this.state.inventory.length === 0) return 'Your bag is empty.'
     const lines = Object.entries(this.state.getInventorySummary()).map(
       ([name, count]) =>
         `- [item_name]${name}[/item_name]` + (count > 1 ? ` ×${count}` : ''),

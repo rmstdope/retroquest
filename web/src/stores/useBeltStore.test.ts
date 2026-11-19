@@ -103,3 +103,27 @@ describe('useBeltStore', () => {
     expect(belt.hand).toBeNull()
   })
 })
+
+describe('useBeltStore: lit', () => {
+  beforeEach(() => {
+    installStorage()
+    setActivePinia(createPinia())
+    vi.useFakeTimers()
+  })
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
+  it('is lit for a second by light(), and a second light() restarts the second', () => {
+    const belt = useBeltStore()
+    expect(belt.lit).toBe(false)
+    belt.light()
+    expect(belt.lit).toBe(true)
+    vi.advanceTimersByTime(600)
+    belt.light()
+    vi.advanceTimersByTime(600)
+    expect(belt.lit).toBe(true)
+    vi.advanceTimersByTime(400)
+    expect(belt.lit).toBe(false)
+  })
+})

@@ -421,7 +421,11 @@ defineExpose({ focusBelt, focusPicture, has, root })
     aria-label="Bag and spells"
   >
     <!-- A panel over the picture: no mark of the room's things lies under the belt's own bar, on any layout (on a laptop it is the only part of the foot the belt covers; elsewhere the foot is kept clear up to the belt's top as well). -->
-    <div class="lq-belt-bar" data-lq-obstacle="panel">
+    <div
+      class="lq-belt-bar"
+      :class="{ 'lq-belt-lit': belt.lit }"
+      data-lq-obstacle="panel"
+    >
       <div class="lq-belt-switch">
         <button
           type="button"
@@ -715,6 +719,13 @@ defineExpose({ focusBelt, focusPicture, has, root })
 }
 .lq-belt-folded .lq-belt-reel {
   grid-template-columns: 0fr;
+}
+.lq-belt-lit {
+  /* Lit for a moment by the typed inventory: a still amber ring, the same with reduced motion. */
+  box-shadow:
+    0 0 0 2px var(--lq-accent),
+    0 0 24px rgb(255 169 20 / 0.35),
+    0 10px 26px rgb(0 0 0 / 0.45);
 }
 .lq-belt-strip {
   /* Floats on the leather: only the pictures themselves take a press (the leather takes the rest, and does nothing). */
