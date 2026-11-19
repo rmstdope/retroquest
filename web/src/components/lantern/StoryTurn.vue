@@ -507,8 +507,10 @@ function chipLabel(chip: Chip): string {
   font-size: var(--lq-story-size);
   line-height: var(--lq-story-line-height);
   color: var(--lq-prose);
+  /* Words read whole: a line breaks between words, never with a hyphen the
+     browser adds, and only a word wider than the bubble may break. */
   overflow-wrap: break-word;
-  hyphens: auto;
+  hyphens: manual;
 }
 .lq-block-event {
   margin: 0;
