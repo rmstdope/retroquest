@@ -244,7 +244,7 @@ export function ringLayout(
     ? place(Math.atan2(at.y - center.y, at.x - center.x) + Math.PI / count)
     : upright
   // Too short a picture to grow round the whole name: it is drawn no wider than fits.
-  const inner = radius - half - NAME_GAP
+  const inner = Math.max(0, radius - half - NAME_GAP)
   const nameWidth =
     radius >= clear
       ? Infinity

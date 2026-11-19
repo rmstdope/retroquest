@@ -134,6 +134,23 @@ describe('PressRing', () => {
     expect(w.emitted<[number]>('top')!.at(-1)![0]).toBe(fanTop)
   })
 
+  it('cuts its name short only on a picture too short for the ring to grow round it (rq-v29l.6)', async () => {
+    const at = (h: number) => ({
+      thing: tilda,
+      actions: ringActions(tilda, ctx),
+      at: { x: 284, y: h / 2 },
+      bounds: { w: 568, h },
+    })
+    const short = mount(PressRing, { attachTo: document.body, props: at(100) })
+    const tall = mount(PressRing, { attachTo: document.body, props: at(320) })
+    wrappers.push(short, tall)
+    await nextTick()
+    const width = (w: VueWrapper): string =>
+      (w.get('.lq-ring-name').element as HTMLElement).style.maxWidth
+    expect(parseFloat(width(short))).toBeGreaterThanOrEqual(0)
+    expect(width(tall)).toBe('')
+  })
+
   it('shows the ware and its price in a Buy… fan', async () => {
     const w = await ring()
     await coin(w, 'buy').trigger('click')

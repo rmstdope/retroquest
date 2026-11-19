@@ -277,6 +277,10 @@ describe('ringLayout', () => {
             coversName(b, center, { width: nameWidth, height: name.height }),
           ).toBe(false)
       }
+    // A picture hardly bigger than a button leaves no room for the name at all.
+    expect(
+      ringLayout({ x: 30, y: 30 }, 4, { w: 60, h: 60 }, name).nameWidth,
+    ).toBe(0)
     // Where the ring can grow, the name is never cut.
     expect(
       ringLayout({ x: 430, y: 300 }, 7, { w: 1512, h: 757 }, name).nameWidth,
