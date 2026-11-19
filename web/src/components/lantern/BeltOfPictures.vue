@@ -4,6 +4,7 @@ import { useGameStore } from '@/stores/useGameStore'
 import { useBeltStore } from '@/stores/useBeltStore'
 import { useFlightStore } from '@/stores/useFlightStore'
 import { useSizeWatch } from '@/composables/useSizeWatch'
+import { DRAG_SLOP } from '@/lantern/beltDrag'
 import BeltFace from './BeltFace.vue'
 import {
   beltPictures,
@@ -42,9 +43,18 @@ const props = defineProps<{
   compact?: boolean
   /** The key of the picture whose ring is open, whose caption shows. */
   captionFor?: string | null
+  /** The key of the picture lifted for a drag: its pocket stays as an empty ring. */
+  lifted?: string | null
+  /** The key of the pocket a lifted picture is over: its rim lights amber. */
+  dragOver?: string | null
 }>()
 const emit = defineEmits<{
   press: [picture: BeltPicture, at: { x: number; y: number }]
+  /** A picture was pulled off its pocket (a mouse moved a few pixels, a finger moved after its hold): the layout decides whether it lifts. */
+  lift: [
+    picture: BeltPicture,
+    at: { x: number; y: number; pointerType: string },
+  ]
   /** The height the strap takes at the foot of the picture (the folded tab's height while folded away). */
   measure: [height: number]
   /** The picture whose caption shows (null: none). The layout draws it, over the words. */
@@ -105,6 +115,8 @@ let moveTimer: ReturnType<typeof setTimeout> | undefined
 let switchTimer: ReturnType<typeof setTimeout> | undefined
 let holdTimer: ReturnType<typeof setTimeout> | undefined
 let holdFrom: { x: number; y: number } | null = null
+/** Where a mouse went down on a picture, until it lifts or lets go. */
+let pullFrom: { x: number; y: number } | null = null
 /** The press that follows a hold's release is not a press. */
 let swallowClick = false
 
@@ -206,7 +218,14 @@ watch(
 /** A pointer went down on a picture: a finger held there for a moment shows its caption. */
 function onPicDown(key: string, event: PointerEvent): void {
   swallowClick = false
-  if (event.pointerType !== 'touch') return
+  document.removeEventListener('touchmove', holdTouchMoves)
+  if (event.pointerType === 'touch')
+    document.addEventListener('touchmove', holdTouchMoves, { passive: false })
+  if (event.pointerType !== 'touch') {
+    pullFrom =
+      event.button === 0 ? { x: event.clientX, y: event.clientY } : null
+    return
+  }
   holdFrom = { x: event.clientX, y: event.clientY }
   clearTimeout(holdTimer)
   holdTimer = setTimeout(() => {
@@ -216,8 +235,25 @@ function onPicDown(key: string, event: PointerEvent): void {
 }
 
 /** The finger drifted: a swipe, not a hold. A mouse that really moves also ends a hover hush. */
-function onPicMove(event: PointerEvent, key: string): void {
-  endHoverHush(key, event)
+function onPicMove(event: PointerEvent, picture: BeltPicture): void {
+  endHoverHush(picture.key, event)
+  const from = event.pointerType === 'touch' ? holdFrom : pullFrom
+  if (from && (held.value || event.pointerType !== 'touch')) {
+    // A mouse pulled a few pixels, or a finger moved after its hold: the picture lifts.
+    if (
+      Math.hypot(event.clientX - from.x, event.clientY - from.y) > DRAG_SLOP
+    ) {
+      pullFrom = null
+      holdFrom = null
+      swallowClick = true
+      emit('lift', picture, {
+        x: event.clientX,
+        y: event.clientY,
+        pointerType: event.pointerType,
+      })
+    }
+    return
+  }
   if (!holdFrom || held.value) return
   if (
     Math.hypot(event.clientX - holdFrom.x, event.clientY - holdFrom.y) >
@@ -228,12 +264,32 @@ function onPicMove(event: PointerEvent, key: string): void {
 
 /** The finger let go or was taken over: the hold's caption goes. */
 function endHold(): void {
+  document.removeEventListener('touchmove', holdTouchMoves)
+  pullFrom = null
   clearTimeout(holdTimer)
   holdFrom = null
   held.value = null
   // The click that follows a release comes at once; one that never comes must not eat a later key press.
   if (swallowClick) setTimeout(() => (swallowClick = false), 0)
 }
+
+/**
+ * A finger held on a picture is dragging it, so its moves must not scroll the
+ * page or the bag. The browser decides at the start of a touch whether script
+ * may stop a scroll, so the listener is there from the finger's going down
+ * (`onPicDown`) and stops a move only once the hold has come.
+ */
+function holdTouchMoves(event: Event): void {
+  if (held.value && event.cancelable) event.preventDefault()
+}
+onUnmounted(() => document.removeEventListener('touchmove', holdTouchMoves))
+// A lifted picture's release is no press, but a release elsewhere sends no click: the swallowing ends with the drag.
+watch(
+  () => props.lifted,
+  (key, before) => {
+    if (!key && before) setTimeout(() => (swallowClick = false), 0)
+  },
+)
 
 /** A hold would raise the system's menu on a phone; it is the caption's. */
 function onPicMenu(event: Event): void {
@@ -406,7 +462,11 @@ async function focusBelt(quiet = false): Promise<void> {
     ?.querySelector<HTMLElement>(`[data-belt-switch="${belt.list}"]`)
     ?.focus()
 }
-defineExpose({ focusBelt, focusPicture, has, root })
+/** The picture on the belt with this key, or null. */
+function pictureFor(key: string): BeltPicture | null {
+  return pictures.value.find((p) => p.key === key) ?? null
+}
+defineExpose({ focusBelt, focusPicture, has, pictureFor, root })
 </script>
 
 <template>
@@ -536,6 +596,8 @@ defineExpose({ focusBelt, focusPicture, has, root })
                   'lq-landed':
                     flights.landed === picture.kind &&
                     flights.landedName === picture.name,
+                  'lq-belt-lifted': lifted === picture.key,
+                  'lq-belt-drop': dragOver === picture.key,
                 },
               ]"
               :style="{ '--i': index }"
@@ -555,7 +617,7 @@ defineExpose({ focusBelt, focusPicture, has, root })
               @pointerenter="onPicEnter(picture.key, $event)"
               @pointerleave="pointed = null"
               @pointerdown="onPicDown(picture.key, $event)"
-              @pointermove="onPicMove($event, picture.key)"
+              @pointermove="onPicMove($event, picture)"
               @pointerup="endHold"
               @pointercancel="endHold"
               @contextmenu="onPicMenu"
@@ -851,6 +913,27 @@ defineExpose({ focusBelt, focusPicture, has, root })
     0 0 0 1px #4a3110,
     0 0 0 3px #ffe3a3,
     0 0 16px rgb(255 200 90 / 0.8);
+}
+/* A picture lifted for a drag leaves its pocket as an empty ring (hover and focus do not light it). */
+.lq-belt-pic.lq-belt-lifted .lq-belt-square {
+  transform: none;
+  border-color: #c8963d;
+  background: #2b1a0c;
+  box-shadow:
+    0 0 0 1px #4a3110,
+    inset 0 2px 6px rgb(0 0 0 / 0.6);
+}
+.lq-belt-pic.lq-belt-lifted .lq-belt-square > * {
+  visibility: hidden;
+}
+/* The pocket a lifted picture is over lights its rim amber: it is what letting go will use it with. */
+.lq-belt-pic.lq-belt-drop .lq-belt-square {
+  transform: scale(1.08);
+  border-color: #ffb43c;
+  box-shadow:
+    0 0 0 1px #4a3110,
+    0 0 0 3px #ffd77a,
+    0 0 18px rgb(255 180 60 / 0.9);
 }
 /* A gained thing has just flown in: its picture and the stud of its kind bump; a lost item rises out of the Bag's stud, which dips. */
 .lq-belt-pic.lq-landed .lq-belt-square,

@@ -810,6 +810,7 @@ describe('the narration paper', () => {
       'Press a thing or a person for a wheel of what you can do with it.',
       'Press a name in the story for the same choices.',
       'In the wheel, Use with… takes the thing in hand; then press what to use it with, or ✕ Cancel.',
+      'Or drag a thing from your bag onto what to use it with, or a spell onto what to cast it on.',
       'Press a thing in your bag for its wheel.',
       'Press a way out of the picture to walk there, or a place on the map to travel to it.',
       "Press the room's name for Look, Search and Rest.",
@@ -833,6 +834,10 @@ describe('the narration paper', () => {
     expect(help).toContain('Tap the picture to see the names of what is here.')
     expect(help).not.toContain('Move the mouse over')
     expect(help).toContain('Press F1 to show or hide the command bar')
+    expect(help).toContain(
+      'Or hold a thing in your bag, then drag it onto what to use it with, or a spell onto what to cast it on.',
+    )
+    expect(help).not.toContain('Or drag a thing from your bag')
   })
 
   it('tells a phone everything in one column with the one Hide, which N works too', async () => {

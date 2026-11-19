@@ -83,6 +83,10 @@ const props = defineProps<{
   /** A ring is open, with the name of its thing in the middle: the pointer has no name of its own. */
   ringOpen?: boolean
   relayout?: unknown
+  /** A picture of the belt is being dragged: every thing and person that can take the drop shows faintly, with no name. */
+  dragging?: boolean
+  /** The `areaId` of the thing the dragged picture is over: it glows and shows its name. */
+  dragOver?: string | null
 }>()
 const emit = defineEmits<{
   pointing: [direction: string | null]
@@ -326,6 +330,17 @@ const allSpots = computed<NamedSpot[]>(() =>
 /** Every mark and name while they are all showing, else none. */
 const spots = computed<NamedSpot[]>(() => (props.showing ? allSpots.value : []))
 
+/** The marks shown while a picture is dragged: things and people (not ways out), each without a name but the one dragged over. */
+const droppable = computed<NamedSpot[]>(() =>
+  props.dragging
+    ? allSpots.value.filter((spot) => !spot.direction && spot.kind !== 'exit')
+    : [],
+)
+/** The dropped-on thing's spot, whose name shows. */
+const dropOver = computed<NamedSpot | null>(
+  () => droppable.value.find((spot) => spot.areaId === props.dragOver) ?? null,
+)
+
 /** The spots that have a name drawn (those not left off). */
 const named = computed<NamedSpot[]>(() =>
   spots.value.filter((spot) => !spot.leftOff),
@@ -414,6 +429,26 @@ const pointed = computed<Hung | null>(() => {
         ></i>
       </template>
     </TransitionGroup>
+    <i
+      v-for="spot in droppable"
+      :key="`drag-${spot.areaId}`"
+      class="lq-area-mark lq-area-drag lq-area-droppable"
+      :class="{ 'lq-area-dropover': spot.areaId === dragOver }"
+      :data-drag-mark="spot.areaId"
+      :style="{ left: `${spot.x}px`, top: `${spot.y}px` }"
+    ></i>
+    <span
+      v-if="dropOver"
+      class="lq-area-name lq-area-drag lq-area-dropname"
+      :class="`lq-area-${dropOver.kind}`"
+      :data-drag-name="dropOver.areaId"
+      :style="{
+        left: `${dropOver.left}px`,
+        top: `${dropOver.top}px`,
+        maxWidth: `${visible.w}px`,
+      }"
+      >{{ dropOver.label }}</span
+    >
     <svg
       v-if="spots.some((spot) => spot.leader) || pointed?.leader"
       class="lq-area-lines"
@@ -504,6 +539,23 @@ const pointed = computed<Hung | null>(() => {
 .lq-area-live {
   pointer-events: auto;
   cursor: pointer;
+}
+/* While a picture is dragged: a faint mark on what can take it, a larger brighter one on what it is over; none takes a press. */
+.lq-area-drag {
+  pointer-events: none;
+}
+.lq-area-droppable {
+  opacity: 0.4;
+  transition:
+    opacity calc(0.15s * var(--lq-motion)) ease,
+    transform calc(0.15s * var(--lq-motion)) ease;
+}
+.lq-area-droppable.lq-area-dropover {
+  opacity: 1;
+  transform: scale(1.7);
+  box-shadow:
+    0 0 0 4px rgb(255 190 60 / 0.7),
+    0 0 22px 8px rgb(255 190 80 / 0.95);
 }
 .lq-area-lines {
   position: absolute;

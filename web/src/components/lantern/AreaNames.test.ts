@@ -190,6 +190,45 @@ describe('AreaNames', () => {
     expect(w.find('[data-area-name="unplaced"]').exists()).toBe(false)
   })
 
+  describe('while a picture is dragged over it', () => {
+    it('shows a faint mark on each thing and person, no name and no way out', async () => {
+      const w = mountNames({ dragging: true })
+      await nextTick()
+      const marks = w
+        .findAll('[data-drag-mark]')
+        .map((m) => m.attributes('data-drag-mark'))
+      expect(marks.sort()).toEqual(['bucket', 'scenery-x-fountain', 'villager'])
+      expect(w.find('[data-drag-name]').exists()).toBe(false)
+      expect(w.find('[data-area-mark]').exists()).toBe(false)
+      expect(w.find('.lq-area-dropover').exists()).toBe(false)
+    })
+
+    it('glows the one under the pointer and shows its name, and only that', async () => {
+      const w = mountNames({ dragging: true, dragOver: 'villager' })
+      await nextTick()
+      expect(w.get('[data-drag-mark="villager"]').classes()).toContain(
+        'lq-area-dropover',
+      )
+      expect(w.get('[data-drag-mark="bucket"]').classes()).not.toContain(
+        'lq-area-dropover',
+      )
+      expect(w.findAll('[data-drag-name]')).toHaveLength(1)
+      expect(w.get('[data-drag-name="villager"]').text()).toBe('Tilda')
+    })
+
+    it('takes no press or pointer of its own, and shows nothing when no drag is on', async () => {
+      const w = mountNames({ dragging: true, dragOver: 'villager' })
+      await nextTick()
+      expect(
+        w
+          .findAll('[data-drag-mark], [data-drag-name]')
+          .every((el) => el.classes().includes('lq-area-drag')),
+      ).toBe(true)
+      await w.setProps({ dragging: false, dragOver: null })
+      expect(w.find('[data-drag-mark]').exists()).toBe(false)
+    })
+  })
+
   it('puts the mark at the middle of the thing', async () => {
     const w = mountNames({ showing: true })
     await nextTick()

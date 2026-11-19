@@ -103,6 +103,46 @@ test('a carried thing is used on a person from the belt: ring, hand, press', asy
   await expect(story).toContainText('Grandmother turns it over in her hands')
 })
 
+test('a thing dragged from the bag onto a person is used on her; a drop on nothing sends nothing and the picture goes home (rq-v29l.17)', async ({
+  page,
+}): Promise<void> => {
+  await page.setViewportSize({ width: 1280, height: 800 })
+  await toTheCottage(page)
+  const story = page.locator('.lq-story')
+  const bread = page.locator('[data-belt-pic="item:bread"]')
+  const pocket = await bread.boundingBox()
+  const person = await page
+    .locator('[data-area-press="grandmother"]')
+    .boundingBox()
+  if (!pocket || !person) throw new Error('the bread or Grandmother is missing')
+  const from = {
+    x: pocket.x + pocket.width / 2,
+    y: pocket.y + pocket.height / 2,
+  }
+  const to = { x: person.x + person.width / 2, y: person.y + person.height / 2 }
+  const pill = page.locator('[data-drag-pill]')
+  // Let go over the empty picture: nothing is sent, the pill and the copy are gone, the wheel stays shut.
+  const told = (await story.innerText()).length
+  await page.mouse.move(from.x, from.y)
+  await page.mouse.down()
+  await page.mouse.move(from.x + 40, from.y - 40, { steps: 4 })
+  await expect(pill).toHaveText('Use Bread with…')
+  await page.mouse.move(to.x - person.width, to.y + person.height, { steps: 4 })
+  await page.mouse.up()
+  await expect(page.locator('[data-drag-ghost]')).toHaveCount(0)
+  await expect(page.getByRole('menu', { name: 'Bread' })).toHaveCount(0)
+  await expect(story).not.toContainText('Grandmother turns it over')
+  expect((await story.innerText()).length).toBe(told)
+  // Dragged onto her, it is used as typing `use bread with grandmother` would.
+  await page.mouse.move(from.x, from.y)
+  await page.mouse.down()
+  await page.mouse.move(from.x + 40, from.y - 40, { steps: 4 })
+  await page.mouse.move(to.x, to.y, { steps: 6 })
+  await expect(pill).toHaveText('Use Bread with Grandmother')
+  await page.mouse.up()
+  await expect(story).toContainText('Grandmother turns it over in her hands')
+})
+
 test('a press on the belt opens no ring of a thing lying under it, and a press on a picture opens its own (rq-v29l.5)', async ({
   page,
 }): Promise<void> => {
