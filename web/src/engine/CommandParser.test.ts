@@ -236,6 +236,10 @@ describe('CommandParser', () => {
     expect(parser.parse('use with')).toBe('What do you want to use?')
     expect(parser.parse('use on')).toBe('What do you want to use?')
     expect(parser.parse('use with chest')).toBe('What do you want to use?')
+    expect(parser.parse('use key on')).toBe(
+      'You need to say what to use it with, an item or a character. ' +
+        'Format: use <item> with <item or character>',
+    )
     expect(game.calls).toEqual([])
   })
 
