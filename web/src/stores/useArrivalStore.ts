@@ -5,6 +5,7 @@ import { useStageSpeechStore } from './useStageSpeechStore'
 import { useSceneStore } from './useSceneStore'
 import {
   ARRIVAL_CLEAR_AFTER_MS,
+  ARRIVAL_LINGER_MS,
   readingTimeMs,
   type ArrivalPart,
 } from '@/lantern/stageArrival'
@@ -28,7 +29,9 @@ export interface PageStart {
  * recording, events that are not voiced) is read for its reading time, which
  * `barMs` gives for the bar that empties. `next` (a click, Enter or Space)
  * goes on a page, then a part, and on the last one clears; `clear` ends it all
- * at once and stops the narrator.
+ * at once and stops the narrator. An arrival that goes by itself (its time
+ * up) is `lingering` for `ARRIVAL_LINGER_MS`, so the view still takes the
+ * press a player aimed at its words as they went.
  *
  * A part too tall for the picture is shown in pages. The view cuts them (it
  * needs layout) and reports where each starts (`setPages`); the store only
@@ -79,7 +82,14 @@ export const useArrivalStore = defineStore('arrival', () => {
   const newsTurns = ref<number[]>([])
   /** Waiting news whose turn's words are told, held while the lines a skip showed unspoken are read. */
   const holding = ref(false)
+  /**
+   * The arrival went by itself a moment ago (`ARRIVAL_LINGER_MS`): the picture
+   * still takes a press as one on it, so a click meant for its words, made as
+   * they went, does nothing rather than open a ring or walk out (rq-v29l.4).
+   */
+  const lingering = ref(false)
   let timer: ReturnType<typeof setTimeout> | undefined
+  let lingerTimer: ReturnType<typeof setTimeout> | undefined
 
   /** Whether an arrival is on the picture. */
   const active = computed(() => !!current.value?.shown)
@@ -159,8 +169,23 @@ export const useArrivalStore = defineStore('arrival', () => {
     timer = undefined
   }
 
-  // The store's own timer ends with its scope; no caller has to clear it.
+  /** Forget that the arrival just went by itself. */
+  function stopLingering(): void {
+    clearTimeout(lingerTimer)
+    lingerTimer = undefined
+    lingering.value = false
+  }
+
+  /** The arrival goes by itself (its time is up): it clears, and lingers for a press for a moment. */
+  function goByItself(): void {
+    clear(true)
+    lingering.value = true
+    lingerTimer = setTimeout(stopLingering, ARRIVAL_LINGER_MS)
+  }
+
+  // The store's own timers end with its scope; no caller has to clear them.
   onScopeDispose(stopTimer)
+  onScopeDispose(stopLingering)
 
   /** Move on after `ms`. */
   function later(ms: number, then: () => void): void {
@@ -192,7 +217,7 @@ export const useArrivalStore = defineStore('arrival', () => {
       now.page = 0
       now.pages = []
       if (!now.narrated || now.ended || silentNews()) readPart()
-    } else clear(true)
+    } else goByItself()
   }
 
   /**
@@ -265,6 +290,7 @@ export const useArrivalStore = defineStore('arrival', () => {
   /** Tell `parts` now (see `show`). */
   function showNow(id: number, parts: ArrivalPart[], narrated: boolean): void {
     if (!parts.length) return
+    stopLingering()
     // Nobody speaks the parts of an arrival that is not narrated.
     const told = narrated
       ? parts
@@ -339,6 +365,7 @@ export const useArrivalStore = defineStore('arrival', () => {
    */
   function clear(keepNews = false): void {
     stopTimer()
+    stopLingering()
     holding.value = false
     const now = current.value
     current.value = null
@@ -466,7 +493,7 @@ export const useArrivalStore = defineStore('arrival', () => {
         now.page = Math.max(0, now.pages.length - 1)
         later(
           ARRIVAL_CLEAR_AFTER_MS,
-          now.index < now.parts.length - 1 ? advance : () => clear(true),
+          now.index < now.parts.length - 1 ? advance : goByItself,
         )
       } else readPart()
     },
@@ -483,6 +510,7 @@ export const useArrivalStore = defineStore('arrival', () => {
     barKey,
     newsUp,
     holding,
+    lingering,
     told: newsTurns,
     newsPending,
     reset,

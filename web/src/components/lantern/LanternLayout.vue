@@ -1761,12 +1761,8 @@ const ringItems = computed(() => {
   }
   return ringActions(open.thing as AreaThing, ringContext.value)
 })
-/** The words are still being told: a press hurries them and opens no ring. */
-const telling = computed(
-  () =>
-    narration.isNarrating ||
-    (speech.conversation?.lines.some((line) => !line.shown) ?? false),
-)
+/** The words are still being told (the narrator reads, or a line on the picture is still to appear): a press hurries them and opens no ring. */
+const telling = computed(() => narration.isNarrating || speech.stillToShow)
 /** A press of `kind` as `decidePointerPress` hears it: the story's state now, with the details of this press in `over`. */
 function pressOf(
   kind: PressKind,
