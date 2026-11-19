@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import { Game, GameController } from '@/engine'
-import { wordsMissingOnPath } from '@/testing/sayWordsOnPath'
+import {
+  wordsMissingOnPath,
+  wordsNeverMetOnPath,
+} from '@/testing/sayWordsOnPath'
 import { Act1 } from './Act1'
 import { ACT1_GOLDEN_PATH } from './Act1GoldenPath'
 
@@ -20,6 +23,13 @@ function stayPath(): string[] {
   path.splice(path.indexOf('buy rope from shopkeeper'), 1)
   return path
 }
+
+/**
+ * Vocabulary words no step of the golden path meets: each is a deliberate,
+ * visible gap (a word of an optional branch, or one only a journal or an
+ * italic line gives), raised in the PR of rq-v29l.18; the list only shrinks.
+ */
+const NEVER_MET: string[] = []
 
 describe('Act 1 words under Say…', () => {
   it('offers only Yes and No in the opening dream', () => {
@@ -49,6 +59,9 @@ describe('Act 1 words under Say…', () => {
     expect(words).toEqual(expect.arrayContaining(['Patches', 'Stay', 'Mira']))
     expect(offered.find((entry) => entry.word === 'Stay')?.isNew).toBe(false)
     expect(offered.find((entry) => entry.word === 'Patches')?.isNew).toBe(true)
-    expect(controller.hasNewSayWords()).toBe(true)
+  })
+
+  it('lists the words of its vocabulary that no step of the golden path puts in front of Elior', () => {
+    expect(wordsNeverMetOnPath(new Act1(), ACT1_GOLDEN_PATH)).toEqual(NEVER_MET)
   })
 })

@@ -93,7 +93,7 @@ describe('GameController.getSayWords', () => {
     ])
   })
 
-  it('does not take words from narration or the name of the room', () => {
+  it('does not take words from the description or the name of the room', () => {
     const ctrl = started()
     ctrl.openRoom()
     ctrl.takeTurn('look')
@@ -112,7 +112,6 @@ describe('GameController.getSayWords', () => {
     const stay = (): boolean | undefined =>
       ctrl.getSayWords().find((w) => w.word === 'Stay')?.isNew
     expect(stay()).toBe(true)
-    expect(ctrl.hasNewSayWords()).toBe(true)
     ctrl.takeTurn('say stay to tilda')
     expect(stay()).toBe(false)
   })

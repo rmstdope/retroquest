@@ -11,6 +11,20 @@ export interface MissingWord {
   word: string
 }
 
+/** The words of the act's vocabulary that no step of `path` puts in front of Elior. */
+export function wordsNeverMetOnPath(act: Act, path: string[]): string[] {
+  const controller = new GameController(new Game([act]))
+  controller.advanceToRunning()
+  controller.openRoom()
+  const met = new Set<string>()
+  for (const command of path) {
+    controller.takeTurn(command)
+    controller.game.state.settleQuests()
+    for (const entry of controller.getSayWords()) met.add(entry.word)
+  }
+  return act.words.filter((word) => !met.has(word))
+}
+
 /** The words of `say <word> to <person>` commands of `path` that were not on offer when said. */
 export function wordsMissingOnPath(act: Act, path: string[]): MissingWord[] {
   const controller = new GameController(new Game([act]))

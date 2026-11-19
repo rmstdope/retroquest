@@ -235,14 +235,20 @@ export class GameController {
     return result
   }
 
-  /** The room the player is in is shown: the people standing in it are met, so their names are in front of Elior. */
+  /**
+   * The room the player is in is shown: the people standing in it are met,
+   * so a name of the act's word list that is a person's whole name is in
+   * front of Elior. Words inside a longer name ("water nymphs") are not.
+   */
   private noticeRoom(): void {
     const state = this.game.state
-    this.game.noticeWords(
-      state.currentRoom.characters
-        .map((character) => `[dialogue]${character.name}[/dialogue]`)
-        .join(' '),
+    const names = state.currentRoom.characters.map((character) =>
+      character.name.toLowerCase(),
     )
+    const known = this.game.acts[this.game.currentAct].words.filter((word) =>
+      names.includes(word.toLowerCase()),
+    )
+    state.meetWords(known.join(' . '), known)
   }
 
   /**
@@ -251,11 +257,6 @@ export class GameController {
    */
   getSayWords(): SayWord[] {
     return this.game.state.wordsToSay()
-  }
-
-  /** Whether any word under Say… is new, for the dot on the Say… button. */
-  hasNewSayWords(): boolean {
-    return this.getSayWords().some((entry) => entry.isNew)
   }
 
   /**

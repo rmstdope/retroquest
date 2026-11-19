@@ -723,17 +723,12 @@ Welcome to
   }
 
   /**
-   * Notes the words of the act's vocabulary that Elior has had put in front
-   * of him: those in a line said to him or written for him to read (the
-   * `[dialogue]` of `text`), not the narration around them.
+   * Notes the words of the act's vocabulary that the answer to a command, a
+   * line said to him or text he reads, puts in front of Elior. The room's own
+   * description is not an answer (see `GameController`).
    */
   noticeWords(text: string): void {
-    const lines = [...text.matchAll(/\[dialogue\]([\s\S]*?)\[\/dialogue\]/g)]
-    if (lines.length === 0) return
-    this.state.meetWords(
-      lines.map((line) => line[1]).join('\n'),
-      this.acts[this.currentAct].words,
-    )
+    this.state.meetWords(text, this.acts[this.currentAct].words)
   }
 
   say(words: string, characterName: string): string {
