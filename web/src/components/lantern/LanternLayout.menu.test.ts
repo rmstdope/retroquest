@@ -214,8 +214,10 @@ describe('LanternLayout: the Escape menu', () => {
     })
 
     it('J, Q and M in the menu latch once each, as choosing the tile does; in the game they are silent', async () => {
-      await press('q')
-      await press('q')
+      for (const key of ['j', 'q', 'm']) {
+        await press(key)
+        await press(key)
+      }
       expect(sounds.choose).not.toHaveBeenCalled()
       for (const key of ['j', 'q', 'm']) {
         sounds.choose.mockClear()
