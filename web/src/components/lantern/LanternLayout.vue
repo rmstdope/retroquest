@@ -1349,6 +1349,8 @@ watch(
     )
       // A thing that lay in the picture leaves it as its own name comes up.
       flights.launch(turn.gained, leaving, motionReduced(), (flight) => {
+        // The rail shows the side the thing is flying to, opened if it was put away.
+        belt.bringBack(flight.kind === 'item' ? 'bag' : 'spells')
         if (flight.areaId) game.releaseGain(flight.areaId)
       })
     else {
