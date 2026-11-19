@@ -115,8 +115,8 @@ function clamp(value: number, low: number, high: number): number {
  * The things with some part on the `visible` part of the picture, each with its
  * mark on its chosen point, or at the middle of that part when it has none; a
  * point out of sight moves to the nearest spot of the part that is, and the
- * mark is wholly on the visible part. A thing with no part there (a way out
- * or a candle wholly behind the bar and the belt) has its mark on the nearest
+ * mark is wholly on the visible part. A thing with no part there (any thing,
+ * a way out or not, wholly behind the bar and the belt) has its mark on the nearest
  * spot that can be seen (behind the bar: at its top, above the thing's
  * middle), so everything placed can be found and pressed. `rect`, what the
  * pointer can be over, stays whole.

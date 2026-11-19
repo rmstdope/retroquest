@@ -227,7 +227,8 @@ const visible = computed<Rect>(() =>
 )
 
 /**
- * The placed things with a part that can be seen, their marks stepped clear of
+ * The placed things in view, each marked on the part that can be seen (one
+ * wholly behind the bar on its nearest spot, `markInside`), their marks stepped clear of
  * the panels and of the words (just outside them, or on their nearest edge
  * where no free picture lies near) and kept apart from each other.
  */
