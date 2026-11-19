@@ -80,12 +80,16 @@ import {
 } from '@/lantern/pressRing'
 import BeltOfPictures from './BeltOfPictures.vue'
 import HandStrip from './HandStrip.vue'
+import DragGhost from './DragGhost.vue'
+import { useBeltDrag, type DragEnd } from '@/composables/useBeltDrag'
+import { dragPill, type DragOver } from '@/lantern/beltDrag'
 import {
   carriedRing,
   pressedOnBelt,
   subjectOf,
   handCommand,
   type BeltPicture,
+  type Hand,
 } from '@/lantern/belt'
 import type { ActionContext } from '@/lantern/actions'
 import type { AreaThing } from '@/lantern/areaThings'
@@ -1907,6 +1911,144 @@ function onAreaPress(
   }
 }
 
+/** What the pointer is over while a belt picture is dragged: a pocket of the belt, a thing or person of the picture (not a way out), or nothing. */
+function dragTarget(x: number, y: number): DragOver | null {
+  const under = document.elementFromPoint?.(x, y)
+  const pocket = under?.closest<HTMLElement>('[data-belt-pic]')
+  if (pocket?.dataset.beltPic) {
+    const picture = beltEl.value?.pictureFor(pocket.dataset.beltPic)
+    return picture
+      ? {
+          from: 'belt',
+          key: picture.key,
+          name: picture.name,
+          label: picture.label,
+          kind: picture.kind,
+        }
+      : null
+  }
+  // A way out lying under the pointer is a miss, as a press there walks.
+  if (areaNamesEl.value?.wayAt(x, y)) return null
+  const mark = under?.closest<HTMLElement>(
+    '[data-area-press], [data-area-mark], [data-area-name]',
+  )
+  const areaId =
+    mark?.dataset.areaPress ?? mark?.dataset.areaMark ?? mark?.dataset.areaName
+  const thing = game.roomAreas.things.find((t) => t.areaId === areaId)
+  if (!thing || thing.kind === 'exit') return null
+  return {
+    from: 'room',
+    areaId: thing.areaId,
+    name: thing.name,
+    label: thing.label,
+  }
+}
+
+/** A picture of the belt that is gliding back to its pocket after a miss. */
+const returning = ref<{
+  hand: Hand
+  pocketKey: string
+  x: number
+  y: number
+  touch: boolean
+  to: { x: number; y: number }
+} | null>(null)
+
+/** A drag ended: a drop on a target sends its command as a typed one; anything else sends nothing and the picture glides back. */
+function onDragEnd(end: DragEnd): void {
+  if (end.command) {
+    sendFrom(end.command, `belt:${end.pocketKey}`)
+    return
+  }
+  const pocket = beltEl.value?.root?.querySelector<HTMLElement>(
+    `[data-belt-pic="${end.pocketKey}"]`,
+  )
+  const box = pocket?.getBoundingClientRect()
+  if (!box) return
+  returning.value = {
+    hand: end.hand,
+    pocketKey: end.pocketKey,
+    x: end.at.x,
+    y: end.at.y,
+    touch: end.pointerType === 'touch',
+    to: { x: box.left + box.width / 2, y: box.top + box.height / 2 },
+  }
+}
+const beltDrag = useBeltDrag({ hitTest: dragTarget, onEnd: onDragEnd })
+
+/** A belt picture was pulled off its pocket: it lifts if the game takes a move and the words have settled (as the wheel would open); a thing already in hand is put down first. */
+function onBeltLift(
+  picture: BeltPicture,
+  at: { x: number; y: number; pointerType: string },
+): void {
+  if (!staged.value || returning.value) return
+  const { action } = decidePointerPress(pressOf('belt'))
+  if (action !== 'open-ring' && action !== 'send-hand') return
+  ring.value = null
+  belt.emptyHand()
+  beltDrag.lift(picture, at)
+}
+
+/** What drags, or glides back, drawn at the pointer. */
+const ghost = computed(() => {
+  const drag = beltDrag.drag.value
+  if (drag)
+    return {
+      hand: drag.hand,
+      x: drag.x,
+      y: drag.y,
+      pill: dragPill(drag.hand, drag.over),
+      touch: drag.pointerType === 'touch',
+      to: null,
+    }
+  const back = returning.value
+  if (!back) return null
+  return {
+    hand: back.hand,
+    x: back.x,
+    y: back.y,
+    pill: dragPill(back.hand, null),
+    touch: back.touch,
+    to: back.to,
+  }
+})
+/** The picture in window pixels, which the pill stays inside. */
+function ghostBounds(): {
+  left: number
+  top: number
+  right: number
+  bottom: number
+} {
+  const box = stageEl.value?.getBoundingClientRect()
+  return {
+    left: box?.left ?? 0,
+    top: box?.top ?? 0,
+    right: box?.right ?? window.innerWidth,
+    bottom: box?.bottom ?? window.innerHeight,
+  }
+}
+/** The pocket lit while a thing is over it (and letting go would use it there). */
+const dragOverPocket = computed(() => {
+  const drag = beltDrag.drag.value
+  const over = drag?.over
+  return drag &&
+    over?.from === 'belt' &&
+    dragPill(drag.hand, over) !== dragPill(drag.hand, null)
+    ? (over.key ?? null)
+    : null
+})
+/** The thing of the picture the dragged picture is over. */
+const dragOverArea = computed(() => {
+  const over = beltDrag.drag.value?.over
+  return over?.from === 'room' ? (over.areaId ?? null) : null
+})
+// A drag ends, as a miss, when the game moves on under it.
+watch(
+  () =>
+    [game.acceptInput, scene.phase, game.showModal, gameDialog.value] as const,
+  () => beltDrag.cancel(),
+)
+
 /** A picture of the belt is pressed, at `at` in the window: another thing for what is in hand, or its own ring. While the words are told it hurries them instead. */
 function onBeltPress(picture: BeltPicture, at: { x: number; y: number }): void {
   const box = stageEl.value?.getBoundingClientRect()
@@ -2366,12 +2508,25 @@ const HOVER_NAMES_HELP =
 /** Help's first line anywhere else (phone, tablet): the names on the picture. */
 const TAP_NAMES_HELP = '  Tap the picture to see the names of what is here.\n'
 
-/** Help's lines 2 to 7 of "Playing without typing:", the same in every act. */
-const PLAYING_WITHOUT_TYPING_HELP =
+/** Help's lines 2 and 3 of "Playing without typing:", the same in every act. */
+const PLAYING_WITHOUT_TYPING_HELP_START =
   '  Press a thing or a person for a wheel of what you can do with it.\n' +
   '  Press a name in the story for the same choices.\n' +
   '  In the wheel, Use with… takes the thing in hand; ' +
-  'then press what to use it with, or ✕ Cancel.\n' +
+  'then press what to use it with, or ✕ Cancel.\n'
+
+/** Help's line about dragging where a mouse is (laptop). */
+const MOUSE_DRAG_HELP =
+  '  Or drag a thing from your bag onto what to use it with, ' +
+  'or a spell onto what to cast it on.\n'
+
+/** Help's line about dragging anywhere else (phone, tablet): a hold comes first. */
+const TOUCH_DRAG_HELP =
+  '  Or hold a thing in your bag, then drag it onto what to use it with, ' +
+  'or a spell onto what to cast it on.\n'
+
+/** Help's remaining lines of that section, the same in every act. */
+const PLAYING_WITHOUT_TYPING_HELP_END =
   '  Press a thing in your bag for its wheel.\n' +
   '  Press a way out of the picture to walk there, ' +
   'or a place on the map to travel to it.\n' +
@@ -2388,7 +2543,9 @@ const infoHtml = computed(() => {
     renderMarkup(
       PLAYING_WITHOUT_TYPING_HEADING +
         (laptop.value ? HOVER_NAMES_HELP : TAP_NAMES_HELP) +
-        PLAYING_WITHOUT_TYPING_HELP +
+        PLAYING_WITHOUT_TYPING_HELP_START +
+        (laptop.value ? MOUSE_DRAG_HELP : TOUCH_DRAG_HELP) +
+        PLAYING_WITHOUT_TYPING_HELP_END +
         (canType.value ? TYPING_BOX_HELP : '') +
         '\n',
     ) +
@@ -2827,7 +2984,9 @@ watch(namesBlocked, (blocked) => {
                 :things="game.roomAreas.things"
                 :boxes="game.roomAreas.boxes"
                 :picture-size="game.roomPictureSize ?? DEFAULT_PICTURE_SIZE"
-                :showing="namesUp"
+                :showing="namesUp && !beltDrag.drag.value"
+                :dragging="beltDrag.drag.value !== null"
+                :drag-over="dragOverArea"
                 :pointer="scene.phase === 'idle' ? names.pointer : null"
                 :foot-cover="footCover"
                 :ring-open="ring !== null"
@@ -2849,9 +3008,20 @@ watch(namesBlocked, (blocked) => {
               :caption-for="
                 ring?.from === 'belt' ? ring.thing.areaId.slice(5) : null
               "
+              :lifted="
+                beltDrag.drag.value?.pocketKey ?? returning?.pocketKey ?? null
+              "
+              :drag-over="dragOverPocket"
               @press="onBeltPress"
+              @lift="onBeltLift"
               @measure="beltMeasured = $event"
               @caption="beltCaption = $event"
+            />
+            <DragGhost
+              v-if="ghost"
+              v-bind="ghost"
+              :bounds="ghostBounds()"
+              @done="returning = null"
             />
             <HandStrip
               v-if="belt.hand"

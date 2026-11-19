@@ -326,6 +326,101 @@ describe('BeltOfPictures', () => {
     expect(w!.find('.lq-belt-name').exists()).toBe(false)
   })
 
+  describe('lifting a picture to drag it', () => {
+    const pointer = (
+      type: string,
+      x: number,
+      pointerType = 'mouse',
+    ): PointerEvent =>
+      new PointerEvent(type, {
+        pointerType,
+        clientX: x,
+        clientY: 5,
+        button: 0,
+        bubbles: true,
+      })
+    const lifts = (): unknown[][] => (w!.emitted('lift') ?? []) as unknown[][]
+
+    it('lifts a picture a mouse pulls a few pixels, and the release is no press', async () => {
+      mountBelt()
+      const el = w!.get('[data-belt-pic="item:bread"]').element
+      el.dispatchEvent(pointer('pointerdown', 10))
+      el.dispatchEvent(pointer('pointermove', 12))
+      expect(lifts()).toHaveLength(0)
+      el.dispatchEvent(pointer('pointermove', 20))
+      expect(lifts()).toHaveLength(1)
+      expect(lifts()[0][0]).toMatchObject({ key: 'item:bread' })
+      expect(lifts()[0][1]).toMatchObject({ x: 20, y: 5, pointerType: 'mouse' })
+      el.dispatchEvent(pointer('pointermove', 40))
+      expect(lifts()).toHaveLength(1)
+      el.dispatchEvent(pointer('pointerup', 40))
+      el.dispatchEvent(new MouseEvent('click', { bubbles: true, detail: 1 }))
+      expect(w!.emitted('press')).toBeUndefined()
+    })
+
+    it('still presses on a click that never moved', async () => {
+      mountBelt()
+      const el = w!.get('[data-belt-pic="item:bread"]').element
+      el.dispatchEvent(pointer('pointerdown', 10))
+      el.dispatchEvent(pointer('pointermove', 11))
+      el.dispatchEvent(pointer('pointerup', 11))
+      el.dispatchEvent(new MouseEvent('click', { bubbles: true, detail: 1 }))
+      expect(lifts()).toHaveLength(0)
+      expect(w!.emitted('press')).toHaveLength(1)
+    })
+
+    it('lifts nothing once the button is up again', async () => {
+      mountBelt()
+      const el = w!.get('[data-belt-pic="item:bread"]').element
+      el.dispatchEvent(pointer('pointerdown', 10))
+      el.dispatchEvent(pointer('pointerup', 10))
+      el.dispatchEvent(pointer('pointermove', 60))
+      expect(lifts()).toHaveLength(0)
+    })
+
+    it('marks the lifted pocket as an empty ring and a pocket dropped on as lit', async () => {
+      mountBelt()
+      await w!.setProps({
+        lifted: 'item:bread',
+        dragOver: "item:Elior's Journal",
+      })
+      expect(w!.get('[data-belt-pic="item:bread"]').classes()).toContain(
+        'lq-belt-lifted',
+      )
+      expect(
+        w!.get('[data-belt-pic="item:Elior\'s Journal"]').classes(),
+      ).toContain('lq-belt-drop')
+      expect(w!.get('[data-belt-pic="item:bread"]').classes()).not.toContain(
+        'lq-belt-drop',
+      )
+    })
+
+    it('lifts a finger only after the hold, then on the next move; a swipe still scrolls', async () => {
+      vi.useFakeTimers()
+      try {
+        mountBelt()
+        const el = w!.get('[data-belt-pic="item:bread"]').element
+        el.dispatchEvent(pointer('pointerdown', 10, 'touch'))
+        el.dispatchEvent(pointer('pointermove', 60, 'touch'))
+        expect(lifts()).toHaveLength(0)
+        el.dispatchEvent(pointer('pointerup', 60, 'touch'))
+        el.dispatchEvent(pointer('pointerdown', 10, 'touch'))
+        vi.advanceTimersByTime(450)
+        await nextTick()
+        el.dispatchEvent(pointer('pointermove', 12, 'touch'))
+        expect(lifts()).toHaveLength(0)
+        const stop = new Event('touchmove', { cancelable: true })
+        document.dispatchEvent(stop)
+        expect(stop.defaultPrevented).toBe(true)
+        el.dispatchEvent(pointer('pointermove', 30, 'touch'))
+        expect(lifts()).toHaveLength(1)
+        expect(lifts()[0][1]).toMatchObject({ pointerType: 'touch' })
+      } finally {
+        vi.useRealTimers()
+      }
+    })
+  })
+
   describe('touch and hold', () => {
     beforeEach(() => vi.useFakeTimers())
     afterEach(() => vi.useRealTimers())
