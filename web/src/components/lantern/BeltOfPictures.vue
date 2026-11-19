@@ -420,7 +420,8 @@ defineExpose({ focusBelt, focusPicture, has, root })
     }"
     aria-label="Bag and spells"
   >
-    <div class="lq-belt-bar">
+    <!-- A panel over the picture: no mark of the room's things lies under the belt's own bar, on any layout (on a laptop it is the only part of the foot the belt covers; elsewhere the foot is kept clear up to the belt's top as well). -->
+    <div class="lq-belt-bar" data-lq-obstacle="panel">
       <div class="lq-belt-switch">
         <button
           type="button"
@@ -627,6 +628,8 @@ defineExpose({ focusBelt, focusPicture, has, root })
   outline: 1.5px dashed rgb(232 196 140 / 0.55);
   outline-offset: -6px;
   transition: border-radius var(--lq-strap-ms);
+  /* The leather covers the picture: a press on it, beside or under a pocket, never reaches a thing beneath. */
+  pointer-events: auto;
 }
 .lq-belt-folded .lq-belt-bar {
   /* The buckle end of a belt. */
@@ -714,7 +717,7 @@ defineExpose({ focusBelt, focusPicture, has, root })
   grid-template-columns: 0fr;
 }
 .lq-belt-strip {
-  /* Floats on the leather: only the pictures themselves take a press. */
+  /* Floats on the leather: only the pictures themselves take a press (the leather takes the rest, and does nothing). */
   pointer-events: none;
   display: flex;
   align-items: center;

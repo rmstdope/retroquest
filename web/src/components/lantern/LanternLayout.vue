@@ -526,12 +526,19 @@ const beltBottom = computed(() =>
 )
 /** The belt starts at the picture's left edge. */
 const beltLeft = computed(() => 0)
-/** How far up from the foot of the picture the belt's top lies: what the names and press areas must keep clear of (none while the belt is away: the picture's foot is then the floor, then the action row alone on a laptop). */
+/**
+ * How far up from the foot of the picture the names and marks keep clear of,
+ * across its whole width: on a laptop only the typing box's room, since the
+ * belt's bar covers only its own width and is a panel the marks step out from
+ * under (rq-v29l.11), so a thing at the foot beside it keeps its name; elsewhere
+ * up to the belt's top while it is up (none while it is away: the picture's
+ * foot is then the floor).
+ */
 const footCover = computed(() =>
-  beltHeight.value > 0 && !belt.away
-    ? beltBottom.value + beltHeight.value
-    : laptop.value
-      ? boxRoom.value
+  laptop.value
+    ? boxRoom.value
+    : beltHeight.value > 0 && !belt.away
+      ? beltBottom.value + beltHeight.value
       : 0,
 )
 
@@ -869,7 +876,7 @@ function focusActions(): void {
   if (typingOpen.value) commandBoxEl.value?.focus()
 }
 
-/** The typing box asked to be hidden (Escape in it). */
+/** The typing box asked to be hidden (Escape in it, or a click on its "F1 hides" pill). */
 function hideBox(): void {
   commandBox.hide()
 }
@@ -2349,21 +2356,44 @@ const FULLSCREEN_KEY_HELP = '\nF — full screen on or off\n'
 /** Help's line for the key that hides the narration paper (laptop only). */
 const NARRATION_KEY_HELP = '\nN — hide or show the words\n'
 
-/** Help's line for the room's name, which opens Look, Search and Rest. */
-const ROOM_NAME_HELP = "\nPress the room's name for Look, Search and Rest.\n"
+/** Help's heading for the section that teaches playing without typing. */
+const PLAYING_WITHOUT_TYPING_HEADING = '[bold]Playing without typing:[/bold]\n'
 
-/** Help's line for F1, the typing box (where a keyboard can type). */
+/** Help's first line where a mouse hovers (laptop): the names on the picture. */
+const HOVER_NAMES_HELP =
+  '  Move the mouse over the picture to see the names of what is here.\n'
+
+/** Help's first line anywhere else (phone, tablet): the names on the picture. */
+const TAP_NAMES_HELP = '  Tap the picture to see the names of what is here.\n'
+
+/** Help's lines 2 to 7 of "Playing without typing:", the same in every act. */
+const PLAYING_WITHOUT_TYPING_HELP =
+  '  Press a thing or a person for a wheel of what you can do with it.\n' +
+  '  Press a name in the story for the same choices.\n' +
+  '  In the wheel, Use with… takes the thing in hand; ' +
+  'then press what to use it with, or ✕ Cancel.\n' +
+  '  Press a thing in your bag for its wheel.\n' +
+  '  Press a way out of the picture to walk there, ' +
+  'or a place on the map to travel to it.\n' +
+  "  Press the room's name for Look, Search and Rest.\n"
+
+/** Help's last line of that section, F1 (where a keyboard can type). */
 const TYPING_BOX_HELP =
-  '\nPress F1 to type commands instead; F1 again hides the box.\n'
+  '  Press F1 to show or hide the command bar; type commands there instead.\n'
 
 /** Stats or Help as HTML (Help ends with the music credits). */
 const infoHtml = computed(() => {
   if (gameDialog.value !== 'help') return ''
   return (
+    renderMarkup(
+      PLAYING_WITHOUT_TYPING_HEADING +
+        (laptop.value ? HOVER_NAMES_HELP : TAP_NAMES_HELP) +
+        PLAYING_WITHOUT_TYPING_HELP +
+        (canType.value ? TYPING_BOX_HELP : '') +
+        '\n',
+    ) +
     renderMarkup(game.readInfo('help')) +
     renderMarkup(NARRATION_HELP) +
-    renderMarkup(ROOM_NAME_HELP) +
-    (canType.value ? renderMarkup(TYPING_BOX_HELP) : '') +
     (laptop.value
       ? renderMarkup(ESCAPE_KEY_HELP) +
         (fullscreen.supported ? renderMarkup(FULLSCREEN_KEY_HELP) : '') +

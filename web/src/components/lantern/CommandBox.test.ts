@@ -103,6 +103,14 @@ describe('CommandBox', () => {
     expect(event.defaultPrevented).toBe(true)
   })
 
+  it('hides when its F1 pill is clicked, for a player using only the mouse (rq-v29l.3)', async () => {
+    const pill = w.get('button[aria-label="F1 hides the typing box"]')
+    expect(pill.text()).toBe('F1 hides')
+    await pill.trigger('click')
+    expect(w.emitted('hide')).toHaveLength(1)
+    expect(submit).not.toHaveBeenCalled()
+  })
+
   it('takes focus back on request', async () => {
     ;(document.activeElement as HTMLElement).blur()
     ;(w.vm as unknown as { focus: () => void }).focus()

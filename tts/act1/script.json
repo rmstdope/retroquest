@@ -790,11 +790,6 @@
     "text": "From the old mill, that. Good stone. My grandfather said they built the mill where they did for a reason. The ground there's older than the village."
   },
   {
-    "id": "0523017458f433",
-    "speaker": "narrator",
-    "text": "A modest cottage with a straw roof and a cozy hearth. The scent of fresh bread and old books fills the air. Grey morning comes through the lace curtains onto shelves lined with trinkets and memories. A sturdy wooden table sits in the center, and a gentle fire crackles in the hearth. Grandmother stands by it, humming, and keeps an eye on the bread."
-  },
-  {
     "id": "052eed951d110a",
     "speaker": "narrator",
     "text": "The deer lowers its head to the grass, then lifts it again to look at you."
@@ -1378,11 +1373,6 @@
     "id": "084e21f9af40ec",
     "speaker": "narrator",
     "text": "Light fills the glade."
-  },
-  {
-    "id": "084fb5cba8e80a",
-    "speaker": "narrator",
-    "text": "A modest cottage with a straw roof and a cozy hearth. The scent of fresh bread and old books fills the air. The curtains are still drawn on a grey morning, and the corner by your bed is too dark to see into. A sturdy wooden table sits in the center, and a gentle fire crackles in the hearth. Grandmother stands by it, humming, and keeps an eye on the bread."
   },
   {
     "id": "0856770984804a",
@@ -4125,6 +4115,11 @@
     "text": "A warm light settles over Patches and finds nothing that needs mending."
   },
   {
+    "id": "193aad9fb6204d",
+    "speaker": "narrator",
+    "text": "A modest cottage with a straw roof and a cozy hearth. The scent of fresh bread and old books fills the air. Grey morning comes through the lace curtains onto shelves lined with trinkets and memories. A sturdy wooden table sits in the center, and a gentle fire crackles in the hearth. Grandmother stands by it, humming, and keeps an eye on the next batch."
+  },
+  {
     "id": "193be0a872654f",
     "speaker": "narrator",
     "text": "Preparing for the road"
@@ -5018,6 +5013,11 @@
     "id": "1ed69eed28a8ab",
     "speaker": "narrator",
     "text": "Beneath it lies a folded note. Something in you knows the careful, slanting hand before you have read a word: it is your father's."
+  },
+  {
+    "id": "1ee044cc7c94a7",
+    "speaker": "narrator",
+    "text": "A modest cottage with a straw roof and a cozy hearth. The scent of fresh bread and old books fills the air. The curtains are still drawn on a grey morning, and the corner by your bed is too dark to see into. A sturdy wooden table sits in the center, and a gentle fire crackles in the hearth. Grandmother stands by it, humming, and keeps an eye on the next batch."
   },
   {
     "id": "1eedd50668e9ec",

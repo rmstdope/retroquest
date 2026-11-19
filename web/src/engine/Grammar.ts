@@ -89,7 +89,7 @@ export const VERB_FORMS: readonly VerbForm[] = [
     group: 'Movement',
     help: [
       'go <direction>, move <direction>, <direction>, <short_direction> ' +
-        '(e.g., go north, , move north, north, n)',
+        '(e.g., go north, move north, north, n)',
     ],
   },
   {
