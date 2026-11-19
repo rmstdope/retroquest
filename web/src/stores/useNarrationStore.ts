@@ -8,7 +8,7 @@ import {
   type NarrationClip,
   type NarrationManifest,
 } from '@/lantern/narrationManifest'
-import type { NarrationUnit } from '@/lantern/narrationUnits'
+import { hasRecording, type NarrationUnit } from '@/lantern/narrationUnits'
 import { readingPauseMs } from '@/lantern/stageSpeech'
 
 /**
@@ -603,8 +603,7 @@ export const useNarrationStore = defineStore('narration', () => {
     gateAt = -1,
   ): void {
     if (active.value) finish(true)
-    const voiced =
-      !!own || units.some((unit) => unit.parts.some((part) => part.clip))
+    const voiced = !!own || hasRecording(units)
     if (!voiced) return
     active.value = {
       turnId,

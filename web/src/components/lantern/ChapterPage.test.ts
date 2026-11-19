@@ -11,6 +11,7 @@ import {
 import { narrationKey } from '@/lantern/narrationKey'
 import { narrationWords } from '@/lantern/narrationManifest'
 import { POPUP_NARRATION_ID, chapterUnits } from '@/lantern/narrationUnits'
+import { usePassageStore } from '@/stores/usePassageStore'
 import ChapterPage from './ChapterPage.vue'
 import type { Chapter } from '@/lantern/chapter'
 
@@ -271,6 +272,35 @@ describe('ChapterPage', () => {
       await w.get('.lq-chapter-body').trigger('click')
       await w.get('.lq-chapter-body').trigger('click')
       expect(useNarrationStore().isNarrating).toBe(true)
+    })
+
+    it('keeps the text hidden under the title while the screen rises, until the voice reads it (rq-lhg3)', async () => {
+      vi.stubGlobal('fetch', () =>
+        Promise.resolve({ ok: true, json: () => Promise.resolve(manifest) }),
+      )
+      usePassageStore().begin(
+        () => {},
+        () => {},
+      )
+      const w = mount(ChapterPage, { props: { chapter, titleId: 't' } })
+      await flushPromises()
+      expect(w.get('.lq-chapter-inner').classes()).not.toContain('lq-held')
+      expect(w.get('h2').text()).toBe('The Call')
+      expect(w.findAll('.lq-chapter-block')).toHaveLength(0)
+      expect(w.findAll('.lq-chapter-unshown')).toHaveLength(3)
+      await vi.advanceTimersByTimeAsync(1500)
+      expect(usePassageStore().phase).toBe('in')
+      expect(w.findAll('.lq-chapter-block')).toHaveLength(0)
+    })
+
+    it('shows the text of an act with no recordings while the screen rises', async () => {
+      usePassageStore().begin(
+        () => {},
+        () => {},
+      )
+      const w = mount(ChapterPage, { props: { chapter, titleId: 't' } })
+      await flushPromises()
+      expect(w.findAll('.lq-chapter-block')).toHaveLength(3)
     })
 
     it("holds the text back while the act's recordings load, then lets it go", async () => {
