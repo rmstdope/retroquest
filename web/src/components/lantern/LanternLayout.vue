@@ -1853,15 +1853,31 @@ onMounted(() => window.addEventListener('resize', onWindowResize))
 onUnmounted(() => window.removeEventListener('resize', onWindowResize))
 /** The belt picture whose caption shows, as the belt says. */
 const beltCaption = ref<BeltPicture | null>(null)
-/** Where the caption lies: centred over the belt, one line higher while a Hide or Show button stands above the belt (over the words, like the ring). */
+/** The top of the open ring's highest button, in its layer's pixels, as the ring says. */
+const ringTop = ref<number | null>(null)
+watch(ring, (open) => {
+  if (!open) ringTop.value = null
+})
+/**
+ * Where the caption lies: centred over the belt, one line higher while a Hide
+ * or Show button stands above the belt (over the words, like the ring); while
+ * a ring opened from the belt is up, above that ring's top, so it never lies
+ * over the ring.
+ */
 function captionStyle(): Record<string, string> {
   void windowTick.value
   const parent = stageEl.value?.parentElement?.getBoundingClientRect()
   const belt = beltEl.value?.root?.getBoundingClientRect()
   if (!parent || !belt) return { visibility: 'hidden' }
+  const left = `${belt.left + belt.width / 2 - parent.left}px`
+  const stage = stageEl.value?.getBoundingClientRect()
+  if (ring.value?.from === 'belt' && ringTop.value !== null && stage) {
+    const top = stage.top + ring.value.layer.top + ringTop.value
+    return { left, bottom: `${parent.bottom - top + 6}px` }
+  }
   const lift = showHide.value || showTab.value ? ' + var(--lq-hide-line)' : ''
   return {
-    left: `${belt.left + belt.width / 2 - parent.left}px`,
+    left,
     bottom: `calc(${parent.bottom - belt.top + 6}px${lift})`,
   }
 }
@@ -2867,6 +2883,7 @@ watch(namesBlocked, (blocked) => {
               @pick="runRing"
               @hand="takeInHand"
               @close="closeRing"
+              @top="ringTop = $event"
             />
           </div>
           <!-- Over the picture, and over the words beside it (the stage isolates its own layers). -->

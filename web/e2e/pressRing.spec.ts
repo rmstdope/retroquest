@@ -18,8 +18,12 @@ const PIXEL = Buffer.from(
   'base64',
 )
 
-/** Open the game in the cottage with its picture up and a few things placed on it. */
-async function toTheCottage(page: Page, breadY = 0.6): Promise<void> {
+/** Open the game in the cottage with its picture up and a few things placed on it (and `more`). */
+async function toTheCottage(
+  page: Page,
+  breadY = 0.6,
+  more: Record<string, object> = {},
+): Promise<void> {
   await page.route('**/images/generated/manifest.json', (route) =>
     route.fulfill({
       json: {
@@ -31,6 +35,7 @@ async function toTheCottage(page: Page, breadY = 0.6): Promise<void> {
             hearth: { x: 0.1, y: 0.4, width: 0.15, height: 0.3 },
             bread: { x: 0.5, y: breadY, width: 0.1, height: 0.1 },
             grandmother: { x: 0.8, y: 0.3, width: 0.1, height: 0.3 },
+            ...more,
           },
         },
       },
@@ -235,4 +240,57 @@ test.describe('on the smallest sideways phone', () => {
       expect(box.bottom).toBeLessThanOrEqual(stage.y + stage.height + 1)
     }
   })
+})
+
+test('a ring at the top edge shows its long name in full, on screen and clear of every button (rq-v29l.6)', async ({
+  page,
+}): Promise<void> => {
+  await page.setViewportSize({ width: 1512, height: 806 })
+  // The Faded Photograph hangs high on the wall, near the picture's top.
+  await toTheCottage(page, 0.6, {
+    'faded-photograph': { x: 0.24, y: 0.0, width: 0.06, height: 0.08 },
+  })
+  await enterCommand(page, 'search')
+  await closeTypingBox(page)
+  const photograph = page.locator('[data-area-press="faded-photograph"]')
+  await expect(photograph).toHaveCount(1)
+  const goOn = page.locator(
+    '.lq-arrival-card:not(.lq-arrival-fade-leave-active) .lq-arrival-hint:visible',
+  )
+  for (let turn = 0; turn < 8 && (await goOn.count()) > 0; turn++)
+    await page.keyboard.press('Enter')
+  await pressThing(page, 'faded-photograph')
+  await expect(
+    page.getByRole('menu', { name: 'Faded Photograph' }),
+  ).toBeVisible()
+  const parts = await page.evaluate(() => {
+    const box = (el: Element): number[] => {
+      const r = el.getBoundingClientRect()
+      return [r.left, r.top, r.right, r.bottom]
+    }
+    const name = document.querySelector('.lq-ring-name')!
+    return {
+      name: box(name),
+      nameCut: name.scrollWidth > name.clientWidth,
+      coins: [...document.querySelectorAll('.lq-ring-coin')].map(box),
+      screen: [0, 0, window.innerWidth, window.innerHeight],
+    }
+  })
+  expect(parts.nameCut).toBe(false)
+  for (const part of [parts.name, ...parts.coins]) {
+    expect(part[0]).toBeGreaterThanOrEqual(0)
+    expect(part[1]).toBeGreaterThanOrEqual(0)
+    expect(part[2]).toBeLessThanOrEqual(parts.screen[2])
+    expect(part[3]).toBeLessThanOrEqual(parts.screen[3])
+  }
+  // A button is round: it covers the name where its circle meets the name's box.
+  for (const coin of parts.coins) {
+    const r = (coin[2] - coin[0]) / 2
+    const c = { x: coin[0] + r, y: coin[1] + r }
+    const near = {
+      x: Math.max(parts.name[0], Math.min(c.x, parts.name[2])),
+      y: Math.max(parts.name[1], Math.min(c.y, parts.name[3])),
+    }
+    expect(Math.hypot(c.x - near.x, c.y - near.y)).toBeGreaterThanOrEqual(r)
+  }
 })

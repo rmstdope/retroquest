@@ -446,3 +446,60 @@ for (const colorScheme of ['light', 'dark'] as const) {
     expect(style.leather).toContain('linear-gradient')
   })
 }
+
+test('a ring opened on the belt lies beside its picture, clear of its caption, with its name in full (rq-v29l.6)', async ({
+  page,
+}): Promise<void> => {
+  await page.setViewportSize({ width: 1512, height: 806 })
+  await toTheCottage(page)
+  // A laptop, then a narrow window where the caption spans the belt.
+  for (const size of [
+    { width: 1512, height: 806 },
+    { width: 500, height: 757 },
+  ])
+    await ringBesideItsPicture(page, size)
+})
+
+/** Open the bread's ring on the belt at `size` and check it against its picture and caption. */
+async function ringBesideItsPicture(
+  page: Page,
+  size: { width: number; height: number },
+): Promise<void> {
+  await page.setViewportSize(size)
+  const pocket = page.locator('[data-belt-pic="item:bread"]')
+  await pocket.click()
+  await expect(page.getByRole('menu', { name: 'Bread' })).toBeVisible()
+  await expect(page.locator('.lq-belt-caption')).toBeVisible()
+  const boxes = await page.evaluate(() => {
+    const box = (el: Element): number[] => {
+      const r = el.getBoundingClientRect()
+      return [r.left, r.top, r.right, r.bottom]
+    }
+    const name = document.querySelector('.lq-ring-name')!
+    return {
+      caption: box(document.querySelector('.lq-belt-caption')!),
+      name: box(name),
+      nameCut: name.scrollWidth > name.clientWidth,
+      coins: [...document.querySelectorAll('.lq-ring-coin')].map(box),
+      pocket: box(document.querySelector('[data-belt-pic="item:bread"]')!),
+    }
+  })
+  const meet = (a: number[], b: number[]): boolean =>
+    a[0] < b[2] && b[0] < a[2] && a[1] < b[3] && b[1] < a[3]
+  expect(boxes.nameCut).toBe(false)
+  for (const part of [boxes.name, ...boxes.coins])
+    expect(meet(part, boxes.caption)).toBe(false)
+  const middle = {
+    x: (boxes.pocket[0] + boxes.pocket[2]) / 2,
+    y: (boxes.pocket[1] + boxes.pocket[3]) / 2,
+  }
+  for (const coin of boxes.coins)
+    expect(
+      Math.hypot(
+        (coin[0] + coin[2]) / 2 - middle.x,
+        (coin[1] + coin[3]) / 2 - middle.y,
+      ),
+    ).toBeGreaterThan((coin[2] - coin[0]) / 2)
+  await page.keyboard.press('Escape')
+  await expect(page.getByRole('menu', { name: 'Bread' })).toHaveCount(0)
+}

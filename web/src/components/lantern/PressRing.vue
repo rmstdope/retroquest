@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import {
   fanLayout,
   FAN_PILL,
@@ -16,7 +16,10 @@ import {
  * The ring of round action buttons round a thing or person pressed on the
  * picture, with its name in the middle in its usual colour. `at` is the spot
  * pressed and `bounds` the picture, both in the layer's pixels; the ring
- * slides inward to stay inside. Pressing an action that has second choices
+ * slides inward to stay inside, turned off the spot when it had to slide, and
+ * grows so its name shows in full with no button over it. It says where its
+ * top is (`top`, in the layer's pixels), so a caption can stand above it.
+ * Pressing an action that has second choices
  * (Use with…, Cast on…, Buy…) lights it, dims the others and fans the
  * choices out as name pills on its outer side; Say… opens a words box. A
  * command is sent with `pick` and nothing else is sent or saved. Escape steps
@@ -38,6 +41,8 @@ const emit = defineEmits<{
   pick: [command: string]
   hand: [verb: HandVerb]
   close: [byKey: boolean]
+  /** The top of the ring's highest button, in the layer's pixels. */
+  top: [y: number]
 }>()
 
 const root = ref<HTMLElement | null>(null)
@@ -48,8 +53,16 @@ const opened = computed<RingAction | null>(
 )
 const words = ref('')
 const wordsBox = ref<HTMLInputElement | null>(null)
+/** The name in the middle, and its size once drawn: the ring keeps its buttons off it. */
+const nameEl = ref<HTMLElement | null>(null)
+const nameSize = ref({ width: 0, height: 0 })
 const layout = computed(() =>
-  ringLayout(props.at, props.actions.length, props.bounds),
+  ringLayout(props.at, props.actions.length, props.bounds, nameSize.value),
+)
+watch(
+  layout,
+  (ring) => emit('top', ring.center.y - ring.radius - RING_BUTTON / 2),
+  { immediate: true },
 )
 const fan = computed(() => {
   const action = opened.value
@@ -172,6 +185,11 @@ function onOutside(event: PointerEvent): void {
 }
 
 onMounted(() => {
+  if (nameEl.value)
+    nameSize.value = {
+      width: nameEl.value.offsetWidth,
+      height: nameEl.value.offsetHeight,
+    }
   document.addEventListener('pointerdown', onOutside, true)
   void nextTick(() => stops()[0]?.focus({ preventScroll: true }))
 })
@@ -189,6 +207,7 @@ onBeforeUnmount(() =>
     @keydown="onKeydown"
   >
     <span
+      ref="nameEl"
       class="lq-ring-name"
       :class="`lq-ring-${thing.kind}`"
       :style="{ left: `${layout.center.x}px`, top: `${layout.center.y}px` }"
@@ -275,9 +294,7 @@ onBeforeUnmount(() =>
 .lq-ring-name {
   position: absolute;
   transform: translate(-50%, -50%);
-  max-width: 130px;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  /* Shown in full: the ring grows round it. */
   white-space: nowrap;
   padding: 5px 10px;
   border: 1px solid;

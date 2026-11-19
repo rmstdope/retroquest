@@ -190,32 +190,48 @@ const RING_GAP = 8
 const MIN_RADIUS = 60
 /** The room kept between a button and the edge of the picture. */
 const EDGE = 2
+/** The least gap kept between a button and the name in the middle. */
+const NAME_GAP = 4
 
 /**
  * Where the buttons of a ring of `count` sit, in the picture's pixels: evenly
  * round the centre, the first at the top and the rest clockwise, on a circle
- * that grows with the count so neighbours never touch. The centre is the spot
- * pressed, slid inward (off the thing if need be) until the whole ring lies
- * inside `bounds`; a picture too small for the ring puts it in the middle.
+ * that grows with the count so neighbours never touch, and with the `name`
+ * shown in the middle (its size in pixels) so no button covers it. The centre
+ * is the spot pressed, slid inward (off the thing if need be) until the whole
+ * ring lies inside `bounds`; a ring slid off its spot is turned so the spot
+ * lies in the gap between two buttons, and no button sits on the thing
+ * pressed. A picture too small for the ring puts it in the middle.
  */
 export function ringLayout(
   at: Point,
   count: number,
   bounds: { w: number; h: number },
+  name: { width: number; height: number } = { width: 0, height: 0 },
 ): { center: Point; radius: number; buttons: Point[] } {
   const half = RING_BUTTON / 2
   const wanted =
     count > 1
       ? (RING_BUTTON + RING_GAP) / (2 * Math.sin(Math.PI / count))
       : MIN_RADIUS
+  // Far enough out that no button reaches the name's corners, whatever the angle.
+  const clear = Math.hypot(name.width / 2, name.height / 2) + half + NAME_GAP
   const room = Math.min(bounds.w, bounds.h) / 2 - half - EDGE
-  const radius = Math.max(0, Math.min(Math.max(wanted, MIN_RADIUS), room))
+  const radius = Math.max(
+    0,
+    Math.min(Math.max(wanted, MIN_RADIUS, clear), room),
+  )
   const reach = radius + half + EDGE
   const clamp = (value: number, size: number): number =>
     size < reach * 2 ? size / 2 : Math.max(reach, Math.min(size - reach, value))
   const center = { x: clamp(at.x, bounds.w), y: clamp(at.y, bounds.h) }
+  const slid = Math.hypot(at.x - center.x, at.y - center.y) > 1
+  // Slid off its spot, the ring turns so the spot lies halfway between two buttons.
+  const start = slid
+    ? Math.atan2(at.y - center.y, at.x - center.x) + Math.PI / count
+    : -Math.PI / 2
   const buttons = Array.from({ length: count }, (_, i) => {
-    const angle = (i * 2 * Math.PI) / count - Math.PI / 2
+    const angle = (i * 2 * Math.PI) / count + start
     return {
       x: center.x + radius * Math.cos(angle),
       y: center.y + radius * Math.sin(angle),
