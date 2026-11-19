@@ -8,6 +8,11 @@ import { startedHoldStore } from '@/testing/holdGame'
 import { useGameStore } from '@/stores/useGameStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
 
+const sounds = vi.hoisted(() => ({ move: vi.fn(), choose: vi.fn() }))
+vi.mock('@/composables/useUiSounds', () => ({
+  useUiSounds: () => ({ playMove: sounds.move, playChoose: sounds.choose }),
+}))
+
 /** A laptop: a wide window with a mouse and keyboard. */
 function laptop(): void {
   vi.stubGlobal(
@@ -27,6 +32,7 @@ describe('LanternLayout: the Escape menu', () => {
   beforeEach(async () => {
     setActivePinia(createPinia())
     laptop()
+    sounds.choose.mockClear()
     await startedHoldStore()
     useGameStore().showTitle = false
     w = mount(LanternLayout, { attachTo: document.body })
@@ -205,6 +211,20 @@ describe('LanternLayout: the Escape menu', () => {
       expect(label()).toBe('Quests')
       await press('m', document.activeElement!)
       expect(heading()).toBe('Map')
+    })
+
+    it('J, Q and M in the menu latch once each, as choosing the tile does; in the game they are silent', async () => {
+      await press('q')
+      await press('q')
+      expect(sounds.choose).not.toHaveBeenCalled()
+      for (const key of ['j', 'q', 'm']) {
+        sounds.choose.mockClear()
+        await press('Escape')
+        await press(key, document.activeElement!)
+        expect(sounds.choose).toHaveBeenCalledTimes(1)
+        await press('Escape', document.activeElement!)
+        await press('Escape', document.activeElement!)
+      }
     })
 
     it('leaves J, Q and M alone while the quit question is up', async () => {
