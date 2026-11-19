@@ -23,6 +23,7 @@ import { setPictureProbe } from '@/lantern/roomPicture'
  */
 describe('LanternLayout: pressing a thing on the picture', () => {
   let w: VueWrapper
+  let bridge: ReturnType<typeof useBridge>
   const PLACED = {
     'act1-eliors-cottage': {
       width: 1920,
@@ -59,7 +60,8 @@ describe('LanternLayout: pressing a thing on the picture', () => {
       toJSON: () => ({}),
     })
     const store = useGameStore()
-    store.setBridge(useBridge(async (): Promise<ActClass[]> => [Act1]))
+    bridge = useBridge(async (): Promise<ActClass[]> => [Act1])
+    store.setBridge(bridge)
     await store.initGame()
     store.dismissModal()
     store.showTitle = false
@@ -109,6 +111,19 @@ describe('LanternLayout: pressing a thing on the picture', () => {
     document.body.innerHTML = ''
     vi.unstubAllGlobals()
     vi.restoreAllMocks()
+  })
+
+  it('offers Open between Use and Examine on what the engine says answers it, and Close on nothing', async () => {
+    await cottage()
+    vi.spyOn(bridge.controller, 'canOpenItem').mockImplementation(
+      (name: string) => name === 'bread',
+    )
+    await press('bread')
+    expect(
+      w
+        .findAll('.lq-press-ring .lq-ring-coin')
+        .map((c) => c.attributes('data-ring-action')),
+    ).toEqual(['take', 'use', 'open', 'examine'])
   })
 
   it('opens a ring for a thing, with its name, as the Actions row would offer it', async () => {

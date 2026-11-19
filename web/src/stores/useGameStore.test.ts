@@ -88,6 +88,7 @@ function createMockBridge() {
     })),
     handleCommand: vi.fn((): string => ''),
     getShortNames: vi.fn((): Record<string, string> => ({})),
+    canOpenItem: vi.fn((_name: string): boolean => false),
     getActStats: vi.fn(() => ({
       questsCompleted: 4,
       questsTotal: 11,
@@ -178,6 +179,21 @@ describe('useGameStore', () => {
     bridge = createMockBridge()
     store = useGameStore()
     store.setBridge(bridge as never)
+  })
+
+  describe('canOpen', () => {
+    it('asks the engine whether the named item answers Open', () => {
+      bridge.controller.canOpenItem.mockImplementation(
+        (name: string) => name === 'box',
+      )
+      expect(store.canOpen('box')).toBe(true)
+      expect(store.canOpen('egg')).toBe(false)
+    })
+
+    it('is false while no bridge is loaded', () => {
+      setActivePinia(createPinia())
+      expect(useGameStore().canOpen('box')).toBe(false)
+    })
   })
 
   // --- Initial state ---
