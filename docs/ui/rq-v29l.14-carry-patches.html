@@ -1,0 +1,101 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Carrying Patches — agreed</title><style>:root{color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:#0b0f13;color:#ece6d6;font:15px/1.5 system-ui,sans-serif;padding:20px 16px 56px}
+.w{max-width:1000px;margin:0 auto}
+h1{font:600 24px/1.25 Georgia,serif;margin:0 0 6px}
+p.lede{margin:0 0 6px;color:#b9b2a1;max-width:80ch}
+p.cost{margin:8px 0 18px;padding:8px 12px;border-left:3px solid #ffa914;background:#1b1710;color:#e6d6b3;max-width:80ch;font-size:14px}
+h2{font:600 15px/1.3 system-ui;margin:26px 0 8px;color:#ffb836}
+h2 span{color:#a39d8e;font-weight:400}
+.stage{position:relative;overflow:hidden;border-radius:10px;border:1px solid #000;background:#000 center/cover no-repeat;width:100%;aspect-ratio:16/9;max-width:960px}
+.stage.phone{max-width:420px;aspect-ratio:844/390}
+.room{position:absolute;left:14px;top:10px;font:600 18px Georgia,serif;text-shadow:0 1px 6px #000}
+.dock{position:absolute;left:10px;right:10px;bottom:10px;display:flex;align-items:flex-end;gap:8px}
+.studs{display:flex;flex-direction:column;gap:5px}
+.stud{width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#e3b866,#8a6020);border:1px solid #4a3410;display:grid;place-items:center;font-size:14px;color:#2a1c06}
+.stud.off{filter:saturate(.3) brightness(.7)}
+.strap{display:flex;gap:8px;padding:7px 10px;border-radius:12px;background:linear-gradient(#6b4524,#4e311a);border:1px dashed #a77c4c;outline:2px solid #3a2412;box-shadow:0 4px 14px rgb(0 0 0/.5)}
+.pocket{position:relative;width:52px;height:52px;border-radius:50%;background:radial-gradient(circle at 50% 45%,#f1e6cc,#cdb98f);border:3px solid #c8a04e;display:grid;place-items:center;font:600 22px Georgia,serif;color:#8a5a1c}
+.phone .pocket{width:38px;height:38px;font-size:16px;border-width:2px}
+.pocket.cat{background:radial-gradient(circle at 50% 45%,#f6dcc0,#c99d6e);color:#7a3d10}
+.pocket.lit{outline:3px solid #ffa914;outline-offset:2px}
+.pocket .tag{position:absolute;right:-4px;bottom:-4px;font:600 10px system-ui;background:#2a1c06;color:#ffd78a;border-radius:999px;padding:1px 5px}
+.arms{position:relative;display:flex;align-items:center;gap:8px;padding:5px 12px 5px 5px;border-radius:999px;background:rgb(22 29 36/.88);border:1px solid #c8a04e;box-shadow:0 4px 14px rgb(0 0 0/.5)}
+.arms .pocket{border-color:#e6c27a}
+.arms small{font:600 12px/1.2 system-ui;color:#e6d6b3}
+.arms small i{display:block;font-style:normal;font-weight:400;color:#a39d8e}
+.caption{position:absolute;left:50px;bottom:84px;padding:5px 11px;border-radius:8px;background:rgb(16 20 26/.92);border:1px solid #34404b;font:500 13px system-ui}
+.ring{position:absolute;width:210px;height:210px}
+.ring .hub{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:58px;height:58px;border-radius:50%;background:rgb(16 20 26/.9);border:2px solid #ffa914;display:grid;place-items:center;font:600 12px system-ui;text-align:center}
+.ring b{position:absolute;transform:translate(-50%,-50%);padding:5px 10px;border-radius:999px;background:rgb(22 29 36/.95);border:1px solid #34404b;font:500 12.5px system-ui;white-space:nowrap}
+.ring b.on{background:#ffa914;color:#1b1206;border-color:#ffa914}
+.fan{position:absolute;display:flex;gap:6px;padding:6px;border-radius:12px;background:rgb(16 20 26/.92);border:1px solid #34404b}
+.fan .pocket{width:42px;height:42px;font-size:17px}
+.fan .lbl{font:500 11px system-ui;text-align:center;margin-top:2px;color:#cfc6b2}
+.strip{position:absolute;left:50%;top:10px;transform:translateX(-50%);padding:6px 14px;border-radius:999px;background:rgb(22 29 36/.92);border:1px solid #ffa914;font:600 13px system-ui}
+.strip u{text-decoration:none;color:#a39d8e;margin-left:10px;font-weight:500}
+.say{position:absolute;left:50%;bottom:90px;transform:translateX(-50%);max-width:70%;padding:10px 14px;border-radius:12px;background:rgb(244 236 218/.95);color:#2a2116;font:15px/1.45 Georgia,serif}
+.fly{position:absolute;border:2px dashed #ffa914;border-radius:50%;width:46px;height:46px}
+.arrow{position:absolute;border-top:2px dashed #ffa914;transform-origin:left center}
+.notes{margin:8px 0 0;padding:10px 14px;border:1px solid #34404b;border-radius:10px;background:#12171d;font-size:14px;max-width:960px}
+.notes li{margin:3px 0}
+.w code{font:13px ui-monospace,monospace;color:#ffd78a}</style></head><body><div class="w">
+<h1>A — Patches rides in the bag</h1>
+<p class="lede">When Elior scoops her up, her picture drops into the bag like anything else he picks up. She sits first on the strap, so she is never scrolled out of sight. Hemlock's <b>Use with…</b> shows her with the other things, and so does Grandmother's.</p>
+<p class="cost">Cost: she looks like a thing in the bag, not a cat in his arms. One place to look for everything carried; nothing new to learn.</p>
+
+<h2>1 · The moment she is picked up <span>— in the shed</span></h2>
+<div class="stage" style="background-image:url(../../web/public/images/generated/act1-abandoned-shed-inside.patches-gone.png)">
+  <div class="room">Abandoned Shed</div>
+  <div class="say">A pair of green eyes blinks in the dark… lets you scoop her up. She is thin and dusty, but unhurt. You carry Patches in your arms.</div>
+  <div class="fly" style="left:56%;top:40%"></div><div class="arrow" style="left:calc(56% + 10px);top:calc(40% + 40px);width:46%;transform:rotate(132deg)"></div>
+  <div class="dock"><div class="studs"><div class="stud">👜</div><div class="stud off">✦</div></div>
+    <div class="strap"><div class="pocket cat lit">P</div><div class="pocket">K</div><div class="pocket">L</div><div class="pocket">F</div></div></div>
+</div>
+<ul class="notes"><li>Her picture flies from where she hid into the first pocket, as other things fly into the bag today. Until her picture is painted she shows her letter, <b>P</b>.</li></ul>
+
+<h2>2 · Walking with her <span>— resting the pointer on her pocket</span></h2>
+<div class="stage" style="background-image:url(../../web/public/images/generated/act1-general-store.png)">
+  <div class="room">General Store</div>
+  <div class="caption">Patches</div>
+  <div class="dock"><div class="studs"><div class="stud">👜</div><div class="stud off">✦</div></div>
+    <div class="strap"><div class="pocket cat">P</div><div class="pocket">K</div><div class="pocket">L</div><div class="pocket">F</div><div class="pocket">C<span class="tag">2</span></div></div></div>
+</div>
+
+<h2>3 · Hemlock's ring → Use with… <span>— she is offered with the rest</span></h2>
+<div class="stage" style="background-image:url(../../web/public/images/generated/act1-general-store.png)">
+  <div class="room">General Store</div>
+  <div class="ring" style="left:52%;top:18%"><div class="hub">Hemlock</div>
+    <b style="left:50%;top:4%">Talk to</b><b style="left:94%;top:40%">Buy…</b><b class="on" style="left:82%;top:88%">Use with…</b><b style="left:14%;top:84%">Cast on…</b><b style="left:6%;top:38%">Examine</b></div>
+  <div class="fan" style="left:58%;top:66%"><div><div class="pocket cat lit">P</div><div class="lbl">Patches</div></div><div><div class="pocket">K</div><div class="lbl">Key</div></div><div><div class="pocket">L</div><div class="lbl">Lantern</div></div><div><div class="pocket">F</div><div class="lbl">Fish</div></div></div>
+  <div class="dock"><div class="studs"><div class="stud">👜</div><div class="stud off">✦</div></div>
+    <div class="strap"><div class="pocket cat">P</div><div class="pocket">K</div><div class="pocket">L</div><div class="pocket">F</div></div></div>
+</div>
+
+<h2>4 · Pressing her pocket <span>— her own ring</span></h2>
+<div class="stage" style="background-image:url(../../web/public/images/generated/act1-general-store.png)">
+  <div class="room">General Store</div>
+  <div class="ring" style="left:-2%;top:36%"><div class="hub">Patches</div>
+    <b style="left:50%;top:4%">Use with…</b><b style="left:50%;top:96%">Examine</b></div>
+  <div class="dock"><div class="studs"><div class="stud">👜</div><div class="stud off">✦</div></div>
+    <div class="strap"><div class="pocket cat lit">P</div><div class="pocket">K</div><div class="pocket">L</div><div class="pocket">F</div></div></div>
+</div>
+<ul class="notes"><li>Only <b>Use with…</b> and <b>Examine</b>: a cat cannot be used on her own, opened or closed. Use with… takes her in hand; then pressing Hemlock (or Grandmother) gives her over: the strip at the top reads <b>Use Patches with…</b>.</li></ul>
+
+<h2>5 · Handed over <span>— her pocket is gone; she is on the counter</span></h2>
+<div class="stage" style="background-image:url(../../web/public/images/generated/act1-general-store.patches-appears.png)">
+  <div class="room">General Store</div>
+  <div class="say">Patches butts her head against… “Patches! You found her!” … Patches curls up beside the till and begins to purr.</div>
+  <div class="dock"><div class="studs"><div class="stud">👜</div><div class="stud off">✦</div></div>
+    <div class="strap"><div class="pocket">K</div><div class="pocket">L</div><div class="pocket">F</div><div class="pocket">C<span class="tag">3</span></div></div></div>
+</div>
+
+<h2>6 · Phone, and a bag with nothing else in it</h2>
+<div class="stage phone" style="background-image:url(../../web/public/images/generated/act1-abandoned-shed-inside.patches-gone.png)">
+  <div class="room" style="font-size:14px">Abandoned Shed</div>
+  <div class="dock"><div class="studs"><div class="stud">👜</div><div class="stud off">✦</div></div>
+    <div class="strap"><div class="pocket cat">P</div></div></div>
+</div>
+<ul class="notes"><li>With the strap folded away, the bag stud gets its amber dot when she arrives, as for any new thing.</li><li>A saved game with her in his arms loads with her back in the first pocket.</li></ul>
+</div></body></html>
