@@ -1310,6 +1310,36 @@ watch(
 // short, or a turn that does not fly, owes nothing).
 /** The newest turn whose gains are owed (or were let be): each turn's once. */
 let owedTurn = flownTurn
+// A gain that will fly lights its Bag or Spells dot when it lands, not before
+// (and never for a list the rail is showing, which counts as seen).
+game.setDotGate((tab) => {
+  const turn = game.turns.at(-1)
+  const kind = tab === 'bag' ? 'item' : tab === 'spells' ? 'spell' : null
+  return (
+    kind !== null &&
+    !!turn &&
+    staged.value &&
+    !turn.restored &&
+    turn.id !== flownTurn &&
+    turn.gained.some((chip) => chip.kind === kind)
+  )
+})
+watch(
+  () => flights.owes('item'),
+  (owing) => {
+    if (!owing) game.showLandedDots('bag')
+  },
+)
+watch(
+  () => flights.owes('spell'),
+  (owing) => {
+    if (!owing) game.showLandedDots('spells')
+  },
+)
+onUnmounted(() => {
+  game.setDotGate(null)
+  game.showLandedDots()
+})
 watch(
   () => {
     const turn = game.turns.at(-1)
@@ -1358,6 +1388,7 @@ watch(
       game.releaseGains()
       // It will not fly (the stage went away meanwhile): the lists show it now.
       flights.forgive(turn.gained)
+      game.showLandedDots()
     }
     // The quest news (and the narrator) held back for a learnt spell's name
     // to fly come on once every name has landed.

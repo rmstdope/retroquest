@@ -112,6 +112,11 @@ export const useFlightStore = defineStore('flight', () => {
     return owed.value[owedKey(kind, name)] ?? 0
   }
 
+  /** Whether any thing of this kind is gained and still on its way: its button's new-thing dot waits until it lands. */
+  function owes(kind: ChipKind): boolean {
+    return Object.keys(owed.value).some((key) => key.startsWith(`${kind}:`))
+  }
+
   /** Bring up the next thing in the queue, if any. */
   function next(): void {
     const flight = queue.shift() ?? null
@@ -225,6 +230,7 @@ export const useFlightStore = defineStore('flight', () => {
     owe,
     forgive,
     owing,
+    owes,
     launch,
     whenIdle,
     clear,

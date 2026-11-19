@@ -22,6 +22,18 @@ describe('useFlightStore', () => {
   const lantern = { kind: 'item' as const, name: 'lantern', count: 1 }
   const revive = { kind: 'spell' as const, name: 'revive', count: 1 }
 
+  it('owes a kind from the turn it is gained until its flight lands, is forgiven or is cleared', () => {
+    const flights = useFlightStore()
+    flights.owe([lantern, revive])
+    expect(flights.owes('item')).toBe(true)
+    expect(flights.owes('spell')).toBe(true)
+    flights.forgive([lantern])
+    expect(flights.owes('item')).toBe(false)
+    expect(flights.owes('spell')).toBe(true)
+    flights.clear()
+    expect(flights.owes('spell')).toBe(false)
+  })
+
   it('shows a gained thing, rests, flies to its button and lands there', () => {
     const flights = useFlightStore()
     flights.launch([lantern])

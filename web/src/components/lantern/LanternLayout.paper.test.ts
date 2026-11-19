@@ -376,6 +376,43 @@ describe('the narration paper', () => {
       expect(paper().querySelector('[data-testid="chip"]')).toBeNull()
     })
 
+    it('lights the dots a flight held back once every gain has landed, not before (rq-xxd8)', async () => {
+      await mountWith([turn(1, 'First.')])
+      const flights = useFlightStore()
+      const light = vi.spyOn(game, 'showLandedDots')
+      game.turns.push(taking(2))
+      await nextTick()
+      expect(flights.owes('item')).toBe(true)
+      expect(light).not.toHaveBeenCalled()
+      flights.clear()
+      await nextTick()
+      expect(light).toHaveBeenCalledWith('bag')
+      expect(light).toHaveBeenCalledWith('spells')
+    })
+
+    it('lights the Bag dot when the item lands, though the spell still flies (rq-xxd8)', async () => {
+      vi.useFakeTimers()
+      await mountWith([turn(1, 'First.')])
+      const flights = useFlightStore()
+      const light = vi.spyOn(game, 'showLandedDots')
+      game.turns.push(taking(2))
+      await nextTick()
+      await vi.advanceTimersByTimeAsync(2100)
+      expect(flights.current?.name).toBe('revive')
+      expect(light).toHaveBeenCalledWith('bag')
+      expect(light).not.toHaveBeenCalledWith('spells')
+      vi.useRealTimers()
+    })
+
+    it('lights the dots at once for a gain that does not fly (rq-xxd8)', async () => {
+      await mountWith([turn(1, 'First.')])
+      const light = vi.spyOn(game, 'showLandedDots')
+      game.turns.push({ ...taking(2), restored: true })
+      await nextTick()
+      await nextTick()
+      expect(light).toHaveBeenCalled()
+    })
+
     it('flies a lost item out of the Bag first, and leaves it off the card', async () => {
       await mountWith([turn(1, 'First.')])
       const flights = useFlightStore()
