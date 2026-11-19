@@ -126,6 +126,12 @@ test.describe('Lantern UI (the default)', () => {
     await expect(input).toHaveValue('')
     await page.keyboard.press('F1')
     await expect(input).toHaveCount(0)
+
+    // A mouse-only player hides it by clicking its "F1 hides" pill (rq-v29l.3).
+    await page.keyboard.press('F1')
+    await expect(input).toBeVisible()
+    await page.getByRole('button', { name: 'F1 hides the typing box' }).click()
+    await expect(input).toHaveCount(0)
   })
 
   test.describe('on a phone (touch)', () => {
