@@ -158,6 +158,8 @@ test('no name lies under the "Use … with" strip', async ({
   await send(page, 'use lantern')
   await send(page, 'take bread')
   await expect(page.locator('[data-belt-pic="item:bread"]')).toBeVisible()
+  // The bread's own name has left the picture with it (it fades out where it stood).
+  await expect(page.locator('[data-area-name="bread"]')).toHaveCount(0)
   // The answer is told first: a press on the bag then would hurry it.
   await skipTelling(page)
   await page.locator('[data-belt-pic="item:bread"]').click()
@@ -180,6 +182,8 @@ test("no name lies over a bag picture's caption", async ({
   await send(page, 'use lantern')
   await send(page, 'take bread')
   await expect(page.locator('[data-belt-pic="item:bread"]')).toBeVisible()
+  // The bread's own name has left the picture with it (it fades out where it stood).
+  await expect(page.locator('[data-area-name="bread"]')).toHaveCount(0)
   await showNames(page)
   await expect(page.locator('[data-area-name="grandmother"]')).toBeVisible()
   await page.locator('[data-belt-pic="item:bread"]').hover()
