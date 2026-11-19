@@ -44,6 +44,8 @@ export interface BeltPicture {
   note: string
   /** The first letter of the name, shown until the picture is made. */
   letter: string
+  /** The verbs of the ring besides Use with… and Examine, when the thing narrows them. */
+  ringVerbs?: NamedItem['ringVerbs']
 }
 
 /** A thing or spell taken in hand, waiting for the press that decides where it goes. */
@@ -91,6 +93,7 @@ export function beltPictures(
       count,
       note: entry.description,
       letter: label.charAt(0).toUpperCase(),
+      ringVerbs: entry.ringVerbs,
     }
   })
 }
@@ -102,6 +105,7 @@ export function subjectOf(picture: BeltPicture): RingSubject {
     name: picture.name,
     label: picture.label,
     kind: picture.kind,
+    verbs: picture.ringVerbs,
   }
 }
 
@@ -142,14 +146,20 @@ export function carriedRing(
     ctx,
     (spell) => [spell, name],
   )
+  const keeps = (verb: 'use' | 'open' | 'close' | 'caston'): boolean =>
+    subject.verbs === undefined || subject.verbs.includes(verb)
   return [
-    plain('use', 'Use', commandOf('use', [name])),
+    ...(keeps('use') ? [plain('use', 'Use', commandOf('use', [name]))] : []),
     ...(others || placed > 0 || ctx.characters.length > 0
       ? [taking('usewith', 'Use with…', 'usewith')]
       : []),
-    plain('open', 'Open', commandOf('open', [name])),
-    plain('close', 'Close', commandOf('close', [name])),
-    ...(castOn ? [castOn] : []),
+    ...(keeps('open')
+      ? [plain('open', 'Open', commandOf('open', [name]))]
+      : []),
+    ...(keeps('close')
+      ? [plain('close', 'Close', commandOf('close', [name]))]
+      : []),
+    ...(castOn && keeps('caston') ? [castOn] : []),
     plain('examine', 'Examine', commandOf('examine', [name])),
   ]
 }

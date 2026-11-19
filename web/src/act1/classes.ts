@@ -67,6 +67,7 @@ import { Grandmother } from './characters/Grandmother'
 import { Merchant } from './characters/Merchant'
 import { Mira } from './characters/Mira'
 import { Patches } from './characters/Patches'
+import { CarriedPatches } from './items/CarriedPatches'
 import { Priest } from './characters/Priest'
 import { Shopkeeper } from './characters/Shopkeeper'
 import { Villager } from './characters/Villager'
@@ -109,6 +110,7 @@ export const ACT1_CLASSES = {
   // Items
   AncientAmulet,
   Apple,
+  CarriedPatches,
   Armor,
   Bread,
   BrokenShovel,

@@ -22,6 +22,7 @@ import { Coin } from '../items/Coin'
 import { FreshBread } from '../items/FreshBread'
 import { Bread } from '../items/Bread'
 import { Patches } from './Patches'
+import { CarriedPatches } from '../items/CarriedPatches'
 import {
   FLAG_GRANDMOTHER_BAKED_BREAD,
   FLAG_JOURNAL_READ,
@@ -388,6 +389,34 @@ export class Grandmother extends Character {
   }
 
   /**
+   * Patches in the bag, offered to her by Use with…, stays with her exactly
+   * as saying "stay" does; every other offer is answered as before.
+   */
+  override acceptOffer(gameState: GameState, item: Item): string | null {
+    if (item instanceof CarriedPatches && this.carryingPatches(gameState)) {
+      return this.keepPatches(gameState)
+    }
+    return super.acceptOffer(gameState, item)
+  }
+
+  /** Let Patches stay by the hearth: grandmother sends word to Hemlock. */
+  private keepPatches(gameState: GameState): string {
+    gameState.setStoryFlag(FLAG_PATCHES_STAYED_WITH_GRANDMOTHER, true)
+    CarriedPatches.release(gameState)
+    gameState.currentRoom.addCharacter(new Patches())
+    return (
+      `${characterName('Patches')} sniffs the rug, circles twice and curls ` +
+      `up at your ${characterName('grandmother')}'s feet. She laughs softly. ` +
+      speech(
+        "Well, that's settled, then. I'll send word to " +
+          `${characterName('Hemlock')} this very afternoon. He's a kind ` +
+          "old soul; he'll be glad she's safe, and his store will be open " +
+          'again by the time you get there.',
+      )
+    )
+  }
+
+  /**
    * Saying "stay" (or "yes" or "keep") while Elior carries Patches lets her
    * stay by the hearth: grandmother sends word to Hemlock, who reopens the
    * store. The byword "Malakar" gets a knock on the bread board, the same
@@ -407,18 +436,7 @@ export class Grandmother extends Character {
     }
     const yes = /\b(stay|yes|keep)\b/i.test(words)
     if (yes && this.carryingPatches(gameState)) {
-      gameState.setStoryFlag(FLAG_PATCHES_STAYED_WITH_GRANDMOTHER, true)
-      gameState.currentRoom.addCharacter(new Patches())
-      return (
-        `${characterName('Patches')} sniffs the rug, circles twice and curls ` +
-        `up at your ${characterName('grandmother')}'s feet. She laughs softly. ` +
-        speech(
-          "Well, that's settled, then. I'll send word to " +
-            `${characterName('Hemlock')} this very afternoon. He's a kind ` +
-            "old soul; he'll be glad she's safe, and his store will be open " +
-            'again by the time you get there.',
-        )
-      )
+      return this.keepPatches(gameState)
     }
     if (FATHER.test(words)) {
       return (

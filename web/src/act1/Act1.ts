@@ -25,6 +25,7 @@ import { Scenery } from './items/Scenery'
 import { Vines } from './items/Vines'
 import { HintOfMagicQuest } from './quests/HintOfMagic'
 import { CuriosityKilledTheCatQuest } from './quests/CuriosityKilledTheCat'
+import { CarriedPatches } from './items/CarriedPatches'
 import { FishingExpeditionQuest } from './quests/FishingExpedition'
 import { KnowYourVillageQuest } from './quests/KnowYourVillage'
 import { LetThereBeLightQuest } from './quests/LetThereBeLight'
@@ -130,6 +131,7 @@ export class Act1 extends Act {
     }
     this.migrateLegacyItemState(gameState)
     this.restoreCottageLoaf(gameState)
+    CarriedPatches.restore(gameState)
     this.restoreLanternLit(gameState)
     for (const [roomKey, room] of Object.entries(rooms)) {
       Scenery.ensure(room, roomKey)

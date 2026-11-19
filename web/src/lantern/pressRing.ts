@@ -29,6 +29,8 @@ export interface RingSubject {
   label: string
   /** Decides the colour of the name. */
   kind: AreaThing['kind'] | 'spell'
+  /** For a carried thing that narrows its ring: the verbs besides Use with… and Examine it keeps. */
+  verbs?: readonly ('use' | 'open' | 'close' | 'caston')[]
 }
 
 /** A second choice in a fan: its words and the command it sends. */

@@ -103,6 +103,15 @@ export class Item {
       : `[failure]You can't take ${this.nameInSentence()}.[/failure]`
   }
 
+  /**
+   * The verbs of this item's ring in the bag besides Use with… and Examine
+   * that the item answers to. All of them by default; override to narrow the
+   * ring of an item that is carried in the story, as Patches is.
+   */
+  ringVerbs(): readonly ('use' | 'open' | 'close' | 'caston')[] {
+    return ['use', 'open', 'close', 'caston']
+  }
+
   use(_gameState: GameState): string {
     return (
       `[failure]You can't use ${this.nameInSentence()} in any ` +

@@ -19,6 +19,7 @@ import { Armor } from '../items/Armor'
 import { Sword } from '../items/Sword'
 import { Mechanism } from '../items/Mechanism'
 import { Patches } from './Patches'
+import { CarriedPatches } from '../items/CarriedPatches'
 import {
   FLAG_HEMLOCK_HEARD_PATCHES_STAYED,
   FLAG_MET_HEMLOCK,
@@ -301,6 +302,7 @@ export class Shopkeeper extends Character {
     gameState.setStoryFlag(FLAG_PATCHES_RETURNED, true)
     gameState.fireSound(TRIGGER_PATCHES_RETURNS)
     gameState.setStoryFlag(FLAG_MET_HEMLOCK, true)
+    CarriedPatches.release(gameState)
     gameState.currentRoom.addCharacter(new Patches())
     const paid = !gameState.getStoryFlag(FLAG_RUSTY_HOE_SECOND_COIN_FOUND)
     if (paid) gameState.addItemToInventory(new Coin())
@@ -522,6 +524,15 @@ export class Shopkeeper extends Character {
         room.items.some((item) => item instanceof Mechanism && item.repaired),
       )
     return ropeHad && !this.giftGiven(gameState)
+  }
+
+  /**
+   * Patches in the bag, offered to him by Use with…, is welcomed home as
+   * talking to him does; every other offer is answered as before.
+   */
+  override acceptOffer(gameState: GameState, item: Item): string | null {
+    if (item instanceof CarriedPatches) return this.talkTo(gameState)
+    return super.acceptOffer(gameState, item)
   }
 
   /**

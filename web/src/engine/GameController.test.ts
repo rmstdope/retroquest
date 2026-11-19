@@ -338,6 +338,26 @@ describe('GameController', () => {
   })
 
   describe('journal data', () => {
+    it('names the ring verbs of a carried item that narrows its ring', () => {
+      class Cat extends Item {
+        /** Only Use with… and Examine. */
+        override ringVerbs(): readonly ('use' | 'open' | 'close' | 'caston')[] {
+          return []
+        }
+      }
+      const ctrl = makeController()
+      ctrl.game.state.addItemToInventory(
+        new Cat({ name: 'cat', description: 'A cat.' }),
+      )
+      ctrl.game.state.addItemToInventory(
+        new Item({ name: 'lamp', description: 'A lamp.' }),
+      )
+      expect(ctrl.getInventory().map((entry) => entry.ringVerbs)).toEqual([
+        [],
+        undefined,
+      ])
+    })
+
     it('shows a carried item the text its examine reads, computed from the state', () => {
       class Lamp extends Item {
         lit = false

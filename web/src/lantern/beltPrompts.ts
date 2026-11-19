@@ -82,6 +82,8 @@ export const THING_PROMPTS: Readonly<Record<string, string>> = {
     'A long feather shading from deep red to gold, glowing faintly at its tip.',
   'item-room-key':
     'A brass key with a wooden tag tied to it by a leather lace.',
+  'item-patches':
+    'A small cat with a patchwork coat of ginger, black and white, and wide green eyes.',
   'item-rope': 'A coil of thick hemp rope, loosely knotted.',
   'item-secret-documents':
     'A small stack of folded papers tied with a black ribbon and stamped with red wax.',

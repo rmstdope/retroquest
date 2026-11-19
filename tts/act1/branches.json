@@ -285,5 +285,6 @@
     {"after": 52, "commands": ["say patches to hemlock"]},
     {"after": 52, "commands": ["say mira to hemlock"]},
     {"after": 37, "commands": ["go north", "go west", "go north", "say stay to grandmother", "go east", "go east", "talk to hemlock", "say patches to hemlock"]},
-    {"after": 34, "commands": ["go south", "go east", "talk to fisherman"]}
+    {"after": 34, "commands": ["go south", "go east", "talk to fisherman"]},
+    {"after": 31, "commands": ["take horseshoe", "go west", "go south", "search", "use key with door", "talk to patches", "use patches with horseshoe", "use horseshoe with patches"]}
 ]
