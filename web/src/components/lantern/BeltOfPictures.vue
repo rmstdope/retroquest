@@ -420,7 +420,8 @@ defineExpose({ focusBelt, focusPicture, has, root })
     }"
     aria-label="Bag and spells"
   >
-    <div class="lq-belt-bar">
+    <!-- A panel over the picture: no mark of the room's things lies under the belt's own bar (on a laptop, the only part of the foot it covers). -->
+    <div class="lq-belt-bar" data-lq-obstacle="panel">
       <div class="lq-belt-switch">
         <button
           type="button"
