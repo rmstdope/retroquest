@@ -9,6 +9,7 @@ import type {
   QuestProgress,
   QuestSummary,
   RoomWare,
+  SayWord,
 } from '@/types/bridge'
 import { closedWayThings } from '@/lantern/areaNames'
 import type { AreaThing } from '@/lantern/areaThings'
@@ -211,6 +212,8 @@ interface PanelSnapshot {
     /** The act's map: visited places and those seen from them. */
     mapPlaces: MapPlace[]
     roomWares: RoomWare[]
+    /** What Say… offers: Yes, No and the words met in the act. */
+    sayWords: SayWord[]
     actNumber: number | null
     /** What the command box offers: words of this place. */
     completions: CompletionTree
@@ -289,6 +292,8 @@ export const useGameStore = defineStore('game', () => {
   const mapPlaces = ref<MapPlace[]>([])
   /** What merchants in the room sell (for the Buy action). */
   const roomWares = ref<RoomWare[]>([])
+  /** What Say… offers; only Yes and No until a word is met. */
+  const sayWords = ref<SayWord[]>([])
 
   // --- Journal ---
   /** Bag and spell names as the bridge lists them (markup, not HTML), for commands. */
@@ -974,6 +979,7 @@ export const useGameStore = defineStore('game', () => {
       exits.value = place.exits
       mapPlaces.value = place.mapPlaces
       roomWares.value = place.roomWares
+      sayWords.value = place.sayWords
       completionTree.value = place.completions
       if (questProgress.value && place.actNumber !== null)
         questProgress.value = {
@@ -1572,6 +1578,7 @@ export const useGameStore = defineStore('game', () => {
         exits: b.controller.getRoomExits(),
         mapPlaces: b.controller.getMapPlaces(),
         roomWares: b.controller.getRoomWares(),
+        sayWords: b.controller.getSayWords(),
         actNumber: progress ? progress.actNumber : null,
         completions: b.controller.getCommandCompletions(),
       },
@@ -2136,6 +2143,7 @@ export const useGameStore = defineStore('game', () => {
     turns,
     questProgress,
     roomWares,
+    sayWords,
     bagEntries,
     spellEntries,
     completionTree,

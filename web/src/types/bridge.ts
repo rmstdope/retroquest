@@ -13,6 +13,7 @@ export type {
   QuestSummary,
   ResultScreen,
   RoomWare,
+  SayWord,
 } from '@/engine'
 
 /** The picture a save was made looking at: the room's painting, its other picture and the patches drawn over it. */

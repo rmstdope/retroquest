@@ -5,7 +5,6 @@ import {
   FAN_PILL,
   RING_BUTTON,
   ringLayout,
-  sayCommand,
   type Point,
   type HandVerb,
   type RingAction,
@@ -23,9 +22,10 @@ import {
  * stand above it.
  * Pressing an action that has second choices
  * (Use with…, Cast on…, Buy…) lights it, dims the others and fans the
- * choices out as name pills on its outer side; Say… opens a words box. A
+ * choices out as name pills on its outer side (Say… fans out its words the
+ * same way, a new word and the button carrying a small dot). A
  * command is sent with `pick` and nothing else is sent or saved. Escape steps
- * back (fan or box to the ring, ring closed, with `close(true)`); Tab closes;
+ * back (fan to the ring, ring closed, with `close(true)`); Tab closes;
  * a press anywhere outside closes and nothing else happens with it. Arrow
  * keys go round the ring and up and down a fan; focus lands on the first
  * action when it opens. The ring may be round a carried thing or spell on
@@ -48,13 +48,11 @@ const emit = defineEmits<{
 }>()
 
 const root = ref<HTMLElement | null>(null)
-/** The action whose choices or words box are shown. */
+/** The action whose choices are shown. */
 const openedId = ref<string | null>(null)
 const opened = computed<RingAction | null>(
   () => props.actions.find((a) => a.id === openedId.value) ?? null,
 )
-const words = ref('')
-const wordsBox = ref<HTMLInputElement | null>(null)
 /** The name in the middle, and its size once drawn: the ring keeps its buttons off it. */
 const nameEl = ref<HTMLElement | null>(null)
 const nameSize = ref({ width: 0, height: 0 })
@@ -77,7 +75,7 @@ const fan = computed(() => {
   if (!from) return null
   return fanLayout(
     from,
-    action.say ? 1 : (action.choices?.length ?? 0),
+    action.choices?.length ?? 0,
     props.bounds,
     layout.value.center,
   )
@@ -115,7 +113,7 @@ function stops(): HTMLElement[] {
   ]
 }
 
-/** Run an action: a command goes out at once, one that takes the subject in hand says so, others open their fan or box. */
+/** Run an action: a command goes out at once, one that takes the subject in hand says so, others open their fan. */
 function press(action: RingAction): void {
   if (action.command) {
     emit('pick', action.command)
@@ -126,20 +124,10 @@ function press(action: RingAction): void {
     return
   }
   openedId.value = action.id
-  words.value = ''
-  void nextTick(() => {
-    if (action.say) wordsBox.value?.focus()
-    else stops()[0]?.focus()
-  })
+  void nextTick(() => stops()[0]?.focus())
 }
 
-/** Send the words typed in the box to the person; nothing while it is empty. */
-function say(): void {
-  const command = sayCommand(words.value, props.thing)
-  if (command) emit('pick', command)
-}
-
-/** Step back from a fan or box to the ring, the button focused again. */
+/** Step back from a fan to the ring, the button focused again. */
 function stepBack(): void {
   const action = opened.value
   openedId.value = null
@@ -167,7 +155,6 @@ function onKeydown(event: KeyboardEvent): void {
   }
   // Nothing typed or pressed in the ring reaches the keys of the game (S, the words key).
   event.stopPropagation()
-  if (event.target instanceof HTMLInputElement) return
   const down = event.key === 'ArrowDown'
   const up = event.key === 'ArrowUp'
   const forward = opened.value ? down : down || event.key === 'ArrowRight'
@@ -239,9 +226,12 @@ onBeforeUnmount(() =>
         'lq-ring-dim': opened && opened.id !== action.id,
       }"
       :data-ring-action="action.id"
-      :aria-haspopup="action.choices || action.say ? 'menu' : undefined"
+      :aria-label="
+        action.dot ? `${action.label.replace('…', '')}, new words` : undefined
+      "
+      :aria-haspopup="action.choices ? 'menu' : undefined"
       :aria-expanded="
-        action.choices || action.say
+        action.choices
           ? opened?.id === action.id
             ? 'true'
             : 'false'
@@ -255,7 +245,8 @@ onBeforeUnmount(() =>
       }"
       @click="press(action)"
     >
-      <i aria-hidden="true">{{ action.icon }}</i>{{ action.label }}
+      <i aria-hidden="true">{{ action.icon }}</i>{{ action.label
+      }}<span v-if="action.dot" class="lq-ring-dot" aria-hidden="true"></span>
     </button>
     <div
       v-if="fan && opened"
@@ -265,34 +256,23 @@ onBeforeUnmount(() =>
       :aria-label="opened.label.replace('…', '')"
       :style="fanStyle"
     >
-      <form v-if="opened.say" class="lq-ring-say" @submit.prevent="say">
-        <input
-          ref="wordsBox"
-          v-model="words"
-          type="text"
-          placeholder="words…"
-          aria-label="words"
-          autocomplete="off"
-        />
-        <button type="submit" class="lq-ring-pill">Say</button>
-      </form>
-      <template v-else>
-        <button
-          v-for="(choice, index) in opened.choices"
-          :key="choice.command"
-          type="button"
-          role="menuitem"
-          class="lq-ring-pill"
-          :style="{
-            height: `${FAN_PILL}px`,
-            [fan.side === 'right' ? 'marginLeft' : 'marginRight']:
-              `${Math.abs(index - (fan.visible - 1) / 2) * 4}px`,
-          }"
-          @click="emit('pick', choice.command)"
-        >
-          {{ choice.label }}
-        </button>
-      </template>
+      <button
+        v-for="(choice, index) in opened.choices"
+        :key="choice.command"
+        type="button"
+        role="menuitem"
+        class="lq-ring-pill"
+        :aria-label="choice.dot ? `${choice.label}, new` : undefined"
+        :style="{
+          height: `${FAN_PILL}px`,
+          [fan.side === 'right' ? 'marginLeft' : 'marginRight']:
+            `${Math.abs(index - (fan.visible - 1) / 2) * 4}px`,
+        }"
+        @click="emit('pick', choice.command)"
+      >
+        {{ choice.label }}
+        <span v-if="choice.dot" class="lq-ring-dot" aria-hidden="true"></span>
+      </button>
     </div>
   </div>
 </template>
@@ -408,20 +388,20 @@ onBeforeUnmount(() =>
   text-overflow: ellipsis;
   cursor: pointer;
 }
-.lq-ring-say {
-  display: flex;
-  gap: 6px;
-  align-items: center;
+/* A word met and not yet said: a small dot on its pill, and on Say… while any pill has one. */
+.lq-ring-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-left: 6px;
+  border-radius: 50%;
+  background: var(--lq-accent);
+  vertical-align: middle;
 }
-.lq-ring-say input {
-  width: 150px;
-  height: 32px;
-  box-sizing: border-box;
-  padding: 0 12px;
-  border-radius: 999px;
-  border: 1px solid var(--lq-line);
-  background: var(--lq-raised);
-  color: var(--lq-fg);
-  font: 16px var(--lq-font-ui);
+.lq-ring-coin .lq-ring-dot {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  margin: 0;
 }
 </style>

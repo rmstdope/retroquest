@@ -13,6 +13,7 @@ import type {
   QuestSummary,
   ResultScreen,
   SaveSlot,
+  SayWord,
 } from '@/types/bridge'
 
 /**
@@ -55,6 +56,13 @@ function createMockBridge() {
     getMapPlaces: vi.fn(() => [] as MapPlace[]),
     getRoomWares: vi.fn(
       () => [] as Array<{ name: string; price: number; seller: string }>,
+    ),
+    getSayWords: vi.fn(
+      () =>
+        [
+          { word: 'Yes', isNew: false },
+          { word: 'No', isNew: false },
+        ] as SayWord[],
     ),
     getInventory: vi.fn(() => [{ name: 'Sword', description: 'Sharp' }]),
     getSpells: vi.fn(() => [{ name: 'Heal', description: 'Restores HP' }]),
@@ -2126,6 +2134,27 @@ describe('useGameStore', () => {
       expect(store.roomWares).toEqual([
         { name: 'rope', price: 1, seller: 'shopkeeper' },
       ])
+    })
+  })
+
+  // --- Words under Say… ---
+
+  describe('say words', () => {
+    it('are refreshed with the panels', async () => {
+      bridge.controller.getSayWords.mockReturnValue([
+        { word: 'Yes', isNew: false },
+        { word: 'No', isNew: false },
+        { word: 'Stay', isNew: true },
+      ])
+
+      await store.initGame()
+
+      expect(store.sayWords.map((entry) => entry.word)).toEqual([
+        'Yes',
+        'No',
+        'Stay',
+      ])
+      expect(store.sayWords[2].isNew).toBe(true)
     })
   })
 

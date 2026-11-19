@@ -7,7 +7,6 @@ import {
   RING_BUTTON,
   ringActions,
   ringLayout,
-  sayCommand,
   visibleBox,
 } from './pressRing'
 
@@ -18,6 +17,10 @@ const EMPTY: ActionContext = {
   spells: [],
   exits: {},
   wares: [],
+  sayWords: [
+    { word: 'Yes', isNew: false },
+    { word: 'No', isNew: false },
+  ],
 }
 const bucket: AreaThing = {
   areaId: 'bucket',
@@ -159,17 +162,38 @@ describe('ringActions', () => {
     )
   })
 
-  it('opens a words box for Say…', () => {
+  it('fans out Yes and No under Say…, each sending the words to the person at once', () => {
     const say = ringActions(tilda, EMPTY).find((a) => a.id === 'say')
-    expect(say?.say).toBe(true)
     expect(say?.command).toBeUndefined()
+    expect(say?.choices).toEqual([
+      { label: 'Yes', command: 'say yes to tilda' },
+      { label: 'No', command: 'say no to tilda' },
+    ])
+    expect(say?.dot).toBeFalsy()
   })
-})
 
-describe('sayCommand', () => {
-  it('is null for an empty box and says the words to the person otherwise', () => {
-    expect(sayCommand('  ', tilda)).toBeNull()
-    expect(sayCommand(' hello ', tilda)).toBe('say hello to tilda')
+  it('fans out every word met after Yes and No, a new one carrying a dot, and Say… too', () => {
+    const ctx = {
+      ...EMPTY,
+      sayWords: [
+        ...EMPTY.sayWords,
+        { word: 'Patches', isNew: true },
+        { word: 'Stay', isNew: false },
+      ],
+    }
+    const say = ringActions(tilda, ctx).find((a) => a.id === 'say')
+    expect(say?.choices?.map((c) => [c.label, c.command, !!c.dot])).toEqual([
+      ['Yes', 'say yes to tilda', false],
+      ['No', 'say no to tilda', false],
+      ['Patches', 'say patches to tilda', true],
+      ['Stay', 'say stay to tilda', false],
+    ])
+    expect(say?.dot).toBe(true)
+  })
+
+  it('has no words box any more', () => {
+    const say = ringActions(tilda, EMPTY).find((a) => a.id === 'say')
+    expect(say).not.toHaveProperty('say')
   })
 })
 

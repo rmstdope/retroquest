@@ -7,7 +7,7 @@
  * command forms accepted by the engine's CommandParser are produced. Save, load
  * and quit belong to the game menu, not here.
  */
-import type { RoomExits, RoomWare } from '@/types/bridge'
+import type { RoomExits, RoomWare, SayWord } from '@/types/bridge'
 import { displayName } from './displayName'
 import { parseCountedName } from './inventoryChanges'
 
@@ -53,6 +53,8 @@ export interface ActionContext {
    * is read). Absent means nothing does. No ring ever offers Close.
    */
   canOpen?: (name: string) => boolean
+  /** What Say… offers: Yes, No, then the words met in the act (see `SayWord`). */
+  sayWords: SayWord[]
 }
 
 export type TargetKind = 'item' | 'character' | 'spell' | 'exit'

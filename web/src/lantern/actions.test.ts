@@ -23,6 +23,7 @@ const CONTEXT: ActionContext = {
     { name: 'rope', price: 1, seller: 'shopkeeper' },
     { name: 'matches', price: 4, seller: 'shopkeeper' },
   ],
+  sayWords: [],
 }
 
 describe('buildCommand', () => {
