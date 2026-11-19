@@ -82,7 +82,7 @@ import BeltOfPictures from './BeltOfPictures.vue'
 import HandStrip from './HandStrip.vue'
 import DragGhost from './DragGhost.vue'
 import { useBeltDrag, type DragEnd } from '@/composables/useBeltDrag'
-import { dragPill, type DragOver } from '@/lantern/beltDrag'
+import { dragCommand, dragPill, type DragOver } from '@/lantern/beltDrag'
 import {
   carriedRing,
   pressedOnBelt,
@@ -230,7 +230,9 @@ const wayGoes = computed<boolean>(
 )
 /** The arrow over an open way: only while a press would go (the game takes actions, no scene is changing or waiting). */
 const wayArrow = computed<string | null>(() =>
-  wayGoes.value ? (nameWay.value ?? pointingWay.value) : null,
+  wayGoes.value && !beltDrag.drag.value
+    ? (nameWay.value ?? pointingWay.value)
+    : null,
 )
 /** A laptop screen (≥1024 × 560): the stage with its action row along the bottom. */
 const laptop = useMediaQuery(WIDE_QUERY)
@@ -2031,9 +2033,7 @@ function ghostBounds(): {
 const dragOverPocket = computed(() => {
   const drag = beltDrag.drag.value
   const over = drag?.over
-  return drag &&
-    over?.from === 'belt' &&
-    dragPill(drag.hand, over) !== dragPill(drag.hand, null)
+  return drag && over?.from === 'belt' && dragCommand(drag.hand, over)
     ? (over.key ?? null)
     : null
 })
@@ -2987,7 +2987,11 @@ watch(namesBlocked, (blocked) => {
                 :showing="namesUp && !beltDrag.drag.value"
                 :dragging="beltDrag.drag.value !== null"
                 :drag-over="dragOverArea"
-                :pointer="scene.phase === 'idle' ? names.pointer : null"
+                :pointer="
+                  scene.phase === 'idle' && !beltDrag.drag.value
+                    ? names.pointer
+                    : null
+                "
                 :foot-cover="footCover"
                 :ring-open="ring !== null"
                 :relayout="namesRelayout"

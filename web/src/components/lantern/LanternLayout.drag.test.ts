@@ -190,6 +190,35 @@ describe('LanternLayout: dragging from the belt', () => {
     expect(w.find('.lq-hand-text').exists()).toBe(false)
   })
 
+  it('shows no hover name and no way arrow of its own during a drag, only the one drop name', async () => {
+    await cottage()
+    w.get('.lq-stage-picture').element.dispatchEvent(
+      pointer('pointermove', 700, 200),
+    )
+    await flushPromises()
+    expect(
+      w.getComponent({ name: 'AreaNames' }).props('pointer'),
+    ).not.toBeNull()
+    await lift()
+    const stage = w.get('.lq-stage').element
+    const picture = w.get('.lq-stage-picture').element
+    under = hit('grandmother').element
+    await over(hit('grandmother').element, 700, 200)
+    picture.dispatchEvent(pointer('pointermove', 700, 200))
+    await flushPromises()
+    const names = w.getComponent({ name: 'AreaNames' })
+    expect(names.props('pointer')).toBeNull()
+    expect(w.findAll('[data-area-pointer]')).toHaveLength(0)
+    expect(w.findAll('[data-drag-name]')).toHaveLength(1)
+    const way = document.createElement('i')
+    way.dataset.way = 'north'
+    under = way
+    stage.append(way)
+    way.dispatchEvent(pointer('pointermove', 100, 100))
+    await flushPromises()
+    expect(w.get('.lq-stage').attributes('style') ?? '').not.toContain('cursor')
+  })
+
   it('sends use … with … when dropped on a person, as if typed', async () => {
     const store = await cottage()
     await lift()

@@ -122,6 +122,7 @@ test('a thing dragged from the bag onto a person is used on her; a drop on nothi
   const to = { x: person.x + person.width / 2, y: person.y + person.height / 2 }
   const pill = page.locator('[data-drag-pill]')
   // Let go over the empty picture: nothing is sent, the pill and the copy are gone, the wheel stays shut.
+  const told = (await story.innerText()).length
   await page.mouse.move(from.x, from.y)
   await page.mouse.down()
   await page.mouse.move(from.x + 40, from.y - 40, { steps: 4 })
@@ -131,6 +132,7 @@ test('a thing dragged from the bag onto a person is used on her; a drop on nothi
   await expect(page.locator('[data-drag-ghost]')).toHaveCount(0)
   await expect(page.getByRole('menu', { name: 'Bread' })).toHaveCount(0)
   await expect(story).not.toContainText('Grandmother turns it over')
+  expect((await story.innerText()).length).toBe(told)
   // Dragged onto her, it is used as typing `use bread with grandmother` would.
   await page.mouse.move(from.x, from.y)
   await page.mouse.down()

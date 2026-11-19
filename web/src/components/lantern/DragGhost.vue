@@ -39,8 +39,10 @@ const EDGE = 8
 
 const pillEl = ref<HTMLElement | null>(null)
 const pillWidth = ref(0)
+const pillHeight = ref(0)
 function measure(): void {
   pillWidth.value = pillEl.value?.offsetWidth ?? 0
+  pillHeight.value = pillEl.value?.offsetHeight ?? 0
 }
 onMounted(measure)
 watch(
@@ -57,10 +59,16 @@ const pillStyle = computed(() => {
   const low = props.bounds.left + EDGE
   const high = Math.max(low, props.bounds.right - EDGE - width)
   const left = Math.min(Math.max(at.value.x - width / 2, low), high)
+  // Under the pointer for a mouse, above a finger; flipped to the other side where it would leave the picture.
+  const below =
+    at.value.y + PILL_GAP + pillHeight.value <= props.bounds.bottom - EDGE
+  const above =
+    at.value.y - PILL_GAP - pillHeight.value >= props.bounds.top + EDGE
+  const under = props.touch ? !above && below : below || !above
   return {
     left: `${left - at.value.x}px`,
-    top: props.touch ? undefined : `${PILL_GAP}px`,
-    bottom: props.touch ? `${PILL_GAP}px` : undefined,
+    top: under ? `${PILL_GAP}px` : undefined,
+    bottom: under ? undefined : `${PILL_GAP}px`,
     maxWidth: `${maxWidth.value}px`,
   }
 })

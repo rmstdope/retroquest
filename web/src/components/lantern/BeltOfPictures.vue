@@ -218,6 +218,9 @@ watch(
 /** A pointer went down on a picture: a finger held there for a moment shows its caption. */
 function onPicDown(key: string, event: PointerEvent): void {
   swallowClick = false
+  document.removeEventListener('touchmove', holdTouchMoves)
+  if (event.pointerType === 'touch')
+    document.addEventListener('touchmove', holdTouchMoves, { passive: false })
   if (event.pointerType !== 'touch') {
     pullFrom =
       event.button === 0 ? { x: event.clientX, y: event.clientY } : null
@@ -241,6 +244,7 @@ function onPicMove(event: PointerEvent, picture: BeltPicture): void {
       Math.hypot(event.clientX - from.x, event.clientY - from.y) > DRAG_SLOP
     ) {
       pullFrom = null
+      holdFrom = null
       swallowClick = true
       emit('lift', picture, {
         x: event.clientX,
@@ -260,6 +264,7 @@ function onPicMove(event: PointerEvent, picture: BeltPicture): void {
 
 /** The finger let go or was taken over: the hold's caption goes. */
 function endHold(): void {
+  document.removeEventListener('touchmove', holdTouchMoves)
   pullFrom = null
   clearTimeout(holdTimer)
   holdFrom = null
@@ -268,19 +273,15 @@ function endHold(): void {
   if (swallowClick) setTimeout(() => (swallowClick = false), 0)
 }
 
-/** A finger dragging a lifted picture must not scroll the page or the bag: the hold has begun the drag, so its moves are the drag's. */
+/**
+ * A finger held on a picture is dragging it, so its moves must not scroll the
+ * page or the bag. The browser decides at the start of a touch whether script
+ * may stop a scroll, so the listener is there from the finger's going down
+ * (`onPicDown`) and stops a move only once the hold has come.
+ */
 function holdTouchMoves(event: Event): void {
-  if (event.cancelable) event.preventDefault()
+  if (held.value && event.cancelable) event.preventDefault()
 }
-watch(
-  held,
-  (key) => {
-    if (key)
-      document.addEventListener('touchmove', holdTouchMoves, { passive: false })
-    else document.removeEventListener('touchmove', holdTouchMoves)
-  },
-  { flush: 'sync' },
-)
 onUnmounted(() => document.removeEventListener('touchmove', holdTouchMoves))
 // A lifted picture's release is no press, but a release elsewhere sends no click: the swallowing ends with the drag.
 watch(

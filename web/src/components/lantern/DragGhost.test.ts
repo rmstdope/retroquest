@@ -73,6 +73,18 @@ describe('DragGhost', () => {
     )
   })
 
+  it('flips the pill to the other side where it would leave the picture', async () => {
+    vi.spyOn(HTMLElement.prototype, 'offsetHeight', 'get').mockReturnValue(26)
+    show({ y: 440 })
+    await nextTick()
+    // A mouse near the foot: no room under it (440 + 42 + 26 > 442), so it rides above.
+    expect(w!.get('[data-drag-pill]').attributes('style')).toContain('bottom:')
+    await w!.setProps({ y: 60, touch: true })
+    await nextTick()
+    // A finger near the top: no room above it, so the pill rides under.
+    expect(w!.get('[data-drag-pill]').attributes('style')).toContain('top:')
+  })
+
   it('glides to the pocket and says done', async () => {
     vi.useFakeTimers()
     vi.stubGlobal('getComputedStyle', () => ({
