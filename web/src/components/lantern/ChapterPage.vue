@@ -4,7 +4,11 @@ import type { Chapter } from '@/lantern/chapter'
 import { parseTurn, type TurnBlock } from '@/lantern/parseTurn'
 import { displayName } from '@/lantern/displayName'
 import { actFolder } from '@/lantern/narrationManifest'
-import { POPUP_NARRATION_ID, chapterUnits } from '@/lantern/narrationUnits'
+import {
+  POPUP_NARRATION_ID,
+  chapterUnits,
+  hasRecording,
+} from '@/lantern/narrationUnits'
 import { useSizeWatch } from '@/composables/useSizeWatch'
 import { useReadAlong } from '@/composables/useReadAlong'
 import { useNarrationStore } from '@/stores/useNarrationStore'
@@ -74,12 +78,7 @@ const passage = usePassageStore()
 /** Whether the page has a recording to be read with. */
 const voiced = computed(() => {
   const manifest = folder.value ? narration.manifestFor(folder.value) : null
-  return (
-    !!manifest &&
-    chapterUnits(props.chapter, manifest).some((unit) =>
-      unit.parts.some((part) => part.clip),
-    )
-  )
+  return !!manifest && hasRecording(chapterUnits(props.chapter, manifest))
 })
 /** Whether body block `index` is shown: not while the screen fades in ahead of the voice. */
 function blockShown(index: number): boolean {

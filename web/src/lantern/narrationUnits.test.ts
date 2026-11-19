@@ -4,6 +4,7 @@ import { narrationWords, type NarrationManifest } from './narrationManifest'
 import {
   chapterUnits,
   firstQuestUnit,
+  hasRecording,
   POPUP_NARRATION_ID,
   readsArrival,
   SCENE_PAUSE_MS,
@@ -143,6 +144,22 @@ describe('readsArrival', () => {
       readsArrival({ description: { moved: true, firstVisit: false } }),
     ).toBe(false)
     expect(readsArrival({ description: null })).toBe(false)
+  })
+})
+
+describe('hasRecording', () => {
+  it('is true only when some part of some unit has a clip', () => {
+    const clip = { file: 'a.mp3', duration: 1 } as never
+    expect(hasRecording([])).toBe(false)
+    expect(
+      hasRecording([{ kind: 'block', parts: [{ markup: 'A', clip: null }] }]),
+    ).toBe(false)
+    expect(
+      hasRecording([
+        { kind: 'block', parts: [] },
+        { kind: 'block', parts: [{ markup: 'B', clip }] },
+      ]),
+    ).toBe(true)
   })
 })
 

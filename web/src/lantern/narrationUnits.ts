@@ -190,6 +190,11 @@ export function turnUnits(
 /** The `turnId` the store narrates the open pop-up (chapter page or quest-complete) under; story turns count from 1. */
 export const POPUP_NARRATION_ID = -1
 
+/** Whether any of `units` has a recording to be read with (else nothing is narrated). */
+export function hasRecording(units: NarrationUnit[]): boolean {
+  return units.some((unit) => unit.parts.some((part) => part.clip))
+}
+
 /** A chapter page as the narration reads it. */
 export interface NarratedChapter {
   kind: 'intro' | 'complete'
