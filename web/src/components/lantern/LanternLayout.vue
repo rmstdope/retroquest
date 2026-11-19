@@ -513,12 +513,19 @@ const beltBottom = computed(() =>
 )
 /** The belt starts at the picture's left edge. */
 const beltLeft = computed(() => 0)
-/** How far up from the foot of the picture the belt's top lies: what the names and press areas must keep clear of (none while the belt is away: the picture's foot is then the floor, then the action row alone on a laptop). */
+/**
+ * How far up from the foot of the picture the names and marks keep clear of,
+ * across its whole width: on a laptop only the typing box's room, since the
+ * belt's bar covers only its own width and is a panel the marks step out from
+ * under (rq-v29l.11), so a thing at the foot beside it keeps its name; elsewhere
+ * up to the belt's top while it is up (none while it is away: the picture's
+ * foot is then the floor).
+ */
 const footCover = computed(() =>
-  beltHeight.value > 0 && !belt.away
-    ? beltBottom.value + beltHeight.value
-    : laptop.value
-      ? boxRoom.value
+  laptop.value
+    ? boxRoom.value
+    : beltHeight.value > 0 && !belt.away
+      ? beltBottom.value + beltHeight.value
       : 0,
 )
 

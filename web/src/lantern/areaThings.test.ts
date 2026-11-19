@@ -2,6 +2,8 @@
 import { describe, expect, it } from 'vitest'
 import { Act1 } from '@/act1/Act1'
 import { Game } from '@/engine'
+import { SharpKnife } from '@/act1/items/SharpKnife'
+import { Vines } from '@/act1/items/Vines'
 import { executeCommands } from '@/testing/gameHelpers'
 import { areaThingsOf } from './areaThings'
 import { declaredAreas } from './roomAreas'
@@ -86,5 +88,21 @@ describe('areaThingsOf', () => {
     expect(scenery.length).toBeGreaterThan(0)
     for (const thing of scenery)
       expect(thing.label).toBe(titles.get(thing.areaId))
+  })
+
+  it('names nothing on the Forest Path "Vines" once the vines are cut (rq-v29l.11)', () => {
+    const act = new Act1()
+    const game = new Game([act])
+    const path = game.state.allRooms.ForestPath
+    game.state.currentRoom = path
+    const knife = new SharpKnife()
+    game.state.inventory.push(knife)
+    const vines = path.items.find((item) => item instanceof Vines)
+    vines?.useWith(game.state, knife)
+    const labels = areaThingsOf(act, 'ForestPath', game.state).map(
+      (t) => t.label,
+    )
+    expect(labels).toContain('Cut Vines')
+    expect(labels).not.toContain('Vines')
   })
 })
