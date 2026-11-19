@@ -73,9 +73,15 @@ describe('PressRing', () => {
         .findAll('.lq-ring-coin')
         .map((b) => b.element.childNodes[1].textContent),
     ).toEqual(
-      expect.arrayContaining(['Talk to', 'Say…', 'Buy…', 'Give…', 'Examine']),
+      expect.arrayContaining([
+        'Talk to',
+        'Say…',
+        'Buy…',
+        'Use with…',
+        'Examine',
+      ]),
     )
-    expect(w.findAll('[role="menuitem"]')).toHaveLength(7)
+    expect(w.findAll('[role="menuitem"]')).toHaveLength(6)
   })
 
   it('focuses the first action when it opens', async () => {
@@ -91,14 +97,14 @@ describe('PressRing', () => {
 
   it('lights an action with choices, dims the others and fans the choices out', async () => {
     const w = await ring()
-    await coin(w, 'give').trigger('click')
-    expect(coin(w, 'give').classes()).toContain('lq-ring-on')
+    await coin(w, 'usewith').trigger('click')
+    expect(coin(w, 'usewith').classes()).toContain('lq-ring-on')
     expect(coin(w, 'talk').classes()).toContain('lq-ring-dim')
     const pills = w.findAll('.lq-ring-fan [role="menuitem"]')
     expect(pills.map((p) => p.text())).toEqual(['Rope', "Elior's Journal"])
     expect(document.activeElement).toBe(pills[0].element)
     await pills[1].trigger('click')
-    expect(w.emitted('pick')).toEqual([["give Elior's Journal to tilda"]])
+    expect(w.emitted('pick')).toEqual([["use Elior's Journal with tilda"]])
   })
 
   it('shows the ware and its price in a Buy… fan', async () => {
@@ -122,11 +128,11 @@ describe('PressRing', () => {
 
   it('steps back from a fan to the ring with Escape, then closes', async () => {
     const w = await ring()
-    await coin(w, 'give').trigger('click')
+    await coin(w, 'usewith').trigger('click')
     key(w, 'Escape')
     await w.vm.$nextTick()
     expect(w.find('.lq-ring-fan').exists()).toBe(false)
-    expect(coin(w, 'give').classes()).not.toContain('lq-ring-on')
+    expect(coin(w, 'usewith').classes()).not.toContain('lq-ring-on')
     expect(w.emitted('close')).toBeUndefined()
     key(w, 'Escape')
     expect(w.emitted('close')).toEqual([[true]])
@@ -145,7 +151,7 @@ describe('PressRing', () => {
     key(w, 'ArrowLeft')
     key(w, 'ArrowLeft')
     expect(document.activeElement).toBe(coin(w, 'examine').element)
-    await coin(w, 'give').trigger('click')
+    await coin(w, 'usewith').trigger('click')
     const pills = w.findAll('.lq-ring-fan [role="menuitem"]')
     key(w, 'ArrowDown')
     expect(document.activeElement).toBe(pills[1].element)

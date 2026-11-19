@@ -62,9 +62,9 @@ Act I has one main quest (_Shadows over Willowbrook_), one checklist quest (_Pre
 - **Needed to complete:**
   1. `use bread with chicken` in the Chicken Coop: the shed key is knocked from the rafter. `take key`.
   2. `use key with door` at the Abandoned Shed: the key is used up, the shed opens and Patches bolts behind the crates. No light is needed for the rest.
-  3. Coax her out with `talk to patches`, `say patches to patches`, or `give egg to patches` / `give fish to patches` (Elior keeps the egg or fish). She lets Elior carry her (`patches_found`).
+  3. Coax her out with `talk to patches`, `say patches to patches`, or `use egg with patches` / `use fish with patches` (Elior keeps the egg or fish). She lets Elior carry her (`patches_found`).
   4. Then one of two endings:
-     - **Home to Hemlock** (golden path): `talk to hemlock`, `give patches to hemlock`, `say patches to hemlock` or any `buy` at the General Store. He pays a `coin` (the notice's reward, or "a little something for your trouble" if Elior never heard of it), reopens the store, and Patches curls up by the till (`patches_returned`).
+     - **Home to Hemlock** (golden path): `talk to hemlock`, `use patches with hemlock`, `say patches to hemlock` or any `buy` at the General Store. He pays a `coin` (the notice's reward, or "a little something for your trouble" if Elior never heard of it), reopens the store, and Patches curls up by the till (`patches_returned`).
      - **She stays with Grandmother:** in the cottage, while carrying her, `say stay to grandmother` (also `yes` or `keep`). Patches settles by the hearth (`patches_stayed_with_grandmother`). The next time Elior talks to Hemlock, he has heard the news, reopens the store and gives a `rope` and an `apple` instead of the coin (`hemlock_heard_patches_stayed`).
 - **Completion:** `patches_returned` or `patches_stayed_with_grandmother`. The second ending completes the quest at once, before Elior visits the store.
 - **Saves:** a save made when the hoe still gave a second coin keeps the store open from the start and pays no reward for Patches.
@@ -81,7 +81,7 @@ Act I has one main quest (_Shadows over Willowbrook_), one checklist quest (_Pre
   1. The `fishing rod`, found by searching the Abandoned Shed by light (see _Curiosity killed the cat_).
   2. `talk to fisherman` while carrying the rod: he knows it for Elior's father's and teaches him the basics (`learned_fishing_basics`). Talked to without the rod, he only greets Elior, and a later talk with the rod gives the lesson.
   3. `use fishing rod with river` (or `use fishing rod` at the Riverbank): the river gives one `fish`, and never another.
-  4. `give fish to fisherman`: he teaches `purify`, the thing Elior's mother taught him at the bend.
+  4. `use fish with fisherman`: he teaches `purify`, the thing Elior's mother taught him at the bend.
 - **Optional:** `cast heal on fisherman` (after Mira's teaching) mends his arm (`healed_fisherman_arm`); if the lesson has not yet been given, he gives it out of gratitude.
 - **Completion:** Elior knows `purify`.
 
@@ -97,8 +97,8 @@ Act I has one main quest (_Shadows over Willowbrook_), one checklist quest (_Pre
 - **Needed to complete:**
   1. `search` in Elior's Cottage, then `take faded photograph`.
   2. `examine faded photograph`: reads _Seek the truth where the river bends._ (`read_photo_message`).
-  3. _Optional in the code, on the golden path:_ `give faded photograph to grandmother`: her daughter's hand, "They went toward something", and the fisherman at the Riverbank (`talked_to_grandmother_about_photo`).
-  4. `give faded photograph to fisherman`: this spot is the bend, and his promise to watch the tin under the smooth stone (`fisherman_told_of_tin`). The photograph stays with Elior.
+  3. _Optional in the code, on the golden path:_ `use faded photograph with grandmother`: her daughter's hand, "They went toward something", and the fisherman at the Riverbank (`talked_to_grandmother_about_photo`).
+  4. `use faded photograph with fisherman`: this spot is the bend, and his promise to watch the tin under the smooth stone (`fisherman_told_of_tin`). The photograph stays with Elior.
   5. `search` at the Riverbank (or `take smooth stone`, or `use broken shovel with smooth stone`): the tin, and the `mother's letter` in it (`found_mothers_letter`). Before the fisherman has told of the tin, none of these finds anything.
   6. `take letter`, then `examine letter` (or `use letter`) (`read_mothers_letter`).
 - **Completion:** the mother's letter has been read.
@@ -106,7 +106,7 @@ Act I has one main quest (_Shadows over Willowbrook_), one checklist quest (_Pre
 
 ### Oh deer, oh deer
 
-- **Trigger:** `give millstone fragment to blacksmith` (`deer_can_be_observed`): Borin says the mill's ground is older than the village and tells his grandfather's story of the deer in the Hidden Glade that comes to folk who sit down, rest a while and stop looking for it.
+- **Trigger:** `use millstone fragment with blacksmith` (`deer_can_be_observed`): Borin says the mill's ground is older than the village and tells his grandfather's story of the deer in the Hidden Glade that comes to folk who sit down, rest a while and stop looking for it.
 - **Log:** one entry: Borin's grandfather swore by a deer that comes to folk who keep still. Not to hunters. Not to talkers.
 - **Mentioned by:**
   - _Hidden Glade_: resting before Borin's story, nothing comes; while the mill's mechanism still runs, "the ground feels thin, as if something far off were drawing on it."
@@ -117,7 +117,7 @@ Act I has one main quest (_Shadows over Willowbrook_), one checklist quest (_Pre
 - **Needed to complete:**
   1. The `rope` from Hemlock: bought with the reward coin, or his gift when Patches stays (see _Curiosity killed the cat_).
   2. `use rope with mechanism` in the Old Mill: the gears jam and a compartment opens. `take millstone fragment`.
-  3. `give millstone fragment to blacksmith` (the trigger).
+  3. `use millstone fragment with blacksmith` (the trigger).
   4. `rest` in the Hidden Glade: the deer steps out of the brambles and a `rare flower` opens near the mossy stone.
 - **Completion:** a rare flower exists (in the glade or carried), which happens on that rest. Talking to or examining the deer is optional.
 
@@ -151,7 +151,7 @@ Act I has one main quest (_Shadows over Willowbrook_), one checklist quest (_Pre
   2. `talk to hemlock` after the priest has asked: the `matches`, on the house.
   3. `use candle with matches` in the chapel (or `use candle` holding the matches): the candle lights and the `locket` shows in the dark corner.
 - **Completion:** the candle is lit.
-- **Follow-on (not part of this quest):** `take locket` teaches `bless` in the priest's scene, and `give locket to grandmother` gives the `travel cloak` (_Preparing for the road_).
+- **Follow-on (not part of this quest):** `take locket` teaches `bless` in the priest's scene, and `use locket with grandmother` gives the `travel cloak` (_Preparing for the road_).
 
 ### Magic for real
 
@@ -166,7 +166,7 @@ Act I has one main quest (_Shadows over Willowbrook_), one checklist quest (_Pre
   1. The three signs of the main quest: enter the Vegetable Field, `talk to tilda`, `examine well`.
   2. `talk to mira`: Elior tells her of the three signs, she calls the land and the king one wound and asks for the rare flower (`connect_with_nature`).
   3. The `rare flower` (_Oh deer, oh deer_).
-  4. `give rare flower to mira`: she teaches `heal`, `unlock` and `light`, and names what the road needs (`magic_fully_unlocked`). The flower can be given before step 2; she then tells of the one wound on the next talk, without the request.
+  4. `use rare flower with mira`: she teaches `heal`, `unlock` and `light`, and names what the road needs (`magic_fully_unlocked`). The flower can be given before step 2; she then tells of the one wound on the next talk, without the request.
 - **Completion:** `magic_fully_unlocked`. From here on spells work.
 
 ### Preparing for the road
@@ -185,10 +185,10 @@ Act I has one main quest (_Shadows over Willowbrook_), one checklist quest (_Pre
   - _Merchant_: food is refused ("you'll want every bite of that where you're going"), except the fresh bread (the optional _selfless_ choice).
   - _Shadows over Willowbrook_'s hint: Mira keeps the amulet until Elior is ready for the road. The map refuses with "your preparations for the road".
 - **Needed to complete:**
-  - Travel cloak: `give locket to grandmother` (_Let there be light_).
+  - Travel cloak: `use locket with grandmother` (_Let there be light_).
   - Protection: `cast bless`, or `cast bless on me` (`myself`, `elior`). Blessing someone else does not count.
   - Food: `take egg` (Coop), `take apple` (with Hemlock's rope, either way), `cast revive on withered carrot` then `take carrot` (Field), `cast grow on bush` then `take wild berries` (Forest Path), or Grandmother's fresh bread. Grandmother takes berries she is given into a pie, but the bush grows more.
-  - Boots: `give shiny ring to merchant` (golden path), or `give horseshoe to merchant` (the horseshoe from the forge), which keeps the ring (`kept_mothers_ring`).
+  - Boots: `use shiny ring with merchant` (golden path), or `use horseshoe with merchant` (the horseshoe from the forge), which keeps the ring (`kept_mothers_ring`).
   - Map: `cast unlock on mysterious box`, then `open mysterious box` (Abandoned Shed).
   - Spells: `revive` (Grandmother), `purify` (Fisherman), `bless` (taking the locket), `heal`, `unlock`, `light` (Mira), `grow` (`cast light` in the Hidden Glade).
 - **Completion:** all six lines hold at once. The items must be carried at the moment the quest is checked. Then `talk to mira` hands over the Ancient Amulet; the amulet is not part of the checklist.
@@ -213,7 +213,7 @@ Act I has one main quest (_Shadows over Willowbrook_), one checklist quest (_Pre
   1. The three signs and Mira's request (as in _Magic for real_).
   2. The rare flower given to Mira (_Magic for real_).
   3. The ring and rune token fished out of the purified well (_Magnet fishing expedition_).
-  4. `give rune token to mira`: the fouling sigil, tied to the mill if the mechanism is jammed. She hands it back.
+  4. `use rune token with mira`: the fouling sigil, tied to the mill if the mechanism is jammed. She hands it back.
   5. `talk to mira` once _Preparing for the road_ is complete: the Ancient Amulet, her hint of a secret and the man in the grey cloak who came to her door. If the token is still unread when Elior already carries the amulet, she asks to see it.
   6. `use map` on the Road to Greendale. The map refuses, naming what is left, while any of these holds: the amulet is not carried; the rune token was found but Mira has not read it; _Preparing for the road_ is not complete; any side quest is open; any side quest is unstarted (named by its lead, see each quest). Otherwise the farewell plays (see _Action that completes the act_) and `shadows_over_willowbrook_completed` is set.
 - **Completion:** `shadows_over_willowbrook_completed`, which also completes the act. Whether the field was watered travels to Act IV (`Act1.carriedFlags`).
@@ -442,7 +442,7 @@ Optional virtue moments; none blocks the golden path, none adds a puzzle or comb
 | Where                       | The choice                                                                                                                               | Records      |
 | --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------ |
 | Village Square, Tilda       | When she asks "The water's clean! Was that you?", admit it was Elior's magic instead of letting the credit go to the spring (`say truth to tilda` or `say yes to tilda`) | **truth**    |
-| Road to Greendale, Merchant | Give Grandmother's `fresh bread` to the hungry Merchant and ask nothing in return (`give fresh bread to merchant`; the golden path's four food kinds are berries, apple, egg and carrot, so _Food for the road_ is unaffected)                         | **selfless** |
+| Road to Greendale, Merchant | Give Grandmother's `fresh bread` to the hungry Merchant and ask nothing in return (`use fresh bread with merchant`; the golden path's four food kinds are berries, apple, egg and carrot, so _Food for the road_ is unaffected)                         | **selfless** |
 | Forest Path                 | Cut a fox kit free from a poacher's snare with the sharp knife instead of walking past (`use sharp knife with snare`)                     | **mercy**    |
 
 ## Golden Path (Optimal Solution to Complete Act I)

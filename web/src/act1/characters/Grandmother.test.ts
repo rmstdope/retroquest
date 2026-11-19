@@ -50,7 +50,7 @@ describe('Grandmother and the locket', () => {
     const game = cottageGame()
     game.state.addItemToInventory(new Locket())
 
-    const response = executeCommands(game, ['give locket to grandmother'])
+    const response = executeCommands(game, ['use locket with grandmother'])
 
     expect(response).toContain("this was your mother's")
     expect(response).toContain('all the way back to the founders')
@@ -61,7 +61,7 @@ describe('Grandmother and the locket', () => {
     const game = cottageGame()
     game.state.addItemToInventory(new Locket())
 
-    const response = executeCommands(game, ['give locket to grandmother'])
+    const response = executeCommands(game, ['use locket with grandmother'])
 
     expect(response).toContain(
       "[character_name]Grandmother[/character_name]'s eyes widen",
@@ -75,7 +75,7 @@ describe('Grandmother and other gifts', () => {
     const game = cottageGame()
     game.state.addItemToInventory(new WildBerries())
 
-    const response = executeCommands(game, ['give berries to grandmother'])
+    const response = executeCommands(game, ['use berries with grandmother'])
 
     expect(response).toContain('same as when you were six')
     expect(response).toContain("I'll make a pie.")
@@ -85,7 +85,7 @@ describe('Grandmother and other gifts', () => {
     const game = cottageGame()
     game.state.addItemToInventory(new Key())
 
-    const response = executeCommands(game, ['give key to grandmother'])
+    const response = executeCommands(game, ['use key with grandmother'])
 
     expect(response).toContain(
       '[character_name]Grandmother[/character_name] turns it over in her hands and gives it back.',
@@ -101,7 +101,7 @@ describe('Grandmother and the faded photograph', () => {
     executeCommands(game, ['examine faded photograph'])
 
     const response = executeCommands(game, [
-      'give faded photograph to grandmother',
+      'use faded photograph with grandmother',
     ])
 
     expect(response).toContain('Your mother loved the river.')
@@ -259,7 +259,7 @@ describe('Grandmother and the dream', () => {
     game.state.addItemToInventory(new FadedPhotograph())
     const gave = executeCommands(game, [
       'examine faded photograph',
-      'give faded photograph to grandmother',
+      'use faded photograph with grandmother',
     ])
     expect(gave).toContain('Your mother loved the river.')
 
@@ -613,7 +613,7 @@ describe('Grandmother between the Revive tale and the flower', () => {
 })
 
 describe('Grandmother and the ring from the well', () => {
-  const GIVE = ['give shiny ring to grandmother']
+  const GIVE = ['use shiny ring with grandmother']
   const WELL_BEAT = 'She never took it off. Not once.'
 
   it('remarks once on the well the first time she is given the ring', () => {

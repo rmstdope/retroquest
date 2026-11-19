@@ -411,7 +411,7 @@ describe('Elena answers to her own name (rq-aum)', () => {
   it('is given things as elena', () => {
     const game = atInn()
     game.state.inventory.push(new Coins())
-    const answer = game.commandParser.parse('give coins to elena')
+    const answer = game.commandParser.parse('use coins with elena')
     expect(answer).not.toContain('There is no character named')
     expect(answer).toContain('[character_name]Barmaid Elena[/character_name]')
   })
@@ -456,7 +456,7 @@ describe('Giving Elena the water washes the mark (rq-ghwn)', () => {
     )
     const given = healedWithWater()
     const giveAnswer = given.game.commandParser.parse(
-      'give crystal-clear water to barmaid elena',
+      'use crystal-clear water with barmaid elena',
     )
     expect(giveAnswer).toBe(useAnswer)
     expect(giveAnswer).not.toContain('seem interested')
@@ -472,7 +472,7 @@ describe('Giving Elena the water washes the mark (rq-ghwn)', () => {
       'use crystal-clear water with barmaid elena',
     )
     expect(
-      game.commandParser.parse('give crystal-clear water to barmaid elena'),
+      game.commandParser.parse('use crystal-clear water with barmaid elena'),
     ).toBe(useAnswer)
   })
 })

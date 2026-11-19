@@ -315,7 +315,7 @@ describe('BeltOfPictures', () => {
       kind: 'item',
       name: 'bread',
       label: 'Bread',
-      verb: 'give',
+      verb: 'usewith',
     })
     await nextTick()
     expect(w!.get('[data-belt-pic="item:bread"]').classes()).toContain('lq-lit')

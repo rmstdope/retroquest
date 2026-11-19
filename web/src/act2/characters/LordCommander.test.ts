@@ -73,7 +73,7 @@ describe('Lord Commander', () => {
     game.state.inventory.push(documents)
 
     const answer = game.commandParser.parse(
-      'give secret documents to lord commander',
+      'use secret documents with lord commander',
     )
 
     expect(answer).toContain('Read them and know what you bring me')
@@ -90,7 +90,7 @@ describe('Lord Commander', () => {
     game.state.setStoryFlag(FLAG_EXAMINED_SECRET_DOCUMENTS, true)
 
     const answer = game.commandParser.parse(
-      'give secret documents to lord commander',
+      'use secret documents with lord commander',
     )
 
     expect(answer).toContain('I hereby restore his knighthood')
@@ -109,7 +109,7 @@ describe('Lord Commander', () => {
     game.state.setStoryFlag(FLAG_EXAMINED_SECRET_DOCUMENTS, true)
 
     const answer = game.commandParser.parse(
-      'give secret documents to lord commander',
+      'use secret documents with lord commander',
     )
 
     expect(answer).toContain('the shattered ridge')
@@ -138,7 +138,7 @@ describe('Lord Commander', () => {
     game.state.inventory.push(stick)
 
     const answer = game.commandParser.parse(
-      `give ${stick.name} to lord commander`,
+      `use ${stick.name} with lord commander`,
     )
 
     expect(answer).toContain(

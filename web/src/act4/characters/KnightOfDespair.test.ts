@@ -350,7 +350,7 @@ describe('KnightOfDespair offered the shield', () => {
   it("raises the Guardian's Chain when it is given to him", () => {
     const game = gameWithToken()
 
-    const out = executeCommands(game, ["give guardian's chain to knight"])
+    const out = executeCommands(game, ["use guardian's chain with knight"])
 
     expect(out).toContain('You hold the chain up between you and the knight.')
     expect(out).not.toContain('interested')
@@ -362,7 +362,7 @@ describe('KnightOfDespair offered the shield', () => {
     const game = gameWithToken()
 
     const out = executeCommands(game, [
-      'give loyalty token to knight of despair',
+      'use loyalty token with knight of despair',
     ])
 
     expect(out).toContain('You hold the loyalty token close to your heart.')
@@ -374,7 +374,7 @@ describe('KnightOfDespair offered the shield', () => {
   it('still refuses anything else', () => {
     const game = createGameInHall()
 
-    expect(executeCommands(game, ['give echo stone to knight'])).toContain(
+    expect(executeCommands(game, ['use echo stone with knight'])).toContain(
       "doesn't seem interested",
     )
   })
@@ -384,7 +384,7 @@ describe('KnightOfDespair offered the shield', () => {
     executeCommands(game, [...THREE_SIGHTS, 'use loyalty token'])
     executeCommands(game, ['say redemption to knight'])
 
-    const out = executeCommands(game, ["give guardian's chain to knight"])
+    const out = executeCommands(game, ["use guardian's chain with knight"])
 
     expect(out).toContain("doesn't seem interested")
     expectStoryFlag(game.state, FLAG_ACT4_GUARDIANS_CHAIN_RAISED, false)
@@ -397,7 +397,7 @@ describe('KnightOfDespair offered the shield', () => {
 
     const out = executeCommands(game, ["use guardian's chain on knight"])
 
-    expect(out).toContain("You can't use")
+    expect(out).toContain("doesn't seem interested")
     expectStoryFlag(game.state, FLAG_ACT4_GUARDIANS_CHAIN_RAISED, false)
   })
 })

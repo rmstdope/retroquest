@@ -756,37 +756,10 @@ Welcome to
   }
 
   /**
-   * "give <item> to <character>". A character not in the room is named as
-   * absent first, whatever is offered. Something not held as an item is then
-   * offered to the character's `giveUnheld`, then refused as not held.
-   */
-  give(args: string): string {
-    const split = this.splitCommand(args, 'give', 'to')
-    if (typeof split === 'string') return split
-    const [itemName, characterName] = split
-    const character = this.findCharacter(characterName)
-    if (!character) {
-      return `[failure]There is no character named '${capitalize(characterName)}' here.[/failure]`
-    }
-    const item = this.findItem(itemName, { room: false })
-    if (!item) {
-      return (
-        this.byName(itemName, (name) =>
-          character.giveUnheld(this.state, name),
-        ) ??
-        `[failure]You don't have ${indefiniteArticle(itemName)} '${itemName}' to give.[/failure]`
-      )
-    }
-    return this.offer(item, character, () =>
-      character.giveItem(this.state, item),
-    )
-  }
-
-  /**
-   * An item offered to a character, by `give` or by `use … on`: the
-   * character's `acceptOffer` answers first, so a pair answered there is
-   * answered by both verbs alike; otherwise `verbHook` is the verb's own
-   * hook, which carries the default refusal.
+   * An item offered to a character by `use … with` or `use … on`: the
+   * character's `acceptOffer` answers first; otherwise `verbHook` is the
+   * item's own answer (`Item.useOnCharacter`), which hands it over by
+   * default and carries the default refusal.
    */
   private offer(
     item: Item,
@@ -833,10 +806,19 @@ Welcome to
     return bare === null ? null : answer(bare)
   }
 
-  /** Use an item, alone or with another item or a character. */
+  /**
+   * Use an item, alone or with another item or a character; with a
+   * character it is handed over. Something not held as an item (Patches,
+   * carried in the story) is offered to the character's `giveUnheld`.
+   */
   use(itemName: string, targetName?: string): string {
     const item = this.findItem(itemName)
     if (!item) {
+      const unheld = targetName ? this.findCharacter(targetName) : null
+      const carried = unheld
+        ? this.byName(itemName, (name) => unheld.giveUnheld(this.state, name))
+        : null
+      if (carried !== null) return carried
       return (
         `[failure]You don't have ${indefiniteArticle(itemName)} '${itemName}' ` +
         `to use, and there isn't one here.[/failure]`

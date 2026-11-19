@@ -73,11 +73,11 @@ describe('StoryNameMenu', () => {
     window.innerHeight = 390
     const bag = Array.from({ length: 16 }, (_, i) => ({
       label: `Thing ${i}`,
-      command: `give thing ${i} to elena`,
+      command: `cast thing ${i} on elena`,
     }))
     wrapper = mount(StoryNameMenu, {
       props: {
-        actions: [{ label: 'Give…', choices: bag }],
+        actions: [{ label: 'Cast…', choices: bag }],
         x: 100,
         top: 180,
         bottom: 198,
@@ -106,10 +106,10 @@ describe('StoryNameMenu', () => {
       props: {
         actions: [
           {
-            label: 'Give…',
+            label: 'Cast…',
             choices: [
-              { label: 'Bread', command: 'give bread to grandmother' },
-              { label: 'Map', command: 'give map to grandmother' },
+              { label: 'Light', command: 'cast light on grandmother' },
+              { label: 'Heal', command: 'cast heal on grandmother' },
             ],
           },
           { label: 'Examine', command: 'examine grandmother' },
@@ -126,15 +126,15 @@ describe('StoryNameMenu', () => {
 
     expect(wrapper.emitted('pick')).toBeUndefined()
     const menu = wrapper.get('[role="menu"]')
-    expect(menu.attributes('aria-label')).toBe('Give')
+    expect(menu.attributes('aria-label')).toBe('Cast')
     expect(menu.findAll('[role="menuitem"]').map((m) => m.text())).toEqual([
-      'Bread',
-      'Map',
+      'Light',
+      'Heal',
     ])
-    expect(document.activeElement?.textContent?.trim()).toBe('Bread')
+    expect(document.activeElement?.textContent?.trim()).toBe('Light')
 
     await menu.findAll('[role="menuitem"]')[1].trigger('click')
-    expect(wrapper.emitted('pick')).toEqual([['give map to grandmother']])
+    expect(wrapper.emitted('pick')).toEqual([['cast heal on grandmother']])
   })
 
   it('goes back to the actions with Escape in a list of choices', async () => {
@@ -143,8 +143,8 @@ describe('StoryNameMenu', () => {
         actions: [
           { label: 'Talk to', command: 'talk to grandmother' },
           {
-            label: 'Give…',
-            choices: [{ label: 'Bread', command: 'give bread to grandmother' }],
+            label: 'Cast…',
+            choices: [{ label: 'Light', command: 'cast light on grandmother' }],
           },
         ],
         x: 100,
@@ -162,9 +162,9 @@ describe('StoryNameMenu', () => {
     expect(wrapper.emitted('close')).toBeUndefined()
     expect(wrapper.findAll('[role="menuitem"]').map((m) => m.text())).toEqual([
       'Talk to',
-      'Give…',
+      'Cast…',
     ])
-    expect(document.activeElement?.textContent?.trim()).toBe('Give…')
+    expect(document.activeElement?.textContent?.trim()).toBe('Cast…')
 
     await wrapper.get('[role="menu"]').trigger('keydown', { key: 'Escape' })
     expect(wrapper.emitted('close')).toEqual([[true]])

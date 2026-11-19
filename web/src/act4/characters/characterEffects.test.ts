@@ -29,7 +29,7 @@ describe('Act IV characters narrate their effects', () => {
     const game = new Game([new Act4()])
     game.state.setStoryFlag(FLAG_ACT4_REDEMPTION_ENDING, true)
     game.state.currentRoom = game.state.allRooms.WillowbrookField
-    const given = executeCommands(game, ["give nyx's token to nyx"])
+    const given = executeCommands(game, ["use nyx's token with nyx"])
     expect(given).not.toContain('You hold out')
     expect(given).toContain(
       'The light comes down to the pendant, and the two of them are gone',

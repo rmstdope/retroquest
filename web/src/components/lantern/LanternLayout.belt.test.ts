@@ -148,7 +148,7 @@ describe('LanternLayout: the belt of pictures', () => {
     )
   })
 
-  it('opens the ring of a carried thing: Use, Use with…, Give…, Open, Close, Examine', async () => {
+  it('opens the ring of a carried thing: Use, Use with…, Open, Close, Examine', async () => {
     await cottage()
     await click(tile('item:bread').element)
     expect(w.get('.lq-ring-name').text()).toBe('Bread')
@@ -156,7 +156,7 @@ describe('LanternLayout: the belt of pictures', () => {
       w
         .findAll('.lq-press-ring .lq-ring-coin')
         .map((c) => c.attributes('data-ring-action')),
-    ).toEqual(['use', 'usewith', 'give', 'open', 'close', 'examine'])
+    ).toEqual(['use', 'usewith', 'open', 'close', 'examine'])
     expect(w.get('.lq-belt-caption').text()).toContain('Bread')
   })
 
@@ -198,14 +198,14 @@ describe('LanternLayout: the belt of pictures', () => {
     expect(strip()).toBe('')
   })
 
-  it('gives to a person with Give…', async () => {
+  it('hands to a person with Use with…', async () => {
     const store = await cottage()
     await click(tile('item:bread').element)
-    await coin('give').trigger('click')
+    await coin('usewith').trigger('click')
     await flushPromises()
-    expect(strip()).toBe('Give Bread to…')
+    expect(strip()).toBe('Use Bread with…')
     await click(hit('grandmother').element)
-    expect(store.turns.at(-1)?.command).toBe('give bread to grandmother')
+    expect(store.turns.at(-1)?.command).toBe('use bread with grandmother')
   })
 
   it("moves focus to the hand's Cancel when something is taken in hand, not onto the picture", async () => {
@@ -219,7 +219,7 @@ describe('LanternLayout: the belt of pictures', () => {
   it('puts the hand down when any other command is sent', async () => {
     const store = await cottage()
     await click(tile('item:bread').element)
-    await coin('give').trigger('click')
+    await coin('usewith').trigger('click')
     await flushPromises()
     store.submitCommand('look')
     await flushPromises()
@@ -229,7 +229,7 @@ describe('LanternLayout: the belt of pictures', () => {
   it('puts the hand down when what is in hand is lost', async () => {
     const store = await cottage()
     await click(tile('item:bread').element)
-    await coin('give').trigger('click')
+    await coin('usewith').trigger('click')
     await flushPromises()
     store.rawInventory = []
     store.bagEntries = []
@@ -241,7 +241,7 @@ describe('LanternLayout: the belt of pictures', () => {
     const store = await cottage()
     const before = store.turns.length
     await click(tile('item:bread').element)
-    await coin('give').trigger('click')
+    await coin('usewith').trigger('click')
     await flushPromises()
     await click(tile('item:bread').element)
     expect(useBeltStore().hand).not.toBeNull()
@@ -263,7 +263,7 @@ describe('LanternLayout: the belt of pictures', () => {
       () => key('Escape'),
     ]) {
       await click(tile('item:bread').element)
-      await coin('give').trigger('click')
+      await coin('usewith').trigger('click')
       await flushPromises()
       await putDown()
       await flushPromises()
@@ -474,7 +474,7 @@ describe('LanternLayout: the belt of pictures', () => {
 
   it('drops the caption when what is in hand is sent, focus back on its picture', async () => {
     await cottage()
-    await takeBreadIn('give')
+    await takeBreadIn('usewith')
     await click(hit('grandmother').element)
     await flushPromises()
     expect(document.activeElement).toBe(tile('item:bread').element)
@@ -494,7 +494,7 @@ describe('LanternLayout: the belt of pictures', () => {
 
   it('keeps the thing in hand when the bare picture is pressed', async () => {
     const store = await cottage()
-    await takeBreadIn('give')
+    await takeBreadIn('usewith')
     const before = store.turns.length
     await click(w.get('.lq-stage-picture').element, { x: 5, y: 5 })
     expect(useBeltStore().hand).not.toBeNull()
@@ -503,7 +503,7 @@ describe('LanternLayout: the belt of pictures', () => {
 
   it('walks through a way out and empties the hand', async () => {
     const store = await cottage()
-    await takeBreadIn('give')
+    await takeBreadIn('usewith')
     const submit = vi.spyOn(store, 'submitCommand')
     const picture = w.get('.lq-stage-picture').element
     picture.setAttribute('data-way', 'east')
@@ -576,7 +576,7 @@ describe('LanternLayout: the belt of pictures', () => {
     ['a new act', () => (useGameStore().musicActName = 'Act2')],
   ])('puts the hand down for %s', async (_name, change) => {
     await cottage()
-    await takeBreadIn('give')
+    await takeBreadIn('usewith')
     expect(useBeltStore().hand).not.toBeNull()
     change()
     await flushPromises()

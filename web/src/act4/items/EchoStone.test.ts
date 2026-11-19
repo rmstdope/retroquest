@@ -130,7 +130,7 @@ describe('EchoStone enhanced', () => {
     const stone = new EchoStone()
     stone.enhance()
     game.state.inventory.push(stone)
-    expect(executeCommands(game, ['give enhanced echo stone to knight'])).toBe(
+    expect(executeCommands(game, ['use enhanced echo stone with knight'])).toBe(
       'The [character_name]Knight of Despair[/character_name] ' +
         "doesn't seem interested in the " +
         '[item_name]enhanced echo stone[/item_name].',

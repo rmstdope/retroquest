@@ -438,7 +438,7 @@ describe('The Sorceress of Lies', () => {
     const given = inChamber()
     const expected = executeCommands(plain, ["use knight's redemption"])
     const answer = executeCommands(given, [
-      "give knight's redemption to sorceress of lies",
+      "use knight's redemption with sorceress of lies",
     ])
     expect(answer).toBe(expected)
     expect(answer).not.toContain('interested')

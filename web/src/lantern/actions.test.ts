@@ -42,7 +42,6 @@ describe('buildCommand', () => {
     ['usewith', ['bucket', 'well'], 'use bucket with well'],
     ['talk', ['mira'], 'talk to mira'],
     ['say', ['hello there', 'mira'], 'say hello there to mira'],
-    ['give', ['apple', 'mira'], 'give apple to mira'],
     ['buy', ['rope', 'shopkeeper'], 'buy rope from shopkeeper'],
     ['open', ['chest'], 'open chest'],
     ['close', ['chest'], 'close chest'],
@@ -54,7 +53,7 @@ describe('buildCommand', () => {
 
   it('is incomplete while a required slot is empty', () => {
     expect(buildCommand(verbById('take'), [])).toBeNull()
-    expect(buildCommand(verbById('give'), ['apple'])).toBeNull()
+    expect(buildCommand(verbById('usewith'), ['apple'])).toBeNull()
     expect(buildCommand(verbById('say'), ['', 'mira'])).toBeNull()
     // The engine rejects "buy rope": the seller is required.
     expect(buildCommand(verbById('buy'), ['rope'])).toBeNull()
@@ -88,7 +87,7 @@ describe('targetsFor', () => {
   })
 
   it('uses plain bag names without markup or stack counts', () => {
-    const targets = targetsFor(verbById('give').slots[0], CONTEXT)
+    const targets = targetsFor({ sources: ['inventory'] }, CONTEXT)
 
     expect(targets.map((t) => t.value)).toEqual(['lantern', 'apple'])
     expect(targets[1].label).toBe('Apple')

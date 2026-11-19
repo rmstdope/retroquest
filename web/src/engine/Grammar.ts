@@ -28,7 +28,7 @@ export type ArgumentKind =
   /** The player's own words (not listable), or a save name. */
   | 'text'
 
-/** A word that joins a verb's first argument to a second one ("give X to Y"). */
+/** A word that joins a verb's first argument to a second one ("buy X from Y"). */
 export interface VerbJoin {
   /** The joining words the parser accepts, such as `with` and `on`. */
   words: readonly string[]
@@ -105,13 +105,6 @@ export const VERB_FORMS: readonly VerbForm[] = [
     argument: 'text',
     group: 'Interaction',
     help: ['say <word(s)> to <character>'],
-  },
-  {
-    verbs: ['give', 'hand'],
-    argument: 'inventoryItem',
-    joins: { words: ['to'], argument: 'character', optional: false },
-    group: 'Interaction',
-    help: ['give <item> to <character>, hand <item> to <character>'],
   },
   {
     verbs: ['buy'],

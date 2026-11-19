@@ -30,7 +30,7 @@ describe("The mother's letter at the river bend", () => {
   it('is found in a tin under the smooth stone once the fisherman tells of it', () => {
     executeCommands(game, [
       'examine faded photograph',
-      'give faded photograph to fisherman',
+      'use faded photograph with fisherman',
     ])
 
     const response = executeCommands(game, ['search'])
@@ -44,7 +44,7 @@ describe("The mother's letter at the river bend", () => {
   it('is found only once', () => {
     executeCommands(game, [
       'examine faded photograph',
-      'give faded photograph to fisherman',
+      'use faded photograph with fisherman',
       'search',
       'take letter',
     ])
@@ -82,7 +82,7 @@ describe("The mother's letter at the river bend", () => {
   it('completes The faded photograph when it is read, not before', () => {
     executeCommands(game, [
       'examine faded photograph',
-      'give faded photograph to fisherman',
+      'use faded photograph with fisherman',
       'search',
       'take letter',
     ])

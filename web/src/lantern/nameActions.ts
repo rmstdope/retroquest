@@ -1,8 +1,8 @@
 import { displayName } from './displayName'
 
 /**
- * One thing to do with a name clicked in the story: a command, or (Give…,
- * Cast…) a list of choices that each have one.
+ * One thing to do with a name clicked in the story: a command, or (Cast…)
+ * a list of choices that each have one.
  */
 export interface NameAction {
   label: string
@@ -60,7 +60,7 @@ function commandName(name: string, around: Around): string {
  * The actions that fit a character or item named in the story, given what is
  * in the room, the bag and the spells known; none when it is not here. An
  * item in the room gets Take, Use, Open, Close and Examine. A
- * character also gets Give… (each thing in the bag) and Cast… (each spell).
+ * character also gets Cast… (each spell).
  */
 export function nameActions(
   kind: 'character' | 'item',
@@ -96,11 +96,6 @@ export function nameActions(
         : []
     return [
       talk,
-      ...choices(
-        'Give…',
-        around.bag,
-        (item) => `give ${commandName(item, around)} to ${name}`,
-      ),
       ...choices(
         'Cast…',
         around.spells ?? [],

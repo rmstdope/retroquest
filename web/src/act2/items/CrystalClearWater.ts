@@ -1,4 +1,4 @@
-import { Item, type Character, type GameState, characterName } from '@/engine'
+import { Item, type Character, type GameState } from '@/engine'
 import { BarmaidElena } from '../characters/BarmaidElena'
 
 /** The item's description; `descriptionFor` returns it in older saves. */
@@ -22,19 +22,14 @@ export class CrystalClearWater extends Item {
     return CRYSTAL_CLEAR_WATER_DESCRIPTION
   }
 
-  /** Use crystal-clear water on a character to purify them. */
+  /**
+   * Used with Elena the water purifies her; with anyone else it is handed
+   * over, as any item is (the Ancient Tree Spirit takes it as a gift).
+   */
   override useOnCharacter(gameState: GameState, target: Character): string {
-    // Special handling for Elena's curse purification
     if (target instanceof BarmaidElena) {
       return target.receiveCrystalWaterPurification(gameState)
     }
-    const name = target.name
-    return (
-      'The [item_name]crystal-clear water[/item_name] glows faintly when ' +
-      'near ' +
-      characterName(name) +
-      ', but it seems this blessed water is meant for someone ' +
-      'specifically afflicted by dark magic.'
-    )
+    return super.useOnCharacter(gameState, target)
   }
 }

@@ -15,7 +15,7 @@ describe('Mira at the Fortress Gates', () => {
     const game = new Game([act])
     game.state.currentRoom = game.state.allRooms.FortressGates
     game.state.inventory.push(new SorceressTruth())
-    const answer = executeCommands(game, ["give sorceress's truth to mira"])
+    const answer = executeCommands(game, ["use sorceress's truth with mira"])
     expect(answer).toContain('Not with these hands.')
     expectDialogueSpeaker(answer, 'Mira')
     expectNoStockReply(answer)

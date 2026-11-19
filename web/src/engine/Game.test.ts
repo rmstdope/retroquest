@@ -1041,51 +1041,40 @@ describe('Game', () => {
   })
 
   describe('an item offered to a character', () => {
-    it('answers give, use on and use with alike, as typed', () => {
+    it('answers use on and use with alike, as typed', () => {
       const families = new Talker('Families')
       families.acceptOffer = (_state, offered) => `Accepted: ${offered.name}`
       rooms.EliorsCottage.addCharacter(families)
       game.state.inventory.push(item('apple'))
       const parser = new CommandParser(game)
       for (const command of [
-        'give apple to families',
-        'use apple on families',
         'use apple with families',
+        'use apple on families',
       ]) {
         expect(parser.parse(command)).toBe('Accepted: apple')
       }
     })
 
-    it('refuses by default in both verbs when nothing answers', () => {
+    it('refuses by default when nothing answers', () => {
       rooms.EliorsCottage.addCharacter(new Talker('Families'))
       game.state.inventory.push(item('apple'))
-      expect(game.give('apple to families')).toContain('seem interested')
-      expect(game.use('apple', 'families')).toContain("can't use")
+      expect(game.use('apple', 'families')).toContain('seem interested')
     })
 
-    it('reaches one answer through give and use on', () => {
-      const families = new Talker('Families')
-      families.acceptOffer = (_state, offered) => `Accepted: ${offered.name}`
-      rooms.EliorsCottage.addCharacter(families)
-      game.state.inventory.push(item('apple'))
-      expect(game.give('apple to families')).toBe('Accepted: apple')
-      expect(game.use('apple', 'families')).toBe('Accepted: apple')
-    })
-
-    it('falls back to each verb’s own hook when acceptOffer has no answer', () => {
+    it('falls back to the item’s own answer when acceptOffer has none', () => {
       const families = new Talker('Families')
       families.giveItem = (_state, given) => `Given: ${given.name}`
       rooms.EliorsCottage.addCharacter(families)
       const apple = item('apple')
-      apple.useOnCharacter = (_state, target) => `Used on ${target.name}`
       game.state.inventory.push(apple)
-      expect(game.give('apple to families')).toBe('Given: apple')
+      expect(game.use('apple', 'families')).toBe('Given: apple')
+      apple.useOnCharacter = (_state, target) => `Used on ${target.name}`
       expect(game.use('apple', 'families')).toBe('Used on Families')
     })
   })
 
   describe('a leading "the" in a character target', () => {
-    it('reaches the character through talk, say, give and buy', () => {
+    it('reaches the character through talk, say, use and buy', () => {
       const families = new Talker('Families')
       families.giveItem = (_state, given) => `Given: ${given.name}`
       families.buyItem = (_state, name) => `Sold: ${name}`
@@ -1095,7 +1084,7 @@ describe('Game', () => {
       expect(game.say('hello', 'the families')).toContain(
         "responds: 'Hello there!'",
       )
-      expect(game.give('apple to the families')).toBe('Given: apple')
+      expect(game.use('apple', 'families')).toBe('Given: apple')
       expect(game.buy('rope from the families')).toBe('Sold: rope')
     })
 
@@ -1128,7 +1117,7 @@ describe('Game', () => {
   })
 
   describe('a character found by a word of its name', () => {
-    it('reaches the character through talk, say, give, examine and cast', () => {
+    it('reaches the character through talk, say, use, examine and cast', () => {
       const guardian = new Talker('Tide-Born Guardian')
       guardian.giveItem = (_state, given) => `Given: ${given.name}`
       guardian.examine = () => 'Examined'
@@ -1139,7 +1128,7 @@ describe('Game', () => {
       expect(game.talk('guardian')).toContain('has nothing to say')
       expect(game.talk('the warden')).toContain('has nothing to say')
       expect(game.say('hello', 'Warden')).toContain("responds: 'Hello there!'")
-      expect(game.give('apple to guardian')).toBe('Given: apple')
+      expect(game.use('apple', 'guardian')).toBe('Given: apple')
       expect(game.examine('guardian')).toBe('Examined')
       expect(game.cast('light on guardian')).toContain(
         '[character_name]Tide-Born Guardian[/character_name]',
@@ -1189,7 +1178,7 @@ describe('Game', () => {
       expect(game.examine('the lantern')).toBe('Examined: lantern')
     })
 
-    it('reaches the item through give, cast on and open', () => {
+    it('reaches the item through use, cast on and open', () => {
       const villager = character('Villager')
       villager.giveItem = (_state, given) => `Given: ${given.name}`
       rooms.EliorsCottage.addCharacter(villager)
@@ -1198,7 +1187,7 @@ describe('Game', () => {
       rooms.EliorsCottage.addItem(chest)
       game.state.inventory.push(item('apple'))
       game.state.knownSpells.push(new EchoSpell('light'))
-      expect(game.give('the apple to villager')).toBe('Given: apple')
+      expect(game.use('apple', 'villager')).toBe('Given: apple')
       expect(game.cast('light on the chest')).toBe(
         '[event]You cast [spell_name]light[/spell_name] on ' +
           '[item_name]chest[/item_name].[/event]',
@@ -1217,7 +1206,7 @@ describe('Game', () => {
         name === 'field' ? 'Grown: field' : null
       game.state.knownSpells.push(grow)
       expect(game.buy('the rope from merchant')).toBe('Sold: rope')
-      expect(game.give('the patches to merchant')).toBe('Took: patches')
+      expect(game.use('patches', 'merchant')).toBe('Took: patches')
       expect(game.cast('grow on the field')).toBe('Grown: field')
     })
 
@@ -1234,14 +1223,14 @@ describe('Game', () => {
     })
   })
 
-  describe('give', () => {
+  describe('use with a character', () => {
     it('hands an inventory item to a character in the room', () => {
       const apple = item('apple')
       const villager = character('Villager')
       villager.giveItem = (_state, given) => `Villager takes the ${given.name}.`
       game.state.inventory.push(apple)
       rooms.EliorsCottage.addCharacter(villager)
-      expect(game.give('apple to villager')).toBe('Villager takes the apple.')
+      expect(game.use('apple', 'villager')).toBe('Villager takes the apple.')
     })
 
     it('lets the character answer for something not held as an item', () => {
@@ -1249,47 +1238,40 @@ describe('Game', () => {
       villager.giveUnheld = (_state, name) =>
         name === 'cat' ? 'Villager takes the cat.' : null
       rooms.EliorsCottage.addCharacter(villager)
-      expect(game.give('cat to villager')).toBe('Villager takes the cat.')
-      expect(game.give('dog to villager')).toBe(
-        "[failure]You don't have a 'dog' to give.[/failure]",
-      )
+      expect(game.use('cat', 'villager')).toBe('Villager takes the cat.')
+      expect(game.use('dog', 'villager')).toContain("You don't have a 'dog'")
     })
 
-    it('names a missing character before refusing something not held', () => {
-      expect(game.give('cat to ghost')).toBe(
-        "[failure]There is no character named 'Ghost' here.[/failure]",
-      )
+    it('refuses something not held to a missing character', () => {
+      expect(game.use('cat', 'ghost')).toContain("You don't have a 'cat'")
     })
 
-    it('reports missing items, missing characters and bad formats', () => {
-      rooms.EliorsCottage.addCharacter(character('Villager'))
-      expect(game.give('nonexistent_item to villager')).toBe(
-        "[failure]You don't have a 'nonexistent_item' to give.[/failure]",
-      )
-      expect(game.give('enhanced echo stone to villager')).toBe(
-        "[failure]You don't have an 'enhanced echo stone' to give.[/failure]",
-      )
-      game.state.inventory.push(item('apple'))
-      expect(game.give('apple to Ghost')).toBe(
-        "[failure]There is no character named 'Ghost' here.[/failure]",
-      )
-      expect(game.give('apple villager')).toBe(
-        "[failure]Invalid command format. Please use 'give <target1> to <target2>'.[/failure]",
-      )
-      expect(game.give('to villager')).toBe(
-        '[failure]What do you want to give?[/failure]',
-      )
-      expect(game.give('apple to')).toBe(
-        '[failure]Who/What should I give apple to?[/failure]',
-      )
+    it('does not hand over an item that lies in the room', () => {
+      const villager = character('Villager')
+      villager.giveItem = () => 'Villager takes it.'
+      rooms.EliorsCottage.addCharacter(villager)
+      rooms.EliorsCottage.addItem(item('apple'))
+      expect(game.use('apple', 'villager')).toContain("aren't carrying")
     })
 
     it('uses the default refusal of a plain character', () => {
       game.state.inventory.push(item('stick'))
       rooms.EliorsCottage.addCharacter(character('Grumpy Person'))
-      expect(game.give('stick to grumpy person')).toContain(
+      expect(game.use('stick', 'grumpy person')).toContain(
         "[character_name]Grumpy Person[/character_name] doesn't seem interested in the [item_name]stick[/item_name].",
       )
+    })
+
+    it('does not know give or hand any more', () => {
+      game.state.inventory.push(item('stick'))
+      rooms.EliorsCottage.addCharacter(character('Grumpy Person'))
+      const parser = new CommandParser(game)
+      for (const command of [
+        'give stick to grumpy person',
+        'hand stick to grumpy person',
+      ]) {
+        expect(parser.parse(command)).toContain("don't understand")
+      }
     })
   })
 
@@ -1386,7 +1368,7 @@ describe('Game', () => {
       game.state.addItemToInventory(item('apple'))
       rooms.EliorsCottage.addCharacter(character('hungry person'))
       expect(game.use('apple', 'hungry person')).toBe(
-        "[failure]You can't use the [item_name]apple[/item_name] on [character_name]Hungry Person[/character_name].[/failure]",
+        "[character_name]Hungry Person[/character_name] doesn't seem interested in the [item_name]apple[/item_name].",
       )
       expect(game.use('apple', 'unicorn')).toBe(
         "[failure]You don't see a 'unicorn' to use with the [item_name]apple[/item_name].[/failure]",
@@ -1500,7 +1482,7 @@ describe('Game', () => {
       expect(tree.take).toEqual({ "elior's": { journal: null }, journal: null })
       expect(tree).not.toHaveProperty('drop')
       expect(tree).not.toHaveProperty('discard')
-      expect(tree.give).toEqual({ rope: { to: { old: { mira: null } } } })
+      expect(tree).not.toHaveProperty('give')
       // Nobody here sells anything, so there is nothing to buy.
       expect(tree.buy).toEqual({})
       expect(tree.cast).toEqual({

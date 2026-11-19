@@ -48,7 +48,7 @@ describe('Mira in Willowbrook Field', () => {
   it("hands the Sorceress's mask back with Elena in mind", () => {
     const game = inField()
     game.state.inventory.push(new SorceressTruth())
-    const answer = executeCommands(game, ["give sorceress's truth to mira"])
+    const answer = executeCommands(game, ["use sorceress's truth with mira"])
     expect(answer).toContain('I burned the letter that asked me to come.')
     expectNoStockReply(answer)
     expect(game.state.inventory.some((i) => i instanceof SorceressTruth)).toBe(

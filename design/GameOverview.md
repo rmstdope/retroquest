@@ -44,7 +44,7 @@ Every puzzle in every act follows these rules, so the game stays puzzling withou
 The full list, with every synonym, is `design/Commands.md`. A few that the game answers:
 
 - **Movement:** `go north`, `north`, `n`
-- **Interaction:** `talk to Mira`, `say patience to shadow`, `give locket to grandmother`, `buy rope from shopkeeper`
+- **Interaction:** `talk to Mira`, `say patience to shadow`, `use locket with grandmother`, `buy rope from shopkeeper`
 - **Examination:** `look`, `examine offering altar`, `search`
 - **Inventory:** `take lantern`, `use bucket with well`, `inventory`
 - **Magic:** `cast light`, `cast purify on well`, `spells`

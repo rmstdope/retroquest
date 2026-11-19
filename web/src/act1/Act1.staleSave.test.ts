@@ -35,7 +35,7 @@ function prepare(game: Game): void {
   }
   game.state.currentRoom = game.state.allRooms.Riverbank
   game.state.addItemToInventory(new Fish())
-  executeCommands(game, ['give fish to fisherman'])
+  executeCommands(game, ['use fish with fisherman'])
 }
 
 describe('Act I loading a save that holds old wording', () => {

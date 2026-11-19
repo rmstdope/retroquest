@@ -974,20 +974,20 @@ describe('Giving the quiet charm to Tobin', () => {
 
   it('plays through the commands, records one selfless moment and cannot be repeated', () => {
     const game = rescued()
-    const gift = executeCommands(game, ['give quiet charm to young miner'])
+    const gift = executeCommands(game, ['use quiet charm with young miner'])
     expect(gift).toContain("It's quiet.")
     expect(gift).toContain('✦ Selflessness — this will be remembered')
     expect(game.state.virtueCount('selfless')).toBe(1)
     expect(game.state.hasItem('quiet charm')).toBe(false)
-    expect(executeCommands(game, ['give charm to boy'])).toContain(
-      "You don't have a 'charm' to give.",
+    expect(executeCommands(game, ['use charm with boy'])).toContain(
+      "You don't have a 'charm' to use, and there isn't one here.",
     )
     expect(game.state.virtueCount('selfless')).toBe(1)
   })
 
   it('keeps the gift, the selfless moment and the unseen thanks through a save', () => {
     const game = rescued()
-    executeCommands(game, ['give charm to tobin'])
+    executeCommands(game, ['use charm with tobin'])
 
     const fresh = new Game([new Act3()])
     expect(fresh.loadSaveData(game.toSaveData())).toContain('loaded')

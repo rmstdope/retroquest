@@ -459,9 +459,9 @@ describe('after the endings and around them', () => {
     expect(executeCommands(game, ['examine malakar'])).toContain(
       "You don't see a 'malakar'",
     )
-    expect(executeCommands(game, ['give ancient amulet to malakar'])).toContain(
-      "There is no character named 'Malakar' here.",
-    )
+    expect(
+      executeCommands(game, ['use ancient amulet with malakar']),
+    ).toContain("You don't see a 'malakar' to use with")
   })
 
   it('keeps a word, and the learned spell, through a reload with the wound open', () => {

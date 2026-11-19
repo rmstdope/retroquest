@@ -210,7 +210,7 @@ test.describe('Lantern UI (the default)', () => {
         'Magnetic Fishing Rod',
         'Lantern',
       ].map((name) => ({ kind: 'spell', name, count: 1 }))
-      store.turns = [{ ...store.turns[0], command: 'give all', lost }]
+      store.turns = [{ ...store.turns[0], command: 'use all', lost }]
       /* eslint-enable @typescript-eslint/no-explicit-any */
     })
 

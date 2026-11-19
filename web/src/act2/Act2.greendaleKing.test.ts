@@ -144,7 +144,7 @@ describe('Lord Commander', () => {
     const docs = new SecretDocuments()
     game.state.inventory.push(docs)
     const a = game.commandParser.parse(
-      'give secret documents to lord commander',
+      'use secret documents with lord commander',
     )
     expect(a).toContain('hands them back')
     expect(a).toContain('Read them and know what you bring me, then return.')
@@ -158,7 +158,7 @@ describe('Lord Commander', () => {
     game.state.setStoryFlag(FLAG_READ_SQUIRES_DIARY, true)
     docs.examine(game.state)
     const a = game.commandParser.parse(
-      'give secret documents to lord commander',
+      'use secret documents with lord commander',
     )
     expect(findMarkupProblems(a)).toEqual([])
     expect(a).toContain('By the will of Malakar.')

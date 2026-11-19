@@ -125,11 +125,11 @@ describe('ThroneChamber', () => {
     }
   })
 
-  it('accepts the full refrain and answers the amulet given to Malakar', () => {
+  it('accepts the full refrain and burns on the amulet used before his offer', () => {
     const game = inThrone()
-    expect(executeCommands(game, ['give ancient amulet to malakar'])).toContain(
-      'You have not heard what I am offering.',
-    )
+    expect(
+      executeCommands(game, ['use ancient amulet with malakar']),
+    ).toContain('it burns white')
     executeCommands(game, ['talk to malakar'])
     const text = executeCommands(game, [
       'say "Power follows purpose; purpose follows truth." to malakar',
@@ -223,6 +223,9 @@ describe('ThroneChamber', () => {
       'Your mother and father told him no once, in a letter. It did not stop him.',
     )
     expect(executeCommands(game, ['use ancient amulet'])).toContain(
+      'workshop in the late sun',
+    )
+    expect(executeCommands(game, ['use ancient amulet'])).toContain(
       'it burns white',
     )
     for (const target of ['malakar', 'wound']) {
@@ -312,7 +315,7 @@ describe('ThroneChamber', () => {
   for (const command of [
     'use lifelight elixir on malakar',
     'use lifelight elixir on wound',
-    'give lifelight elixir to malakar',
+    'use lifelight elixir with malakar',
   ]) {
     it(`heals Malakar with "${command}"`, () => {
       const game = opened()
@@ -495,6 +498,7 @@ describe('Throne Chamber, commands out of order', () => {
   it('burns Malakar after talk too, and keeps the picture stage on reload', () => {
     const game = inThrone()
     executeCommands(game, ['talk to malakar'])
+    executeCommands(game, ['use amulet on malakar'])
     expect(executeCommands(game, ['use amulet on malakar'])).toContain(
       'it burns white',
     )

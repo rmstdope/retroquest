@@ -65,7 +65,7 @@
     {
         "after": 48,
         "commands": [
-            "give ancient amulet to malakar",
+            "use ancient amulet with malakar",
             "say refrain to malakar",
             "use ancient amulet",
             "use lifelight elixir on malakar",
@@ -78,7 +78,7 @@
     {
         "after": 48,
         "commands": [
-            "give ancient amulet to malakar",
+            "use ancient amulet with malakar",
             "say refrain to malakar",
             "use ancient amulet",
             "use lifelight elixir on prison",
@@ -92,7 +92,7 @@
     {
         "after": 48,
         "commands": [
-            "give ancient amulet to malakar",
+            "use ancient amulet with malakar",
             "say refrain to malakar",
             "use ancient amulet",
             "use lifelight elixir on prison",
@@ -109,7 +109,7 @@
     },
     {
         "after": 6,
-        "commands": ["give guardian's chain to captain of the guard"]
+        "commands": ["use guardian's chain with captain of the guard"]
     },
     {
         "after": 29,
@@ -147,13 +147,13 @@
             "n",
             "cast bless on captain",
             "cast grow on trapped servants",
-            "give guardian's chain to captain"
+            "use guardian's chain with captain"
         ]
     },
     {
         "after": 6,
         "commands": [
-            "give guardian's chain to captain of the guard",
+            "use guardian's chain with captain of the guard",
             "take servant's pendant",
             "n",
             "use servant's pendant",
@@ -271,9 +271,9 @@
     {
         "after": 55,
         "commands": [
-            "give nyx's token to nyx",
-            "give servant's pendant to nyx",
-            "give ancient amulet to nyx",
+            "use nyx's token with nyx",
+            "use servant's pendant with nyx",
+            "use ancient amulet with nyx",
             "cast bless on nyx",
             "cast grow on nyx"
         ]
@@ -282,7 +282,7 @@
         "after": 29,
         "commands": [
             "say redemption to ghostly warriors",
-            "give knight's redemption to sir cedric"
+            "use knight's redemption with sir cedric"
         ]
     },
     {
@@ -291,18 +291,18 @@
             "down",
             "w",
             "s",
-            "give sorceress's truth to mira"
+            "use sorceress's truth with mira"
         ]
     },
     {
         "after": 47,
         "commands": [
-            "give ancient amulet to malakar",
+            "use ancient amulet with malakar",
             "say aren to malakar",
             "say lysa to malakar",
             "say mira to malakar",
             "say patience to malakar",
-            "give ancient amulet to king alden"
+            "use ancient amulet with king alden"
         ]
     },
     {
@@ -315,7 +315,7 @@
         "after": 53,
         "commands": [
             "cast forgiveness on king alden",
-            "give ancient amulet to king alden"
+            "use ancient amulet with king alden"
         ]
     },
     {
@@ -328,8 +328,8 @@
             "say you should have told me to grandmother",
             "say thank you to grandmother",
             "say thank you to grandmother",
-            "give ancient amulet to grandmother",
-            "give nyx's token to grandmother",
+            "use ancient amulet with grandmother",
+            "use nyx's token with grandmother",
             "say i forgive you to mira",
             "say you should have told me to mira",
             "say parents to mira",
@@ -338,8 +338,8 @@
             "say grandmother to mira",
             "say thank you to mira",
             "say thank you to mira",
-            "give sorceress's truth to mira",
-            "give knight's redemption to sir cedric",
+            "use sorceress's truth with mira",
+            "use knight's redemption with sir cedric",
             "cast forgiveness on mira",
             "cast forgiveness on grandmother",
             "cast forgiveness on sir cedric"

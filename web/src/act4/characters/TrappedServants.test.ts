@@ -51,7 +51,7 @@ describe('TrappedServants', () => {
     game.state.inventory.push(new GuardiansEssence())
 
     const answer = game.commandParser.parse(
-      "give guardian's essence to servants",
+      "use guardian's essence with servants",
     )
 
     expect(answer).toContain('For the first time, they look at you')
@@ -65,7 +65,7 @@ describe('TrappedServants', () => {
     game.state.inventory.push(new ServantsPendant())
 
     const answer = game.commandParser.parse(
-      "give servant's pendant to servants",
+      "use servant's pendant with servants",
     )
 
     expect(answer).toContain("don't seem interested")

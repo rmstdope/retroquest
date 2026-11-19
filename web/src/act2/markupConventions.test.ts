@@ -19,7 +19,7 @@ import { Act2 } from './Act2'
 import { ACT2_COMPLETING_COMMANDS, ACT2_GOLDEN_PATH } from './Act2GoldenPath'
 import { MountainFlower } from './items/MountainFlower'
 
-const GIVE_LEAVES = 'give silver leaves to master healer lyria'
+const GIVE_LEAVES = 'use silver leaves with master healer lyria'
 
 /** The golden path and every alternate choice, as (label, answers), with the names of every character met along them. */
 function paths(): { played: [string, PlayedAnswer[]][]; cast: string[] } {
@@ -39,7 +39,7 @@ function paths(): { played: [string, PlayedAnswer[]][]; cast: string[] } {
   ])
   virtues.state.addItemToInventory(new MountainFlower())
   for (const [room, command] of [
-    ['ResidentialQuarter', 'give mountain flower to families'],
+    ['ResidentialQuarter', 'use mountain flower with families'],
     ['SilverStagInn', 'say truth to marcus'],
     ['SilverStagInn', 'talk to barmaid elena'],
     ['MarketDistrict', 'say forgive to thorne'],

@@ -24,7 +24,7 @@ describe('Sir Cedric in Willowbrook Field', () => {
     const game = inField()
     game.state.inventory.push(new KnightsRedemption())
     const answer = executeCommands(game, [
-      "give knight's redemption to sir cedric",
+      "use knight's redemption with sir cedric",
     ])
     expect(answer).toContain('I know whose that was.')
     expectDialogueSpeaker(answer, 'Sir Cedric')

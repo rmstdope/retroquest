@@ -35,7 +35,7 @@ describe("The Innkeeper's Daughter log", () => {
   })
 
   it('records the cure order once Lyria has explained it', () => {
-    const game = playedTo('give healing herbs to master healer lyria')
+    const game = playedTo('use healing herbs with master healer lyria')
     const log =
       game.state.getQuest(QUEST_INNKEEPERS_DAUGHTER)?.description ?? ''
     expect(log).toMatch(/healing.*untouched water.*unbinding/s)

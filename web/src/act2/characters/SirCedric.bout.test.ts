@@ -280,7 +280,7 @@ describe('Giving Sir Cedric his training sword (rq-5cau)', () => {
   it('opens the recognition and the bout, as using the sword does', () => {
     const game = courtyardGame()
 
-    const answer = run(game, ['give training sword to sir cedric'])
+    const answer = run(game, ['use training sword with sir cedric'])
 
     expect(answer).not.toContain("doesn't seem interested")
     expect(answer).toContain('That notch by the guard.')
@@ -313,7 +313,7 @@ describe('Starting the bout before ever greeting Sir Cedric (rq-o4lr)', () => {
 
   it.each([
     'use training sword',
-    'give training sword to sir cedric',
+    'use training sword with sir cedric',
     'use training sword on sir cedric',
   ])(
     'plays his introduction and the sigil scene before the notch on "%s"',

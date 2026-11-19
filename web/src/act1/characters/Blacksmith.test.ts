@@ -45,7 +45,7 @@ describe('Borin sharpening the knife', () => {
       game.state.addItemToInventory(new Coin())
       game.state.addItemToInventory(new DullKnife())
 
-      const response = executeCommands(game, [`give ${given} to blacksmith`])
+      const response = executeCommands(game, [`use ${given} with blacksmith`])
 
       expect(plain(response)).toContain(TRADE)
       expect(game.state.hasItem('coin')).toBe(false)
@@ -59,7 +59,7 @@ describe('Borin sharpening the knife', () => {
     const game = gameAtForge()
     game.state.addItemToInventory(new DullKnife())
 
-    const response = executeCommands(game, ['give dull knife to blacksmith'])
+    const response = executeCommands(game, ['use dull knife with blacksmith'])
 
     expect(plain(response)).toContain(
       'Borin eyes the dull knife. That edge has seen better days. ' +
@@ -75,7 +75,7 @@ describe('Borin sharpening the knife', () => {
     const game = gameAtForge()
     game.state.addItemToInventory(new Coin())
 
-    const response = executeCommands(game, ['give coin to blacksmith'])
+    const response = executeCommands(game, ['use coin with blacksmith'])
 
     expect(response).toContain(
       'Bring the [item_name]dull knife[/item_name] as well.',
@@ -92,7 +92,7 @@ describe('Borin by his own name', () => {
       game.state.addItemToInventory(new Coin())
       game.state.addItemToInventory(new DullKnife())
 
-      executeCommands(game, [`give knife to ${name}`])
+      executeCommands(game, [`use knife with ${name}`])
 
       expect(game.state.hasItem('sharp knife')).toBe(true)
     },
@@ -122,7 +122,7 @@ describe('Borin as the act goes on', () => {
     const game = gameAtForge()
     game.state.addItemToInventory(new Coin())
     game.state.addItemToInventory(new DullKnife())
-    executeCommands(game, ['give coin to blacksmith'])
+    executeCommands(game, ['use coin with blacksmith'])
 
     const response = executeCommands(game, ['talk to blacksmith'])
 
@@ -146,7 +146,7 @@ describe('Borin as the act goes on', () => {
     const game = gameAtForge()
     game.state.addItemToInventory(new Coin())
     game.state.addItemToInventory(new DullKnife())
-    executeCommands(game, ['give coin to blacksmith'])
+    executeCommands(game, ['use coin with blacksmith'])
     seeTheDeer(game)
     game.state.setStoryFlag(FLAG_MAGIC_FULLY_UNLOCKED, true)
 
@@ -165,7 +165,7 @@ describe('Borin as the act goes on', () => {
     const game = gameAtForge()
     game.state.addItemToInventory(new Coin())
     game.state.addItemToInventory(new DullKnife())
-    executeCommands(game, ['give coin to blacksmith'])
+    executeCommands(game, ['use coin with blacksmith'])
     const afterKnife = executeCommands(game, ['talk to blacksmith'])
     seeTheDeer(game)
     const afterDeer = executeCommands(game, ['talk to blacksmith'])
@@ -181,7 +181,7 @@ describe('Borin as the act goes on', () => {
     const game = gameAtForge()
     game.state.addItemToInventory(new RuneToken())
 
-    const response = executeCommands(game, ['give rune token to blacksmith'])
+    const response = executeCommands(game, ['use rune token with blacksmith'])
 
     expect(response).toContain('not forged by any honest smith')
     expect(game.state.hasItem('rune token')).toBe(true)
@@ -193,7 +193,7 @@ describe('Borin as the act goes on', () => {
     game.state.addItemToInventory(new MillstoneFragment())
 
     const response = executeCommands(game, [
-      'give millstone fragment to blacksmith',
+      'use millstone fragment with blacksmith',
     ])
 
     expect(response).toContain('sit down, rest a while')
@@ -271,7 +271,7 @@ describe('Borin greets Elior only once, however they first meet (rq-gxur)', () =
   it('does not greet Elior as unseen after pricing his knife', () => {
     const game = freshAtForge()
     game.state.addItemToInventory(new DullKnife())
-    executeCommands(game, ['give dull knife to borin'])
+    executeCommands(game, ['use dull knife with borin'])
 
     const response = executeCommands(game, ['talk to borin'])
 
@@ -284,7 +284,7 @@ describe('Borin greets Elior only once, however they first meet (rq-gxur)', () =
     const game = freshAtForge()
     game.state.addItemToInventory(new Coin())
     game.state.addItemToInventory(new DullKnife())
-    executeCommands(game, ['give dull knife to borin'])
+    executeCommands(game, ['use dull knife with borin'])
 
     const response = executeCommands(game, ['talk to borin'])
 
@@ -295,7 +295,7 @@ describe('Borin greets Elior only once, however they first meet (rq-gxur)', () =
   it('does not greet Elior as unseen after taking the millstone fragment', () => {
     const game = freshAtForge()
     game.state.addItemToInventory(new MillstoneFragment())
-    executeCommands(game, ['give millstone fragment to borin'])
+    executeCommands(game, ['use millstone fragment with borin'])
 
     const response = executeCommands(game, ['talk to borin'])
 

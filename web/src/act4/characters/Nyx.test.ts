@@ -22,7 +22,7 @@ describe('Nyx at the hedge', () => {
     const game = home()
     expectItemInInventory(game.state, "Nyx's Token", true)
 
-    const given = executeCommands(game, ["give nyx's token to nyx"])
+    const given = executeCommands(game, ["use nyx's token with nyx"])
 
     expect(given).toContain('the two of them are gone into the hedge together')
     expectItemInInventory(game.state, "Nyx's Token", false)
@@ -35,8 +35,8 @@ describe('Nyx at the hedge', () => {
   it('takes the crystal into the hedge, and remembers both across a reload', () => {
     const game = home()
     executeCommands(game, [
-      "give nyx's token to nyx",
-      'give forest heart crystal to nyx',
+      "use nyx's token with nyx",
+      'use forest heart crystal with nyx',
     ])
     expectItemInInventory(game.state, 'Forest Heart Crystal', false)
     const loaded = new Game([new Act4()])
@@ -53,7 +53,7 @@ describe('Nyx at the hedge', () => {
 
   it('leaves anything else in your hand', () => {
     const game = home()
-    const out = executeCommands(game, ['give ancient amulet to nyx'])
+    const out = executeCommands(game, ['use ancient amulet with nyx'])
     expect(out).toContain('leaves it in your hand. It is yours.')
     expectItemInInventory(game.state, 'Ancient Amulet', true)
   })

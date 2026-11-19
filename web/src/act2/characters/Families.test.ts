@@ -18,7 +18,7 @@ function createGameAfterHelpingElders(): Game {
   const game = new Game([new Act2()])
   game.state.currentRoom = game.state.allRooms.ResidentialQuarter
   game.state.addItemToInventory(new WalkingStick())
-  game.commandParser.parse('give walking stick to families')
+  game.commandParser.parse('use walking stick with families')
   return game
 }
 
@@ -131,7 +131,7 @@ describe('Families and the mountain flower (selfless moment)', () => {
     game.state.currentRoom = game.state.allRooms.ResidentialQuarter
     game.state.addItemToInventory(new WalkingStick())
 
-    const answer = game.commandParser.parse('give walking stick to families')
+    const answer = game.commandParser.parse('use walking stick with families')
 
     expect(answer).toContain(
       'walks the length of the lane without touching the wall.',
@@ -143,7 +143,7 @@ describe('Families and the mountain flower (selfless moment)', () => {
     const game = createGameAfterHelpingElders()
     game.state.addItemToInventory(new MountainFlower())
 
-    const answer = game.commandParser.parse('give mountain flower to families')
+    const answer = game.commandParser.parse('use mountain flower with families')
 
     expect(answer).not.toContain('You give the')
     expect(answer).toContain('A little later a thin face appears at the window')
@@ -161,7 +161,7 @@ describe('Families and the mountain flower (selfless moment)', () => {
   it('drops the Wren line and adds nothing after the flower', () => {
     const game = createGameAfterHelpingElders()
     game.state.addItemToInventory(new MountainFlower())
-    game.commandParser.parse('give mountain flower to families')
+    game.commandParser.parse('use mountain flower with families')
 
     const answer = game.commandParser.parse('talk to families')
 
@@ -174,7 +174,7 @@ describe('Families and the mountain flower (selfless moment)', () => {
     game.state.currentRoom = game.state.allRooms.ResidentialQuarter
     game.state.addItemToInventory(new MountainFlower())
 
-    const answer = game.commandParser.parse('give mountain flower to families')
+    const answer = game.commandParser.parse('use mountain flower with families')
 
     expect(answer).not.toContain('You give the')
     expect(answer).toContain(
@@ -191,7 +191,7 @@ describe('Families and the mountain flower (selfless moment)', () => {
     game.state.addVirtue(VIRTUE_SELFLESS)
     game.state.addItemToInventory(new MountainFlower())
 
-    const answer = game.commandParser.parse('give mountain flower to families')
+    const answer = game.commandParser.parse('use mountain flower with families')
 
     expect(answer).toContain(REMEMBERED)
   })
@@ -246,7 +246,7 @@ describe('Families and the blight', () => {
     const game = createGameAfterHelpingElders()
     game.commandParser.parse('talk to families')
     game.state.addItemToInventory(new MountainFlower())
-    game.commandParser.parse('give mountain flower to families')
+    game.commandParser.parse('use mountain flower with families')
 
     const answer = game.commandParser.parse('talk to families')
 

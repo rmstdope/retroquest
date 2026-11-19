@@ -64,12 +64,12 @@ describe('The faded photograph quest', () => {
     expect(hint()).toMatch(/grandmother/i)
     hints.push(hint())
 
-    to('give faded photograph to grandmother')
+    to('use faded photograph with grandmother')
     expect(hint()).toMatch(/fisherman/)
     expect(hint()).toMatch(/Riverbank/)
     hints.push(hint())
 
-    to('give faded photograph to fisherman')
+    to('use faded photograph with fisherman')
     expect(hint()).toMatch(/smooth stone/)
     hints.push(hint())
 
@@ -90,7 +90,7 @@ describe('The faded photograph quest', () => {
   it('skips the grandmother stage when Elior goes straight to the fisherman, and adds nothing when he asks her later', () => {
     const game = new Game([new Act1()])
     const path = ACT1_GOLDEN_PATH.filter(
-      (command) => command !== 'give faded photograph to grandmother',
+      (command) => command !== 'use faded photograph with grandmother',
     )
     playPath(game, path, 0, pathIndex(path, 'take letter') + 1)
     const quest = game.state.activatedQuests.find(

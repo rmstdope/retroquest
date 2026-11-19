@@ -10,7 +10,7 @@
     {
         "after": 68,
         "commands": [
-            "give faded photograph to fisherman",
+            "use faded photograph with fisherman",
             "search",
             "take letter",
             "examine letter",
@@ -37,7 +37,7 @@
             "go west",
             "go west",
             "go north",
-            "give rare flower to mira",
+            "use rare flower with mira",
             "go south",
             "go east",
             "go south",
@@ -72,37 +72,37 @@
         "commands": ["talk to mira", "talk to mira"],
         "unset": ["investigated_withered_crops", "villager_talked_to", "well_examined"]
     },
-    { "after": 2, "commands": ["give bread to grandmother"] },
-    { "after": 8, "commands": ["give faded photograph to grandmother"] },
+    { "after": 2, "commands": ["use bread with grandmother"] },
+    { "after": 8, "commands": ["use faded photograph with grandmother"] },
     { "after": 23, "commands": ["use bucket on old notice"] },
     {
         "after": 30,
-        "commands": ["give faded photograph to blacksmith"]
+        "commands": ["use faded photograph with blacksmith"]
     },
     {
         "after": 12,
-        "commands": ["take knife", "go north", "go east", "go west", "go south", "go east", "go east", "talk to blacksmith", "give dull knife to blacksmith"]
+        "commands": ["take knife", "go north", "go east", "go west", "go south", "go east", "go east", "talk to blacksmith", "use dull knife with blacksmith"]
     },
     {
         "after": 13,
-        "commands": ["go north", "go east", "go west", "go south", "go east", "go east", "talk to blacksmith", "give coin to blacksmith"]
+        "commands": ["go north", "go east", "go west", "go south", "go east", "go east", "talk to blacksmith", "use coin with blacksmith"]
     },
-    { "after": 36, "commands": ["open mysterious box", "give egg to patches"] },
+    { "after": 36, "commands": ["open mysterious box", "use egg with patches"] },
     { "after": 39, "commands": ["use fishing rod on magnet"] },
     { "after": 41, "commands": ["use fishing rod on well"] },
     {
         "after": 45,
-        "commands": ["take healing herb", "take ancient amulet", "give rusty hoe to mira"]
+        "commands": ["take healing herb", "take ancient amulet", "use rusty hoe with mira"]
     },
     {
         "after": 48,
-        "commands": ["take sword", "take armor", "give rusty hoe to shopkeeper"]
+        "commands": ["take sword", "take armor", "use rusty hoe with shopkeeper"]
     },
     {
         "after": 67,
         "commands": ["take smooth stone", "use fishing rod on river"]
     },
-    { "after": 71, "commands": ["give faded photograph to fisherman"] },
+    { "after": 71, "commands": ["use faded photograph with fisherman"] },
     {
         "after": 76,
         "commands": ["take snare", "use sharp knife on snare"]
@@ -128,13 +128,13 @@
         "commands": ["cast heal on snare", "cast revive on bush"]
     },
     { "after": 121, "commands": ["cast grow"] },
-    { "after": 130, "commands": ["give wild berries to grandmother"] },
+    { "after": 130, "commands": ["use wild berries with grandmother"] },
     {
         "after": 136,
-        "commands": ["give rusty hoe to merchant", "give egg to merchant"]
+        "commands": ["use rusty hoe with merchant", "use egg with merchant"]
     },
     { "after": 141, "commands": ["cast grow on healing herb"] },
-    { "after": 142, "commands": ["give rune token to mira"] },
+    { "after": 142, "commands": ["use rune token with mira"] },
     { "after": 142, "without": ["travel cloak"], "commands": ["talk to mira"] },
     {
       "after": 142,
@@ -144,19 +144,19 @@
     { "after": 142, "without": ["map"], "commands": ["talk to mira"] },
     { "after": 142, "unlearn": ["grow"], "commands": ["talk to mira"] },
     { "after": 142, "unset": ["journey_bless_completed"], "commands": ["talk to mira"] },
-    {"after": 4, "commands": ["give lantern to grandmother", "buy rope from grandmother"]},
-    {"after": 22, "commands": ["give lantern to tilda", "buy rope from tilda"]},
-    {"after": 36, "commands": ["give lantern to patches"]},
-    {"after": 86, "commands": ["give lantern to blacksmith", "buy rope from blacksmith"]},
+    {"after": 4, "commands": ["use lantern with grandmother", "buy rope from grandmother"]},
+    {"after": 22, "commands": ["use lantern with tilda", "buy rope from tilda"]},
+    {"after": 36, "commands": ["use lantern with patches"]},
+    {"after": 86, "commands": ["use lantern with blacksmith", "buy rope from blacksmith"]},
     {"after": 95, "commands": ["buy rope from patches", "buy dragon from shopkeeper", "buy rope from shopkeeper"]},
-    {"after": 97, "commands": ["buy rope from mira", "give lantern to mira"]},
+    {"after": 97, "commands": ["buy rope from mira", "use lantern with mira"]},
     {"after": 98, "commands": ["cast bless on mira", "cast heal on mira", "cast purify on mira"]},
     {"after": 99, "commands": ["cast bless on tilda", "cast heal on tilda", "cast purify on tilda", "go east", "cast bless on patches", "cast heal on patches", "cast purify on patches", "cast bless on shopkeeper", "cast heal on shopkeeper", "cast purify on shopkeeper", "go south", "cast bless on blacksmith", "cast heal on blacksmith", "cast purify on blacksmith"]},
     {"after": 100, "commands": ["cast bless on grandmother", "cast heal on grandmother", "cast purify on grandmother"]},
-    {"after": 118, "commands": ["give lantern to fisherman", "buy rope from fisherman", "cast bless on fisherman", "cast heal on fisherman", "cast purify on fisherman"]},
-    {"after": 120, "commands": ["give lantern to deer", "buy rope from deer", "cast bless on deer", "cast heal on deer", "cast purify on deer"]},
-    {"after": 134, "commands": ["give lantern to priest", "buy rope from priest", "cast bless on priest", "cast heal on priest", "cast purify on priest"]},
-    {"after": 136, "commands": ["give lantern to merchant", "buy rope from merchant", "cast bless on merchant", "cast heal on merchant", "cast purify on merchant"]},
+    {"after": 118, "commands": ["use lantern with fisherman", "buy rope from fisherman", "cast bless on fisherman", "cast heal on fisherman", "cast purify on fisherman"]},
+    {"after": 120, "commands": ["use lantern with deer", "buy rope from deer", "cast bless on deer", "cast heal on deer", "cast purify on deer"]},
+    {"after": 134, "commands": ["use lantern with priest", "buy rope from priest", "cast bless on priest", "cast heal on priest", "cast purify on priest"]},
+    {"after": 136, "commands": ["use lantern with merchant", "buy rope from merchant", "cast bless on merchant", "cast heal on merchant", "cast purify on merchant"]},
     {
         "after": -1,
         "commands": ["go north", "talk to xyz"]
@@ -195,7 +195,7 @@
     },
     {
         "after": 72,
-        "commands": ["give faded photograph to fisherman"]
+        "commands": ["use faded photograph with fisherman"]
     },
     {
         "after": 98,
@@ -233,10 +233,10 @@
     {"after": 14, "commands": ["take carrot"]},
     {"after": -1, "commands": ["say hello to voice"]},
     {"after": 37, "commands": ["go north", "go west", "go north", "say stay to grandmother"]},
-    {"after": 74, "commands": ["give mother's letter to fisherman"]},
-    {"after": 98, "commands": ["give mother's letter to mira", "give faded photograph to mira"]},
-    {"after": 131, "commands": ["give shiny ring to grandmother", "give mother's letter to grandmother", "give travel cloak to grandmother"]},
-    {"after": 143, "commands": ["give mother's letter to mira"]},
+    {"after": 74, "commands": ["use mother's letter with fisherman"]},
+    {"after": 98, "commands": ["use mother's letter with mira", "use faded photograph with mira"]},
+    {"after": 131, "commands": ["use shiny ring with grandmother", "use mother's letter with grandmother", "use travel cloak with grandmother"]},
+    {"after": 143, "commands": ["use mother's letter with mira"]},
     {"after": 76, "commands": ["take snare", "use sharp knife on snare", "go north", "go west", "go north", "go north", "go west", "go north", "go east", "go north", "talk to mira"]},
     {"after": 98, "commands": ["go south", "go west", "go south", "go east", "go east", "talk to blacksmith"]},
     {"after": 114, "commands": ["use bucket on well", "go west", "use bucket", "examine crops", "examine earth", "use bucket"]},
@@ -247,29 +247,29 @@
     {"after": 57, "commands": ["use fishing rod with mechanism", "use sharp knife with mechanism"]},
     {"after": 75, "commands": ["go north", "go west", "go north", "go north", "go east", "go north", "go east", "go east", "take rusty saw", "go west", "go west", "go south", "go west", "go south", "go south", "go east", "go south", "use rusty saw with vines"]},
     {"after": 89, "commands": ["use lantern with dark corner"]},
-    {"after": 141, "commands": ["talk to mira", "give rune token to mira"]},
+    {"after": 141, "commands": ["talk to mira", "use rune token with mira"]},
     {"after": 144, "commands": ["go south", "go west", "talk to grandmother", "go south", "go east", "go south", "go south", "examine ancient amulet", "go east", "go south", "go south", "examine ancient amulet"]},
     {"after": 90, "commands": ["talk to shopkeeper", "take matches"], "unset": ["patches_found", "patches_returned"]},
     {"after": 16, "commands": ["use dull knife with rafter", "use lantern with rafter"]},
     {"after": 57, "commands": ["use magnet with mechanism", "use sharp knife with gears"]},
     {"after": 92, "commands": ["use matches with dark corner"]},
-    {"after": 21, "commands": ["give coin to grandmother"]},
-    {"after": 52, "commands": ["give coin to hemlock", "go east", "go east", "give coin to merchant"]},
-    {"after": 69, "commands": ["go west", "go north", "go north", "go west", "go north", "give fish to grandmother"]},
-    {"after": 85, "commands": ["go west", "go north", "give rare flower to grandmother"]},
-    {"after": 118, "commands": ["give rune token to fisherman"]},
-    {"after": 130, "commands": ["give rune token to grandmother"]},
-    {"after": 132, "commands": ["give rune token to tilda"]},
-    {"after": 133, "commands": ["give rune token to hemlock"]},
-    {"after": 134, "commands": ["give rune token to priest"]},
-    {"after": 136, "commands": ["give rune token to merchant"]},
-    {"after": 143, "commands": ["go south", "go west", "give ancient amulet to grandmother"]},
-    {"after": 143, "commands": ["go south", "give ancient amulet to tilda", "go east", "give ancient amulet to hemlock", "go east", "give ancient amulet to priest", "go east", "give ancient amulet to merchant", "go west", "go west", "go south", "go west", "go south", "go south", "go east", "give ancient amulet to fisherman"]},
-    {"after": 92, "commands": ["give matches to priest"]},
-    {"after": 93, "commands": ["give matches to priest"]},
-    {"after": 131, "commands": ["give shiny ring to grandmother", "go east", "go east", "go east", "cast bless", "go east", "give shiny ring to merchant", "go west", "go west", "go west", "go north", "give rune token to mira", "talk to mira", "go south", "go east", "go east", "go east", "use map"]},
-    {"after": 31, "commands": ["take horseshoe", "give coin to blacksmith", "go west", "go south", "search", "use key with door", "talk to patches", "search", "take fishing rod", "take magnet", "go north", "go west", "go north", "go east", "go north", "talk to mira", "go south", "go east", "take apple", "take rope", "take matches", "talk to shopkeeper", "buy rope from shopkeeper", "go south", "go west", "go south", "go south", "use rope with mechanism", "take millstone fragment", "go north", "go north", "go east", "give millstone fragment to blacksmith", "go west", "go south", "go south", "go east", "talk to fisherman", "use fishing rod with river", "give fish to fisherman", "give faded photograph to fisherman", "search", "take letter", "examine letter", "go south", "use sharp knife with vines", "take stick", "go south", "rest", "take rare flower", "go north", "go north", "go west", "go north", "go north", "go east", "go north", "go east", "talk to priest", "go west", "talk to shopkeeper", "go east", "use candle with matches", "take locket", "go west", "go west", "go north", "give rare flower to mira", "go south", "go west", "go south", "go east", "go south", "cast unlock on mysterious box", "open mysterious box", "go north", "go west", "cast revive on Withered carrot", "take carrot", "go east", "use fishing rod with magnet", "use magnetic fishing rod with stick", "use extended magnetic fishing rod with well", "cast purify on well", "use extended magnetic fishing rod with well", "go south", "go south", "go east", "go south", "go south", "cast light", "go north", "cast grow on bush", "take wild berries", "go north", "go west", "go north", "go north", "go west", "go north", "give locket to grandmother", "give shiny ring to grandmother", "go east", "go east", "go east", "cast bless", "go east", "give horseshoe to merchant", "go west", "go west", "go west", "go north", "give rune token to mira", "talk to mira", "go south", "go east", "go east", "go east", "use map"]},
-    {"after": 31, "commands": ["take horseshoe", "give coin to blacksmith", "go west", "go south", "search", "use key with door", "talk to patches", "search", "take fishing rod", "take magnet", "go north", "go west", "go north", "go east", "go north", "talk to mira", "go south", "go east", "take apple", "take rope", "take matches", "talk to shopkeeper", "buy rope from shopkeeper", "go south", "go west", "go south", "go south", "use rope with mechanism", "take millstone fragment", "go north", "go north", "go east", "give millstone fragment to blacksmith", "go west", "go south", "go south", "go east", "talk to fisherman", "use fishing rod with river", "give fish to fisherman", "give faded photograph to fisherman", "search", "take letter", "examine letter", "go south", "use sharp knife with vines", "take stick", "go south", "rest", "take rare flower", "go north", "go north", "go west", "go north", "go north", "go east", "go north", "go east", "talk to priest", "go west", "talk to shopkeeper", "go east", "use candle with matches", "take locket", "go west", "go west", "go north", "give rare flower to mira", "go south", "go west", "go south", "go east", "go south", "cast unlock on mysterious box", "open mysterious box", "go north", "go west", "cast revive on Withered carrot", "take carrot", "go east", "use fishing rod with magnet", "use magnetic fishing rod with stick", "use extended magnetic fishing rod with well", "cast purify on well", "use extended magnetic fishing rod with well", "go south", "go south", "go east", "go south", "go south", "cast light", "go north", "cast grow on bush", "take wild berries", "go north", "go west", "go north", "go north", "go west", "go north", "give locket to grandmother", "go east", "go east", "go east", "cast bless", "go east", "give horseshoe to merchant", "go west", "go west", "go west", "go north", "give rune token to mira", "talk to mira", "go south", "go east", "go east", "go east", "use map"]},
+    {"after": 21, "commands": ["use coin with grandmother"]},
+    {"after": 52, "commands": ["use coin with hemlock", "go east", "go east", "use coin with merchant"]},
+    {"after": 69, "commands": ["go west", "go north", "go north", "go west", "go north", "use fish with grandmother"]},
+    {"after": 85, "commands": ["go west", "go north", "use rare flower with grandmother"]},
+    {"after": 118, "commands": ["use rune token with fisherman"]},
+    {"after": 130, "commands": ["use rune token with grandmother"]},
+    {"after": 132, "commands": ["use rune token with tilda"]},
+    {"after": 133, "commands": ["use rune token with hemlock"]},
+    {"after": 134, "commands": ["use rune token with priest"]},
+    {"after": 136, "commands": ["use rune token with merchant"]},
+    {"after": 143, "commands": ["go south", "go west", "use ancient amulet with grandmother"]},
+    {"after": 143, "commands": ["go south", "use ancient amulet with tilda", "go east", "use ancient amulet with hemlock", "go east", "use ancient amulet with priest", "go east", "use ancient amulet with merchant", "go west", "go west", "go south", "go west", "go south", "go south", "go east", "use ancient amulet with fisherman"]},
+    {"after": 92, "commands": ["use matches with priest"]},
+    {"after": 93, "commands": ["use matches with priest"]},
+    {"after": 131, "commands": ["use shiny ring with grandmother", "go east", "go east", "go east", "cast bless", "go east", "use shiny ring with merchant", "go west", "go west", "go west", "go north", "use rune token with mira", "talk to mira", "go south", "go east", "go east", "go east", "use map"]},
+    {"after": 31, "commands": ["take horseshoe", "use coin with blacksmith", "go west", "go south", "search", "use key with door", "talk to patches", "search", "take fishing rod", "take magnet", "go north", "go west", "go north", "go east", "go north", "talk to mira", "go south", "go east", "take apple", "take rope", "take matches", "talk to shopkeeper", "buy rope from shopkeeper", "go south", "go west", "go south", "go south", "use rope with mechanism", "take millstone fragment", "go north", "go north", "go east", "use millstone fragment with blacksmith", "go west", "go south", "go south", "go east", "talk to fisherman", "use fishing rod with river", "use fish with fisherman", "use faded photograph with fisherman", "search", "take letter", "examine letter", "go south", "use sharp knife with vines", "take stick", "go south", "rest", "take rare flower", "go north", "go north", "go west", "go north", "go north", "go east", "go north", "go east", "talk to priest", "go west", "talk to shopkeeper", "go east", "use candle with matches", "take locket", "go west", "go west", "go north", "use rare flower with mira", "go south", "go west", "go south", "go east", "go south", "cast unlock on mysterious box", "open mysterious box", "go north", "go west", "cast revive on Withered carrot", "take carrot", "go east", "use fishing rod with magnet", "use magnetic fishing rod with stick", "use extended magnetic fishing rod with well", "cast purify on well", "use extended magnetic fishing rod with well", "go south", "go south", "go east", "go south", "go south", "cast light", "go north", "cast grow on bush", "take wild berries", "go north", "go west", "go north", "go north", "go west", "go north", "use locket with grandmother", "use shiny ring with grandmother", "go east", "go east", "go east", "cast bless", "go east", "use horseshoe with merchant", "go west", "go west", "go west", "go north", "use rune token with mira", "talk to mira", "go south", "go east", "go east", "go east", "use map"]},
+    {"after": 31, "commands": ["take horseshoe", "use coin with blacksmith", "go west", "go south", "search", "use key with door", "talk to patches", "search", "take fishing rod", "take magnet", "go north", "go west", "go north", "go east", "go north", "talk to mira", "go south", "go east", "take apple", "take rope", "take matches", "talk to shopkeeper", "buy rope from shopkeeper", "go south", "go west", "go south", "go south", "use rope with mechanism", "take millstone fragment", "go north", "go north", "go east", "use millstone fragment with blacksmith", "go west", "go south", "go south", "go east", "talk to fisherman", "use fishing rod with river", "use fish with fisherman", "use faded photograph with fisherman", "search", "take letter", "examine letter", "go south", "use sharp knife with vines", "take stick", "go south", "rest", "take rare flower", "go north", "go north", "go west", "go north", "go north", "go east", "go north", "go east", "talk to priest", "go west", "talk to shopkeeper", "go east", "use candle with matches", "take locket", "go west", "go west", "go north", "use rare flower with mira", "go south", "go west", "go south", "go east", "go south", "cast unlock on mysterious box", "open mysterious box", "go north", "go west", "cast revive on Withered carrot", "take carrot", "go east", "use fishing rod with magnet", "use magnetic fishing rod with stick", "use extended magnetic fishing rod with well", "cast purify on well", "use extended magnetic fishing rod with well", "go south", "go south", "go east", "go south", "go south", "cast light", "go north", "cast grow on bush", "take wild berries", "go north", "go west", "go north", "go north", "go west", "go north", "use locket with grandmother", "go east", "go east", "go east", "cast bless", "go east", "use horseshoe with merchant", "go west", "go west", "go west", "go north", "use rune token with mira", "talk to mira", "go south", "go east", "go east", "go east", "use map"]},
     {"after": 92, "commands": ["use lantern with candle"]},
     {"after": 77, "commands": ["use stick with fishing rod"]},
     {"after": 79, "commands": ["use lantern with mossy stone"]},

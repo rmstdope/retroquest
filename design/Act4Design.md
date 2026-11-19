@@ -473,7 +473,7 @@ The air is quiet.
 
 #### Characters
 
--   Grandmother, Mira, Sir Cedric, Nyx's light in the hedge (companions who remain close). Nyx cannot speak here, but she takes back her two gifts from Act II if Elior offers them (`give nyx's token to nyx`, `give forest heart crystal to nyx`): the pendant goes into the hedge with the light, the crystal is set among the roots and its lights pass into hers. Optional; nothing gates on it.
+-   Grandmother, Mira, Sir Cedric, Nyx's light in the hedge (companions who remain close). Nyx cannot speak here, but she takes back her two gifts from Act II if Elior offers them (`use nyx's token with nyx`, `use forest heart crystal with nyx`): the pendant goes into the hedge with the light, the crystal is set among the roots and its lights pass into hers. Optional; nothing gates on it.
 
 #### Exits
 
@@ -612,7 +612,7 @@ and changes a few lines of dialogue.
 
 | Where                                   | The choice                                                              | Records     |
 | --------------------------------------- | ----------------------------------------------------------------------- | ----------- |
-| Outer Courtyard, Captain of the Guard   | Give the freed captain the Guardian's Chain so he can walk home through the fortress (`give guardian's chain to captain`); Elior then faces the knight with the Loyalty Token instead | **selfless** |
+| Outer Courtyard, Captain of the Guard   | Give the freed captain the Guardian's Chain so he can walk home through the fortress (`use guardian's chain with captain`); Elior then faces the knight with the Loyalty Token instead | **selfless** |
 | Mirror Labyrinth, The True Self         | Tell the reflection the truth about Elior's fear (`say truth to true self`) | **truth**   |
 | Hall of Echoes, Ghostly Warriors        | Cast `redemptions_light` on the ghostly warriors and let them rest      | **mercy**   |
 
@@ -631,7 +631,7 @@ Other optional moments gate nothing. The sights and hearts repeat their line eac
     ("Not like this.") and holding out the Lifelight Elixir makes him reach for it and stop.
     Neither costs anything. The refrain said before he has spoken makes him laugh and say "Not yet", and he
     makes his offer then.
--   **The Bargain:** after his offer and before the refrain, `give ancient amulet to malakar`
+-   **The Bargain:** after his offer and before the refrain, `use ancient amulet with malakar` (the first time; the next uses are the early-amulet burn)
     accepts it. The wound yawns, a vision of Aren and Lysa young at the workbench shows, the
     Shadow says "Not like this. Not by force.", the amulet will not break and Malakar is thrown
     against the throne. Malakar: "You saw. Then you know I was not lying." Lysa then adds a
@@ -730,7 +730,7 @@ where they would occur. The `examine` and `talk to` steps below that `ACT4_GOLDE
     - `cast bless on servants`
         - Quest completed: "The Trapped Servants"
     - `take servant's pendant` (the freed servants leave it behind)
-    - Optional (**selfless**): `give guardian's chain to captain of the guard`
+    - Optional (**selfless**): `use guardian's chain with captain of the guard`
     - `talk to freed servants` → "The mirrors show truth, but only echoes from the halls can reveal
       the full path."
 

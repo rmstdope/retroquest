@@ -4,7 +4,6 @@ import { Act2 } from '@/act2/Act2'
 import { Act3 } from '@/act3/Act3'
 import { Act4 } from '@/act4/Act4'
 import type { Act } from './Act'
-import { Character } from './Character'
 import type { CompletionTree } from './Game'
 import { Game } from './Game'
 import { DIRECTIONS, SHORT_DIRECTIONS, VERB_FORMS } from './Grammar'
@@ -76,13 +75,11 @@ describe('the suggestion list holds everything the parser accepts', () => {
           for (const name of item.allNames()) {
             const words = name.split(' ')
             for (const [verb, join] of [
-              ['give', 'to'],
               ['use', 'with'],
               ['use', 'on'],
             ]) {
               if (target === undefined) continue
               const targetName = target.allNames()[0].split(' ')
-              if (verb === 'give' && !(target instanceof Character)) continue
               if (!offers(joined, [verb, ...words, join, ...targetName]))
                 missing.push(`${verb} ${name} ${join} ${targetName.join(' ')}`)
             }
