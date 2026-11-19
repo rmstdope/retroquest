@@ -4,10 +4,15 @@ import { Game, GameController } from '@/engine'
 import { Act1 } from '../Act1'
 import { executeCommands } from '@/testing/gameHelpers'
 
-/** The sentence of the cottage's room card that names Grandmother. */
-function grandmotherSentence(): string {
+/** A new Act I game standing in Elior's Cottage. */
+function inCottage(): Game {
   const game = new Game([new Act1()])
   game.state.currentRoom = game.state.allRooms.EliorsCottage
+  return game
+}
+
+/** The sentence of the cottage's room card that names Grandmother. */
+function grandmotherSentence(game: Game = inCottage()): string {
   const text = new GameController(game).getRoomDescription()
   const sentence = text
     .split(/(?<=[.!?])\s+/)
@@ -77,10 +82,7 @@ describe("Elior's Cottage bread", () => {
   it('leaves Grandmother watching no bread once Elior has taken it', () => {
     const game = cottage()
     executeCommands(game, ['take bread'])
-    const text = new GameController(game).getRoomDescription()
-    const sentence = text
-      .split(/(?<=[.!?])\s+/)
-      .find((s) => s.includes('Grandmother'))
+    const sentence = grandmotherSentence(game)
     expect(sentence).toMatch(/stands by it, humming/)
     expect(sentence).not.toMatch(/bread|loaf/i)
   })
