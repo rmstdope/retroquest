@@ -456,6 +456,31 @@ describe('LanternLayout: the belt of pictures', () => {
     expect(w.get('.lq-belt-caption').text()).toContain('Bread')
   })
 
+  it('raises no caption when the ring goes from under a still mouse, only once the mouse moves on the picture', async () => {
+    await cottage()
+    await click(tile('item:bread').element)
+    await coin('examine').trigger('click')
+    await flushPromises()
+    const mouse = (type: string, movementX = 0): PointerEvent =>
+      new PointerEvent(type, { pointerType: 'mouse', movementX })
+    tile('item:bread').element.dispatchEvent(mouse('pointerenter'))
+    tile('item:bread').element.dispatchEvent(mouse('pointermove'))
+    await flushPromises()
+    expect(w.find('.lq-belt-caption').exists()).toBe(false)
+    tile('item:bread').element.dispatchEvent(mouse('pointermove', 3))
+    await flushPromises()
+    expect(w.get('.lq-belt-caption').text()).toContain('Bread')
+  })
+
+  it('drops the caption when what is in hand is sent, focus back on its picture', async () => {
+    await cottage()
+    await takeBreadIn('give')
+    await click(hit('grandmother').element)
+    await flushPromises()
+    expect(document.activeElement).toBe(tile('item:bread').element)
+    expect(w.find('.lq-belt-caption').exists()).toBe(false)
+  })
+
   it('fans the spells known for Cast on… on a carried thing', async () => {
     const store = await cottage()
     carryMore(store)

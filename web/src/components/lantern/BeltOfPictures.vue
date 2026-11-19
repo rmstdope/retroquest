@@ -25,7 +25,9 @@ import { beltPictures, type BeltList, type BeltPicture } from '@/lantern/belt'
  * what it does is the layout's. The picture in hand stays lit. A caption for
  * the picture pointed at (a mouse resting on it), focused, held down by a
  * finger for a moment, or `captionFor` (the one whose ring is open) is told
- * to the layout, which draws it above the strap and the words. The list
+ * to the layout, which draws it above the strap and the words; a picture
+ * focused quietly (`focusPicture`, after a command from its ring) shows none,
+ * nor does a mouse left resting there until it moves. The list
  * showing counts as seen, so the amber dot only sits on the stud of the list
  * not showing, and on both while the strap is folded. Which list and whether
  * it is folded are the belt store's, remembered on this device.
@@ -204,8 +206,9 @@ function onPicDown(key: string, event: PointerEvent): void {
   }, HOLD_MS)
 }
 
-/** The finger drifted: a swipe, not a hold. */
-function onPicMove(event: PointerEvent): void {
+/** The finger drifted: a swipe, not a hold. A mouse that really moves also ends a hover hush. */
+function onPicMove(event: PointerEvent, key: string): void {
+  endHoverHush(key, event)
   if (!holdFrom || held.value) return
   if (
     Math.hypot(event.clientX - holdFrom.x, event.clientY - holdFrom.y) >
@@ -228,9 +231,26 @@ function onPicMenu(event: Event): void {
   if (holdFrom || held.value) event.preventDefault()
 }
 
-/** A mouse or pen resting on a picture points at it; a touch does not (a tap opens its ring). */
+/** The picture `focusPicture` is focusing quietly: that focus shows no caption. */
+let quietFocus: string | null = null
+/**
+ * After a quiet focus, a mouse that rests where the ring was shows no caption
+ * either (the ring going is no pointing); the first real move on a picture
+ * ends the hush.
+ */
+let hoverHushed = false
+
+/** A mouse or pen resting on a picture points at it; a touch does not (a tap opens its ring), nor a mouse still hushed by a quiet focus. */
 function onPicEnter(key: string, event: PointerEvent): void {
-  if (event.pointerType !== 'touch') pointed.value = key
+  if (event.pointerType !== 'touch' && !hoverHushed) pointed.value = key
+}
+
+/** A mouse or pen that really moves on a picture ends the hush and points at it; the browser's still moves (after the ring goes) do not. */
+function endHoverHush(key: string, event: PointerEvent): void {
+  if (!hoverHushed || event.pointerType === 'touch') return
+  if (event.movementX === 0 && event.movementY === 0) return
+  hoverHushed = false
+  pointed.value = key
 }
 
 /** The tiles in the strip, left to right. */
@@ -239,9 +259,6 @@ function tiles(): HTMLElement[] {
     ...(strip.value?.querySelectorAll<HTMLElement>('[data-belt-pic]') ?? []),
   ]
 }
-
-/** The picture `focusPicture` is focusing quietly: that focus shows no caption. */
-let quietFocus: string | null = null
 
 /**
  * Focus a picture (the first when no key is given) and scroll it into view.
@@ -254,6 +271,10 @@ async function focusPicture(key?: string, quiet = false): Promise<void> {
   const all = tiles()
   const el = key ? all.find((t) => t.dataset.beltPic === key) : all[0]
   quietFocus = quiet ? (el?.dataset.beltPic ?? null) : null
+  if (quiet) {
+    hoverHushed = true
+    pointed.value = null
+  }
   el?.focus()
   quietFocus = null
   el?.scrollIntoView?.({ block: 'nearest', inline: 'nearest' })
@@ -368,7 +389,7 @@ watch(phase, async () => {
   measureScroll()
 })
 
-/** Focus the first picture, the stud of the list showing when none is carried. */
+/** Focus the first picture, the stud of the list showing when none is carried; `quiet` as for `focusPicture`. */
 async function focusBelt(quiet = false): Promise<void> {
   await nextTick()
   if (pictures.value.length) return focusPicture(undefined, quiet)
@@ -520,7 +541,7 @@ defineExpose({ focusBelt, focusPicture, has, root })
               @pointerenter="onPicEnter(picture.key, $event)"
               @pointerleave="pointed = null"
               @pointerdown="onPicDown(picture.key, $event)"
-              @pointermove="onPicMove"
+              @pointermove="onPicMove($event, picture.key)"
               @pointerup="endHold"
               @pointercancel="endHold"
               @contextmenu="onPicMenu"
