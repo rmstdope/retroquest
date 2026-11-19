@@ -67,10 +67,10 @@ describe('SettingsDialog from the keyboard', () => {
     expect(ringed()).toBe('theme')
   })
 
-  it('goes round 6 stops (7 with full screen), skipping the headings', async () => {
+  it('goes round 7 stops (8 with full screen), skipping the headings', async () => {
     await open()
     const seen = [ringed()]
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 6; i++) {
       press('ArrowDown')
       seen.push(ringed())
     }
@@ -79,6 +79,7 @@ describe('SettingsDialog from the keyboard', () => {
       'textSize',
       'musicVolume',
       'effectsVolume',
+      'menuClicks',
       'narrationVolume',
       'reduceMotion',
     ])
@@ -86,7 +87,7 @@ describe('SettingsDialog from the keyboard', () => {
     expect(ringed()).toBe('theme')
     press('ArrowUp')
     expect(ringed()).toBe('reduceMotion')
-    expect(sounds.move).toHaveBeenCalledTimes(7)
+    expect(sounds.move).toHaveBeenCalledTimes(8)
   })
 
   it('has a Full screen stop between Text size and Music volume where it works', async () => {
@@ -138,6 +139,43 @@ describe('SettingsDialog from the keyboard', () => {
     const calls = sounds.move.mock.calls.length
     press('ArrowLeft')
     expect(sounds.move.mock.calls.length).toBe(calls)
+  })
+
+  it('Menu clicks is a switch: on plays one latch, off is silent', async () => {
+    await open()
+    const settings = useSettingsStore()
+    const w = wrapper as VueWrapper
+    const row = w.get<HTMLElement>('[data-stop="menuClicks"]')
+    row.element.focus()
+    expect(ringed()).toBe('menuClicks')
+    sounds.choose.mockClear()
+    press('Enter')
+    expect(settings.menuClicks).toBe(false)
+    expect(sounds.choose).not.toHaveBeenCalled()
+    press(' ')
+    expect(settings.menuClicks).toBe(true)
+    expect(sounds.choose).toHaveBeenCalledTimes(1)
+    const toggle = w.get('[role="switch"][aria-label="Menu clicks"]')
+    await toggle.trigger('click')
+    expect(settings.menuClicks).toBe(false)
+    expect(sounds.choose).toHaveBeenCalledTimes(1)
+  })
+
+  it('Menu clicks sits after the Sound effects volume and before Narration, in the agreed words', async () => {
+    const w = await open()
+    const stops = w
+      .findAll('[data-stop]')
+      .map((el) => el.attributes('data-stop'))
+    expect(stops.indexOf('menuClicks')).toBe(stops.indexOf('effectsVolume') + 1)
+    expect(stops.indexOf('narrationVolume')).toBe(
+      stops.indexOf('menuClicks') + 1,
+    )
+    const row = w.get('[data-stop="menuClicks"]')
+    expect(row.get('.lq-row-label').text()).toBe('Menu clicks')
+    expect(row.get('.lq-note').text()).toBe(
+      'The tick and latch as you move through the menus',
+    )
+    expect(row.get('[role="switch"]').attributes('aria-checked')).toBe('true')
   })
 
   it('Enter, Space and the sideways arrows flip a switch, with the latch', async () => {

@@ -5,10 +5,11 @@ import { GENERATED_EFFECTS_PATH, loadChosenEffects } from './chosenEffects'
 import type { ChosenManifest } from './chosenMusic'
 
 /**
- * Composable for the interface's own sound effects (the title page's ring move
- * and choose sounds): the takes chosen in Content Studio's Sound effects
- * workspace, played at the player's effects volume. An effect with no chosen
- * take is silent.
+ * Composable for the interface's own sound effects (the ring move and choose
+ * sounds of the title page and the menus): the takes chosen in Content
+ * Studio's Sound effects workspace, played at the player's effects volume. An effect with no chosen
+ * take is silent, and so is every effect while the player's Menu clicks
+ * setting is off.
  */
 export function useUiSounds(
   audioFactory: AudioFactory = (src) => new Audio(src),
@@ -24,7 +25,7 @@ export function useUiSounds(
 
   /** Play the take chosen for `id`, if any. */
   function play(id: string): void {
-    if (!Object.hasOwn(takes, id)) return
+    if (!settings.menuClicks || !Object.hasOwn(takes, id)) return
     const audio = audioFactory(GENERATED_EFFECTS_PATH + takes[id].file)
     audio.volume = settings.effectsVolume / 100
     audio.muted = settings.effectsVolume === 0

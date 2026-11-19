@@ -11,8 +11,9 @@ import type { KeyHint } from './KeyLine.vue'
 
 /**
  * The player's settings, saved in this browser: theme and text size, music,
- * sound effects and narration (on/off and volume), how the actions start, and reduce
- * motion (which follows the device until it is changed here). Full screen is a
+ * sound effects and narration (on/off and volume), the Menu clicks switch
+ * (the tick and latch of the menus, after the Sound effects volume), how the
+ * actions start, and reduce motion (which follows the device until it is changed here). Full screen is a
  * switch at the end of Appearance (left out where the browser cannot do it,
  * with a line about the F key for a keyboard only).
  *
@@ -50,7 +51,7 @@ const KEYS: KeyHint[] = [
   { keys: ['Esc'], word: 'back' },
 ]
 /** The rows that are switches. */
-const SWITCHES = ['fullscreen', 'reduceMotion']
+const SWITCHES = ['fullscreen', 'reduceMotion', 'menuClicks']
 /** A volume moves this much for each ← or →. */
 const VOLUME_STEP = 5
 
@@ -69,8 +70,13 @@ const fullscreen = useFullscreen()
 const keyboardPlayer = useMediaQuery(KEYBOARD_QUERY)
 const motionReduced = useReducedMotion()
 
-/** Flip a switch row, with the latch. */
+/** Flip a switch row, with the latch (Menu clicks only when it comes on). */
 function flip(kind: string): void {
+  if (kind === 'menuClicks') {
+    settings.menuClicks = !settings.menuClicks
+    if (settings.menuClicks) ring.choose()
+    return
+  }
   ring.choose()
   if (kind === 'fullscreen') fullscreen.toggle()
   else if (kind === 'reduceMotion')
@@ -317,6 +323,29 @@ function volume(event: Event): number {
           />
           <span class="lq-volume-num">{{ settings.effectsVolume }}</span>
         </label>
+        <div
+          class="lq-row lq-stop"
+          data-ring="within"
+          data-stop="menuClicks"
+          tabindex="-1"
+        >
+          <span class="lq-row-text"
+            ><span class="lq-row-label">Menu clicks</span
+            ><span class="lq-note"
+              >The tick and latch as you move through the menus</span
+            ></span
+          >
+          <button
+            type="button"
+            role="switch"
+            class="lq-switch"
+            aria-label="Menu clicks"
+            :aria-checked="settings.menuClicks ? 'true' : 'false'"
+            @click="flip('menuClicks')"
+          >
+            <span class="lq-knob"></span>
+          </button>
+        </div>
         <div class="lq-row">
           <span class="lq-row-text"
             ><span class="lq-row-label">Narration</span

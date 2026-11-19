@@ -72,4 +72,18 @@ describe('useUiSounds', () => {
     expect(none.made).toEqual([])
     expect(broken.made).toEqual([])
   })
+
+  it('is silent while Menu clicks is off, and plays again when it is on', async () => {
+    const { made, factory } = player()
+    const settings = useSettingsStore()
+    const sounds = useUiSounds(factory, () => Promise.resolve(TAKES))
+    await flushPromises()
+    settings.menuClicks = false
+    sounds.playMove()
+    sounds.playChoose()
+    expect(made).toEqual([])
+    settings.menuClicks = true
+    sounds.playChoose()
+    expect(made).toHaveLength(1)
+  })
 })
