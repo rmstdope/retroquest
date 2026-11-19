@@ -66,6 +66,12 @@ test('the picture, the interface and the story cannot be selected', async ({
   expect(await selectionShows(page), 'triple-click on the page').toBe(false)
 })
 
+/**
+ * Typing, selecting and editing in the command box still work. Chromium keeps
+ * an input selectable even under a `user-select: none` page, so this guards
+ * the typing in CI; the base stylesheet's `user-select: text` on inputs is for
+ * WebKit (Safari), which CI does not run.
+ */
 test('the command box still takes typing and editing', async ({ page }) => {
   await start(page)
   await enterCommand(page, 'look')
