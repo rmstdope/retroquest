@@ -93,7 +93,7 @@ describe('Act 1 golden path', () => {
       'search',
       'take faded photograph',
       'examine faded photograph',
-      'give faded photograph to grandmother',
+      'use faded photograph with grandmother',
     ])
     expect(state.isQuestCompleted(PHOTO)).toBe(false)
 
@@ -139,7 +139,7 @@ describe('Act 1 golden path', () => {
     // Step 6: Blacksmith's Forge
     executeCommands(game, ['go east'])
     expectCurrentRoom(state, "Blacksmith's Forge")
-    executeCommands(game, ['talk to blacksmith', 'give coin to blacksmith'])
+    executeCommands(game, ['talk to blacksmith', 'use coin with blacksmith'])
     expectItemInInventory(state, 'coin', false)
     expectItemInInventory(state, 'dull knife', false)
     expectItemInInventory(state, 'sharp knife')
@@ -257,7 +257,7 @@ describe('Act 1 golden path', () => {
       'Know your village',
       'Magnet fishing expedition',
     ])
-    executeCommands(game, ['give millstone fragment to blacksmith'])
+    executeCommands(game, ['use millstone fragment with blacksmith'])
     expectItemInInventory(state, 'millstone fragment', false)
     expectQuests(state, [
       MAIN,
@@ -294,7 +294,7 @@ describe('Act 1 golden path', () => {
       'Fishing expedition',
       'Magnet fishing expedition',
     ])
-    executeCommands(game, ['give fish to fisherman'])
+    executeCommands(game, ['use fish with fisherman'])
     expectItemInInventory(state, 'fish', false)
     expectSpellKnown(state, 'purify')
     expectQuests(state, [
@@ -305,7 +305,7 @@ describe('Act 1 golden path', () => {
       'Oh deer, oh deer',
       'Magnet fishing expedition',
     ])
-    executeCommands(game, ['give faded photograph to fisherman'])
+    executeCommands(game, ['use faded photograph with fisherman'])
     expectStoryFlag(state, 'fisherman_told_of_tin', true)
     expectItemInRoom(room(), "mother's letter", false)
     executeCommands(game, ['search'])
@@ -435,7 +435,7 @@ describe('Act 1 golden path', () => {
       'Know your village',
       'Magnet fishing expedition',
     ])
-    executeCommands(game, ['give rare flower to mira'])
+    executeCommands(game, ['use rare flower with mira'])
     expectItemInInventory(state, 'rare flower', false)
     expectSpellKnown(state, 'heal')
     expectSpellKnown(state, 'unlock')
@@ -554,7 +554,7 @@ describe('Act 1 golden path', () => {
     ])
     expectCurrentRoom(state, "Elior's Cottage")
     expectItemInInventory(state, 'locket')
-    executeCommands(game, ['give locket to grandmother'])
+    executeCommands(game, ['use locket with grandmother'])
     expectItemInInventory(state, 'locket', false)
     expectItemInInventory(state, 'travel cloak')
 
@@ -570,7 +570,7 @@ describe('Act 1 golden path', () => {
     expectQuests(state, [MAIN, 'Preparing for the road'])
     expectCurrentRoom(state, 'Road to Greendale')
     expectItemInInventory(state, 'shiny ring')
-    executeCommands(game, ['give shiny ring to merchant'])
+    executeCommands(game, ['use shiny ring with merchant'])
     expectItemInInventory(state, 'shiny ring', false)
     expectItemInInventory(state, 'wandering boots')
     expectQuests(state, [MAIN])
@@ -601,7 +601,7 @@ describe('Act 1 golden path', () => {
       expectSpellKnown(state, spell)
     }
     expectStoryFlag(state, 'journey_bless_completed', true)
-    executeCommands(game, ['give rune token to mira'])
+    executeCommands(game, ['use rune token with mira'])
     expectStoryFlag(state, 'mira_named_fouling_sigil', true)
     expectItemInInventory(state, 'rune token')
     executeCommands(game, ['talk to mira'])
@@ -720,7 +720,7 @@ describe('Act 1 optional watering of the Vegetable Field', () => {
 })
 
 /** The command that shows Grandmother the ring at the cottage. */
-const RING_TO_GRANDMOTHER = 'give shiny ring to grandmother'
+const RING_TO_GRANDMOTHER = 'use shiny ring with grandmother'
 
 describe('Act 1 with the alternative choices', () => {
   /**
@@ -735,8 +735,8 @@ describe('Act 1 with the alternative choices', () => {
     expect(path[home]).toBe('go north')
     path.splice(home + 1, 0, 'say stay to grandmother')
     path.splice(path.indexOf('buy rope from shopkeeper'), 1)
-    path[path.indexOf('give shiny ring to merchant')] =
-      'give horseshoe to merchant'
+    path[path.indexOf('use shiny ring with merchant')] =
+      'use horseshoe with merchant'
     return path
   }
 
@@ -775,7 +775,7 @@ describe('Act 1 with the alternative choices', () => {
     const game = new Game([new Act1()])
     const path = alternativePath()
     path.splice(
-      path.indexOf('give locket to grandmother') + 1,
+      path.indexOf('use locket with grandmother') + 1,
       0,
       RING_TO_GRANDMOTHER,
     )
@@ -791,7 +791,7 @@ describe('Act 1 with the alternative choices', () => {
     const game = new Game([new Act1()])
     const path = [...ACT1_GOLDEN_PATH]
     path.splice(
-      path.indexOf('give locket to grandmother') + 1,
+      path.indexOf('use locket with grandmother') + 1,
       0,
       RING_TO_GRANDMOTHER,
     )
@@ -824,11 +824,11 @@ describe('Act 1 when Elior buys more rope before the knife is sharpened', () => 
    */
   function sharpenAfterTheStore(path: string[], purchases: string[]): string[] {
     const moved = [...path]
-    moved.splice(moved.indexOf('give coin to blacksmith'), 1)
+    moved.splice(moved.indexOf('use coin with blacksmith'), 1)
     moved.splice(
-      moved.indexOf('give millstone fragment to blacksmith'),
+      moved.indexOf('use millstone fragment with blacksmith'),
       0,
-      'give coin to blacksmith',
+      'use coin with blacksmith',
     )
     moved.splice(moved.indexOf('talk to shopkeeper') + 1, 0, ...purchases)
     return moved
@@ -898,7 +898,7 @@ describe('Act 1 with the optional virtue moments', () => {
     executeCommands(game, path.slice(purified + 1))
     // Grandmother's loaf is off the golden path; Elior carries it here.
     game.state.addItemToInventory(new FreshBread())
-    executeCommands(game, ['give fresh bread to merchant'])
+    executeCommands(game, ['use fresh bread with merchant'])
     return game
   }
 
@@ -1009,7 +1009,7 @@ describe('Act 1 when Elior never shows Mira the rune token (rq-7g9c)', () => {
   /** The golden path, but the rune token never leaves Elior's pack. */
   function pathWithoutShowingToken(): string[] {
     const path = [...ACT1_GOLDEN_PATH]
-    path.splice(path.indexOf('give rune token to mira'), 1)
+    path.splice(path.indexOf('use rune token with mira'), 1)
     return path
   }
 
@@ -1033,7 +1033,7 @@ describe('Act 1 when Elior never shows Mira the rune token (rq-7g9c)', () => {
       'go west',
       'go west',
       'go north',
-      'give rune token to mira',
+      'use rune token with mira',
       'go south',
       'go east',
       'go east',

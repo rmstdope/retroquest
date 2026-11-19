@@ -877,7 +877,6 @@ describe('GameController', () => {
       ['talk to old mira', 'Old Mira'],
       ['speak to borin', 'Borin'],
       ['say hello to borin', 'Borin'],
-      ['give bread to borin', 'Borin'],
       ['  Talk To The Borin ', 'Borin'],
     ])('reads %s as addressing %s', (command, who) => {
       const ctrl = talkers()
@@ -885,15 +884,19 @@ describe('GameController', () => {
       expect(ctrl.lastTurnAddressee()).toBe(who)
     })
 
-    it.each(['look', 'take bread', 'go north', 'talk to nobody', 'say hi'])(
-      'reads %s as addressing no one',
-      (command) => {
-        const ctrl = talkers()
-        ctrl.takeTurn('talk to borin')
-        ctrl.takeTurn(command)
-        expect(ctrl.lastTurnAddressee()).toBeNull()
-      },
-    )
+    it.each([
+      'look',
+      'take bread',
+      'go north',
+      'talk to nobody',
+      'say hi',
+      'use bread with borin',
+    ])('reads %s as addressing no one', (command) => {
+      const ctrl = talkers()
+      ctrl.takeTurn('talk to borin')
+      ctrl.takeTurn(command)
+      expect(ctrl.lastTurnAddressee()).toBeNull()
+    })
   })
 
   describe('the characters of the running act', () => {

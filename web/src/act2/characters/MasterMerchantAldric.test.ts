@@ -44,7 +44,7 @@ describe('Master Merchant Aldric dialogue markup', () => {
     game.state.addItemToInventory(new MerchantsFlyer())
 
     const answer = game.commandParser.parse(
-      "give merchant's flyer to master merchant aldric",
+      "use merchant's flyer with master merchant aldric",
     )
 
     expect(answer).toContain(
@@ -59,7 +59,7 @@ describe('Master Merchant Aldric dialogue markup', () => {
   it('attributes the talk after the flyer to Aldric', () => {
     const game = createGameAtMarket()
     game.state.addItemToInventory(new MerchantsFlyer())
-    game.commandParser.parse("give merchant's flyer to master merchant aldric")
+    game.commandParser.parse("use merchant's flyer with master merchant aldric")
 
     const answer = game.commandParser.parse('talk to master merchant aldric')
 
@@ -78,7 +78,7 @@ describe('Master Merchant Aldric dialogue markup', () => {
   it('says his racks are bare when he has no wares', () => {
     const game = createGameAtMarket()
     game.state.addItemToInventory(new MerchantsFlyer())
-    game.commandParser.parse("give merchant's flyer to master merchant aldric")
+    game.commandParser.parse("use merchant's flyer with master merchant aldric")
     const aldric = game.state.currentRoom.characters.find(
       (c) => c instanceof MasterMerchantAldric,
     )
@@ -97,7 +97,7 @@ describe('Master Merchant Aldric dialogue markup', () => {
     game.state.addItemToInventory(new WalkingStick())
 
     const answer = game.commandParser.parse(
-      'give walking stick to master merchant aldric',
+      'use walking stick with master merchant aldric',
     )
 
     expect(answer).toContain("I sell gear, friend; I don't take it in.")
@@ -148,7 +148,7 @@ const ALDRIC_BLIGHT =
 function createGameWithOpenShop(): Game {
   const game = createGameAtMarket()
   game.state.addItemToInventory(new MerchantsFlyer())
-  game.commandParser.parse("give merchant's flyer to master merchant aldric")
+  game.commandParser.parse("use merchant's flyer with master merchant aldric")
   return game
 }
 
@@ -226,7 +226,7 @@ describe('Master Merchant Aldric restored from a save made before the rewrite', 
     expect(closed).not.toContain('referral')
 
     loaded.commandParser.parse(
-      "give merchant's flyer to master merchant aldric",
+      "use merchant's flyer with master merchant aldric",
     )
     const open = loaded.commandParser.parse('talk to master merchant aldric')
     expect(open).not.toContain('An old idle line.')

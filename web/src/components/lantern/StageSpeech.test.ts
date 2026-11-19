@@ -193,7 +193,7 @@ describe('StageSpeech', () => {
 
   it('shows no button until a line is shown', async () => {
     const { speech, w } = mounted()
-    speech.observe(turn('Nothing to say.', 'Mira', 'give bread to mira'))
+    speech.observe(turn('Nothing to say.', 'Mira', 'use bread with mira'))
     await w.vm.$nextTick()
     expect(speech.conversation).not.toBeNull()
     expect(w.find('button').exists()).toBe(false)

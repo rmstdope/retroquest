@@ -61,7 +61,7 @@ describe('Merchant', () => {
     expect(offer).toContain('coin I can earn anywhere')
     expect(offer).not.toContain("coin's no good")
 
-    executeCommands(game, ['give shiny ring to merchant'])
+    executeCommands(game, ['use shiny ring with merchant'])
 
     expect(game.state.hasItem('wandering boots')).toBe(true)
     expect(game.state.hasItem('shiny ring')).toBe(false)
@@ -71,7 +71,7 @@ describe('Merchant', () => {
   it('takes the horseshoe instead, so Elior keeps the ring', () => {
     const game = gameAtMerchant()
 
-    const answer = executeCommands(game, ['give horseshoe to merchant'])
+    const answer = executeCommands(game, ['use horseshoe with merchant'])
 
     expectDialogueSpeaker(answer, 'merchant')
     expect(game.state.hasItem('wandering boots')).toBe(true)
@@ -82,9 +82,9 @@ describe('Merchant', () => {
 
   it('trades only one pair of boots', () => {
     const game = gameAtMerchant()
-    executeCommands(game, ['give horseshoe to merchant'])
+    executeCommands(game, ['use horseshoe with merchant'])
 
-    executeCommands(game, ['give shiny ring to merchant'])
+    executeCommands(game, ['use shiny ring with merchant'])
 
     expect(game.state.hasItem('shiny ring')).toBe(true)
     expect(
@@ -121,7 +121,7 @@ describe('Merchant', () => {
 
   it('tells the news before the boots line when the boots were traded first', () => {
     const game = gameAtMerchant()
-    executeCommands(game, ['give shiny ring to merchant'])
+    executeCommands(game, ['use shiny ring with merchant'])
 
     const first = executeCommands(game, ['talk to merchant'])
 
@@ -155,7 +155,7 @@ describe('Merchant', () => {
 
   it('tells the news once to a save made before the news existed', () => {
     const game = gameAtMerchant()
-    executeCommands(game, ['give shiny ring to merchant'])
+    executeCommands(game, ['use shiny ring with merchant'])
     const fresh = new Game([new Act1()])
     fresh.loadSaveData(game.toSaveData())
     expect(fresh.state.getStoryFlag(FLAG_MERCHANT_NEWS_HEARD)).toBe(false)
@@ -192,7 +192,7 @@ describe('Merchant and the fresh bread', () => {
 
   it('is hungry whether or not the boots were traded, and with or without the bread in the pack', () => {
     const game = gameAtMerchant()
-    executeCommands(game, ['give shiny ring to merchant'])
+    executeCommands(game, ['use shiny ring with merchant'])
     expect(game.state.hasItem('fresh bread')).toBe(false)
 
     const answer = executeCommands(game, ['talk to merchant'])
@@ -207,7 +207,7 @@ describe('Merchant and the fresh bread', () => {
     const game = gameAtMerchant()
     game.state.addItemToInventory(new FreshBread())
 
-    const answer = executeCommands(game, ['give fresh bread to merchant'])
+    const answer = executeCommands(game, ['use fresh bread with merchant'])
 
     expect(game.state.hasItem('fresh bread')).toBe(false)
     expect(answer).not.toContain('You give the')
@@ -229,7 +229,7 @@ describe('Merchant and the fresh bread', () => {
   it('drops the hunger line once he is fed, and adds nothing', () => {
     const game = gameAtMerchant()
     game.state.addItemToInventory(new FreshBread())
-    executeCommands(game, ['give fresh bread to merchant'])
+    executeCommands(game, ['use fresh bread with merchant'])
 
     const answer = executeCommands(game, ['talk to merchant'])
 
@@ -249,7 +249,7 @@ describe('Merchant and the fresh bread', () => {
     const game = gameAtMerchant()
     game.state.addItemToInventory(make())
 
-    const answer = executeCommands(game, [`give ${name} to merchant`])
+    const answer = executeCommands(game, [`use ${name} with merchant`])
 
     expect(answer).not.toContain('You offer the')
     expect(answer).toContain(
@@ -265,7 +265,7 @@ describe('Merchant and the fresh bread', () => {
     const game = gameAtMerchant()
     game.state.addItemToInventory(new Apple())
 
-    const answer = executeCommands(game, ['give apple to merchant'])
+    const answer = executeCommands(game, ['use apple with merchant'])
 
     expect(answer).toBe(
       '[character_name]merchant[/character_name]\n' +

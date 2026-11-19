@@ -28,7 +28,7 @@ describe('GreendaleGates', () => {
 
   it('finds the map by searching right after the pass is given', () => {
     const { game, gates } = createGameAtGates()
-    game.commandParser.parse('give entry pass to gate captain')
+    game.commandParser.parse('use entry pass with gate captain')
 
     const answer = game.commandParser.parse('search')
 
@@ -44,7 +44,7 @@ describe('GreendaleGates', () => {
 
   it('says it has been searched on the second search', () => {
     const { game } = createGameAtGates()
-    game.commandParser.parse('give entry pass to gate captain')
+    game.commandParser.parse('use entry pass with gate captain')
     game.commandParser.parse('search')
 
     expect(game.commandParser.parse('search')).toContain(
@@ -64,7 +64,7 @@ describe('GreendaleGates', () => {
 
   it('keeps his departure and the found map through a save and load', () => {
     const { game } = createGameAtGates()
-    game.commandParser.parse('give entry pass to gate captain')
+    game.commandParser.parse('use entry pass with gate captain')
 
     const reloaded = new Game([new Act2()])
     reloaded.loadSaveData(game.toSaveData())

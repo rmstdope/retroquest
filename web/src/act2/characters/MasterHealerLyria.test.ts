@@ -204,12 +204,12 @@ describe('Master Healer Lyria dialogue markup', () => {
     game.state.addItemToInventory(new HealingHerbs())
     game.state.addItemToInventory(new CrystalFocus())
 
-    executeCommands(game, ['give healing herbs to master healer lyria'])
+    executeCommands(game, ['use healing herbs with master healer lyria'])
     expect(game.state.activatedQuests.map((q) => q.name)).toContain(
       "The Healer's Apprentice",
     )
     const second = executeCommands(game, [
-      'give crystal focus to master healer lyria',
+      'use crystal focus with master healer lyria',
     ])
 
     expect(plain(second)).toContain('Quest Complete')
@@ -226,13 +226,13 @@ describe('Lyria apprenticeship across a save', () => {
     game.state.currentRoom = game.state.allRooms.HealersHouse
     game.state.addItemToInventory(new HealingHerbs())
     game.state.addItemToInventory(new CrystalFocus())
-    executeCommands(game, ['give healing herbs to master healer lyria'])
+    executeCommands(game, ['use healing herbs with master healer lyria'])
     const reloaded = createGame()
     expect(reloaded.loadSaveData(game.toSaveData())).toContain('loaded')
 
     const talk = executeCommands(reloaded, ['talk to master healer lyria'])
     const teach = executeCommands(reloaded, [
-      'give crystal focus to master healer lyria',
+      'use crystal focus with master healer lyria',
     ])
 
     expect(plain(talk)).toContain(REMINDER_LINE)
@@ -444,7 +444,7 @@ describe('Master Healer Lyria and the silver leaves', () => {
       game.state.currentRoom.addCharacter(new MasterHealerLyria())
 
       const out = executeCommands(game, [
-        'give silver leaves to master healer lyria',
+        'use silver leaves with master healer lyria',
       ])
 
       expect(plain(out)).toContain('Silverbark.')
@@ -456,7 +456,7 @@ describe('Master Healer Lyria and the silver leaves', () => {
     const game = gameWithLeaves()
     game.state.currentRoom = game.state.allRooms.ResidentialQuarter
 
-    executeCommands(game, ['give silver leaves to families'])
+    executeCommands(game, ['use silver leaves with families'])
 
     expect(game.state.hasItem('silver leaves')).toBe(true)
     expect(game.state.getStoryFlag(FLAG_LYRIA_SILVER_LEAVES_GIVEN)).toBe(false)

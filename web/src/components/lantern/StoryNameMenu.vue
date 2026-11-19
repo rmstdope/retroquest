@@ -4,7 +4,7 @@ import type { NameAction } from '@/lantern/nameActions'
 
 /**
  * A small menu next to a name clicked in the story: the actions that fit
- * it. Picking one runs it; an action with choices (Give…, Cast…) shows
+ * it. Picking one runs it; an action with choices (Cast…) shows
  * them in its place, named after it (Escape there goes back to the
  * actions); Escape, a click elsewhere, Tab or scrolling (the name would
  * move away from it) closes it; a scroll from before it opened does not.

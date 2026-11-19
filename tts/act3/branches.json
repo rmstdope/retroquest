@@ -4,7 +4,7 @@
     "commands": [
       "take quiet charm",
       "n",
-      "give quiet charm to tobin",
+      "use quiet charm with tobin",
       "talk to tobin",
       "talk to miners"
     ]
@@ -70,8 +70,8 @@
       "talk to pier warden",
       "say truth to pier warden",
       "take weathered coin",
-      "give weathered coin to pier warden",
-      "give weathered coin to pier warden"
+      "use weathered coin with pier warden",
+      "use weathered coin with pier warden"
     ]
   },
   {

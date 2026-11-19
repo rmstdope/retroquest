@@ -33,9 +33,6 @@ class RecordingGame implements CommandTarget {
   say(words: string, character: string) {
     return this.record('say', words, character)
   }
-  give(args: string) {
-    return this.record('give', args)
-  }
   buy(args: string) {
     return this.record('buy', args)
   }
@@ -164,8 +161,8 @@ describe('CommandParser', () => {
         'the answer is wisdom',
         'water nymph',
       ],
-      'give bread to grandmother': ['give', 'bread to grandmother'],
-      'hand coin to merchant': ['give', 'coin to merchant'],
+      'use bread with grandmother': ['use', 'bread', 'grandmother'],
+      'use coin with merchant': ['use', 'coin', 'merchant'],
       'buy rope from shopkeeper': ['buy', 'rope from shopkeeper'],
     })
   })

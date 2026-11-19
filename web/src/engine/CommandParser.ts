@@ -19,7 +19,6 @@ export interface CommandTarget {
   move(direction: string): string
   talk(target: string): string
   say(words: string, character: string): string
-  give(args: string): string
   buy(args: string): string
   look(): string
   examine(target: string): string
@@ -45,7 +44,6 @@ export interface CommandTarget {
 }
 
 const TALK_PREFIXES = prefixesOf('talk to')
-const GIVE_PREFIXES = prefixesOf('give')
 /** `look ` also reads as examine when something follows. */
 const EXAMINE_PREFIXES = [...prefixesOf('inspect'), `${EXAMINE_SHORTHAND} `]
 /** The examine verbs typed with nothing named; `look` alone is `look`. */
@@ -70,7 +68,6 @@ const STATS_VERBS = formOf('stats').verbs
 /** The words that join `use`'s two items: "with", and "on" when there is no "with". */
 const USE_JOINS = formOf('use').joins?.words ?? []
 const [USE_WITH, USE_ON] = [` ${USE_JOINS[0]} `, ` ${USE_JOINS[1]} `]
-const GIVE_JOIN = formOf('give').joins?.words[0] ?? 'to'
 const SEARCH_VERBS = formOf('search').verbs
 const INVENTORY_VERBS = formOf('inventory').verbs
 const HELP_VERBS = formOf('help').verbs
@@ -88,8 +85,8 @@ function afterPrefix(command: string, prefixes: string[]): string | null {
 }
 
 /**
- * The name the player's command addresses, as typed: the target of `talk to`,
- * `say … to` and `give … to`, or null for any other command. The same prefixes
+ * The name the player's command addresses, as typed: the target of `talk to`
+ * and `say … to`, or null for any other command. The same prefixes
  * and splitting as `parse`, so the story knows who a command is for.
  */
 export function addresseeTarget(command: string): string | null {
@@ -103,14 +100,6 @@ export function addresseeTarget(command: string): string | null {
     return separator < 0
       ? null
       : args.slice(separator + ' to '.length).trim() || null
-  }
-  const give = afterPrefix(cmd, GIVE_PREFIXES)
-  if (give !== null) {
-    const parts = give.split(/\s+/).filter(Boolean)
-    const index = parts.indexOf(GIVE_JOIN)
-    return index > 0 && index < parts.length - 1
-      ? parts.slice(index + 1).join(' ')
-      : null
   }
   return null
 }
@@ -132,8 +121,6 @@ export class CommandParser {
     if (talkTarget !== null) return this.game.talk(talkTarget)
     const sayArgs = afterPrefix(cmd, SAY_PREFIXES)
     if (sayArgs !== null) return this.say(sayArgs.trim())
-    const giveArgs = afterPrefix(cmd, GIVE_PREFIXES)
-    if (giveArgs !== null) return this.game.give(giveArgs)
     const buyArgs = afterPrefix(cmd, BUY_PREFIXES)
     if (buyArgs !== null) return this.game.buy(buyArgs)
 

@@ -98,9 +98,7 @@ describe('Item', () => {
     expect(rock.useWith(gs, stick)).toContain(
       'with the [item_name]stick[/item_name]',
     )
-    expect(rock.useOnCharacter(gs, mira)).toContain(
-      'on [character_name]Mira[/character_name]',
-    )
+    expect(rock.useOnCharacter(gs, mira)).toContain("aren't carrying")
     expect(rock.examine(gs)).toBe('A grey rock.')
     expect(rock.pickedUp(gs)).toBe('')
     expect(rock.open(gs)).toContain("can't open")
@@ -174,6 +172,30 @@ describe('Item names in a sentence', () => {
     ]) {
       expect(refusal).toContain("[item_name]Nyx's Token[/item_name]")
     }
+  })
+})
+
+describe('Item used on a character', () => {
+  it('hands a carried item over, as the character answers an offer', () => {
+    const gs = gameState()
+    const rock = new Item({
+      name: 'rock',
+      description: 'd',
+      canBeCarried: true,
+    })
+    const mira = new Character({ name: 'Mira', description: 'd' })
+    gs.inventory.push(rock)
+    expect(rock.useOnCharacter(gs, mira)).toBe(mira.giveItem(gs, rock))
+    expect(rock.useOnCharacter(gs, mira)).toContain('seem interested in')
+  })
+
+  it('refuses an item that lies in the room instead of handing it over', () => {
+    const gs = gameState()
+    const rock = new Item({ name: 'rock', description: 'd' })
+    const mira = new Character({ name: 'Mira', description: 'd' })
+    expect(rock.useOnCharacter(gs, mira)).toBe(
+      "[failure]You aren't carrying the [item_name]rock[/item_name].[/failure]",
+    )
   })
 })
 

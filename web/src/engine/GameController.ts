@@ -246,7 +246,7 @@ export class GameController {
 
   /**
    * The character of the room the last `takeTurn` command was for (talk to,
-   * say … to, give … to), or null. Found before the command ran.
+   * say … to), or null. Found before the command ran.
    */
   lastTurnAddressee(): string | null {
     return this.addressee

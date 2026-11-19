@@ -25,27 +25,27 @@ describe('HandStrip', () => {
     expect(w.get('.lq-hand-text').text()).toBe('Use Bread with…')
     expect(w.get('button').text()).toBe('✕ Cancel')
     w.unmount()
-    w = mount(HandStrip, { props: { hand: hand('give') } })
-    expect(w.get('.lq-hand-text').text()).toBe('Give Bread to…')
+    w = mount(HandStrip, { props: { hand: hand('usewith') } })
+    expect(w.get('.lq-hand-text').text()).toBe('Use Bread with…')
     w.unmount()
     w = mount(HandStrip, { props: { hand: hand('caston') } })
     expect(w.get('.lq-hand-text').text()).toBe('Cast Light on…')
   })
 
   it('is announced to a screen reader', () => {
-    w = mount(HandStrip, { props: { hand: hand('give') } })
+    w = mount(HandStrip, { props: { hand: hand('usewith') } })
     expect(w.attributes('role')).toBe('status')
   })
 
   it('asks to cancel', async () => {
-    w = mount(HandStrip, { props: { hand: hand('give') } })
+    w = mount(HandStrip, { props: { hand: hand('usewith') } })
     await w.get('button').trigger('click')
     expect(w.emitted('cancel')).toHaveLength(1)
   })
 
   it('has a small copy of the picture ride by the pointer on a laptop', async () => {
     w = mount(HandStrip, {
-      props: { hand: hand('give'), ghost: true },
+      props: { hand: hand('usewith'), ghost: true },
       attachTo: document.body,
     })
     expect(w.find('.lq-hand-ghost').exists()).toBe(false)
@@ -60,7 +60,7 @@ describe('HandStrip', () => {
 
   it('has no copy for touch or when not asked', async () => {
     w = mount(HandStrip, {
-      props: { hand: hand('give'), ghost: false },
+      props: { hand: hand('usewith'), ghost: false },
       attachTo: document.body,
     })
     const move = new Event('pointermove')
@@ -86,7 +86,7 @@ describe('HandStrip', () => {
 
     it('is the picture of the thing in hand once it is painted', async () => {
       setPictureProbe(() => Promise.resolve(true))
-      w = await mountMoved('give')
+      w = await mountMoved('usewith')
       const img = w.get('.lq-hand-ghost img')
       expect(img.attributes('src')).toBe(beltPictureUrl('item', 'bread'))
       expect(w.get('.lq-hand-ghost').text()).toBe('')
@@ -102,7 +102,7 @@ describe('HandStrip', () => {
 
     it('keeps the letter while the picture is not painted', async () => {
       setPictureProbe(() => Promise.resolve(false))
-      w = await mountMoved('give')
+      w = await mountMoved('usewith')
       expect(w.find('.lq-hand-ghost img').exists()).toBe(false)
       expect(w.get('.lq-hand-ghost').text()).toBe('B')
     })

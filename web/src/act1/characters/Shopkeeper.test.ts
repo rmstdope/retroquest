@@ -115,7 +115,7 @@ describe('Shopkeeper dialogue markup', () => {
   it('keeps the refusal of a gift inside dialogue', () => {
     const game = gameInStore()
     game.state.addItemToInventory(new Stick())
-    const answer = game.commandParser.parse('give stick to shopkeeper')
+    const answer = game.commandParser.parse('use stick with shopkeeper')
     expect(answer).toContain("I don't take them in")
     expectQuotesInsideDialogue(answer)
     expectDialogueSpeaker(answer, 'Hemlock')
@@ -373,7 +373,7 @@ describe('Hemlock and his missing cat', () => {
     const game = gameInStore({ shopOpen: false })
     game.state.setStoryFlag(FLAG_PATCHES_FOUND, true)
 
-    const answer = game.commandParser.parse('give patches to shopkeeper')
+    const answer = game.commandParser.parse('use patches with shopkeeper')
 
     expect(answer).not.toContain("You don't have")
     expect(answer).toContain('You found her')
@@ -382,15 +382,15 @@ describe('Hemlock and his missing cat', () => {
     expect(coins(game)).toBe(1)
   })
 
-  it('names his absence when Elior gives Patches away from the store', () => {
+  it('does not hand Patches to a shopkeeper who is not here', () => {
     const game = gameInStore({ shopOpen: false })
     game.state.setStoryFlag(FLAG_PATCHES_FOUND, true)
     game.state.currentRoom = game.state.allRooms.AbandonedShed
 
-    const answer = game.commandParser.parse('give patches to shopkeeper')
+    const answer = game.commandParser.parse('use patches with shopkeeper')
 
     expect(answer).toBe(
-      "[failure]There is no character named 'Shopkeeper' here.[/failure]",
+      "[failure]You don't have a 'patches' to use, and there isn't one here.[/failure]",
     )
     expect(game.state.getStoryFlag(FLAG_PATCHES_RETURNED)).toBe(false)
   })
@@ -775,7 +775,7 @@ describe('Shopkeeper named as Hemlock, a proper name', () => {
   it('refuses a gift as "Hemlock"', () => {
     const game = gameInStore()
     game.state.addItemToInventory(new Stick())
-    const answer = game.commandParser.parse('give stick to shopkeeper')
+    const answer = game.commandParser.parse('use stick with shopkeeper')
     expect(
       answer.startsWith(`${HEMLOCK} chuckles and pushes it back`),
       answer,
@@ -855,7 +855,7 @@ describe('the shopkeeper answers to his name', () => {
     game.state.addItemToInventory(new Bread())
 
     const talk = game.commandParser.parse('talk to hemlock')
-    const give = game.commandParser.parse('give bread to hemlock')
+    const give = game.commandParser.parse('use bread with hemlock')
 
     expect(talk).not.toContain('There is no character')
     expectDialogueSpeaker(talk, 'Hemlock')
@@ -882,7 +882,7 @@ describe('Hemlock and the rune token (rq-hkep)', () => {
     const game = gameInStore()
     game.state.addItemToInventory(new RuneToken())
 
-    const answer = game.commandParser.parse('give rune token to hemlock')
+    const answer = game.commandParser.parse('use rune token with hemlock')
 
     expect(answer).toContain("I'll not have that on my counter, lad.")
     expect(answer).toContain('edge of his ledger')
@@ -974,13 +974,13 @@ describe('Hemlock, named from the first moment', () => {
     for (const shopOpen of [false, true]) {
       const game = gameInStore({ shopOpen })
       game.state.addItemToInventory(new Stick())
-      const answer = game.commandParser.parse('give stick to shopkeeper')
+      const answer = game.commandParser.parse('use stick with shopkeeper')
       expect(answer).toContain('[character_name]Hemlock[/character_name]')
       expect(answer).not.toMatch(/shopkeeper/i)
     }
     const game = gameInStore()
     game.state.addItemToInventory(new Stick())
-    expect(game.commandParser.parse('give stick to hemlock')).toContain(
+    expect(game.commandParser.parse('use stick with hemlock')).toContain(
       '[character_name]Hemlock[/character_name] chuckles and pushes it',
     )
   })

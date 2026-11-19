@@ -137,8 +137,8 @@ export class Character {
   }
 
   /**
-   * The player offers something by name that is not an item in the
-   * inventory, such as an animal carried in the story. Return the story text
+   * The player uses something by name with this character that is not an
+   * item in the inventory, such as an animal carried in the story. Return the story text
    * when the character takes it, or null (the default) for the engine's plain
    * "You don't have ..." failure.
    */
@@ -148,11 +148,11 @@ export class Character {
 
   /**
    * The one answer to "this item is offered to this character", shared by
-   * `give <item> to <character>` and `use <item> on <character>`. Return the
+   * `use <item> with <character>` and `use <item> on <character>`. Return the
    * story text when the character takes the offer, or null (the default) to
-   * leave it to the verb's own hook (`giveItem`, `Item.useOnCharacter`) and so
-   * to the default refusal. A pair moved here must also lose its hand-written
-   * calls to the other verb's hook (`giveItem` or `useOnCharacter`), which
+   * leave it to the item's own answer (`Item.useOnCharacter`, which hands the
+   * item to `giveItem`) and so to the default refusal. A pair moved here must
+   * also lose its hand-written calls to `giveItem` or `useOnCharacter`, which
    * would skip this method.
    */
   acceptOffer(_gameState: GameState, _item: Item): string | null {
@@ -160,7 +160,7 @@ export class Character {
   }
 
   /**
-   * The player offers an item. By default the character refuses it, the
+   * The player hands over an item by using it with this character. By default the character refuses it, the
    * sentence opening with the name (see `nameInSentence`) and the verb agreeing
    * with it (see `isPlural`).
    */

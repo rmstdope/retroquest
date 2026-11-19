@@ -153,7 +153,7 @@ export class KnightOfDespair extends Character {
 
   /**
    * The chain or the token offered to him before he is redeemed is raised, as
-   * using it is, whether it is given or used on him.
+   * using it is, whether it is used with or on him.
    */
   override acceptOffer(gameState: GameState, item: Item): string | null {
     const isShield =

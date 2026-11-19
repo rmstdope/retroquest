@@ -62,14 +62,14 @@ describe('nameActions', () => {
     )
   })
 
-  it('offers giving something from the bag and casting a spell on a character', () => {
+  it('offers using a thing from the bag with a character, and casting a spell on them', () => {
     expect(nameActions('character', 'Grandmother', HERE)).toEqual([
       { label: 'Talk to', command: 'talk to grandmother' },
       {
-        label: 'Give…',
+        label: 'Use with…',
         choices: [
-          { label: 'Bread', command: 'give bread to grandmother' },
-          { label: 'Map', command: 'give map to grandmother' },
+          { label: 'Bread', command: 'use bread with grandmother' },
+          { label: 'Map', command: 'use map with grandmother' },
         ],
       },
       {
@@ -98,9 +98,5 @@ describe('nameActions', () => {
       label: 'Use',
       command: 'use bucket',
     })
-    const give = nameActions('character', 'grandmother', full)[1]
-    expect(give.choices).toEqual([
-      { label: 'Bucket (full)', command: 'give bucket to grandmother' },
-    ])
   })
 })

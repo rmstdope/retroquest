@@ -18,7 +18,7 @@ import type { AreaThing } from './areaThings'
 import { parseCountedName } from './inventoryChanges'
 
 /** What a ring button takes in hand, to be used on the next thing pressed. */
-export type HandVerb = 'usewith' | 'give' | 'caston'
+export type HandVerb = 'usewith' | 'caston'
 
 /** What a ring is drawn round: a thing of the picture, or a carried thing or spell on the belt. */
 export interface RingSubject {
@@ -71,7 +71,6 @@ export const ICONS: Record<string, string> = {
   talk: '☺',
   say: '❝',
   buy: '¤',
-  give: '❖',
 }
 
 /** A button with a command that is sent at once. */
@@ -114,7 +113,7 @@ export function fanned(
 /**
  * The ring of `thing`, clockwise from the top: for a thing Take, Use, Use
  * with…, Open, Close, Cast on…, Examine; for a person Talk to, Say…, Buy…
- * (sellers only), Give…, Use with…, Cast on…, Examine. Nothing is left out
+ * (sellers only), Use with…, Cast on…, Examine. Nothing is left out
  * for what will work, only for having nothing to choose from (nothing
  * carried, no spells, nothing to sell).
  */
@@ -155,19 +154,10 @@ export function ringActions(
           (ware) => [ware, name],
         )
       : null
-    const give = fanned(
-      'give',
-      'Give…',
-      verbById('give').slots[0],
-      ctx,
-      (carriedName) => [carriedName, name],
-      true,
-    )
     return [
       plain('talk', 'Talk to', commandOf('talk', [name])),
       { id: 'say', label: 'Say…', icon: ICONS.say, say: true },
       ...present(buy),
-      ...present(give),
       ...present(useWith),
       ...present(castOn),
       examine,

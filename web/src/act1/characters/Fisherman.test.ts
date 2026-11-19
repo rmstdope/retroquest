@@ -30,7 +30,7 @@ describe('Fisherman', () => {
 
     it('recognises the mother but keeps the tin to himself before the message is read', () => {
       const response = executeCommands(game, [
-        'give faded photograph to fisherman',
+        'use faded photograph with fisherman',
       ])
 
       expect(response).toContain('your mother')
@@ -43,7 +43,7 @@ describe('Fisherman', () => {
       executeCommands(game, ['examine faded photograph'])
 
       const response = executeCommands(game, [
-        'give faded photograph to fisherman',
+        'use faded photograph with fisherman',
       ])
 
       expect(response).not.toContain('You show the')
@@ -57,11 +57,11 @@ describe('Fisherman', () => {
     it('points back to the stone when shown the photograph again', () => {
       executeCommands(game, [
         'examine faded photograph',
-        'give faded photograph to fisherman',
+        'use faded photograph with fisherman',
       ])
 
       const response = executeCommands(game, [
-        'give faded photograph to fisherman',
+        'use faded photograph with fisherman',
       ])
 
       expect(response).toContain('[item_name]smooth stone[/item_name]')
@@ -72,7 +72,7 @@ describe('Fisherman', () => {
   it('credits the mother when teaching purify', () => {
     game.state.addItemToInventory(new Fish())
 
-    const response = executeCommands(game, ['give fish to fisherman'])
+    const response = executeCommands(game, ['use fish with fisherman'])
 
     expect(response).toContain(
       'mother taught me a thing for that, here at the bend',
@@ -199,7 +199,7 @@ describe('Fisherman teaching purify', () => {
     game.state.currentRoom = game.state.allRooms.Riverbank
     game.state.addItemToInventory(new Fish())
 
-    const response = executeCommands(game, ['give fish to fisherman'])
+    const response = executeCommands(game, ['use fish with fisherman'])
 
     expect(response).not.toContain(',[/dialogue]')
     expect(response).toContain(
@@ -211,7 +211,7 @@ describe('Fisherman teaching purify', () => {
     const game = new Game([new Act1()])
     game.state.currentRoom = game.state.allRooms.Riverbank
     game.state.addItemToInventory(new Fish())
-    executeCommands(game, ['give fish to fisherman'])
+    executeCommands(game, ['use fish with fisherman'])
     const fisherman = game.state.currentRoom.getCharacterByName('fisherman')
     Object.defineProperty(fisherman, 'dialogueStates', {
       value: { taught_spells: 'The river has many moods.' },

@@ -1803,7 +1803,7 @@ describe('useGameStore', () => {
       await startPlaying()
       bridge.controller.getInventory.mockReturnValue([])
 
-      store.submitCommand('give sword to mira')
+      store.submitCommand('use sword with mira')
 
       expect(store.turns.at(-1)?.lost).toEqual([
         { kind: 'item', name: 'Sword', count: 1 },
@@ -1905,7 +1905,7 @@ describe('useGameStore', () => {
       bridge.controller.isActRunning.mockReturnValue(false)
       bridge.controller.getInventory.mockReturnValue([])
 
-      store.submitCommand('give amulet to mira')
+      store.submitCommand('use amulet with mira')
 
       expect(store.turns.at(-1)?.lost).toEqual([])
     })
@@ -2021,7 +2021,7 @@ describe('useGameStore', () => {
         mainQuest: 'Shadows over Willowbrook',
       })
       store.dismissModal()
-      store.submitCommand('give amulet to mira')
+      store.submitCommand('use amulet with mira')
       expect(store.questProgress?.completed).toBe(5)
     })
   })
@@ -2314,7 +2314,7 @@ describe('useGameStore', () => {
         mainQuest: 'Shadows',
       })
 
-      store.submitCommand('give flower to mira')
+      store.submitCommand('use flower with mira')
 
       expect(store.turns.at(-1)!.quests).toEqual([
         {

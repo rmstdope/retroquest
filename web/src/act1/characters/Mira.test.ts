@@ -69,7 +69,7 @@ describe('Mira accepting the rare flower', () => {
     const game = gameInMirasHut()
     game.state.addItemToInventory(new RareFlower())
 
-    const response = executeCommands(game, ['give rare flower to mira'])
+    const response = executeCommands(game, ['use rare flower with mira'])
 
     for (const spell of ['heal', 'unlock', 'light'])
       expectSpellKnown(game.state, spell)
@@ -88,7 +88,7 @@ describe('Mira accepting the rare flower', () => {
     const game = gameInMirasHut()
     game.state.addItemToInventory(new RareFlower())
 
-    const response = executeCommands(game, ['give rare flower to mira'])
+    const response = executeCommands(game, ['use rare flower with mira'])
 
     expect(response).not.toContain('Greendale')
     expect(response).not.toContain('druid')
@@ -99,7 +99,7 @@ describe('Mira handing over the ancient amulet', () => {
   it('sends Elior toward Greendale and warns him to guard the amulet', () => {
     const game = gameInMirasHut()
     game.state.addItemToInventory(new RareFlower())
-    executeCommands(game, ['give rare flower to mira'])
+    executeCommands(game, ['use rare flower with mira'])
     completeJourneyPreparations(game.state)
 
     const response = executeCommands(game, ['talk to mira'])
@@ -115,7 +115,7 @@ describe('Mira handing over the ancient amulet', () => {
   it('takes the amulet off its stand, so there is one amulet in the world', () => {
     const game = gameInMirasHut()
     game.state.addItemToInventory(new RareFlower())
-    executeCommands(game, ['give rare flower to mira'])
+    executeCommands(game, ['use rare flower with mira'])
     completeJourneyPreparations(game.state)
 
     executeCommands(game, ['talk to mira'])
@@ -132,7 +132,7 @@ describe('Mira handing over the ancient amulet', () => {
   it('hints once, between the gift and the warning, that she knew his parents', () => {
     const game = gameInMirasHut()
     game.state.addItemToInventory(new RareFlower())
-    executeCommands(game, ['give rare flower to mira'])
+    executeCommands(game, ['use rare flower with mira'])
     completeJourneyPreparations(game.state)
 
     const response = executeCommands(game, ['talk to mira'])
@@ -164,7 +164,7 @@ describe('Mira handing over the ancient amulet', () => {
 
     const flower = new RareFlower()
     game.state.addItemToInventory(flower)
-    const given = executeCommands(game, ['give rare flower to mira'])
+    const given = executeCommands(game, ['use rare flower with mira'])
     expect(given).not.toContain('your parents')
     const notReady = executeCommands(game, ['talk to mira'])
     expect(notReady).not.toContain('your parents')
@@ -173,7 +173,7 @@ describe('Mira handing over the ancient amulet', () => {
   it('does not repeat the parting words once the amulet is his', () => {
     const game = gameInMirasHut()
     game.state.addItemToInventory(new RareFlower())
-    executeCommands(game, ['give rare flower to mira'])
+    executeCommands(game, ['use rare flower with mira'])
     completeJourneyPreparations(game.state)
     executeCommands(game, ['talk to mira'])
 
@@ -188,7 +188,7 @@ describe('Mira and the rune token from the well', () => {
     const game = gameInMirasHut()
     game.state.addItemToInventory(new RuneToken())
 
-    const response = executeCommands(game, ['give rune token to mira'])
+    const response = executeCommands(game, ['use rune token with mira'])
 
     expect(response).toContain('fouling sigil')
     expect(response).toContain(
@@ -216,7 +216,7 @@ describe('Mira and the rune token from the well', () => {
     mechanism.useWith(game.state, rope)
     game.state.addItemToInventory(new RuneToken())
 
-    const response = executeCommands(game, ['give rune token to mira'])
+    const response = executeCommands(game, ['use rune token with mira'])
 
     expect(response).toContain('mill')
     expectDialogueSpeaker(response, 'Mira')
@@ -225,9 +225,9 @@ describe('Mira and the rune token from the well', () => {
   it('does not tell the whole tale twice', () => {
     const game = gameInMirasHut()
     game.state.addItemToInventory(new RuneToken())
-    executeCommands(game, ['give rune token to mira'])
+    executeCommands(game, ['use rune token with mira'])
 
-    const response = executeCommands(game, ['give rune token to mira'])
+    const response = executeCommands(game, ['use rune token with mira'])
 
     expect(response).not.toContain('on purpose')
     expectItemInInventory(game.state, 'rune token')
@@ -271,7 +271,7 @@ describe('Mira while the rune token is still unread', () => {
 
   it('says goodbye again once she has read the token', () => {
     const game = amuletAndUnreadToken()
-    executeCommands(game, ['give rune token to mira'])
+    executeCommands(game, ['use rune token with mira'])
 
     const answer = executeCommands(game, ['talk to mira'])
 
@@ -357,7 +357,7 @@ describe('Mira when the flower comes before the three signs', () => {
     game.state.setStoryFlag(FLAG_WOKE_FROM_DREAM, true)
     game.state.setStoryFlag(FLAG_INVESTIGATED_WITHERED_CROPS, true)
     game.state.addItemToInventory(new RareFlower())
-    executeCommands(game, ['look', 'give rare flower to mira'])
+    executeCommands(game, ['look', 'use rare flower with mira'])
     game.state.setStoryFlag(FLAG_VILLAGER_TALKED_TO, true)
     game.state.setStoryFlag(FLAG_WELL_EXAMINED, true)
     executeCommands(game, ['look'])
@@ -441,7 +441,7 @@ const NOT_YET_LINES: Record<string, string> = {
 function readyExcept(...missing: string[]): Game {
   const game = gameInMirasHut()
   game.state.addItemToInventory(new RareFlower())
-  executeCommands(game, ['give rare flower to mira'])
+  executeCommands(game, ['use rare flower with mira'])
   const has = (need: string): boolean => !missing.includes(need)
   if (has('boots')) game.state.addItemToInventory(new WanderingBoots())
   if (has('cloak')) game.state.addItemToInventory(new TravelCloak())
@@ -523,7 +523,7 @@ describe('Mira and the cloaked stranger', () => {
   it('says, as she hands over the amulet, that a man in a grey cloak came asking after it', () => {
     const game = gameInMirasHut()
     game.state.addItemToInventory(new RareFlower())
-    executeCommands(game, ['give rare flower to mira'])
+    executeCommands(game, ['use rare flower with mira'])
     completeJourneyPreparations(game.state)
 
     const response = executeCommands(game, ['talk to mira'])
@@ -535,12 +535,12 @@ describe('Mira and the cloaked stranger', () => {
   it('names the man at her door, without catching herself, when the token comes after the amulet', () => {
     const game = gameInMirasHut()
     game.state.addItemToInventory(new RareFlower())
-    executeCommands(game, ['give rare flower to mira'])
+    executeCommands(game, ['use rare flower with mira'])
     completeJourneyPreparations(game.state)
     executeCommands(game, ['talk to mira'])
     game.state.addItemToInventory(new RuneToken())
 
-    const response = executeCommands(game, ['give rune token to mira'])
+    const response = executeCommands(game, ['use rune token with mira'])
 
     expect(response).toContain('fouling sigil')
     expect(response).toContain(
@@ -554,9 +554,9 @@ describe('Mira and the cloaked stranger', () => {
   it('catches herself on the token first, then tells him of the man at the hand-over', () => {
     const game = gameInMirasHut()
     game.state.addItemToInventory(new RuneToken())
-    const token = executeCommands(game, ['give rune token to mira'])
+    const token = executeCommands(game, ['use rune token with mira'])
     game.state.addItemToInventory(new RareFlower())
-    executeCommands(game, ['give rare flower to mira'])
+    executeCommands(game, ['use rare flower with mira'])
     completeJourneyPreparations(game.state)
 
     const handOver = executeCommands(game, ['talk to mira'])
@@ -572,7 +572,7 @@ describe('Mira and the blessing for the road', () => {
     const game = gameInMirasHut()
     game.state.addItemToInventory(new RareFlower())
 
-    const taught = executeCommands(game, ['give rare flower to mira'])
+    const taught = executeCommands(game, ['use rare flower with mira'])
     const notYet = executeCommands(game, ['talk to mira'])
 
     expect(taught).toContain('a blessing on you')

@@ -455,7 +455,7 @@ Optional virtue moments; none blocks the golden path, none adds a puzzle or comb
 
 | Where                                   | The choice                                                                                                   | Records      |
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ------------ |
-| Residential Quarter, the Families       | Give the Mountain Flower to the sick child the Families mention, gaining nothing (`give mountain flower to families`)   | **selfless** |
+| Residential Quarter, the Families       | Give the Mountain Flower to the sick child the Families mention, gaining nothing (`use mountain flower with families`)   | **selfless** |
 | The Silver Stag Inn, Innkeeper Marcus   | After Elena is cured, tell Marcus the curse was set on her on purpose (the mask-shaped mark), instead of letting him believe it was bad luck (`say truth to marcus`) | **truth**    |
 | Market District, Caravan Master Thorne  | After the rescue, speak for Brenn, the caravan guard who fled when the ravine path gave way, so Thorne does not turn him out (`say forgive to thorne`) | **mercy**    |
 
@@ -515,7 +515,7 @@ The implemented command sequence is `ACT2_GOLDEN_PATH` in `web/src/act2/Act2Gold
 6. **Resolve cross-phase quests:** Back in town, speak to Thorne for the Secret Documents, then return to the inn and cure Elena in order with `greater_heal` (revealing the Sorceress of Lies' mark on her wrist), Crystal-Clear Water, and `dispel` (the mark fades); speak with Marcus to receive the Druidic Charm. In Castle Courtyard, speak with the Training Master and Squires, search for and read the Squire's Diary. In Great Hall, examine the Secret Documents (Malakar's agents framed Cedric) and give them to the Lord Commander; speak with Sir Cedric to complete his honor quest and receive Nature's Charm.
 7. **Summon Nyx and finish the act:** The second forest journey goes straight to the Heart of the Forest, so the golden path takes two forest journeys in all. At Heart of the Forest, use the Druidic Charm with the Offering Altar while carrying the Protective Charm and Nature's Charm, then speak with Nyx, who speaks the refrain and gives `prophetic_vision`, Nyx's Token, and the Forest Heart Crystal. Return to Castle Courtyard and cast Prophetic Vision while Sir Cedric is present; the vision shows the Shadow of the Past, Cedric answers that Malakar is no tale and is hunting Elior (the red line, row II), and Elior says aloud that Malakar took his parents, which Cedric does not correct. The cast shares the vision and leaves Cedric waiting; The Gathering Storm completes, and the act ends, on Elior's next exchange with him: `say truth to cedric` (Elior tells him the voice did not sound like a hunter; Cedric: "Then it is worse, not better. A thing that wants you to come to it.") or any `talk to sir cedric`. The cast works only after every side quest is complete.
 
-The optional virtue moments (see Optional choices) add the commands `give mountain flower to families`, `say truth to marcus` and `say forgive to thorne` at the points they name; none is on the golden path.
+The optional virtue moments (see Optional choices) add the commands `use mountain flower with families`, `say truth to marcus` and `say forgive to thorne` at the points they name; none is on the golden path.
 
 ## Quest Completion Verification
 

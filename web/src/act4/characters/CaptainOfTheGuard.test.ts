@@ -181,7 +181,9 @@ describe('CaptainOfTheGuard', () => {
 
     it('takes the chain, records Selflessness once and sends him home', () => {
       const game = createCourtyardGame()
-      const answer = executeCommands(game, ["give guardian's chain to captain"])
+      const answer = executeCommands(game, [
+        "use guardian's chain with captain",
+      ])
       expect(answer).toContain(
         "You lift the [item_name]guardian's chain[/item_name] over the captain's head. Its crystals flare once and settle against his soot-black tabard, and the warmth goes out of your hands.",
       )
@@ -216,14 +218,18 @@ describe('CaptainOfTheGuard', () => {
     it('works the same after the knight is redeemed', () => {
       const game = createCourtyardGame()
       game.state.setStoryFlag(FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED, true)
-      const answer = executeCommands(game, ["give guardian's chain to captain"])
+      const answer = executeCommands(game, [
+        "use guardian's chain with captain",
+      ])
       expect(answer).toContain('✦ Selflessness')
       expect(game.state.virtueCount(VIRTUE_SELFLESS)).toBe(1)
     })
 
     it('refuses the chain before he is freed', () => {
       const game = createCourtyardGame(false)
-      const answer = executeCommands(game, ["give guardian's chain to captain"])
+      const answer = executeCommands(game, [
+        "use guardian's chain with captain",
+      ])
       expect(answer).toContain(
         'The captain stares through you. His hands do not close on it, and you keep it.',
       )
@@ -238,11 +244,11 @@ describe('CaptainOfTheGuard', () => {
       const before = createCourtyardGame(false)
       before.state.addItemToInventory(new LoyaltyToken())
       expect(
-        executeCommands(before, ['give loyalty token to captain']),
+        executeCommands(before, ['use loyalty token with captain']),
       ).toContain('His hands do not close on it, and you keep it.')
       const after = createCourtyardGame()
       after.state.addItemToInventory(new LoyaltyToken())
-      const answer = executeCommands(after, ['give loyalty token to captain'])
+      const answer = executeCommands(after, ['use loyalty token with captain'])
       expect(answer).toContain(
         '[failure][clue]The [character_name]Captain of the Guard[/character_name] pushes it back into your hands.[/clue][/failure]',
       )
@@ -261,13 +267,13 @@ describe('CaptainOfTheGuard', () => {
       const game = createCourtyardGame()
       game.state.removeItemFromInventory("Guardian's Chain")
       expect(
-        executeCommands(game, ["give guardian's chain to captain"]),
+        executeCommands(game, ["use guardian's chain with captain"]),
       ).toContain("You don't have a 'guardian's chain'")
     })
 
     it('keeps him gone, the chain given and the moment counted once on reload', () => {
       const game = createCourtyardGame()
-      executeCommands(game, ["give guardian's chain to captain"])
+      executeCommands(game, ["use guardian's chain with captain"])
       game.loadSaveData(game.toSaveData())
       expect(executeCommands(game, ['look'])).not.toContain('captain')
       expect(game.state.getStoryFlag(FLAG_ACT4_CHAIN_GIVEN)).toBe(true)

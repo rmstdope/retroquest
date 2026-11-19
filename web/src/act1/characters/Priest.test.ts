@@ -137,7 +137,7 @@ describe('The priest answers the matches he asked for (rq-dmwp)', () => {
   })
 
   it('hands the matches back and asks Elior to light the cold candle', () => {
-    const response = executeCommands(game, ['give matches to priest'])
+    const response = executeCommands(game, ['use matches with priest'])
 
     expect(response).not.toContain(STOCK)
     expect(response).toContain('Will you light it for me?')
@@ -149,7 +149,7 @@ describe('The priest answers the matches he asked for (rq-dmwp)', () => {
   })
 
   it('still lets Elior light the candle after the matches are handed back', () => {
-    executeCommands(game, ['give matches to priest'])
+    executeCommands(game, ['use matches with priest'])
 
     const response = executeCommands(game, ['use matches with candle'])
 
@@ -159,7 +159,7 @@ describe('The priest answers the matches he asked for (rq-dmwp)', () => {
   it('lets Elior keep the matches once the candle is lit', () => {
     executeCommands(game, ['use matches with candle'])
 
-    const response = executeCommands(game, ['give matches to priest'])
+    const response = executeCommands(game, ['use matches with priest'])
 
     expect(response).not.toContain(STOCK)
     expect(response).toContain('that was your doing')
@@ -168,7 +168,7 @@ describe('The priest answers the matches he asked for (rq-dmwp)', () => {
   it('keeps his stock give-back line for other things', () => {
     game.state.addItemToInventory(new Stick())
 
-    const response = executeCommands(game, ['give stick to priest'])
+    const response = executeCommands(game, ['use stick with priest'])
 
     expect(response).toContain(STOCK)
   })

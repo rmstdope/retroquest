@@ -72,7 +72,7 @@ describe('ringActions', () => {
     expect(labels(tilda, EMPTY)).toEqual(['Talk to', 'Say…', 'Examine'])
   })
 
-  it('puts Buy… after Say… for a seller with wares, and Give… and Use with… after', () => {
+  it('puts Buy… after Say… for a seller with wares, and Use with… after', () => {
     const ctx: ActionContext = {
       ...EMPTY,
       inventory: ['rope'],
@@ -83,7 +83,6 @@ describe('ringActions', () => {
       'Talk to',
       'Say…',
       'Buy…',
-      'Give…',
       'Use with…',
       'Cast on…',
       'Examine',
@@ -118,7 +117,7 @@ describe('ringActions', () => {
     expect(labels(bucket, ctx)).not.toContain('Use with…')
   })
 
-  it('gives a person the things carried, counted as in the Bag, and the wares with prices', () => {
+  it('hands a person the things carried, counted as in the Bag, and sells the wares with prices', () => {
     const ctx: ActionContext = {
       ...EMPTY,
       inventory: ['[item_name]2 apple[/item_name]', "Elior's Journal"],
@@ -130,9 +129,10 @@ describe('ringActions', () => {
     const byLabel = Object.fromEntries(
       ringActions(tilda, ctx).map((a) => [a.label, a]),
     )
-    expect(byLabel['Give…'].choices).toEqual([
-      { label: 'Apple ×2', command: 'give apple to tilda' },
-      { label: "Elior's Journal", command: "give Elior's Journal to tilda" },
+    expect(byLabel['Give…']).toBeUndefined()
+    expect(byLabel['Use with…'].choices).toEqual([
+      { label: 'Apple ×2', command: 'use apple with tilda' },
+      { label: "Elior's Journal", command: "use Elior's Journal with tilda" },
     ])
     expect(byLabel['Buy…'].choices).toEqual([
       { label: 'Rope · 1 coin', command: 'buy rope from tilda' },

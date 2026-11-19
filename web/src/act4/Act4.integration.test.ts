@@ -892,7 +892,7 @@ describe('Act 4 integration', () => {
       game.state.currentRoom = game.state.allRooms.OuterCourtyard
       game.state.addVirtue(VIRTUE_SELFLESS)
       expect(selflessLine(game.state)).toBeNull()
-      executeCommands(game, ["give guardian's chain to captain"])
+      executeCommands(game, ["use guardian's chain with captain"])
       expect(selflessLine(game.state)).not.toBeNull()
       reload()
       expectStoryFlag(game.state, FLAG_ACT4_CHAIN_GIVEN)
@@ -909,7 +909,7 @@ describe('Act 4 integration', () => {
         'cast truth sight on echo stone',
       ])
       game.state.currentRoom = game.state.allRooms.OuterCourtyard
-      executeCommands(game, ["give guardian's chain to captain"])
+      executeCommands(game, ["use guardian's chain with captain"])
       game.state.currentRoom = game.state.allRooms.HallOfEchoes
       expect(executeCommands(game, ['say redemption to knight'])).toContain(
         'the chain is gone with the captain',

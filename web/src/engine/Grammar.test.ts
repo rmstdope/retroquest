@@ -93,7 +93,6 @@ describe('Grammar', () => {
         '[bold]Interaction:[/bold]\n' +
         '  talk to <character>, speak to <character>, converse with <character>\n' +
         '  say <word(s)> to <character>\n' +
-        '  give <item> to <character>, hand <item> to <character>\n' +
         '  buy <item> from <character>\n' +
         '\n' +
         '[bold]Examination:[/bold]\n' +

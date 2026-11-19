@@ -50,7 +50,7 @@ describe('King Alden', () => {
   it('cannot take the elixir while he hangs in the crystal', () => {
     const game = inThrone()
     const answer = executeCommands(game, [
-      'give lifelight elixir to king alden',
+      'use lifelight elixir with king alden',
     ])
     expect(answer).toContain('the king inside does not stir')
     expectNoStockReply(answer)
@@ -59,13 +59,13 @@ describe('King Alden', () => {
 
   it('cannot take the amulet in the crystal, and refuses it awake', () => {
     const asleep = executeCommands(inThrone(), [
-      'give ancient amulet to king alden',
+      'use ancient amulet with king alden',
     ])
     expect(asleep).toContain('The amulet clicks against the crystal.')
     expectNoStockReply(asleep)
     const game = inThrone()
     game.state.setStoryFlag(FLAG_ACT4_ELIXIR_ON_KING, true)
-    const awake = executeCommands(game, ['give ancient amulet to king alden'])
+    const awake = executeCommands(game, ['use ancient amulet with king alden'])
     expect(awake).toContain('My half of it has cost me enough.')
     expectNoStockReply(awake)
     expect(game.state.inventory.some((i) => i instanceof AncientAmulet)).toBe(

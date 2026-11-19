@@ -197,7 +197,7 @@ describe('Sir Cedric in the Hall of Echoes', () => {
     game.state.currentRoom = game.state.allRooms.HallOfEchoes
     game.state.inventory.push(new KnightsRedemption())
     const answer = executeCommands(game, [
-      "give knight's redemption to sir cedric",
+      "use knight's redemption with sir cedric",
     ])
     expect(answer).toContain('What he owed me he said to my face.')
     expectNoStockReply(answer)

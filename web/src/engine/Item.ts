@@ -132,11 +132,18 @@ export class Item {
     return ''
   }
 
-  useOnCharacter(_gameState: GameState, target: Character): string {
-    return (
-      `[failure]You can't use ${this.nameInSentence()} on ` +
-      `${target.nameInSentence()}.[/failure]`
-    )
+  /**
+   * Using the item with a character hands it over: the character answers as
+   * to an offer (`Character.giveItem`), which by default is a refusal. An
+   * item that lies in the room cannot be handed over and is refused first.
+   * Override for an item that means something else with a character, and end
+   * in `super` for the rest.
+   */
+  useOnCharacter(gameState: GameState, target: Character): string {
+    if (!gameState.inventory.includes(this)) {
+      return `[failure]You aren't carrying ${this.nameInSentence()}.[/failure]`
+    }
+    return target.giveItem(gameState, this)
   }
 
   /**

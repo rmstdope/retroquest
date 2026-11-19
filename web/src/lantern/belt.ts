@@ -112,12 +112,12 @@ function taking(id: string, label: string, verb: HandVerb): RingAction {
 
 /**
  * The ring of a carried thing, clockwise from the top: Use, Use with…,
- * Give…, Open, Close, Cast on…, Examine; of a spell: Cast, Cast on…. An
- * action with nothing to choose from is left out: Use with… when nothing else
- * is carried and nothing is placed in the room (`placed`), Give… with nobody
- * here, Cast on… with no spells. Use, Open, Close, Examine and Cast send at
- * once; Cast on… on a thing fans the spells known; Use with…, Give… and a
- * spell's Cast on… take it in hand.
+ * Open, Close, Cast on…, Examine; of a spell: Cast, Cast on…. An action with
+ * nothing to choose from is left out: Use with… when nothing else is carried,
+ * nothing is placed in the room (`placed`) and nobody is here (it is also how
+ * a thing is handed over), Cast on… with no spells. Use, Open, Close,
+ * Examine and Cast send at once; Cast on… on a thing fans the spells known;
+ * Use with… and a spell's Cast on… take it in hand.
  */
 export function carriedRing(
   subject: RingSubject,
@@ -144,10 +144,9 @@ export function carriedRing(
   )
   return [
     plain('use', 'Use', commandOf('use', [name])),
-    ...(others || placed > 0
+    ...(others || placed > 0 || ctx.characters.length > 0
       ? [taking('usewith', 'Use with…', 'usewith')]
       : []),
-    ...(ctx.characters.length > 0 ? [taking('give', 'Give…', 'give')] : []),
     plain('open', 'Open', commandOf('open', [name])),
     plain('close', 'Close', commandOf('close', [name])),
     ...(castOn ? [castOn] : []),
@@ -155,14 +154,13 @@ export function carriedRing(
   ]
 }
 
-/** What the strip says while `hand` waits: "Use Bread with…", "Give Bread to…", "Cast Light on…". */
+/** What the strip says while `hand` waits: "Use Bread with…", "Cast Light on…". */
 export function handStrip(hand: Hand): string {
   if (hand.verb === 'usewith') return `Use ${hand.label} with…`
-  if (hand.verb === 'give') return `Give ${hand.label} to…`
   return `Cast ${hand.label} on…`
 }
 
-/** The command `hand` sends once `pressed` is chosen: use with, give to or cast on. */
+/** The command `hand` sends once `pressed` is chosen: use with or cast on. */
 export function handCommand(hand: Hand, pressed: { name: string }): string {
   const verb = verbById(hand.verb)
   return buildCommand(verb, [hand.name, pressed.name]) ?? ''

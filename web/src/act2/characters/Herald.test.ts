@@ -42,7 +42,7 @@ describe('Herald dialogue markup', () => {
     const game = createGameAtCastleApproach()
     game.state.addItemToInventory(new EntryPass())
 
-    const answer = game.commandParser.parse('give entry pass to herald')
+    const answer = game.commandParser.parse('use entry pass with herald')
 
     expect(answer).toContain('A sound seal. You may pass into the courtyard.')
     expect(answer).toContain(
@@ -56,7 +56,7 @@ describe('Herald dialogue markup', () => {
   it('attributes the talk after the pass to the herald', () => {
     const game = createGameAtCastleApproach()
     game.state.addItemToInventory(new EntryPass())
-    game.commandParser.parse('give entry pass to herald')
+    game.commandParser.parse('use entry pass with herald')
 
     const answer = game.commandParser.parse('talk to herald')
 

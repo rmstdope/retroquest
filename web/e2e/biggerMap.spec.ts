@@ -32,7 +32,7 @@ async function wake(page: Page): Promise<void> {
     'search',
     'take faded photograph',
     'examine faded photograph',
-    'give faded photograph to grandmother',
+    'use faded photograph with grandmother',
   ]
   for (const command of opening) {
     await enter(page, command)

@@ -1,6 +1,6 @@
 /**
  * The belt of pictures (rq-ezpg.8): the carried things lie along the foot of
- * the room's picture, a press on one opens its ring, Use with… and Give… take
+ * the room's picture, a press on one opens its ring, Use with… takes
  * it in hand with a strip saying so, and the next press on a thing sends the
  * command typed. Cancel and Escape put it down; B goes to the belt.
  */
@@ -83,9 +83,9 @@ test('a carried thing is used on a person from the belt: ring, hand, press', asy
   await page.locator('[data-belt-pic="item:bread"]').click()
   const ring = page.getByRole('menu', { name: 'Bread' })
   await expect(ring).toBeVisible()
-  await ring.getByRole('menuitem', { name: /Give/ }).click()
+  await ring.getByRole('menuitem', { name: /Use with/ }).click()
   await expect(ring).toHaveCount(0)
-  const strip = page.getByRole('status').filter({ hasText: 'Give Bread to…' })
+  const strip = page.getByRole('status').filter({ hasText: 'Use Bread with…' })
   await expect(strip).toBeVisible()
   await expect(strip.getByRole('button', { name: '✕ Cancel' })).toBeVisible()
   await page.screenshot({ path: 'test-results/belt-laptop-in-hand.png' })
@@ -95,7 +95,7 @@ test('a carried thing is used on a person from the belt: ring, hand, press', asy
   await expect
     .poll(async () => (await story.innerText()).length)
     .toBeGreaterThan(before)
-  // The game's own answer, as typing `give bread to grandmother` gives it.
+  // The game's own answer, as typing `use bread with grandmother` gives it.
   await expect(story).toContainText('Grandmother turns it over in her hands')
 })
 

@@ -1954,7 +1954,7 @@ function sendHand(command: string): void {
   sendFrom(command, handFrom ?? undefined)
 }
 
-/** The ring's Use with…, Give… or Cast on…: close it and put the thing or spell in hand; focus goes to ✕ Cancel (the picture's things take no keyboard focus). */
+/** The ring's Use with… or Cast on…: close it and put the thing or spell in hand; focus goes to ✕ Cancel (the picture's things take no keyboard focus). */
 function takeInHand(verb: HandVerb): void {
   const open = ring.value
   ring.value = null

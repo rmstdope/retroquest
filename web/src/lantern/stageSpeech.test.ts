@@ -111,7 +111,7 @@ describe('eliorLine', () => {
     null,
     'talk to mira',
     'say hi',
-    'give bread to mira',
+    'use bread with mira',
     'say to mira',
   ])('is nothing for %s', (command) => {
     expect(eliorLine(command)).toBeNull()

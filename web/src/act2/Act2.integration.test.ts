@@ -85,7 +85,7 @@ describe('Act 2 golden path', () => {
     ).toHaveProperty('south')
     // Give Entry Pass to Gate Captain
     expectCharacterInRoom(room(), 'Gate Captain')
-    executeCommands(game, ['give entry pass to gate captain'])
+    executeCommands(game, ['use entry pass with gate captain'])
     expectItemInInventory(state, 'Entry Pass', true)
     // Verify that north exit to Main Square is now available after showing the Entry Pass
     exits = room().getExits(state)
@@ -143,7 +143,7 @@ describe('Act 2 golden path', () => {
     expectCurrentRoom(state, 'Castle Approach')
     // Give Entry Pass to Herald
     expectCharacterInRoom(room(), 'Herald')
-    executeCommands(game, ['give entry pass to herald'])
+    executeCommands(game, ['use entry pass with herald'])
     expectItemInInventory(state, 'entry pass', true)
     // Talk to Castle Guard Captain
     expectCharacterInRoom(room(), 'Castle Guard Captain')
@@ -180,7 +180,7 @@ describe('Act 2 golden path', () => {
     expectCurrentRoom(state, 'Market District')
     // Give Merchant's Flyer to Master Merchant Aldric
     expectCharacterInRoom(room(), 'Master Merchant Aldric')
-    executeCommands(game, ["give merchant's flyer to master merchant aldric"])
+    executeCommands(game, ["use merchant's flyer with master merchant aldric"])
     expectItemInInventory(state, "Merchant's Flyer", false)
     // Talk to Master Merchant Aldric
     executeCommands(game, ['talk to master merchant aldric'])
@@ -268,7 +268,7 @@ describe('Act 2 golden path', () => {
     expectCharacterInRoom(room(), 'Court Herald')
     expectCharacterInRoom(room(), 'Historians')
     // Show the journal to historians directly (we already used our main pass)
-    executeCommands(game, ["give traveler's journal to historians"])
+    executeCommands(game, ["use traveler's journal with historians"])
     // Search for records about Willowbrook (this will activate and complete "Echoes of the Past")
     // But we need formal credentials first - assume the herald recognizes us from prior interaction
     if (!state.getStoryFlag('court_herald_formal_presentation')) {
@@ -287,7 +287,7 @@ describe('Act 2 golden path', () => {
     executeCommands(game, ['go east', 'go north'])
     expectCurrentRoom(state, 'Residential Quarter')
     // Give Walking Stick to families to assist elderly residents
-    executeCommands(game, ['give walking stick to families'])
+    executeCommands(game, ['use walking stick with families'])
     expectItemInInventory(state, 'Walking Stick', false)
     // Talk to families to get healing herbs
     executeCommands(game, ['talk to families'])
@@ -311,7 +311,7 @@ describe('Act 2 golden path', () => {
     ])
     expectSpellKnown(state, 'greater_heal', false)
     // The healing herbs start the apprenticeship at the carter's bed.
-    executeCommands(game, ['give healing herbs to master healer lyria'])
+    executeCommands(game, ['use healing herbs with master healer lyria'])
     expectItemInInventory(state, 'Healing Herbs', false)
     expectSpellKnown(state, 'greater_heal', false)
     expectQuests(state, [
@@ -374,7 +374,7 @@ describe('Act 2 golden path', () => {
     executeCommands(game, ['go secret_passage', 'go north']) // To Healer's House
     expectCurrentRoom(state, "Healer's House")
     // Give Crystal Focus to Healer to complete Healer's apprentice
-    executeCommands(game, ['give crystal focus to master healer lyria'])
+    executeCommands(game, ['use crystal focus with master healer lyria'])
     expectSpellKnown(state, 'greater_heal')
     expectQuests(state, [
       MAIN,
@@ -452,7 +452,7 @@ describe('Act 2 golden path', () => {
     // Look at silver-barked tree
     executeCommands(game, ['look at silver-barked tree'])
     // Give Enchanted Acorn to Ancient Tree Spirit
-    executeCommands(game, ['give enchanted acorn to ancient tree spirit'])
+    executeCommands(game, ['use enchanted acorn with ancient tree spirit'])
     expectItemInInventory(state, 'Enchanted Acorn', false)
     expectSpellKnown(state, 'forest_speech')
     expectQuests(state, [
@@ -497,7 +497,7 @@ describe('Act 2 golden path', () => {
     expectCurrentRoom(state, 'Ancient Grove')
 
     // Complete the "Whispers in the Wind" quest (requires both Crystal-Clear Water and Moonflowers)
-    executeCommands(game, ['give moonflowers to ancient tree spirit'])
+    executeCommands(game, ['use moonflowers with ancient tree spirit'])
     expectItemInInventory(state, 'Moonflowers', false)
     expectItemInInventory(state, 'crystal-clear water')
     expectQuests(state, [
@@ -602,12 +602,12 @@ describe('Act 2 golden path', () => {
     expectCurrentRoom(state, 'Great Hall')
     // Quest should still be active unless documents examined
     executeCommands(game, [
-      'give secret documents to lord commander',
+      'use secret documents with lord commander',
       'examine secret documents',
     ])
     expectQuests(state, [MAIN, "Cedric's Lost Honor"])
     // Give secret documents to Lord Commander to complete quest
-    executeCommands(game, ['give secret documents to lord commander'])
+    executeCommands(game, ['use secret documents with lord commander'])
     expectQuests(state, [MAIN])
     expectItemInInventory(state, 'secret documents', false) // Should be removed
 
@@ -1142,7 +1142,7 @@ describe('Step 24: Lord Commander interaction', () => {
 
     // Give documents to Lord Commander
     let result = executeCommands(game, [
-      'give secret documents to lord commander',
+      'use secret documents with lord commander',
     ])
 
     // Verify the quest is now completed
@@ -1315,7 +1315,7 @@ describe('Act 2 optional virtue moments', () => {
     executeCommands(game, [...ACT2_GOLDEN_PATH, ...ACT2_COMPLETING_COMMANDS])
     game.state.addItemToInventory(new MountainFlower())
     game.state.currentRoom = game.state.allRooms.ResidentialQuarter
-    executeCommands(game, ['give mountain flower to families'])
+    executeCommands(game, ['use mountain flower with families'])
     game.state.currentRoom = game.state.allRooms.SilverStagInn
     executeCommands(game, ['say truth to marcus'])
     game.state.currentRoom = game.state.allRooms.MarketDistrict
@@ -1415,7 +1415,7 @@ describe("The sergeant's sword", () => {
 })
 
 describe('Act 2 silver leaves and the forest heart crystal', () => {
-  const GIVE = 'give silver leaves to master healer lyria'
+  const GIVE = 'use silver leaves with master healer lyria'
   const WINDOWSILL = 'The dish of silver leaves sits on the windowsill'
 
   it('is optional: the act finishes with the leaves never given', () => {

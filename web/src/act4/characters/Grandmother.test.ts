@@ -48,10 +48,12 @@ describe('Grandmother at the gate', () => {
   it('takes neither the amulet nor the token, and says why', () => {
     const game = inField()
     game.state.inventory.push(new AncientAmulet(), new NyxToken())
-    const amulet = executeCommands(game, ['give ancient amulet to grandmother'])
+    const amulet = executeCommands(game, [
+      'use ancient amulet with grandmother',
+    ])
     expect(amulet).toContain('That was never mine to hold')
     expectNoStockReply(amulet)
-    const token = executeCommands(game, ["give nyx's token to grandmother"])
+    const token = executeCommands(game, ["use nyx's token with grandmother"])
     expect(token).toContain('Someone in that hedge')
     expectNoStockReply(token)
     expect(game.state.inventory.some((i) => i instanceof AncientAmulet)).toBe(

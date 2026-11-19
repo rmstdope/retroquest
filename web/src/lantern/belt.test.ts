@@ -69,7 +69,7 @@ describe('carriedRing', () => {
     expect(labels(bread, EMPTY)).toEqual(['Use', 'Open', 'Close', 'Examine'])
   })
 
-  it('offers every action in order when there is something to use it on, someone to give to and spells', () => {
+  it('offers every action in order when there is something to use it on, someone to hand it to and spells', () => {
     const ctx = {
       ...EMPTY,
       characters: ['tilda'],
@@ -79,7 +79,6 @@ describe('carriedRing', () => {
     expect(labels(bread, ctx, 1)).toEqual([
       'Use',
       'Use with…',
-      'Give…',
       'Open',
       'Close',
       'Cast on…',
@@ -87,11 +86,11 @@ describe('carriedRing', () => {
     ])
   })
 
-  it('leaves out Use with… when the only carried thing is itself and nothing is placed', () => {
+  it('keeps Use with… for someone to hand the thing to when nothing else is carried or placed', () => {
     const ctx = { ...EMPTY, inventory: ['bread'], characters: ['tilda'] }
     expect(labels(bread, ctx, 0)).toEqual([
       'Use',
-      'Give…',
+      'Use with…',
       'Open',
       'Close',
       'Examine',
@@ -111,11 +110,11 @@ describe('carriedRing', () => {
     ])
   })
 
-  it('takes the thing in hand for Use with… and Give…', () => {
+  it('takes the thing in hand for Use with…', () => {
     const ctx = { ...EMPTY, inventory: ['bread'], characters: ['tilda'] }
     const ring = carriedRing(bread, ctx, 1)
     expect(ring.find((a) => a.id === 'usewith')?.hand).toBe('usewith')
-    expect(ring.find((a) => a.id === 'give')?.hand).toBe('give')
+    expect(ring.find((a) => a.id === 'give')).toBeUndefined()
     expect(ring.find((a) => a.id === 'use')?.command).toBe('use bread')
     expect(ring.find((a) => a.id === 'examine')?.command).toBe('examine bread')
   })
@@ -138,16 +137,12 @@ describe('the hand', () => {
 
   it('says what the next press will do', () => {
     expect(handStrip(inHand('usewith'))).toBe('Use Bread with…')
-    expect(handStrip(inHand('give'))).toBe('Give Bread to…')
     expect(handStrip(inHand('caston', light))).toBe('Cast Light on…')
   })
 
   it('sends the command that already exists for the pressed thing', () => {
     expect(handCommand(inHand('usewith'), { name: 'tilda' })).toBe(
       'use bread with tilda',
-    )
-    expect(handCommand(inHand('give'), { name: 'tilda' })).toBe(
-      'give bread to tilda',
     )
     expect(handCommand(inHand('caston', light), { name: 'bread' })).toBe(
       'cast light on bread',

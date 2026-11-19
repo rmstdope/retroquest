@@ -37,7 +37,7 @@ describe('Court Herald', () => {
     const game = gameInHall()
     game.state.addItemToInventory(new EntryPass())
 
-    const answer = game.commandParser.parse('give entry pass to court herald')
+    const answer = game.commandParser.parse('use entry pass with court herald')
 
     expect(
       answer.startsWith(

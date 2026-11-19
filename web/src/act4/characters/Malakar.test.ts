@@ -17,10 +17,10 @@ function inThrone(): Game {
 }
 
 describe('Malakar', () => {
-  it('holds off the amulet offered before he has spoken', () => {
+  it('burns on the amulet used with him before he has spoken, not the Bargain', () => {
     const game = inThrone()
-    const answer = executeCommands(game, ['give ancient amulet to malakar'])
-    expect(answer).toContain('You have not heard what I am offering.')
+    const answer = executeCommands(game, ['use ancient amulet with malakar'])
+    expect(answer).toContain('it burns white')
     expect(answer).not.toContain(CATCH_ALL)
     expect(game.state.getStoryFlag(FLAG_ACT4_THRONE_BARGAIN_SEEN)).toBe(false)
   })

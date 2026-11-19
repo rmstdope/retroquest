@@ -55,7 +55,7 @@ describe('Gate Captain dialogue markup', () => {
     const game = createGameAtGates()
     game.state.addItemToInventory(new EntryPass())
 
-    const answer = game.commandParser.parse('give entry pass to gate captain')
+    const answer = game.commandParser.parse('use entry pass with gate captain')
 
     expect(answer).toContain(
       'He runs a thumb along the line where a name should be; it has been ' +
@@ -73,7 +73,7 @@ describe('Gate Captain dialogue markup', () => {
     const game = createGameAtGates()
     game.state.addItemToInventory(new EntryPass())
 
-    const answer = game.commandParser.parse('give entry pass to gate captain')
+    const answer = game.commandParser.parse('use entry pass with gate captain')
 
     expect(answer).toContain('A map would help you find your way')
     expect(answer).not.toContain("You'll need a map")
@@ -88,17 +88,17 @@ describe('Gate Captain dialogue markup', () => {
   it('is not there to talk to after he accepted the pass', () => {
     const game = createGameAtGates()
     game.state.addItemToInventory(new EntryPass())
-    game.commandParser.parse('give entry pass to gate captain')
+    game.commandParser.parse('use entry pass with gate captain')
 
     game.state.addItemToInventory(new EntryPass())
 
     const talk = game.commandParser.parse('talk to gate captain')
-    const give = game.commandParser.parse('give entry pass to gate captain')
+    const give = game.commandParser.parse('use entry pass with gate captain')
 
     expect(talk).toContain(
       "There is no character named '[character_name]gate captain",
     )
-    expect(give).toContain("There is no character named 'Gate captain' here.")
+    expect(give).toContain("You don't see a 'gate captain' to use with")
   })
 
   it('still sends off a captain left in the room by an older save', () => {
@@ -122,7 +122,7 @@ describe('Gate Captain dialogue markup', () => {
     game.state.addItemToInventory(new WalkingStick())
 
     const answer = game.commandParser.parse(
-      'give walking stick to gate captain',
+      'use walking stick with gate captain',
     )
 
     expect(answer).toContain(

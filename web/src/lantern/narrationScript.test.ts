@@ -584,7 +584,7 @@ describe('actScript said words', () => {
   it('fails a branch whose talk, give or take reaches nobody, naming the branch', () => {
     for (const command of [
       'talk to nobodyhere',
-      'give lantern to nobodyhere',
+      'use lantern with nobodyhere',
       'take nothinghere',
     ]) {
       const nobody: ScriptBranch = { after: 0, commands: [command] }

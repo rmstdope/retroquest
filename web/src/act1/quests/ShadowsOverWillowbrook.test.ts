@@ -271,7 +271,7 @@ describe('Shadows over Willowbrook log', () => {
     game.state.setStoryFlag(FLAG_INVESTIGATED_WITHERED_CROPS, true)
     game.state.currentRoom = game.state.allRooms.MirasHut
     game.state.addItemToInventory(new RareFlower())
-    executeCommands(game, ['look', 'give rare flower to mira'])
+    executeCommands(game, ['look', 'use rare flower with mira'])
     game.state.setStoryFlag(FLAG_VILLAGER_TALKED_TO, true)
     game.state.setStoryFlag(FLAG_WELL_EXAMINED, true)
     executeCommands(game, ['talk to mira'])

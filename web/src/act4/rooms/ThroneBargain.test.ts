@@ -34,9 +34,6 @@ const BARGAIN = [
   dialogue('Malakar', 'You saw. Then you know I was not lying.'),
 ].join('\n')
 
-const AGAIN =
-  '[dim]Malakar does not reach for it. He has seen what it will not do.[/dim]'
-
 const AFTER_TALK = dialogue(
   'Malakar',
   'It would not break for me. Perhaps it would for you.',
@@ -48,30 +45,35 @@ const LYSA_LINE = dialogue(
 )
 
 describe('the Bargain', () => {
-  it('is not offered before Malakar has been talked to', () => {
+  it('is not played before Malakar has been talked to: the amulet burns him', () => {
     const game = inThrone()
-    expect(executeCommands(game, ['give amulet to malakar'])).toContain(
-      'You have not heard what I am offering.',
+    expect(executeCommands(game, ['use amulet with malakar'])).toContain(
+      'it burns white',
     )
     expect(game.state.getStoryFlag(FLAG_ACT4_THRONE_BARGAIN_SEEN)).toBe(false)
   })
 
   it('plays once in order, keeps the amulet and records itself', () => {
     const game = offered()
-    expect(executeCommands(game, ['give amulet to malakar'])).toBe(BARGAIN)
+    expect(executeCommands(game, ['use amulet with malakar'])).toBe(BARGAIN)
     expectStoryFlag(game.state, FLAG_ACT4_THRONE_BARGAIN_SEEN, true)
     expectItemInInventory(game.state, 'ancient amulet')
   })
 
-  it('gives a dim line instead of replaying', () => {
+  it('does not replay: the next use is the burn, then a dim line', () => {
     const game = offered()
-    executeCommands(game, ['give amulet to malakar'])
-    expect(executeCommands(game, ['give amulet to malakar'])).toBe(AGAIN)
+    executeCommands(game, ['use amulet with malakar'])
+    const next = executeCommands(game, ['use amulet with malakar'])
+    expect(next).toContain('it burns white')
+    expect(next).not.toContain('workshop')
+    expect(executeCommands(game, ['use amulet with malakar'])).toContain(
+      'still warm',
+    )
   })
 
   it('gives Malakar a new line to talk to, until the refrain', () => {
     const game = offered()
-    executeCommands(game, ['give amulet to malakar'])
+    executeCommands(game, ['use amulet with malakar'])
     expect(executeCommands(game, ['talk to malakar'])).toBe(AFTER_TALK)
     expect(executeCommands(game, ['talk to malakar'])).toBe(AFTER_TALK)
     executeCommands(game, ['say refrain to malakar'])
@@ -80,40 +82,39 @@ describe('the Bargain', () => {
     )
   })
 
-  it('leaves giving unchanged once the refrain is said', () => {
+  it('opens the amulet instead of the Bargain once the refrain is said', () => {
     const game = offered()
     executeCommands(game, ['say refrain to malakar'])
-    const out = executeCommands(game, ['give amulet to malakar'])
+    const out = executeCommands(game, ['use amulet with malakar'])
     expect(out).not.toContain('workshop')
     expect(game.state.getStoryFlag(FLAG_ACT4_THRONE_BARGAIN_SEEN)).toBe(false)
   })
 
-  it('keeps the burn scene for raising the amulet, in either order', () => {
+  it('plays the Bargain first and the burn after it, whichever way it is typed', () => {
     const burn = 'it burns white'
-    const raisedFirst = offered()
-    expect(executeCommands(raisedFirst, ['use amulet on malakar'])).toContain(
-      burn,
-    )
-    expect(executeCommands(raisedFirst, ['give amulet to malakar'])).toBe(
+    const withFirst = offered()
+    expect(executeCommands(withFirst, ['use amulet with malakar'])).toBe(
       BARGAIN,
     )
-    const givenFirst = offered()
-    executeCommands(givenFirst, ['give amulet to malakar'])
-    expect(executeCommands(givenFirst, ['use amulet on malakar'])).toContain(
+    expect(executeCommands(withFirst, ['use amulet on malakar'])).toContain(
       burn,
     )
+    const onFirst = offered()
+    expect(executeCommands(onFirst, ['use amulet on malakar'])).toBe(BARGAIN)
   })
 
   it('survives a save and load', () => {
     const game = offered()
-    executeCommands(game, ['give amulet to malakar'])
+    executeCommands(game, ['use amulet with malakar'])
     const loaded = new Game([new Act4()])
     expect(loaded.loadSaveData(game.toSaveData())).toContain(
       'Game loaded successfully.',
     )
     expectStoryFlag(loaded.state, FLAG_ACT4_THRONE_BARGAIN_SEEN, true)
     expectItemInInventory(loaded.state, 'ancient amulet')
-    expect(executeCommands(loaded, ['give amulet to malakar'])).toBe(AGAIN)
+    expect(executeCommands(loaded, ['use amulet with malakar'])).toContain(
+      'it burns white',
+    )
     expect(executeCommands(loaded, ['talk to malakar'])).toBe(AFTER_TALK)
   })
 })
@@ -127,7 +128,7 @@ describe('Lysa in the farewell', () => {
       const game = offered()
       const without = farewell(ending, game.state)
       expect(without).not.toContain('bravest thing you did today')
-      executeCommands(game, ['give amulet to malakar'])
+      executeCommands(game, ['use amulet with malakar'])
       const seen = farewell(ending, game.state)
       expect(seen).toContain(`${dialogue('Lysa', WATCHED)}\n${LYSA_LINE}`)
     }
@@ -138,7 +139,7 @@ describe('Lysa in the farewell', () => {
     const talk = ACT4_GOLDEN_PATH.indexOf('talk to malakar')
     const ending = ACT4_GOLDEN_PATH.indexOf('cast forgiveness on wound')
     executeCommands(game, ACT4_GOLDEN_PATH.slice(0, talk + 1))
-    executeCommands(game, ['give amulet to malakar'])
+    executeCommands(game, ['use amulet with malakar'])
     executeCommands(game, ACT4_GOLDEN_PATH.slice(talk + 1, ending))
     const out = executeCommands(game, [ACT4_GOLDEN_PATH[ending]])
     expect(out).toContain(LYSA_LINE)

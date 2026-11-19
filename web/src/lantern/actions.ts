@@ -110,16 +110,6 @@ export const VERBS: readonly Verb[] = [
     group: 'main',
   },
   {
-    id: 'give',
-    label: 'Give',
-    words: 'give',
-    slots: [
-      { sources: ['inventory'] },
-      { sources: ['characters'], joiner: 'to' },
-    ],
-    group: 'main',
-  },
-  {
     id: 'buy',
     label: 'Buy',
     words: 'buy',

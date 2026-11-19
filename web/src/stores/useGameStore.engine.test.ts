@@ -523,7 +523,7 @@ describe('useGameStore over the real engine: the no-match line and a name that w
     it('does not say no match for an extra name before the rest of the command', async () => {
       const store = await storeHoldingToken()
 
-      expect(saysNoMatch(store, 'give pendant to sorceress')).toBe(false)
+      expect(saysNoMatch(store, 'use pendant with sorceress')).toBe(false)
       expect(saysNoMatch(store, 'use crystalline pendant with')).toBe(false)
     })
 
@@ -533,7 +533,6 @@ describe('useGameStore over the real engine: the no-match line and a name that w
       expect(
         store.completionState('use crystalline pendant ').candidates,
       ).toEqual(['with', 'on'])
-      expect(store.completionState('give pendant ').candidates).toEqual(['to'])
     })
 
     it('does not say no match for an extra name of a thing in the room', async () => {
@@ -561,7 +560,7 @@ describe('useGameStore over the real engine: the no-match line and a name that w
       const store = await storeHoldingToken()
 
       expect(store.completionState('use pendant').sendable).toBe(true)
-      expect(store.completionState('give pendant').sendable).toBe(false)
+      expect(store.completionState('use pendant with').sendable).toBe(false)
     })
 
     it('still says no match where the item is not to be had', async () => {
@@ -577,7 +576,7 @@ describe('useGameStore over the real engine: the no-match line and a name that w
       expect(saysNoMatch(store, 'examine pendant bob')).toBe(true)
       expect(saysNoMatch(store, "examine nyx's token bob")).toBe(true)
       expect(saysNoMatch(store, 'use pendant bob')).toBe(true)
-      expect(saysNoMatch(store, 'give pendant to bob')).toBe(true)
+      expect(saysNoMatch(store, 'use pendant with bob')).toBe(true)
       expect(saysNoMatch(store, 'go pendant')).toBe(true)
     })
   })

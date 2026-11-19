@@ -25,8 +25,7 @@ import {
   VIRTUE_MERCY,
 } from '../Act4StoryFlags'
 import { endingPlayed } from '../endings'
-import { AMULET_DARK, AncientAmulet } from '../items/AncientAmulet'
-import { LifelightElixir } from '../items/LifelightElixir'
+import { AMULET_DARK } from '../items/AncientAmulet'
 import { Forgiveness } from '../spells/Forgiveness'
 
 /** The speaker label of the dream voice, as in the Memory Vault. */
@@ -469,8 +468,10 @@ export class Malakar extends Character {
   }
 
   /**
-   * Items offered to him by hand: the Lifelight Elixir is the same as using it
-   * on him, and the Ancient Amulet may accept his bargain (see `amuletGiven`).
+   * Anything else handed to him by using it with him: once the ending is
+   * played he answers for the seal, otherwise he refuses as any character
+   * does. (The Lifelight Elixir and the Ancient Amulet have their own
+   * answers; see `LifelightElixir` and `openAmulet`.)
    */
   override giveItem(
     gameState: GameState,
@@ -479,30 +480,14 @@ export class Malakar extends Character {
     const ending = endingPlayed(gameState)
     if (ending === 'justice') return GONE_INTO_SEAL
     if (ending) return NOTHING_LEFT
-    if (item instanceof LifelightElixir) return this.receiveElixir(gameState)
-    if (item instanceof AncientAmulet) return this.amuletGiven(gameState)
     return super.giveItem(gameState, item)
   }
 
   /**
-   * The amulet given to him by hand. Before his offer he holds it off; after
-   * the offer and before the refrain it accepts the offer and plays the
-   * Bargain once (then a dim line); otherwise he answers as for any other
-   * words.
+   * The Bargain: the amulet put into his hand after his offer and before the
+   * refrain, the first time (`openAmulet` sends it here).
    */
-  private amuletGiven(gameState: GameState): string {
-    if (!gameState.getStoryFlag(FLAG_ACT4_THRONE_OFFER_HEARD)) {
-      return [
-        "Malakar's eyes go to the amulet, and stay on it a while.",
-        dialogue(this.name, 'Not yet. You have not heard what I am offering.'),
-      ].join('\n')
-    }
-    if (gameState.getStoryFlag(FLAG_ACT4_THRONE_REFRAIN_SAID)) {
-      return this.otherWords(gameState)
-    }
-    if (gameState.getStoryFlag(FLAG_ACT4_THRONE_BARGAIN_SEEN)) {
-      return '[dim]Malakar does not reach for it. He has seen what it will not do.[/dim]'
-    }
+  private playBargain(gameState: GameState): string {
     gameState.setStoryFlag(FLAG_ACT4_THRONE_BARGAIN_SEEN, true)
     return [
       "Malakar's hand closes on the amulet, and for a moment neither of " +
@@ -524,8 +509,10 @@ export class Malakar extends Character {
   }
 
   /**
-   * The Ancient Amulet used here: the third step of the scene. Before the
-   * refrain it burns Malakar (once, then a dim line).
+   * The Ancient Amulet used here: the third step of the scene. After his
+   * offer and before the refrain the first use is the Bargain (see
+   * `playBargain`); otherwise, before the refrain, it burns Malakar (once,
+   * then a dim line).
    */
   openAmulet(gameState: GameState): string {
     if (endingPlayed(gameState)) {
@@ -535,6 +522,12 @@ export class Malakar extends Character {
       return '[dim]The amulet is already open, its light filling the chamber.[/dim]'
     }
     if (!gameState.getStoryFlag(FLAG_ACT4_THRONE_REFRAIN_SAID)) {
+      if (
+        gameState.getStoryFlag(FLAG_ACT4_THRONE_OFFER_HEARD) &&
+        !gameState.getStoryFlag(FLAG_ACT4_THRONE_BARGAIN_SEEN)
+      ) {
+        return this.playBargain(gameState)
+      }
       return this.burnedByAmulet(gameState)
     }
     gameState.setStoryFlag(FLAG_ACT4_THRONE_AMULET_OPENED, true)

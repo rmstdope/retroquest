@@ -85,7 +85,7 @@ describe('Grandmother and the moor, once', () => {
     const game = gameIn('EliorsCottage')
     executeCommands(game, ['talk to grandmother'])
     game.state.addItemToInventory(new Locket())
-    executeCommands(game, ['give locket to grandmother'])
+    executeCommands(game, ['use locket with grandmother'])
     return game
   }
 

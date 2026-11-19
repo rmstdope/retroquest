@@ -112,7 +112,7 @@ describe('a group character in a default reply', () => {
     game.state.currentRoom.addCharacter(new GhostlyWarriors())
     game.state.inventory.push(new EchoStone())
 
-    expect(game.commandParser.parse('give echo stone to warriors')).toContain(
+    expect(game.commandParser.parse('use echo stone with warriors')).toContain(
       'The [character_name]ghostly warriors[/character_name] don',
     )
   })
