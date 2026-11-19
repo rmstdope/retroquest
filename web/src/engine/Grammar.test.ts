@@ -102,7 +102,7 @@ describe('Grammar', () => {
         '\n' +
         '[bold]Inventory Management:[/bold]\n' +
         '  take <item>, pick up <item>, grab <item>, get <item>\n' +
-        '  use <item>, use <item> with <item>\n' +
+        '  use <item>, use <item> with <item or character>\n' +
         '  inventory, i, inv\n' +
         '  open <container>\n' +
         '  close <container>\n' +
