@@ -35,7 +35,7 @@ describe('FadedPhotograph', () => {
     const tooltip = bagTooltip(game)
     expect(findMarkupProblems(tooltip)).toEqual([])
     expect(tooltip).not.toContain(MESSAGE)
-    expect(tooltip).toMatch(/back/)
+    expect(tooltip).toContain('Something is written on the back.')
     expect(game.state.getStoryFlag(FLAG_READ_PHOTO_MESSAGE)).toBeFalsy()
   })
 
