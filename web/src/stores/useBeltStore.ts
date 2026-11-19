@@ -13,6 +13,9 @@ import { appStorage } from '@/storage/appStorage'
  */
 export const BELT_STORAGE_KEY = 'retroquest_belt'
 
+/** How long (in milliseconds) the strap stays lit. */
+const LIT_MS = 1000
+
 /** Read the remembered belt, falling back per field to the default. */
 function load(): { away: boolean; list: BeltList } {
   const fallback = { away: false, list: 'bag' as BeltList }
@@ -40,6 +43,9 @@ export const useBeltStore = defineStore('belt', () => {
   const away = ref(initial.away)
   const list = ref<BeltList>(initial.list)
   const hand = ref<Hand | null>(null)
+  /** The strap is lit for a moment (the typed `inventory`); never stored. */
+  const lit = ref(false)
+  let litTimer: ReturnType<typeof setTimeout> | undefined
 
   watch([away, list], () => {
     try {
@@ -65,6 +71,12 @@ export const useBeltStore = defineStore('belt', () => {
     away.value = false
     if (which) list.value = which
   }
+  /** Light the strap for about a second; lighting it again restarts the second. */
+  function light(): void {
+    clearTimeout(litTimer)
+    lit.value = true
+    litTimer = setTimeout(() => (lit.value = false), LIT_MS)
+  }
   /** Take a thing or spell in hand for the next press. */
   function takeInHand(next: Hand): void {
     hand.value = next
@@ -74,5 +86,16 @@ export const useBeltStore = defineStore('belt', () => {
     hand.value = null
   }
 
-  return { away, list, hand, show, putAway, bringBack, takeInHand, emptyHand }
+  return {
+    away,
+    list,
+    hand,
+    lit,
+    light,
+    show,
+    putAway,
+    bringBack,
+    takeInHand,
+    emptyHand,
+  }
 })
