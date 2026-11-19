@@ -84,7 +84,9 @@ describe('A save made before the rewrite shows the new wording', () => {
       const room = loaded.state.allRooms[name]
       expect(room.descriptionFor(loaded.state)).not.toContain('old wording')
     }
-    expect(describeIn(loaded, 'VillageSquare')).toContain('keep their voices')
+    expect(describeIn(loaded, 'VillageSquare')).toContain(
+      'the talk at the stalls is low',
+    )
     expect(
       loaded.state.inventory
         .find((i) => i instanceof Locket)

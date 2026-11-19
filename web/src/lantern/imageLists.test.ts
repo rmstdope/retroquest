@@ -41,11 +41,17 @@ describe('roomImages', () => {
     const outside = images.find((i) => i.id === 'act1-abandoned-shed')
     const inside = images.find((i) => i.id === 'act1-abandoned-shed-inside')
     expect(inside?.title).toBe('Abandoned Shed, inside')
-    expect(inside?.text).toBe(outside?.text)
+    expect(inside?.text).not.toBe(outside?.text)
     expect(inside?.text).toContain('workbench')
     expect(inside?.areas?.map((a) => a.id)).toContain('patches')
     expect(outside?.areas?.map((a) => a.id)).not.toContain('patches')
-    expect(images.indexOf(inside!)).toBe(Object.keys(act.rooms).length)
+    // The rooms come first, then the other pictures in room order (the shut store before the shed's inside).
+    expect(images.indexOf(inside!)).toBeGreaterThanOrEqual(
+      Object.keys(act.rooms).length,
+    )
+    expect(
+      images.map((i) => i.id).slice(Object.keys(act.rooms).length),
+    ).toEqual(['act1-general-store-shut', 'act1-abandoned-shed-inside'])
   })
 
   it.each(ACTS.map((act) => [act.name, act] as const))(

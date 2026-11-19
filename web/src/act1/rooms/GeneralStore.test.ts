@@ -20,7 +20,8 @@ const OPEN =
   'and the air smells of fruit, wax and old wood. ' +
   'Outside, the lane runs east to the chapel. [character_name]Hemlock[/character_name] ' +
   'dusts jars between customers'
-const CAT = ', and every so often looks at the counter, where his cat sleeps.'
+const CAT =
+  ', and every so often looks down by the counter, where his cat sleeps.'
 
 /** The store's room text in a fresh game with the given flags set. */
 function storeText(...flags: string[]): string {

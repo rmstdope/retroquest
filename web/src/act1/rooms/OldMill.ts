@@ -8,15 +8,14 @@ import {
 } from '../Act1StoryFlags'
 
 const DESCRIPTION_START =
-  'A creaky windmill towers above, its sails turning slowly in the breeze. Dusty ' +
-  'gears and cobwebs fill the interior, and the scent of flour hangs in the air. ' +
-  'Sunlight streams through broken windows, illuminating sacks of grain and a ' +
-  'heavy millstone.'
+  'A creaky windmill towers above, its sails turning slowly in the breeze. In ' +
+  'the yard below, sacks of grain slump against a stone wall beside a heavy ' +
+  'millstone, and the scent of flour hangs in the air.'
 const MECHANISM_WORKING =
-  ' Amidst the old workings, you notice a strange mechanism of black iron, ' +
+  ' Under the lean-to by the wall, you notice a strange mechanism of black iron, ' +
   "whirring to itself, that doesn't belong to the mill's original design."
 const MECHANISM_JAMMED =
-  ' Amidst the old workings, the black-iron mechanism stands ' +
+  ' Under the lean-to by the wall, the black-iron mechanism stands ' +
   'jammed with a rope, silent at last.'
 
 /** The one paragraph in which the cloaked stranger is seen, his back turned. */

@@ -7,8 +7,8 @@ import { Scenery } from '../items/Scenery'
 const SQUARE_DESCRIPTION =
   'The heart of Willowbrook: cobblestones around an old stone fountain, ' +
   'and a weathered notice board covered in faded announcements. ' +
-  'Half the market stalls stand empty. The people at the others keep ' +
-  'their voices down, and stop talking when you pass.'
+  'The market is busy, but the talk at the stalls is low, and it stops ' +
+  'when you pass.'
 
 /** Village Square room: central social/navigation hub with light utility items. */
 export class VillageSquare extends Room {

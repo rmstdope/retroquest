@@ -209,7 +209,12 @@ describe('appliedPatchIds', () => {
       // The golden path skips optional pickups and ways, so those patches may never apply;
       // every other patch (a thing gone, arriving, changed) is judged true at some step.
       // The Justice and Sacrifice endings are not on the golden path (Redemption), so their patches never apply there.
-      const otherEndings = new Set(['wound-sealed', 'malakar-kneeling'])
+      // Nor is the fox kit cut free (a mercy the path skips), so its snare-cut patch never applies.
+      const otherEndings = new Set([
+        'wound-sealed',
+        'malakar-kneeling',
+        'snare-cut',
+      ])
       const never: string[] = []
       for (const room of Object.keys(act.rooms))
         for (const patch of act.roomPatches(room))

@@ -1,3 +1,4 @@
+import { ACT1_PICTURE_TEXTS } from './pictureTexts'
 import { ACT1_ROOM_PATCHES, ACT1_VARIANT_PATCHES } from './roomPatches'
 import { Act, characterName, type GameState, type ImagePatch } from '@/engine'
 import { TheDream } from './rooms/TheDream'
@@ -96,6 +97,11 @@ export class Act1 extends Act {
   override roomPatches(roomKey: string, variant = ''): readonly ImagePatch[] {
     if (variant) return ACT1_VARIANT_PATCHES[roomKey]?.[variant] ?? []
     return ACT1_ROOM_PATCHES[roomKey] ?? []
+  }
+
+  /** The act's own picture words: Act 1 declares them in `pictureTexts.ts`. */
+  override pictureText(roomKey: string, variant = ''): string | undefined {
+    return ACT1_PICTURE_TEXTS[roomKey]?.[variant]
   }
 
   override getActIntro(): string {

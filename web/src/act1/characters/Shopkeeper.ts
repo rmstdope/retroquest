@@ -323,7 +323,7 @@ export class Shopkeeper extends Character {
       (paid ? '\n' + 'You receive a [item_name]coin[/item_name].' : '') +
       (firstMeeting ? this.byword() : '') +
       '\n' +
-      `${characterName('Patches')} curls up beside the till and begins to purr.`
+      `${characterName('Patches')} curls up on the floor by the counter and begins to purr.`
     )
   }
 
