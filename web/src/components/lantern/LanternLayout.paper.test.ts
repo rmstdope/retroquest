@@ -774,8 +774,9 @@ describe('the narration paper', () => {
       "Press the room's name for Look, Search and Rest.",
     )
     expect(keyboardHelp).toContain(
-      'Press F1 to type commands instead; F1 again hides the box.',
+      'Press F1 to show or hide the command bar; type commands there instead.',
     )
+    expect(keyboardHelp).not.toContain('F1 again hides the box')
     w?.unmount()
     document.body.innerHTML = ''
     // A phone: touch, no hover, small.
@@ -792,6 +793,46 @@ describe('the narration paper', () => {
       "Press the room's name for Look, Search and Rest.",
     )
     expect(phoneHelp).not.toContain('F1')
+  })
+
+  it('opens Help with "Playing without typing:" above the commands, in the agreed words', async () => {
+    vi.stubGlobal(
+      'matchMedia',
+      vi.fn((query: string) => ({
+        matches: !query.includes('coarse'),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+      })),
+    )
+    const help = await helpText()
+    const lines = [
+      'Move the mouse over the picture to see the names of what is here.',
+      'Press a thing or a person for a wheel of what you can do with it.',
+      'Press a name in the story for the same choices.',
+      'In the wheel, Use with… takes the thing in hand; then press what to use it with, or ✕ Cancel.',
+      'Press a thing in your bag for its wheel.',
+      'Press a way out of the picture to walk there, or a place on the map to travel to it.',
+      "Press the room's name for Look, Search and Rest.",
+      'Press F1 to show or hide the command bar; type commands there instead.',
+    ]
+    let at = help.indexOf('Playing without typing:')
+    expect(at).toBeGreaterThanOrEqual(0)
+    for (const line of lines) {
+      const found = help.indexOf(line, at)
+      expect(found, line).toBeGreaterThanOrEqual(at)
+      at = found
+    }
+    expect(at).toBeLessThan(help.indexOf('Commands'))
+    expect(help.indexOf('Narration:')).toBeGreaterThan(help.indexOf('Commands'))
+    expect(help.split("Press the room's name").length).toBe(2)
+  })
+
+  it('says "Tap the picture…" in that section where there is no laptop', async () => {
+    stubScreen(false)
+    const help = await helpText()
+    expect(help).toContain('Tap the picture to see the names of what is here.')
+    expect(help).not.toContain('Move the mouse over')
+    expect(help).toContain('Press F1 to show or hide the command bar')
   })
 
   it('tells a phone everything in one column with the one Hide, which N works too', async () => {

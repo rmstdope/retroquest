@@ -88,7 +88,7 @@ describe('Grammar', () => {
         '\n' +
         '[bold]Movement:[/bold]\n' +
         '  go <direction>, move <direction>, <direction>, <short_direction> ' +
-        '(e.g., go north, , move north, north, n)\n' +
+        '(e.g., go north, move north, north, n)\n' +
         '\n' +
         '[bold]Interaction:[/bold]\n' +
         '  talk to <character>, speak to <character>, converse with <character>\n' +
