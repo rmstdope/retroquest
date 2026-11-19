@@ -10,6 +10,7 @@ import {
   FLIGHT_SHOW_MS,
   useFlightStore,
 } from '@/stores/useFlightStore'
+import { useBeltStore } from '@/stores/useBeltStore'
 import { useArrivalStore } from '@/stores/useArrivalStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import {
@@ -170,6 +171,36 @@ describe('LanternLayout: panels wait for the narration', () => {
     flights.clear()
     await vi.advanceTimersByTimeAsync(0)
     expect(wrapper!.find(`[data-belt-pic="item:${GEM}"]`).exists()).toBe(true)
+  })
+
+  it('switches a hidden rail on the Spells side to the Bag as a gained item starts to fly, and leaves it there (rq-jbu4)', async () => {
+    vi.spyOn(HTMLMediaElement.prototype, 'play').mockResolvedValue()
+    await ready()
+    const narration = useNarrationStore()
+    const belt = useBeltStore()
+    const clip = { file: 'x.mp3', speaker: 'narrator', duration: 5, words: [] }
+    vi.spyOn(narration, 'manifestFor').mockReturnValue(
+      new Proxy({}, { get: () => clip }),
+    )
+    belt.show('spells')
+    belt.putAway()
+    useGameStore().submitCommand(`take ${GEM.toLowerCase()}`)
+    await vi.advanceTimersByTimeAsync(0)
+    narration.skipAll()
+    await vi.advanceTimersByTimeAsync(0)
+    // Nothing flies yet: the rail is as the player left it.
+    expect(belt.list).toBe('spells')
+    expect(belt.away).toBe(true)
+    useArrivalStore().clear()
+    await vi.advanceTimersByTimeAsync(0)
+    expect(useFlightStore().current?.name).toBe(GEM)
+    expect(belt.list).toBe('bag')
+    expect(belt.away).toBe(false)
+    await vi.advanceTimersByTimeAsync(
+      FLIGHT_SHOW_MS + FLIGHT_HOLD_MS + FLIGHT_FLY_MS,
+    )
+    expect(belt.list).toBe('bag')
+    expect(belt.away).toBe(false)
   })
 
   it('keeps a taken thing painted until the narrator is done, then lets it go as its name comes up (rq-sm83)', async () => {
