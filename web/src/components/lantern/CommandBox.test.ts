@@ -104,7 +104,7 @@ describe('CommandBox', () => {
   })
 
   it('hides when its F1 pill is clicked, for a player using only the mouse (rq-v29l.3)', async () => {
-    const pill = w.get('button[aria-label="Hide the typing box"]')
+    const pill = w.get('button[aria-label="F1 hides the typing box"]')
     expect(pill.text()).toBe('F1 hides')
     await pill.trigger('click')
     expect(w.emitted('hide')).toHaveLength(1)

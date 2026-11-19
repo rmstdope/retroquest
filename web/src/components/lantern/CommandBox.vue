@@ -118,8 +118,8 @@ function onEscape(event: KeyboardEvent): void {
     <button
       type="button"
       class="lq-box-tag"
-      aria-label="Hide the typing box"
-      title="Hide the typing box"
+      aria-label="F1 hides the typing box"
+      title="F1 hides the typing box"
       @click="emit('hide')"
     >
       <kbd>F1 hides</kbd>
