@@ -508,6 +508,24 @@ describe('markInside with a mark point', () => {
     expect(placed.y).toBe(460 - 8)
   })
 
+  it('stands the mark of a way out wholly behind the bar above its point', () => {
+    const [placed] = markInside(
+      [
+        {
+          ...base,
+          kind: 'exit' as const,
+          x: 300,
+          y: 500,
+          rect: { x: 100, y: 470, w: 400, h: 60 },
+          point: { x: 150, y: 500 },
+        },
+      ],
+      visible,
+    )
+    expect(placed).toMatchObject({ x: 150, y: 460 - 8 })
+    expect(placed.from).toEqual({ x: 150, y: 500 })
+  })
+
   it('keeps the whole rectangle to press', () => {
     const rect = { x: 80, y: 200, w: 40, h: 300 }
     const [placed] = markInside(
