@@ -158,10 +158,10 @@
         "height": 0.072222
       },
       "magnet": {
-        "x": 0.765104,
-        "y": 0.334259,
-        "width": 0.030208,
-        "height": 0.050926
+        "x": 0.761979,
+        "y": 0.335185,
+        "width": 0.036458,
+        "height": 0.05463
       }
     },
     "effects": [
@@ -591,6 +591,11 @@
         "width": 1920,
         "height": 1080
       },
+      "stick-appears": {
+        "file": "act1-forest-path.stick-appears.png",
+        "width": 1920,
+        "height": 1080
+      },
       "vines-cut": {
         "file": "act1-forest-path.vines-cut.png",
         "width": 1920,
@@ -646,10 +651,10 @@
         "height": 0.152778
       },
       "stick": {
-        "x": 0.696875,
-        "y": 0.672222,
-        "width": 0.077083,
-        "height": 0.124074
+        "x": 0.457292,
+        "y": 0.833333,
+        "width": 0.134375,
+        "height": 0.062963
       },
       "snare": {
         "x": 0.792708,
@@ -1295,6 +1300,11 @@
       },
       "withered-carrot-fresh": {
         "file": "act1-vegetable-field.withered-carrot-fresh.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "withered-carrot-taken": {
+        "file": "act1-vegetable-field.withered-carrot-taken.png",
         "width": 1920,
         "height": 1080
       }
@@ -2167,6 +2177,87 @@
         "width": 0.148958,
         "height": 0.565741
       }
+    }
+  },
+  "act4-chamber-of-whispers": {
+    "file": "act4-chamber-of-whispers.png",
+    "width": 1920,
+    "height": 1080,
+    "patches": {
+      "sorceress-of-lies-unmasked": {
+        "file": "act4-chamber-of-whispers.sorceress-of-lies-unmasked.png",
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "areas": {
+      "sorceress-staff": {
+        "x": 0.411458,
+        "y": 0.325,
+        "width": 0.070313,
+        "height": 0.637037,
+        "mark": {
+          "x": 0.438021,
+          "y": 0.397222
+        }
+      },
+      "crystal-whispers": {
+        "x": 0.055208,
+        "y": 0.065741,
+        "width": 0.798958,
+        "height": 0.278704,
+        "mark": {
+          "x": 0.199479,
+          "y": 0.167593
+        }
+      }
+    },
+    "effects": [
+      {
+        "kind": "dust",
+        "settings": {
+          "amount": 4.05,
+          "speed": 2.8
+        }
+      },
+      {
+        "kind": "fireflies",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        },
+        "spot": [
+          [
+            [
+              0.3859,
+              0.6251
+            ],
+            [
+              0.645,
+              0.5948
+            ],
+            [
+              0.6483,
+              0.9364
+            ],
+            [
+              0.3893,
+              0.9302
+            ]
+          ]
+        ]
+      },
+      {
+        "kind": "leaves",
+        "settings": {
+          "amount": 3.9,
+          "speed": 1
+        }
+      }
+    ],
+    "zoom": {
+      "seconds": 10,
+      "percent": 10
     }
   },
   "item-ancient-amulet": {
