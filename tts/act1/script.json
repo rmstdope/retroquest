@@ -140,6 +140,11 @@
     "text": "You hold it by the edges so as not to smudge the faces. The child in it is you, though you do not remember the day."
   },
   {
+    "id": "00baa1a2885700",
+    "speaker": "narrator",
+    "text": "Mira glances up, a sprig of sage between her fingers. You tell her about the grey crops and the hushed square. She keeps tying."
+  },
+  {
     "id": "00c10270bb35ae",
     "speaker": "grandmother",
     "text": "Back again? There's bread on the board, if you're hungry. And light that lantern before you go feeling about in your corner; you'll have the shelf down."
@@ -555,6 +560,11 @@
     "text": "If you're going out, look in on Mira at her hut; she was asking after you. You know she has a way with herbs, and with... other things. Hemlock will have heard whatever there is to hear at the General Store; he always does. And show your face at the forge, or Borin will think you've forgotten him."
   },
   {
+    "id": "039f10aa151b4d",
+    "speaker": "mira",
+    "text": "That's part of it. Not all. Keep looking."
+  },
+  {
     "id": "03b2a91ae4d914",
     "speaker": "narrator",
     "text": "Mira glances up from the herbs, and back down."
@@ -700,6 +710,11 @@
     "text": "Hemlock glances at the door, then back at you."
   },
   {
+    "id": "04b6901d644cb0",
+    "speaker": "narrator",
+    "text": "Shadows over Willowbrook: Something is wrong in Willowbrook, and you have seen part of it. The well holds the rest."
+  },
+  {
     "id": "04b6e65057b84f",
     "speaker": "mira",
     "text": "Your road leads to Greendale, Elior. Once there, show the amulet to no one lightly. Those who know what it is will find you."
@@ -798,6 +813,11 @@
     "id": "0538db6a1900fb",
     "speaker": "narrator",
     "text": "The merchant grins."
+  },
+  {
+    "id": "053be39dc4ca94",
+    "speaker": "narrator",
+    "text": "Mira will not talk about your magic yet. Something is wrong in the village, and she wants to hear what you have seen of it first."
   },
   {
     "id": "053cf06d097caf",
@@ -1043,6 +1063,11 @@
     "id": "069677785bd63f",
     "speaker": "narrator",
     "text": "The rope is old and soft with handling. It hangs straight down from a hole in the ceiling, and nobody is touching it."
+  },
+  {
+    "id": "069a523a9d5e98",
+    "speaker": "mira",
+    "text": "Dreams aren't the only thing wrong in Willowbrook. Walk the village with your eyes open, then come back and tell me what you saw."
   },
   {
     "id": "06a35532638971",
@@ -1398,11 +1423,6 @@
     "id": "08a13e79ccfb3f",
     "speaker": "narrator",
     "text": "The candle is lit, and in the dark corner by the altar its light found a locket."
-  },
-  {
-    "id": "08a208fffd8241",
-    "speaker": "narrator",
-    "text": "Mira glances up, a sprig of sage between her fingers."
   },
   {
     "id": "08afa82ad5846f",
@@ -2113,11 +2133,6 @@
     "id": "0d16c9949e99b1",
     "speaker": "mira",
     "text": "The man in the grey cloak, who came to my door."
-  },
-  {
-    "id": "0d1a2b0ed0ac2b",
-    "speaker": "mira",
-    "text": "Back already, Elior. Tell me what you've seen."
   },
   {
     "id": "0d1d08d0535a2c",
@@ -2858,6 +2873,11 @@
     "id": "1186a7a6adc382",
     "speaker": "priest",
     "text": "The founders' relic... That crest, child, only the founders' line wore it. Your mother's line. She prayed here alone the night she left. She must have hidden it then, for you."
+  },
+  {
+    "id": "1193aaf36c6fde",
+    "speaker": "narrator",
+    "text": "She goes back to the herbs."
   },
   {
     "id": "1193b3251fc651",
@@ -3795,6 +3815,11 @@
     "text": "In all your years, you have never once heard her say their names."
   },
   {
+    "id": "1775a86a070ce4",
+    "speaker": "mira",
+    "text": "You've been dreaming. It's written all over you."
+  },
+  {
     "id": "177a6e95fe57b9",
     "speaker": "narrator",
     "text": "Your grandmother, flour on her apron and her sleeves pushed up. She has raised you since your parents went away, and she keeps her hands busy when she would rather not answer."
@@ -4548,6 +4573,11 @@
     "id": "1c2881f61be783",
     "speaker": "fisherman",
     "text": "Ask the river, lad. It's been listening longer than I have."
+  },
+  {
+    "id": "1c37776484d8da",
+    "speaker": "narrator",
+    "text": "Shadows over Willowbrook: Something is wrong in Willowbrook, and you have seen part of it. The square and the well hold the rest."
   },
   {
     "id": "1c3baeb777c912",

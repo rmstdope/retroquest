@@ -10,6 +10,7 @@ import {
   FLAG_VILLAGER_TALKED_TO,
   FLAG_WELL_EXAMINED,
   FLAG_MAGIC_FULLY_UNLOCKED,
+  FLAG_MIRA_MET,
 } from '../Act1StoryFlags'
 
 const QUEST = 'Magic for real'
@@ -104,5 +105,55 @@ describe('Magic for real', () => {
     game.state.setStoryFlag(FLAG_MAGIC_FULLY_UNLOCKED, true)
     turn()
     expect(game.state.completedQuests.some((q) => q.name === QUEST)).toBe(true)
+  })
+
+  const WAITS =
+    'Mira will not talk about your magic yet. Something is wrong in the ' +
+    'village, and she wants to hear what you have seen of it first.'
+
+  /** The hint with the markup tags and names stripped to plain words. */
+  function plainHint(): string {
+    return (quest().hint ?? '').replace(/\[[^\]]*\]/g, '')
+  }
+
+  it('gains an entry, and the hint, once Mira is met', () => {
+    game.state.learnSpell(new HealSpell())
+    turn()
+    game.state.setStoryFlag(FLAG_MIRA_MET, true)
+    turn()
+    expect(plainHint()).toBe(WAITS)
+    expect(quest().description).toContain('a way with herbs')
+    expect(quest().description).toContain('will not talk about your magic')
+  })
+
+  it('opens with the entry beneath the opening when Mira was met before the first spell', () => {
+    game.state.setStoryFlag(FLAG_MIRA_MET, true)
+    game.state.learnSpell(new HealSpell())
+    turn()
+    expect(plainHint()).toBe(WAITS)
+    expect(quest().description).toContain('a way with herbs')
+  })
+
+  it('moves on to the flower once she asks, and stays so after a reload', () => {
+    game.state.learnSpell(new HealSpell())
+    game.state.setStoryFlag(FLAG_MIRA_MET, true)
+    turn()
+    game.state.setStoryFlag(FLAG_CONNECT_WITH_NATURE, true)
+    turn()
+    expect(quest().hint).toContain('rare flower')
+    const loaded = new Game([new Act1()])
+    loaded.loadSaveData(game.toSaveData())
+    expect(quest(loaded).hint).toContain('rare flower')
+  })
+
+  it('does not log the waiting entry when she asks for the flower in her first talk', () => {
+    game.state.learnSpell(new HealSpell())
+    turn()
+    game.state.setStoryFlag(FLAG_INVESTIGATED_WITHERED_CROPS, true)
+    game.state.setStoryFlag(FLAG_VILLAGER_TALKED_TO, true)
+    game.state.setStoryFlag(FLAG_WELL_EXAMINED, true)
+    game.state.currentRoom = game.state.allRooms.MirasHut
+    executeCommands(game, ['talk to mira'])
+    expect(quest().description).not.toContain('will not talk about your magic')
   })
 })

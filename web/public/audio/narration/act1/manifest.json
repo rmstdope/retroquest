@@ -28899,63 +28899,6 @@
    }
   ]
  },
- "08a208fffd8241": {
-  "file": "08a208fffd8241.mp3",
-  "speaker": "narrator",
-  "duration": 4.365,
-  "words": [
-   {
-    "word": "Mira",
-    "start": 0.0,
-    "end": 0.34
-   },
-   {
-    "word": "glances",
-    "start": 0.34,
-    "end": 0.94
-   },
-   {
-    "word": "up,",
-    "start": 0.94,
-    "end": 1.42
-   },
-   {
-    "word": "a",
-    "start": 1.8,
-    "end": 2.18
-   },
-   {
-    "word": "sprig",
-    "start": 2.18,
-    "end": 2.58
-   },
-   {
-    "word": "of",
-    "start": 2.58,
-    "end": 2.74
-   },
-   {
-    "word": "sage",
-    "start": 2.74,
-    "end": 3.16
-   },
-   {
-    "word": "between",
-    "start": 3.16,
-    "end": 3.44
-   },
-   {
-    "word": "her",
-    "start": 3.44,
-    "end": 3.68
-   },
-   {
-    "word": "fingers.",
-    "start": 3.68,
-    "end": 4.04
-   }
-  ]
- },
  "08afa82ad5846f": {
   "file": "08afa82ad5846f.mp3",
   "speaker": "narrator",
@@ -42627,53 +42570,6 @@
     "word": "door.",
     "start": 2.88,
     "end": 3.22
-   }
-  ]
- },
- "0d1a2b0ed0ac2b": {
-  "file": "0d1a2b0ed0ac2b.mp3",
-  "speaker": "mira",
-  "duration": 3.855,
-  "words": [
-   {
-    "word": "Back",
-    "start": 0.0,
-    "end": 0.38
-   },
-   {
-    "word": "already,",
-    "start": 0.38,
-    "end": 0.92
-   },
-   {
-    "word": "Elior.",
-    "start": 1.16,
-    "end": 1.58
-   },
-   {
-    "word": "Tell",
-    "start": 1.9,
-    "end": 2.3
-   },
-   {
-    "word": "me",
-    "start": 2.3,
-    "end": 2.5
-   },
-   {
-    "word": "what",
-    "start": 2.5,
-    "end": 2.78
-   },
-   {
-    "word": "you've",
-    "start": 2.78,
-    "end": 3.06
-   },
-   {
-    "word": "seen.",
-    "start": 3.06,
-    "end": 3.46
    }
   ]
  },

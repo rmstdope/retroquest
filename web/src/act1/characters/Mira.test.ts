@@ -21,6 +21,7 @@ import {
   FLAG_INVESTIGATED_WITHERED_CROPS,
   FLAG_JOURNEY_BLESS_COMPLETED,
   FLAG_MAGIC_FULLY_UNLOCKED,
+  FLAG_MIRA_MET,
   FLAG_MIRA_NAMED_FOULING_SIGIL,
   FLAG_VILLAGER_TALKED_TO,
   FLAG_WELL_EXAMINED,
@@ -627,5 +628,104 @@ describe('Mira spoken to again before the flower', () => {
     const response = executeCommands(game, ['talk to mira'])
     expect(response).not.toContain(FIRST_MEETING)
     expect(response).toContain('The flower, ')
+  })
+})
+
+describe('Mira sends Elior out to look at the village (rq-fe4g)', () => {
+  const SEND_OFF =
+    "Dreams aren't the only thing wrong in Willowbrook. " +
+    'Walk the village with your eyes open, then come back and tell me what you saw.'
+  const REMARK = "It didn't get out of that snare on its own."
+  const PART = "That's part of it. Not all. Keep looking."
+
+  it('sends him out on the first talk, without asking what brings him', () => {
+    const game = gameInMirasHut()
+    const first = executeCommands(game, ['talk to mira'])
+    expect(first).toContain("It's written all over you.")
+    expect(first).not.toContain('What brings you?')
+    expect(first).toContain(SEND_OFF)
+    expect(first).not.toContain('rare flower')
+  })
+
+  it('keeps today’s first meeting when all three signs are already seen', () => {
+    const game = gameInMirasHut()
+    game.state.setStoryFlag(FLAG_INVESTIGATED_WITHERED_CROPS, true)
+    game.state.setStoryFlag(FLAG_VILLAGER_TALKED_TO, true)
+    game.state.setStoryFlag(FLAG_WELL_EXAMINED, true)
+    const first = executeCommands(game, ['talk to mira'])
+    expect(first).toContain('What brings you?')
+    expect(first).not.toContain(SEND_OFF)
+    expect(first).toContain('None of that is weather.')
+    expect(first).toContain('rare flower')
+  })
+
+  it('tells him he has not been looking when nothing is seen', () => {
+    const game = gameInMirasHut()
+    executeCommands(game, ['talk to mira'])
+    const second = executeCommands(game, ['talk to mira'])
+    expect(second).toContain('a sprig of sage')
+    expect(second).toContain("You've not been looking. Go on.")
+    expect(second).not.toContain("Tell me what you've seen")
+  })
+
+  it('drops the opening narration after her fox kit remark', () => {
+    const game = gameInMirasHut()
+    executeCommands(game, ['talk to mira'])
+    game.state.setStoryFlag(FLAG_FOX_KIT_FREED, true)
+    const second = executeCommands(game, ['talk to mira'])
+    expect(second).toContain(REMARK)
+    expect(second).not.toContain('a sprig of sage')
+    expect(second).toContain("You've not been looking. Go on.")
+  })
+
+  it.each([
+    [[FLAG_INVESTIGATED_WITHERED_CROPS], 'the grey crops'],
+    [[FLAG_VILLAGER_TALKED_TO], 'the hushed square'],
+    [[FLAG_WELL_EXAMINED], 'the sour smell of the well'],
+    [
+      [FLAG_WELL_EXAMINED, FLAG_INVESTIGATED_WITHERED_CROPS],
+      'the grey crops and the sour smell of the well',
+    ],
+    [
+      [FLAG_VILLAGER_TALKED_TO, FLAG_INVESTIGATED_WITHERED_CROPS],
+      'the grey crops and the hushed square',
+    ],
+    [
+      [FLAG_WELL_EXAMINED, FLAG_VILLAGER_TALKED_TO],
+      'the hushed square and the sour smell of the well',
+    ],
+  ])('names what he has seen, in fixed order, for %j', (flags, told) => {
+    const game = gameInMirasHut()
+    executeCommands(game, ['talk to mira'])
+    for (const flag of flags) game.state.setStoryFlag(flag, true)
+    const answer = executeCommands(game, ['talk to mira'])
+    expect(answer).toContain('a sprig of sage')
+    expect(answer).toContain(`You tell her about ${told}. She keeps tying.`)
+    expect(answer).toContain(PART)
+    expect(answer).not.toContain('rare flower')
+    expect(game.state.getStoryFlag(FLAG_CONNECT_WITH_NATURE)).toBe(false)
+  })
+
+  it('drops the opening narration for a partial telling after her remark', () => {
+    const game = gameInMirasHut()
+    executeCommands(game, ['talk to mira'])
+    game.state.setStoryFlag(FLAG_INVESTIGATED_WITHERED_CROPS, true)
+    game.state.setStoryFlag(FLAG_FOX_KIT_FREED, true)
+    const answer = executeCommands(game, ['talk to mira'])
+    expect(answer).toContain(REMARK)
+    expect(answer).not.toContain('a sprig of sage')
+    expect(answer).toContain('You tell her about the grey crops.')
+  })
+
+  it('works out the same lines after a reload', () => {
+    const game = gameInMirasHut()
+    executeCommands(game, ['talk to mira'])
+    game.state.setStoryFlag(FLAG_VILLAGER_TALKED_TO, true)
+    const loaded = new Game([new Act1()])
+    loaded.loadSaveData(game.toSaveData())
+    expect(loaded.state.getStoryFlag(FLAG_MIRA_MET)).toBe(true)
+    expect(executeCommands(loaded, ['talk to mira'])).toContain(
+      'You tell her about the hushed square.',
+    )
   })
 })

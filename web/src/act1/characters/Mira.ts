@@ -89,6 +89,46 @@ export class Mira extends Character {
     })
   }
 
+  /** Her greeting at the first meeting, up to where she studies his face. */
+  private firstGreeting(): string {
+    return (
+      `${characterName(this.name)} looks up from the herbs she is ` +
+      'tying. ' +
+      speech(`${characterName('Elior')}. Come in, mind the sage.`) +
+      '\nShe studies your face. '
+    )
+  }
+
+  /** The signs Elior has seen, in the order the full telling names them. */
+  private seenSigns(gameState: GameState): string[] {
+    const signs: string[] = []
+    if (gameState.getStoryFlag(FLAG_INVESTIGATED_WITHERED_CROPS)) {
+      signs.push('the grey crops')
+    }
+    if (gameState.getStoryFlag(FLAG_VILLAGER_TALKED_TO)) {
+      signs.push('the hushed square')
+    }
+    if (gameState.getStoryFlag(FLAG_WELL_EXAMINED)) {
+      signs.push('the sour smell of the well')
+    }
+    return signs
+  }
+
+  /**
+   * Elior tells her what he has seen of the three signs, one or two of them;
+   * she says it is part of it. `afterRemark` drops her opening narration.
+   */
+  private partialTelling(signs: string[], afterRemark: boolean): string {
+    return (
+      (afterRemark
+        ? ''
+        : `${characterName(this.name)} glances up, a sprig of sage between ` +
+          'her fingers. ') +
+      `You tell her about ${signs.join(' and ')}. She keeps tying. ` +
+      speech("That's part of it. Not all. Keep looking.")
+    )
+  }
+
   /** Mira's glance over Elior and her "not yet" with the one need she names. */
   private notYet(need: string): string {
     return (
@@ -117,6 +157,7 @@ export class Mira extends Character {
   private dialogue(
     stage:
       | 'initial'
+      | 'initial_all_seen'
       | 'reminder_before_request'
       | 'reminder_before_request_after_remark'
       | 'reminder_flower'
@@ -130,10 +171,18 @@ export class Mira extends Character {
     switch (stage) {
       case 'initial':
         return (
-          `${characterName(this.name)} looks up from the herbs she is ` +
-          'tying. ' +
-          speech(`${characterName('Elior')}. Come in, mind the sage.`) +
-          '\nShe studies your face. ' +
+          this.firstGreeting() +
+          speech("You've been dreaming. It's written all over you.") +
+          '\nShe goes back to the herbs. ' +
+          speech(
+            "Dreams aren't the only thing wrong in Willowbrook. " +
+              'Walk the village with your eyes open, then come back and ' +
+              'tell me what you saw.',
+          )
+        )
+      case 'initial_all_seen':
+        return (
+          this.firstGreeting() +
           speech(
             "You've been dreaming. It's written all over you. What brings you?",
           )
@@ -143,12 +192,14 @@ export class Mira extends Character {
           `${characterName(this.name)} glances up, a sprig of sage between ` +
           'her fingers. ' +
           speech(
-            `Back already, ${characterName('Elior')}. Tell me what you've seen.`,
+            `Back already, ${characterName('Elior')}. ` +
+              "You've not been looking. Go on.",
           )
         )
       case 'reminder_before_request_after_remark':
         return speech(
-          `Back already, ${characterName('Elior')}. Tell me what you've seen.`,
+          `Back already, ${characterName('Elior')}. ` +
+            "You've not been looking. Go on.",
         )
       case 'reminder_flower':
         return (
@@ -497,15 +548,20 @@ export class Mira extends Character {
       if (this.hearsThreeSignsNow(gameState)) {
         const extra = `\n${this.oneWound()}\n` + FLOWER_REQUEST
         // Once met, the request alone follows; the first meeting is not replayed.
-        return met ? extra.trimStart() : this.dialogue('initial') + extra
+        return met
+          ? extra.trimStart()
+          : this.dialogue('initial_all_seen') + extra
       }
       if (met) {
+        if (gameState.getStoryFlag(FLAG_CONNECT_WITH_NATURE)) {
+          return this.dialogue('reminder_flower')
+        }
+        const signs = this.seenSigns(gameState)
+        if (signs.length > 0) return this.partialTelling(signs, afterRemark)
         return this.dialogue(
-          gameState.getStoryFlag(FLAG_CONNECT_WITH_NATURE)
-            ? 'reminder_flower'
-            : afterRemark
-              ? 'reminder_before_request_after_remark'
-              : 'reminder_before_request',
+          afterRemark
+            ? 'reminder_before_request_after_remark'
+            : 'reminder_before_request',
         )
       }
       return this.dialogue('initial')
