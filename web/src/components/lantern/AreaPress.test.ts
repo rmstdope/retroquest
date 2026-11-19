@@ -154,6 +154,20 @@ describe('AreaPress', () => {
     expect(w.emitted('focused')).toBeUndefined()
   })
 
+  it('has no way-out button in a room with no way out', async () => {
+    const w = mount(AreaPress, {
+      attachTo: document.body,
+      props: {
+        things: things.filter((t) => t.kind !== 'exit'),
+        boxes,
+        pictureSize: { width: 1920, height: 1080 },
+      },
+    })
+    wrappers.push(w)
+    await nextTick()
+    expect(w.findAll('[data-way]')).toHaveLength(0)
+  })
+
   it('shows nothing for a room with nothing placed', async () => {
     const w = mount(AreaPress, {
       attachTo: document.body,

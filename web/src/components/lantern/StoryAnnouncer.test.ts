@@ -51,6 +51,16 @@ describe('StoryAnnouncer', () => {
     ])
   })
 
+  it('does not read out the story a load restores', async () => {
+    const w = mount(StoryAnnouncer, { props: { turns: [turn(1, 'Old.')] } })
+    await w.setProps({
+      turns: [{ ...turn(7, 'Restored bubble.'), restored: true as const }],
+    })
+    await nextTick()
+    await nextTick()
+    expect(w.findAll('p')).toHaveLength(0)
+  })
+
   it('leaves out a turn the recorded narration voice is telling', async () => {
     const w = mount(StoryAnnouncer, { props: { turns: [] } })
     const narration = useNarrationStore()

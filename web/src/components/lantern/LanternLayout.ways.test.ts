@@ -183,6 +183,13 @@ describe('LanternLayout: leaving by pressing a way out in the picture', () => {
     expect(submit).toHaveBeenCalledWith('go east')
   })
 
+  it('keeps the story announcer outside anything inert or hidden', async () => {
+    await cottage()
+    const log = w.get('[role="log"]').element
+    expect(log.closest('[inert]')).toBeNull()
+    expect(log.closest('.lq-story-wrap')).toBeNull()
+  })
+
   it('goes nowhere from a press on the bare way just as the arrival went by itself, but goes from its name (rq-v29l.4)', async () => {
     const store = await cottage()
     for (const command of [

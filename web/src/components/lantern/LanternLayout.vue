@@ -2759,6 +2759,8 @@ watch(namesBlocked, (blocked) => {
 
 <template>
   <div ref="rootEl" class="lq-root">
+    <!-- Outside the game's wrappers, which go inert or hidden (a turn page, ▾ Hide, another tab): the words are still told. -->
+    <StoryAnnouncer :turns="game.turns" />
     <HoldRing v-if="holdRing" :spot="holdRing" :still="motionReduced()" />
     <!-- The game, out of reach (and untouched) while a phone is held upright. -->
     <div class="lq-game" :inert="turnPage || undefined">
@@ -3051,7 +3053,6 @@ watch(namesBlocked, (blocked) => {
                 </template>
               </div>
             </section>
-            <StoryAnnouncer :turns="game.turns" />
             <!-- None while an arrival is told on the picture: it says how to go on and skip itself. -->
             <p
               v-if="narration.hintVisible && hintText && !arrival.active"

@@ -10,7 +10,7 @@ import { useNarrationStore } from '@/stores/useNarrationStore'
  * gets one paragraph for each bubble of the turn (`announcementsOf`: its own
  * words, sentences spaced, a quote as "Speaker: line"). Nothing shows, and
  * hiding the words (▾ Hide) changes nothing. The turns already there when it
- * appears (a load) are not told, and a turn the recorded narration voice is
+ * appears (a load) are not told, nor are the turns a load restores, and a turn the recorded narration voice is
  * telling is left out so the two never talk over each other (the story still
  * holds it). Room arrivals and quest news keep the way they are spoken now.
  */
@@ -30,7 +30,7 @@ watch(
     // Narration begins a moment after its turn appears.
     await nextTick()
     for (const turn of fresh) {
-      if (narration.narrates(turn.id)) continue
+      if (turn.restored || narration.narrates(turn.id)) continue
       for (const text of announcementsOf(turn.text))
         lines.value.push({ key: key++, text })
     }
