@@ -1351,7 +1351,11 @@ watch(
       flights.launch(turn.gained, leaving, motionReduced(), (flight) => {
         if (flight.areaId) game.releaseGain(flight.areaId)
       })
-    else game.releaseGains()
+    else {
+      game.releaseGains()
+      // It will not fly (the stage went away meanwhile): the lists show it now.
+      flights.forgive(turn.gained)
+    }
     // The quest news (and the narrator) held back for a learnt spell's name
     // to fly come on once every name has landed.
     flights.whenIdle(() => arrival.releaseNews())

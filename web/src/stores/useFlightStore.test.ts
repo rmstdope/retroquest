@@ -236,6 +236,24 @@ describe('useFlightStore', () => {
       expect(flights.owing('spell', 'apple')).toBe(0)
     })
 
+    it('pays back only the landed thing, leaving another of the same kind owed', () => {
+      const flights = useFlightStore()
+      const key = { kind: 'item' as const, name: 'key', count: 1 }
+      flights.owe([lantern, key])
+      flights.launch([lantern, key])
+      vi.advanceTimersByTime(FLIGHT_SHOW_MS + FLIGHT_HOLD_MS + FLIGHT_FLY_MS)
+      expect(flights.owing('item', 'lantern')).toBe(0)
+      expect(flights.owing('item', 'key')).toBe(1)
+    })
+
+    it('shows a thing that will not fly at once, once forgiven', () => {
+      const flights = useFlightStore()
+      flights.owe([lantern, revive])
+      flights.forgive([lantern])
+      expect(flights.owing('item', 'lantern')).toBe(0)
+      expect(flights.owing('spell', 'revive')).toBe(1)
+    })
+
     it('forgets what is owed when cleared', () => {
       const flights = useFlightStore()
       flights.owe([lantern])

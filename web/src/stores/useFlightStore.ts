@@ -93,6 +93,20 @@ export const useFlightStore = defineStore('flight', () => {
     owed.value = now
   }
 
+  /** Pay these back without a flight: they will not fly, so their lists show them now. */
+  function forgive(chips: Chip[]): void {
+    for (const chip of chips) pay(chip.kind, chip.name, chip.count)
+  }
+
+  /** Take `count` of a thing off what is owed. */
+  function pay(kind: ChipKind, name: string, count: number): void {
+    const now = { ...owed.value }
+    const left = (now[owedKey(kind, name)] ?? 0) - count
+    if (left > 0) now[owedKey(kind, name)] = left
+    else delete now[owedKey(kind, name)]
+    owed.value = now
+  }
+
   /** How many of the thing or spell are owed: gained, and still on their way to the list. */
   function owing(kind: ChipKind, name: string): number {
     return owed.value[owedKey(kind, name)] ?? 0
@@ -137,11 +151,7 @@ export const useFlightStore = defineStore('flight', () => {
 
   /** The thing in hand reached its picture or button: it is in its list now; bump them, and go on. */
   function land(kind: ChipKind, name: string, count: number): void {
-    const now = { ...owed.value }
-    const left = (now[owedKey(kind, name)] ?? 0) - count
-    if (left > 0) now[owedKey(kind, name)] = left
-    else delete now[owedKey(kind, name)]
-    owed.value = now
+    pay(kind, name, count)
     landed.value = kind
     landedName.value = name
     after(FLIGHT_LAND_MS, () => {
@@ -213,6 +223,7 @@ export const useFlightStore = defineStore('flight', () => {
     dipped,
     told,
     owe,
+    forgive,
     owing,
     launch,
     whenIdle,
