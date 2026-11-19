@@ -38,6 +38,7 @@ for (const { name, width, height } of [
     await enter(page, 'look')
     await enter(page, 'talk to grandmother')
     await expect(page.locator('.lq-block-text').first()).toBeAttached()
+    await expect(page.getByTestId('speech-line').first()).toBeAttached()
 
     const values = await hyphenation(
       page,
