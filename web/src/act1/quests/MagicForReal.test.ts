@@ -141,6 +141,7 @@ describe('Magic for real', () => {
     game.state.setStoryFlag(FLAG_CONNECT_WITH_NATURE, true)
     turn()
     expect(quest().hint).toContain('rare flower')
+    expect(quest().description).toContain('will not talk about your magic')
     const loaded = new Game([new Act1()])
     loaded.loadSaveData(game.toSaveData())
     expect(quest(loaded).hint).toContain('rare flower')
