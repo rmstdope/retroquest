@@ -221,7 +221,10 @@ export function useLanternPresentation(
         // line appears (at once for a single line); its other panels change now.
         const unnarratedPatches =
           stage.staged() && !unnarratedScene && !narration.narrates(turn.id)
-        if (stage.staged())
+        // A turn a load brought back was said when it was played: the loaded
+        // room starts with nothing said on its picture.
+        if (stage.staged() && turn.restored) speech.clear()
+        else if (stage.staged())
           speech.observe(
             turn,
             unnarratedScene,
