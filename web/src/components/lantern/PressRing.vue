@@ -17,8 +17,10 @@ import {
  * picture, with its name in the middle in its usual colour. `at` is the spot
  * pressed and `bounds` the picture, both in the layer's pixels; the ring
  * slides inward to stay inside, turned off the spot when it had to slide, and
- * grows so its name shows in full with no button over it. It says where its
- * top is (`top`, in the layer's pixels), so a caption can stand above it.
+ * grows so its name shows in full with no button over it (on a picture too
+ * short for that, the name is cut short to what fits). It says where its top
+ * is, an open fan's included (`top`, in the layer's pixels), so a caption can
+ * stand above it.
  * Pressing an action that has second choices
  * (Use with…, Cast on…, Buy…) lights it, dims the others and fans the
  * choices out as name pills on its outer side; Say… opens a words box. A
@@ -41,7 +43,7 @@ const emit = defineEmits<{
   pick: [command: string]
   hand: [verb: HandVerb]
   close: [byKey: boolean]
-  /** The top of the ring's highest button, in the layer's pixels. */
+  /** The top of the ring's highest button, or of its open fan if higher, in the layer's pixels. */
   top: [y: number]
 }>()
 
@@ -59,11 +61,14 @@ const nameSize = ref({ width: 0, height: 0 })
 const layout = computed(() =>
   ringLayout(props.at, props.actions.length, props.bounds, nameSize.value),
 )
-watch(
-  layout,
-  (ring) => emit('top', ring.center.y - ring.radius - RING_BUTTON / 2),
-  { immediate: true },
-)
+/** The name is cut short only on a picture too short for the ring to grow round it. */
+const nameStyle = computed(() => ({
+  left: `${layout.value.center.x}px`,
+  top: `${layout.value.center.y}px`,
+  ...(Number.isFinite(layout.value.nameWidth)
+    ? { maxWidth: `${layout.value.nameWidth}px` }
+    : {}),
+}))
 const fan = computed(() => {
   const action = opened.value
   if (!action) return null
@@ -88,6 +93,15 @@ const fanStyle = computed(() => {
       : { right: `${props.bounds.w - f.x}px` }),
   }
 })
+
+watch(
+  [layout, fan],
+  ([ring, open]) => {
+    const top = ring.center.y - ring.radius - RING_BUTTON / 2
+    emit('top', open ? Math.min(top, open.top) : top)
+  },
+  { immediate: true },
+)
 
 /** The buttons of the ring, or the pills of the fan that is open. */
 function stops(): HTMLElement[] {
@@ -210,7 +224,7 @@ onBeforeUnmount(() =>
       ref="nameEl"
       class="lq-ring-name"
       :class="`lq-ring-${thing.kind}`"
-      :style="{ left: `${layout.center.x}px`, top: `${layout.center.y}px` }"
+      :style="nameStyle"
       aria-hidden="true"
       >{{ thing.label }}</span
     >
@@ -294,8 +308,10 @@ onBeforeUnmount(() =>
 .lq-ring-name {
   position: absolute;
   transform: translate(-50%, -50%);
-  /* Shown in full: the ring grows round it. */
+  /* Shown in full: the ring grows round it (cut short only where the picture is too short). */
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   padding: 5px 10px;
   border: 1px solid;
   border-radius: 999px;

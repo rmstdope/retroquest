@@ -107,6 +107,33 @@ describe('PressRing', () => {
     expect(w.emitted('pick')).toEqual([["use Elior's Journal with tilda"]])
   })
 
+  it('says where its top is, and the top of an open fan when the fan rises above it (rq-v29l.6)', async () => {
+    const many: ActionContext = {
+      ...ctx,
+      inventory: Array.from({ length: 12 }, (_, i) => `thing ${i}`),
+    }
+    const w = mount(PressRing, {
+      attachTo: document.body,
+      props: {
+        thing: tilda,
+        actions: ringActions(tilda, many),
+        at: { x: 300, y: 160 },
+        bounds: { w: 568, h: 320 },
+      },
+    })
+    wrappers.push(w)
+    await nextTick()
+    const ringTop = w.emitted<[number]>('top')!.at(-1)![0]
+    expect(ringTop).toBeGreaterThan(0)
+    await coin(w, 'usewith').trigger('click')
+    await nextTick()
+    const fanTop = parseFloat(
+      (w.get('.lq-ring-fan').element as HTMLElement).style.top,
+    )
+    expect(fanTop).toBeLessThan(ringTop)
+    expect(w.emitted<[number]>('top')!.at(-1)![0]).toBe(fanTop)
+  })
+
   it('shows the ware and its price in a Buy… fan', async () => {
     const w = await ring()
     await coin(w, 'buy').trigger('click')

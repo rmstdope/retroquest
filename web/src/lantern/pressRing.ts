@@ -199,16 +199,18 @@ const NAME_GAP = 4
  * that grows with the count so neighbours never touch, and with the `name`
  * shown in the middle (its size in pixels) so no button covers it. The centre
  * is the spot pressed, slid inward (off the thing if need be) until the whole
- * ring lies inside `bounds`; a ring slid off its spot is turned so the spot
- * lies in the gap between two buttons, and no button sits on the thing
- * pressed. A picture too small for the ring puts it in the middle.
+ * ring lies inside `bounds`; a ring slid so far that a button would lie on
+ * the spot is turned so the spot lies in the gap between two buttons, and no
+ * button sits on the thing pressed. A picture too small for the ring puts it
+ * in the middle; one too short for it to grow round the whole name gives the
+ * widest the name may be drawn (`nameWidth`, cut short), else Infinity.
  */
 export function ringLayout(
   at: Point,
   count: number,
   bounds: { w: number; h: number },
   name: { width: number; height: number } = { width: 0, height: 0 },
-): { center: Point; radius: number; buttons: Point[] } {
+): { center: Point; radius: number; buttons: Point[]; nameWidth: number } {
   const half = RING_BUTTON / 2
   const wanted =
     count > 1
@@ -225,19 +227,29 @@ export function ringLayout(
   const clamp = (value: number, size: number): number =>
     size < reach * 2 ? size / 2 : Math.max(reach, Math.min(size - reach, value))
   const center = { x: clamp(at.x, bounds.w), y: clamp(at.y, bounds.h) }
-  const slid = Math.hypot(at.x - center.x, at.y - center.y) > 1
-  // Slid off its spot, the ring turns so the spot lies halfway between two buttons.
-  const start = slid
-    ? Math.atan2(at.y - center.y, at.x - center.x) + Math.PI / count
-    : -Math.PI / 2
-  const buttons = Array.from({ length: count }, (_, i) => {
-    const angle = (i * 2 * Math.PI) / count + start
-    return {
-      x: center.x + radius * Math.cos(angle),
-      y: center.y + radius * Math.sin(angle),
-    }
-  })
-  return { center, radius, buttons }
+  const place = (start: number): Point[] =>
+    Array.from({ length: count }, (_, i) => {
+      const angle = (i * 2 * Math.PI) / count + start
+      return {
+        x: center.x + radius * Math.cos(angle),
+        y: center.y + radius * Math.sin(angle),
+      }
+    })
+  const upright = place(-Math.PI / 2)
+  // Slid so far that a button would lie on the spot, the ring turns so the spot lies halfway between two.
+  const onSpot = upright.some(
+    (b) => Math.hypot(b.x - at.x, b.y - at.y) < RING_BUTTON / 2 + RING_GAP,
+  )
+  const buttons = onSpot
+    ? place(Math.atan2(at.y - center.y, at.x - center.x) + Math.PI / count)
+    : upright
+  // Too short a picture to grow round the whole name: it is drawn no wider than fits.
+  const inner = radius - half - NAME_GAP
+  const nameWidth =
+    radius >= clear
+      ? Infinity
+      : 2 * Math.sqrt(Math.max(0, inner * inner - (name.height / 2) ** 2))
+  return { center, radius, buttons, nameWidth }
 }
 
 /** The height of one name in a fan, and the pitch between two. */

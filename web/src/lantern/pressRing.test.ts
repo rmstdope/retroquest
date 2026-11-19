@@ -261,6 +261,35 @@ describe('ringLayout', () => {
       }
   })
 
+  it('cuts the name to what fits between the buttons on a picture too short for the ring to grow (rq-v29l.6)', () => {
+    const name = { width: 140, height: 25 }
+    for (const h of [200, 240, 270])
+      for (const count of [4, 7]) {
+        const { center, buttons, nameWidth } = ringLayout(
+          { x: 284, y: h / 2 },
+          count,
+          { w: 568, h },
+          name,
+        )
+        expect(nameWidth).toBeLessThan(name.width)
+        for (const b of buttons)
+          expect(
+            coversName(b, center, { width: nameWidth, height: name.height }),
+          ).toBe(false)
+      }
+    // Where the ring can grow, the name is never cut.
+    expect(
+      ringLayout({ x: 430, y: 300 }, 7, { w: 1512, h: 757 }, name).nameWidth,
+    ).toBe(Infinity)
+  })
+
+  it('keeps a ring that slid only a little the usual way up, its first button at the top (rq-v29l.6)', () => {
+    const { center, buttons } = ringLayout({ x: 90, y: 160 }, 4, bounds)
+    expect(center.x).toBeGreaterThan(90)
+    expect(buttons[0].x).toBeCloseTo(center.x)
+    expect(buttons[0].y).toBeLessThan(center.y)
+  })
+
   it('turns a ring slid off its spot so no button lies on the spot pressed (rq-v29l.6)', () => {
     const wide = { w: 1512, h: 757 }
     const name = { width: 62, height: 25 }
