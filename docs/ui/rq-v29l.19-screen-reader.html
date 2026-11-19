@@ -1,0 +1,54 @@
+<!doctype html><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>rq-v29l.19 — screen reader: ways out and story words</title><style>body{margin:0;background:#14110d;color:#eadfc8;font:15px/1.5 Georgia,serif;padding:24px}
+h1{font-size:20px;margin:0 0 4px} .sub{color:#a99c82;margin:0 0 20px;max-width:900px}
+.wrap{display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start}
+.stage{position:relative;width:640px;max-width:100%;aspect-ratio:16/9;border-radius:10px;overflow:hidden;background:#333 center/cover}
+.plate{position:absolute;left:12px;top:12px;background:rgba(20,16,10,.85);border:1px solid #6b5a3a;border-radius:8px;padding:6px 12px;font-weight:bold}
+.mark{position:absolute;font:13px system-ui;padding:3px 9px;border-radius:12px;background:rgba(20,16,10,.85);border:1px solid}
+.exit{color:#f2b84b;border-color:#f2b84b}.item{color:#7fd38a;border-color:#7fd38a}.char{color:#7fb6f2;border-color:#7fb6f2}.scen{color:#ddd;border-color:#888}
+.sr{width:380px;max-width:100%;background:#1f1a13;border:1px solid #4a3e2a;border-radius:10px;padding:14px 16px;font:14px/1.45 system-ui}
+.sr h2{font:600 13px system-ui;letter-spacing:.06em;text-transform:uppercase;color:#a99c82;margin:0 0 10px}
+.sr ol{margin:0;padding-left:22px}.sr li{margin:3px 0}
+.role{color:#a99c82;font-size:12px}.new{background:#3a2f12;border-left:3px solid #f2b84b;padding-left:6px}
+.note{color:#a99c82;font-size:13px;margin-top:10px}
+.states{margin-top:28px;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;max-width:1100px}
+.state{background:#1f1a13;border:1px solid #4a3e2a;border-radius:10px;padding:12px 14px;font:14px/1.45 system-ui}
+.state b{display:block;font-family:Georgia,serif;margin-bottom:6px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}.pill{font:13px system-ui;border:1px solid #f2b84b;color:#f2b84b;border-radius:12px;padding:2px 9px;background:rgba(20,16,10,.85)}
+.bubble{background:rgba(245,236,215,.95);color:#2a2116;border-radius:12px;padding:8px 12px;margin:6px 0;font-size:14px;max-width:260px}
+.story{position:absolute;left:12px;top:60px}
+</style>
+<h1>ways out become buttons on the picture</h1><p class=sub>Nothing a sighted player sees changes. A screen reader finds each way out on the picture the same way it already finds people and things, after them, in the order left to right.</p><div class=wrap>
+<div class=stage style="background-image:url(../../web/public/images/generated/act1-village-square.png)">
+ <div class=plate>Village Square ▾</div>
+ <span class="mark exit" style="left:20px;top:55%">← Elior's Cottage</span>
+ <span class="mark exit" style="left:44%;top:22%">↑ Mira's Hut</span>
+ <span class="mark exit" style="right:20px;top:58%">→ General Store</span>
+ <span class="mark char" style="left:30%;top:66%">Villager</span>
+ <span class="mark item" style="left:58%;top:72%">Bucket</span>
+ <span class="mark item" style="left:66%;top:40%">Old Notice</span>
+ <span class="mark scen" style="left:46%;top:50%">Fountain</span>
+</div>
+<div class=sr><h2>What a screen reader lists on the picture</h2><ol>
+<li>Villager <span class=role>menu button</span></li><li>Fountain <span class=role>menu button</span></li><li>Bucket <span class=role>menu button</span></li><li>Old Notice <span class=role>menu button</span></li>
+<li class=new>Go west to Elior's Cottage <span class=role>button</span></li><li class=new>Go north to Mira's Hut <span class=role>button</span></li><li class=new>Go east to General Store <span class=role>button</span></li></ol>
+<p class=note>Highlighted: new. Pressing one walks there at once, just like clicking its name. The wording matches the buttons already in the Map.</p></div></div>
+<div class=states>
+<div class=state><b>A way that is closed right now</b>Left out — a sighted player sees only painting there too.</div>
+<div class=state><b>A room with no ways out (the dream)</b>Nothing new is listed. No "no ways out" line is read.</div>
+<div class=state><b>Up, down and other directions</b>Read the same way: "Go down to …", "Go up to …".</div>
+</div>
+
+<hr style="margin:32px 0;border-color:#4a3e2a">
+<h1>new words are also spoken as they appear</h1><p class=sub>Each bubble is its own paragraph and each sentence ends with a pause (today “light up.He” is read as one word), and the screen reader speaks each new story bubble when it appears, without moving the player's place — the way chat windows and text adventures usually work. Nothing on screen changes.</p><div class=wrap>
+<div class=stage style="background-image:url(../../web/public/images/generated/act1-village-square.png)"><div class=plate>Village Square ▾</div>
+<div class=story><div class=bubble>You hand the fisherman the bait.</div><div class=bubble>The fisherman's eyes light up. He wraps it in a scrap of sailcloth.</div></div></div>
+<div class=sr><h2>What is heard, unasked, after the action</h2>
+<ol><li>“You hand the fisherman the bait.”</li><li>“The fisherman's eyes light up. ‹pause› He wraps it in a scrap of sailcloth.”</li></ol>
+<p>Spoken lines (a person talking) are spoken too, with the speaker's name first: “Mira: …”.</p>
+<p class=note>Cost: if the game's recorded narration voice is also on, the two voices talk over each other — so while recorded narration plays, the screen reader is not given the words (it can still read them in the story).</p></div></div>
+<div class=states>
+<div class=state><b>A room's first arrival</b>Already spoken today (room name, then its description) — unchanged.</div>
+<div class=state><b>Words hidden (▾ Hide)</b>New words still spoken; hiding is only visual.</div>
+<div class=state><b>A long turn</b>Spoken bubble by bubble; a new action cuts off what is still being spoken.</div>
+</div>
+
