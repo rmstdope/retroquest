@@ -327,7 +327,7 @@ describe('AreaNames', () => {
       expect(y).toBeLessThan(540 - 73)
     })
 
-    it('has no mark or name for a thing wholly behind the bar', async () => {
+    it('shows the mark and name of a thing wholly behind the bar above it, pressable as the thing (rq-v29l.2)', async () => {
       const w = mountNames({
         showing: true,
         footCover: 73,
@@ -337,8 +337,16 @@ describe('AreaNames', () => {
         },
       })
       await nextTick()
-      expect(w.find('[data-area-mark="bucket"]').exists()).toBe(false)
-      expect(w.find('[data-area-name="bucket"]').exists()).toBe(false)
+      const mark = w.get('[data-area-mark="bucket"]')
+      const name = w.get('[data-area-name="bucket"]')
+      expect(px(mark.attributes('style'), 'top')).toBeLessThan(540 - 73)
+      expect(px(name.attributes('style'), 'top') + 25).toBeLessThanOrEqual(
+        540 - 73,
+      )
+      await mark.trigger('click')
+      await name.trigger('click')
+      const pressed = w.emitted('press') ?? []
+      expect(pressed.map((args) => args[0])).toEqual([things[1], things[1]])
     })
 
     it('shows the mark and name of a way out wholly behind the bar above it, pressable as the way (rq-v29l.1)', async () => {
