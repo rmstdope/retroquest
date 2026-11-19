@@ -31,4 +31,14 @@ export class KeepsakeNote extends Item {
       'She has underlined the last line twice.'
     )
   }
+
+  /** The action ring offers Open on it: opening it reads it. */
+  override answersToOpen(): boolean {
+    return true
+  }
+
+  /** Opening it reads it: the same words as examining it. */
+  override open(gameState: GameState): string {
+    return this.examine(gameState)
+  }
 }

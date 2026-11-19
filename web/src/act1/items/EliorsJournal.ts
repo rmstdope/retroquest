@@ -66,4 +66,14 @@ export class EliorsJournal extends Item {
   override nameInSentence(options?: NameOptions): string {
     return super.nameInSentence({ ...options, bare: true })
   }
+
+  /** The action ring offers Open on it: opening it reads it. */
+  override answersToOpen(): boolean {
+    return true
+  }
+
+  /** Opening it reads it: the same words as using it. */
+  override open(gameState: GameState): string {
+    return this.use(gameState)
+  }
 }

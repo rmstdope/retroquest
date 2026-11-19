@@ -73,4 +73,9 @@ export class ShedDoor extends Item {
       '[/item_name] on the [item_name]shed door[/item_name].[/failure]'
     )
   }
+
+  /** The action ring offers Open on it: it opens, and answers whatever its state. */
+  override answersToOpen(): boolean {
+    return true
+  }
 }

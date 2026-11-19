@@ -310,4 +310,20 @@ export class GameMap extends Item {
       'Some of the paths on it you have never walked.'
     )
   }
+
+  /** The action ring offers Open on it: opening it reads it. */
+  override answersToOpen(): boolean {
+    return true
+  }
+
+  /**
+   * Opening it reads it, as using it does, except on the Road to Greendale,
+   * where using the map is the act's finishing step: there opening it only
+   * shows the map, so the ring (which offers Open everywhere) gives nothing away.
+   */
+  override open(gameState: GameState): string {
+    if (gameState.currentRoom instanceof RoadToGreendale)
+      return this.examine(gameState)
+    return this.use(gameState)
+  }
 }

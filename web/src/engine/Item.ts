@@ -11,7 +11,7 @@ export interface ItemOptions {
 }
 
 /** Every verb of a carried item's ring that `Item.ringVerbs` can name. */
-export const RING_VERBS = ['use', 'open', 'close', 'caston'] as const
+export const RING_VERBS = ['use', 'open', 'caston'] as const
 
 /** One verb of a carried item's ring besides Use with… and Examine. */
 export type RingVerb = (typeof RING_VERBS)[number]
@@ -180,6 +180,16 @@ export class Item {
   /** Called after the player takes the item; the text is shown after the pickup. */
   pickedUp(_gameState: GameState): string {
     return ''
+  }
+
+  /**
+   * Whether the action ring offers Open on this item: true for what opens
+   * (whatever its state, so the ring gives nothing away) and for what is read
+   * (books, letters, notes, diaries, scrolls and maps, which override `open` to
+   * read). False by default; no item can be closed, so no ring offers Close.
+   */
+  answersToOpen(): boolean {
+    return false
   }
 
   open(_gameState: GameState): string {

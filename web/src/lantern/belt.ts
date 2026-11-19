@@ -115,13 +115,13 @@ function taking(id: string, label: string, verb: HandVerb): RingAction {
 }
 
 /**
- * The ring of a carried thing, clockwise from the top: Use, Use with…,
- * Open, Close, Cast on…, Examine; of a spell: Cast, Cast on…. An action with
- * nothing to choose from is left out: Use with… when nothing else is carried,
- * nothing is placed in the room (`placed`) and nobody is here (it is also how
- * a thing is handed over), Cast on… with no spells. Use, Open, Close,
- * Examine and Cast send at once; Cast on… on a thing fans the spells known;
- * Use with… and a spell's Cast on… take it in hand.
+ * The ring of a carried thing, clockwise from the top: Use, Use with…, Open
+ * (only on what opens or is read), Cast on…, Examine; of a spell: Cast,
+ * Cast on…. An action with nothing to choose from is left out: Use with…
+ * when nothing else is carried, nothing is placed in the room (`placed`) and
+ * nobody is here (it is also how a thing is handed over), Cast on… with no
+ * spells. Use, Open, Examine and Cast send at once; Cast on… on a thing fans
+ * the spells known; Use with… and a spell's Cast on… take it in hand.
  */
 export function carriedRing(
   subject: RingSubject,
@@ -153,11 +153,8 @@ export function carriedRing(
     ...(others || placed > 0 || ctx.characters.length > 0
       ? [taking('usewith', 'Use with…', 'usewith')]
       : []),
-    ...(keeps('open')
+    ...(keeps('open') && ctx.canOpen?.(name)
       ? [plain('open', 'Open', commandOf('open', [name]))]
-      : []),
-    ...(keeps('close')
-      ? [plain('close', 'Close', commandOf('close', [name]))]
       : []),
     ...(castOn && keeps('caston') ? [castOn] : []),
     plain('examine', 'Examine', commandOf('examine', [name])),

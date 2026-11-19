@@ -25,4 +25,14 @@ export class PrayerBook extends Item {
   override use(gameState: GameState): string {
     return this.read(gameState)
   }
+
+  /** The action ring offers Open on it: opening it reads it. */
+  override answersToOpen(): boolean {
+    return true
+  }
+
+  /** Opening it reads it: the same words as using it. */
+  override open(gameState: GameState): string {
+    return this.use(gameState)
+  }
 }

@@ -85,8 +85,17 @@ describe('carriedRing', () => {
     )
     expect(subjectOf(picture).verbs).toEqual([])
   })
-  it('offers a thing Use, Open, Close and Examine when nothing else is anywhere', () => {
-    expect(labels(bread, EMPTY)).toEqual(['Use', 'Open', 'Close', 'Examine'])
+  it('offers a thing Use and Examine when nothing else is anywhere', () => {
+    expect(labels(bread, EMPTY)).toEqual(['Use', 'Examine'])
+  })
+
+  it('offers Open only on what opens or is read, and never Close', () => {
+    const ctx = { ...EMPTY, canOpen: (name: string) => name === 'bread' }
+    expect(labels(bread, ctx)).toEqual(['Use', 'Open', 'Examine'])
+    expect(labels(bread, { ...EMPTY, canOpen: () => false })).toEqual([
+      'Use',
+      'Examine',
+    ])
   })
 
   it('offers every action in order when there is something to use it on, someone to hand it to and spells', () => {
@@ -99,8 +108,6 @@ describe('carriedRing', () => {
     expect(labels(bread, ctx, 1)).toEqual([
       'Use',
       'Use with…',
-      'Open',
-      'Close',
       'Cast on…',
       'Examine',
     ])
@@ -108,13 +115,7 @@ describe('carriedRing', () => {
 
   it('keeps Use with… for someone to hand the thing to when nothing else is carried or placed', () => {
     const ctx = { ...EMPTY, inventory: ['bread'], characters: ['tilda'] }
-    expect(labels(bread, ctx, 0)).toEqual([
-      'Use',
-      'Use with…',
-      'Open',
-      'Close',
-      'Examine',
-    ])
+    expect(labels(bread, ctx, 0)).toEqual(['Use', 'Use with…', 'Examine'])
   })
 
   it('offers Use with… for a placed thing even with nothing else carried', () => {

@@ -173,7 +173,7 @@ describe('LanternLayout: the belt of pictures', () => {
     expect(strip()).toContain('Use Patches with…')
   })
 
-  it('opens the ring of a carried thing: Use, Use with…, Open, Close, Examine', async () => {
+  it('opens the ring of a carried thing: Use, Use with…, Examine (no Open or Close on bread)', async () => {
     await cottage()
     await click(tile('item:bread').element)
     expect(w.get('.lq-ring-name').text()).toBe('Bread')
@@ -181,7 +181,7 @@ describe('LanternLayout: the belt of pictures', () => {
       w
         .findAll('.lq-press-ring .lq-ring-coin')
         .map((c) => c.attributes('data-ring-action')),
-    ).toEqual(['use', 'usewith', 'open', 'close', 'examine'])
+    ).toEqual(['use', 'usewith', 'examine'])
     expect(w.get('.lq-belt-caption').text()).toContain('Bread')
   })
 

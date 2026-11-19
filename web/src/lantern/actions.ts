@@ -48,6 +48,11 @@ export interface ActionContext {
   exits: RoomExits
   /** What merchants in the room sell. */
   wares: RoomWare[]
+  /**
+   * Whether a ring offers Open on the named carried or room item (it opens, or
+   * is read). Absent means nothing does. No ring ever offers Close.
+   */
+  canOpen?: (name: string) => boolean
 }
 
 export type TargetKind = 'item' | 'character' | 'spell' | 'exit'

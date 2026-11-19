@@ -219,3 +219,11 @@ describe('Item names', () => {
     expect(lamp.answersTo('torch')).toBe(false)
   })
 })
+
+describe('Item.answersToOpen', () => {
+  it('is false for an item that neither opens nor is read', () => {
+    expect(
+      new Item({ name: 'egg', description: 'An egg.' }).answersToOpen(),
+    ).toBe(false)
+  })
+})

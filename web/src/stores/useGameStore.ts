@@ -1123,6 +1123,14 @@ export const useGameStore = defineStore('game', () => {
     questToOpen.value = name
   }
 
+  /**
+   * Whether the action ring offers Open on the carried or room item `name`;
+   * a fact of the item, so the ring reads it live as the lists change.
+   */
+  function canOpen(name: string): boolean {
+    return bridge ? bridge.controller.canOpenItem(name) : false
+  }
+
   function requireBridge(): GameBridge {
     if (!bridge) throw new Error('Bridge not initialized')
     return bridge
@@ -2133,6 +2141,7 @@ export const useGameStore = defineStore('game', () => {
     completionTree,
     commandPlace,
     shortNames,
+    canOpen,
     readInfo,
     quitAsked,
     finishAsked,
