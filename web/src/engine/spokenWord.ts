@@ -96,3 +96,16 @@ export function affirms(words: string, answers: readonly string[]): boolean {
     })
   })
 }
+
+/**
+ * The entries of `vocabulary` that the text says as whole words, in the order
+ * the vocabulary lists them. The `[markup]` tags of story text are not
+ * words; an entry of several words must appear as those words in a row.
+ */
+export function mentionedWords(
+  text: string,
+  vocabulary: readonly string[],
+): string[] {
+  const spoken = wordsOf(text.replace(/\[\/?[a-z_]+\]/g, ' '))
+  return vocabulary.filter((entry) => startsOf(spoken, entry).length > 0)
+}

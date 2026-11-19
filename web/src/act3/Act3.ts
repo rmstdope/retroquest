@@ -37,6 +37,7 @@ import { MendSpell } from './spells/MendSpell'
 import { BlessSpell } from './spells/BlessSpell'
 import { ACT3_CLASSES } from './classes'
 import { ACT3_GOLDEN_PATH } from './Act3GoldenPath'
+import { ACT3_WORDS } from './Act3Words'
 import {
   FLAG_ACT3_FORTRESS_GATES_EXAMINED,
   FLAG_ACT3_MINERS_RESCUE_COMPLETED,
@@ -108,6 +109,7 @@ export class Act3 extends Act {
         'No Copyright Vlog Music for Videos',
       classes: ACT3_CLASSES,
       goldenPath: ACT3_GOLDEN_PATH,
+      words: ACT3_WORDS,
     })
   }
 

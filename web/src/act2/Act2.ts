@@ -45,6 +45,7 @@ import {
 } from './Act2StoryFlags'
 import { ACT2_CLASSES } from './classes'
 import { ACT2_GOLDEN_PATH } from './Act2GoldenPath'
+import { ACT2_WORDS } from './Act2Words'
 
 /** Act 2: Greendale & The Forest Edge. */
 export class Act2 extends Act {
@@ -98,6 +99,7 @@ export class Act2 extends Act {
         'Free To Use Music for Video',
       classes: ACT2_CLASSES,
       goldenPath: ACT2_GOLDEN_PATH,
+      words: ACT2_WORDS,
     })
   }
 

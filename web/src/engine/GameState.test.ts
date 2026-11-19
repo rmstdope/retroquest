@@ -504,3 +504,54 @@ describe('GameState', () => {
     })
   })
 })
+
+describe('GameState words to say', () => {
+  const vocabulary = ['Stay', 'Patches', 'Mira', 'Yes']
+  let state: GameState
+
+  beforeEach(() => {
+    state = new GameState(
+      new Room({ name: 'R', description: 'A room.' }),
+      {},
+      [],
+    )
+  })
+
+  it('offers only Yes and No before any word is met', () => {
+    expect(state.wordsToSay()).toEqual([
+      { word: 'Yes', isNew: false },
+      { word: 'No', isNew: false },
+    ])
+  })
+
+  it('adds met words after Yes and No, A to Z, each new', () => {
+    state.meetWords('Tell Patches to stay. [dim]Mira[/dim] waits.', vocabulary)
+    expect(state.wordsToSay()).toEqual([
+      { word: 'Yes', isNew: false },
+      { word: 'No', isNew: false },
+      { word: 'Mira', isNew: true },
+      { word: 'Patches', isNew: true },
+      { word: 'Stay', isNew: true },
+    ])
+  })
+
+  it('lists a word once however often it is met, and Yes only as the fixed pill', () => {
+    state.meetWords('yes, yes, stay', vocabulary)
+    state.meetWords('Stay!', vocabulary)
+    expect(state.wordsToSay().map((w) => w.word)).toEqual(['Yes', 'No', 'Stay'])
+  })
+
+  it('clears the dot of a word once it has been said', () => {
+    state.meetWords('stay patches', vocabulary)
+    state.sayWords('Stay, please', vocabulary)
+    expect(state.wordsToSay().filter((w) => w.isNew)).toEqual([
+      { word: 'Patches', isNew: true },
+    ])
+  })
+
+  it('keeps a word said before it was met undotted', () => {
+    state.sayWords('stay', vocabulary)
+    state.meetWords('stay', vocabulary)
+    expect(state.wordsToSay().find((w) => w.word === 'Stay')?.isNew).toBe(false)
+  })
+})
