@@ -39,8 +39,13 @@ export class FathersNote extends Item {
     return clue('The note stays in the box, where your father left it for you.')
   }
 
-  /** The note was unfolded when the box was opened; there is nothing more to open. */
-  override open(_gameState: GameState): string {
-    return "The box holds only your father's note, already unfolded."
+  /** The action ring offers Open on it: opening it reads it. */
+  override answersToOpen(): boolean {
+    return true
+  }
+
+  /** Opening it reads it: the same words as examining it. */
+  override open(gameState: GameState): string {
+    return this.examine(gameState)
   }
 }

@@ -41,12 +41,30 @@ const labels = (thing: AreaThing, ctx: ActionContext): string[] =>
   ringActions(thing, ctx).map((a) => a.label)
 
 describe('ringActions', () => {
-  it('offers a thing Take, Use, Open, Close and Examine with nothing carried and no spells', () => {
-    expect(labels(bucket, EMPTY)).toEqual([
+  it('offers a thing Take, Use and Examine with nothing carried and no spells, and never Close', () => {
+    expect(labels(bucket, EMPTY)).toEqual(['Take', 'Use', 'Examine'])
+  })
+
+  it('offers Open, between Use with… and Cast on…, only on what opens, in any state', () => {
+    const ctx = {
+      ...EMPTY,
+      inventory: ['rope'],
+      spells: ['light'],
+      canOpen: (name: string) => name === bucket.name,
+    }
+    expect(labels(bucket, ctx)).toEqual([
+      'Take',
+      'Use',
+      'Use with…',
+      'Open',
+      'Cast on…',
+      'Examine',
+    ])
+    expect(labels(fountain, ctx)).not.toContain('Open')
+    expect(labels(bucket, { ...EMPTY, canOpen: () => true })).toEqual([
       'Take',
       'Use',
       'Open',
-      'Close',
       'Examine',
     ])
   })
@@ -61,8 +79,6 @@ describe('ringActions', () => {
       'Take',
       'Use',
       'Use with…',
-      'Open',
-      'Close',
       'Cast on…',
       'Examine',
     ])

@@ -115,7 +115,7 @@ export function fanned(
 
 /**
  * The ring of `thing`, clockwise from the top: for a thing Take, Use, Use
- * with…, Open, Close, Cast on…, Examine; for a person Talk to, Say…, Buy…
+ * with…, Open (only on what opens or is read), Cast on…, Examine; for a person Talk to, Say…, Buy…
  * (sellers only), Use with…, Cast on…, Examine. Nothing is left out
  * for what will work, only for having nothing to choose from (nothing
  * carried, no spells, nothing to sell).
@@ -170,8 +170,9 @@ export function ringActions(
     plain('take', 'Take', commandOf('take', [name])),
     plain('use', 'Use', commandOf('use', [name])),
     ...present(useWith),
-    plain('open', 'Open', commandOf('open', [name])),
-    plain('close', 'Close', commandOf('close', [name])),
+    ...(ctx.canOpen?.(name)
+      ? [plain('open', 'Open', commandOf('open', [name]))]
+      : []),
     ...present(castOn),
     examine,
   ]

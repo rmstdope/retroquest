@@ -1786,6 +1786,7 @@ const ringContext = computed<ActionContext>(() => ({
   spells: game.spellEntries,
   exits: game.exits,
   wares: game.roomWares,
+  canOpen: game.canOpen,
 }))
 /** The actions on the open ring, read live so what is gone leaves it. */
 const ringItems = computed(() => {

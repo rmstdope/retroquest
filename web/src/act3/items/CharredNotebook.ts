@@ -45,4 +45,14 @@ export class CharredNotebook extends Item {
       "torn it. The names in it are your parents'."
     )
   }
+
+  /** The action ring offers Open on it: opening it reads it. */
+  override answersToOpen(): boolean {
+    return true
+  }
+
+  /** Opening it reads it: the same words as examining it. */
+  override open(gameState: GameState): string {
+    return this.examine(gameState)
+  }
 }

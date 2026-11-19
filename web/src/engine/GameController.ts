@@ -512,6 +512,15 @@ export class GameController {
   }
 
   /**
+   * Whether the action ring offers Open on the carried or room item `name`
+   * (full or short): the item the verbs would pick answers Open, or is read.
+   * False for a name that matches nothing here.
+   */
+  canOpenItem(name: string): boolean {
+    return this.game.state.findItem(name)?.answersToOpen() ?? false
+  }
+
+  /**
    * Short names (as the story uses them) of carried and room items mapped
    * to their full names, e.g. `{ journal: "Elior's Journal" }`. Each short
    * name is resolved through `GameState.findItem`, the lookup the parser's

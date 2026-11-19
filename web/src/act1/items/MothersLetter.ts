@@ -1,10 +1,4 @@
-import {
-  type NameOptions,
-  Item,
-  type GameState,
-  characterName,
-  writing,
-} from '@/engine'
+import { Item, type GameState, characterName, writing } from '@/engine'
 import { FLAG_READ_MOTHERS_LETTER } from '../Act1StoryFlags'
 
 /** The letter as Elior reads it, built on demand so older saves read the current wording. */
@@ -60,16 +54,21 @@ export class MothersLetter extends Item {
     return this.examine(gameState)
   }
 
-  /** Named after a person, so it takes no "the" and keeps its capitals. */
-  override nameInSentence(options?: NameOptions): string {
-    return super.nameInSentence({ ...options, bare: true })
-  }
-
   /** The line the story tells when Elior takes it, wherever it is lying. */
   override pickedUp(_gameState: GameState): string {
     return (
       'You fold it along its old creases and put it inside your shirt, where it will stay dry. ' +
       'Your hands are not quite steady.'
     )
+  }
+
+  /** The action ring offers Open on it: opening it reads it. */
+  override answersToOpen(): boolean {
+    return true
+  }
+
+  /** Opening it reads it: the same words as using it. */
+  override open(gameState: GameState): string {
+    return this.use(gameState)
   }
 }

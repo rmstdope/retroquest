@@ -125,7 +125,7 @@ describe('LanternLayout: pressing a thing on the picture', () => {
       w
         .findAll('.lq-press-ring .lq-ring-coin')
         .map((c) => c.attributes('data-ring-action')),
-    ).toEqual(['take', 'use', 'open', 'close', 'examine'])
+    ).toEqual(['take', 'use', 'examine'])
   })
 
   it('keeps the ring in the part of the picture the typing box leaves, over the words', async () => {

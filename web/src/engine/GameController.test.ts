@@ -312,6 +312,33 @@ describe('GameController', () => {
       })
     })
 
+    it('says which named things the action ring offers Open on, by the engine lookup', () => {
+      class Chest extends Item {
+        /** Opens in any state. */
+        override answersToOpen(): boolean {
+          return true
+        }
+      }
+      const ctrl = makeController({
+        items: [
+          new Chest({
+            name: 'Old Chest',
+            description: 'x',
+            shortName: 'chest',
+          }),
+          item('egg'),
+        ],
+      })
+      ctrl.game.state.inventory.push(
+        new Chest({ name: 'Tin Box', description: 'x', shortName: 'box' }),
+      )
+      expect(ctrl.canOpenItem('Old Chest')).toBe(true)
+      expect(ctrl.canOpenItem('chest')).toBe(true)
+      expect(ctrl.canOpenItem('tin box')).toBe(true)
+      expect(ctrl.canOpenItem('egg')).toBe(false)
+      expect(ctrl.canOpenItem('nothing here')).toBe(false)
+    })
+
     it('maps a shared short name to the item the engine picks', () => {
       const ctrl = makeController({ items: [item('Rusted Locker Key', 'key')] })
       ctrl.game.state.inventory.push(
@@ -341,7 +368,7 @@ describe('GameController', () => {
     it('names the ring verbs of a carried item that narrows its ring', () => {
       class Cat extends Item {
         /** Only Use with… and Examine. */
-        override ringVerbs(): readonly ('use' | 'open' | 'close' | 'caston')[] {
+        override ringVerbs(): readonly ('use' | 'open' | 'caston')[] {
           return []
         }
       }

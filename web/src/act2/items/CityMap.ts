@@ -45,4 +45,14 @@ export class CityMap extends Item {
       STRANGERS_MARKS
     )
   }
+
+  /** The action ring offers Open on it: opening it reads it. */
+  override answersToOpen(): boolean {
+    return true
+  }
+
+  /** Opening it reads it: the same words as using it. */
+  override open(gameState: GameState): string {
+    return this.use(gameState)
+  }
 }

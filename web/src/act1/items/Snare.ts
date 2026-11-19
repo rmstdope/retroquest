@@ -79,4 +79,9 @@ export class Snare extends Item {
       remembered('Mercy')
     )
   }
+
+  /** The action ring offers Open on it: it opens, and answers whatever its state. */
+  override answersToOpen(): boolean {
+    return true
+  }
 }
