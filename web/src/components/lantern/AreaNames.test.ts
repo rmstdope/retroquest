@@ -340,6 +340,33 @@ describe('AreaNames', () => {
       expect(w.find('[data-area-mark="bucket"]').exists()).toBe(false)
       expect(w.find('[data-area-name="bucket"]').exists()).toBe(false)
     })
+
+    it('shows the mark and name of a way out wholly behind the bar above it, pressable as the way (rq-v29l.1)', async () => {
+      const w = mountNames({
+        showing: true,
+        footCover: 73,
+        things: [
+          ...things,
+          {
+            areaId: 'exit-south',
+            name: 'south',
+            label: '↓ Vegetable Field',
+            kind: 'exit',
+            direction: 'south',
+          },
+        ],
+        boxes: {
+          ...boxes,
+          'exit-south': { x: 0.27, y: 0.88, width: 0.46, height: 0.12 },
+        },
+      })
+      await nextTick()
+      const mark = w.get('[data-area-mark="exit-south"]')
+      const name = w.get('[data-area-name="exit-south"]')
+      expect(mark.attributes('data-way')).toBe('south')
+      expect(name.attributes('data-way')).toBe('south')
+      expect(px(mark.attributes('style'), 'top')).toBeLessThan(540 - 73)
+    })
   })
 
   it('keeps a name clear of the edge the drift pulls past the picture', async () => {
