@@ -526,12 +526,26 @@ export class Shopkeeper extends Character {
     return ropeHad && !this.giftGiven(gameState)
   }
 
+  /** Whether Elior carries Patches: found, and not yet given a home. */
+  private static isCarryingPatches(gameState: GameState): boolean {
+    return (
+      gameState.getStoryFlag(FLAG_PATCHES_FOUND) &&
+      !gameState.getStoryFlag(FLAG_PATCHES_RETURNED) &&
+      !gameState.getStoryFlag(FLAG_PATCHES_STAYED_WITH_GRANDMOTHER)
+    )
+  }
+
   /**
    * Patches in the bag, offered to him by Use with…, is welcomed home as
    * talking to him does; every other offer is answered as before.
    */
   override acceptOffer(gameState: GameState, item: Item): string | null {
-    if (item instanceof CarriedPatches) return this.talkTo(gameState)
+    if (
+      item instanceof CarriedPatches &&
+      Shopkeeper.isCarryingPatches(gameState)
+    ) {
+      return this.talkTo(gameState)
+    }
     return super.acceptOffer(gameState, item)
   }
 
@@ -540,10 +554,7 @@ export class Shopkeeper extends Character {
    * while Elior carries her welcomes her home, as talking to him does.
    */
   override giveUnheld(gameState: GameState, name: string): string | null {
-    const carrying =
-      gameState.getStoryFlag(FLAG_PATCHES_FOUND) &&
-      !gameState.getStoryFlag(FLAG_PATCHES_RETURNED) &&
-      !gameState.getStoryFlag(FLAG_PATCHES_STAYED_WITH_GRANDMOTHER)
+    const carrying = Shopkeeper.isCarryingPatches(gameState)
     if (!carrying || !new Patches().answersTo(name)) return null
     return this.talkTo(gameState)
   }

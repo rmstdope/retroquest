@@ -5,7 +5,7 @@
 import { Character } from './Character'
 import type { CompletionTree, Game } from './Game'
 import type { SoundFiring } from './GameState'
-import type { Item } from './Item'
+import { RING_VERBS, type Item, type RingVerb } from './Item'
 import type { Quest, QuestDetails } from './Quest'
 
 /** A journal entry: a name (with markup) and its text. */
@@ -13,7 +13,7 @@ export interface NamedItem {
   name: string
   description: string
   /** The verbs of a carried item's ring besides Use with… and Examine, when it narrows them (`Item.ringVerbs`); absent for all. */
-  ringVerbs?: readonly ('use' | 'open' | 'close' | 'caston')[]
+  ringVerbs?: readonly RingVerb[]
 }
 
 /** Something a merchant in the room sells. */
@@ -376,7 +376,7 @@ export class GameController {
             ? `[item_name]${count} ${item.name}[/item_name]`
             : `[item_name]${item.name}[/item_name]`,
         description: item.descriptionFor(this.game.state),
-        ...(verbs.length < 4 ? { ringVerbs: verbs } : {}),
+        ...(verbs !== RING_VERBS ? { ringVerbs: verbs } : {}),
       })
     }
     return entries

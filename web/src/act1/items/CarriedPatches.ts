@@ -1,4 +1,4 @@
-import { Item, type GameState, type NameOptions } from '@/engine'
+import { Item, type GameState, type NameOptions, type RingVerb } from '@/engine'
 import { Patches } from '../characters/Patches'
 import {
   FLAG_PATCHES_FOUND,
@@ -36,7 +36,7 @@ export class CarriedPatches extends Item {
   }
 
   /** She is in his arms already; her ring has no verbs of its own. */
-  override ringVerbs(): readonly ('use' | 'open' | 'close' | 'caston')[] {
+  override ringVerbs(): readonly RingVerb[] {
     return []
   }
 

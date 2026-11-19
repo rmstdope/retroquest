@@ -745,7 +745,18 @@ export const useGameStore = defineStore('game', () => {
         ? holdGainAreas(itemChanges.gained, b)
         : itemChanges.gained
     const gained = showChips ? [...itemsGained, ...spellChanges.gained] : []
-    const lost = showChips ? [...itemChanges.lost, ...spellChanges.lost] : []
+    // A carried animal handed to someone is in that room's picture now, not lost.
+    const handedOver = b.controller
+      .getRoomCharacters()
+      .map((n) => n.toLowerCase())
+    const lost = showChips
+      ? [
+          ...itemChanges.lost.filter(
+            (chip) => !handedOver.includes(chip.name.toLowerCase()),
+          ),
+          ...spellChanges.lost,
+        ]
+      : []
     // A new act starts a new bag: nothing in it is "new" yet.
     if (!actRunning) clearNewDots()
     if (showChips && itemChanges.gained.length) markNew('bag')
@@ -787,7 +798,8 @@ export const useGameStore = defineStore('game', () => {
   }
 
   /**
-   * The gained items that lay in the room picture, each tagged with the area it
+   * The gained items that lay in the room picture (a carried animal such as
+   * Patches lay there as a character), each tagged with the area it
    * lay in (the shown picture had a thing of that name that the engine's has
    * not), and those areas held painted until their names come up
    * (`releaseGain`); the rest are returned as they are.
@@ -797,7 +809,7 @@ export const useGameStore = defineStore('game', () => {
     const after = b.pictureState()
     const left = before.things.filter(
       (thing) =>
-        thing.kind === 'item' &&
+        (thing.kind === 'item' || thing.kind === 'character') &&
         !after.things.some((now) => now.areaId === thing.areaId),
     )
     const taken: string[] = []

@@ -3,7 +3,7 @@ export type { ImagePatch, PatchContext, PatchWhen } from './ImagePatch'
 export { Character, type CharacterOptions } from './Character'
 export { GameState } from './GameState'
 export type { QuestChanges, SoundFiring } from './GameState'
-export { Item, type ItemOptions } from './Item'
+export { Item, RING_VERBS, type ItemOptions, type RingVerb } from './Item'
 export {
   Quest,
   flagStage,

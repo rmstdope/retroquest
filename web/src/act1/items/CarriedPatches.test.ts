@@ -51,6 +51,14 @@ describe('CarriedPatches', () => {
     )
   })
 
+  it('tucks her head for a person who is not one of her homes', () => {
+    const game = gameCarrying()
+    game.state.currentRoom = game.state.allRooms.Riverbank
+    const answer = game.commandParser.parse('use patches with fisherman')
+    expect(answer).toContain('Patches tucks her head under your chin.')
+    expect(game.state.inventory[0]).toBeInstanceOf(CarriedPatches)
+  })
+
   it('sniffs a thing used with her', () => {
     const game = gameCarrying()
     const answer = game.commandParser.parse('use fish with patches')

@@ -5,7 +5,7 @@
  * press decides. Every command is the one the Actions row would send, built
  * with `buildCommand`; none is new. Knows nothing of Vue or the game.
  */
-import type { NamedItem } from '@/engine'
+import type { NamedItem, RingVerb } from '@/engine'
 import {
   buildCommand,
   verbById,
@@ -146,7 +146,7 @@ export function carriedRing(
     ctx,
     (spell) => [spell, name],
   )
-  const keeps = (verb: 'use' | 'open' | 'close' | 'caston'): boolean =>
+  const keeps = (verb: RingVerb): boolean =>
     subject.verbs === undefined || subject.verbs.includes(verb)
   return [
     ...(keeps('use') ? [plain('use', 'Use', commandOf('use', [name]))] : []),
