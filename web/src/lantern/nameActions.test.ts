@@ -62,9 +62,16 @@ describe('nameActions', () => {
     )
   })
 
-  it('offers casting a spell on a character, and no giving', () => {
+  it('offers using a thing from the bag with a character, and casting a spell on them', () => {
     expect(nameActions('character', 'Grandmother', HERE)).toEqual([
       { label: 'Talk to', command: 'talk to grandmother' },
+      {
+        label: 'Use with…',
+        choices: [
+          { label: 'Bread', command: 'use bread with grandmother' },
+          { label: 'Map', command: 'use map with grandmother' },
+        ],
+      },
       {
         label: 'Cast…',
         choices: [{ label: 'Light', command: 'cast light on grandmother' }],

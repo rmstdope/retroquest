@@ -5,8 +5,7 @@ import BeltFace from './BeltFace.vue'
 
 /**
  * The strip at the top of the room saying what the next press will do with
- * the thing or spell in hand ("Use Bread with…", "Give Bread to…", "Cast
- * Light on…"), with ✕ Cancel. It is a status, so a screen reader hears it
+ * the thing or spell in hand ("Use Bread with…", "Cast Light on…"), with ✕ Cancel. It is a status, so a screen reader hears it
  * when something is taken in hand. With `ghost` (a laptop with a mouse) a
  * small copy of the picture rides beside the pointer (the thing's or spell's
  * own picture as on the belt, its first letter until that is painted); it never

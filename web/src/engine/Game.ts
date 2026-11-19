@@ -461,7 +461,7 @@ Welcome to
 
   /**
    * The tree under a verb that takes one argument and then a joining word and
-   * a second argument ("give X to Y"): each first-argument name leads to the
+   * a second argument ("buy X from Y"): each first-argument name leads to the
    * joining words, and to `@` (sendable as it stands) when the join is optional.
    */
   private joinedTree(

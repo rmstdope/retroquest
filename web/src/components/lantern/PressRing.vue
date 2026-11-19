@@ -17,7 +17,7 @@ import {
  * picture, with its name in the middle in its usual colour. `at` is the spot
  * pressed and `bounds` the picture, both in the layer's pixels; the ring
  * slides inward to stay inside. Pressing an action that has second choices
- * (Use with…, Give…, Cast on…, Buy…) lights it, dims the others and fans the
+ * (Use with…, Cast on…, Buy…) lights it, dims the others and fans the
  * choices out as name pills on its outer side; Say… opens a words box. A
  * command is sent with `pick` and nothing else is sent or saved. Escape steps
  * back (fan or box to the ring, ring closed, with `close(true)`); Tab closes;
@@ -25,7 +25,7 @@ import {
  * keys go round the ring and up and down a fan; focus lands on the first
  * action when it opens. The ring may be round a carried thing or spell on
  * the belt (`RingSubject`, a spell in purple); an action that takes it in hand
- * (Use with…, Give…, Cast on…) says `hand` with its verb and sends nothing.
+ * (Use with…, Cast on…) says `hand` with its verb and sends nothing.
  * Reduce motion is carried by `--lq-motion`.
  */
 const props = defineProps<{
