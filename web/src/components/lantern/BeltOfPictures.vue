@@ -627,6 +627,8 @@ defineExpose({ focusBelt, focusPicture, has, root })
   outline: 1.5px dashed rgb(232 196 140 / 0.55);
   outline-offset: -6px;
   transition: border-radius var(--lq-strap-ms);
+  /* The leather covers the picture: a press on it, beside or under a pocket, never reaches a thing beneath. */
+  pointer-events: auto;
 }
 .lq-belt-folded .lq-belt-bar {
   /* The buckle end of a belt. */
@@ -714,7 +716,7 @@ defineExpose({ focusBelt, focusPicture, has, root })
   grid-template-columns: 0fr;
 }
 .lq-belt-strip {
-  /* Floats on the leather: only the pictures themselves take a press. */
+  /* Floats on the leather: only the pictures themselves take a press (the leather takes the rest, and does nothing). */
   pointer-events: none;
   display: flex;
   align-items: center;

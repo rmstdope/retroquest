@@ -18,8 +18,11 @@ const PIXEL = Buffer.from(
   'base64',
 )
 
-/** Open the game in the cottage with its picture up and a few things placed on it, the bread taken. */
-async function toTheCottage(page: Page): Promise<void> {
+/** Open the game in the cottage with its picture up and a few things placed on it (and `more`), the bread taken. */
+async function toTheCottage(
+  page: Page,
+  more: Record<string, object> = {},
+): Promise<void> {
   await page.route('**/images/generated/manifest.json', (route) =>
     route.fulfill({
       json: {
@@ -31,6 +34,7 @@ async function toTheCottage(page: Page): Promise<void> {
             hearth: { x: 0.1, y: 0.2, width: 0.15, height: 0.3 },
             bread: { x: 0.5, y: 0.3, width: 0.1, height: 0.1 },
             grandmother: { x: 0.8, y: 0.2, width: 0.1, height: 0.3 },
+            ...more,
           },
         },
       },
@@ -97,6 +101,41 @@ test('a carried thing is used on a person from the belt: ring, hand, press', asy
     .toBeGreaterThan(before)
   // The game's own answer, as typing `use bread with grandmother` gives it.
   await expect(story).toContainText('Grandmother turns it over in her hands')
+})
+
+test('a press on the belt opens no ring of a thing lying under it, and a press on a picture opens its own (rq-v29l.5)', async ({
+  page,
+}): Promise<void> => {
+  await page.setViewportSize({ width: 1512, height: 806 })
+  // As the Riverbank's reeds: a thing across the picture's foot-left corner, its mark low on it.
+  await toTheCottage(page, {
+    hearth: {
+      x: 0,
+      y: 0.575926,
+      width: 0.300521,
+      height: 0.424074,
+      mark: { x: 0.067708, y: 0.781481 },
+    },
+  })
+  const bread = page.locator('[data-belt-pic="item:bread"]')
+  const pocket = await bread.boundingBox()
+  if (!pocket) throw new Error('the bread has no picture on the belt')
+  // The leather just under the pocket and just beside it, where a press meant for the bread lands as often as not.
+  for (const at of [
+    { x: pocket.x + pocket.width / 2, y: pocket.y + pocket.height + 4 },
+    { x: pocket.x + pocket.width + 3, y: pocket.y + pocket.height / 2 },
+  ]) {
+    await page.mouse.click(at.x, at.y)
+    await expect(page.getByRole('menu', { name: 'Hearth' })).toHaveCount(0)
+    // A pocket still swelling from the bread's landing may take the press itself: put its ring away.
+    if ((await page.getByRole('menu').count()) > 0) {
+      await page.keyboard.press('Escape')
+      await expect(page.getByRole('menu')).toHaveCount(0)
+    }
+  }
+  await bread.click()
+  await expect(page.getByRole('menu', { name: 'Bread' })).toBeVisible()
+  await expect(page.getByRole('menu')).toHaveCount(1)
 })
 
 test('the No match line of the typing box lies over the belt, not under its labels (rq-su6c)', async ({
