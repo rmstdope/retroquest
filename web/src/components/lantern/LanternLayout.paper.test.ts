@@ -796,6 +796,14 @@ describe('the narration paper', () => {
   })
 
   it('opens Help with "Playing without typing:" above the commands, in the agreed words', async () => {
+    vi.stubGlobal(
+      'matchMedia',
+      vi.fn((query: string) => ({
+        matches: !query.includes('coarse'),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+      })),
+    )
     const help = await helpText()
     const lines = [
       'Move the mouse over the picture to see the names of what is here.',
@@ -805,6 +813,7 @@ describe('the narration paper', () => {
       'Press a thing in your bag for its wheel.',
       'Press a way out of the picture to walk there, or a place on the map to travel to it.',
       "Press the room's name for Look, Search and Rest.",
+      'Press F1 to show or hide the command bar; type commands there instead.',
     ]
     let at = help.indexOf('Playing without typing:')
     expect(at).toBeGreaterThanOrEqual(0)
@@ -823,6 +832,7 @@ describe('the narration paper', () => {
     const help = await helpText()
     expect(help).toContain('Tap the picture to see the names of what is here.')
     expect(help).not.toContain('Move the mouse over')
+    expect(help).toContain('Press F1 to show or hide the command bar')
   })
 
   it('tells a phone everything in one column with the one Hide, which N works too', async () => {
