@@ -1,0 +1,30 @@
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Option A — the menus only</title><style>:root{--bg:#14110d;--glass:rgba(40,34,27,.86);--ink:#efe6d4;--muted:#a99c84;--amber:#e3a547;--cream:#f4e9cf;--line:rgba(239,230,212,.14)}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 30% 20%,#3a2c1c,#0d0b08 70%);color:var(--ink);font:16px/1.45 Georgia,serif;padding:24px 16px}
+h1{font:600 14px system-ui;letter-spacing:.08em;text-transform:uppercase;color:var(--amber);margin:0 0 4px}
+.lead{font:14px system-ui;color:var(--muted);max-width:760px;margin:0 0 20px}
+.wrap{display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start}
+.cap{font:600 12px system-ui;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin:0 0 8px}
+.dlg{width:min(420px,100%);background:var(--glass);border:1px solid var(--line);border-radius:20px;padding:18px 18px 12px;backdrop-filter:blur(8px);box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.dlg h2{margin:0 0 10px;font-size:22px;display:flex;justify-content:space-between}.x{font:16px system-ui;color:var(--muted)}
+.grp{font:600 11px system-ui;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);margin:14px 4px 6px}
+.row{display:flex;justify-content:space-between;align-items:center;padding:9px 10px;border-radius:14px}
+.lbl{display:block}.note{display:block;font:13px system-ui;color:var(--muted)}
+.vol{display:flex;gap:10px;align-items:center;padding:4px 10px 8px;font:13px system-ui;color:var(--muted)}
+.bar{flex:1;height:4px;border-radius:2px;background:linear-gradient(90deg,var(--amber) var(--v),var(--line) var(--v))}
+.sw{width:42px;height:24px;border-radius:12px;background:var(--line);position:relative;flex:none}.sw::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:var(--muted)}
+.sw.on{background:var(--amber)}.sw.on::after{left:21px;background:#1b150e}
+.ring{outline:2px solid var(--cream);outline-offset:-3px}
+.new{position:relative}.new::before{content:"NEW";position:absolute;left:-46px;top:12px;font:700 10px system-ui;color:#1b150e;background:var(--amber);padding:2px 5px;border-radius:4px}
+.keys{font:12px system-ui;color:var(--muted);border-top:1px solid var(--line);margin-top:10px;padding-top:8px}
+.tag{font:600 11px system-ui;padding:2px 7px;border-radius:9px;margin-left:6px}.t-ok{background:rgba(227,165,71,.2);color:var(--amber)}.t-new{background:var(--amber);color:#1b150e}.t-off{background:var(--line);color:var(--muted)}
+table{border-collapse:collapse;font:14px system-ui;width:min(760px,100%)}td,th{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{color:var(--muted);font-weight:600;font-size:12px;text-transform:uppercase}
+td small{color:var(--muted)}</style></head><body>
+<h1>Option A — the menus only</h1><p class=lead>Which windows over the game make the title page's sounds: the soft <b>tick</b> as the selection ring moves to another choice, and the brass <b>latch</b> when a choice is made. <span class="tag t-ok">already</span> = sounds like this today · <span class="tag t-new">new</span> = starts sounding · <span class="tag t-off">silent</span> = stays quiet. The room's own buttons and the actions on the picture stay silent in both options.</p>
+<table><tr><th>Window</th><th>Tick (ring moves)</th><th>Latch (choice made)</th></tr>
+<tr><td><b>Menu</b> (Escape)</td><td><span class='tag t-new'>new</span><br><small>moving between Journal, Quests, Map, Quick save … Quit</small></td><td><span class='tag t-new'>new</span><br><small>choosing any entry</small></td></tr>
+<tr><td><b>Save / Load</b></td><td><span class='tag t-ok'>already</span></td><td><span class='tag t-ok'>already</span></td></tr>
+<tr><td><b>Settings</b></td><td><span class='tag t-ok'>already</span><br><small>also a volume or choice changing</small></td><td><span class='tag t-ok'>already</span><br><small>a switch flipped</small></td></tr>
+<tr><td><b>Quit?</b></td><td><span class='tag t-ok'>already</span></td><td><span class='tag t-ok'>already</span></td></tr>
+<tr><td><b>Journal, Quests, Map, Help, Finish the story?</b></td><td><span class='tag t-off'>silent</span></td><td><span class='tag t-off'>silent</span><br><small>these are reading windows, not menus</small></td></tr>
+<tr><td><b>Title page</b></td><td><span class='tag t-ok'>already</span></td><td><span class='tag t-ok'>already</span></td></tr>
+</table><p class=lead style='margin-top:16px'>With the <b>Menu clicks</b> switch off, every row above is silent.</p></body></html>
