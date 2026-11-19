@@ -110,6 +110,15 @@ export async function enterCommand(page: Page, command: string): Promise<void> {
     await input.press('Enter')
     return
   }
+  await sendToGame(page, command)
+}
+
+/**
+ * Send a command straight to the game once it takes commands, with no typing
+ * box: the phone's way, and a spec's way when the box itself would be in the
+ * way (it is something the names keep clear of).
+ */
+export async function sendToGame(page: Page, command: string): Promise<void> {
   await page.waitForFunction(() => {
     const root = document.querySelector('#app') as AppRootElement | null
     return root?.__vue_app__?.config.globalProperties.$pinia._s.get('game')
