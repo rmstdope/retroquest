@@ -144,7 +144,7 @@ export const VERB_FORMS: readonly VerbForm[] = [
     argument: 'item',
     joins: { words: ['with', 'on'], argument: 'thing', optional: true },
     group: 'Inventory Management',
-    help: ['use <item>, use <item> with <item>'],
+    help: ['use <item>, use <item> with <item or character>'],
   },
   {
     verbs: ['inventory', 'i', 'inv'],
