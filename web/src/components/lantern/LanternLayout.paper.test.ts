@@ -306,6 +306,55 @@ describe('the narration paper', () => {
     await settle()
   }
 
+  describe('a game a load brought back', () => {
+    afterEach(() => vi.useRealTimers())
+
+    /** The story as a load restores it: every turn marked `restored`, numbered afresh. */
+    const restore = (turns: Turn[]): Turn[] =>
+      turns.map((entry, index) => ({
+        ...entry,
+        id: 100 + index,
+        restored: true,
+      }))
+    const speechLines = (): Element[] => [
+      ...document.querySelectorAll('[data-testid="speech-line"]'),
+    ]
+
+    it('shows none of the lines of the saved story on the stage, neither at once nor over time', async () => {
+      vi.useFakeTimers()
+      await mountWith([turn(1, 'The square is busy.')])
+      const several = {
+        ...turn(
+          2,
+          `${say('Mira', 'Hello.')}\n${say('Mira', 'Welcome back.')}\n` +
+            say('Mira', 'Mind the well.'),
+          'talk to mira',
+        ),
+        addressed: 'Mira',
+      }
+      game.turns = restore([turn(1, 'The square is busy.'), several])
+      await nextTick()
+      await nextTick()
+      expect(speechLines()).toHaveLength(0)
+      expect(bubbles()).toHaveLength(0)
+      await vi.advanceTimersByTimeAsync(20000)
+      expect(speechLines()).toHaveLength(0)
+      expect(bubbles()).toHaveLength(0)
+    })
+
+    it('tells the next command after the load as usual', async () => {
+      await mountWith([turn(1, 'First.')])
+      game.turns = restore([turn(1, 'First.'), talk(2, 'Hello.')])
+      await nextTick()
+      game.turns.push(talk(200, 'Again.'))
+      await nextTick()
+      await nextTick()
+      expect(speechLines().map((line) => line.textContent)).toEqual([
+        expect.stringContaining('Again.'),
+      ])
+    })
+  })
+
   describe('a gained item or spell', () => {
     const taking = (id: number): Turn => ({
       ...turn(id, 'You take them.', 'take bread'),

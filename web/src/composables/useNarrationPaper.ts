@@ -25,7 +25,9 @@ export interface NarrationPaper {
  * cards: one for every turn that leaves one since the last room change (see
  * `startsFresh`), at most `MAX_CARDS`, derived from the turns themselves; with
  * the speech told beside the paper (`speechBeside`) a turn told only as speech
- * leaves none. A talk that moves Elior clears the cards before it only once
+ * leaves none. A turn a load brought back (`Turn.restored`) leaves no card
+ * and no paper: the loaded room starts with nothing on it, and the story
+ * drawer keeps those turns. A talk that moves Elior clears the cards before it only once
  * its room has changed (`movePending` says it has not yet).
  */
 export function useNarrationPaper(
@@ -36,7 +38,11 @@ export function useNarrationPaper(
   movePending: (turn: Turn) => boolean = () => false,
 ): NarrationPaper {
   const hidden = ref(false)
-  const last = computed(() => turns().at(-1))
+  /** The newest turn, unless a load brought it back (told when it was played). */
+  const last = computed(() => {
+    const turn = turns().at(-1)
+    return turn && !turn.restored ? turn : undefined
+  })
   const cards = computed(() => {
     const all = turns()
     let fresh = all.length - 1
@@ -47,7 +53,7 @@ export function useNarrationPaper(
     while (fresh > 0 && !starts(fresh)) fresh--
     return all
       .slice(Math.max(fresh, 0))
-      .filter((turn) => turnHasCard(turn, speechBeside()))
+      .filter((turn) => !turn.restored && turnHasCard(turn, speechBeside()))
       .slice(-MAX_CARDS)
   })
   const visible = computed(() =>
