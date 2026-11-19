@@ -36,8 +36,8 @@ import { readingPauseMs } from '@/lantern/stageSpeech'
  * - A turn can have a gate (`begin`'s `gateAt`): the narrator stops before that
  *   unit (`atGate`) until `passGate`, so a learnt spell's name can fly before
  *   the quest news after it is told.
- * - Words of the turn shown unspoken (by a hurry, a skip, or a block with no
- *   voice, such as an event line) are owed their reading time
+ * - Words of the turn shown unspoken (by a skip, or a block with no voice,
+ *   such as an event line) are owed their reading time
  *   (`readingPauseMs` per paragraph): news after them (a spell or quest unit)
  *   waits until it has passed, and `owedReadingMs` tells the news of a
  *   skipped turn how long to wait, so a card never covers lines the player
@@ -111,7 +111,7 @@ interface ActiveNarration {
   gateAt: number
   /** Whether the narrator has stopped at the gate. */
   atGate: boolean
-  /** Until when (`Date.now()`) the words a hurry showed unspoken are read: news waits for it. */
+  /** Until when (`Date.now()`) the event lines shown unspoken are read: news waits for it. */
   owedUntil: number
   /** Elior's own words of a say command, still to be spoken before the turn's units, or null. */
   own: NarrationClip | null
@@ -255,8 +255,8 @@ export const useNarrationStore = defineStore('narration', () => {
   }
 
   /**
-   * How long (ms) the words of turn `turnId` that a hurry or skip showed
-   * unspoken still need to be read: what its news waits for. 0 when nothing
+   * How long (ms) the words of turn `turnId` that a skip or an event line
+   * showed unspoken still need to be read: what its news waits for. 0 when nothing
    * is owed.
    */
   function owedReadingMs(turnId: number): number {
@@ -421,7 +421,7 @@ export const useNarrationStore = defineStore('narration', () => {
       // A unit that asks for a longer breath (a room, a chapter's text after
       // its heading) is shown and read once it has passed.
       const pause = unit.pauseBefore ?? 0
-      // News waits, too, for words a hurry showed unspoken to be read.
+      // News waits, too, for event lines shown unspoken to be read (a hurried block owes nothing).
       const owed = isNews(unit) ? Math.max(0, now.owedUntil - Date.now()) : 0
       const wait = Math.max(index >= 0 ? pause - now.waited : 0, owed)
       if (now.pausedFor !== now.unit && wait > 0) {
@@ -548,12 +548,7 @@ export const useNarrationStore = defineStore('narration', () => {
     if (!now) return
     if (now.owning) return completeOwnWords(now, hurried)
     const { unit, part } = now
-    // The hurried block's words not yet spoken are shown now: they are owed their reading.
-    if (hurried)
-      now.owedUntil = Math.max(
-        now.owedUntil,
-        Date.now() + unspokenMs(now, false),
-      )
+    // A hurried block owes nothing: the player has read it, and what waits on it comes at once.
     stopVoice()
     if (hurried) {
       now.unit++
