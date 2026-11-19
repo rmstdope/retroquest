@@ -247,6 +247,18 @@ describe('BeltOfPictures', () => {
     expect(w!.find('[data-belt-switch="bag"] .lq-dot').exists()).toBe(true)
   })
 
+  it("lights a button's dot only once the gained thing has landed", async () => {
+    const game = useGameStore()
+    const flights = useFlightStore()
+    game.spellsHaveNew = true
+    flights.owe([{ kind: 'spell', name: 'revive', count: 1 }])
+    mountBelt()
+    expect(w!.find('[data-belt-switch="spells"] .lq-dot').exists()).toBe(false)
+    flights.forgive([{ kind: 'spell', name: 'revive', count: 1 }])
+    await nextTick()
+    expect(w!.find('[data-belt-switch="spells"] .lq-dot').exists()).toBe(true)
+  })
+
   it('counts the list showing as seen', async () => {
     const game = useGameStore()
     game.bagHasNew = true

@@ -6,7 +6,7 @@ import { useFlightStore } from '@/stores/useFlightStore'
 /**
  * Section tabs on phones: Story, Bag, Spells, Quests and Map. A dot marks
  * Bag, Spells or Quests while something new is in it. Bag and Spells are
- * where a gained item or spell flies to on a phone (`data-flight-target`,
+ * where a gained item or spell flies to on a phone (its dot waits for the landing) (`data-flight-target`,
  * `AcquiredFlight`), and the tab it lands in bumps.
  */
 export type Section = 'story' | 'bag' | 'spells' | 'quests' | 'map'
@@ -25,11 +25,16 @@ function choose(id: Section): void {
 
 const sections = computed(() => [
   { id: 'story' as const, label: 'Story', dot: false, flight: undefined },
-  { id: 'bag' as const, label: 'Bag', dot: game.bagHasNew, flight: 'item' },
+  {
+    id: 'bag' as const,
+    label: 'Bag',
+    dot: game.bagHasNew && !flights.owes('item'),
+    flight: 'item',
+  },
   {
     id: 'spells' as const,
     label: 'Spells',
-    dot: game.spellsHaveNew,
+    dot: game.spellsHaveNew && !flights.owes('spell'),
     flight: 'spell',
   },
   {
