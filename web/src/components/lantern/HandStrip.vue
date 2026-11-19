@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { handStrip, type Hand } from '@/lantern/belt'
+import BeltFace from './BeltFace.vue'
 
 /**
  * The strip at the top of the room saying what the next press will do with
  * the thing or spell in hand ("Use Bread with…", "Give Bread to…", "Cast
  * Light on…"), with ✕ Cancel. It is a status, so a screen reader hears it
  * when something is taken in hand. With `ghost` (a laptop with a mouse) a
- * small copy of the picture rides beside the pointer; it never takes a press
- * and not a touch brings it.
+ * small copy of the picture rides beside the pointer (the thing's or spell's
+ * own picture as on the belt, its first letter until that is painted); it never
+ * takes a press and not a touch brings it.
  */
 const props = defineProps<{ hand: Hand; ghost?: boolean }>()
 const emit = defineEmits<{ cancel: [] }>()
@@ -48,8 +50,15 @@ defineExpose({ cancelButton })
       :class="`lq-hand-ghost-${hand.kind}`"
       :style="{ left: `${at.x + 12}px`, top: `${at.y + 12}px` }"
       aria-hidden="true"
-      >{{ hand.label.charAt(0).toUpperCase() }}</span
     >
+      <BeltFace
+        :kind="hand.kind"
+        :name="hand.name"
+        picture-class="lq-hand-ghost-face"
+      >
+        {{ hand.label.charAt(0).toUpperCase() }}
+      </BeltFace>
+    </span>
   </div>
 </template>
 
@@ -109,6 +118,12 @@ defineExpose({ cancelButton })
   font: 600 16px var(--lq-font-display);
   box-shadow: 0 4px 12px rgb(0 0 0 / 0.3);
   pointer-events: none;
+}
+.lq-hand-ghost-face {
+  width: 100%;
+  height: 100%;
+  border-radius: 7px;
+  object-fit: cover;
 }
 .lq-hand-ghost-item {
   background: var(--lq-item-soft);
