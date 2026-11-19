@@ -74,6 +74,17 @@ describe("Elior's Cottage bread", () => {
     expect(text).toMatch(/sturdy wooden table sits in the center/i)
   })
 
+  it('leaves Grandmother watching no bread once Elior has taken it', () => {
+    const game = cottage()
+    executeCommands(game, ['take bread'])
+    const text = new GameController(game).getRoomDescription()
+    const sentence = text
+      .split(/(?<=[.!?])\s+/)
+      .find((s) => s.includes('Grandmother'))
+    expect(sentence).toMatch(/stands by it, humming/)
+    expect(sentence).not.toMatch(/bread|loaf/i)
+  })
+
   it('can be taken without lighting the lantern', () => {
     const game = cottage()
     executeCommands(game, ['take bread'])
