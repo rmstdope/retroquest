@@ -91,6 +91,21 @@ describe('LanternLayout: the typed map and inventory', () => {
     expect(belt.lit).toBe(false)
   })
 
+  it('map does not open over a dialog that is already up', async () => {
+    document.body.dispatchEvent(
+      new KeyboardEvent('keydown', {
+        key: 'Escape',
+        bubbles: true,
+        cancelable: true,
+      }),
+    )
+    await flushPromises()
+    expect(heading()).toBe('Menu')
+    useGameStore().submitCommand('map')
+    await flushPromises()
+    expect(heading()).toBe('Menu')
+  })
+
   it('inventory with an empty bag lights nothing and says so in one turn', async () => {
     const game = useGameStore()
     const before = turns()
