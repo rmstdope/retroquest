@@ -1336,10 +1336,10 @@ export const useGameStore = defineStore('game', () => {
     dotGate = gate
   }
 
-  /** The gains that were flying have landed (or will not fly): light the dots they held back. */
-  function showLandedDots(): void {
+  /** The gains of a tab that were flying have landed (or will not fly): light the dot held back for it; with no tab, every held dot. */
+  function showLandedDots(only?: JournalTab): void {
     for (const tab of ['bag', 'spells', 'quests'] as const)
-      if (landingDots[tab]) {
+      if (landingDots[tab] && (only === undefined || only === tab)) {
         landingDots[tab] = false
         setDot(tab, true)
       }

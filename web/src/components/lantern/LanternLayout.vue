@@ -1324,12 +1324,21 @@ game.setDotGate((tab) => {
   )
 })
 watch(
-  () => flights.owes('item') || flights.owes('spell'),
+  () => flights.owes('item'),
   (owing) => {
-    if (!owing) game.showLandedDots()
+    if (!owing) game.showLandedDots('bag')
   },
 )
-onUnmounted(() => game.setDotGate(null))
+watch(
+  () => flights.owes('spell'),
+  (owing) => {
+    if (!owing) game.showLandedDots('spells')
+  },
+)
+onUnmounted(() => {
+  game.setDotGate(null)
+  game.showLandedDots()
+})
 watch(
   () => {
     const turn = game.turns.at(-1)

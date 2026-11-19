@@ -209,9 +209,22 @@ describe('useGameStore: panels held while a turn is narrated', () => {
     expect(store.bagHasNew).toBe(false)
     store.showLandedDots()
     expect(store.bagHasNew).toBe(true)
-    // Later news while a dot is lit leaves it lit.
-    store.submitCommand('look')
+    // A later gain flying while the dot is lit leaves it lit.
+    store.submitCommand('drop gem')
     store.releasePanels(store.turns.at(-1)!.id, ['stock'], true)
+    store.submitCommand(`take ${GEM}`)
+    store.releasePanels(store.turns.at(-1)!.id, ['stock'], true)
+    expect(store.bagHasNew).toBe(true)
+  })
+
+  it('lights only the tab that landed (rq-xxd8)', async () => {
+    const store = await startedStore()
+    store.setDotGate((tab) => tab === 'bag')
+    store.submitCommand(`take ${GEM}`)
+    store.releasePanels(store.turns.at(-1)!.id, ['stock'], true)
+    store.showLandedDots('spells')
+    expect(store.bagHasNew).toBe(false)
+    store.showLandedDots('bag')
     expect(store.bagHasNew).toBe(true)
   })
 
