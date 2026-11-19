@@ -856,7 +856,7 @@ function focusActions(): void {
   if (typingOpen.value) commandBoxEl.value?.focus()
 }
 
-/** The typing box asked to be hidden (Escape in it). */
+/** The typing box asked to be hidden (Escape in it, or a click on its "F1 hides" pill). */
 function hideBox(): void {
   commandBox.hide()
 }

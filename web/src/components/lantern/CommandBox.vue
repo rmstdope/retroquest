@@ -11,7 +11,8 @@ import { useCommandCompletion } from '@/composables/useCommandCompletion'
  * Typing is allowed while the game is busy, but Enter then waits and keeps the
  * text. Tab completes as the old Type box did. Escape closes an open word
  * list first and otherwise asks to hide the box (`hide`), taking the key so
- * the menu does not also open; F1 hides it too (the composable's job).
+ * the menu does not also open; F1 hides it too (the composable's job), and so
+ * does a click on the "F1 hides" pill, for a player using only the mouse.
  */
 const emit = defineEmits<{ hide: [] }>()
 const game = useGameStore()
@@ -114,7 +115,15 @@ function onEscape(event: KeyboardEvent): void {
         </li>
       </ul>
     </div>
-    <kbd class="lq-box-tag" aria-hidden="true">F1 hides</kbd>
+    <button
+      type="button"
+      class="lq-box-tag"
+      aria-label="Hide the typing box"
+      title="Hide the typing box"
+      @click="emit('hide')"
+    >
+      <kbd>F1 hides</kbd>
+    </button>
   </form>
 </template>
 
@@ -164,6 +173,13 @@ function onEscape(event: KeyboardEvent): void {
   font: inherit;
   font-size: 12px;
   font-weight: 700;
+  cursor: pointer;
+}
+.lq-box-tag:hover {
+  color: var(--lq-fg);
+}
+.lq-box-tag kbd {
+  font: inherit;
 }
 .lq-completions {
   position: absolute;
