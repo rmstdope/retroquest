@@ -116,7 +116,9 @@ function clamp(value: number, low: number, high: number): number {
  * mark on its chosen point, or at the middle of that part when it has none; a
  * point out of sight moves to the nearest spot of the part that is, and the
  * mark is wholly on the visible part. A thing with no part
- * there is left out. `rect`, what the pointer can be over, stays whole.
+ * there is left out, except a way out, whose mark stands on the nearest spot
+ * that can be seen (behind the bar: at its top, above the way's middle), so
+ * every way out can be found. `rect`, what the pointer can be over, stays whole.
  */
 export function markInside(
   placed: readonly PlacedName[],
@@ -129,7 +131,30 @@ export function markInside(
     const y0 = Math.max(rect.y, visible.y)
     const x1 = Math.min(rect.x + rect.w, visible.x + visible.w)
     const y1 = Math.min(rect.y + rect.h, visible.y + visible.h)
-    if (x1 - x0 < 1 || y1 - y0 < 1) continue
+    if (x1 - x0 < 1 || y1 - y0 < 1) {
+      if (entry.kind !== 'exit') continue
+      // A way out wholly behind the bar (or the drift's edge) still has a
+      // mark: on the nearest spot that can be seen, so it can be found.
+      const wanted = entry.point ?? {
+        x: rect.x + rect.w / 2,
+        y: rect.y + rect.h / 2,
+      }
+      marked.push({
+        ...entry,
+        x: clamp(
+          wanted.x,
+          visible.x + MARK_RADIUS,
+          visible.x + visible.w - MARK_RADIUS,
+        ),
+        y: clamp(
+          wanted.y,
+          visible.y + MARK_RADIUS,
+          visible.y + visible.h - MARK_RADIUS,
+        ),
+        from: wanted,
+      })
+      continue
+    }
     const x = clamp(
       clamp(entry.point?.x ?? (x0 + x1) / 2, x0, x1),
       visible.x + MARK_RADIUS,

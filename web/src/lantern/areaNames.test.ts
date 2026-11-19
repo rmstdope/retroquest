@@ -454,6 +454,14 @@ describe('markInside', () => {
   it('has no mark for a thing wholly behind the bar', () => {
     expect(markInside([entry(100, 470, 40, 40)], visible)).toEqual([])
   })
+
+  it('stands the mark of a way out wholly behind the bar at the foot of what can be seen, above its middle', () => {
+    const way = { ...entry(100, 470, 400, 60), kind: 'exit' as const }
+    const [placed] = markInside([way], visible)
+    expect(placed).toMatchObject({ areaId: 'a', x: 300, y: 460 - 8 })
+    expect(placed.from).toEqual({ x: 300, y: 500 })
+    expect(placed.rect).toEqual(way.rect)
+  })
 })
 
 describe('markInside with a mark point', () => {
