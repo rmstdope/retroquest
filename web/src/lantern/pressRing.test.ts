@@ -219,6 +219,125 @@ describe('ringLayout', () => {
     const large = ringLayout({ x: 284, y: 160 }, 7, bounds)
     expect(large.radius).toBeGreaterThan(small.radius)
   })
+
+  /** Whether a button at `b` overlaps the name, a box of `size` centred on `c`. */
+  function coversName(
+    b: { x: number; y: number },
+    c: { x: number; y: number },
+    size: { width: number; height: number },
+  ): boolean {
+    const nearX = Math.max(
+      c.x - size.width / 2,
+      Math.min(b.x, c.x + size.width / 2),
+    )
+    const nearY = Math.max(
+      c.y - size.height / 2,
+      Math.min(b.y, c.y + size.height / 2),
+    )
+    return Math.hypot(b.x - nearX, b.y - nearY) < RING_BUTTON / 2
+  }
+
+  it('grows until a long name in the middle covers no button (rq-v29l.6)', () => {
+    const name = { width: 140, height: 25 }
+    const wide = { w: 1512, h: 757 }
+    for (const count of [2, 4, 6, 7]) {
+      const { center, buttons } = ringLayout(
+        { x: 430, y: 300 },
+        count,
+        wide,
+        name,
+      )
+      for (const b of buttons) expect(coversName(b, center, name)).toBe(false)
+    }
+  })
+
+  it('keeps the name and every button inside the picture near any edge or corner (rq-v29l.6)', () => {
+    const name = { width: 140, height: 25 }
+    const wide = { w: 1512, h: 757 }
+    for (const count of [2, 6, 7])
+      for (const at of [
+        { x: 0, y: 0 },
+        { x: 430, y: 10 },
+        { x: 1512, y: 0 },
+        { x: 85, y: 711 },
+        { x: 1500, y: 750 },
+      ]) {
+        const { center, buttons } = ringLayout(at, count, wide, name)
+        expect(center.x - name.width / 2).toBeGreaterThanOrEqual(0)
+        expect(center.x + name.width / 2).toBeLessThanOrEqual(wide.w)
+        expect(center.y - name.height / 2).toBeGreaterThanOrEqual(0)
+        expect(center.y + name.height / 2).toBeLessThanOrEqual(wide.h)
+        for (const b of buttons) {
+          expect(b.x - RING_BUTTON / 2).toBeGreaterThanOrEqual(0)
+          expect(b.y - RING_BUTTON / 2).toBeGreaterThanOrEqual(0)
+          expect(b.x + RING_BUTTON / 2).toBeLessThanOrEqual(wide.w)
+          expect(b.y + RING_BUTTON / 2).toBeLessThanOrEqual(wide.h)
+          expect(coversName(b, center, name)).toBe(false)
+        }
+      }
+  })
+
+  it('cuts the name to what fits between the buttons on a picture too short for the ring to grow (rq-v29l.6)', () => {
+    const name = { width: 140, height: 25 }
+    for (const h of [200, 240, 270])
+      for (const count of [4, 7]) {
+        const { center, buttons, nameWidth } = ringLayout(
+          { x: 284, y: h / 2 },
+          count,
+          { w: 568, h },
+          name,
+        )
+        expect(nameWidth).toBeLessThan(name.width)
+        for (const b of buttons)
+          expect(
+            coversName(b, center, { width: nameWidth, height: name.height }),
+          ).toBe(false)
+      }
+    // A picture hardly bigger than a button leaves no room for the name at all.
+    expect(
+      ringLayout({ x: 30, y: 30 }, 4, { w: 60, h: 60 }, name).nameWidth,
+    ).toBe(0)
+    // Where the ring can grow, the name is never cut.
+    expect(
+      ringLayout({ x: 430, y: 300 }, 7, { w: 1512, h: 757 }, name).nameWidth,
+    ).toBe(Infinity)
+  })
+
+  it('keeps a ring that slid only a little the usual way up, its first button at the top (rq-v29l.6)', () => {
+    const { center, buttons } = ringLayout({ x: 90, y: 160 }, 4, bounds)
+    expect(center.x).toBeGreaterThan(90)
+    expect(buttons[0].x).toBeCloseTo(center.x)
+    expect(buttons[0].y).toBeLessThan(center.y)
+  })
+
+  it('turns a ring slid off its spot so no button lies on the spot pressed (rq-v29l.6)', () => {
+    const wide = { w: 1512, h: 757 }
+    const name = { width: 62, height: 25 }
+    // A spell in the belt's foot-left corner: Cast and Cast on… go either side of the name, not on the picture.
+    const corner = { x: 85, y: 711 }
+    const { center, buttons } = ringLayout(corner, 2, wide, name)
+    expect(center.y).toBeLessThan(corner.y)
+    for (const b of buttons) {
+      // Either side of the name, never above or below it.
+      expect(Math.abs(b.x - center.x)).toBeGreaterThan(Math.abs(b.y - center.y))
+      expect(Math.hypot(b.x - corner.x, b.y - corner.y)).toBeGreaterThan(
+        RING_BUTTON / 2,
+      )
+    }
+    expect(buttons[0].x).toBeLessThan(buttons[1].x)
+    for (const count of [3, 5, 7])
+      for (const at of [
+        { x: 600, y: 745 },
+        { x: 5, y: 400 },
+        { x: 1510, y: 5 },
+      ]) {
+        const slid = ringLayout(at, count, wide, name)
+        for (const b of slid.buttons)
+          expect(Math.hypot(b.x - at.x, b.y - at.y)).toBeGreaterThan(
+            RING_BUTTON / 2,
+          )
+      }
+  })
 })
 
 describe('fanLayout', () => {
