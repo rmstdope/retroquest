@@ -670,5 +670,20 @@ describe('useGameStore: panels held while a turn is narrated', () => {
       expect(store.roomPicture).toBe(roomPictureUrl('Act1', 'AbandonedShed'))
       expect(store.roomPatchUrls).toEqual([])
     })
+
+    it('keep the areas of the room’s own picture while the inside is not painted', async () => {
+      const store = await openShedStore(false)
+      const box = { x: 0.4, y: 0.5, width: 0.1, height: 0.1 }
+      store.imageManifest = {
+        'act1-abandoned-shed': {
+          width: 1920,
+          height: 1080,
+          areas: { 'mysterious-box': box },
+        },
+      }
+      expect(store.roomAreas.things.map((t) => t.areaId)).toEqual([
+        'mysterious-box',
+      ])
+    })
   })
 })

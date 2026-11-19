@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { Game } from '@/engine'
 import { roomImages } from '@/lantern/imageLists'
+import { narrationText } from '@/lantern/narrationKey'
 import { Act1 } from './Act1'
 import { SharpKnife } from './items/SharpKnife'
 import { executeCommands } from '@/testing/gameHelpers'
@@ -49,7 +50,7 @@ describe('the picture words of Act I (rq-v29l.20)', () => {
     for (const [key, room] of Object.entries(act.rooms)) {
       if (declared.includes(key)) continue
       const own = images.find((i) => i.title === room.name)
-      expect(own?.text).not.toBe('')
+      expect(own?.text).toBe(narrationText(room.description))
     }
   })
 
@@ -69,6 +70,7 @@ describe('the picture words of Act I (rq-v29l.20)', () => {
       'deep purple petals with gold',
     )
     expect(patch('General Store', 'patches-appears')).toContain('ginger')
+    expect(patch("Elior's Cottage", 'patches-appears')).toContain('ginger')
     expect(
       roomImages(new Act1())
         .find((i) => i.id === 'act1-abandoned-shed-inside')
@@ -101,6 +103,7 @@ describe('the Forest Path snare patches', () => {
     expect(caught).not.toContain('snare-cut')
     executeCommands(game, ['use sharp knife with snare'])
     const freed = appliedPatchIds(act, 'ForestPath', game.state, '')
+    expect(freed).toContain('snare-appears')
     expect(freed.indexOf('snare-cut')).toBeGreaterThan(
       freed.indexOf('snare-appears'),
     )

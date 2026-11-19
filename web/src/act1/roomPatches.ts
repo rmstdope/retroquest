@@ -317,7 +317,7 @@ export const ACT1_VARIANT_PATCHES: Readonly<
       {
         id: 'patches-gone',
         title: 'Patches gone',
-        text: 'Take Patches out of the picture.',
+        text: 'Take the eyes behind the crates out of the picture.',
         area: 'patches',
         when: 'absent',
       },
