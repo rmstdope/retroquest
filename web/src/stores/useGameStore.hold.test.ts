@@ -578,6 +578,55 @@ describe('useGameStore: panels held while a turn is narrated', () => {
     })
   })
 
+  describe('Patches carried and handed over (rq-v29l.14)', () => {
+    /** Act I in the unlocked shed with Patches hiding, and the shed's other pictures painted. */
+    async function shedWithPatches(
+      carriedTo?: string,
+    ): Promise<ReturnType<typeof useGameStore>> {
+      setPictureProbe(() => Promise.resolve(true))
+      const game = new Game([new Act1()])
+      game.state.currentRoom = game.state.allRooms.AbandonedShed
+      game.state.addItemToInventory(new Key())
+      game.commandParser.parse('use key with door')
+      if (carriedTo) {
+        game.commandParser.parse('talk to patches')
+        game.state.currentRoom = game.state.allRooms[carriedTo]
+      }
+      appStorage.setItem('retroquest_save', game.toSaveData())
+      const store = useGameStore()
+      store.setBridge(useBridge(async (): Promise<ActClass[]> => [Act1]))
+      await store.initGame()
+      store.dismissModal()
+      store.loadGame()
+      await new Promise((resolve) => setTimeout(resolve))
+      store.setPanelHold(true)
+      store.setScenePicture(true)
+      return store
+    }
+
+    afterEach(() => setPictureProbe(null))
+
+    it('flies her into the bag from the area she hid in', async () => {
+      const store = await shedWithPatches()
+      const hiding = store.shownPicture.things.find(
+        (thing) => thing.name.toLowerCase() === 'patches',
+      )
+      expect(hiding).toBeDefined()
+      store.submitCommand('talk to patches')
+      const gained = store.turns.at(-1)!.gained
+      expect(gained.map((chip) => chip.name)).toEqual(['Patches'])
+      expect(gained[0].areaId).toBe(hiding!.areaId)
+    })
+
+    it('does not tell her handover as a lost thing', async () => {
+      const store = await shedWithPatches('GeneralStore')
+      store.submitCommand('use patches with hemlock')
+      const handover = store.turns.at(-1)!
+      expect(handover.text).toContain('You found her!')
+      expect(handover.lost).toEqual([])
+    })
+  })
+
   describe("the patches of a room's other picture", () => {
     /** A saved Act I game with the shed door opened, loaded into the store; the inside is `painted` or not. */
     async function openShedStore(

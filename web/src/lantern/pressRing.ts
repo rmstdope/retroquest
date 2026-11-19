@@ -14,6 +14,7 @@ import {
   type ActionContext,
   type Slot,
 } from './actions'
+import type { RingVerb } from '@/engine'
 import type { AreaThing } from './areaThings'
 import { parseCountedName } from './inventoryChanges'
 
@@ -29,6 +30,8 @@ export interface RingSubject {
   label: string
   /** Decides the colour of the name. */
   kind: AreaThing['kind'] | 'spell'
+  /** For a carried thing that narrows its ring: the verbs besides Use with… and Examine it keeps. */
+  verbs?: readonly RingVerb[]
 }
 
 /** A second choice in a fan: its words and the command it sends. */

@@ -19,6 +19,7 @@ import { Armor } from '../items/Armor'
 import { Sword } from '../items/Sword'
 import { Mechanism } from '../items/Mechanism'
 import { Patches } from './Patches'
+import { CarriedPatches } from '../items/CarriedPatches'
 import {
   FLAG_HEMLOCK_HEARD_PATCHES_STAYED,
   FLAG_MET_HEMLOCK,
@@ -301,6 +302,7 @@ export class Shopkeeper extends Character {
     gameState.setStoryFlag(FLAG_PATCHES_RETURNED, true)
     gameState.fireSound(TRIGGER_PATCHES_RETURNS)
     gameState.setStoryFlag(FLAG_MET_HEMLOCK, true)
+    CarriedPatches.release(gameState)
     gameState.currentRoom.addCharacter(new Patches())
     const paid = !gameState.getStoryFlag(FLAG_RUSTY_HOE_SECOND_COIN_FOUND)
     if (paid) gameState.addItemToInventory(new Coin())
@@ -524,15 +526,35 @@ export class Shopkeeper extends Character {
     return ropeHad && !this.giftGiven(gameState)
   }
 
+  /** Whether Elior carries Patches: found, and not yet given a home. */
+  private static isCarryingPatches(gameState: GameState): boolean {
+    return (
+      gameState.getStoryFlag(FLAG_PATCHES_FOUND) &&
+      !gameState.getStoryFlag(FLAG_PATCHES_RETURNED) &&
+      !gameState.getStoryFlag(FLAG_PATCHES_STAYED_WITH_GRANDMOTHER)
+    )
+  }
+
+  /**
+   * Patches in the bag, offered to him by Use with…, is welcomed home as
+   * talking to him does; every other offer is answered as before.
+   */
+  override acceptOffer(gameState: GameState, item: Item): string | null {
+    if (
+      item instanceof CarriedPatches &&
+      Shopkeeper.isCarryingPatches(gameState)
+    ) {
+      return this.talkTo(gameState)
+    }
+    return super.acceptOffer(gameState, item)
+  }
+
   /**
    * Patches is carried in the story, not held as an item: giving her to him
    * while Elior carries her welcomes her home, as talking to him does.
    */
   override giveUnheld(gameState: GameState, name: string): string | null {
-    const carrying =
-      gameState.getStoryFlag(FLAG_PATCHES_FOUND) &&
-      !gameState.getStoryFlag(FLAG_PATCHES_RETURNED) &&
-      !gameState.getStoryFlag(FLAG_PATCHES_STAYED_WITH_GRANDMOTHER)
+    const carrying = Shopkeeper.isCarryingPatches(gameState)
     if (!carrying || !new Patches().answersTo(name)) return null
     return this.talkTo(gameState)
   }

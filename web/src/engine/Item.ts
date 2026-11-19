@@ -10,6 +10,12 @@ export interface ItemOptions {
   canBeCarried?: boolean
 }
 
+/** Every verb of a carried item's ring that `Item.ringVerbs` can name. */
+export const RING_VERBS = ['use', 'open', 'close', 'caston'] as const
+
+/** One verb of a carried item's ring besides Use with… and Examine. */
+export type RingVerb = (typeof RING_VERBS)[number]
+
 /**
  * Base class for all items. Subclasses override the actions they answer to;
  * every action fails politely by default.
@@ -101,6 +107,15 @@ export class Item {
     return this.canBeCarried
       ? ''
       : `[failure]You can't take ${this.nameInSentence()}.[/failure]`
+  }
+
+  /**
+   * The verbs of this item's ring in the bag besides Use with… and Examine
+   * that the item answers to. All of them by default; override to narrow the
+   * ring of an item that is carried in the story, as Patches is.
+   */
+  ringVerbs(): readonly RingVerb[] {
+    return RING_VERBS
   }
 
   use(_gameState: GameState): string {

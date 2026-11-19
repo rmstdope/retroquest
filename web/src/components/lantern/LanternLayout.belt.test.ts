@@ -16,6 +16,7 @@ import { useBeltStore } from '@/stores/useBeltStore'
 import { setPictureProbe } from '@/lantern/roomPicture'
 import type { GameState } from '@/engine'
 import { LightSpell } from '@/act1/spells/LightSpell'
+import { CarriedPatches } from '@/act1/items/CarriedPatches'
 
 /** Act I with Light already known, so a real spell sits on the belt. */
 class Act1KnowingLight extends Act1 {
@@ -23,6 +24,15 @@ class Act1KnowingLight extends Act1 {
   override setupGameState(gameState: GameState): void {
     super.setupGameState(gameState)
     gameState.learnSpell(new LightSpell())
+  }
+}
+
+/** Act I with Patches already in Elior's arms, first in the bag. */
+class Act1CarryingPatches extends Act1 {
+  /** Act I's own setup, then Patches scooped up. */
+  override setupGameState(gameState: GameState): void {
+    super.setupGameState(gameState)
+    gameState.inventory.unshift(new CarriedPatches())
   }
 }
 
@@ -146,6 +156,21 @@ describe('LanternLayout: the belt of pictures', () => {
     expect(w.find('[data-belt-switch="bag"]').attributes('aria-pressed')).toBe(
       'true',
     )
+  })
+
+  it('carries Patches first on the belt, with a ring of only Use with… and Examine, and a hand strip naming her', async () => {
+    await cottage(Act1CarryingPatches)
+    const pictures = w.findAll('[data-belt-pic]')
+    expect(pictures[0].attributes('data-belt-pic')).toBe('item:Patches')
+    await click(tile('item:Patches').element)
+    expect(w.get('.lq-ring-name').text()).toBe('Patches')
+    expect(
+      w
+        .findAll('.lq-press-ring .lq-ring-coin')
+        .map((c) => c.attributes('data-ring-action')),
+    ).toEqual(['usewith', 'examine'])
+    await click(coin('usewith').element)
+    expect(strip()).toContain('Use Patches with…')
   })
 
   it('opens the ring of a carried thing: Use, Use with…, Open, Close, Examine', async () => {

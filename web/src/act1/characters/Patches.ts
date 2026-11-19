@@ -1,6 +1,7 @@
 import { Character, type GameState, type Item, characterName } from '@/engine'
 import { Egg } from '../items/Egg'
 import { Fish } from '../items/Fish'
+import { CarriedPatches } from '../items/CarriedPatches'
 import {
   FLAG_PATCHES_FOUND,
   FLAG_PATCHES_STAYED_WITH_GRANDMOTHER,
@@ -71,6 +72,7 @@ export class Patches extends Character {
     gameState.setStoryFlag(FLAG_PATCHES_FOUND, true)
     const room = gameState.currentRoom
     room.characters = room.characters.filter((c) => c !== this)
+    gameState.inventory.unshift(new CarriedPatches())
     return (
       'A pair of green eyes blinks in the dark. With a small, uncertain mew, ' +
       `${characterName(this.name)} creeps out, sniffs your fingers and lets ` +

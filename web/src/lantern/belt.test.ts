@@ -8,6 +8,7 @@ import {
   handCommand,
   handStrip,
   pressedOnBelt,
+  subjectOf,
   type Hand,
 } from './belt'
 import type { RingSubject } from './pressRing'
@@ -65,6 +66,25 @@ describe('beltPictures', () => {
 })
 
 describe('carriedRing', () => {
+  it('offers a thing that narrows its ring only Use with… and Examine', () => {
+    const cat: RingSubject = { ...bread, name: 'Patches', verbs: [] }
+    const ctx = { ...EMPTY, characters: ['Hemlock'] }
+    expect(labels(cat, ctx)).toEqual(['Use with…', 'Examine'])
+  })
+  it('carries the narrowed ring verbs from the bag entry to the picture', () => {
+    const [picture] = beltPictures(
+      [
+        {
+          name: '[item_name]Patches[/item_name]',
+          description: 'A cat.',
+          ringVerbs: [],
+        },
+      ],
+      [],
+      'bag',
+    )
+    expect(subjectOf(picture).verbs).toEqual([])
+  })
   it('offers a thing Use, Open, Close and Examine when nothing else is anywhere', () => {
     expect(labels(bread, EMPTY)).toEqual(['Use', 'Open', 'Close', 'Examine'])
   })
