@@ -4,10 +4,11 @@ import type { Chapter } from '@/lantern/chapter'
 import { parseTurn, type TurnBlock } from '@/lantern/parseTurn'
 import { displayName } from '@/lantern/displayName'
 import { actFolder } from '@/lantern/narrationManifest'
-import { POPUP_NARRATION_ID } from '@/lantern/narrationUnits'
+import { POPUP_NARRATION_ID, chapterUnits } from '@/lantern/narrationUnits'
 import { useSizeWatch } from '@/composables/useSizeWatch'
 import { useReadAlong } from '@/composables/useReadAlong'
 import { useNarrationStore } from '@/stores/useNarrationStore'
+import { usePassageStore } from '@/stores/usePassageStore'
 
 /**
  * A full-screen chapter page between acts: the intro opens an act (title,
@@ -24,7 +25,9 @@ import { useNarrationStore } from '@/stores/useNarrationStore'
  * the act's recordings are still loading the title and text are held back
  * (their room kept) so unspoken text never flashes. A block not yet spoken
  * keeps its room too, as a hidden placeholder, so the page does not grow and
- * the button does not move while it is read.
+ * the button does not move while it is read. While the screen fades in
+ * (`usePassageStore`) the title rises alone: a page that will be read keeps
+ * its text hidden until the voice, which starts once the screen is up, reads it.
  */
 const props = defineProps<{ chapter: Chapter; titleId: string }>()
 const emit = defineEmits<{ continue: [] }>()
@@ -67,6 +70,22 @@ function shownMarkup(block: TurnBlock): string {
 const held = computed(
   () => !!folder.value && narration.manifestFor(folder.value) === null,
 )
+const passage = usePassageStore()
+/** Whether the page has a recording to be read with. */
+const voiced = computed(() => {
+  const manifest = folder.value ? narration.manifestFor(folder.value) : null
+  return (
+    !!manifest &&
+    chapterUnits(props.chapter, manifest).some((unit) =>
+      unit.parts.some((part) => part.clip),
+    )
+  )
+})
+/** Whether body block `index` is shown: not while the screen fades in ahead of the voice. */
+function blockShown(index: number): boolean {
+  if (voiced.value && passage.phase !== 'idle') return false
+  return shown(index + 1)
+}
 /**
  * Shrink each centred closing block to its widest line of text, so the
  * speaking rule (drawn at the block's left edge) sits beside the words even
@@ -176,12 +195,12 @@ defineExpose({ focus })
         <template v-for="(block, index) in blocks" :key="index">
           <p
             :class="
-              shown(index + 1)
+              blockShown(index)
                 ? ['lq-chapter-block', { 'lq-speaking': isSpeaking(index + 1) }]
                 : 'lq-chapter-unshown'
             "
-            :data-unit="shown(index + 1) ? index + 1 : undefined"
-            :aria-hidden="shown(index + 1) ? undefined : 'true'"
+            :data-unit="blockShown(index) ? index + 1 : undefined"
+            :aria-hidden="blockShown(index) ? undefined : 'true'"
           >
             <span v-if="block.speaker" class="lq-chapter-speaker">{{
               block.speaker
