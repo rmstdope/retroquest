@@ -236,8 +236,13 @@ test.describe('at the foot of a laptop picture beside the belt (rq-v29l.11)', ()
     ).toHaveCount(1)
     const stage = await page.locator('.lq-stage').boundingBox()
     const bar = await page.locator('.lq-belt-bar').boundingBox()
-    for (const mark of await page.locator('[data-area-mark]').all()) {
-      const box = await mark.boundingBox()
+    const spots = [
+      ...(await page.locator('[data-area-mark]').all()),
+      ...(await page.locator('[data-area-name]').all()),
+    ]
+    expect(spots).toHaveLength(6)
+    for (const spot of spots) {
+      const box = await spot.boundingBox()
       expect
         .soft(box!.y + box!.height)
         .toBeLessThanOrEqual(stage!.y + stage!.height)
@@ -248,6 +253,20 @@ test.describe('at the foot of a laptop picture beside the belt (rq-v29l.11)', ()
         box!.y + box!.height > bar!.y
       expect.soft(underBar).toBe(false)
     }
+  })
+
+  test('the mouse over a thing at the foot beside the belt names it', async ({
+    page,
+  }): Promise<void> => {
+    await page.setViewportSize({ width: 1512, height: 806 })
+    await toTheCottage(page, AT_THE_FOOT)
+    const stage = await page.locator('.lq-stage').boundingBox()
+    // The bread's middle, at 57.4% across and 91.35% down of the 16:9 picture trimmed to the stage.
+    const scale = Math.max(stage!.width / 1920, stage!.height / 1080)
+    const x = stage!.x + stage!.width / 2 + (0.574 - 0.5) * 1920 * scale
+    const y = stage!.y + stage!.height / 2 + (0.9135 - 0.5) * 1080 * scale
+    await page.mouse.move(x, y)
+    await expect(page.locator('[data-area-pointer]')).toHaveText('Bread')
   })
 })
 
