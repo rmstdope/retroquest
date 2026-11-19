@@ -1,0 +1,51 @@
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{--bg:#10151a;--surface:#161d24;--raised:#1c242c;--line:#26313b;--line2:#34404b;--fg:#ece6d6;--prose:#d9d3c3;--muted:#a39d8e;--accent:#ffa914;--accentText:#ffb836;--accentSoft:#36270a;--accentLine:#a8740f;--item:#8fcf7a;--itemSoft:#18261b;--itemLine:#355236;--failure:#e8896b}
+*{box-sizing:border-box}body{margin:0;background:#0b0f13;color:var(--fg);font-family:'DM Sans',system-ui,sans-serif;padding:0 16px 40px}
+h1{max-width:1100px;margin:20px auto 4px;font-family:Georgia,serif;font-weight:500;font-size:26px}
+.lead{max-width:1100px;margin:0 auto 18px;color:var(--muted);font-size:15px;line-height:1.5}
+.row{max-width:1100px;margin:0 auto 26px}
+.cap{font-size:14px;color:var(--muted);margin:0 0 8px}.cap b{color:var(--fg);font-size:17px;display:block;margin-bottom:2px}
+.app{position:relative;height:520px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:linear-gradient(160deg,#3a4a35,#24301f 55%,#141b14)}
+.app.short{height:300px}
+.plate{position:absolute;left:18px;top:16px;background:rgba(22,29,36,.9);border:1px solid var(--line2);border-radius:12px;padding:8px 14px;font-family:Georgia,serif;font-size:20px}
+.btns{position:absolute;right:14px;top:14px;display:flex;gap:8px}
+.sb{height:36px;padding:0 13px;border-radius:999px;border:1px solid var(--line2);background:rgba(22,29,36,.93);color:var(--fg);font-size:13px;display:flex;align-items:center}
+.belt{position:absolute;left:50%;transform:translateX(-50%);bottom:62px;display:flex;gap:8px;padding:8px 10px;border-radius:14px;background:rgba(22,29,36,.92);border:1px solid var(--line2)}
+.belt .p{width:46px;height:46px;border-radius:9px;background:var(--raised);border:1px solid var(--line2);display:grid;place-items:center;font-size:20px;position:relative}
+.belt .p i{position:absolute;right:-4px;bottom:-4px;font-style:normal;font-size:11px;background:var(--accent);color:#1a1408;border-radius:9px;padding:0 5px}
+.box{position:absolute;left:18px;right:18px;bottom:12px;height:40px;border-radius:10px;border:1px solid var(--accentLine);background:rgba(22,29,36,.95);font-family:ui-monospace,Menlo,monospace;font-size:14px;display:flex;align-items:center;padding:0 12px;color:var(--fg)}
+.box::before{content:'›';color:var(--accent);margin-right:8px}
+.card{position:absolute;left:18px;top:70px;width:min(420px,calc(100% - 36px));display:flex;flex-direction:column;gap:8px}
+.bub{padding:9px 14px;border-radius:10px;border:1px solid var(--line2);background:rgba(22,29,36,.96);box-shadow:0 2px 10px rgba(0,0,0,.18);font-family:Georgia,'Source Serif 4',serif;font-size:15.5px;line-height:1.5;color:var(--prose)}
+.rn{color:var(--accentText)}.it{color:var(--item)}.dir{color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px}
+.hd{font-family:'DM Sans',sans-serif;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+ul.l{list-style:none;margin:0;padding:0}ul.l li{padding:3px 0}
+.ex{display:block;padding-left:14px;font-size:14px}
+.note{position:absolute;font-size:12px;color:var(--accent);background:#000c;padding:4px 8px;border-radius:6px;border:1px dashed var(--accent);max-width:260px;line-height:1.35}
+.bad .bub{font-family:ui-monospace,Menlo,monospace;font-size:13px;padding:5px 10px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:760px){.two{grid-template-columns:1fr}}
+</style><title>B · Opens the screen</title></head><body>
+<h1>B · The typed word opens the screen that already shows it</h1>
+<p class=lead>Typing <b>map</b> opens the drawn map window, exactly as the menu's Map does. Typing <b>inventory</b> brings the bag strip up and lights it for a moment. Nothing is written in the story card: the screen is the answer.</p>
+<div class="row two">
+<div><p class=cap><b>map</b> — the same window as the menu's Map</p><div class=app><div class=plate>Village Square</div>
+<div style="position:absolute;inset:0;background:rgba(5,8,10,.62)"></div>
+<div style="position:absolute;left:8%;right:8%;top:40px;bottom:40px;background:var(--surface);border:1px solid var(--line2);border-radius:14px;display:flex;flex-direction:column">
+<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line)"><div><div class=hd>Act I</div><div style="font-family:Georgia,serif;font-size:20px">Map</div></div><div style="width:32px;height:32px;border-radius:50%;border:1px solid var(--line2);display:grid;place-items:center;color:var(--muted)">×</div></div>
+<svg viewBox="0 0 420 260" style="flex:1;width:100%"><g stroke="#34404b" stroke-width="2"><line x1="110" y1="80" x2="110" y2="170"/><line x1="110" y1="170" x2="260" y2="170"/><line x1="260" y1="170" x2="260" y2="80"/><line x1="260" y1="170" x2="370" y2="170" stroke-dasharray="5 5"/><line x1="110" y1="80" x2="230" y2="80" stroke-dasharray="5 5"/></g>
+<g font-size="12" fill="#ece6d6" text-anchor="middle"><rect x="50" y="56" width="120" height="44" rx="8" fill="#1c242c" stroke="#34404b"/><text x="110" y="83">Vegetable Field</text>
+<rect x="50" y="148" width="120" height="44" rx="8" fill="#1c242c" stroke="#34404b"/><text x="110" y="175">Elior's Cottage</text>
+<rect x="200" y="148" width="120" height="44" rx="8" fill="#36270a" stroke="#ffa914"/><text x="260" y="168" fill="#ffb836">Village Square</text><text x="260" y="183" font-size="10" fill="#a39d8e">You are here</text>
+<rect x="200" y="56" width="120" height="44" rx="8" fill="#1c242c" stroke="#34404b"/><text x="260" y="83">Mira's Hut</text>
+<text x="380" y="166" fill="#a39d8e" font-size="11">Well…</text></g></svg></div>
+<div class=box style="opacity:.5">map</div>
+<div class=note style="right:20px;bottom:64px">Escape or × closes it; the typing box gets focus back.</div></div></div>
+<div><p class=cap><b>inventory</b> — the bag strip is the answer</p><div class=app><div class=plate>Village Square</div>
+<div class=belt style="box-shadow:0 0 0 2px var(--accent),0 0 24px rgba(255,169,20,.35)"><div class=p>🍞</div><div class=p>🪙<i>3</i></div><div class=p>🗝️</div><div class=p>🖼️</div></div>
+<div class=box>inventory</div>
+<div class=note style="left:50%;transform:translateX(-50%);bottom:132px">Lit for about a second; unfolds first if it was folded away.</div></div></div></div>
+<div class="row two">
+<div><p class=cap><b>Map — always opens</b></p><p class=cap>Typed <b>map</b> does exactly what the menu's Map (and the M key) does, even in the first room: the window always has at least the place Elior is in. The story keeps no trace.</p></div>
+<div><p class=cap><b>Empty — the bag is empty</b></p><div class="app short"><div class=plate>The Dream</div><div class=card><div class=bub>Your bag is empty.</div></div><div class=box>inventory</div></div><p class=cap>No strip to light, so the card says it, in one bubble. The story keeps no trace of a bag that had things in it.</p></div></div>
+<div class=row><p class=cap><b>Agreed 2026-11-19.</b> Neither word leaves a line in the story so far.</p></div>
+</body></html>
