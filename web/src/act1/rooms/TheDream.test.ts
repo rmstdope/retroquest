@@ -35,7 +35,16 @@ describe('The Dream, where Act I opens', () => {
     expect(look).not.toContain('Exits:')
     const description = game.state.currentRoom.descriptionFor(game.state)
     expect(description).toContain('three notes')
-    expect(description).toContain('A man’s hand reaches out of the dark')
+    expect(description).toContain(
+      'It is raining hard on a village street. Thunder breaks so close ' +
+        'that the shutters shake with it.',
+    )
+    expect(description).toContain(
+      'In the street a man in a hooded cloak holds a child against his ' +
+        'shoulder. His hood hides his face.',
+    )
+    expect(description).toContain('Behind him a tall figure stands')
+    expect(description).not.toMatch(/dark\b|\bgone\b|his hand|curtain/i)
     expect(description).toContain('what it whispers is your name')
     expect(description).not.toContain('Dark, and a storm in it.')
   })
@@ -54,11 +63,25 @@ describe('The Dream, where Act I opens', () => {
       expect(answer).not.toContain("can't go that way")
       expect(answer).not.toContain('There is no character named')
       expect(answer).toContain('your name')
+      expect(answer).not.toMatch(/dark\b|\bdoor\b/)
     }
     expect(executeCommands(game, ['listen'])).toContain(
       "I don't understand the command: 'listen'",
     )
     expectStoryFlag(game.state, FLAG_WOKE_FROM_DREAM, false)
+  })
+
+  it('says the agreed words when he walks away and when he searches', () => {
+    const game = newGame()
+    expect(executeCommands(game, ['north'])).toContain(
+      'You go that way, and it is the same street, the same rain, the same ' +
+        'tune. There is no way out of this. There is only the voice, and it ' +
+        'says your name.',
+    )
+    expect(executeCommands(game, ['search'])).toContain(
+      'Your hands find nothing. The street has no end and the dream no ' +
+        'edges. The whisper comes again, nearer, and it is your name.',
+    )
   })
 
   it('hints at the voice before Elior has answered it, never naming a command', () => {
@@ -79,6 +102,11 @@ describe('The Dream, where Act I opens', () => {
       const answer = executeCommands(game, [command])
       expect(answer).toContain('…let them rest…')
       expect(answer).not.toContain('and let them rest')
+      expect(answer).toContain(
+        'The dream lets go of you, and you wake in your own bed. The storm ' +
+          'is gone and it is grey morning. Your heart is going hard.',
+      )
+      expect(answer).not.toContain('curtains')
       expect(answer).toContain('someone is humming it, out by the hearth')
       expect(answer).toContain("[room_name]Elior's Cottage[/room_name]")
       expectCurrentRoom(game.state, "Elior's Cottage")

@@ -64,7 +64,7 @@ describe('Ancient Amulet on its stand', () => {
       const hut = game.state.currentRoom.describe(game.state)
       expect(hut).toContain(GLOW_ON_STAND)
       expect(hut.indexOf(GLOW_ON_STAND)).toBeGreaterThan(
-        hut.indexOf('the way you move through your own kitchen.'),
+        hut.indexOf('tying a bundle of herbs in the light.'),
       )
       expect(executeCommands(game, ['examine amulet'])).toContain(
         `${RUNES} Its glow quickens as you lean closer, steady as a heartbeat.`,
@@ -92,7 +92,7 @@ describe('Ancient Amulet after the handover', () => {
     handOver(game)
     const hut = game.state.currentRoom.describe(game.state)
     expect(hut).not.toContain('glows brighter')
-    expect(hut).toContain(`kitchen. ${EMPTY_STAND}\n`)
+    expect(hut).toContain(`in the light. ${EMPTY_STAND}\n`)
     expect(game.state.allRooms.MirasHut.getItemByName('amulet')).toBeNull()
   })
 })

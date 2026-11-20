@@ -33,7 +33,7 @@ describe('useSceneStore', () => {
   })
 
   describe('with an interlude', () => {
-    const waking = { unit: 3, markup: 'The dark lets go of you.' }
+    const waking = { unit: 3, markup: 'The dream lets go of you.' }
 
     it('holds the dark, telling the interlude, until it is let go; then rises and runs onUp', () => {
       const scene = useSceneStore()

@@ -26,9 +26,9 @@ describe('SceneInterlude', () => {
 
   it('tells the interlude in the middle with the hint to go on', async () => {
     const w = mount(SceneInterlude)
-    inTheDark('The dark lets go of you.')
+    inTheDark('The dream lets go of you.')
     await w.vm.$nextTick()
-    expect(w.get('.lq-interlude-text').text()).toBe('The dark lets go of you.')
+    expect(w.get('.lq-interlude-text').text()).toBe('The dream lets go of you.')
     expect(w.get('.lq-interlude-hint').text()).toBe(
       'Click to continue · Hold to skip',
     )
@@ -36,7 +36,7 @@ describe('SceneInterlude', () => {
 
   it('says "Tap to continue · Hold to skip" on a phone', async () => {
     const w = mount(SceneInterlude, { props: { phone: true } })
-    inTheDark('The dark lets go of you.')
+    inTheDark('The dream lets go of you.')
     await w.vm.$nextTick()
     expect(w.get('.lq-interlude-hint').text()).toBe(
       'Tap to continue · Hold to skip',

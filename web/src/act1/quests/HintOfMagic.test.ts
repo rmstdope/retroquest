@@ -5,8 +5,8 @@ import { Act1 } from '../Act1'
 import { FLAG_LANTERN_LIT } from '../Act1StoryFlags'
 
 const ENTRY_LANTERN =
-  'You woke with three words written down, somewhere in the dark by your ' +
-  'bed, and a tune still going in the house. The [item_name]lantern[/item_name] ' +
+  'You woke with three words written down, somewhere in the dark of your ' +
+  'room, and a tune still going in the house. The [item_name]lantern[/item_name] ' +
   'would show you where.'
 const ENTRY_JOURNAL =
   'The [item_name]lantern[/item_name] found your [item_name]journal[/item_name]. ' +
@@ -16,11 +16,11 @@ const ENTRY_GRANDMOTHER =
   'the tune from your dream. She will want to hear about it.'
 
 const DARK_CORNER =
-  'The curtains are still drawn on a bright morning, and the corner by your ' +
-  'bed is too dark to see into.'
-const SUNNY_MORNING =
-  'Morning sun comes through the lace curtains onto shelves lined with ' +
-  'trinkets and memories.'
+  'The doorway to your room stands open, and the room beyond it is too ' +
+  'dark to see into.'
+const FIRELIGHT =
+  'Firelight reaches the shelves, lined with trinkets and memories, and ' +
+  'your room is no longer dark.'
 
 const LANTERN_NUDGE =
   'And light that lantern before you go feeling about in your corner; ' +
@@ -136,7 +136,7 @@ describe('The opening leads lantern, journal, Grandmother', () => {
         JOURNAL_NUDGE,
     )
     expect(again).not.toContain(LANTERN_NUDGE)
-    expect(cottageText(game)).toContain(SUNNY_MORNING)
+    expect(cottageText(game)).toContain(FIRELIGHT)
     expect(cottageText(game)).not.toContain(DARK_CORNER)
   })
 
@@ -144,7 +144,7 @@ describe('The opening leads lantern, journal, Grandmother', () => {
     const game = wokenGame()
     executeCommands(game, ['use lantern', 'take lantern'])
 
-    expect(cottageText(game)).toContain(SUNNY_MORNING)
+    expect(cottageText(game)).toContain(FIRELIGHT)
   })
 
   it('journal read: the log points at Grandmother, who tells the dream', () => {
@@ -171,7 +171,7 @@ describe('The opening after a load', () => {
     const fresh = reloaded(game)
 
     expect(hintLine(fresh)).toBe(ENTRY_JOURNAL)
-    expect(cottageText(fresh)).toContain(SUNNY_MORNING)
+    expect(cottageText(fresh)).toContain(FIRELIGHT)
   })
 
   it('loads an older save, lantern lit before the flag, in that state', () => {
@@ -183,7 +183,7 @@ describe('The opening after a load', () => {
     )
 
     expect(hintLine(fresh)).toBe(ENTRY_JOURNAL)
-    expect(cottageText(fresh)).toContain(SUNNY_MORNING)
+    expect(cottageText(fresh)).toContain(FIRELIGHT)
     const again = executeCommands(fresh, [
       'talk to grandmother',
       'talk to grandmother',

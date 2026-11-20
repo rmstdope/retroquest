@@ -22,7 +22,7 @@ import { Locket } from './Locket'
 import { Matches } from './Matches'
 import { Mechanism } from './Mechanism'
 import { Shopkeeper } from '../characters/Shopkeeper'
-import { RustyHoe } from './RustyHoe'
+import { RustyTrowel } from './RustyTrowel'
 import { RustySaw } from './RustySaw'
 import { SharpKnife } from './SharpKnife'
 
@@ -109,7 +109,7 @@ function keyFell(gameState: GameState): boolean {
  */
 function rafterUseFrom(gameState: GameState, item: Item): string {
   const reach =
-    item instanceof RustyHoe ||
+    item instanceof RustyTrowel ||
     item instanceof RustySaw ||
     item instanceof DullKnife ||
     item instanceof SharpKnife
@@ -197,9 +197,9 @@ function gladeLit(gameState: GameState): boolean {
   return 'lightSpellCast' in room && room.lightSpellCast === true
 }
 
-/** The hoe used with the field's earth or crops digs, as `use hoe` does. */
-function hoeDigs(gameState: GameState, item: Item): string {
-  return item instanceof RustyHoe ? item.use(gameState) : ''
+/** The trowel used with the field's earth or crops digs, as `use trowel` does. */
+function trowelDigs(gameState: GameState, item: Item): string {
+  return item instanceof RustyTrowel ? item.use(gameState) : ''
 }
 
 /**
@@ -250,7 +250,7 @@ export const SCENERY_BY_ROOM: Record<string, SceneryDef[]> = {
             'The stalks bend in the breeze and come back.'
           : 'The leaves curl brown at the edges and break when you touch them. ' +
             'The stalks are still standing.',
-      hoeDigs,
+      trowelDigs,
     ),
     staged(
       'VegetableField.earth',
@@ -261,7 +261,7 @@ export const SCENERY_BY_ROOM: Record<string, SceneryDef[]> = {
           ? 'The earth is dark and gives under your boot. ' +
             'Water still shines in the furrows.'
           : 'The earth is cracked into plates. It is dry a finger deep.',
-      hoeDigs,
+      trowelDigs,
     ),
   ],
   ChickenCoop: [
@@ -341,9 +341,9 @@ export const SCENERY_BY_ROOM: Record<string, SceneryDef[]> = {
   BlacksmithsForge: [
     plain(
       'BlacksmithsForge.coals',
-      'coals',
-      ['hearth'],
-      'The coals glow orange under a crust of grey. ' +
+      'fire',
+      ['hearth', 'logs'],
+      'Logs burn on a bed of red embers. ' +
         'Borin feeds them without looking.',
     ),
     plain(
@@ -355,11 +355,10 @@ export const SCENERY_BY_ROOM: Record<string, SceneryDef[]> = {
     ),
     plain(
       'BlacksmithsForge.hinges',
-      'hinges',
-      ['ploughshares', 'walls'],
-      'Hinges and ploughshares hang on the walls, ' +
-        'each tied with a scrap of cloth with a name on it. ' +
-        'You know most of the names.',
+      'tools',
+      ['tongs', 'rope', 'walls'],
+      'Tongs and a coil of rope hang on the walls, ' +
+        "each where Borin's hand expects it to be.",
     ),
     plain(
       'BlacksmithsForge.hammer',
@@ -405,16 +404,16 @@ export const SCENERY_BY_ROOM: Record<string, SceneryDef[]> = {
     plain(
       'TheDream.man',
       'man',
-      ['hand'],
-      'He is gone. You saw only his hand, ' +
-        'and how carefully it lifted the child.',
+      [],
+      'His hood hides his face. He holds the child carefully, ' +
+        'as if it might wake.',
     ),
     plain(
       'TheDream.child',
       'child',
       [],
-      'Gone with him, into the dark. ' +
-        'It was small enough to hold against a shoulder, and it did not cry.',
+      'Small enough to hold against a shoulder. ' +
+        'It is asleep, and it does not cry.',
     ),
   ],
   VillageWell: [

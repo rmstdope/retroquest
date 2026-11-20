@@ -15,7 +15,7 @@ import { MagneticFishingRod } from './MagneticFishingRod'
 import { Mechanism } from './Mechanism'
 import { MysteriousBox } from './MysteriousBox'
 import { Rope } from './Rope'
-import { RustyHoe } from './RustyHoe'
+import { RustyTrowel } from './RustyTrowel'
 import { RustySaw } from './RustySaw'
 import { SharpKnife } from './SharpKnife'
 import { Stick } from './Stick'
@@ -217,7 +217,7 @@ describe('wrong tries at Act I puzzles', () => {
   })
 
   it.each([
-    ['rusty hoe', new RustyHoe()],
+    ['rusty trowel', new RustyTrowel()],
     ['rusty saw', new RustySaw()],
   ])(
     'says the %s falls short of the rafter and points at the hens',
@@ -256,9 +256,9 @@ describe('wrong tries at Act I puzzles', () => {
   })
 
   it('says the rafter is bare once the key has fallen', () => {
-    const game = gameIn('ChickenCoop', [new Bread(), new RustyHoe()])
+    const game = gameIn('ChickenCoop', [new Bread(), new RustyTrowel()])
     executeCommands(game, ['use bread with chicken'])
-    const text = executeCommands(game, ['use rusty hoe with rafter'])
+    const text = executeCommands(game, ['use rusty trowel with rafter'])
     expect(text).toBe(
       '[failure]Only dust and a few feathers on the rafter now.[/failure]',
     )
@@ -445,11 +445,11 @@ describe('more natural tries at Act I puzzles', () => {
       "The bell is the priest's to ring.",
   )
 
-  it('digs the field when the hoe is used with any name for the ground', () => {
+  it('digs the field when the trowel is used with any name for the ground', () => {
     const wrong: string[] = []
     for (const target of ['earth', 'soil', 'ground', 'crops', 'rows']) {
-      const game = gameIn('VegetableField', [new RustyHoe()])
-      const text = executeCommands(game, [`use rusty hoe with ${target}`])
+      const game = gameIn('VegetableField', [new RustyTrowel()])
+      const text = executeCommands(game, [`use rusty trowel with ${target}`])
       if (!text.includes('you unearth a small, tarnished'))
         wrong.push(`${target}: ${text}`)
       if (!game.state.hasItem('coin')) wrong.push(`${target}: no coin`)
@@ -457,10 +457,10 @@ describe('more natural tries at Act I puzzles', () => {
     expect(wrong).toEqual([])
   })
 
-  it('tills the field again with the hoe and the earth like use hoe', () => {
-    const game = gameIn('VegetableField', [new RustyHoe()])
-    executeCommands(game, ['use hoe'])
-    const again = executeCommands(game, ['use hoe with earth'])
+  it('digs the field again with the trowel and the earth like use trowel', () => {
+    const game = gameIn('VegetableField', [new RustyTrowel()])
+    executeCommands(game, ['use trowel'])
+    const again = executeCommands(game, ['use trowel with earth'])
     expect(again).toContain("you've already found what was hidden here")
   })
 

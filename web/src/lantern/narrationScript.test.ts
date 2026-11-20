@@ -523,9 +523,9 @@ describe('actScript branches before the first command', () => {
       [],
       [dream],
     )
-    expect(lines.some((line) => line.text.includes('There is no door'))).toBe(
-      true,
-    )
+    expect(
+      lines.some((line) => line.text.includes('There is no way out of this')),
+    ).toBe(true)
   })
 })
 

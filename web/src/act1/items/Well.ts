@@ -20,29 +20,29 @@ export class Well extends Item {
     super({
       name: 'well',
       description:
-        'An old stone well, its surface worn smooth, its shaft disappearing into ' +
-        'the depths.',
+        'An old stone well, no higher than your knee, around water that goes ' +
+        'down further than you can see.',
     })
   }
 
   /** The well's look: dark and sour, or clear, and whether the ring still lies below. */
   override descriptionFor(_gameState: GameState): string {
     const baseDesc =
-      'An old stone well, its surface worn smooth, its shaft disappearing into ' +
-      'the depths.'
+      'An old stone well, no higher than your knee, around water that goes ' +
+      'down further than you can see.'
     if (this.isPurified) {
       return (
         baseDesc +
         (this.containsRing
-          ? ' The water within is crystal clear. You can see something shiny ' +
+          ? ' The water is crystal clear now. You can see something shiny ' +
             "at the bottom, but it's still too deep to reach by hand."
-          : ' The water within is crystal clear. The bottom is visible and ' +
+          : ' The water is crystal clear now. The bottom is visible and ' +
             'appears empty.')
       )
     }
     return (
       baseDesc +
-      ' The water below is dark and still, and it smells sour, the way ' +
+      ' The water is dark and green, and it smells sour, the way ' +
       'milk does when it has turned.' +
       (this.containsRing
         ? ' Far down, something glints, or you think it does. It is much too ' +

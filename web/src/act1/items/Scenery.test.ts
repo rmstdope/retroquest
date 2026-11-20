@@ -295,10 +295,14 @@ describe('Scenery that agrees with its room', () => {
   it('dream: the man, the child and the shadows each read as themselves', () => {
     const game = gameIn('TheDream')
     const man = say(game, 'examine man')
-    expect(man).not.toContain('no face')
-    expect(man).toContain('hand')
-    expect(say(game, 'examine hand')).toBe(man)
-    expect(say(game, 'examine child')).toContain('Gone with him')
+    expect(man).toBe(
+      'His hood hides his face. He holds the child carefully, as if it ' +
+        'might wake.',
+    )
+    expect(say(game, 'examine child')).toBe(
+      'Small enough to hold against a shoulder. It is asleep, and it does ' +
+        'not cry.',
+    )
     expect(say(game, 'examine shadows')).toContain('like smoke')
   })
 })

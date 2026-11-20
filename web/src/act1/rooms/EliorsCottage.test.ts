@@ -83,7 +83,7 @@ describe("Elior's Cottage bread", () => {
     const game = cottage()
     executeCommands(game, ['take bread'])
     const sentence = grandmotherSentence(game)
-    expect(sentence).toMatch(/stands by it, humming/)
+    expect(sentence).toMatch(/stands by your doorway, humming/)
     expect(sentence).not.toMatch(/bread|loaf/i)
   })
 

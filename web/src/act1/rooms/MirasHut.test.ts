@@ -11,6 +11,16 @@ function gameInHut(): Game {
 }
 
 describe("Mira's Hut room card", () => {
+  it('has Mira at the window with her back to him', () => {
+    const text = new GameController(gameInHut()).getRoomDescription()
+    expect(text).toContain(
+      '[character_name]Mira[/character_name] stands at the window with her ' +
+        'back to you, tying a bundle of ' +
+        'herbs in the light.',
+    )
+    expect(text).not.toContain('moves among them')
+  })
+
   it('shows the amulet on its stand without a glow and no empty stand at first', () => {
     const text = new GameController(gameInHut()).getRoomDescription()
     expect(text).not.toContain('glows brighter')

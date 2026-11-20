@@ -42,7 +42,7 @@ import { RareFlower } from './items/RareFlower'
 import { River } from './items/River'
 import { Rope } from './items/Rope'
 import { RuneToken } from './items/RuneToken'
-import { RustyHoe } from './items/RustyHoe'
+import { RustyTrowel } from './items/RustyTrowel'
 import { RustySaw } from './items/RustySaw'
 import { SackOfFlour } from './items/SackOfFlour'
 import { SharpKnife } from './items/SharpKnife'
@@ -150,7 +150,8 @@ export const ACT1_CLASSES = {
   River,
   Rope,
   RuneToken,
-  RustyHoe,
+  // Saves and picture areas know the rusty trowel by its old key.
+  RustyHoe: RustyTrowel,
   RustySaw,
   SackOfFlour,
   SharpKnife,

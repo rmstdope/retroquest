@@ -12,8 +12,8 @@ const EMPTY_STAND = ' The stand where the amulet rested stands empty.'
 const HUT_DESCRIPTION =
   'A small hut hung with drying herbs: lavender, sage, and roots in ' +
   'bundles from the rafters. Shelves of bottles line the walls, every ' +
-  `one labelled. ${characterName('Mira')} moves among them without looking, ` +
-  'the way you move through your own kitchen.'
+  `one labelled. ${characterName('Mira')} stands at the window with her ` +
+  'back to you, tying a bundle of herbs in the light.'
 
 /**
  * Mira's Hut room: early healing and mystical mentor resource node. The

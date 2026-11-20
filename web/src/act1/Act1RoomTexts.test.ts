@@ -17,7 +17,7 @@ describe('Act I room and item texts say one true thing', () => {
     const game = gameIn('VillageWell')
     const well = game.state.currentRoom.items.find((i) => i instanceof Well)
     const sour =
-      'The water below is dark and still, and it smells sour, the way milk ' +
+      'The water is dark and green, and it smells sour, the way milk ' +
       'does when it has turned.'
     const glint =
       ' Far down, something glints, or you think it does. It is much too ' +

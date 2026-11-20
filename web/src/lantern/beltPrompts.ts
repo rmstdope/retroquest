@@ -157,8 +157,8 @@ export const THING_PROMPTS: Readonly<Record<string, string>> = {
     'A flat grey stone token with a single glowing rune cut into it.',
   'item-rusted-locker-key':
     'A small flat key, thick with orange rust, with a number stamped on its bow.',
-  'item-rusty-hoe':
-    'A farm hoe with a rusty blade and a splintered wooden handle.',
+  'item-rusty-trowel':
+    'A garden trowel with a rusty blade and a worn wooden handle.',
   'item-rusty-saw': 'A hand saw with a rusty, toothed blade and a wooden grip.',
   'item-sea-sealed-letter':
     'A letter folded small and sealed with a blue-green wax, a salt stain across it.',

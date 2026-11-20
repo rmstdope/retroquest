@@ -95,11 +95,11 @@
     { "after": 41, "commands": ["use fishing rod on well"] },
     {
         "after": 45,
-        "commands": ["take healing herb", "take ancient amulet", "use rusty hoe with mira"]
+        "commands": ["take healing herb", "take ancient amulet", "use rusty trowel with mira"]
     },
     {
         "after": 48,
-        "commands": ["take sword", "take armor", "use rusty hoe with shopkeeper"]
+        "commands": ["take sword", "take armor", "use rusty trowel with shopkeeper"]
     },
     {
         "after": 67,
@@ -134,7 +134,7 @@
     { "after": 130, "commands": ["use wild berries with grandmother"] },
     {
         "after": 136,
-        "commands": ["use rusty hoe with merchant", "use egg with merchant"]
+        "commands": ["use rusty trowel with merchant", "use egg with merchant"]
     },
     { "after": 141, "commands": ["cast grow on healing herb"] },
     { "after": 142, "commands": ["use rune token with mira"] },
@@ -243,7 +243,7 @@
     {"after": 76, "commands": ["take snare", "use sharp knife on snare", "go north", "go west", "go north", "go north", "go west", "go north", "go east", "go north", "talk to mira"]},
     {"after": 98, "commands": ["go south", "go west", "go south", "go east", "go east", "talk to blacksmith"]},
     {"after": 114, "commands": ["use bucket on well", "go west", "use bucket", "examine crops", "examine earth", "use bucket"]},
-    {"after": 16, "commands": ["use rusty hoe with rafter"]},
+    {"after": 16, "commands": ["use rusty trowel with rafter"]},
     {"after": 30, "commands": ["go west", "go south", "use key with door", "go south", "go east", "go south", "use dull knife with vines"]},
     {"after": 36, "commands": ["use sharp knife with mysterious box"]},
     {"after": 41, "commands": ["use magnet with well"]},
