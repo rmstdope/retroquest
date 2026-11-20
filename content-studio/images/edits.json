@@ -23,9 +23,13 @@
           },
           "exit-south": {
             "x": 464,
-            "y": 924,
+            "y": 872,
             "width": 870,
-            "height": 156
+            "height": 208,
+            "point": {
+              "x": 899,
+              "y": 908
+            }
           },
           "scenery-abandoned-shed-boards": {
             "x": 1141,
@@ -46,15 +50,15 @@
           "title": "Dust",
           "on": true,
           "settings": {
-            "amount": 3,
-            "speed": 1.6
+            "amount": 3.8,
+            "speed": 2.2
           }
         },
         "leaves": {
           "title": "Leaves",
           "on": true,
           "settings": {
-            "amount": 3,
+            "amount": 3.9,
             "speed": 1
           }
         }
@@ -79,7 +83,11 @@
             "x": 466,
             "y": 701,
             "width": 308,
-            "height": 320
+            "height": 320,
+            "point": {
+              "x": 584,
+              "y": 839
+            }
           },
           "exit-north": {
             "x": 524,
@@ -88,10 +96,14 @@
             "height": 197
           },
           "exit-south": {
-            "x": 546,
-            "y": 976,
-            "width": 733,
-            "height": 104
+            "x": 574,
+            "y": 894,
+            "width": 773,
+            "height": 186,
+            "point": {
+              "x": 962,
+              "y": 929
+            }
           },
           "fishing-rod": {
             "x": 1417,
@@ -117,15 +129,19 @@
             "width": 244,
             "height": 196,
             "point": {
-              "x": 1674,
-              "y": 788
+              "x": 1715,
+              "y": 806
             }
           },
           "scenery-abandoned-shed-boards": {
-            "x": 900,
-            "y": 190,
-            "width": 882,
-            "height": 305
+            "x": 888,
+            "y": 156,
+            "width": 915,
+            "height": 398,
+            "point": {
+              "x": 1146,
+              "y": 383
+            }
           },
           "scenery-abandoned-shed-crates": {
             "x": 1318,
@@ -197,8 +213,8 @@
             "width": 290,
             "height": 881,
             "point": {
-              "x": 1194,
-              "y": 272
+              "x": 1240,
+              "y": 431
             }
           },
           "exit-north": {
@@ -278,7 +294,7 @@
           "title": "Embers",
           "on": true,
           "settings": {
-            "amount": 3,
+            "amount": 3.4,
             "speed": 2.25
           },
           "spot": [
@@ -292,12 +308,12 @@
                 0
               ],
               [
-                0.4354,
-                0.9063
+                0.4117,
+                0.8826
               ],
               [
-                0.2046,
-                0.899
+                0.2833,
+                0.8819
               ]
             ]
           ]
@@ -382,7 +398,11 @@
             "x": 929,
             "y": 906,
             "width": 109,
-            "height": 120
+            "height": 120,
+            "point": {
+              "x": 997,
+              "y": 926
+            }
           },
           "exit-north": {
             "x": 190,
@@ -396,8 +416,8 @@
             "width": 169,
             "height": 94,
             "point": {
-              "x": 1144,
-              "y": 980
+              "x": 1110,
+              "y": 961
             }
           },
           "key": {
@@ -492,9 +512,13 @@
           },
           "exit-south": {
             "x": 512,
-            "y": 954,
+            "y": 887,
             "width": 881,
-            "height": 126
+            "height": 193,
+            "point": {
+              "x": 947,
+              "y": 942
+            }
           },
           "faded-photograph": {
             "x": 466,
@@ -508,8 +532,8 @@
             "width": 340,
             "height": 754,
             "point": {
-              "x": 1300,
-              "y": 315
+              "x": 1324,
+              "y": 438
             }
           },
           "hearth": {
@@ -564,7 +588,11 @@
             "x": 568,
             "y": 642,
             "width": 732,
-            "height": 302
+            "height": 236,
+            "point": {
+              "x": 822,
+              "y": 789
+            }
           }
         }
       },
@@ -576,6 +604,34 @@
             "amount": 1,
             "speed": 1
           }
+        },
+        "embers": {
+          "title": "Embers",
+          "on": true,
+          "settings": {
+            "amount": 5,
+            "speed": 2.05
+          },
+          "spot": [
+            [
+              [
+                0.2179,
+                0.4
+              ],
+              [
+                0.3623,
+                0.3973
+              ],
+              [
+                0.3035,
+                0.7607
+              ],
+              [
+                0.2576,
+                0.7623
+              ]
+            ]
+          ]
         },
         "fire": {
           "title": "Fire",
@@ -602,6 +658,34 @@
               [
                 0.244792,
                 0.77037
+              ]
+            ]
+          ]
+        },
+        "smoke": {
+          "title": "Smoke",
+          "on": true,
+          "settings": {
+            "amount": 2.3,
+            "speed": 1
+          },
+          "spot": [
+            [
+              [
+                0.2167,
+                0.3961
+              ],
+              [
+                0.3497,
+                0.4017
+              ],
+              [
+                0.3124,
+                0.6668
+              ],
+              [
+                0.2634,
+                0.6844
               ]
             ]
           ]
@@ -639,13 +723,21 @@
             "x": 468,
             "y": 915,
             "width": 1006,
-            "height": 165
+            "height": 165,
+            "point": {
+              "x": 760,
+              "y": 940
+            }
           },
           "scenery-forest-path-alcove": {
             "x": 492,
             "y": 652,
             "width": 157,
-            "height": 114
+            "height": 114,
+            "point": {
+              "x": 575,
+              "y": 690
+            }
           },
           "scenery-forest-path-birds": {
             "x": 1298,
@@ -672,22 +764,30 @@
             "height": 608
           },
           "snare": {
-            "x": 1522,
-            "y": 728,
-            "width": 187,
-            "height": 177
+            "x": 445,
+            "y": 671,
+            "width": 189,
+            "height": 123,
+            "point": {
+              "x": 526,
+              "y": 765
+            }
           },
           "stick": {
-            "x": 878,
-            "y": 900,
-            "width": 258,
-            "height": 68
+            "x": 530,
+            "y": 825,
+            "width": 368,
+            "height": 103
           },
           "vines": {
             "x": 289,
             "y": 615,
             "width": 638,
-            "height": 237
+            "height": 237,
+            "point": {
+              "x": 410,
+              "y": 692
+            }
           },
           "wild-berries": {
             "x": 60,
@@ -751,9 +851,13 @@
           },
           "exit-south": {
             "x": 538,
-            "y": 984,
+            "y": 953,
             "width": 639,
-            "height": 96
+            "height": 127,
+            "point": {
+              "x": 968,
+              "y": 976
+            }
           },
           "exit-west": {
             "x": 0,
@@ -771,7 +875,11 @@
             "x": 691,
             "y": 912,
             "width": 191,
-            "height": 119
+            "height": 119,
+            "point": {
+              "x": 780,
+              "y": 942
+            }
           },
           "rope": {
             "x": 313,
@@ -841,7 +949,11 @@
             "x": 1242,
             "y": 312,
             "width": 447,
-            "height": 589
+            "height": 589,
+            "point": {
+              "x": 1467,
+              "y": 528
+            }
           },
           "exit-north": {
             "x": 776,
@@ -859,13 +971,21 @@
             "x": 0,
             "y": 475,
             "width": 434,
-            "height": 605
+            "height": 605,
+            "point": {
+              "x": 182,
+              "y": 642
+            }
           },
           "scenery-hidden-glade-grass": {
             "x": 436,
             "y": 851,
             "width": 1148,
-            "height": 229
+            "height": 229,
+            "point": {
+              "x": 816,
+              "y": 884
+            }
           },
           "scenery-hidden-glade-mossy-stone": {
             "x": 757,
@@ -912,10 +1032,14 @@
             "height": 168
           },
           "exit-south": {
-            "x": 662,
-            "y": 980,
-            "width": 646,
-            "height": 100
+            "x": 543,
+            "y": 913,
+            "width": 765,
+            "height": 167,
+            "point": {
+              "x": 961,
+              "y": 939
+            }
           },
           "healing-herb": {
             "x": 1463,
@@ -981,7 +1105,11 @@
             "x": 1278,
             "y": 990,
             "width": 87,
-            "height": 74
+            "height": 74,
+            "point": {
+              "x": 1337,
+              "y": 999
+            }
           },
           "sack-of-flour": {
             "x": 312,
@@ -1017,6 +1145,14 @@
             "amount": 1,
             "speed": 1
           }
+        },
+        "leaves": {
+          "title": "Leaves",
+          "on": true,
+          "settings": {
+            "amount": 4.7,
+            "speed": 0.75
+          }
         }
       }
     },
@@ -1032,16 +1168,24 @@
       "text": "A face portrait of your grandmother.",
       "gameWas": "Your grandmother, flour on her apron and her sleeves pushed up. She has raised you since your parents went away, and she keeps her hands busy when she would rather not answer."
     },
+    "act1-portrait-patches": {
+      "text": "A face portrait of a pitch black cat with wide green eyes.",
+      "gameWas": "A face portrait of a small cat with a patchwork coat of ginger, black and white, and wide green eyes."
+    },
     "act1-riverbank": {
       "text": "A gentle river flows past the village and makes a slow bend here, past the reeds and a broad, flat stone at the water's edge. A couple of insects hum over the water. A weathered fisherman sits on an upturned crate at the bend, watching the water.",
       "gameWas": "A gentle river flows past the village and makes a slow bend here, past the reeds and a broad, flat stone at the water's edge. Insects hum over the water. A weathered fisherman sits on an upturned crate at the bend, watching the water.",
       "takeAreas": {
         "13": {
           "exit-south": {
-            "x": 1390,
+            "x": 724,
             "y": 905,
-            "width": 530,
-            "height": 175
+            "width": 1196,
+            "height": 175,
+            "point": {
+              "x": 1243,
+              "y": 925
+            }
           },
           "exit-west": {
             "x": 0,
@@ -1101,11 +1245,27 @@
             "x": 789,
             "y": 717,
             "width": 568,
-            "height": 207
+            "height": 187
           }
         }
       },
       "effects": {
+        "dust": {
+          "title": "Dust",
+          "on": true,
+          "settings": {
+            "amount": 3.7,
+            "speed": 1.9
+          }
+        },
+        "leaves": {
+          "title": "Leaves",
+          "on": true,
+          "settings": {
+            "amount": 3.65,
+            "speed": 1
+          }
+        },
         "mist": {
           "title": "Mist",
           "on": true,
@@ -1137,7 +1297,11 @@
             "x": 485,
             "y": 944,
             "width": 354,
-            "height": 97
+            "height": 97,
+            "point": {
+              "x": 786,
+              "y": 958
+            }
           },
           "scenery-road-to-greendale-cart": {
             "x": 1117,
@@ -1164,15 +1328,15 @@
           "title": "Dust",
           "on": true,
           "settings": {
-            "amount": 1,
-            "speed": 1
+            "amount": 3.7,
+            "speed": 2
           }
         },
         "leaves": {
           "title": "Leaves",
           "on": true,
           "settings": {
-            "amount": 1,
+            "amount": 3.7,
             "speed": 1
           }
         }
@@ -1184,7 +1348,7 @@
       "takeAreas": {
         "13": {
           "dream-voice": {
-            "x": 7,
+            "x": 0,
             "y": 0,
             "width": 1913,
             "height": 1080,
@@ -1209,8 +1373,8 @@
             "width": 207,
             "height": 590,
             "point": {
-              "x": 1028,
-              "y": 733
+              "x": 996,
+              "y": 627
             }
           },
           "scenery-the-dream-shadows": {
@@ -1222,13 +1386,49 @@
         }
       },
       "effects": {
-        "mist": {
-          "title": "Mist",
+        "dust": {
+          "title": "Dust",
           "on": true,
+          "settings": {
+            "amount": 2.7,
+            "speed": 3.65
+          }
+        },
+        "fireflies": {
+          "title": "Fireflies",
+          "on": false,
           "settings": {
             "amount": 1,
             "speed": 1
           }
+        },
+        "mist": {
+          "title": "Mist",
+          "on": true,
+          "settings": {
+            "amount": 5,
+            "speed": 5
+          },
+          "spot": [
+            [
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                1
+              ],
+              [
+                1,
+                0
+              ]
+            ]
+          ]
         }
       }
     },
@@ -1257,9 +1457,13 @@
           },
           "exit-south": {
             "x": 505,
-            "y": 985,
+            "y": 950,
             "width": 897,
-            "height": 94
+            "height": 129,
+            "point": {
+              "x": 734,
+              "y": 976
+            }
           },
           "rusty-hoe": {
             "x": 45,
@@ -1277,7 +1481,11 @@
             "x": 437,
             "y": 847,
             "width": 1122,
-            "height": 171
+            "height": 171,
+            "point": {
+              "x": 717,
+              "y": 885
+            }
           },
           "withered-carrot": {
             "x": 869,
@@ -1294,6 +1502,14 @@
           "settings": {
             "amount": 5,
             "speed": 3.85
+          }
+        },
+        "leaves": {
+          "title": "Leaves",
+          "on": true,
+          "settings": {
+            "amount": 3.65,
+            "speed": 1
           }
         },
         "mist": {
@@ -1420,7 +1636,7 @@
           "title": "Dust",
           "on": true,
           "settings": {
-            "amount": 1,
+            "amount": 1.55,
             "speed": 1
           }
         },
@@ -1502,7 +1718,11 @@
             "x": 343,
             "y": 844,
             "width": 1358,
-            "height": 206
+            "height": 206,
+            "point": {
+              "x": 1310,
+              "y": 904
+            }
           },
           "scenery-village-square-fountain": {
             "x": 674,
@@ -1547,7 +1767,15 @@
           "title": "Dust",
           "on": true,
           "settings": {
-            "amount": 1,
+            "amount": 3.45,
+            "speed": 1
+          }
+        },
+        "leaves": {
+          "title": "Leaves",
+          "on": true,
+          "settings": {
+            "amount": 3.55,
             "speed": 1
           }
         },
@@ -1561,12 +1789,12 @@
           "spot": [
             [
               [
-                0.413021,
-                0.423148
+                0.4697,
+                0.4649
               ],
               [
-                0.569271,
-                0.423148
+                0.5211,
+                0.4643
               ],
               [
                 0.569271,
@@ -1600,9 +1828,13 @@
           },
           "exit-south": {
             "x": 343,
-            "y": 956,
+            "y": 919,
             "width": 1237,
-            "height": 124
+            "height": 161,
+            "point": {
+              "x": 967,
+              "y": 942
+            }
           },
           "exit-west": {
             "x": 0,
@@ -1617,13 +1849,13 @@
             "height": 290
           },
           "well": {
-            "x": 156,
+            "x": 432,
             "y": 410,
-            "width": 1582,
-            "height": 543,
+            "width": 1098,
+            "height": 510,
             "point": {
               "x": 935,
-              "y": 833
+              "y": 752
             }
           }
         }
@@ -1633,9 +1865,58 @@
           "title": "Dust",
           "on": true,
           "settings": {
-            "amount": 1,
+            "amount": 3.25,
             "speed": 1
           }
+        },
+        "leaves": {
+          "title": "Leaves",
+          "on": true,
+          "settings": {
+            "amount": 2.65,
+            "speed": 1
+          }
+        },
+        "ripples": {
+          "title": "Pond ripples",
+          "on": true,
+          "settings": {
+            "amount": 5,
+            "speed": 2.4,
+            "strength": 0.8
+          },
+          "spot": [
+            [
+              [
+                0.3954,
+                0.6843
+              ],
+              [
+                0.5466,
+                0.6492
+              ],
+              [
+                0.7479,
+                0.7619
+              ],
+              [
+                0.7515,
+                0.8387
+              ],
+              [
+                0.5712,
+                0.9971
+              ],
+              [
+                0.4649,
+                0.9991
+              ],
+              [
+                0.2829,
+                0.8133
+              ]
+            ]
+          ]
         }
       }
     },
@@ -2141,6 +2422,10 @@
     "item-magnetic-fishing-rod": {
       "text": "A short fishing rod with a red and silver horseshoe shaped magnet tied on the end of its line. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border.",
       "gameWas": "A short fishing rod with a red and silver magnet tied on the end of its line. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+    },
+    "item-patches": {
+      "text": "A curled up black cat with green eyes. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border.",
+      "gameWas": "A small cat with a patchwork coat of ginger, black and white, and wide green eyes. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
     },
     "item-rusty-hoe": {
       "text": "A farm hoe with a rusty blade and a long wooden handle. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border.",
