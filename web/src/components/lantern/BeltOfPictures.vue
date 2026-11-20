@@ -115,8 +115,8 @@ let moveTimer: ReturnType<typeof setTimeout> | undefined
 let switchTimer: ReturnType<typeof setTimeout> | undefined
 let holdTimer: ReturnType<typeof setTimeout> | undefined
 let holdFrom: { x: number; y: number } | null = null
-/** Where a mouse went down on a picture, until it lifts or lets go. */
-let pullFrom: { x: number; y: number } | null = null
+/** The picture a mouse went down on and where, until it lifts or lets go. */
+let pullFrom: { picture: BeltPicture; x: number; y: number } | null = null
 /** The press that follows a hold's release is not a press. */
 let swallowClick = false
 
@@ -216,14 +216,21 @@ watch(
 )
 
 /** A pointer went down on a picture: a finger held there for a moment shows its caption. */
-function onPicDown(key: string, event: PointerEvent): void {
+function onPicDown(picture: BeltPicture, event: PointerEvent): void {
+  const key = picture.key
   swallowClick = false
+  endPull()
   document.removeEventListener('touchmove', holdTouchMoves)
   if (event.pointerType === 'touch')
     document.addEventListener('touchmove', holdTouchMoves, { passive: false })
   if (event.pointerType !== 'touch') {
-    pullFrom =
-      event.button === 0 ? { x: event.clientX, y: event.clientY } : null
+    if (event.button === 0) {
+      pullFrom = { picture, x: event.clientX, y: event.clientY }
+      // Watched on the document: a quick flick leaves the pocket before the first move lands on it.
+      document.addEventListener('pointermove', onPull)
+      document.addEventListener('pointerup', endPull)
+      document.addEventListener('pointercancel', endPull)
+    }
     return
   }
   holdFrom = { x: event.clientX, y: event.clientY }
@@ -237,13 +244,13 @@ function onPicDown(key: string, event: PointerEvent): void {
 /** The finger drifted: a swipe, not a hold. A mouse that really moves also ends a hover hush. */
 function onPicMove(event: PointerEvent, picture: BeltPicture): void {
   endHoverHush(picture.key, event)
-  const from = event.pointerType === 'touch' ? holdFrom : pullFrom
-  if (from && (held.value || event.pointerType !== 'touch')) {
-    // A mouse pulled a few pixels, or a finger moved after its hold: the picture lifts.
+  if (event.pointerType !== 'touch') return
+  if (holdFrom && held.value) {
+    // A finger moved after its hold: the picture lifts.
     if (
-      Math.hypot(event.clientX - from.x, event.clientY - from.y) > DRAG_SLOP
+      Math.hypot(event.clientX - holdFrom.x, event.clientY - holdFrom.y) >
+      DRAG_SLOP
     ) {
-      pullFrom = null
       holdFrom = null
       swallowClick = true
       emit('lift', picture, {
@@ -262,10 +269,34 @@ function onPicMove(event: PointerEvent, picture: BeltPicture): void {
     endHold()
 }
 
+/** A mouse button is down on a picture: once the pointer has moved a few pixels with the button still held, that picture lifts. */
+function onPull(event: PointerEvent): void {
+  const from = pullFrom
+  if (!from) return
+  if (!(event.buttons & 1)) return endPull()
+  if (Math.hypot(event.clientX - from.x, event.clientY - from.y) <= DRAG_SLOP)
+    return
+  endPull()
+  swallowClick = true
+  emit('lift', from.picture, {
+    x: event.clientX,
+    y: event.clientY,
+    pointerType: event.pointerType,
+  })
+}
+
+/** The mouse button is up (anywhere) or the press was taken over: nothing is pulled any more. */
+function endPull(): void {
+  pullFrom = null
+  document.removeEventListener('pointermove', onPull)
+  document.removeEventListener('pointerup', endPull)
+  document.removeEventListener('pointercancel', endPull)
+}
+
 /** The finger let go or was taken over: the hold's caption goes. */
 function endHold(): void {
   document.removeEventListener('touchmove', holdTouchMoves)
-  pullFrom = null
+  endPull()
   clearTimeout(holdTimer)
   holdFrom = null
   held.value = null
@@ -282,7 +313,10 @@ function endHold(): void {
 function holdTouchMoves(event: Event): void {
   if (held.value && event.cancelable) event.preventDefault()
 }
-onUnmounted(() => document.removeEventListener('touchmove', holdTouchMoves))
+onUnmounted(() => {
+  document.removeEventListener('touchmove', holdTouchMoves)
+  endPull()
+})
 // A lifted picture's release is no press, but a release elsewhere sends no click: the swallowing ends with the drag.
 watch(
   () => props.lifted,
@@ -616,7 +650,7 @@ defineExpose({ focusBelt, focusPicture, has, pictureFor, root })
               @blur="focused = null"
               @pointerenter="onPicEnter(picture.key, $event)"
               @pointerleave="pointed = null"
-              @pointerdown="onPicDown(picture.key, $event)"
+              @pointerdown="onPicDown(picture, $event)"
               @pointermove="onPicMove($event, picture)"
               @pointerup="endHold"
               @pointercancel="endHold"
