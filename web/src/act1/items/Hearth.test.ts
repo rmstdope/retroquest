@@ -45,8 +45,12 @@ describe('Hearth', () => {
     const loaded = new Game([new Act1()])
     loaded.loadSaveData(game.toSaveData())
     const lantern = loaded.state.currentRoom.items.find(
-      (i) => i instanceof Lantern,
+      (i): i is Lantern => i instanceof Lantern,
     )
-    expect((lantern as Lantern).isLit()).toBe(true)
+    expect(lantern?.isLit()).toBe(true)
+    expect(loaded.state.getStoryFlag(FLAG_LANTERN_LIT)).toBe(true)
+    expect(
+      loaded.state.currentRoom.getItemByName("Elior's Journal"),
+    ).not.toBeNull()
   })
 })
