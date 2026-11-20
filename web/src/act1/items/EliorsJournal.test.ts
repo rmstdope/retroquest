@@ -50,16 +50,6 @@ describe('EliorsJournal', () => {
     expect(text).not.toMatch(/mother|father/i)
   })
 
-  it('is refused by name, as Elior\'s Journal and without a "the"', () => {
-    const game = new Game([new Act1()])
-    game.state.currentRoom = game.state.allRooms.EliorsCottage
-    const answer = executeCommands(game, ['use lantern', 'take journal'])
-
-    expect(answer).toContain(
-      "[failure]You can't take [item_name]Elior's Journal[/item_name].[/failure]",
-    )
-  })
-
   it('is named the same way when used with itself or with nothing here', () => {
     const game = new Game([new Act1()])
     game.state.currentRoom = game.state.allRooms.EliorsCottage
@@ -84,4 +74,27 @@ describe('EliorsJournal', () => {
 
     expect(journal.use(game.state)).toBe(journal.use(game.state))
   })
+
+  it.each(['take journal', "take elior's journal"])(
+    'answers "%s" with a clue and stays in the room, read or not',
+    (command) => {
+      const game = new Game([new Act1()])
+      game.state.currentRoom = game.state.allRooms.EliorsCottage
+      executeCommands(game, ['use lantern'])
+      for (const read of [false, true]) {
+        if (read) executeCommands(game, ['use journal'])
+        const answer = executeCommands(game, [command])
+        expect(answer).toContain(
+          'It stays by your bed, where you write at night. ' +
+            'It is the newest page you want, the smudged one, ' +
+            'and it will not keep you long.',
+        )
+        expect(answer).toContain('[clue]')
+        expect(answer).not.toContain("can't take")
+        expect(
+          game.state.currentRoom.items.some((i) => i instanceof EliorsJournal),
+        ).toBe(true)
+      }
+    },
+  )
 })

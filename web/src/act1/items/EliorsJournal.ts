@@ -3,6 +3,7 @@ import {
   Item,
   type GameState,
   characterName,
+  clue,
   dialogue,
 } from '@/engine'
 import { FLAG_JOURNAL_READ } from '../Act1StoryFlags'
@@ -60,6 +61,15 @@ export class EliorsJournal extends Item {
       '\n'
     gameState.setStoryFlag(FLAG_JOURNAL_READ, true)
     return entry
+  }
+
+  /** It cannot be carried; the refusal points the player at the newest page. */
+  override preventPickup(): string {
+    return clue(
+      'It stays by your bed, where you write at night. ' +
+        'It is the newest page you want, the smudged one, ' +
+        'and it will not keep you long.',
+    )
   }
 
   /** Named after a person, so it takes no "the" and keeps its capitals. */

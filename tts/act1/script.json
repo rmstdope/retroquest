@@ -2415,6 +2415,11 @@
     "text": "You have learned Bless."
   },
   {
+    "id": "0ec8888c33b307",
+    "speaker": "narrator",
+    "text": "It is bound for the baker's, not for you. Somebody in the village is already short of flour this week."
+  },
+  {
     "id": "0ec8bae57fb309",
     "speaker": "narrator",
     "text": "The places to look at properly:"
@@ -3820,6 +3825,11 @@
     "text": "You've been dreaming. It's written all over you."
   },
   {
+    "id": "17766451dffe0f",
+    "speaker": "narrator",
+    "text": "It stays by your bed, where you write at night. It is the newest page you want, the smudged one, and it will not keep you long."
+  },
+  {
     "id": "177a6e95fe57b9",
     "speaker": "narrator",
     "text": "Your grandmother, flour on her apron and her sleeves pushed up. She has raised you since your parents went away, and she keeps her hands busy when she would rather not answer."
@@ -3833,6 +3843,11 @@
     "id": "1787ba9eac6d10",
     "speaker": "narrator",
     "text": "Know your village: You have not stood in the heat of the Blacksmith's Forge in a long while."
+  },
+  {
+    "id": "179629b367b3e9",
+    "speaker": "narrator",
+    "text": "You touch the wick to a coal, and it takes. The flickering light reveals more of the room. A journal appears in the light."
   },
   {
     "id": "179884ac56aaea",
