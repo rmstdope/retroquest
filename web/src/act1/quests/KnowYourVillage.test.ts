@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { Game, findMarkupProblems } from '@/engine'
 import { Act1 } from '../Act1'
 import { TheDream } from '../rooms/TheDream'
+import { ReviveSpell } from '../spells/ReviveSpell'
 import { executeCommands } from '@/testing/gameHelpers'
 import { KnowYourVillageQuest } from './KnowYourVillage'
 
@@ -147,12 +148,49 @@ describe('Know your village', () => {
       expect(details.intro).toBe(
         'Something pulls at you to walk every lane of Willowbrook, ' +
           'and to look properly at the places you have passed a thousand times.\n' +
-          'You have yet to look properly at:',
+          'The places to look at properly:',
       )
       expect(details.items.map((item) => item.text)).toEqual(ORDER)
       expect(
         details.items.filter((item) => !item.done).map((item) => item.text),
       ).toEqual(['Chicken Coop', 'Hidden Glade'])
+    })
+
+    it('lists only known places on first showing, ticked as visited', () => {
+      const game = new Game([new Act1()])
+      executeCommands(game, ['talk to voice'])
+      game.state.learnSpell(new ReviveSpell())
+      game.state.currentRoom = game.state.allRooms.VillageSquare
+      game.state.markVisited(game.state.currentRoom)
+      game.state.settleQuests()
+      const details = quest(game).details()
+      expect(details.kind).toBe('checklist')
+      if (details.kind !== 'checklist') return
+      expect(details.items.map((item) => item.text)).toEqual([
+        "Elior's Cottage",
+        'Village Square',
+        'Vegetable Field',
+        "Mira's Hut",
+        'General Store',
+      ])
+      expect(details.items.filter((item) => item.done)).toHaveLength(2)
+      expect(JSON.stringify(details)).not.toContain('Hidden Glade')
+      expect(KnowYourVillageQuest.nearestUnvisited(game.state)?.name).not.toBe(
+        'Hidden Glade',
+      )
+    })
+
+    it('names the Hidden Glade only once the Forest Path is visited', () => {
+      const game = setup(['Hidden Glade'], 'Forest Path')
+      const details = quest(game).details()
+      if (details.kind !== 'checklist') throw new Error('not a checklist')
+      expect(details.items.map((item) => item.text)).toEqual(ORDER)
+      const early = setup(['Hidden Glade', 'Forest Path'], 'Riverbank')
+      const earlyDetails = quest(early).details()
+      if (earlyDetails.kind !== 'checklist') throw new Error('not a checklist')
+      expect(earlyDetails.items.map((item) => item.text)).toEqual(
+        ORDER.filter((n) => n !== 'Hidden Glade'),
+      )
     })
 
     it('completes once the last unvisited place is entered', () => {
