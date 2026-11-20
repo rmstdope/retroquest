@@ -225,6 +225,41 @@ describe('LanternLayout: leaving by pressing a way out in the picture', () => {
     expect(submit).toHaveBeenCalledWith('go east')
   })
 
+  it("goes nowhere from a way's dot pressed through the words just as the arrival went by itself (rq-r6xn)", async () => {
+    const store = await cottage()
+    for (const command of [
+      'use lantern',
+      'take bread',
+      'take lantern',
+      'talk to grandmother',
+      'use journal',
+      'talk to grandmother',
+    ]) {
+      store.submitCommand(command)
+    }
+    store.releasePanels(store.turns.at(-1)!.id, [...PANEL_GROUPS], false)
+    useAreaNamesStore().showing = true
+    await w.vm.$nextTick()
+    const submit = vi.spyOn(store, 'submitCommand')
+    const dot = w.get<HTMLElement>('[data-area-mark="exit-east"]').element
+    const pressThroughWords = (): void => {
+      w.get('.lq-story').element.dispatchEvent(
+        new MouseEvent('click', {
+          bubbles: true,
+          cancelable: true,
+          clientX: parseFloat(dot.style.left),
+          clientY: parseFloat(dot.style.top),
+        }),
+      )
+    }
+    useArrivalStore().lingering = true
+    pressThroughWords()
+    expect(submit).not.toHaveBeenCalled()
+    useArrivalStore().lingering = false
+    pressThroughWords()
+    expect(submit).toHaveBeenCalledWith('go east')
+  })
+
   it('does not go through an open way that lies under a mark pressed for its thing', async () => {
     const store = await cottage()
     for (const command of [

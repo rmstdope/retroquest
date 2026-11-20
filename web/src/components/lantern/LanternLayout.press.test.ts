@@ -275,22 +275,17 @@ describe('LanternLayout: pressing a thing on the picture', () => {
     await press('bread')
     expect(ring().exists()).toBe(false)
     // The click was meant for the card, even where it lands on a mark.
-    w.get('[data-area-mark="bread"]').element.dispatchEvent(
-      new MouseEvent('click', { bubbles: true, clientX: 400, clientY: 300 }),
-    )
-    await flushPromises()
+    const pressMark = async (): Promise<void> => {
+      w.get('[data-area-mark="bread"]').element.dispatchEvent(
+        new MouseEvent('click', { bubbles: true, clientX: 400, clientY: 300 }),
+      )
+      await flushPromises()
+    }
+    await pressMark()
     expect(ring().exists()).toBe(false)
-  })
-
-  it('opens the ring from a mark once the arrival has lingered (rq-r6xn)', async () => {
-    await cottage()
-    useAreaNamesStore().showing = true
-    await flushPromises()
+    // Once the linger is over, the mark opens its ring.
     useArrivalStore().lingering = false
-    w.get('[data-area-mark="bread"]').element.dispatchEvent(
-      new MouseEvent('click', { bubbles: true, clientX: 400, clientY: 300 }),
-    )
-    await flushPromises()
+    await pressMark()
     expect(ring().exists()).toBe(true)
   })
 

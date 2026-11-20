@@ -99,7 +99,7 @@ test('a click on a card just as it goes by itself opens no ring on the thing und
   await pushNews(page)
   await expect(page.locator('.lq-arrival-stage.lq-on')).toHaveCount(1)
   // A key now and then keeps the marks up while the card is read: Grandmother's shows through it.
-  await page.evaluate(() =>
+  const keys = await page.evaluateHandle(() =>
     setInterval(
       () =>
         document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Shift' })),
@@ -107,15 +107,50 @@ test('a click on a card just as it goes by itself opens no ring on the thing und
     ),
   )
   const mark = page.locator('[data-area-mark="grandmother"]')
-  await expect(mark).toHaveCount(1)
-  // Its place once the card has made room for it.
-  await page.waitForTimeout(500)
-  const spot = await mark.boundingBox()
+  // Its place once the card has made room for it: it comes in at its own
+  // place, steps aside for the card, and then holds, give or take the
+  // picture's slow drift.
+  const first = await mark.boundingBox()
+  if (!first) throw new Error('Grandmother has no mark')
+  let spot: typeof first | null = first
+  await expect
+    .poll(
+      async () => {
+        const before = spot
+        spot = await mark.boundingBox()
+        if (!before || !spot) return false
+        const aside = Math.hypot(spot.x - first.x, spot.y - first.y) > 10
+        return aside && Math.hypot(spot.x - before.x, spot.y - before.y) < 2
+      },
+      { intervals: [100] },
+    )
+    .toBe(true)
   if (!spot) throw new Error('Grandmother has no mark')
   const x = spot.x + spot.width / 2
   const y = spot.y + spot.height / 2
   // The pointer rests on the card, just off the mark the click will land on.
   await page.mouse.move(x + 3, y + 3)
+  // Whether the card's linger still held when the press went down.
+  await page.evaluate(() => {
+    const root = document.querySelector('#app') as unknown as {
+      __vue_app__: {
+        config: {
+          globalProperties: {
+            $pinia: { _s: Map<string, { lingering?: boolean }> }
+          }
+        }
+      }
+    }
+    const arrival =
+      root.__vue_app__.config.globalProperties.$pinia._s.get('arrival')
+    document.addEventListener(
+      'pointerdown',
+      () => {
+        document.body.dataset.lingered = String(!!arrival?.lingering)
+      },
+      { capture: true, once: true },
+    )
+  })
   // The card is read for its time and goes by itself; the player clicks it at that moment.
   await page.waitForFunction(
     () => document.querySelectorAll('.lq-arrival-stage.lq-on').length === 0,
@@ -123,6 +158,15 @@ test('a click on a card just as it goes by itself opens no ring on the thing und
     { timeout: 30_000, polling: 'raf' },
   )
   await page.mouse.click(x, y)
-  await page.waitForTimeout(300)
+  await page.evaluate((id) => clearInterval(id), keys)
+  // A click that came after the linger tests nothing: the setup was too slow, not the game wrong.
+  await expect(
+    page.locator('body'),
+    'the click came within the linger',
+  ).toHaveAttribute('data-lingered', 'true')
+  // The ring would open on the click itself; one frame later there is none.
+  await page.evaluate(
+    () => new Promise((done) => requestAnimationFrame(() => done(null))),
+  )
   await expect(page.getByRole('menu')).toHaveCount(0)
 })

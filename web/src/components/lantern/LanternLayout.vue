@@ -830,13 +830,16 @@ function onWordsPointer(event: PointerEvent): void {
 /**
  * A press or tap on a dot that shows through the words' faded edge is a press
  * on its thing, as on the picture, and never hurries the narration (rq-njoa);
- * a press anywhere else on the words goes on to the cards as before.
+ * a press anywhere else on the words goes on to the cards as before. Just
+ * after a card went by itself it does nothing, as on the picture
+ * (`meantForArrival`).
  */
 function onWordsPress(event: MouseEvent): void {
   const dot = areaNamesEl.value?.spotAt(event.clientX, event.clientY)
   if (!dot) return
   event.stopPropagation()
   event.preventDefault()
+  if (meantForArrival()) return
   if (dot.kind === 'exit') {
     const way = dot.direction || null
     pressOn('exit-dot', { way: way !== null }, way)
