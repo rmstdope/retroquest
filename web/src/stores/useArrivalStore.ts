@@ -31,7 +31,8 @@ export interface PageStart {
  * goes on a page, then a part, and on the last one clears; `clear` ends it all
  * at once and stops the narrator. An arrival that goes by itself (its time
  * up) is `lingering` for `ARRIVAL_LINGER_MS`: the layout then takes a press on
- * the bare picture as one aimed at its words as they went, and does nothing.
+ * the picture, a mark or name included, as one aimed at its words as they
+ * went, and does nothing.
  *
  * A part too tall for the picture is shown in pages. The view cuts them (it
  * needs layout) and reports where each starts (`setPages`); the store only
@@ -84,8 +85,9 @@ export const useArrivalStore = defineStore('arrival', () => {
   const holding = ref(false)
   /**
    * The arrival went by itself a moment ago (`ARRIVAL_LINGER_MS`): a press on
-   * the bare picture was meant for its words as they went, and the layout lets
-   * it do nothing rather than open a ring or walk out (rq-v29l.4).
+   * the picture (a mark or name too) was meant for its words as they went, and
+   * the layout lets it do nothing rather than open a ring or walk out
+   * (rq-v29l.4, rq-r6xn).
    */
   const lingering = ref(false)
   let timer: ReturnType<typeof setTimeout> | undefined

@@ -190,7 +190,7 @@ describe('LanternLayout: leaving by pressing a way out in the picture', () => {
     expect(log.closest('.lq-story-wrap')).toBeNull()
   })
 
-  it('goes nowhere from a press on the bare way just as the arrival went by itself, but goes from its name (rq-v29l.4)', async () => {
+  it('goes nowhere from a press on the bare way just as the arrival went by itself, nor from its name the player could see (rq-v29l.4, rq-r6xn)', async () => {
     const store = await cottage()
     for (const command of [
       'use lantern',
@@ -205,13 +205,20 @@ describe('LanternLayout: leaving by pressing a way out in the picture', () => {
     store.releasePanels(store.turns.at(-1)!.id, [...PANEL_GROUPS], false)
     await w.vm.$nextTick()
     const submit = vi.spyOn(store, 'submitCommand')
+    // The names were up while the room's words were told: the player could see them.
+    useAreaNamesStore().showing = true
+    await w.vm.$nextTick()
     // The room's words went by themselves a moment ago: a press was meant for them.
     useArrivalStore().lingering = true
     await press(600, 100)
     expect(submit).not.toHaveBeenCalled()
-    // A name the player can see is pressed on purpose.
-    useAreaNamesStore().showing = true
-    await w.vm.$nextTick()
+    // Even a press landing on a way's name was meant for the card.
+    w.get('[data-area-name="exit-east"]').element.dispatchEvent(
+      new MouseEvent('click', { bubbles: true }),
+    )
+    expect(submit).not.toHaveBeenCalled()
+    // Once the linger is over, the name walks.
+    useArrivalStore().lingering = false
     w.get('[data-area-name="exit-east"]').element.dispatchEvent(
       new MouseEvent('click', { bubbles: true }),
     )
