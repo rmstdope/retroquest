@@ -182,6 +182,16 @@ describe('appliedPatchIds', () => {
     expect(patches.find((p) => p.id === 'locket-appears')?.layer).toBe(1)
   })
 
+  it('lays the forest path stick and snare over the cut vines, the cut snare over the snare', () => {
+    const patches = new Act1().roomPatches('ForestPath')
+    const layerOf = (id: string): number =>
+      patches.find((p) => p.id === id)?.layer ?? 0
+    expect(layerOf('vines-cut')).toBe(0)
+    expect(layerOf('stick-appears')).toBeGreaterThan(layerOf('vines-cut'))
+    expect(layerOf('snare-appears')).toBeGreaterThan(layerOf('vines-cut'))
+    expect(layerOf('snare-cut')).toBeGreaterThan(layerOf('snare-appears'))
+  })
+
   it.each(ACTS.map((make) => [make().name, make] as const))(
     'of %s changes during the golden path and only names declared patches',
     (_name, make) => {
