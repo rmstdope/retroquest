@@ -14,12 +14,12 @@ import { Coin } from '../items/Coin'
 const SHUT =
   'A cluttered shop with the shutters half down. Rope, apples and ' +
   'trinkets crowd the shelves in the gloom. [character_name]Hemlock[/character_name] ' +
-  'stands at the window, watching the lane to the chapel.'
+  'stands at his counter, sorting apples, and keeps glancing at the lane to the chapel.'
 const OPEN =
-  'A cluttered shop. Rope, apples and trinkets crowd the shelves, ' +
+  'A cluttered shop with the shutters up. Rope, apples and trinkets crowd the shelves, ' +
   'and the air smells of fruit, wax and old wood. ' +
   'Outside, the lane runs east to the chapel. [character_name]Hemlock[/character_name] ' +
-  'dusts jars between customers'
+  'sorts apples at his counter between customers'
 const CAT =
   ', and every so often looks down by the counter, where his cat sleeps.'
 
@@ -40,6 +40,17 @@ describe('General Store ways out (rq-un37)', () => {
       east: 'VillageChapel',
       south: 'BlacksmithsForge',
     })
+  })
+})
+
+describe('General Store has one picture (rq-n11w)', () => {
+  it('has no other picture, shut or open', () => {
+    const game = new Game([new Act1()])
+    const store = game.state.allRooms.GeneralStore
+    expect(store.pictureVariants()).toEqual([])
+    expect(store.pictureVariant(game.state)).toBe('')
+    game.state.setStoryFlag(FLAG_PATCHES_RETURNED, true)
+    expect(store.pictureVariant(game.state)).toBe('')
   })
 })
 

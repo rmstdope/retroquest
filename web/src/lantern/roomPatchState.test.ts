@@ -4,6 +4,7 @@
  */
 import { describe, expect, it } from 'vitest'
 import { Act1 } from '@/act1/Act1'
+import { FLAG_PATCHES_STAYED_WITH_GRANDMOTHER } from '@/act1/Act1StoryFlags'
 import { Key } from '@/act1/items/Key'
 import { Lantern } from '@/act1/items/Lantern'
 import { WitheredCarrot } from '@/act1/items/WitheredCarrot'
@@ -44,6 +45,36 @@ describe('appliedPatchIds', () => {
     expect(appliedPatchIds(act, 'AbandonedShed', game.state)).not.toContain(
       'fishing-rod-appears',
     )
+  })
+
+  describe('the store shutters (rq-n11w)', () => {
+    const store = (act: Act1, game: Game): string[] =>
+      appliedPatchIds(act, 'GeneralStore', game.state)
+
+    it('raises the shutters only once the store is open', () => {
+      const act = new Act1()
+      const game = new Game([act])
+      expect(store(act, game)).not.toContain('shutters-raised')
+      game.state.setStoryFlag(FLAG_PATCHES_STAYED_WITH_GRANDMOTHER, true)
+      expect(store(act, game)).toContain('shutters-raised')
+      expect(store(act, game)).not.toContain('patches-appears')
+    })
+  })
+
+  describe('a save made in the shut store (rq-n11w)', () => {
+    it('loads onto the one picture and raises the shutters when the store opens', () => {
+      const act = new Act1()
+      const game = new Game([act])
+      const fresh = new Game([act])
+      expect(fresh.loadSaveData(game.toSaveData())).toContain('loaded')
+      expect(appliedPatchIds(act, 'GeneralStore', fresh.state)).not.toContain(
+        'shutters-raised',
+      )
+      fresh.state.setStoryFlag(FLAG_PATCHES_STAYED_WITH_GRANDMOTHER, true)
+      expect(appliedPatchIds(act, 'GeneralStore', fresh.state)).toContain(
+        'shutters-raised',
+      )
+    })
   })
 
   describe("the shed's inside picture", () => {
