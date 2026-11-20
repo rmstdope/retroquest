@@ -45,7 +45,7 @@ export class Locket extends Item {
         ) +
         '\nHe lays his hand over yours and says the old blessing slowly, ' +
         'so you can follow it.\n' +
-        'You have learned [spell_name]bless[/spell_name].'
+        'You have learned [spell_name]Bless[/spell_name].'
       )
     }
     return (

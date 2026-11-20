@@ -85,11 +85,6 @@
     "text": "The merchant has nothing to sell you."
   },
   {
-    "id": "0087c0e709d3b2",
-    "speaker": "narrator",
-    "text": "You have learned purify."
-  },
-  {
     "id": "008acc1ef42825",
     "speaker": "fisherman",
     "text": "That was your father's rod, or I'm a trout. I can't cast with this arm, but I can show you. Here."
@@ -900,11 +895,6 @@
     "text": "Whatever you dreamed, it's written all over you. Come and tell me, before you go anywhere."
   },
   {
-    "id": "05817e605a230d",
-    "speaker": "narrator",
-    "text": "You read them slowly, and the spell comes with the reading. It does not wake in you the way the others did; this one you read, word by word, off the stone, and it feels like your own. You have learned the grow spell!"
-  },
-  {
     "id": "0586f7fe81dd2b",
     "speaker": "mira",
     "text": "Elior. Come in, mind the sage."
@@ -1028,6 +1018,11 @@
     "id": "0678b14852e2e7",
     "speaker": "narrator",
     "text": "New side quest"
+  },
+  {
+    "id": "0683194767d5a3",
+    "speaker": "narrator",
+    "text": "You have learned Heal, Unlock and Light."
   },
   {
     "id": "068378a4163763",
@@ -1173,11 +1168,6 @@
     "id": "070a45c6e5cc68",
     "speaker": "priest",
     "text": "Not in the chapel, child. That word has never done Willowbrook any good."
-  },
-  {
-    "id": "070a648732a4bd",
-    "speaker": "narrator",
-    "text": "You have learned heal, unlock and light."
   },
   {
     "id": "0716aa64111c1f",
@@ -2420,6 +2410,11 @@
     "text": "In the candlelight it is only a corner: old stone, and a gap low in the wall."
   },
   {
+    "id": "0ebe3ad2346713",
+    "speaker": "narrator",
+    "text": "You have learned Bless."
+  },
+  {
     "id": "0ed700def39039",
     "speaker": "narrator",
     "text": "In the gloom you make out an old workbench and a few interesting things. From the shadows comes a frightened mew, and a small patchwork shape bolts behind the broken crates."
@@ -2618,6 +2613,11 @@
     "id": "1024bdacf51e8e",
     "speaker": "narrator",
     "text": "With a magnet on the line, the rod would catch iron and never a fish. Not yet, then."
+  },
+  {
+    "id": "102977a127dee8",
+    "speaker": "narrator",
+    "text": "You have learned Revive."
   },
   {
     "id": "103167bad018d7",
@@ -3415,6 +3415,11 @@
     "text": "The flower opened for you, and Mira showed you where the door is. Your spells answer now."
   },
   {
+    "id": "14f9b5d09a4b6d",
+    "speaker": "narrator",
+    "text": "You have learned Purify."
+  },
+  {
     "id": "14fc80c2fd796e",
     "speaker": "fisherman",
     "text": "She used to sit right where you're standing, your mother. Feet in the water, even in spring. Said it helped her think."
@@ -4003,11 +4008,6 @@
     "id": "1892f28e8f5562",
     "speaker": "narrator",
     "text": "Your grandmother brushes the flour from her hands."
-  },
-  {
-    "id": "18964e39051980",
-    "speaker": "narrator",
-    "text": "You have learned revive."
   },
   {
     "id": "189694e46d5920",
@@ -4875,11 +4875,6 @@
     "text": "I'd give a good deal for a fresh fish."
   },
   {
-    "id": "1dfd52df92eea4",
-    "speaker": "narrator",
-    "text": "You have learned bless."
-  },
-  {
     "id": "1e0db63760df0d",
     "speaker": "narrator",
     "text": "The rod is too short to reach the water."
@@ -5133,6 +5128,11 @@
     "id": "1f85214b270c2c",
     "speaker": "narrator",
     "text": "Magical protection"
+  },
+  {
+    "id": "1f8885cda11970",
+    "speaker": "narrator",
+    "text": "You read them slowly, and the spell comes with the reading. It does not wake in you the way the others did; this one you read, word by word, off the stone, and it feels like your own. You have learned the Grow spell!"
   },
   {
     "id": "1f8cc97cf69e5e",

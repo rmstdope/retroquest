@@ -298,7 +298,7 @@ export class Grandmother extends Character {
     return (
       'As she speaks, the words your father wrote come back to you, and ' +
       'this time they stay.\n' +
-      'You have learned [spell_name]revive[/spell_name].'
+      'You have learned [spell_name]Revive[/spell_name].'
     )
   }
 
