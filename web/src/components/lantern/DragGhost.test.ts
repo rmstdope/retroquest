@@ -85,6 +85,14 @@ describe('DragGhost', () => {
     expect(w!.get('[data-drag-pill]').attributes('style')).toContain('top:')
   })
 
+  it('turns see-through over a thing in the picture, so its glowing name reads', async () => {
+    show()
+    const copy = (): string[] => w!.get('.lq-drag-copy').classes()
+    expect(copy()).not.toContain('lq-drag-over-target')
+    await w!.setProps({ overTarget: true })
+    expect(copy()).toContain('lq-drag-over-target')
+  })
+
   it('glides to the pocket and says done', async () => {
     vi.useFakeTimers()
     vi.stubGlobal('getComputedStyle', () => ({

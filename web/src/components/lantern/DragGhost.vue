@@ -21,6 +21,8 @@ const props = defineProps<{
   y: number
   /** What the pill says. */
   pill: string
+  /** The pointer is over a thing in the picture, whose name glows beneath the copy. */
+  overTarget?: boolean
   /** The drag is a finger's: the pill rides above it. */
   touch?: boolean
   /** The room's picture in window pixels: the pill stays inside it. */
@@ -106,7 +108,10 @@ watch(
     data-drag-ghost
     aria-hidden="true"
   >
-    <span class="lq-drag-copy" :class="`lq-drag-${hand.kind}`">
+    <span
+      class="lq-drag-copy"
+      :class="[`lq-drag-${hand.kind}`, { 'lq-drag-over-target': overTarget }]"
+    >
       <BeltFace
         :kind="hand.kind"
         :name="hand.name"
@@ -126,7 +131,7 @@ watch(
 <style scoped>
 .lq-drag {
   position: fixed;
-  z-index: 60; /* local */
+  z-index: var(--lq-z-stage-drag);
   width: 0;
   height: 0;
   pointer-events: none;
@@ -153,6 +158,9 @@ watch(
     0 0 0 1px #4a3110,
     0 0 16px rgb(255 190 80 / 0.85),
     0 6px 14px rgb(0 0 0 / 0.5);
+}
+.lq-drag-over-target {
+  opacity: 0.4;
 }
 .lq-drag-item {
   background: #18261b;
