@@ -170,7 +170,7 @@ export class HiddenGlade extends Room {
         '\nYou read them slowly, and the spell comes with the reading. ' +
         'It does not wake in you the way the others did; this one you read, ' +
         'word by word, off the stone, and it feels like your own. ' +
-        'You have learned the [spell_name]grow[/spell_name] spell!'
+        'You have learned the [spell_name]Grow[/spell_name] spell!'
     }
     message +=
       '\nCarved beneath the runes, in a plainer hand, are words you can read:' +

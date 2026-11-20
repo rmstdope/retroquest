@@ -367,8 +367,8 @@ export class Mira extends Character {
         '\nShe sits you down, puts her hands over yours, and shows you ' +
         'three things, slowly: how to mend, how to open, how to make a ' +
         'light. None of it feels new. It feels like remembering.' +
-        '\nYou have learned [spell_name]heal[/spell_name], ' +
-        '[spell_name]unlock[/spell_name] and [spell_name]light[/spell_name].' +
+        '\nYou have learned [spell_name]Heal[/spell_name], ' +
+        '[spell_name]Unlock[/spell_name] and [spell_name]Light[/spell_name].' +
         '\n' +
         speech("It was always in you. I've only shown you where the door is.") +
         '\nHer tone turns practical. ' +

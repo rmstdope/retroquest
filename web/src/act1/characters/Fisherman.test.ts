@@ -203,7 +203,7 @@ describe('Fisherman teaching purify', () => {
 
     expect(response).not.toContain(',[/dialogue]')
     expect(response).toContain(
-      'You have learned [spell_name]purify[/spell_name].',
+      'You have learned [spell_name]Purify[/spell_name].',
     )
   })
 
