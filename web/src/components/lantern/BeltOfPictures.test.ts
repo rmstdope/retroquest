@@ -346,6 +346,7 @@ describe('BeltOfPictures', () => {
         clientX: x,
         clientY: 5,
         button: 0,
+        buttons: type === 'pointerup' ? 0 : 1,
         bubbles: true,
       })
     const lifts = (): unknown[][] => (w!.emitted('lift') ?? []) as unknown[][]
@@ -384,6 +385,51 @@ describe('BeltOfPictures', () => {
       el.dispatchEvent(pointer('pointerdown', 10))
       el.dispatchEvent(pointer('pointerup', 10))
       el.dispatchEvent(pointer('pointermove', 60))
+      expect(lifts()).toHaveLength(0)
+    })
+
+    it('lifts the pressed picture when a quick flick leaves its pocket in one move', async () => {
+      mountBelt()
+      const el = w!.get('[data-belt-pic="item:bread"]').element
+      el.dispatchEvent(pointer('pointerdown', 10))
+      document.body.dispatchEvent(pointer('pointermove', 400))
+      expect(lifts()).toHaveLength(1)
+      expect(lifts()[0][0]).toMatchObject({ key: 'item:bread' })
+    })
+
+    it('never lifts another picture than the pressed one', async () => {
+      mountBelt()
+      const bread = w!.get('[data-belt-pic="item:bread"]').element
+      const other = w!.findAll('[data-belt-pic]')[1].element
+      bread.dispatchEvent(pointer('pointerdown', 10))
+      other.dispatchEvent(pointer('pointermove', 60))
+      expect(lifts()).toHaveLength(1)
+      expect(lifts()[0][0]).toMatchObject({ key: 'item:bread' })
+    })
+
+    it('lifts nothing when the button was let go off the picture', async () => {
+      mountBelt()
+      const el = w!.get('[data-belt-pic="item:bread"]').element
+      el.dispatchEvent(pointer('pointerdown', 10))
+      document.body.dispatchEvent(pointer('pointerup', 400))
+      const other = w!.findAll('[data-belt-pic]')[1].element
+      other.dispatchEvent(pointer('pointermove', 60))
+      expect(lifts()).toHaveLength(0)
+    })
+
+    it('lifts nothing when a move arrives with no button held', async () => {
+      mountBelt()
+      const el = w!.get('[data-belt-pic="item:bread"]').element
+      el.dispatchEvent(pointer('pointerdown', 10))
+      el.dispatchEvent(
+        new PointerEvent('pointermove', {
+          pointerType: 'mouse',
+          clientX: 60,
+          clientY: 5,
+          buttons: 0,
+          bubbles: true,
+        }),
+      )
       expect(lifts()).toHaveLength(0)
     })
 

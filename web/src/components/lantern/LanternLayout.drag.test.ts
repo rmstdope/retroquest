@@ -148,6 +148,7 @@ describe('LanternLayout: dragging from the belt', () => {
       clientX: x,
       clientY: y,
       button: 0,
+      buttons: type === 'pointerup' ? 0 : 1,
       bubbles: true,
     })
   /** Press the bread's pocket and pull it far enough to lift. */
