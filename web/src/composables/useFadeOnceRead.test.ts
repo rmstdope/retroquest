@@ -131,7 +131,7 @@ describe('useFadeOnceRead', () => {
     expect(el.dataset.fade).toBe('away')
   })
 
-  it('starts a long line fading the moment its narration ends, past its minimum reading time', async () => {
+  it('starts a line fading the moment its narration ends when the narration outlasts its minimum reading time', async () => {
     vi.useFakeTimers()
     const text =
       'The corner by the altar is so dark that your eyes slide off it.'

@@ -122,8 +122,12 @@ describe('the narration paper', () => {
       'live',
       'live',
     ])
+    // Short bubbles shown together start fading together, top first, once their minimum is up.
     await vi.advanceTimersByTimeAsync(100)
-    expect(bubbles()[0]?.getAttribute('data-fade')).toBe('away')
+    expect(bubbles().map((b) => b.getAttribute('data-fade'))).toEqual([
+      'away',
+      'away',
+    ])
     const fadeEnds = (el: Element): void => {
       const event = new Event('animationend', { bubbles: true })
       Object.defineProperty(event, 'animationName', { value: 'lq-fade-away' })
@@ -133,8 +137,6 @@ describe('the narration paper', () => {
     await nextTick()
     expect(bubbles()[0]?.getAttribute('data-fade')).toBe('gone')
     expect(hideButton()).not.toBeNull()
-    await vi.advanceTimersByTimeAsync(900)
-    expect(bubbles()[1]?.getAttribute('data-fade')).toBe('away')
     fadeEnds(bubbles()[1]!)
     await nextTick()
     expect(hideButton()).toBeNull()
