@@ -130,7 +130,7 @@ test('a click on a card just as it goes by itself opens no ring on the thing und
   const y = spot.y + spot.height / 2
   // The pointer rests on the card, just off the mark the click will land on.
   await page.mouse.move(x + 3, y + 3)
-  // Whether the card's linger still held when the press went down.
+  // Whether the card's linger still held when the click reached the page (what the game decides on).
   await page.evaluate(() => {
     const root = document.querySelector('#app') as unknown as {
       __vue_app__: {
@@ -144,7 +144,7 @@ test('a click on a card just as it goes by itself opens no ring on the thing und
     const arrival =
       root.__vue_app__.config.globalProperties.$pinia._s.get('arrival')
     document.addEventListener(
-      'pointerdown',
+      'click',
       () => {
         document.body.dataset.lingered = String(!!arrival?.lingering)
       },
