@@ -5,6 +5,8 @@ import {
   clearOfPanels,
   clearOfWords,
   hangName,
+  heldNear,
+  HOLD_REACH,
   keepMarksApart,
   layoutNames,
   markInside,
@@ -12,6 +14,7 @@ import {
   placeNames,
   pressAt,
   visiblePart,
+  type HeldName,
   type HungName,
   type NamedSpot,
   type PlacedName,
@@ -57,6 +60,11 @@ import type { PictureSize, Rect } from '@/lantern/roomMotionScene'
  * `relayout` is any value that changes when something it keeps clear of
  * moves (the words coming or going); the story scrolling its words lays the
  * marks out again too, so a dot kept clear of a card stays clear as it scrolls.
+ *
+ * The one name the `pointer` is on or within about 24px of (and its dot, when the
+ * pointer is on the dot) is held where it stands while the names lay out again, and the
+ * others glide around it (not under Reduce motion); the hold ends when the pointer
+ * moves out of reach or off the picture, the names hide, a ring opens, or the room changes.
  *
  * `spotAt` says which showing mark a screen point rests on, so a mark under a
  * card's faded edge (which takes the pointer) can still be pointed at and pressed.
@@ -311,6 +319,72 @@ function sizeOf(label: string): { w: number; h: number } {
   }
 }
 
+/** A name held where it stands: its corner, and its dot's place when the pointer is on the dot. */
+type Held = HeldName & { dot: { x: number; y: number } | null }
+const held = ref<Held | null>(null)
+/** Whether names and dots glide to a new place (off for a moment when the room changes, so a name does not cross from the last room). */
+const glide = ref(true)
+let glideTimer: ReturnType<typeof setTimeout> | undefined
+
+/** The pointer in the layer's pixels, or null when it is not to hold anything. */
+function pointerInLayer(): { x: number; y: number } | null {
+  if (!props.pointer || props.ringOpen || !props.showing) return null
+  const frame = frameOf()
+  const at = {
+    x: (props.pointer.x - frame.left) / frame.ratio,
+    y: (props.pointer.y - frame.top) / frame.ratio,
+  }
+  const underWords = covers.value.some(
+    (r) => at.x >= r.x && at.x <= r.x + r.w && at.y >= r.y && at.y <= r.y + r.h,
+  )
+  return underWords ? null : at
+}
+
+/** Hold the name the pointer is on or beside (as it stands now), or let go. */
+function refreshHold(): void {
+  const at = pointerInLayer()
+  const spot = at ? heldNear(spots.value, at.x, at.y, HOLD_REACH) : null
+  if (!at || !spot) {
+    held.value = null
+    return
+  }
+  const onDot = Math.hypot(spot.x - at.x, spot.y - at.y) <= DOT_HIT
+  held.value = {
+    areaId: spot.areaId,
+    left: spot.left,
+    top: spot.top,
+    dot: onDot ? { x: spot.x, y: spot.y } : null,
+  }
+}
+watch(
+  () => [props.pointer, props.showing, props.ringOpen] as const,
+  refreshHold,
+)
+// A new room starts fresh, and its names do not glide in from the last room's places. Keyed on what the room holds, not on the array: the list is rebuilt whenever the story refreshes, which is no new room.
+watch(
+  () => props.things.map((thing) => thing.areaId).join('|'),
+  () => {
+    held.value = null
+    glide.value = false
+    clearTimeout(glideTimer)
+    glideTimer = setTimeout(() => (glide.value = true), 50)
+  },
+)
+// Words opening over a resting pointer take the hold away: nothing is held under the words.
+watch(covers, refreshHold)
+onUnmounted(() => clearTimeout(glideTimer))
+
+/** The placed marks, with the held one's dot kept where it stands when the pointer is on it. */
+const placedHeld = computed<PlacedName[]>(() => {
+  const dot = held.value?.dot
+  if (!dot) return placed.value
+  return placed.value.map((entry) =>
+    entry.areaId === held.value?.areaId
+      ? { ...entry, x: dot.x, y: dot.y }
+      : entry,
+  )
+})
+
 /** The words in view while they are open (a name keeps near its dot and its line off them), else nothing. */
 const wordsOpen = computed<Rect[] | undefined>(() =>
   covers.value.length > 0 ? covers.value : undefined,
@@ -319,11 +393,12 @@ const wordsOpen = computed<Rect[] | undefined>(() =>
 /** Every placed mark with its name, or left off when the words are open and no free spot lies near it. */
 const allSpots = computed<NamedSpot[]>(() =>
   layoutNames(
-    placed.value,
+    placedHeld.value,
     sizeOf,
     obstacles.value,
     visible.value,
     wordsOpen.value,
+    held.value ?? undefined,
   ),
 )
 
@@ -423,6 +498,7 @@ const pointed = computed<Hung | null>(() => {
           :class="{
             'lq-area-way': spot.direction,
             'lq-area-live': showing && !spot.direction,
+            'lq-area-glide': glide,
           }"
           :style="{ left: `${spot.x}px`, top: `${spot.y}px` }"
           @click="press(spot, $event)"
@@ -485,6 +561,7 @@ const pointed = computed<Hung | null>(() => {
             'lq-area-way': spot.direction,
             'lq-area-live': showing && !spot.direction,
             'lq-area-faded': pointed?.covers.includes(spot.areaId),
+            'lq-area-glide': glide,
           },
         ]"
         :data-area-name="spot.areaId"
@@ -609,6 +686,13 @@ const pointed = computed<Hung | null>(() => {
 .lq-area-name,
 .lq-area-lines line {
   transition: opacity calc(0.2s * var(--lq-motion)) ease;
+}
+/* A name or dot that is laid out anew glides to its place (none under Reduce motion); one coming or going keeps its fade below. */
+.lq-area-glide {
+  transition:
+    opacity calc(0.2s * var(--lq-motion)) ease,
+    left calc(0.25s * var(--lq-motion)) ease,
+    top calc(0.25s * var(--lq-motion)) ease;
 }
 .lq-area-enter-active {
   transition: opacity calc(0.25s * var(--lq-motion)) ease;

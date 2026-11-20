@@ -1350,6 +1350,167 @@ describe('AreaNames', () => {
   })
 })
 
+describe('AreaNames holds the name under the pointer (rq-74xp)', () => {
+  /** The corner of a thing's name (the layer's pixels). */
+  function nameAt(w: VueWrapper, id: string): { x: number; y: number } {
+    const style = w.get(`[data-area-name="${id}"]`).attributes('style') ?? ''
+    return {
+      x: parseFloat(/left: ([\d.-]+)px/.exec(style)![1]),
+      y: parseFloat(/top: ([\d.-]+)px/.exec(style)![1]),
+    }
+  }
+
+  /** A panel over the picture at (`x`, `y`) of size `w`×`h`, as the layout marks its plate. */
+  function plateAt(x: number, y: number, w: number, h: number): HTMLElement {
+    const plate = document.createElement('div')
+    mark(plate, 'panel')
+    document.querySelector('.lq-stage')!.append(plate)
+    vi.spyOn(plate, 'getBoundingClientRect').mockReturnValue({
+      left: x,
+      top: y,
+      width: w,
+      height: h,
+      right: x + w,
+      bottom: y + h,
+      x,
+      y,
+      toJSON: () => ({}),
+    })
+    return plate
+  }
+
+  /** Mount with names showing, then lay a plate over the bucket's name. */
+  async function mountWithPlateOverBucket(
+    pointerOnBucket: boolean,
+  ): Promise<{ w: VueWrapper; before: { x: number; y: number } }> {
+    const w = mountNames({ showing: true })
+    await settle(w, 'a')
+    const before = nameAt(w, 'bucket')
+    if (pointerOnBucket)
+      await w.setProps({ pointer: { x: before.x + 20, y: before.y + 10 } })
+    plateAt(before.x - 10, before.y - 4, 120, 40)
+    await settle(w, 'b')
+    return { w, before }
+  }
+
+  it('moves a name when something lands on it and the pointer is elsewhere', async () => {
+    const { w, before } = await mountWithPlateOverBucket(false)
+    expect(nameAt(w, 'bucket')).not.toEqual(before)
+  })
+
+  it('leaves the name under the pointer where it was when the names lay out again', async () => {
+    const { w, before } = await mountWithPlateOverBucket(true)
+    expect(nameAt(w, 'bucket')).toEqual(before)
+  })
+
+  it('holds a name the pointer is only just beside', async () => {
+    const w = mountNames({ showing: true })
+    await settle(w, 'a')
+    const before = nameAt(w, 'bucket')
+    await w.setProps({ pointer: { x: before.x - 20, y: before.y + 10 } })
+    plateAt(before.x - 10, before.y - 4, 120, 40)
+    await settle(w, 'b')
+    expect(nameAt(w, 'bucket')).toEqual(before)
+  })
+
+  it('lets the name go to its best spot once the pointer moves out of reach', async () => {
+    const { w, before } = await mountWithPlateOverBucket(true)
+    await w.setProps({ pointer: { x: 10, y: 10 } })
+    await settle(w, 'c')
+    expect(nameAt(w, 'bucket')).not.toEqual(before)
+  })
+
+  it('holds nothing while the pointer is off the picture, or the names are hidden', async () => {
+    const w = mountNames({ showing: true })
+    await settle(w, 'a')
+    const before = nameAt(w, 'bucket')
+    await w.setProps({ pointer: { x: before.x + 20, y: before.y + 10 } })
+    await w.setProps({ pointer: null })
+    plateAt(before.x - 10, before.y - 4, 120, 40)
+    await settle(w, 'b')
+    expect(nameAt(w, 'bucket')).not.toEqual(before)
+  })
+
+  it('drops the hold when the names are hidden', async () => {
+    const w = mountNames({ showing: true })
+    await settle(w, 'a')
+    const before = nameAt(w, 'bucket')
+    await w.setProps({ pointer: { x: before.x + 20, y: before.y + 10 } })
+    await w.setProps({ showing: false })
+    plateAt(before.x - 10, before.y - 4, 120, 40)
+    await w.setProps({ showing: true, pointer: null })
+    await settle(w, 'b')
+    expect(nameAt(w, 'bucket')).not.toEqual(before)
+  })
+
+  it('holds the dot too when the pointer is on the dot', async () => {
+    const w = mountNames({ showing: true })
+    await settle(w, 'a')
+    const dot = markAt(w, 'bucket')!
+    await w.setProps({ pointer: { x: dot.x, y: dot.y } })
+    plateAt(dot.x - 40, dot.y - 40, 80, 80)
+    await settle(w, 'b')
+    expect(markAt(w, 'bucket')).toEqual(dot)
+  })
+
+  it('keeps the hold when the story refreshes the list of things without changing the room', async () => {
+    const { w, before } = await mountWithPlateOverBucket(true)
+    await w.setProps({ things: [...things] })
+    await settle(w, 'c')
+    expect(nameAt(w, 'bucket')).toEqual(before)
+  })
+
+  it('drops the hold when words open over the resting pointer', async () => {
+    const w = mountNames({ showing: true })
+    await settle(w, 'a')
+    const before = nameAt(w, 'bucket')
+    const at = { x: before.x + 20, y: before.y + 10 }
+    await w.setProps({ pointer: at })
+    plateAt(before.x - 10, before.y - 4, 120, 40)
+    const words = document.createElement('div')
+    mark(words, 'words')
+    document.querySelector('.lq-stage')!.append(words)
+    vi.spyOn(words, 'getBoundingClientRect').mockReturnValue({
+      left: before.x - 30,
+      top: before.y - 30,
+      width: 200,
+      height: 100,
+      right: before.x + 170,
+      bottom: before.y + 70,
+      x: before.x - 30,
+      y: before.y - 30,
+      toJSON: () => ({}),
+    })
+    await settle(w, 'b')
+    expect(nameAt(w, 'bucket')).not.toEqual(before)
+  })
+
+  it('starts fresh in a new room, and does not glide across rooms for a moment', async () => {
+    const { w, before } = await mountWithPlateOverBucket(true)
+    await w.setProps({ things: things.filter((t) => t.areaId !== 'villager') })
+    expect(w.get('[data-area-name="bucket"]').classes()).not.toContain(
+      'lq-area-glide',
+    )
+    await vi.advanceTimersByTimeAsync(100)
+    await settle(w, 'c')
+    expect(nameAt(w, 'bucket')).not.toEqual(before)
+    expect(w.get('[data-area-name="bucket"]').classes()).toContain(
+      'lq-area-glide',
+    )
+  })
+
+  it('glides: names and dots carry a transition on their place', async () => {
+    const w = mountNames({ showing: true })
+    await settle(w, 'a')
+    expect(w.get('[data-area-name="bucket"]').classes()).toContain(
+      'lq-area-glide',
+    )
+    expect(w.get('[data-area-mark="bucket"]').classes()).toContain(
+      'lq-area-glide',
+    )
+  })
+})
+
 describe('AreaNames ways out', () => {
   const closedWays: AreaThing[] = [
     {

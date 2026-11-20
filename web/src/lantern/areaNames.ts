@@ -691,6 +691,10 @@ function dotOf(entry: PlacedName): Rect {
  * holds) a moved name must lie within `NAME_REACH` of its mark with its line
  * crossing none of them, and only a wholly free spot is taken: a name that has
  * none is `leftOff` (its mark stays, it has no name or line).
+ *
+ * With `held` (the name the pointer rests on) that name stays exactly at its
+ * given corner, with a line back to its mark when that is away from it, and
+ * every other name is laid out around it.
  */
 export function layoutNames(
   placed: readonly PlacedName[],
@@ -698,11 +702,32 @@ export function layoutNames(
   obstacles: readonly Rect[],
   bounds: Rect,
   words?: readonly Rect[],
+  held?: HeldName,
 ): NamedSpot[] {
   const taken: Rect[] = [...obstacles]
   const dots = placed.map(dotOf)
   const spots: NamedSpot[] = []
+  const heldEntry = held && placed.find((e) => e.areaId === held.areaId)
+  const heldRect: Rect | null =
+    held && heldEntry
+      ? { x: held.left, y: held.top, ...measure(heldEntry.label) }
+      : null
+  if (heldRect) taken.push(heldRect)
   placed.forEach((entry, index) => {
+    if (heldRect && entry === heldEntry) {
+      spots.push({
+        ...entry,
+        left: heldRect.x,
+        top: heldRect.y,
+        width: heldRect.w,
+        height: heldRect.h,
+        leader:
+          distanceTo(entry, heldRect) > GAP + 0.5
+            ? leaderFor(entry, heldRect)
+            : null,
+      })
+      return
+    }
     const { w, h } = measure(entry.label)
     const cost = (rect: Rect): number =>
       taken.filter((t) => overlaps(rect, t)).length +
@@ -778,6 +803,41 @@ export function layoutNames(
     })
   })
   return spots
+}
+
+/** The name the pointer rests on, kept where it was: its thing and its corner. */
+export interface HeldName {
+  areaId: string
+  left: number
+  top: number
+}
+
+/** How far from a name or its dot the pointer may be and still hold it, in pixels. */
+export const HOLD_REACH = 24
+
+/**
+ * The spot whose name or mark (a left-off name has nothing to hold: never) lies within `reach` of the point
+ * (`x`, `y`) and is nearest to it, or null. Two within reach: the nearer wins.
+ */
+export function heldNear(
+  spots: readonly NamedSpot[],
+  x: number,
+  y: number,
+  reach: number = HOLD_REACH,
+): NamedSpot | null {
+  let best: NamedSpot | null = null
+  let bestDistance = Infinity
+  for (const spot of spots) {
+    if (spot.leftOff) continue
+    const dx = Math.max(spot.left - x, 0, x - (spot.left + spot.width))
+    const dy = Math.max(spot.top - y, 0, y - (spot.top + spot.height))
+    const d = Math.min(Math.hypot(spot.x - x, spot.y - y), Math.hypot(dx, dy))
+    if (d <= reach && d < bestDistance) {
+      best = spot
+      bestDistance = d
+    }
+  }
+  return best
 }
 
 /** The offsets to try at distance `d` from the wanted spot: below, either side, above, then the corners. */
