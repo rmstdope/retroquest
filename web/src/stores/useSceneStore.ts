@@ -38,7 +38,8 @@ export type ScenePhase = 'idle' | 'out' | 'dark' | 'in'
  * then holds, telling it, until `endInterlude` and the fade of its words
  * (`INTERLUDE_FADE_MS`), and the new picture then rises slowly
  * (`INTERLUDE_RISE_MS`); its words are let through
- * while what comes after it still waits. Nothing here is saved.
+ * while what comes after it still waits, and `interludeShown` stays true
+ * until they have faded. Nothing here is saved.
  */
 export const useSceneStore = defineStore('scene', () => {
   /** The picture settled on the stage ('' is the paper backdrop); null before the first one after a reset. */
@@ -59,6 +60,8 @@ export const useSceneStore = defineStore('scene', () => {
   let planned: SceneInterlude | null = null
   /** The told interlude's words fading out in the dark; the picture rises after. */
   let fading: ReturnType<typeof setTimeout> | undefined
+  /** Whether an interlude is told in the dark or its words are still fading out there (its hint still on screen). */
+  const interludeShown = ref(false)
   /** How long the rise under way (or the next one) takes, in ms: `INTERLUDE_RISE_MS` after an interlude, else `SCENE_HALF_MS`. */
   const riseMs = ref(SCENE_HALF_MS)
   /** Whether the target has loaded (true), is missing (false), or is not known yet (null). */
@@ -146,6 +149,7 @@ export const useSceneStore = defineStore('scene', () => {
     if (planned && turn.value !== null) {
       phase.value = 'dark'
       interlude.value = { turn: turn.value, ...planned }
+      interludeShown.value = true
       riseMs.value = INTERLUDE_RISE_MS
       // The interlude's own words come now; what is after it waits for the picture.
       from.value = planned.unit + 1
@@ -180,6 +184,7 @@ export const useSceneStore = defineStore('scene', () => {
   function stopFading(): void {
     clearTimeout(fading)
     fading = undefined
+    interludeShown.value = false
   }
 
   /** The interlude is told: its words fade out in the dark, then the new picture rises (once it has loaded, or is given up). */
@@ -188,6 +193,7 @@ export const useSceneStore = defineStore('scene', () => {
     interlude.value = null
     fading = setTimeout(() => {
       fading = undefined
+      interludeShown.value = false
       if (ready.value !== null) rise()
     }, INTERLUDE_FADE_MS)
   }
@@ -260,6 +266,7 @@ export const useSceneStore = defineStore('scene', () => {
     riseMs,
     darkTurn,
     interlude,
+    interludeShown,
     settled,
     holds,
     wait,
