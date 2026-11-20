@@ -3,10 +3,21 @@ import type { Exits, GameState } from '@/engine'
 import { DreamVoice } from '../characters/DreamVoice'
 import { Scenery } from '../items/Scenery'
 
+const DESCRIPTION =
+  'It is raining hard on a village street. Thunder breaks so close ' +
+  'that the shutters shake with it. Shadows drift through the rain ' +
+  'like smoke. In the street a man in a hooded cloak holds a child ' +
+  'against his shoulder. His hood hides his face. ' +
+  'Somewhere a slow tune climbs three notes and settles home again. ' +
+  'Behind him a tall figure stands among the shadows. It has no face ' +
+  'you can find. It is too far away to reach, and too close to be ' +
+  'only a dream. It is whispering, at the very edge of hearing, and ' +
+  'what it whispers is your name.'
+
 /**
  * The Dream: where the game opens. One room, a rainy village street with a
- * storm in it, the cradle tune, a hooded man holding a child, and a tall figure whispering
- * Elior's name. The shadows, the man and the child can be examined, but
+ * storm in it, the cradle tune, a hooded man holding a child, and a tall
+ * figure whispering Elior's name. The shadows, the man and the child can be examined, but
  * nothing can be carried out of it and no way leads anywhere;
  * answering the voice (talking to it, or saying anything to it) ends it,
  * and Elior wakes in his cottage. Asking for a hint here points at the
@@ -16,20 +27,16 @@ export class TheDream extends Room {
   constructor() {
     super({
       name: 'The Dream',
-      description:
-        'It is raining hard on a village street. Thunder breaks so close ' +
-        'that the shutters shake with it. Shadows drift through the rain ' +
-        'like smoke. In the street a man in a hooded cloak holds a child ' +
-        'against his shoulder. His hood hides his face. ' +
-        'Somewhere a slow tune climbs three notes and settles home again. ' +
-        'Behind him a tall figure stands among the shadows. It has no face ' +
-        'you can find. It is too far away to reach, and too close to be ' +
-        'only a dream. It is whispering, at the very edge of hearing, and ' +
-        'what it whispers is your name.',
+      description: DESCRIPTION,
       items: Scenery.forRoom('TheDream'),
       characters: [new DreamVoice()],
       exits: {},
     })
+  }
+
+  /** The dream in the current words, whatever an older save kept. */
+  override descriptionFor(_gameState: GameState): string {
+    return DESCRIPTION
   }
 
   /** A dream has no ways out of it. */

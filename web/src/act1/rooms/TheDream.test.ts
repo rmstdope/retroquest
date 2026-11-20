@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { findMarkupProblems, Game } from '@/engine'
+import { findMarkupProblems, Game, GameController } from '@/engine'
 import { Act1 } from '../Act1'
 import { TheDream } from './TheDream'
 import { DreamVoice } from '../characters/DreamVoice'
@@ -154,13 +154,28 @@ describe('The Dream, where Act I opens', () => {
     expect(lit).toContain('journal')
   })
 
-  it('wakes to a sunny morning in the curtains', () => {
+  it('wakes to a bright morning', () => {
     const game = newGame()
     const answer = executeCommands(game, ['talk to voice'])
     expect(answer).toContain(
-      'The storm is gone and there is morning sun in the curtains.',
+      'The storm is gone and it is bright morning.',
     )
     expect(answer).not.toContain('grey')
+  })
+
+  it('shows the new words in a save made inside the dream with the old ones', () => {
+    const game = newGame()
+    const old = game
+      .toSaveData()
+      .replace(
+        'It is raining hard on a village street.',
+        'It is dark, and it is raining hard.',
+      )
+    const fresh = new Game([new Act1()])
+    fresh.loadSaveData(old)
+    expect(new GameController(fresh).getRoomDescription()).toContain(
+      'It is raining hard on a village street.',
+    )
   })
 
   it('survives a save and load made inside the dream', () => {

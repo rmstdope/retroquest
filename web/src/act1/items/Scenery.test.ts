@@ -7,6 +7,7 @@ import { SharpKnife } from './SharpKnife'
 import { Candle } from './Candle'
 import { Matches } from './Matches'
 import { Mechanism } from './Mechanism'
+import { Rope } from './Rope'
 import { Scenery } from './Scenery'
 import { Vines } from './Vines'
 import { SCENERY_BY_ROOM } from './sceneryLines'
@@ -290,6 +291,12 @@ describe('Scenery that agrees with its room', () => {
         'The shaft from the sails turns above them and never meets them. ' +
         'The mill is quiet now.',
     )
+  })
+
+  it('forge: the tools do not answer to the name of a rope lying there', () => {
+    const game = gameIn('BlacksmithsForge')
+    game.state.currentRoom.addItem(new Rope())
+    expect(say(game, 'examine rope')).not.toContain('Tongs')
   })
 
   it('dream: the man, the child and the shadows each read as themselves', () => {

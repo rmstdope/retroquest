@@ -356,7 +356,7 @@ export const SCENERY_BY_ROOM: Record<string, SceneryDef[]> = {
     plain(
       'BlacksmithsForge.hinges',
       'tools',
-      ['tongs', 'rope', 'walls'],
+      ['tongs', 'walls'],
       'Tongs and a coil of rope hang on the walls, ' +
         "each where Borin's hand expects it to be.",
     ),
