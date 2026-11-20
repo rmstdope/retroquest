@@ -19,7 +19,7 @@
  */
 import type { ImagePatch } from '@/engine'
 
-/** A patch as Content Studio's list holds it: its id, title, words and area, without the rule. */
+/** A patch as Content Studio's list holds it: its id, title, words, area and `over`, without the rule. */
 export type ListedPatch = Omit<ImagePatch, 'when' | 'layer'>
 
 /** The Content Studio list form of `patch`. */
@@ -29,5 +29,6 @@ export function listedPatch(patch: ImagePatch): ListedPatch {
     title: patch.title,
     text: patch.text,
     ...(patch.area !== undefined ? { area: patch.area } : {}),
+    ...(patch.over !== undefined ? { over: patch.over } : {}),
   }
 }

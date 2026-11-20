@@ -371,19 +371,22 @@
         "id": "stick-appears",
         "title": "Stick appears",
         "text": "Add the stick to the picture.",
-        "area": "stick"
+        "area": "stick",
+        "over": "vines-cut"
       },
       {
         "id": "snare-appears",
         "title": "Snare appears",
         "text": "Add the snare in the alcove, with a fox kit caught in it.",
-        "area": "snare"
+        "area": "snare",
+        "over": "vines-cut"
       },
       {
         "id": "snare-cut",
         "title": "Snare cut",
         "text": "Show the snare cut and empty, the fox kit gone.",
-        "area": "snare"
+        "area": "snare",
+        "over": "snare-appears"
       },
       {
         "id": "wild-berries-appears",
