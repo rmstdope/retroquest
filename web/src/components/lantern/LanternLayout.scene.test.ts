@@ -732,6 +732,28 @@ describe('LanternLayout: change of scene', () => {
     await vi.runAllTimersAsync()
   })
 
+  it('narrated, the waking in the dark shows only its own skip hint, not the story hint as well (rq-v29l.10)', async () => {
+    const game = await dream()
+    const scene = useSceneStore()
+    const narration = useNarrationStore()
+    const voices = recordEverything()
+    const turn = await answerVoice(game)
+    for (let i = 0; i < 10 && !narration.atSceneChange(turn.id); i++) {
+      voices.at(-1)?.onended?.()
+      await vi.advanceTimersByTimeAsync(400)
+    }
+    await vi.advanceTimersByTimeAsync(3 * SCENE_HALF_MS)
+    await w.vm.$nextTick()
+    expect(scene.interlude?.unit).toBe(turn.waking)
+    expect(narration.hintVisible).toBe(true)
+    expect(w.get('[data-testid="scene-interlude"]').text()).toContain(
+      'Click to continue · Hold to skip',
+    )
+    expect(w.find('.lq-narration-hint').exists()).toBe(false)
+    narration.skipAll()
+    await vi.runAllTimersAsync()
+  })
+
   it('narrated, a waking not recorded yet stays its time to read in the dark, then the cottage rises', async () => {
     const game = await dream()
     const scene = useSceneStore()
