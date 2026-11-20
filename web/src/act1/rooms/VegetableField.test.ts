@@ -15,6 +15,20 @@ describe('Vegetable Field room card', () => {
   })
 })
 
+describe('Vegetable Field weather', () => {
+  const STORM_SKY =
+    "Rows of withered crops stretch beneath the last grey of the night's storm."
+
+  it('is grey from the storm while withered, with and without the hoe', () => {
+    const game = new Game([new Act1()])
+    game.state.currentRoom = game.state.allRooms.VegetableField
+    const controller = new GameController(game)
+    expect(controller.getRoomDescription()).toContain(STORM_SKY)
+    game.commandParser.parse('take rusty hoe')
+    expect(controller.getRoomDescription()).toContain(STORM_SKY)
+  })
+})
+
 describe('Vegetable Field sound', () => {
   it('sounds withered until watered, then green', () => {
     const game = new Game([new Act1()])

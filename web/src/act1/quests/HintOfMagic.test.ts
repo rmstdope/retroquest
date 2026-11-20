@@ -16,10 +16,10 @@ const ENTRY_GRANDMOTHER =
   'the tune from your dream. She will want to hear about it.'
 
 const DARK_CORNER =
-  'The curtains are still drawn on a grey morning, and the corner by your ' +
+  'The curtains are still drawn on a bright morning, and the corner by your ' +
   'bed is too dark to see into.'
-const GREY_MORNING =
-  'Grey morning comes through the lace curtains onto shelves lined with ' +
+const SUNNY_MORNING =
+  'Morning sun comes through the lace curtains onto shelves lined with ' +
   'trinkets and memories.'
 
 const LANTERN_NUDGE =
@@ -136,7 +136,7 @@ describe('The opening leads lantern, journal, Grandmother', () => {
         JOURNAL_NUDGE,
     )
     expect(again).not.toContain(LANTERN_NUDGE)
-    expect(cottageText(game)).toContain(GREY_MORNING)
+    expect(cottageText(game)).toContain(SUNNY_MORNING)
     expect(cottageText(game)).not.toContain(DARK_CORNER)
   })
 
@@ -144,7 +144,7 @@ describe('The opening leads lantern, journal, Grandmother', () => {
     const game = wokenGame()
     executeCommands(game, ['use lantern', 'take lantern'])
 
-    expect(cottageText(game)).toContain(GREY_MORNING)
+    expect(cottageText(game)).toContain(SUNNY_MORNING)
   })
 
   it('journal read: the log points at Grandmother, who tells the dream', () => {
@@ -171,7 +171,7 @@ describe('The opening after a load', () => {
     const fresh = reloaded(game)
 
     expect(hintLine(fresh)).toBe(ENTRY_JOURNAL)
-    expect(cottageText(fresh)).toContain(GREY_MORNING)
+    expect(cottageText(fresh)).toContain(SUNNY_MORNING)
   })
 
   it('loads an older save, lantern lit before the flag, in that state', () => {
@@ -183,7 +183,7 @@ describe('The opening after a load', () => {
     )
 
     expect(hintLine(fresh)).toBe(ENTRY_JOURNAL)
-    expect(cottageText(fresh)).toContain(GREY_MORNING)
+    expect(cottageText(fresh)).toContain(SUNNY_MORNING)
     const again = executeCommands(fresh, [
       'talk to grandmother',
       'talk to grandmother',

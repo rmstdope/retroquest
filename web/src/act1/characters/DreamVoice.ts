@@ -71,8 +71,8 @@ export class DreamVoice extends Character {
       dialogue(this.name, `…let them rest… ${characterName('Elior')}.`) +
       '\n\n' +
       'The dark lets go of you, and you wake in your own bed. ' +
-      'The storm is gone and there is grey ' +
-      'morning in the curtains. Your heart is going hard. The tune is ' +
+      'The storm is gone and there is ' +
+      'morning sun in the curtains. Your heart is going hard. The tune is ' +
       'still going too, thin and near: someone is humming it, out by the ' +
       'hearth. Three words are already slipping, and you write them down ' +
       'before they can go.\n\n' +
