@@ -194,6 +194,27 @@ describe('useRoomTitleStore', () => {
     expect(title.name).toBe('Village Square')
   })
 
+  it('leaves a load to the arrival it tells the room with, as a first visit (rq-fl1v)', async () => {
+    await enter('Village Square', moveTurn(2, false))
+    title.settle()
+    game.loadNumber++
+    await enter('Village Square', moveTurn(3, true))
+    useArrivalStore().show(
+      3,
+      [
+        {
+          kind: 'description',
+          lines: [{ unit: 0, markup: 'A square.' }],
+          voiced: false,
+          room: 'Village Square',
+        },
+      ],
+      false,
+    )
+    await nextTick()
+    expect(title.name).toBeNull()
+  })
+
   it('greets a room walked back into before the change of scene to another was up', async () => {
     await enter('Village Square', moveTurn(2, false))
     title.settle()

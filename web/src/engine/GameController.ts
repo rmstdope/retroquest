@@ -187,8 +187,12 @@ export interface RoomDescription {
   firstVisit: boolean
 }
 
-/** The description of a room shown again after a load: an arrival, not a first visit. */
-export const LOADED_ROOM: RoomDescription = { moved: true, firstVisit: false }
+/**
+ * The description of a room told again after a load: the UI tells it as it
+ * tells a first visit (the card in the middle of the picture), though the
+ * engine's own record of visited rooms is untouched.
+ */
+export const LOADED_ROOM: RoomDescription = { moved: true, firstVisit: true }
 
 export class GameController {
   /** How the last turn described the room, or null when it did not. */

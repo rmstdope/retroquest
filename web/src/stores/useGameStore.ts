@@ -1768,9 +1768,9 @@ export const useGameStore = defineStore('game', () => {
    * shows the engine's line under the command, and the game, the room and the
    * turn stay as they were. A loaded game starts afresh (hold, act, music,
    * dots and panels) with a notice, and the story is the save's story so far,
-   * as it stood when the game was saved (`restoreStory`). A save made before
-   * the story was kept shows only the room, under the command when one was
-   * typed. It plays on in the loaded act, so an act-complete page still held
+   * as it stood when the game was saved (`restoreStory`), followed by the
+   * room told as a first visit is (rq-fl1v). A save made before the story was
+   * kept has only that, under the command when one was typed. It plays on in the loaded act, so an act-complete page still held
    * for narration is dropped.
    */
   function afterLoad(
@@ -1797,11 +1797,15 @@ export const useGameStore = defineStore('game', () => {
     clearNewDots()
     actEndPending.value = false
     const story = b.takeLoadedStory()
-    if (isStory(story)) restoreStory(b, story)
-    else {
+    // The room is told as a first visit is, narrated, whether the save kept
+    // its story or not; the typed word stays on the turn (the narration card's command line).
+    const told = { chips: false, description: LOADED_ROOM, narrate: true }
+    if (isStory(story)) {
+      restoreStory(b, story)
+      showOutput(null, '', told)
+    } else {
       turns.value = []
-      // The typed word stays on the turn (the narration card's command line).
-      showOutput(command, '', { chips: false, description: LOADED_ROOM })
+      showOutput(command, '', told)
     }
     refreshPanels()
   }

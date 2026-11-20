@@ -24,6 +24,7 @@ import { narrationWords } from '@/lantern/narrationManifest'
 import { arrivalBlocks } from '@/lantern/narrationScript'
 import { SCENE_PAUSE_MS } from '@/lantern/narrationUnits'
 import { ARRIVAL_CLEAR_AFTER_MS } from '@/lantern/stageArrival'
+import { PASSAGE_HALF_MS } from '@/stores/usePassageStore'
 import { startedHoldStore } from '@/testing/holdGame'
 
 const GARDEN = arrivalBlocks('Garden', 'A green garden.')
@@ -172,6 +173,48 @@ describe('LanternLayout: the arrival on the picture', () => {
     // Both sides are clear, so there is nothing to hide or show.
     expect(w.find('.lq-paper-tab').exists()).toBe(false)
     expect(w.find('.lq-words-hide').exists()).toBe(false)
+  })
+
+  /** A storage that keeps the saves for the test, so a game can be saved and loaded. */
+  function stubStorage(): void {
+    const stored: Record<string, string> = {}
+    vi.stubGlobal('localStorage', {
+      getItem: (key: string): string | null => stored[key] ?? null,
+      setItem: (key: string, value: string): void => {
+        stored[key] = value
+      },
+      removeItem: (key: string): void => {
+        delete stored[key]
+      },
+    })
+  }
+
+  it('tells the room on the picture after a load, as a first visit, even in the room the player was in (rq-fl1v)', async () => {
+    stubStorage()
+    const w = await ready()
+    await run('go north')
+    await hold()
+    expect(card(w)).toBe('')
+    const game = useGameStore(pinia)
+    expect(game.saveGame()).toBe(true)
+    game.loadGame()
+    await vi.advanceTimersByTimeAsync(PASSAGE_HALF_MS * 2 + 2000)
+    expect(card(w)).toContain('Garden')
+    expect(card(w)).toContain('A green garden.')
+    expect(card(w)).toContain('Click to continue · Hold to skip')
+    await hold()
+    expect(card(w)).toBe('')
+  })
+
+  it('reads the loaded room for its reading time when nobody narrates it (rq-fl1v)', async () => {
+    stubStorage()
+    const w = await ready(true, false)
+    const game = useGameStore(pinia)
+    expect(game.saveGame()).toBe(true)
+    game.loadGame()
+    await vi.advanceTimersByTimeAsync(PASSAGE_HALF_MS * 2 + 2000)
+    expect(card(w)).not.toBe('')
+    expect(w.find('[data-testid="arrival-bar"]').exists()).toBe(true)
   })
 
   it('shows only its own skip hint while it is told, not the story hint as well (rq-v29l.10)', async () => {
@@ -782,7 +825,9 @@ describe('LanternLayout: the arrival on the picture', () => {
       const audio = await narratedSpellTurn()
       game.loadGame()
       await vi.advanceTimersByTimeAsync(20000)
-      expect(game.turns.every((turn) => turn.restored)).toBe(true)
+      // Only the room told for the return is new; the story and its news are the save's.
+      expect(game.turns.slice(0, -1).every((turn) => turn.restored)).toBe(true)
+      expect(game.turns.at(-1)?.spells).toBeUndefined()
       expect(audio.playNewSpell).not.toHaveBeenCalled()
       expect(audio.playQuestComplete).not.toHaveBeenCalled()
     })

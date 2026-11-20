@@ -41,6 +41,13 @@ test('Continue opens the newest save with no chapter page', async ({
 
   await expect(page.locator('.lq-title-page')).toHaveCount(0)
   await expect(page.locator('.lq-chapter-button')).toHaveCount(0)
+  // The room is told as a first visit is (rq-fl1v): heading, name and description.
+  const told = page.locator('.lq-arrival-card')
+  await expect(told).toBeVisible()
+  await expect(told).toContainText('You are in')
+  await expect(told).toContainText('Click to continue · Hold to skip')
+  await told.click()
+  await expect(told).toHaveCount(0)
   await expect(page.locator('.lq-room-name')).toBeVisible()
 })
 

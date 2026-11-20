@@ -10,12 +10,12 @@ export const ROOM_TITLE_MS = 3600
 
 /**
  * The room's title over the middle of the picture: the player walks into a
- * room, or a game is loaded, and the room's name is told there ("You are in")
- * before it settles as the small name in the corner (`RoomPlate`). A room is
- * greeted once per arrival, when the stage shows (`staged`), no chapter page
- * covers it and its picture is up (after a change of scene). A first visit is
- * not greeted here: its arrival is told on the picture with the name as its
- * heading. Nor is a turn whose news (a learned spell, quest news) is told in
+ * room and the room's name is told there ("You are in") before it settles as
+ * the small name in the corner (`RoomPlate`). A room is greeted once per
+ * arrival, when the stage shows (`staged`), no chapter page covers it and its
+ * picture is up (after a change of scene). A first visit is not greeted here:
+ * its arrival is told on the picture with the name as its heading. Nor is a
+ * loaded game (rq-fl1v): its room is told as a first visit is. Nor is a turn whose news (a learned spell, quest news) is told in
  * the middle of the picture: the title would show through the news card, so
  * the name goes straight to the corner. The name switches as the narrator
  * reaches the room (the game store's held `roomName`), so the title follows
