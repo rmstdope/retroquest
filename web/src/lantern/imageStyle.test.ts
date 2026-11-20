@@ -66,23 +66,21 @@ describe('the style in content-studio/images/edits.json', () => {
     expect(style.look).not.toMatch(/warm/i)
   })
 
-  it('describes a handmade, pre-industrial world in the look', () => {
+  it('says only what is absent about modern things, naming no object of its own', () => {
     expect(style.look).toContain(
-      'a pre-industrial world where everything is handmade: ' +
-        'light comes only from the sun, fire, candles and oil lamps; ' +
-        'people wear wool, linen and leather; ' +
-        'roofs are thatch, slate or timber',
+      'hand-painted, a simple pre-industrial handmade world ' +
+        'with no electric light, no poles or wires, no aerials, ' +
+        'no modern clothing, no logos, ' +
+        'and no writing or symbols unless the scene asks for them, ' +
+        'one single full-bleed image',
     )
+    // Whatever the shared look names is painted in every room.
+    expect(style.look).not.toMatch(/candle|lamp|wool|linen|leather|thatch/i)
   })
 
-  it('names the modern things to keep out, and any lettering nobody asked for', () => {
+  it('keeps the words to keep out as they were', () => {
     expect(style.keepOut).toBe(
-      'photorealism, 3d render, anime, neon colours, modern objects, ' +
-        'electric lights, light switches, wall sockets, lamp posts, ' +
-        'telegraph or power poles, wires, TV aerials, satellite dishes, ' +
-        'modern clothing, zips, logos, printed shirts, baseball caps, ' +
-        'rubber boots, letters, words, writing or symbols of any kind ' +
-        'unless the description asks for them',
+      'photorealism, 3d render, anime, neon colours, modern objects',
     )
   })
 
@@ -140,7 +138,7 @@ describe('the Act 1 pictures that showed modern objects or stray lettering', () 
     expect(images['act1-blacksmiths-forge'].text).toBe(
       'A smoky forge. Coals glow in the hearth. ' +
         'The blacksmith stands next to an anvil with a hammer in his hand. ' +
-        'The blacksmith wears a rough undyed linen shirt, sleeves rolled past the elbow, under a scorched leather apron; ' +
+        'He wears a rough undyed linen shirt, sleeves rolled past the elbow, under a scorched leather apron; ' +
         'forearms like fence posts, old burns on his knuckles. ' +
         'There is a small horseshoe on the wall.',
     )

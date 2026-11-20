@@ -1,7 +1,7 @@
 {
   "style": {
-    "look": "Painted storybook illustration of a place in a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft light and long soft shadows, hand-painted, a pre-industrial world where everything is handmade: light comes only from the sun, fire, candles and oil lamps; people wear wool, linen and leather; roofs are thatch, slate or timber, one single full-bleed image with no fold, frame or border, no text, lettering, signature or watermark anywhere, wide landscape composition",
-    "keepOut": "photorealism, 3d render, anime, neon colours, modern objects, electric lights, light switches, wall sockets, lamp posts, telegraph or power poles, wires, TV aerials, satellite dishes, modern clothing, zips, logos, printed shirts, baseball caps, rubber boots, letters, words, writing or symbols of any kind unless the description asks for them",
+    "look": "Painted storybook illustration of a place in a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft light and long soft shadows, hand-painted, a simple pre-industrial handmade world with no electric light, no poles or wires, no aerials, no modern clothing, no logos, and no writing or symbols unless the scene asks for them, one single full-bleed image with no fold, frame or border, no text, lettering, signature or watermark anywhere, wide landscape composition",
+    "keepOut": "photorealism, 3d render, anime, neon colours, modern objects",
     "parts": {
       "act1": "Warm late-day light, earthy greens and straw golds, homely and lived-in, in a fantasy setting",
       "act2": "Clear daylight and richer colour, deep greens, warm reds and creams, a faint grey haze at the edges, in a fantasy setting",
@@ -203,7 +203,7 @@
       }
     },
     "act1-blacksmiths-forge": {
-      "text": "A smoky forge. Coals glow in the hearth. The blacksmith stands next to an anvil with a hammer in his hand. The blacksmith wears a rough undyed linen shirt, sleeves rolled past the elbow, under a scorched leather apron; forearms like fence posts, old burns on his knuckles. There is a small horseshoe on the wall.",
+      "text": "A smoky forge. Coals glow in the hearth. The blacksmith stands next to an anvil with a hammer in his hand. He wears a rough undyed linen shirt, sleeves rolled past the elbow, under a scorched leather apron; forearms like fence posts, old burns on his knuckles. There is a small horseshoe on the wall.",
       "gameWas": "A hot, smoky forge. Coals glow in the hearth and the anvil rings. Hinges, ploughshares and horseshoes hang from the walls, waiting to be mended or fetched, and Borin wipes his brow without putting down the hammer.",
       "takeAreas": {
         "95": {
