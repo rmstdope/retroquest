@@ -613,8 +613,12 @@
       "gameWas": "A winding path snakes into the heart of the woods, dappled sunlight flickering through the canopy above. Beside the path, thick, thorny vines block a small alcove. The air is alive with the scent of pine and wildflowers, and the ground is soft with moss and fallen leaves. Birds flit between branches, and the occasional snap of a twig hints at unseen creatures nearby.",
       "patches": {
         "snare-appears": {
-          "text": "Add the snare trap to the picture.",
-          "gameWas": "Add the snare to the picture."
+          "text": "Add trap in the alcove, with a fox kit caught in it.",
+          "gameWas": "Add the snare in the alcove, with a fox kit caught in it."
+        },
+        "snare-cut": {
+          "text": "Show the trap cut and empty, the fox kit gone.",
+          "gameWas": "Show the snare cut and empty, the fox kit gone."
         }
       },
       "takeAreas": {
