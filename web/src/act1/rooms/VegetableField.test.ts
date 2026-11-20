@@ -11,6 +11,7 @@ describe('Vegetable Field room card', () => {
     game.state.setStoryFlag(FLAG_VEGETABLE_FIELD_WATERED, true)
     const text = new GameController(game).getRoomDescription()
     expect(text).toContain('Rows of green crops')
+    expect(text).toContain('beneath an open sky')
     expect(text).not.toContain('withered')
   })
 })
