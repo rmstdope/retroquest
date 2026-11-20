@@ -34,6 +34,13 @@ export interface ImagePatch {
   area?: string
   /** When the patch applies; every patch says, so none exists without its rule. */
   when: PatchWhen
+  /**
+   * The id of another patch of the same image that this one is painted on top
+   * of, so Content Studio paints it on that patch's result. It is listed to the
+   * studio; give it a higher `layer` than that patch so the game lays them in
+   * the same order. Absent for a patch painted straight on the image.
+   */
+  over?: string
   /** Where the patch lies when several apply: a higher layer over a lower, equal layers in no order. Default 0. */
   layer?: number
 }

@@ -14,6 +14,7 @@ import { Game, type Act } from '@/engine'
 import { executeCommands } from '@/testing/gameHelpers'
 import type { ImagePatch } from '@/engine'
 import { appliedPatchIds, layeredIds } from './roomPatchState'
+import { listedPatch } from './roomPatches'
 
 const ACTS: Array<() => Act> = [
   () => new Act1(),
@@ -181,6 +182,39 @@ describe('appliedPatchIds', () => {
     ])
     expect(patches.find((p) => p.id === 'locket-appears')?.layer).toBe(1)
   })
+
+  it('lists the forest path stick and snare as lying over the cut vines, the cut snare over the snare', () => {
+    const patches = new Act1().roomPatches('ForestPath')
+    const overOf = (id: string): string | undefined =>
+      patches.find((p) => p.id === id)?.over
+    expect(overOf('vines-cut')).toBeUndefined()
+    expect(overOf('stick-appears')).toBe('vines-cut')
+    expect(overOf('snare-appears')).toBe('vines-cut')
+    expect(overOf('snare-cut')).toBe('snare-appears')
+    const stick = patches.find((p) => p.id === 'stick-appears')
+    expect(stick && listedPatch(stick).over).toBe('vines-cut')
+  })
+
+  it.each(ACTS.map((make) => [make().name, make] as const))(
+    'of %s lays every patch that lies over another on a higher layer',
+    (_name, make) => {
+      const act = make()
+      for (const room of Object.keys(act.rooms)) {
+        const patches = act.roomPatches(room)
+        for (const patch of patches) {
+          if (patch.over === undefined) continue
+          const under = patches.find((p) => p.id === patch.over)
+          expect(
+            under,
+            `${room}/${patch.id} lies over a patch of the room`,
+          ).toBeDefined()
+          expect(patch.layer ?? 0, `${room}/${patch.id}`).toBeGreaterThan(
+            under?.layer ?? 0,
+          )
+        }
+      }
+    },
+  )
 
   it.each(ACTS.map((make) => [make().name, make] as const))(
     'of %s changes during the golden path and only names declared patches',

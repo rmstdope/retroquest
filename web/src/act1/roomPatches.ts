@@ -199,6 +199,8 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       title: 'Stick appears',
       text: 'Add the stick to the picture.',
       area: 'stick',
+      over: 'vines-cut',
+      layer: 1,
       when: 'present',
     },
     {
@@ -206,6 +208,8 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       title: 'Snare appears',
       text: 'Add the snare in the alcove, with a fox kit caught in it.',
       area: 'snare',
+      over: 'vines-cut',
+      layer: 1,
       when: 'present',
     },
     {
@@ -213,7 +217,8 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       title: 'Snare cut',
       text: 'Show the snare cut and empty, the fox kit gone.',
       area: 'snare',
-      layer: 1,
+      over: 'snare-appears',
+      layer: 2,
       when: (c) => {
         const snare = c.things.get('snare')
         return snare instanceof Snare && snare.freed
