@@ -215,7 +215,7 @@ watch(
   },
 )
 
-/** A pointer went down on a picture: a finger held there for a moment shows its caption. */
+/** A pointer went down on a picture: a finger held there for a moment shows its caption; a left mouse or pen press starts a pull, watched on the document until the button is let go. */
 function onPicDown(picture: BeltPicture, event: PointerEvent): void {
   const key = picture.key
   swallowClick = false
