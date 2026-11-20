@@ -95,8 +95,8 @@ const PLACES: [name: string, hint: string][] = [
 
 /**
  * Side quest: visit every room of Willowbrook. Its log is a checklist of the
- * places Elior knows, and its hint names the known, unvisited one nearest to Elior; both are read
- * from `visitedRooms`, so a loaded save shows the same.
+ * places Elior knows, and its hint names the known, unvisited one nearest to
+ * Elior; both are read from `visitedRooms`, so a loaded save shows the same.
  */
 export class KnowYourVillageQuest extends Quest {
   constructor() {
