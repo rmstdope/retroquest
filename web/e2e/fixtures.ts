@@ -16,6 +16,9 @@
  * own throttling), to bring out on a laptop the races a busy CI runner shows:
  * `E2E_CPU_THROTTLE=10 npx playwright test <spec> --repeat-each 10`.
  */
+import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { test as base, type Page } from '@playwright/test'
 
 export * from '@playwright/test'
@@ -48,6 +51,7 @@ export const test = base.extend<{
       await page.route('**/audio/narration/*/manifest.json', (route) =>
         route.fulfill({ json: {} }),
       )
+    else await voiceUnrecordedLines(page)
     const throttle = Number(process.env.E2E_CPU_THROTTLE)
     if (throttle > 1) {
       const cdp = await page.context().newCDPSession(page)
@@ -56,6 +60,66 @@ export const test = base.extend<{
     await use(page)
   },
 })
+
+/** The lines of Act 1 whose wording changed (rq-6is9) and so have no recording yet; the specs that read them aloud still need a voice there. */
+const UNRECORDED_ACT1_LINES: readonly string[] = [
+  '0cae7f44582e81',
+  '07ccfd90396c3a',
+  '0dd4a44e45486f',
+  '17a70ff3dd4d25',
+  '1f0942cb88249f',
+  '017329cff1ecf6',
+  '16f455f6e3c305',
+]
+
+/** The `web/` folder, found from this file so the helpers below work wherever Playwright is started. */
+const WEB_DIR = fileURLToPath(new URL('..', import.meta.url))
+
+/**
+ * Answer Act 1's narration manifest with the real one plus a stand-in entry
+ * (and a stand-in clip) for each line in `UNRECORDED_ACT1_LINES` that has no
+ * recording yet, so the game voices it as it will once recorded. An id the
+ * real manifest holds keeps its real entry and clip, so the list can be
+ * emptied whenever the team has recorded them.
+ */
+async function voiceUnrecordedLines(page: Page): Promise<void> {
+  await page.route('**/audio/narration/act1/manifest.json', async (route) => {
+    const response = await route.fetch()
+    const manifest = (await response.json()) as Record<string, unknown>
+    const script = JSON.parse(
+      readFileSync(join(WEB_DIR, '../tts/act1/script.json'), 'utf8'),
+    ) as { id: string; speaker: string; text: string }[]
+    const missing: string[] = []
+    for (const id of UNRECORDED_ACT1_LINES) {
+      const line = script.find((entry) => entry.id === id)
+      if (!line || id in manifest) continue
+      missing.push(id)
+      const words = line.text.split(/\s+/)
+      manifest[id] = {
+        file: `${id}.mp3`,
+        speaker: line.speaker,
+        duration: words.length * 0.4,
+        words: words.map((word, i) => ({
+          word,
+          start: i * 0.4,
+          end: (i + 1) * 0.4,
+        })),
+      }
+    }
+    if (missing.length > 0)
+      await page.route(
+        new RegExp(`/audio/narration/act1/(${missing.join('|')})\\.mp3$`),
+        (clip) =>
+          clip.fulfill({
+            body: readFileSync(
+              join(WEB_DIR, 'public/audio/narration/act1/00010af0e27d3f.mp3'),
+            ),
+            contentType: 'audio/mpeg',
+          }),
+      )
+    await route.fulfill({ json: manifest })
+  })
+}
 
 /**
  * Show the rest of what is being told at once, as a player does: let go of the

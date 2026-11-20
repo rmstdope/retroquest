@@ -260,6 +260,11 @@
     "text": "Mira looks you over: cloak, boots, pack. She nods once."
   },
   {
+    "id": "017329cff1ecf6",
+    "speaker": "narrator",
+    "text": "Rows of withered crops stretch beneath the last grey of the night's storm. The earth is cracked and dry, with only a few stubborn carrots hinting at better days. A faint breeze rustles the brittle leaves, carrying the scent of soil and distant rain. These rows were green a month ago."
+  },
+  {
     "id": "017e832c934bd2",
     "speaker": "mira",
     "text": "I have told you what I know of it. Keep it hidden, and keep your eyes open."
@@ -388,11 +393,6 @@
     "id": "025ee993cf1408",
     "speaker": "priest",
     "text": "Look there, child. The light has found something."
-  },
-  {
-    "id": "02618682c4c622",
-    "speaker": "narrator",
-    "text": "Rows of withered crops stretch beneath a brooding gray sky. The earth is cracked and dry, with only a few stubborn carrots and a rusty hoe hinting at better days. A faint breeze rustles the brittle leaves, carrying the scent of soil and distant rain. These rows were green a month ago."
   },
   {
     "id": "02625eaf626e1f",
@@ -1040,11 +1040,6 @@
     "text": "Know your village: You have not sat in the Village Chapel in a long while."
   },
   {
-    "id": "068dd35b0f517b",
-    "speaker": "narrator",
-    "text": "The dark lets go of you, and you wake in your own bed. The storm is gone and there is grey morning in the curtains. Your heart is going hard. The tune is still going too, thin and near: someone is humming it, out by the hearth. Three words are already slipping, and you write them down before they can go."
-  },
-  {
     "id": "06923c0dda6bb5",
     "speaker": "narrator",
     "text": "The earth is dark and gives under your boot. Water still shines in the furrows."
@@ -1148,11 +1143,6 @@
     "id": "06f9af686e26e3",
     "speaker": "narrator",
     "text": "Grey boards, warped and grimy, and nailed so close that hardly a crack shows between them."
-  },
-  {
-    "id": "06fc43cea34bbb",
-    "speaker": "narrator",
-    "text": "A modest cottage with a straw roof and a cozy hearth. The scent of fresh bread and old books fills the air. Grey morning comes through the lace curtains onto shelves lined with trinkets and memories. A sturdy wooden table sits in the center, with a small loaf cooling on it, and a gentle fire crackles in the hearth. Grandmother stands by it, humming, and keeps an eye on the bread."
   },
   {
     "id": "06fceab0fa1e36",
@@ -1263,6 +1253,11 @@
     "id": "07c7494529d5ac",
     "speaker": "narrator",
     "text": "The handle creaks, but it holds. Most things in Willowbrook are like that."
+  },
+  {
+    "id": "07ccfd90396c3a",
+    "speaker": "narrator",
+    "text": "A modest cottage with a straw roof and a cozy hearth. The scent of fresh bread and old books fills the air. Morning sun comes through the lace curtains onto shelves lined with trinkets and memories. A sturdy wooden table sits in the center, with a small loaf cooling on it, and a gentle fire crackles in the hearth. Grandmother stands by it, humming, and keeps an eye on the bread."
   },
   {
     "id": "07d130d329b869",
@@ -1623,11 +1618,6 @@
     "id": "09d7037c370abe",
     "speaker": "narrator",
     "text": "Curiosity killed the cat"
-  },
-  {
-    "id": "09d9e8cdbadd81",
-    "speaker": "narrator",
-    "text": "A modest cottage with a straw roof and a cozy hearth. The scent of fresh bread and old books fills the air. The curtains are still drawn on a grey morning, and the corner by your bed is too dark to see into. A sturdy wooden table sits in the center, with a small loaf cooling on it, and a gentle fire crackles in the hearth. Grandmother stands by it, humming, and keeps an eye on the bread."
   },
   {
     "id": "09dbad01a111e2",
@@ -2060,6 +2050,11 @@
     "text": "The village well smells sour, and far down in the dark water something glints."
   },
   {
+    "id": "0cae7f44582e81",
+    "speaker": "narrator",
+    "text": "The dark lets go of you, and you wake in your own bed. The storm is gone and there is morning sun in the curtains. Your heart is going hard. The tune is still going too, thin and near: someone is humming it, out by the hearth. Three words are already slipping, and you write them down before they can go."
+  },
+  {
     "id": "0cb17cd6836df3",
     "speaker": "narrator",
     "text": "Revive"
@@ -2185,11 +2180,6 @@
     "text": "A small disc of black iron, cold to the touch however long you hold it. A twisted rune, like a root strangling itself, is scored deep into its face. Nothing about it was lost by accident; someone made it, and made it to last."
   },
   {
-    "id": "0d6adf5b5b587b",
-    "speaker": "narrator",
-    "text": "Rows of withered crops stretch beneath a brooding gray sky. The earth is cracked and dry, with only a few stubborn carrots hinting at better days. A faint breeze rustles the brittle leaves, carrying the scent of soil and distant rain. These rows were green a month ago."
-  },
-  {
     "id": "0d6b9898f9048e",
     "speaker": "tilda",
     "text": "Go on, love, tell me what that's about and I'll tell you what it means."
@@ -2278,6 +2268,11 @@
     "id": "0dca7112ae9e08",
     "speaker": "hemlock",
     "text": "Been to see the priest, have you? He does get through his matches."
+  },
+  {
+    "id": "0dd4a44e45486f",
+    "speaker": "narrator",
+    "text": "A modest cottage with a straw roof and a cozy hearth. The scent of fresh bread and old books fills the air. Morning sun comes through the lace curtains onto shelves lined with trinkets and memories. A sturdy wooden table sits in the center, and a gentle fire crackles in the hearth. Grandmother stands by it, humming, and keeps an eye on the next batch."
   },
   {
     "id": "0dd5c21afbf51c",
@@ -3745,6 +3740,11 @@
     "text": "Borin eyes the coin."
   },
   {
+    "id": "16f455f6e3c305",
+    "speaker": "narrator",
+    "text": "Rows of withered crops stretch beneath the last grey of the night's storm. The earth is cracked and dry, with only a few stubborn carrots and a rusty hoe hinting at better days. A faint breeze rustles the brittle leaves, carrying the scent of soil and distant rain. These rows were green a month ago."
+  },
+  {
     "id": "16f77bdaa1bb25",
     "speaker": "narrator",
     "text": "Shadows over Willowbrook: Mira is waiting for the rare flower from the Hidden Glade, the one that opens only for someone the land trusts. The millstone fragment is old stone. Borin at the forge knows old stone."
@@ -3858,6 +3858,11 @@
     "id": "179e9d90b46b6a",
     "speaker": "narrator",
     "text": "A plain iron sword. The edge is sharp, and the handle is wrapped in leather."
+  },
+  {
+    "id": "17a70ff3dd4d25",
+    "speaker": "narrator",
+    "text": "A modest cottage with a straw roof and a cozy hearth. The scent of fresh bread and old books fills the air. The curtains are still drawn on a bright morning, and the corner by your bed is too dark to see into. A sturdy wooden table sits in the center, with a small loaf cooling on it, and a gentle fire crackles in the hearth. Grandmother stands by it, humming, and keeps an eye on the bread."
   },
   {
     "id": "17af0d0fc2534a",
@@ -4128,11 +4133,6 @@
     "id": "1936aa63d56be7",
     "speaker": "narrator",
     "text": "A warm light settles over Patches and finds nothing that needs mending."
-  },
-  {
-    "id": "193aad9fb6204d",
-    "speaker": "narrator",
-    "text": "A modest cottage with a straw roof and a cozy hearth. The scent of fresh bread and old books fills the air. Grey morning comes through the lace curtains onto shelves lined with trinkets and memories. A sturdy wooden table sits in the center, and a gentle fire crackles in the hearth. Grandmother stands by it, humming, and keeps an eye on the next batch."
   },
   {
     "id": "193be0a872654f",
@@ -5035,11 +5035,6 @@
     "text": "Beneath it lies a folded note. Something in you knows the careful, slanting hand before you have read a word: it is your father's."
   },
   {
-    "id": "1ee044cc7c94a7",
-    "speaker": "narrator",
-    "text": "A modest cottage with a straw roof and a cozy hearth. The scent of fresh bread and old books fills the air. The curtains are still drawn on a grey morning, and the corner by your bed is too dark to see into. A sturdy wooden table sits in the center, and a gentle fire crackles in the hearth. Grandmother stands by it, humming, and keeps an eye on the next batch."
-  },
-  {
     "id": "1eedd50668e9ec",
     "speaker": "narrator",
     "text": "Your hands find nothing. The dark has no floor and the dream no edges. The whisper comes again, nearer, and it is your name."
@@ -5048,6 +5043,11 @@
     "id": "1eedfba9ff0936",
     "speaker": "narrator",
     "text": "You search around the Chicken Coop, but find nothing of interest beyond what you can already see."
+  },
+  {
+    "id": "1f0942cb88249f",
+    "speaker": "narrator",
+    "text": "A modest cottage with a straw roof and a cozy hearth. The scent of fresh bread and old books fills the air. The curtains are still drawn on a bright morning, and the corner by your bed is too dark to see into. A sturdy wooden table sits in the center, and a gentle fire crackles in the hearth. Grandmother stands by it, humming, and keeps an eye on the next batch."
   },
   {
     "id": "1f0a016b014864",

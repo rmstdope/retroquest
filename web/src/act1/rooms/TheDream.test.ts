@@ -126,6 +126,15 @@ describe('The Dream, where Act I opens', () => {
     expect(lit).toContain('journal')
   })
 
+  it('wakes to a sunny morning in the curtains', () => {
+    const game = newGame()
+    const answer = executeCommands(game, ['talk to voice'])
+    expect(answer).toContain(
+      'The storm is gone and there is morning sun in the curtains.',
+    )
+    expect(answer).not.toContain('grey')
+  })
+
   it('survives a save and load made inside the dream', () => {
     const game = newGame()
     executeCommands(game, ['look'])

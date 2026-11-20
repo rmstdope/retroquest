@@ -11,7 +11,22 @@ describe('Vegetable Field room card', () => {
     game.state.setStoryFlag(FLAG_VEGETABLE_FIELD_WATERED, true)
     const text = new GameController(game).getRoomDescription()
     expect(text).toContain('Rows of green crops')
+    expect(text).toContain('beneath an open sky')
     expect(text).not.toContain('withered')
+  })
+})
+
+describe('Vegetable Field weather', () => {
+  const STORM_SKY =
+    "Rows of withered crops stretch beneath the last grey of the night's storm."
+
+  it('is grey from the storm while withered, with and without the hoe', () => {
+    const game = new Game([new Act1()])
+    game.state.currentRoom = game.state.allRooms.VegetableField
+    const controller = new GameController(game)
+    expect(controller.getRoomDescription()).toContain(STORM_SKY)
+    game.commandParser.parse('take rusty hoe')
+    expect(controller.getRoomDescription()).toContain(STORM_SKY)
   })
 })
 

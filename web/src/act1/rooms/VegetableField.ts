@@ -10,13 +10,13 @@ import {
 } from '../Act1StoryFlags'
 
 const WITHERED_DESCRIPTION =
-  'Rows of withered crops stretch beneath a brooding gray sky. The earth is ' +
-  'cracked and dry, with only a few stubborn carrots and a rusty hoe hinting at ' +
+  "Rows of withered crops stretch beneath the last grey of the night's storm. " +
+  'The earth is cracked and dry, with only a few stubborn carrots and a rusty hoe hinting at ' +
   'better days. A faint breeze rustles the brittle leaves, carrying the scent ' +
   'of soil and distant rain. These rows were green a month ago.'
 const WITHERED_WITHOUT_HOE_DESCRIPTION =
-  'Rows of withered crops stretch beneath a brooding gray sky. The earth is ' +
-  'cracked and dry, with only a few stubborn carrots hinting at better days. ' +
+  "Rows of withered crops stretch beneath the last grey of the night's storm. " +
+  'The earth is cracked and dry, with only a few stubborn carrots hinting at better days. ' +
   'A faint breeze rustles the brittle leaves, carrying the scent of soil and ' +
   'distant rain. These rows were green a month ago.'
 const WATERED_DESCRIPTION =

@@ -226,7 +226,7 @@
     "title": "Elior's Cottage",
     "width": 1920,
     "height": 1080,
-    "text": "A modest cottage with a straw roof and a cozy hearth. The scent of fresh bread and old books fills the air. The curtains are still drawn on a grey morning, and the corner by your bed is too dark to see into. A sturdy wooden table sits in the center, with a small loaf cooling on it, and a gentle fire crackles in the hearth. Grandmother stands by it, humming, and keeps an eye on the bread.",
+    "text": "A modest cottage with a straw roof and a cozy hearth. The scent of fresh bread and old books fills the air. The curtains are still drawn on a bright morning, and the corner by your bed is too dark to see into. A sturdy wooden table sits in the center, with a small loaf cooling on it, and a gentle fire crackles in the hearth. Grandmother stands by it, humming, and keeps an eye on the bread.",
     "areas": [
       {
         "id": "hearth",
@@ -874,7 +874,7 @@
     "title": "Vegetable Field",
     "width": 1920,
     "height": 1080,
-    "text": "Rows of withered crops stretch beneath a brooding gray sky. The earth is cracked and dry, with only a few stubborn carrots and a rusty hoe hinting at better days. A faint breeze rustles the brittle leaves, carrying the scent of soil and distant rain. These rows were green a month ago.",
+    "text": "Rows of withered crops stretch beneath the last grey of the night's storm. The earth is cracked and dry, with only a few stubborn carrots and a rusty hoe hinting at better days. A faint breeze rustles the brittle leaves, carrying the scent of soil and distant rain. These rows were green a month ago.",
     "areas": [
       {
         "id": "withered-carrot",
