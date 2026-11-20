@@ -487,15 +487,14 @@ function wayPressed(event: MouseEvent): string | null {
 }
 
 /**
- * Whether a press on `target` was meant for the room's words, which went by
+ * Whether a press was meant for the room's words or a card, which went by
  * themselves a moment ago (`useArrivalStore.lingering`): it does nothing,
- * neither a ring nor a walk (rq-v29l.4). A press on a mark or name the
- * player can see is meant for its thing or way, and acts.
+ * neither a ring nor a walk (rq-v29l.4), even where it lands on a mark or name
+ * that showed through the card, since the click was aimed at the card
+ * (rq-r6xn).
  */
-function meantForArrival(target: Element): boolean {
-  return (
-    arrival.lingering && !target.closest('[data-area-mark], [data-area-name]')
-  )
+function meantForArrival(): boolean {
+  return arrival.lingering
 }
 
 /** Go the way out in `direction` at once, as a press on its dot or its painted place does. */
@@ -513,7 +512,7 @@ function goWay(direction: string): void {
 function onPicturePress(event: MouseEvent): void {
   if (!(event.target instanceof Element)) return
   if (!event.target.closest('.lq-stage-picture')) return
-  if (meantForArrival(event.target)) return
+  if (meantForArrival()) return
   tapOnPicture()
   const way = wayPressed(event)
   pressOn('picture', { way: way !== null }, way)
@@ -831,13 +830,16 @@ function onWordsPointer(event: PointerEvent): void {
 /**
  * A press or tap on a dot that shows through the words' faded edge is a press
  * on its thing, as on the picture, and never hurries the narration (rq-njoa);
- * a press anywhere else on the words goes on to the cards as before.
+ * a press anywhere else on the words goes on to the cards as before. Just
+ * after a card went by itself it does nothing, as on the picture
+ * (`meantForArrival`).
  */
 function onWordsPress(event: MouseEvent): void {
   const dot = areaNamesEl.value?.spotAt(event.clientX, event.clientY)
   if (!dot) return
   event.stopPropagation()
   event.preventDefault()
+  if (meantForArrival()) return
   if (dot.kind === 'exit') {
     const way = dot.direction || null
     pressOn('exit-dot', { way: way !== null }, way)
@@ -1935,8 +1937,8 @@ function onAreaPress(
 ): void {
   const box = stageEl.value?.getBoundingClientRect()
   if (!box || !staged.value) return
-  // Just after the room's words went by themselves, only a press on a mark or name acts (`meantForArrival`).
-  if (arrival.lingering && !onMark) return
+  // Just after the room's words or a card went by themselves, no press acts (`meantForArrival`).
+  if (meantForArrival()) return
   // A way out smaller than the thing it lies on is the press's: the stage takes it (`onPicturePress`).
   // A press on a thing's own mark or name is its thing's, wherever the mark stands.
   const wayUnder = !onMark && !!areaNamesEl.value?.wayAt(at.x, at.y)
