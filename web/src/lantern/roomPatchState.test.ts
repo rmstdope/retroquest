@@ -5,6 +5,8 @@
 import { describe, expect, it } from 'vitest'
 import { Act1 } from '@/act1/Act1'
 import { FLAG_PATCHES_STAYED_WITH_GRANDMOTHER } from '@/act1/Act1StoryFlags'
+import { Patches } from '@/act1/characters/Patches'
+import { FLAG_PATCHES_RETURNED } from '@/act1/Act1StoryFlags'
 import { Key } from '@/act1/items/Key'
 import { Lantern } from '@/act1/items/Lantern'
 import { WitheredCarrot } from '@/act1/items/WitheredCarrot'
@@ -61,12 +63,26 @@ describe('appliedPatchIds', () => {
     })
   })
 
+  describe('the store opened with Patches home (rq-n11w)', () => {
+    it('raises the shutters and shows Patches together', () => {
+      const act = new Act1()
+      const game = new Game([act])
+      game.state.setStoryFlag(FLAG_PATCHES_RETURNED, true)
+      game.state.allRooms.GeneralStore.addCharacter(new Patches())
+      expect(appliedPatchIds(act, 'GeneralStore', game.state)).toEqual(
+        expect.arrayContaining(['shutters-raised', 'patches-appears']),
+      )
+    })
+  })
+
   describe('a save made in the shut store (rq-n11w)', () => {
     it('loads onto the one picture and raises the shutters when the store opens', () => {
       const act = new Act1()
       const game = new Game([act])
       const fresh = new Game([act])
       expect(fresh.loadSaveData(game.toSaveData())).toContain('loaded')
+      const store = fresh.state.allRooms.GeneralStore
+      expect(store.pictureVariant(fresh.state)).toBe('')
       expect(appliedPatchIds(act, 'GeneralStore', fresh.state)).not.toContain(
         'shutters-raised',
       )
