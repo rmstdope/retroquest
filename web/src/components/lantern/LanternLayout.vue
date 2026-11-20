@@ -2039,6 +2039,7 @@ const ghost = computed(() => {
       x: drag.x,
       y: drag.y,
       pill: dragPill(drag.hand, drag.over),
+      overTarget: drag.over?.from === 'room',
       touch: drag.pointerType === 'touch',
       to: null,
     }
@@ -2049,6 +2050,7 @@ const ghost = computed(() => {
     x: back.x,
     y: back.y,
     pill: dragPill(back.hand, null),
+    overTarget: false,
     touch: back.touch,
     to: back.to,
   }
@@ -3246,9 +3248,14 @@ watch(namesBlocked, (blocked) => {
                 </template>
               </div>
             </section>
-            <!-- None while an arrival is told on the picture: it says how to go on and skip itself. -->
+            <!-- None while an arrival is told on the picture, or the waking in the dark of a change of scene (until its words have faded): each says how to go on and skip itself. -->
             <p
-              v-if="narration.hintVisible && hintText && !arrival.active"
+              v-if="
+                narration.hintVisible &&
+                hintText &&
+                !arrival.active &&
+                !scene.interludeShown
+              "
               class="lq-narration-hint"
               data-lq-obstacle="words"
               :class="{ 'lq-hint-raised': moreBelow && !storyHeld }"
