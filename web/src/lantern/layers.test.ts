@@ -53,6 +53,18 @@ describe('layers.css', () => {
   })
 })
 
+describe('the dragged copy (rq-v29l.17)', () => {
+  it('lies above the belt, the hand strip and the command box, so it is seen over the bag', () => {
+    const stage = Object.fromEntries(
+      declaredLayers()
+        .filter((l) => l.group === 'stage')
+        .map((l) => [l.name, l.value]),
+    )
+    for (const under of ['belt', 'hand-strip', 'command-box'])
+      expect(stage['drag']).toBeGreaterThan(stage[under])
+  })
+})
+
 describe('the Lantern components', () => {
   it('state a layer only by name (or mark it local to the component)', () => {
     const declared = new Set(

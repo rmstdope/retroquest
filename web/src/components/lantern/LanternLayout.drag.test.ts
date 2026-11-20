@@ -222,12 +222,16 @@ describe('LanternLayout: dragging from the belt', () => {
   it('sends use … with … when dropped on a person, as if typed', async () => {
     const store = await cottage()
     await lift()
+    expect(w.get('.lq-drag-copy').classes()).not.toContain(
+      'lq-drag-over-target',
+    )
     await over(hit('grandmother').element)
     expect(pill()).toBe('Use Bread with Grandmother')
     expect(w.get('[data-drag-mark="grandmother"]').classes()).toContain(
       'lq-area-dropover',
     )
     expect(w.get('[data-drag-name="grandmother"]').text()).toBe('Grandmother')
+    expect(w.get('.lq-drag-copy').classes()).toContain('lq-drag-over-target')
     await letGo()
     expect(store.turns.at(-1)?.command).toBe('use bread with grandmother')
     expect(w.find('[data-drag-ghost]').exists()).toBe(false)
@@ -274,6 +278,9 @@ describe('LanternLayout: dragging from the belt', () => {
     await over(tile('item:feather').element)
     expect(pill()).toBe('Use Bread with Feather')
     expect(tile('item:feather').classes()).toContain('lq-belt-drop')
+    expect(w.get('.lq-drag-copy').classes()).not.toContain(
+      'lq-drag-over-target',
+    )
     await letGo()
     expect(store.turns.at(-1)?.command).toBe('use bread with feather')
   })

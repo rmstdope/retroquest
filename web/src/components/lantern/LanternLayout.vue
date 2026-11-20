@@ -2039,6 +2039,7 @@ const ghost = computed(() => {
       x: drag.x,
       y: drag.y,
       pill: dragPill(drag.hand, drag.over),
+      overTarget: drag.over?.from === 'room',
       touch: drag.pointerType === 'touch',
       to: null,
     }
@@ -2049,6 +2050,7 @@ const ghost = computed(() => {
     x: back.x,
     y: back.y,
     pill: dragPill(back.hand, null),
+    overTarget: false,
     touch: back.touch,
     to: back.to,
   }

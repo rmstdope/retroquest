@@ -32,6 +32,8 @@
   --lq-z-stage-hand-strip: 80;
   /* Above the belt and the hand strip: its word list opens upwards over them. */
   --lq-z-stage-command-box: 90;
+  /* A dragged picture is over everything in the stage, the bag included: it must be seen all the way. */
+  --lq-z-stage-drag: 95;
 
   /* page: beside the stage, lowest first. */
   --lq-z-page-speech: 10;
