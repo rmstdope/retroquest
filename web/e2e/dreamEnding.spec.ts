@@ -54,9 +54,9 @@ for (const command of ['talk to voice', 'say who are you to voice']) {
 
     // In the dark: the waking in the middle, nothing on the cards or of the cottage.
     const interlude = page.getByTestId('scene-interlude')
-    await expect(interlude).toContainText('The dark lets go of you')
+    await expect(interlude).toContainText('The dream lets go of you')
     await expect(page.locator('.lq-stage-picture.lq-scene-dark')).toHaveCount(1)
-    await expect(card).not.toContainText('The dark lets go of you')
+    await expect(card).not.toContainText('The dream lets go of you')
     await expect(
       page.locator('[data-testid="arrival-on-picture"].lq-on'),
     ).toHaveCount(0)
@@ -73,7 +73,7 @@ for (const command of ['talk to voice', 'say who are you to voice']) {
 
     // In the cottage nothing of the dream, nor the waking, is left on the cards.
     await skipTelling(page)
-    await expect(card).not.toContainText('The dark lets go of you')
+    await expect(card).not.toContainText('The dream lets go of you')
     await expect(card).not.toContainText('The whisper comes once more')
     await expect(card).not.toContainText('let them rest')
     await expect(card).not.toContainText('You are in')
@@ -86,7 +86,7 @@ for (const command of ['talk to voice', 'say who are you to voice']) {
     })
     await expect(record).toContainText(`› ${command}`)
     await expect(record).toContainText('The whisper comes once more')
-    await expect(record).toContainText('The dark lets go of you')
+    await expect(record).toContainText('The dream lets go of you')
     await expect(record).toContainText("You are in Elior's Cottage.")
   })
 }
