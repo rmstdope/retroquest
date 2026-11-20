@@ -59,8 +59,8 @@ export function readingTimeMs(markup: string): number {
 
 /**
  * Whether a turn's arrival is told on the picture: a player's move (or the
- * look that opens an act) into a room for the first time. A look, a revisit
- * and a load are not.
+ * look that opens an act) into a room for the first time, and a load, which
+ * tells its room the same way (`LOADED_ROOM`). A look and a revisit are not.
  */
 export function arrivesOnPicture(turn: {
   narrate?: true

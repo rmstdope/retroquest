@@ -1770,8 +1770,9 @@ export const useGameStore = defineStore('game', () => {
    * dots and panels) with a notice, and the story is the save's story so far,
    * as it stood when the game was saved (`restoreStory`), followed by the
    * room told as a first visit is (rq-fl1v). A save made before the story was
-   * kept has only that, under the command when one was typed. It plays on in the loaded act, so an act-complete page still held
-   * for narration is dropped.
+   * kept has only that, under the command when one was typed. It plays on in
+   * the loaded act, so an act-complete page still held for narration is
+   * dropped.
    */
   function afterLoad(
     b: GameBridge,

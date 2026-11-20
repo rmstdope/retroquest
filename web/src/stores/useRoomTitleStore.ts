@@ -15,8 +15,9 @@ export const ROOM_TITLE_MS = 3600
  * arrival, when the stage shows (`staged`), no chapter page covers it and its
  * picture is up (after a change of scene). A first visit is not greeted here:
  * its arrival is told on the picture with the name as its heading. Nor is a
- * loaded game (rq-fl1v): its room is told as a first visit is. Nor is a turn whose news (a learned spell, quest news) is told in
- * the middle of the picture: the title would show through the news card, so
+ * loaded game (rq-fl1v): its room is told as a first visit is. Nor is a turn
+ * whose news (a learned spell, quest news) is told in the middle of the
+ * picture: the title would show through the news card, so
  * the name goes straight to the corner. The name switches as the narrator
  * reaches the room (the game store's held `roomName`), so the title follows
  * the voice; walking on before a change of scene is up greets only the room

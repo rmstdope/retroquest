@@ -202,8 +202,25 @@ describe('LanternLayout: the arrival on the picture', () => {
     expect(card(w)).toContain('Garden')
     expect(card(w)).toContain('A green garden.')
     expect(card(w)).toContain('Click to continue · Hold to skip')
+    // The room's name is not also faded in over the picture.
+    expect(w.find('.lq-room-title').exists()).toBe(false)
     await hold()
     expect(card(w)).toBe('')
+  })
+
+  it('replaces an arrival that is up with the loaded room (rq-fl1v)', async () => {
+    stubStorage()
+    const w = await ready()
+    const game = useGameStore(pinia)
+    expect(game.saveGame()).toBe(true)
+    await run('go north')
+    expect(card(w)).toContain('A green garden.')
+    game.loadGame()
+    await vi.advanceTimersByTimeAsync(PASSAGE_HALF_MS * 2 + 2000)
+    expect(card(w)).toContain('Click to continue · Hold to skip')
+    expect(card(w)).not.toBe('')
+    expect(game.turns.at(-1)?.arrival?.room).toBe(game.roomName)
+    expect(card(w)).toContain(game.turns.at(-1)?.arrival?.description ?? '?')
   })
 
   it('reads the loaded room for its reading time when nobody narrates it (rq-fl1v)', async () => {

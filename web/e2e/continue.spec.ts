@@ -46,6 +46,8 @@ test('Continue opens the newest save with no chapter page', async ({
   await expect(told).toBeVisible()
   await expect(told).toContainText('You are in')
   await expect(told).toContainText('Click to continue · Hold to skip')
+  await expect(told.locator('.lq-arrival-line')).not.toHaveText('')
+  await expect(page.locator('.lq-room-title')).toHaveCount(0)
   await told.click()
   await expect(told).toHaveCount(0)
   await expect(page.locator('.lq-room-name')).toBeVisible()
