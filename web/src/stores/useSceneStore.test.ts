@@ -110,6 +110,31 @@ describe('useSceneStore', () => {
       expect(scene.phase).toBe('in')
     })
 
+    it('shows the interlude from the dark until its words have faded, and not on a skip after', () => {
+      const scene = useSceneStore()
+      scene.settled('a.png')
+      scene.begin(4, 'b.png', () => {}, 3, waking)
+      scene.targetReady(true)
+      expect(scene.interludeShown).toBe(false)
+      vi.advanceTimersByTime(SCENE_HALF_MS)
+      expect(scene.interludeShown).toBe(true)
+      scene.endInterlude()
+      // Its words still fade out in the dark.
+      expect(scene.interludeShown).toBe(true)
+      vi.advanceTimersByTime(INTERLUDE_FADE_MS - 1)
+      expect(scene.interludeShown).toBe(true)
+      vi.advanceTimersByTime(1)
+      expect(scene.interludeShown).toBe(false)
+      // The next telling, skipped while it is up, shows nothing after.
+      vi.advanceTimersByTime(INTERLUDE_RISE_MS)
+      scene.begin(5, 'c.png', () => {}, 3, waking)
+      scene.targetReady(true)
+      vi.advanceTimersByTime(SCENE_HALF_MS)
+      expect(scene.interludeShown).toBe(true)
+      scene.skip()
+      expect(scene.interludeShown).toBe(false)
+    })
+
     it('ends with the change when the room is brought up at once', () => {
       const scene = useSceneStore()
       scene.settled('a.png')

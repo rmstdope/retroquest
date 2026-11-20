@@ -3246,13 +3246,13 @@ watch(namesBlocked, (blocked) => {
                 </template>
               </div>
             </section>
-            <!-- None while an arrival is told on the picture, or the waking in the dark of a change of scene: each says how to go on and skip itself. -->
+            <!-- None while an arrival is told on the picture, or the waking in the dark of a change of scene (until its words have faded): each says how to go on and skip itself. -->
             <p
               v-if="
                 narration.hintVisible &&
                 hintText &&
                 !arrival.active &&
-                !scene.interlude
+                !scene.interludeShown
               "
               class="lq-narration-hint"
               data-lq-obstacle="words"

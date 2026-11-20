@@ -750,6 +750,22 @@ describe('LanternLayout: change of scene', () => {
       'Click to continue · Hold to skip',
     )
     expect(w.find('.lq-narration-hint').exists()).toBe(false)
+    // The waking is read: its words and hint fade out in the dark, and the
+    // story hint stays away while they do.
+    voices.at(-1)?.onended?.()
+    await vi.advanceTimersByTimeAsync(400)
+    await w.vm.$nextTick()
+    expect(scene.interlude).toBeNull()
+    expect(scene.phase).toBe('dark')
+    expect(narration.hintVisible).toBe(true)
+    expect(w.find('.lq-narration-hint').exists()).toBe(false)
+    // Once they have faded and the cottage rises, the story hint is back.
+    await vi.advanceTimersByTimeAsync(INTERLUDE_FADE_MS)
+    await w.vm.$nextTick()
+    expect(scene.phase).toBe('in')
+    expect(useArrivalStore().active).toBe(false)
+    expect(narration.hintVisible).toBe(true)
+    expect(w.find('.lq-narration-hint').exists()).toBe(true)
     narration.skipAll()
     await vi.runAllTimersAsync()
   })
