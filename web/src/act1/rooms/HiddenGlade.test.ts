@@ -204,6 +204,9 @@ describe('Hidden Glade', () => {
         'It does not wake in you the way the others did; this one you read, ' +
         'word by word, off the stone, and it feels like your own.'
       expect(text).toContain(own)
+      expect(text).toContain(
+        'You have learned the [spell_name]Grow[/spell_name] spell!',
+      )
       expect(text.indexOf(own)).toBeLessThan(
         text.indexOf('You have learned the'),
       )

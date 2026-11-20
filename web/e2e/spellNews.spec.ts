@@ -32,7 +32,7 @@ async function pushSpell(page: Page): Promise<void> {
     app.config.globalProperties.$pinia.state.value.game.turns.push({
       id: 998,
       command: 'talk to grandmother',
-      text: 'She smiles.\nYou have learned [spell_name]revive[/spell_name].',
+      text: 'She smiles.\nYou have learned [spell_name]Revive[/spell_name].',
       room: 'Cottage',
       description: null,
       gained: [],
@@ -85,7 +85,7 @@ test.describe('a learned spell told in the middle of the picture', () => {
     await openJournal(page)
     await expect(
       page.getByRole('complementary', { name: 'Journal drawer' }),
-    ).toContainText('You have learned revive.')
+    ).toContainText('You have learned Revive.')
   })
 
   test('is told on a phone too, with "Tap to continue · Hold to skip"', async ({

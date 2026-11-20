@@ -132,7 +132,9 @@ describe('Act I pickup lines (rq-3uug)', () => {
   it('keeps the priest scene on the first locket take and tells the line after', () => {
     const game = newGame()
     game.state.currentRoom.items.push(new Locket())
-    expect(game.take('locket')).toContain('You have learned')
+    expect(game.take('locket')).toContain(
+      'You have learned [spell_name]Bless[/spell_name].',
+    )
     expect(game.state.hasSpell(new BlessSpell().id)).toBe(true)
     game.state.currentRoom.items.push(new Locket())
     const again = game.take('locket')

@@ -231,6 +231,9 @@ describe('Grandmother and the dream', () => {
     expect(reaction).toBeGreaterThan(greeting)
     expect(tale).toBeGreaterThan(reaction)
     expect(lesson).toBeGreaterThan(tale)
+    expect(response).toContain(
+      'You have learned [spell_name]Revive[/spell_name].',
+    )
     expect(response).toContain('Some voices are older than memory.')
     expect(findMarkupProblems(response)).toEqual([])
   })

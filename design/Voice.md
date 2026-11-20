@@ -46,7 +46,7 @@ after the elixir ("It does not hurt. For the first time in years, it does not hu
     top of a turn is the only echo. An answer says what happened ("The ground is tough, and you
     unearth a small, tarnished coin! You quickly pocket it.") and goes bare, as story text the
     voice reads. Short results ("You quickly pocket it.") and gifts ("You receive a coin.", "You
-    have learned bless.") are effects too. Never write the repeat ("You till the soil with the
+    have learned Bless.") are effects too. Never write the repeat ("You till the soil with the
     rusty hoe."): drop it when the rest stands on its own, and fold the thing into the read
     sentence when it does not ("The coin lands heads up."). A command and its result that share a
     sentence are one read sentence ("The magnet clamps onto the end of the fishing rod: it is a

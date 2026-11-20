@@ -75,6 +75,10 @@ describe('Mira accepting the rare flower', () => {
       expectSpellKnown(game.state, spell)
     expect(game.state.getStoryFlag(FLAG_MAGIC_FULLY_UNLOCKED)).toBe(true)
     expect(response).toContain(
+      'You have learned [spell_name]Heal[/spell_name], ' +
+        '[spell_name]Unlock[/spell_name] and [spell_name]Light[/spell_name].',
+    )
+    expect(response).toContain(
       "You'll need warmth, protection, food, boots and a [item_name]map[/item_name].",
     )
     expect(response).not.toContain('\n- ')

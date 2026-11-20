@@ -198,7 +198,7 @@ export class Fisherman extends Character {
             'back. I reckon it was always more hers than mine.',
         ) +
         '\nHe shows you, slowly.\n' +
-        'You have learned [spell_name]purify[/spell_name].'
+        'You have learned [spell_name]Purify[/spell_name].'
       )
     } else if (item instanceof Fish && this.receivedFish) {
       return (
