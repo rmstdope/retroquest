@@ -1006,7 +1006,7 @@ describe('StoryTurn quest news told in the middle', () => {
   describe('a turn whose learned spell is told in the middle', () => {
     const told = {
       text: 'She nods.',
-      fullText: 'She nods.\nYou have learned [spell_name]revive[/spell_name].',
+      fullText: 'She nods.\nYou have learned [spell_name]Revive[/spell_name].',
       spells: [{ name: 'Revive', text: 'Calls back.' }],
     }
 
@@ -1018,7 +1018,7 @@ describe('StoryTurn quest news told in the middle', () => {
 
     it('keeps the line in the record', () => {
       const w = mount(StoryTurn, { props: { turn: turn(told), record: true } })
-      expect(visibleText(w)).toContain('You have learned revive.')
+      expect(visibleText(w)).toContain('You have learned Revive.')
     })
   })
 
