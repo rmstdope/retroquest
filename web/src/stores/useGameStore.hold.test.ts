@@ -12,6 +12,7 @@ import {
 import { roomPictureUrl, setPictureProbe } from '@/lantern/roomPicture'
 import { useBridge, type ActClass } from '@/composables/useBridge'
 import { Act1 } from '@/act1/Act1'
+import { ACT1_GOLDEN_PATH } from '@/act1/Act1GoldenPath'
 import { Key } from '@/act1/items/Key'
 import { Game } from '@/engine'
 import { PANEL_GROUPS, useGameStore } from './useGameStore'
@@ -197,6 +198,30 @@ describe('useGameStore: panels held while a turn is narrated', () => {
     expect(store.heldTurn).toBe(id)
     store.releasePanels(id, ['picture'], true)
     expect(store.heldTurn).toBe(null)
+  })
+
+  it('shows what an Examine tells of a carried thing in the bag at once, while the bag is held (rq-d19b)', async () => {
+    const store = useGameStore()
+    store.setBridge(useBridge(async (): Promise<ActClass[]> => [Act1]))
+    await store.initGame()
+    store.dismissModal()
+    store.setPanelHold(true)
+    store.setScenePicture(true)
+    for (const command of ACT1_GOLDEN_PATH.slice(
+      0,
+      ACT1_GOLDEN_PATH.indexOf('examine faded photograph'),
+    )) {
+      store.submitCommand(command)
+      store.releasePanels(store.turns.at(-1)!.id, [...PANEL_GROUPS], false)
+    }
+    const photograph = (): string =>
+      store.rawInventory.find((entry) => entry.name.includes('photograph'))!
+        .description
+    expect(photograph()).not.toContain('Seek the truth where the river bends.')
+    store.submitCommand('examine faded photograph')
+    // The turn is still told (its quest news is to come): the bag is held.
+    expect(store.groupHeld('stock')).toBe(true)
+    expect(photograph()).toContain('Seek the truth where the river bends.')
   })
 
   it('keeps the bag dot back for a gain that will fly until it lands, and never dims an earlier dot (rq-xxd8)', async () => {
