@@ -123,6 +123,7 @@ import StageButtons from './StageButtons.vue'
 import StagePicture from './StagePicture.vue'
 import StageSpeech from './StageSpeech.vue'
 import ColumnTurn from './ColumnTurn.vue'
+import StoryAnnouncer from './StoryAnnouncer.vue'
 import StoryDrawer from './StoryDrawer.vue'
 import StoryNameMenu from './StoryNameMenu.vue'
 import { NAME_SELECTOR, useNameStops } from '@/composables/useNameStops'
@@ -2933,6 +2934,8 @@ watch(namesBlocked, (blocked) => {
 
 <template>
   <div ref="rootEl" class="lq-root">
+    <!-- Outside the game's wrappers, which go inert or hidden (a turn page, ▾ Hide, another tab): the words are still told. -->
+    <StoryAnnouncer :turns="game.turns" />
     <HoldRing v-if="holdRing" :spot="holdRing" :still="motionReduced()" />
     <!-- The game, out of reach (and untouched) while a phone is held upright. -->
     <div class="lq-game" :inert="turnPage || undefined">

@@ -78,8 +78,8 @@ describe('theme', () => {
       expect(renderMarkup(input)).toBe(expected)
     })
 
-    it('converts newlines to <br>', () => {
-      expect(renderMarkup('line1\nline2')).toBe('line1<br>line2')
+    it('converts newlines to <br>, keeping a space before it', () => {
+      expect(renderMarkup('line1\nline2')).toBe('line1 <br>line2')
     })
 
     it('escapes HTML before applying tags', () => {

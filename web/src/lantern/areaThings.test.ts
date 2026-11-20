@@ -46,6 +46,7 @@ describe('areaThingsOf', () => {
     )
     expect(byId['villager'].name).toBe(room.characters[0].name)
     expect(byId['exit-north'].name).toBe('north')
+    expect(byId['exit-north'].place).toBe(byId['exit-north'].label.slice(2))
   })
 
   it('only offers areas the room declares', () => {

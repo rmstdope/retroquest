@@ -22,6 +22,8 @@ export interface AreaThing {
   kind: 'character' | 'item' | 'scenery' | 'exit'
   /** For a way out, the direction that goes there (what pressing it types after `go`). */
   direction?: string
+  /** For a way out, the name of the place it leads to, without the arrow (what a screen reader hears after "Go <direction> to"). */
+  place?: string
 }
 
 /** The area id of a thing, or null for one its act does not register (it has no area to mark). */
@@ -81,6 +83,7 @@ export function areaThingsOf(
       label: `${exitArrow(direction)} ${place}`,
       kind: 'exit',
       direction,
+      place,
     })
   }
   return things

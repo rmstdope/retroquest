@@ -129,7 +129,9 @@ test('every place of Act I fits across the bigger map (rq-7319)', async ({
   await page.setViewportSize({ width: 1512, height: 860 })
   await start(page)
   await enter(page, 'debug act1')
-  await expect(page.getByText("Debug script 'act1' played")).toBeVisible()
+  await expect(
+    page.locator('main').getByText("Debug script 'act1' played"),
+  ).toBeVisible()
   await key(page, 'm')
   const dialog = page.getByRole('dialog', { name: 'Map' })
   await expect(dialog.locator('[data-place="Road to Greendale"]')).toHaveCount(

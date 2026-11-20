@@ -35,6 +35,8 @@ test.describe('debug command (dev server)', () => {
   test('names a script that does not exist', async ({ page }) => {
     await openGame(page)
     await enterCommand(page, 'debug nothing-here')
-    await expect(page.getByText("'nothing-here' not found")).toBeVisible()
+    await expect(
+      page.locator('main').getByText("'nothing-here' not found"),
+    ).toBeVisible()
   })
 })

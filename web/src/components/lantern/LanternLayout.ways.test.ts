@@ -157,6 +157,39 @@ describe('LanternLayout: leaving by pressing a way out in the picture', () => {
     expect(submit).toHaveBeenCalledWith('go east')
   })
 
+  it('goes at once when a screen reader presses the way-out button, and lists the open ways', async () => {
+    const store = await cottage()
+    for (const command of [
+      'use lantern',
+      'take bread',
+      'take lantern',
+      'talk to grandmother',
+      'use journal',
+      'talk to grandmother',
+    ]) {
+      store.submitCommand(command)
+    }
+    store.releasePanels(store.turns.at(-1)!.id, [...PANEL_GROUPS], false)
+    await w.vm.$nextTick()
+    const labels = w
+      .findAll('.lq-area-press-way')
+      .map((b) => b.attributes('aria-label'))
+    expect(labels.every((l) => l?.startsWith('Go '))).toBe(true)
+    expect(labels).toContain('Go east to Village Square')
+    const submit = vi.spyOn(store, 'submitCommand')
+    w.get('.lq-area-press-way[data-way="east"]').element.dispatchEvent(
+      new MouseEvent('click', { bubbles: true, detail: 0 }),
+    )
+    expect(submit).toHaveBeenCalledWith('go east')
+  })
+
+  it('keeps the story announcer outside anything inert or hidden', async () => {
+    await cottage()
+    const log = w.get('[role="log"]').element
+    expect(log.closest('[inert]')).toBeNull()
+    expect(log.closest('.lq-story-wrap')).toBeNull()
+  })
+
   it('goes nowhere from a press on the bare way just as the arrival went by itself, but goes from its name (rq-v29l.4)', async () => {
     const store = await cottage()
     for (const command of [

@@ -63,7 +63,9 @@ test.describe('Lantern UI (the default)', () => {
 
     await expect(page.getByRole('banner')).toHaveCount(0)
     await expect(page.getByText(GAME_NAME, { exact: true })).toHaveCount(0)
-    await expect(page.getByText('bustles with life')).toBeVisible()
+    await expect(
+      page.locator('main').getByText('bustles with life'),
+    ).toBeVisible()
     await expect(page.locator('.lq-name-btn')).toBeEnabled()
     await expect(page.locator('.lq-composer, .lq-dock')).toHaveCount(0)
   })

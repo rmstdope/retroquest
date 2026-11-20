@@ -232,7 +232,9 @@ test('plays the red line from Act I to the Willowbrook epilogue', async ({
     }
 
     await type(page, `debug act${index + 1}`)
-    await expect(page.getByText(act.played)).toBeVisible({ timeout: 60_000 })
+    await expect(page.locator('main').getByText(act.played)).toBeVisible({
+      timeout: 60_000,
+    })
     for (const command of act.completing) await type(page, command)
 
     // The journal holds every turn (the paper only the last), but the
