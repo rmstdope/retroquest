@@ -1009,6 +1009,32 @@ export const useGameStore = defineStore('game', () => {
   }
 
   /**
+   * While Bag and Spells are held, a thing they already show takes the
+   * description the engine gives it now at once (after an Examine, what it
+   * told): the hold keeps back what was gained or lost, not a changed
+   * description of what is carried. An entry is matched by its listed name,
+   * count included; its name and ring verbs stay held. The release then finds
+   * the description already shown, so it does not flash the Bag for it.
+   */
+  function applyHeldNotes(): void {
+    if (!latest) return
+    rawInventory.value = withLatestNotes(rawInventory.value, latest.stock.bag)
+    rawSpells.value = withLatestNotes(rawSpells.value, latest.stock.spells)
+  }
+
+  /** `shown` with each entry's description taken from the entry of the same name in `now`; `shown` itself when nothing differs. */
+  function withLatestNotes(shown: NamedItem[], now: NamedItem[]): NamedItem[] {
+    let changed = false
+    const next = shown.map((entry) => {
+      const current = now.find((candidate) => candidate.name === entry.name)
+      if (!current || current.description === entry.description) return entry
+      changed = true
+      return { ...entry, description: current.description }
+    })
+    return changed ? next : shown
+  }
+
+  /**
    * The narration of turn `turnId` has reached `groups`: they show the
    * engine's state now (and their dots), lighting up when `flash` is set. Does
    * nothing for another turn than the one held, or for a group already released.
@@ -1596,6 +1622,7 @@ export const useGameStore = defineStore('game', () => {
     latestPicture.value = latest.picture
     latestPlace.value = latest.place
     for (const group of PANEL_GROUPS) if (!held.value[group]) applyGroup(group)
+    if (held.value.stock) applyHeldNotes()
     syncMusic(b)
     acceptInput.value = b.controller.isAcceptingInput()
     shortNames.value = b.controller.getShortNames()
