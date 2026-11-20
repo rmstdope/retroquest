@@ -1453,9 +1453,41 @@ describe('AreaNames holds the name under the pointer (rq-74xp)', () => {
     expect(markAt(w, 'bucket')).toEqual(dot)
   })
 
-  it('starts fresh in a new room, and does not glide across rooms for a moment', async () => {
+  it('keeps the hold when the story refreshes the list of things without changing the room', async () => {
     const { w, before } = await mountWithPlateOverBucket(true)
     await w.setProps({ things: [...things] })
+    await settle(w, 'c')
+    expect(nameAt(w, 'bucket')).toEqual(before)
+  })
+
+  it('drops the hold when words open over the resting pointer', async () => {
+    const w = mountNames({ showing: true })
+    await settle(w, 'a')
+    const before = nameAt(w, 'bucket')
+    const at = { x: before.x + 20, y: before.y + 10 }
+    await w.setProps({ pointer: at })
+    plateAt(before.x - 10, before.y - 4, 120, 40)
+    const words = document.createElement('div')
+    mark(words, 'words')
+    document.querySelector('.lq-stage')!.append(words)
+    vi.spyOn(words, 'getBoundingClientRect').mockReturnValue({
+      left: before.x - 30,
+      top: before.y - 30,
+      width: 200,
+      height: 100,
+      right: before.x + 170,
+      bottom: before.y + 70,
+      x: before.x - 30,
+      y: before.y - 30,
+      toJSON: () => ({}),
+    })
+    await settle(w, 'b')
+    expect(nameAt(w, 'bucket')).not.toEqual(before)
+  })
+
+  it('starts fresh in a new room, and does not glide across rooms for a moment', async () => {
+    const { w, before } = await mountWithPlateOverBucket(true)
+    await w.setProps({ things: things.filter((t) => t.areaId !== 'villager') })
     expect(w.get('[data-area-name="bucket"]').classes()).not.toContain(
       'lq-area-glide',
     )
@@ -1470,7 +1502,12 @@ describe('AreaNames holds the name under the pointer (rq-74xp)', () => {
   it('glides: names and dots carry a transition on their place', async () => {
     const w = mountNames({ showing: true })
     await settle(w, 'a')
-    expect(w.html()).toContain('lq-area-glide')
+    expect(w.get('[data-area-name="bucket"]').classes()).toContain(
+      'lq-area-glide',
+    )
+    expect(w.get('[data-area-mark="bucket"]').classes()).toContain(
+      'lq-area-glide',
+    )
   })
 })
 

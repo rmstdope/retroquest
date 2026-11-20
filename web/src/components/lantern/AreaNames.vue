@@ -330,10 +330,14 @@ let glideTimer: ReturnType<typeof setTimeout> | undefined
 function pointerInLayer(): { x: number; y: number } | null {
   if (!props.pointer || props.ringOpen || !props.showing) return null
   const frame = frameOf()
-  return {
+  const at = {
     x: (props.pointer.x - frame.left) / frame.ratio,
     y: (props.pointer.y - frame.top) / frame.ratio,
   }
+  const underWords = covers.value.some(
+    (r) => at.x >= r.x && at.x <= r.x + r.w && at.y >= r.y && at.y <= r.y + r.h,
+  )
+  return underWords ? null : at
 }
 
 /** Hold the name the pointer is on or beside (as it stands now), or let go. */
@@ -356,9 +360,9 @@ watch(
   () => [props.pointer, props.showing, props.ringOpen] as const,
   refreshHold,
 )
-// A new room starts fresh, and its names do not glide in from the last room's places.
+// A new room starts fresh, and its names do not glide in from the last room's places. Keyed on what the room holds, not on the array: the list is rebuilt whenever the story refreshes, which is no new room.
 watch(
-  () => props.things,
+  () => props.things.map((thing) => thing.areaId).join('|'),
   () => {
     held.value = null
     glide.value = false
@@ -366,6 +370,8 @@ watch(
     glideTimer = setTimeout(() => (glide.value = true), 50)
   },
 )
+// Words opening over a resting pointer take the hold away: nothing is held under the words.
+watch(covers, refreshHold)
 onUnmounted(() => clearTimeout(glideTimer))
 
 /** The placed marks, with the held one's dot kept where it stands when the pointer is on it. */
