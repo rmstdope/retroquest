@@ -8,6 +8,7 @@ import {
   clearOfPanels,
   clearOfWords,
   hangName,
+  heldNear,
   isFree,
   keepMarksApart,
   closedWayThings,
@@ -1458,5 +1459,69 @@ describe('isFree', () => {
   it('treats a rectangle as free when it only touches, taken when it overlaps', () => {
     expect(isFree({ x: 150, y: 100, w: 20, h: 20 }, [box])).toBe(true)
     expect(isFree({ x: 149, y: 100, w: 20, h: 20 }, [box])).toBe(false)
+  })
+})
+
+describe('a held name (rq-74xp)', () => {
+  const measure = (label: string): { w: number; h: number } => ({
+    w: label.length * 8,
+    h: 20,
+  })
+  const bounds = { x: 0, y: 0, w: 960, h: 540 }
+  const mark = (areaId: string, label: string, x: number, y: number) => ({
+    areaId,
+    name: areaId,
+    label,
+    kind: 'item' as const,
+    x,
+    y,
+    rect: { x, y, w: 1, h: 1 },
+  })
+
+  it('stays at its given corner and the others lay out around it', () => {
+    const placed = [mark('a', 'Well', 400, 300), mark('b', 'Shed', 420, 330)]
+    const free = layoutNames(placed, measure, [], bounds)
+    const held = { areaId: 'b', left: free[0].left, top: free[0].top + 2 }
+    const spots = layoutNames(placed, measure, [], bounds, undefined, held)
+    const b = spots.find((s) => s.areaId === 'b')
+    const a = spots.find((s) => s.areaId === 'a')
+    expect(b?.left).toBe(held.left)
+    expect(b?.top).toBe(held.top)
+    expect(
+      a !== undefined &&
+        b !== undefined &&
+        a.left < b.left + b.width &&
+        b.left < a.left + a.width &&
+        a.top < b.top + b.height &&
+        b.top < a.top + a.height,
+    ).toBe(false)
+    expect(spots.map((s) => s.areaId)).toEqual(['a', 'b'])
+  })
+
+  it('keeps a line back to its mark when it stands away from it', () => {
+    const [spot] = layoutNames(
+      [mark('a', 'Well', 400, 300)],
+      measure,
+      [],
+      bounds,
+      undefined,
+      { areaId: 'a', left: 100, top: 100 },
+    )
+    expect(spot.leader).not.toBeNull()
+  })
+
+  it('finds the name or dot within reach, the nearer of two, and nothing beyond', () => {
+    const spots = layoutNames(
+      [mark('a', 'Well', 200, 300), mark('b', 'Shed', 600, 300)],
+      measure,
+      [],
+      bounds,
+    )
+    const a = spots[0]
+    expect(heldNear(spots, a.left + 5, a.top + 5, 24)?.areaId).toBe('a')
+    expect(heldNear(spots, 200, 300, 24)?.areaId).toBe('a')
+    expect(heldNear(spots, a.left - 20, a.top + 5, 24)?.areaId).toBe('a')
+    expect(heldNear(spots, 400, 100, 24)).toBeNull()
+    expect(heldNear(spots, 400, 300, 300)?.areaId).toBe('a')
   })
 })
