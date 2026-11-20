@@ -86,6 +86,32 @@ function outOfSightState(state: FadeState | undefined): boolean {
   return state === 'spent' || state === 'gone'
 }
 
+/** The least time any line with words shows before it starts to fade, in ms. */
+const MINIMUM_READ_BASE_MS = 4000
+
+/** What each word of a line adds to its minimum reading time, in ms. */
+const MINIMUM_READ_PER_WORD_MS = 200
+
+/** The most a minimum reading time grows to: a long line's own time to read (`readingPauseMs`) is no longer. */
+const MINIMUM_READ_MAX_MS = 6000
+
+/**
+ * The least time a line stays fully visible before it starts to fade, by its
+ * words: four seconds and a fifth of a second per word, at most six seconds,
+ * however short its narration. A long line keeps the time it had: read aloud,
+ * its narration outlasts this and it fades as soon as it has been heard;
+ * never read aloud, its own time to read is as long. A line with no words
+ * needs none.
+ */
+export function minimumReadMs(text: string): number {
+  const words = text.split(/\s+/).filter((word) => word.length > 0).length
+  if (words === 0) return 0
+  return Math.min(
+    MINIMUM_READ_MAX_MS,
+    MINIMUM_READ_BASE_MS + MINIMUM_READ_PER_WORD_MS * words,
+  )
+}
+
 /** The fade state of every line on the picture, by line id, for the columns to read. */
 export interface FadeLedger {
   /** Every line's state by id; reactive. */

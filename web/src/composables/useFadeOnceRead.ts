@@ -3,6 +3,7 @@ import {
   advanceColumn,
   createFadeLedger,
   finishFade,
+  minimumReadMs,
   type ColumnLineInput,
   type FadeLedger,
   type FadeState,
@@ -53,7 +54,9 @@ export interface FadeOnceRead {
  * read once neither it nor a part of it is being read aloud (`.lq-speaking`,
  * `[data-reading]`); a line never read aloud (its turn not narrated, a skip
  * showed it, or it has no recording yet) waits its `data-read-ms` first, the
- * time to read it. It fades whether or not more lines come after it, but
+ * time to read it. Either way a line stays fully visible for at least its
+ * minimum reading time (`minimumReadMs`) from when it first showed, however
+ * short its narration. It fades whether or not more lines come after it, but
  * never ahead of the lines above it in its column (the nearest ancestor
  * matching `columns`, else `container`): a line read while one above it still
  * shows starts fading once that one has, and a spent line keeps its room
@@ -82,6 +85,8 @@ export function useFadeOnceRead(
   let heard = new WeakSet<Element>()
   /** The lines whose time to read has run, waiting only for a line above them to start fading. */
   let ready = new WeakSet<Element>()
+  /** When each line first showed (or showed again once let go), for its minimum reading time. */
+  let shownAt = new WeakMap<Element, number>()
   /** What every line's fade state is, for the columns. */
   const ledger = createFadeLedger()
 
@@ -148,13 +153,27 @@ export function useFadeOnceRead(
       clearTimeout(waiting.get(el))
       waiting.delete(el)
     }
-    const ms = heard.has(el) ? 0 : Number(el.dataset.readMs) || 0
+    const ms = waitMs(el)
     return {
       state: el.dataset.fade as FadeState | undefined,
       reading: isReading,
       eligible: ready.has(el) || ms <= 0,
       waiting: waiting.has(el),
     }
+  }
+
+  /**
+   * How much longer `el` waits before it may fade: its time to read
+   * (`data-read-ms`; none once heard), and never less than what is left of
+   * its minimum reading time (`minimumReadMs`) since it first showed.
+   */
+  function waitMs(el: HTMLElement): number {
+    const now = Date.now()
+    if (!shownAt.has(el)) shownAt.set(el, now)
+    const shown = now - (shownAt.get(el) ?? now)
+    const left = minimumReadMs(el.textContent ?? '') - shown
+    const own = heard.has(el) ? 0 : Number(el.dataset.readMs) || 0
+    return Math.max(own, left)
   }
 
   /** Advance one column's lines by the rules of `advanceColumn` and carry out what it decided. */
@@ -168,19 +187,16 @@ export function useFadeOnceRead(
     })
   }
 
-  /** Give `el` the time to read it takes (`data-read-ms`), then let it fade. */
+  /** Give `el` the time to read it takes (`waitMs`), then let it fade. */
   function waitToRead(el: HTMLElement, root: HTMLElement): void {
     waiting.set(
       el,
-      setTimeout(
-        () => {
-          waiting.delete(el)
-          if (el.dataset.fade !== 'live') return
-          ready.add(el)
-          mark(root)
-        },
-        Number(el.dataset.readMs) || 0,
-      ),
+      setTimeout(() => {
+        waiting.delete(el)
+        if (el.dataset.fade !== 'live') return
+        ready.add(el)
+        mark(root)
+      }, waitMs(el)),
     )
   }
 
@@ -222,7 +238,10 @@ export function useFadeOnceRead(
   )
   // Let go, the lines brought back are read anew.
   watch(held, (now) => {
-    if (!now) heard = new WeakSet<Element>()
+    if (!now) {
+      heard = new WeakSet<Element>()
+      shownAt = new WeakMap<Element, number>()
+    }
     if (container.value) mark(container.value)
   })
   onScopeDispose(() => stop(container.value))

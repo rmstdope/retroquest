@@ -4,7 +4,7 @@ import { ref } from 'vue'
 import { mount, type VueWrapper } from '@vue/test-utils'
 import { defineComponent, h, type Ref } from 'vue'
 import { useFadeOnceRead } from './useFadeOnceRead'
-import type { FadeLedger } from '@/lantern/lineFade'
+import { minimumReadMs, type FadeLedger } from '@/lantern/lineFade'
 
 describe('useFadeOnceRead', () => {
   let root: HTMLElement
@@ -17,9 +17,15 @@ describe('useFadeOnceRead', () => {
 
   /** A line as the stage draws it; `reading` marks it as being read aloud. */
   function line(
-    opts: { reading?: boolean; readMs?: number; column?: HTMLElement } = {},
+    opts: {
+      reading?: boolean
+      readMs?: number
+      column?: HTMLElement
+      text?: string
+    } = {},
   ): HTMLElement {
     const el = document.createElement('p')
+    if (opts.text) el.textContent = opts.text
     el.className = 'lq-line'
     el.dataset.lineId = `l${ids++}`
     if (opts.reading) el.classList.add('lq-speaking')
@@ -108,6 +114,41 @@ describe('useFadeOnceRead', () => {
     await settle()
     el.classList.remove('lq-speaking')
     await settle()
+    expect(el.dataset.fade).toBe('away')
+  })
+
+  it('keeps a short line read aloud fully visible for its minimum reading time', async () => {
+    vi.useFakeTimers()
+    const text = "That's part of it. Not all. Keep looking."
+    const el = line({ reading: true, readMs: 2000, text })
+    await vi.advanceTimersByTimeAsync(1500)
+    el.classList.remove('lq-speaking')
+    await vi.advanceTimersByTimeAsync(0)
+    expect(el.dataset.fade).toBe('live')
+    await vi.advanceTimersByTimeAsync(minimumReadMs(text) - 1501)
+    expect(el.dataset.fade).toBe('live')
+    await vi.advanceTimersByTimeAsync(1)
+    expect(el.dataset.fade).toBe('away')
+  })
+
+  it('starts a long line fading the moment its narration ends, past its minimum reading time', async () => {
+    vi.useFakeTimers()
+    const text =
+      'The corner by the altar is so dark that your eyes slide off it.'
+    const el = line({ reading: true, text })
+    await vi.advanceTimersByTimeAsync(minimumReadMs(text) + 500)
+    el.classList.remove('lq-speaking')
+    await vi.advanceTimersByTimeAsync(0)
+    expect(el.dataset.fade).toBe('away')
+  })
+
+  it('keeps a short line never read aloud for its minimum reading time, past its own time to read', async () => {
+    vi.useFakeTimers()
+    const text = 'Keep looking.'
+    const el = line({ readMs: 900, text })
+    await vi.advanceTimersByTimeAsync(minimumReadMs(text) - 1)
+    expect(el.dataset.fade).toBe('live')
+    await vi.advanceTimersByTimeAsync(1)
     expect(el.dataset.fade).toBe('away')
   })
 
