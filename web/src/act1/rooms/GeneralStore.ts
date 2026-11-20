@@ -19,18 +19,18 @@ function shutText(shelves: string): string {
   return (
     `A cluttered shop with the shutters half down. ${shelves} ` +
     'crowd the shelves in the gloom. ' +
-    `${characterName('Hemlock')} stands at the window, ` +
-    'watching the lane to the chapel.'
+    `${characterName('Hemlock')} stands at his counter, sorting apples, ` +
+    'and keeps glancing at the lane to the chapel.'
   )
 }
 
 /** The open shop, its shelves named as they stand, before the cat clause. */
 function openText(shelves: string): string {
   return (
-    `A cluttered shop. ${shelves} crowd the shelves, ` +
+    `A cluttered shop with the shutters up. ${shelves} crowd the shelves, ` +
     'and the air smells of fruit, wax and old wood. ' +
     'Outside, the lane runs east to the chapel. ' +
-    `${characterName('Hemlock')} dusts jars between customers`
+    `${characterName('Hemlock')} sorts apples at his counter between customers`
   )
 }
 
@@ -68,19 +68,6 @@ export class GeneralStore extends Room {
         south: 'BlacksmithsForge',
       },
     })
-  }
-
-  /** The store's second picture, the shut shop. */
-  static readonly PICTURE_SHUT = 'shut'
-
-  /** The shut shop while the store is shut; the room's own picture, the open shop, once it opens. */
-  override pictureVariant(gameState: GameState): string {
-    return Shopkeeper.isStoreOpen(gameState) ? '' : GeneralStore.PICTURE_SHUT
-  }
-
-  /** The shut shop is the store's second picture. */
-  override pictureVariants(): readonly string[] {
-    return [GeneralStore.PICTURE_SHUT]
   }
 
   /** Give a save made before the lane to the chapel the store's current ways out. */

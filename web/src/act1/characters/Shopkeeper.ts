@@ -257,7 +257,7 @@ export class Shopkeeper extends Character {
     if (!gameState.getStoryFlag(FLAG_MET_HEMLOCK)) {
       gameState.setStoryFlag(FLAG_MET_HEMLOCK, true)
       return (
-        `${this.nameInSentence({ atStart: true })} looks up from the window, ` +
+        `${this.nameInSentence({ atStart: true })} looks up from his counter, ` +
         'his face creased with worry. ' +
         speech(
           'Oh! Forgive me, lad, I was watching for her. ' +

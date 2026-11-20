@@ -401,7 +401,7 @@
     "title": "General Store",
     "width": 1920,
     "height": 1080,
-    "text": "A cluttered shop. Rope, apples and trinkets crowd the shelves, and the air smells of fruit, wax and old wood. Outside, the lane runs east to the chapel. Hemlock dusts jars between customers.",
+    "text": "A cluttered shop with the shutters half down. Rope, apples and trinkets crowd the shelves in the gloom. Hemlock stands at his counter, sorting apples, and keeps glancing at the lane to the chapel.",
     "areas": [
       {
         "id": "rope",
@@ -458,6 +458,11 @@
     ],
     "patches": [
       {
+        "id": "shutters-raised",
+        "title": "Shutters raised",
+        "text": "Raise the window shutters all the way."
+      },
+      {
         "id": "rope-gone",
         "title": "Rope gone",
         "text": "Remove the rope from the picture.",
@@ -474,63 +479,6 @@
         "title": "Patches appears",
         "text": "Add Patches, a small cat with ginger, black and white patchwork fur.",
         "area": "patches"
-      }
-    ]
-  },
-  {
-    "id": "act1-general-store-shut",
-    "title": "General Store, shut",
-    "width": 1920,
-    "height": 1080,
-    "text": "A cluttered shop with the shutters half down. Rope, apples and trinkets crowd the shelves in the gloom. Hemlock stands at the window, watching the lane to the chapel.",
-    "areas": [
-      {
-        "id": "rope",
-        "title": "Rope"
-      },
-      {
-        "id": "apple",
-        "title": "Apple"
-      },
-      {
-        "id": "matches",
-        "title": "Matches"
-      },
-      {
-        "id": "sword",
-        "title": "Sword"
-      },
-      {
-        "id": "armor",
-        "title": "Armor"
-      },
-      {
-        "id": "scenery-general-store-trinkets",
-        "title": "Trinkets"
-      },
-      {
-        "id": "scenery-general-store-jars",
-        "title": "Jars"
-      },
-      {
-        "id": "scenery-general-store-counter",
-        "title": "Counter"
-      },
-      {
-        "id": "shopkeeper",
-        "title": "Hemlock"
-      },
-      {
-        "id": "exit-west",
-        "title": "Way west"
-      },
-      {
-        "id": "exit-east",
-        "title": "Way east"
-      },
-      {
-        "id": "exit-south",
-        "title": "Way south"
       }
     ]
   },

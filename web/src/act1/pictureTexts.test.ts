@@ -6,8 +6,6 @@ import { Act1 } from './Act1'
 import { SharpKnife } from './items/SharpKnife'
 import { executeCommands } from '@/testing/gameHelpers'
 import { appliedPatchIds } from '@/lantern/roomPatchState'
-import { Shopkeeper } from './characters/Shopkeeper'
-import { FLAG_PATCHES_RETURNED } from './Act1StoryFlags'
 
 const images = roomImages(new Act1())
 const byId = (id: string) => images.find((i) => i.id === id)
@@ -24,14 +22,15 @@ describe('the picture words of Act I (rq-v29l.20)', () => {
     )
   })
 
-  it('gives the open shop to the store and the shut shop to its second picture', () => {
-    expect(byId('act1-general-store')?.text).toContain('dusts jars')
-    const shut = byId('act1-general-store-shut')
-    expect(shut?.title).toBe('General Store, shut')
-    expect(shut?.text).toContain('shutters half down')
-    expect(shut?.areas?.map((a) => a.id)).toContain('shopkeeper')
-    expect(shut?.areas?.map((a) => a.id)).not.toContain('patches')
-    expect(shut?.patches).toBeUndefined()
+  it('gives the store one picture, described by the shut room text with rope', () => {
+    const store = byId('act1-general-store')
+    expect(store?.text).toBe(
+      'A cluttered shop with the shutters half down. Rope, apples and ' +
+        'trinkets crowd the shelves in the gloom. Hemlock stands at his ' +
+        'counter, sorting apples, and keeps glancing at the lane to the chapel.',
+    )
+    expect(store?.areas?.map((a) => a.id)).toContain('patches')
+    expect(byId('act1-general-store-shut')).toBeUndefined()
   })
 
   it('describes the shed inside in near-darkness with no cat in view', () => {
@@ -76,18 +75,6 @@ describe('the picture words of Act I (rq-v29l.20)', () => {
         .find((i) => i.id === 'act1-abandoned-shed-inside')
         ?.patches?.find((p) => p.id === 'fishing-rod-appears')?.text,
     ).toContain('dusty shelves')
-  })
-})
-
-describe('the store picture follows whether the store is open', () => {
-  it('shows the shut shop while shut and the open shop once it opens', () => {
-    const game = new Game([new Act1()])
-    const store = game.state.allRooms.GeneralStore
-    expect(store.pictureVariants()).toEqual(['shut'])
-    expect(store.pictureVariant(game.state)).toBe('shut')
-    game.state.setStoryFlag(FLAG_PATCHES_RETURNED, true)
-    expect(Shopkeeper.isStoreOpen(game.state)).toBe(true)
-    expect(store.pictureVariant(game.state)).toBe('')
   })
 })
 

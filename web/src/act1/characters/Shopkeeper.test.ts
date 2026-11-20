@@ -266,6 +266,13 @@ describe('Hemlock and his missing cat', () => {
     expectDialogueSpeaker(again, 'Hemlock')
   })
 
+  it('first looks up from his counter, where he is painted (rq-n11w)', () => {
+    const game = gameInStore({ shopOpen: false })
+    const first = game.commandParser.parse('talk to shopkeeper')
+    expect(first).toContain('looks up from his counter, his face creased')
+    expect(first).not.toContain('from the window')
+  })
+
   it('grumbles about the stopped caravans with Malakar as a byword on the first talk', () => {
     const game = gameInStore({ shopOpen: false })
 

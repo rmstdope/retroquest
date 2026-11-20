@@ -2,6 +2,7 @@ import type { ImagePatch } from '@/engine'
 import { Candle } from './items/Candle'
 import { Lantern } from './items/Lantern'
 import { Mechanism } from './items/Mechanism'
+import { Shopkeeper } from './characters/Shopkeeper'
 import { Snare } from './items/Snare'
 import { Well } from './items/Well'
 import { WitheredCarrot } from './items/WitheredCarrot'
@@ -134,6 +135,12 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
     },
   ],
   GeneralStore: [
+    {
+      id: 'shutters-raised',
+      title: 'Shutters raised',
+      text: 'Raise the window shutters all the way.',
+      when: (c) => Shopkeeper.isStoreOpen(c.state),
+    },
     {
       id: 'rope-gone',
       title: 'Rope gone',
