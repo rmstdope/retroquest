@@ -3,6 +3,7 @@ import {
   advanceColumn,
   createFadeLedger,
   finishFade,
+  minimumReadMs,
   type ColumnLineInput,
   type FadeState,
 } from './lineFade'
@@ -108,5 +109,24 @@ describe('createFadeLedger', () => {
     ledger.forget('a')
     expect(ledger.version.value).toBe(3)
     expect(ledger.outOfSight('a')).toBe(false)
+  })
+})
+
+describe('minimumReadMs', () => {
+  it('gives a line with words four seconds and a fifth of a second per word', () => {
+    expect(minimumReadMs('Keep looking.')).toBe(4000 + 2 * 200)
+    expect(minimumReadMs("That's part of it. Not all. Keep looking.")).toBe(
+      4000 + 8 * 200,
+    )
+  })
+
+  it('grows no longer than six seconds, a long line’s own time to read', () => {
+    expect(minimumReadMs('word '.repeat(10))).toBe(6000)
+    expect(minimumReadMs('word '.repeat(55))).toBe(6000)
+  })
+
+  it('needs no time for a line with nothing to read', () => {
+    expect(minimumReadMs('')).toBe(0)
+    expect(minimumReadMs('  \n ')).toBe(0)
   })
 })

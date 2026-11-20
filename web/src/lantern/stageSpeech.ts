@@ -121,10 +121,13 @@ export function speakerColor(name: string): string {
 /** Any markup tag, which takes no reading time. */
 const TAGS = /\[\/?[a-z_]+\]/g
 
+/** The longest time to read a line takes, in ms: the cap of `readingPauseMs`, and of a line's minimum reading time (`minimumReadMs`). */
+export const READING_TIME_MAX_MS = 6000
+
 /** The pause before the next line when nothing is read aloud: by the length of the words, 0.9 to 6 seconds. */
 export function readingPauseMs(markup: string): number {
   const length = markup.replace(TAGS, '').length
-  return Math.min(6000, Math.max(900, 600 + 35 * length))
+  return Math.min(READING_TIME_MAX_MS, Math.max(900, 600 + 35 * length))
 }
 
 /** What of a line on the picture decides the run it belongs to. */

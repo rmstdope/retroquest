@@ -17,6 +17,7 @@ import {
   type ComputedRef,
   type InjectionKey,
 } from 'vue'
+import { READING_TIME_MAX_MS } from './stageSpeech'
 
 /**
  * Where a line is in its life on the picture: `live` while it is being read
@@ -84,6 +85,29 @@ export function finishFade(state: FadeState): FadeState {
 /** Whether a state is out of sight (its fade has run). */
 function outOfSightState(state: FadeState | undefined): boolean {
   return state === 'spent' || state === 'gone'
+}
+
+/** The least time any line with words shows before it starts to fade, in ms. */
+const MINIMUM_READ_BASE_MS = 4000
+
+/** What each word of a line adds to its minimum reading time, in ms. */
+const MINIMUM_READ_PER_WORD_MS = 200
+
+/**
+ * The least time a line stays fully visible before it starts to fade, by its
+ * words: four seconds and a fifth of a second per word, at most six seconds
+ * (`READING_TIME_MAX_MS`, the cap of a line's own time to read), however short
+ * its narration. A line whose narration outlasts this fades as soon as it has
+ * been heard; a line never read aloud whose own time to read is longer waits
+ * that. A line with no words needs none.
+ */
+export function minimumReadMs(text: string): number {
+  const words = text.split(/\s+/).filter((word) => word.length > 0).length
+  if (words === 0) return 0
+  return Math.min(
+    READING_TIME_MAX_MS,
+    MINIMUM_READ_BASE_MS + MINIMUM_READ_PER_WORD_MS * words,
+  )
 }
 
 /** The fade state of every line on the picture, by line id, for the columns to read. */

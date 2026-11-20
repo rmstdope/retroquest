@@ -10,6 +10,7 @@ import { useNarrationStore } from '@/stores/useNarrationStore'
 import { useFlightStore } from '@/stores/useFlightStore'
 import { useArrivalStore } from '@/stores/useArrivalStore'
 import { useSceneStore } from '@/stores/useSceneStore'
+import { minimumReadMs } from '@/lantern/lineFade'
 
 /** A turn that tells `text` (nothing when empty). */
 function turn(id: number, text: string, command: string | null = 'look'): Turn {
@@ -51,6 +52,7 @@ describe('the narration paper', () => {
     w?.unmount()
     vi.unstubAllGlobals()
     vi.restoreAllMocks()
+    vi.useRealTimers()
   })
 
   async function mountWith(turns: Turn[]): Promise<VueWrapper> {
@@ -110,14 +112,21 @@ describe('the narration paper', () => {
   })
 
   it('lets each bubble fade once read, and drops the Hide when every line has gone', async () => {
+    vi.useFakeTimers()
     await mountWith([turn(1, 'First.\n\nSecond.', 'look')])
-    await settle()
+    await vi.advanceTimersByTimeAsync(15)
     expect(hideButton()).not.toBeNull()
-    // Not read aloud: the first fades after its time to read, the second after both.
-    await new Promise((r) => setTimeout(r, 950))
+    // Not read aloud: past their time to read, each still shows for its minimum reading time.
+    await vi.advanceTimersByTimeAsync(minimumReadMs('First.') - 100)
+    expect(bubbles().map((b) => b.getAttribute('data-fade'))).toEqual([
+      'live',
+      'live',
+    ])
+    // Short bubbles shown together start fading together, top first, once their minimum is up.
+    await vi.advanceTimersByTimeAsync(100)
     expect(bubbles().map((b) => b.getAttribute('data-fade'))).toEqual([
       'away',
-      'live',
+      'away',
     ])
     const fadeEnds = (el: Element): void => {
       const event = new Event('animationend', { bubbles: true })
@@ -128,7 +137,6 @@ describe('the narration paper', () => {
     await nextTick()
     expect(bubbles()[0]?.getAttribute('data-fade')).toBe('gone')
     expect(hideButton()).not.toBeNull()
-    await new Promise((r) => setTimeout(r, 900))
     fadeEnds(bubbles()[1]!)
     await nextTick()
     expect(hideButton()).toBeNull()
@@ -221,12 +229,13 @@ describe('the narration paper', () => {
   })
 
   it('holds the words while they are hidden, so Show brings them back to fade anew', async () => {
+    vi.useFakeTimers()
     await mountWith([turn(1, 'First.')])
-    await settle()
+    await vi.advanceTimersByTimeAsync(15)
     hideButton()?.click()
     await nextTick()
-    // Longer than the time to read it: shown, it would have started to fade.
-    await new Promise((r) => setTimeout(r, 950))
+    // Longer than its minimum reading time: shown, it would have started to fade.
+    await vi.advanceTimersByTimeAsync(minimumReadMs('First.') + 50)
     expect(bubbles()[0]?.getAttribute('data-fade')).toBe('live')
     // No fade runs out while they are hidden.
     const event = new Event('animationend', { bubbles: true })
@@ -240,8 +249,10 @@ describe('the narration paper', () => {
     await nextTick()
     expect(bubbles()[0]?.getAttribute('data-fade')).toBe('live')
     expect(hideButton()).not.toBeNull()
-    // Shown again, it waits its time to read once more, then fades.
-    await new Promise((r) => setTimeout(r, 950))
+    // Shown again, it waits its minimum reading time once more, then fades.
+    await vi.advanceTimersByTimeAsync(minimumReadMs('First.') - 50)
+    expect(bubbles()[0]?.getAttribute('data-fade')).toBe('live')
+    await vi.advanceTimersByTimeAsync(100)
     expect(bubbles()[0]?.getAttribute('data-fade')).toBe('away')
   })
 
