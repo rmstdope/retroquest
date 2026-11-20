@@ -126,10 +126,8 @@ describe('the Act 1 pictures that showed modern objects or stray lettering', () 
 
   it("shows only the founders' mark over the chapel door", () => {
     const text = images['act1-village-chapel'].text
-    expect(text).toContain(
-      'Over the door, a small carving cut into the stone: a tree under two moons, ' +
-        'its edges worn soft with age but the shape still clear. ' +
-        'No other carving, letters, writing or symbols anywhere on the walls or the door.',
+    expect(text).toBe(
+      'A small stone room. It is very dark, A small stained glass window cast colors across the worn pews. A kindly priest tends an altar. There is a prayer book on the altar. On the far wall, the church bell rope hangs straight and still. Over the door, a small carving cut into the stone: a tree under two moons, its edges worn soft with age but the shape still clear. No other carving, letters, writing or symbols anywhere on the walls or the door. A dark corner by the altar swallows the light completely.\nThere is a box of short, white rods on the floor.',
     )
     expect(text).not.toContain('strange symbols')
   })
@@ -145,16 +143,14 @@ describe('the Act 1 pictures that showed modern objects or stray lettering', () 
   })
 
   it('lights the cottage by the hearth alone, with bare walls', () => {
-    expect(images['act1-eliors-cottage'].text).toContain(
-      'The room is lit only by the hearth fire; ' +
-        'the walls are bare plaster and timber with no fittings on them.',
+    expect(images['act1-eliors-cottage'].text).toBe(
+      'The inside of a modest cottage with a cozy hearth and a book shelf with books.\nThere are no windows.\nThe room is dark and the corner by your bed is pitch black.  A sturdy wooden table sits in the center, with a small loaf cooling on it, and a gentle fire crackles in the hearth. Grandmother stands by it, humming, and keeps an eye on the bread. The room is lit only by the hearth fire; the walls are bare plaster and timber with no fittings on them.',
     )
   })
 
   it('puts nothing but chimneys on the title screen roofs', () => {
-    expect(images['title-screen'].text).toContain(
-      'Thatched and slate roofs with stone chimneys and a curl of smoke; ' +
-        'nothing on the roofs but chimneys.',
+    expect(images['title-screen'].text).toBe(
+      'A quiet village under a lantern-lit night, drawn with open sky across the top third and a calm, uncluttered middle for the buttons. Thatched and slate roofs with stone chimneys and a curl of smoke; nothing on the roofs but chimneys. In the sky, there is a full moon which reflects clearly in the water of a pond in the village. In the clouds, you can see the outlines of a cloaked man.',
     )
   })
 })
