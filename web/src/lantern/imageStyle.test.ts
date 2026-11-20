@@ -66,11 +66,23 @@ describe('the style in content-studio/images/edits.json', () => {
     expect(style.look).not.toMatch(/warm/i)
   })
 
-  it('keeps out only what does no harm when named in the prompt', () => {
-    // The studio's models read no negative prompt: keepOut is added to the
-    // prompt as words, so what would be drawn by naming it stays in the look.
+  it('describes a handmade, pre-industrial world in the look', () => {
+    expect(style.look).toContain(
+      'a pre-industrial world where everything is handmade: ' +
+        'light comes only from the sun, fire, candles and oil lamps; ' +
+        'people wear wool, linen and leather; ' +
+        'roofs are thatch, slate or timber',
+    )
+  })
+
+  it('names the modern things to keep out, and any lettering nobody asked for', () => {
     expect(style.keepOut).toBe(
-      'photorealism, 3d render, anime, neon colours, modern objects',
+      'photorealism, 3d render, anime, neon colours, modern objects, ' +
+        'electric lights, light switches, wall sockets, lamp posts, ' +
+        'telegraph or power poles, wires, TV aerials, satellite dishes, ' +
+        'modern clothing, zips, logos, printed shirts, baseball caps, ' +
+        'rubber boots, letters, words, writing or symbols of any kind ' +
+        'unless the description asks for them',
     )
   })
 
@@ -95,6 +107,57 @@ describe('the style in content-studio/images/edits.json', () => {
         'Cold, dim light, violet and grey shadows, ' +
         'colours drained almost to stone, a hush of dread, in a fantasy setting',
     })
+  })
+})
+
+describe('the Act 1 pictures that showed modern objects or stray lettering', () => {
+  const images = readJson<{ images: Record<string, { text: string }> }>(
+    EDITS_FILE,
+  ).images
+
+  it('shows the fisherman empty-handed in homespun clothes, with no pole behind him', () => {
+    expect(images['act1-riverbank'].text).toBe(
+      "A gentle river flows past the village and makes a slow bend here, past the reeds and a broad, flat stone at the water's edge. " +
+        'A couple of insects hum over the water. ' +
+        'A weathered old fisherman in a homespun wool smock and a shapeless felt hood sits on an upturned crate at the bend, ' +
+        'watching the water, his bad arm held close to his side. ' +
+        'His hands are empty: no rod, no line, no net. ' +
+        'Beyond the reeds, only thatched cottages and trees.',
+    )
+  })
+
+  it("shows only the founders' mark over the chapel door", () => {
+    const text = images['act1-village-chapel'].text
+    expect(text).toContain(
+      'Over the door, a small carving cut into the stone: a tree under two moons, ' +
+        'its edges worn soft with age but the shape still clear. ' +
+        'No other carving, letters, writing or symbols anywhere on the walls or the door.',
+    )
+    expect(text).not.toContain('strange symbols')
+  })
+
+  it('dresses Borin in linen and leather', () => {
+    expect(images['act1-blacksmiths-forge'].text).toBe(
+      'A smoky forge. Coals glow in the hearth. ' +
+        'The blacksmith stands next to an anvil with a hammer in his hand. ' +
+        'The blacksmith wears a rough undyed linen shirt, sleeves rolled past the elbow, under a scorched leather apron; ' +
+        'forearms like fence posts, old burns on his knuckles. ' +
+        'There is a small horseshoe on the wall.',
+    )
+  })
+
+  it('lights the cottage by the hearth alone, with bare walls', () => {
+    expect(images['act1-eliors-cottage'].text).toContain(
+      'The room is lit only by the hearth fire; ' +
+        'the walls are bare plaster and timber with no fittings on them.',
+    )
+  })
+
+  it('puts nothing but chimneys on the title screen roofs', () => {
+    expect(images['title-screen'].text).toContain(
+      'Thatched and slate roofs with stone chimneys and a curl of smoke; ' +
+        'nothing on the roofs but chimneys.',
+    )
   })
 })
 
