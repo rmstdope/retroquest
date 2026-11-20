@@ -218,10 +218,17 @@ describe('useGameStore: panels held while a turn is narrated', () => {
       store.rawInventory.find((entry) => entry.name.includes('photograph'))!
         .description
     expect(photograph()).not.toContain('Seek the truth where the river bends.')
+    const entries = store.bagEntries
     store.submitCommand('examine faded photograph')
+    const id = store.turns.at(-1)!.id
     // The turn is still told (its quest news is to come): the bag is held.
     expect(store.groupHeld('stock')).toBe(true)
     expect(photograph()).toContain('Seek the truth where the river bends.')
+    expect(store.bagEntries).toBe(entries)
+    // Already shown, the description does not flash the Bag on release.
+    const flashes = store.panelFlash.stock
+    store.releasePanels(id, ['stock'], true)
+    expect(store.panelFlash.stock).toBe(flashes)
   })
 
   it('keeps the bag dot back for a gain that will fly until it lands, and never dims an earlier dot (rq-xxd8)', async () => {

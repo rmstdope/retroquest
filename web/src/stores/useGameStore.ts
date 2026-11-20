@@ -1009,10 +1009,12 @@ export const useGameStore = defineStore('game', () => {
   }
 
   /**
-   * While Bag and Spells are held, what the engine now says of a thing they
-   * already show (its description, as an Examine just told it) shows at once:
-   * the hold keeps back what was gained or lost, not what was learnt about
-   * what is carried. An entry is matched by its listed name, count included.
+   * While Bag and Spells are held, a thing they already show takes the
+   * description the engine gives it now at once (after an Examine, what it
+   * told): the hold keeps back what was gained or lost, not a changed
+   * description of what is carried. An entry is matched by its listed name,
+   * count included; its name and ring verbs stay held. The release then finds
+   * the description already shown, so it does not flash the Bag for it.
    */
   function applyHeldNotes(): void {
     if (!latest) return
@@ -1020,15 +1022,14 @@ export const useGameStore = defineStore('game', () => {
     rawSpells.value = withLatestNotes(rawSpells.value, latest.stock.spells)
   }
 
-  /** `shown` with each entry the engine still lists by the same name taken from `now`; `shown` itself when nothing differs. */
+  /** `shown` with each entry's description taken from the entry of the same name in `now`; `shown` itself when nothing differs. */
   function withLatestNotes(shown: NamedItem[], now: NamedItem[]): NamedItem[] {
     let changed = false
     const next = shown.map((entry) => {
       const current = now.find((candidate) => candidate.name === entry.name)
-      if (!current || JSON.stringify(current) === JSON.stringify(entry))
-        return entry
+      if (!current || current.description === entry.description) return entry
       changed = true
-      return current
+      return { ...entry, description: current.description }
     })
     return changed ? next : shown
   }
