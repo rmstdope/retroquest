@@ -88020,48 +88020,6 @@
    }
   ]
  },
- "1c0d3c7ff1706b": {
-  "file": "1c0d3c7ff1706b.mp3",
-  "speaker": "narrator",
-  "duration": 2.276,
-  "words": [
-   {
-    "word": "You",
-    "start": 0.0,
-    "end": 0.18
-   },
-   {
-    "word": "have",
-    "start": 0.18,
-    "end": 0.42
-   },
-   {
-    "word": "yet",
-    "start": 0.42,
-    "end": 0.68
-   },
-   {
-    "word": "to",
-    "start": 0.68,
-    "end": 0.88
-   },
-   {
-    "word": "look",
-    "start": 0.88,
-    "end": 1.1
-   },
-   {
-    "word": "properly",
-    "start": 1.1,
-    "end": 1.6
-   },
-   {
-    "word": "at:",
-    "start": 1.6,
-    "end": 2.02
-   }
-  ]
- },
  "1c0dc9e9252c80": {
   "file": "1c0dc9e9252c80.mp3",
   "speaker": "narrator",

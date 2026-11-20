@@ -144,6 +144,18 @@ describe('GameMap leads at the road', () => {
     )
   })
 
+  it('never names an unknown place in the refusal', () => {
+    const { game, map } = setupReadyExcept()
+    game.state.activatedQuests.push(new KnowYourVillageQuest())
+    for (const room of Object.values(game.state.allRooms)) {
+      if (room.name !== 'Hidden Glade' && room.name !== 'Forest Path')
+        game.state.markVisited(room)
+    }
+    const text = map.use(game.state)
+    expect(text).toContain('[room_name]Forest Path[/room_name]')
+    expect(text).not.toContain('Hidden Glade')
+  })
+
   it('keeps the old clause when another begun task is open beside the places', () => {
     const { game, map } = setupReadyExcept()
     game.state.activatedQuests.push(

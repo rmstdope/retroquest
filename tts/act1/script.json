@@ -2415,6 +2415,11 @@
     "text": "You have learned Bless."
   },
   {
+    "id": "0ec8bae57fb309",
+    "speaker": "narrator",
+    "text": "The places to look at properly:"
+  },
+  {
     "id": "0ed700def39039",
     "speaker": "narrator",
     "text": "In the gloom you make out an old workbench and a few interesting things. From the shadows comes a frightened mew, and a small patchwork shape bolts behind the broken crates."
@@ -4558,11 +4563,6 @@
     "id": "1c06819587e463",
     "speaker": "grandmother",
     "text": "The three of you. You'd not have been two. Your mother wouldn't stand still for it; that's why she's half a blur."
-  },
-  {
-    "id": "1c0d3c7ff1706b",
-    "speaker": "narrator",
-    "text": "You have yet to look properly at:"
   },
   {
     "id": "1c0dc9e9252c80",

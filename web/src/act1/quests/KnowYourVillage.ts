@@ -7,7 +7,7 @@ export const KNOW_YOUR_VILLAGE = 'Know your village'
 const DESCRIPTION =
   'Something pulls at you to walk every lane of Willowbrook, ' +
   'and to look properly at the places you have passed a thousand times.'
-const LEAD_IN = 'You have yet to look properly at:'
+const LEAD_IN = 'The places to look at properly:'
 
 /**
  * The places of the village in walking order, each with the hint line that
@@ -95,8 +95,8 @@ const PLACES: [name: string, hint: string][] = [
 
 /**
  * Side quest: visit every room of Willowbrook. Its log is a checklist of the
- * places, and its hint names the unvisited one nearest to Elior; both are read
- * from `visitedRooms`, so a loaded save shows the same.
+ * places Elior knows, and its hint names the known, unvisited one nearest to
+ * Elior; both are read from `visitedRooms`, so a loaded save shows the same.
  */
 export class KnowYourVillageQuest extends Quest {
   constructor() {
@@ -110,16 +110,34 @@ export class KnowYourVillageQuest extends Quest {
   }
 
   /**
-   * The village's places Elior has not visited, in walking order. The dream
-   * the act opens with is not a corner of Willowbrook and does not count.
+   * The places Elior knows: those he has visited, and those a visited place
+   * has an open way to, which is when the map shows them. The dream is not a
+   * corner of Willowbrook and never counts.
+   */
+  static known(gameState: GameState): Room[] {
+    const names = new Set(gameState.visitedRooms)
+    for (const name of gameState.visitedRooms) {
+      const room = Object.values(gameState.allRooms).find(
+        (candidate) => candidate.name === name,
+      )
+      if (!room) continue
+      for (const key of Object.values(room.getExits(gameState))) {
+        const next = gameState.allRooms[key]
+        if (next) names.add(next.name)
+      }
+    }
+    return Object.values(gameState.allRooms).filter(
+      (room) => !(room instanceof TheDream) && names.has(room.name),
+    )
+  }
+
+  /**
+   * The village's known places Elior has not visited, in walking order. A
+   * place not yet known is never named.
    */
   static unvisited(gameState: GameState): Room[] {
-    return Object.values(gameState.allRooms)
-      .filter(
-        (room) =>
-          !(room instanceof TheDream) &&
-          !gameState.visitedRooms.includes(room.name),
-      )
+    return KnowYourVillageQuest.known(gameState)
+      .filter((room) => !gameState.visitedRooms.includes(room.name))
       .sort((a, b) => walkingIndex(a) - walkingIndex(b))
   }
 
@@ -155,7 +173,10 @@ export class KnowYourVillageQuest extends Quest {
    */
   override checkCompletion(gameState: GameState): boolean {
     this.refreshChecklist(gameState)
-    return KnowYourVillageQuest.unvisited(gameState).length === 0
+    return Object.values(gameState.allRooms).every(
+      (room) =>
+        room instanceof TheDream || gameState.visitedRooms.includes(room.name),
+    )
   }
 
   /** Names the nearest unvisited place in Elior's words; nothing once all are visited. */
@@ -165,12 +186,15 @@ export class KnowYourVillageQuest extends Quest {
     return PLACES.find(([name]) => name === nearest.name)?.[1] ?? null
   }
 
-  /** Set the checklist: every place in walking order, ticked when visited. */
+  /** Set the checklist: the known places in walking order, ticked when visited. */
   private refreshChecklist(gameState: GameState): void {
-    const items = PLACES.map(([name]) => ({
-      done: gameState.visitedRooms.includes(name),
-      text: name,
-    }))
+    const known = KnowYourVillageQuest.known(gameState).map((r) => r.name)
+    const items = PLACES.filter(([name]) => known.includes(name)).map(
+      ([name]) => ({
+        done: gameState.visitedRooms.includes(name),
+        text: name,
+      }),
+    )
     const intro = `${DESCRIPTION}\n${LEAD_IN}`
     const lines = items.map(({ done, text }) => {
       const tag = done ? 'success' : 'pending'
