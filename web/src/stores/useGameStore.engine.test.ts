@@ -740,7 +740,17 @@ describe('useGameStore over the real engine: the story so far in a save', () => 
       const reloaded = await reloadedStore()
       load(reloaded)
 
-      expect(story(reloaded)).toEqual(
+      const brought = story(reloaded)
+      // The room is told once more after it (rq-fl1v): a first-visit arrival.
+      const [told] = brought.splice(-1)
+      expect(told).toMatchObject({
+        command: null,
+        text: '',
+        description: { moved: true, firstVisit: true },
+        narrate: true,
+        arrival: { room: 'Hall' },
+      })
+      expect(brought).toEqual(
         // Marked as brought back; nothing of it is narrated or chimed again.
         before.map((turn) => {
           const { narrate: _narrate, ...rest } = turn as Turn

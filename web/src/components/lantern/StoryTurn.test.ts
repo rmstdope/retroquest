@@ -976,6 +976,26 @@ describe('StoryTurn quest news told in the middle', () => {
     expect(cleared.find('[data-testid="news-line"]').exists()).toBe(false)
   })
 
+  it('keeps the room a load told in the record (Story so far), not on a card (rq-fl1v)', () => {
+    const returned = turn({
+      room: 'Garden',
+      description: { moved: true, firstVisit: true },
+      narrate: true,
+      arrival: {
+        room: 'Garden',
+        description: 'A green garden.',
+        characters: [],
+        items: [],
+        exits: {},
+      },
+    })
+    const record = mount(StoryTurn, { props: { turn: returned, record: true } })
+    expect(record.text()).toContain('Garden')
+    expect(record.text()).toContain('A green garden.')
+    const card = mount(StoryTurn, { props: { turn: returned, card: true } })
+    expect(card.text()).not.toContain('A green garden.')
+  })
+
   it('shows no quest news on a card, even news not told in the middle', () => {
     const w = mount(StoryTurn, {
       props: {

@@ -1593,13 +1593,52 @@ describe('useGameStore', () => {
       bridge.controller.getRoomName.mockReturnValue('Ancient Grove')
 
       store.loadFromSlot(3)
+      usePassageStore().skip()
 
       expect(store.turns.at(-1)).toMatchObject({
         command: null,
         text: '',
         room: 'Ancient Grove',
-        description: { moved: true, firstVisit: false },
+        description: { moved: true, firstVisit: true },
+        narrate: true,
+        arrival: { room: 'Ancient Grove' },
       })
+    })
+
+    it("adds the loaded room as one more turn after the save's story, which stays as it was (rq-fl1v)", async () => {
+      await startPlaying()
+      bridge.controller.getRoomName.mockReturnValue('Ancient Grove')
+      bridge.takeLoadedStory.mockReturnValueOnce([
+        {
+          id: 7,
+          command: 'look',
+          text: 'Old answer.',
+          room: 'Ancient Grove',
+          description: { moved: false, firstVisit: false },
+          gained: [],
+          lost: [],
+          arrival: null,
+          narrate: true,
+        },
+      ])
+
+      store.loadFromSlot(3)
+      usePassageStore().skip()
+
+      expect(store.turns).toHaveLength(2)
+      expect(store.turns[0]).toMatchObject({
+        text: 'Old answer.',
+        restored: true,
+      })
+      expect(store.turns[0]).not.toHaveProperty('narrate')
+      expect(store.turns[1]).toMatchObject({
+        command: null,
+        text: '',
+        description: { moved: true, firstVisit: true },
+        narrate: true,
+        arrival: { room: 'Ancient Grove' },
+      })
+      expect(store.turns[1]).not.toHaveProperty('restored')
     })
 
     it('keeps the act-completing answer in the old room; arrival marks the new one', async () => {
@@ -1638,7 +1677,7 @@ describe('useGameStore', () => {
       })
     })
 
-    it('marks the opening arrival and a typed command for narration, never a load', async () => {
+    it('marks the opening arrival, a typed command and the room a load tells for narration, never the loaded story', async () => {
       await startPlaying()
       expect(store.turns[0]).toMatchObject({
         narrate: true,
@@ -1649,7 +1688,8 @@ describe('useGameStore', () => {
       expect(store.turns.at(-1)?.narrate).toBe(true)
 
       store.submitCommand('load')
-      expect(store.turns.at(-1)?.narrate).toBeUndefined()
+      expect(store.turns.at(-1)?.narrate).toBe(true)
+      expect(store.turns.slice(0, -1).every((turn) => turn.restored)).toBe(true)
     })
 
     it('flags a first visit when the room is new, even as another leaves the visited list (waking from the dream)', async () => {
