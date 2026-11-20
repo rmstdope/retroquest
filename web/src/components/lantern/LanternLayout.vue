@@ -749,10 +749,10 @@ function onBeltKey(event: KeyboardEvent): void {
   void beltEl.value?.focusBelt()
 }
 
-/** Escape steps back from what is in hand and from the belt (Escape leaves the names to fade by themselves); a dialog that is up shuts first. */
+/** Escape steps back from what is in hand and from the belt (Escape leaves the names to fade by themselves); a dialog that is up shuts first, and a drag that is up keeps the Escape for itself (it ends the drag and nothing more). */
 function onNamesEscape(event: KeyboardEvent): void {
   if (event.key !== 'Escape') return
-  if (dialogOpen() || ring.value) return
+  if (dialogOpen() || ring.value || beltDrag.drag.value) return
   // What is in hand goes down first (focus back on its picture on the belt); then, on the belt, focus goes back to where it was.
   if (belt.hand) {
     event.preventDefault()

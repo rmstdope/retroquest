@@ -285,6 +285,22 @@ describe('LanternLayout: dragging from the belt', () => {
     expect(store.turns.at(-1)?.command).toBe('use bread with feather')
   })
 
+  it('cancels the drag on Escape when the bag has the focus, so letting go sends nothing', async () => {
+    const store = await cottage()
+    const before = store.turns.length
+    const button = tile('item:bread').element as HTMLElement
+    button.focus()
+    expect(w.get('.lq-belt').element.contains(document.activeElement)).toBe(
+      true,
+    )
+    await lift()
+    await over(hit('bread').element)
+    await key('Escape')
+    expect(w.get('[data-drag-ghost]').classes()).toContain('lq-drag-glide')
+    await letGo()
+    expect(store.turns.length).toBe(before)
+  })
+
   it('glides back and sends nothing on a miss, an Escape or a lost pointer', async () => {
     const store = await cottage()
     const before = store.turns.length
