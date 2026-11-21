@@ -22,11 +22,14 @@ describe('Vegetable Field blight timeline', () => {
     game.state.currentRoom = game.state.allRooms.VegetableField
     const controller = new GameController(game)
     const LAST_SENTENCE = 'On market day these rows were green.'
-    expect(controller.getRoomDescription()).toContain(LAST_SENTENCE)
-    expect(controller.getRoomDescription()).not.toContain('a month ago')
+    const description = (): string => controller.getRoomDescription()
+    expect(description()).toContain('a rusty hoe')
+    expect(description().endsWith(LAST_SENTENCE)).toBe(true)
+    expect(description()).not.toContain('a month ago')
     game.commandParser.parse('take rusty hoe')
-    expect(controller.getRoomDescription()).toContain(LAST_SENTENCE)
-    expect(controller.getRoomDescription()).not.toContain('a month ago')
+    expect(description()).not.toContain('a rusty hoe')
+    expect(description().endsWith(LAST_SENTENCE)).toBe(true)
+    expect(description()).not.toContain('a month ago')
   })
 })
 
