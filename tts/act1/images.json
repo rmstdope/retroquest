@@ -116,7 +116,7 @@
     "title": "Blacksmith's Forge",
     "width": 1920,
     "height": 1080,
-    "text": "A hot, smoky forge. Coals glow in the hearth and the anvil rings. Hinges, ploughshares and horseshoes hang from the walls, waiting to be mended or fetched, and Borin wipes his brow without putting down the hammer.",
+    "text": "A hot, smoky forge. A log fire burns on the hearthstone, and not all of its smoke finds the chimney. A single horseshoe hangs on the wall. Borin stands between the fire and the anvil, his hammer in his hand, watching the fire.",
     "areas": [
       {
         "id": "horseshoe",
@@ -124,7 +124,7 @@
       },
       {
         "id": "scenery-blacksmiths-forge-coals",
-        "title": "Coals"
+        "title": "Fire"
       },
       {
         "id": "scenery-blacksmiths-forge-anvil",
@@ -132,7 +132,7 @@
       },
       {
         "id": "scenery-blacksmiths-forge-hinges",
-        "title": "Hinges"
+        "title": "Tools"
       },
       {
         "id": "scenery-blacksmiths-forge-hammer",
@@ -226,7 +226,7 @@
     "title": "Elior's Cottage",
     "width": 1920,
     "height": 1080,
-    "text": "A modest cottage with a straw roof and a cozy hearth. The scent of fresh bread and old books fills the air. The curtains are still drawn on a bright morning, and the corner by your bed is too dark to see into. A sturdy wooden table sits in the center, with a small loaf cooling on it, and a gentle fire crackles in the hearth. Grandmother stands by it, humming, and keeps an eye on the bread.",
+    "text": "A modest cottage with a straw roof and a cozy hearth. The scent of fresh bread and old books fills the air. The doorway to your room stands open, and the room beyond it is too dark to see into. A sturdy wooden table sits in the center, with a small loaf cooling on it, and a gentle fire crackles in the hearth. Grandmother stands by your doorway, humming, and keeps an eye on the bread.",
     "areas": [
       {
         "id": "hearth",
@@ -596,7 +596,7 @@
     "title": "Mira's Hut",
     "width": 1920,
     "height": 1080,
-    "text": "A small hut hung with drying herbs: lavender, sage, and roots in bundles from the rafters. Shelves of bottles line the walls, every one labelled. Mira moves among them without looking, the way you move through your own kitchen.",
+    "text": "A small hut hung with drying herbs: lavender, sage, and roots in bundles from the rafters. Shelves of bottles line the walls, every one labelled. Mira stands at the window with her back to you, tying a bundle of herbs in the light.",
     "areas": [
       {
         "id": "healing-herb",
@@ -849,7 +849,7 @@
     "title": "The Dream",
     "width": 1920,
     "height": 1080,
-    "text": "It is dark, and it is raining hard. You hear it beating on shutters, though you cannot see any. Thunder breaks so close that the dark shakes with it. Shadows drift past like smoke. A man’s hand reaches out of the dark, lifts a child and holds it against his shoulder, and then both of them are gone. Somewhere a slow tune climbs three notes and settles home again. A tall figure stands among the shadows. It has no face you can find. It is too far away to reach, and too close to be only a dream. It is whispering, at the very edge of hearing, and what it whispers is your name.",
+    "text": "It is raining hard on a village street. Thunder breaks so close that the shutters shake with it. Shadows drift through the rain like smoke. In the street a man in a hooded cloak holds a child against his shoulder. His hood hides his face. Somewhere a slow tune climbs three notes and settles home again. Behind him a tall figure stands among the shadows. It has no face you can find. It is too far away to reach, and too close to be only a dream. It is whispering, at the very edge of hearing, and what it whispers is your name.",
     "areas": [
       {
         "id": "scenery-the-dream-shadows",
@@ -874,7 +874,7 @@
     "title": "Vegetable Field",
     "width": 1920,
     "height": 1080,
-    "text": "Rows of withered crops stretch beneath the last grey of the night's storm. The earth is cracked and dry, with only a few stubborn carrots and a rusty hoe hinting at better days. A faint breeze rustles the brittle leaves, carrying the scent of soil and distant rain. These rows were green a month ago.",
+    "text": "Rows of withered crops stretch beneath the last grey of the night's storm. The earth is cracked and dry, with only a few stubborn carrots and a rusty trowel hinting at better days. A faint breeze rustles the brittle leaves, carrying the scent of soil and distant rain. These rows were green a month ago.",
     "areas": [
       {
         "id": "withered-carrot",
@@ -882,7 +882,7 @@
       },
       {
         "id": "rusty-hoe",
-        "title": "Rusty Hoe"
+        "title": "Rusty Trowel"
       },
       {
         "id": "dull-knife",
@@ -912,8 +912,8 @@
     "patches": [
       {
         "id": "rusty-hoe-taken",
-        "title": "Rusty Hoe taken",
-        "text": "Remove the rusty hoe from the picture.",
+        "title": "Rusty Trowel taken",
+        "text": "Remove the rusty trowel from the picture.",
         "area": "rusty-hoe"
       },
       {
@@ -1092,7 +1092,7 @@
       {
         "id": "well-purified",
         "title": "Well purified",
-        "text": "Make the water in the well clear and bright instead of dark and still.",
+        "text": "Make the water in the well clear and bright instead of dark and green.",
         "area": "well"
       }
     ]
@@ -1308,18 +1308,18 @@
     "text": "A flat grey stone token with a single glowing rune cut into it. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
   },
   {
-    "id": "item-rusty-hoe",
-    "title": "Rusty Hoe",
-    "width": 256,
-    "height": 256,
-    "text": "A farm hoe with a rusty blade and a splintered wooden handle. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
-  },
-  {
     "id": "item-rusty-saw",
     "title": "Rusty Saw",
     "width": 256,
     "height": 256,
     "text": "A hand saw with a rusty, toothed blade and a wooden grip. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-rusty-trowel",
+    "title": "Rusty Trowel",
+    "width": 256,
+    "height": 256,
+    "text": "A garden trowel with a rusty blade and a worn wooden handle. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
   },
   {
     "id": "item-sharp-knife",

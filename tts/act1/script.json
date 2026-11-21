@@ -5,11 +5,6 @@
     "text": "The priest sees the box in your hand and nods at the cold candle by the altar."
   },
   {
-    "id": "000167b4df23c1",
-    "speaker": "narrator",
-    "text": "Hint of magic: You woke with three words written down, somewhere in the dark by your bed, and a tune still going in the house. The lantern would show you where."
-  },
-  {
     "id": "00090556652da5",
     "speaker": "narrator",
     "text": "An old man on an upturned crate at the bend, watching the water, his mended arm resting easy on his knee."
@@ -63,6 +58,11 @@
     "id": "0065faa20bb5e8",
     "speaker": "narrator",
     "text": "Borin doesn't stop hammering."
+  },
+  {
+    "id": "0066806acc1520",
+    "speaker": "narrator",
+    "text": "His hood hides his face. He holds the child carefully, as if it might wake."
   },
   {
     "id": "0074c947a2229e",
@@ -138,6 +138,11 @@
     "id": "00c10270bb35ae",
     "speaker": "grandmother",
     "text": "Back again? There's bread on the board, if you're hungry. And light that lantern before you go feeling about in your corner; you'll have the shelf down."
+  },
+  {
+    "id": "00c915b8b33209",
+    "speaker": "narrator",
+    "text": "Tongs and a coil of rope hang on the walls, each where Borin's hand expects it to be."
   },
   {
     "id": "00c98598d024c6",
@@ -295,11 +300,6 @@
     "text": "That's not shop goods, lad, and I'd not put a price on it if it were."
   },
   {
-    "id": "01da3eb13f1793",
-    "speaker": "narrator",
-    "text": "An old stone well stands between the field and the forge, its stones worn smooth by countless hands. The water below lies dark and still, and a faint sour smell hangs in the cool, damp air. Moss creeps up the sides."
-  },
-  {
     "id": "01da719beef367",
     "speaker": "narrator",
     "text": "A divine light surrounds Patches and leaves strength and resolve behind."
@@ -410,6 +410,11 @@
     "text": "Let there be light: Hemlock gave you the box of matches. The candle by the altar in the chapel is still cold."
   },
   {
+    "id": "029a3fd938422f",
+    "speaker": "narrator",
+    "text": "A hot, smoky forge. A log fire burns on the hearthstone, and not all of its smoke finds the chimney. A single horseshoe hangs on the wall. Borin stands between the fire and the anvil, his hammer in his hand, watching the fire."
+  },
+  {
     "id": "029c790169a08e",
     "speaker": "narrator",
     "text": "An old, faded photograph. The image is barely visible, but you can make out two adults and a child. On the back, in your mother's handwriting, is a cryptic message:"
@@ -433,6 +438,11 @@
     "id": "02d25d2e523f27",
     "speaker": "tilda",
     "text": "Magic? In Willowbrook? ... Well. I'll not tell a soul if you'd rather I didn't. But I'll know, and I'll be saving you the first loaf every morning."
+  },
+  {
+    "id": "02daf77594623a",
+    "speaker": "narrator",
+    "text": "An old stone well, no higher than your knee, around water that goes down further than you can see. The water is dark and green, and it smells sour, the way milk does when it has turned. Far down, something glints, or you think it does. It is much too deep to reach."
   },
   {
     "id": "02dc158d29c293",
@@ -498,6 +508,11 @@
     "id": "0329cd9f132a75",
     "speaker": "tilda",
     "text": "Hush, love. Not out loud, not with the fields the way they are."
+  },
+  {
+    "id": "032d0c441e2d2e",
+    "speaker": "narrator",
+    "text": "Rows of withered crops stretch beneath the last grey of the night's storm. The earth is cracked and dry, with only a few stubborn carrots and a rusty trowel hinting at better days. A faint breeze rustles the brittle leaves, carrying the scent of soil and distant rain. These rows were green a month ago."
   },
   {
     "id": "0335c4695a33b6",
@@ -640,6 +655,11 @@
     "text": "A pair of frightened green eyes watches you from behind the crates."
   },
   {
+    "id": "0443d524731b3d",
+    "speaker": "narrator",
+    "text": "A small hut hung with drying herbs: lavender, sage, and roots in bundles from the rafters. Shelves of bottles line the walls, every one labelled. Mira stands at the window with her back to you, tying a bundle of herbs in the light. On its stand, the ancient amulet glows brighter as you step in, as if something you carry has woken it."
+  },
+  {
     "id": "0456a9d57a4bdb",
     "speaker": "narrator",
     "text": "It is heavy, and bent at one heel. Iron like this does not go to waste."
@@ -658,6 +678,11 @@
     "id": "046c97577f2dc9",
     "speaker": "narrator",
     "text": "You think it over. The voice keeps saying your name, nearer each time, as if it is waiting for you to answer it."
+  },
+  {
+    "id": "048481463a1c4e",
+    "speaker": "narrator",
+    "text": "It is raining hard on a village street. Thunder breaks so close that the shutters shake with it. Shadows drift through the rain like smoke. In the street a man in a hooded cloak holds a child against his shoulder. His hood hides his face. Somewhere a slow tune climbs three notes and settles home again. Behind him a tall figure stands among the shadows. It has no face you can find. It is too far away to reach, and too close to be only a dream. It is whispering, at the very edge of hearing, and what it whispers is your name."
   },
   {
     "id": "048c85835e0cb7",
@@ -775,6 +800,11 @@
     "text": "A silver ring with a small, sparkling gemstone. Inside the band, worn almost smooth, two initials are engraved:"
   },
   {
+    "id": "050688b7e959ed",
+    "speaker": "narrator",
+    "text": "A hot, smoky forge. A log fire burns on the hearthstone, and not all of its smoke finds the chimney. Borin stands between the fire and the anvil, his hammer in his hand, watching the fire."
+  },
+  {
     "id": "050a197058685d",
     "speaker": "narrator",
     "text": "The small patchwork shape hiding in the Abandoned Shed looked a lot like Patches, the cat who sleeps on the counter of the General Store."
@@ -818,11 +848,6 @@
     "id": "053cf06d097caf",
     "speaker": "narrator",
     "text": "The flower opened for you. Mira showed you how to mend, how to open and how to make a light, and promised you the ancient amulet once you are ready for the road."
-  },
-  {
-    "id": "0554391f98fcd8",
-    "speaker": "narrator",
-    "text": "An old stone well, its surface worn smooth, its shaft disappearing into the depths. The water within is crystal clear. The bottom is visible and appears empty."
   },
   {
     "id": "0555c702da0393",
@@ -955,6 +980,11 @@
     "text": "Mira has tasked you with preparing for your journey. She says you will need:"
   },
   {
+    "id": "05ec0692562bc2",
+    "speaker": "narrator",
+    "text": "An old stone well, no higher than your knee, around water that goes down further than you can see. The water is crystal clear now. The bottom is visible and appears empty."
+  },
+  {
     "id": "05feedc880605f",
     "speaker": "narrator",
     "text": "He counts the coin twice and hands over the rope, and an apple with it."
@@ -973,6 +1003,11 @@
     "id": "060ee47babb935",
     "speaker": "narrator",
     "text": "A long fishing rod with a magnet on the end, reinforced with a sturdy stick. Perfect for reaching and retrieving metallic items from a distance."
+  },
+  {
+    "id": "062664cf9b3246",
+    "speaker": "narrator",
+    "text": "An old stone well sits low in the grass between the field and the forge, a ring of stones worn smooth by countless hands around a deep pool. Lily pads float on dark green water, and a faint sour smell hangs in the cool, damp air. Moss creeps over the stones."
   },
   {
     "id": "0638932533305a",
@@ -1090,11 +1125,6 @@
     "text": "Dusty shelves above the workbench: jars of screws, a coil of wire, a candle stub."
   },
   {
-    "id": "06c1ee650d9fd0",
-    "speaker": "narrator",
-    "text": "The coals glow orange under a crust of grey. Borin feeds them without looking."
-  },
-  {
     "id": "06c49bbc27a458",
     "speaker": "merchant",
     "text": "That's kind, friend, but you'll want every bite of that where you're going. Keep it."
@@ -1145,11 +1175,6 @@
     "text": "Grey boards, warped and grimy, and nailed so close that hardly a crack shows between them."
   },
   {
-    "id": "06fceab0fa1e36",
-    "speaker": "narrator",
-    "text": "Hinges and ploughshares hang on the walls, each tied with a scrap of cloth with a name on it. You know most of the names."
-  },
-  {
     "id": "07040f5fea63ad",
     "speaker": "narrator",
     "text": "Preparing for the road: Mira has tasked you with preparing for your journey. She says you will need: Sturdy footwear"
@@ -1170,6 +1195,11 @@
     "text": "A small wooden coop stands here, its planks patched and weathered. Nervous chickens cluck and flutter, their feathers ruffled as they dart between straw nests. The air is thick with the scent of hay and the occasional squawk. Sunbeams slip through the slats, casting striped shadows on the dirt floor. High on a rafter, out of reach, something glints where no hen could have put it."
   },
   {
+    "id": "073731d207b287",
+    "speaker": "narrator",
+    "text": "You woke with three words written down, somewhere in the dark of your room, and a tune still going in the house. The lantern would show you where."
+  },
+  {
     "id": "073c6d58d2326c",
     "speaker": "narrator",
     "text": "A simple beeswax candle on the altar, its wick cold. It has a faint, comforting scent."
@@ -1188,11 +1218,6 @@
     "id": "0750595b52d3ff",
     "speaker": "narrator",
     "text": "A travelling merchant with a half-empty cart and a thin grey mare who stands on three good shoes. He has the look of a man two days from his last meal."
-  },
-  {
-    "id": "0753534b1ec3ba",
-    "speaker": "narrator",
-    "text": "Grandmother looks up from the hearth before you reach the door."
   },
   {
     "id": "07574c19cb124f",
@@ -1245,19 +1270,9 @@
     "text": "Thank you for the light, child. Show that to your grandmother. She will know it better than I."
   },
   {
-    "id": "07ac1fda167358",
-    "speaker": "narrator",
-    "text": "A hot, smoky forge. Coals glow in the hearth and the anvil rings. Hinges, ploughshares and horseshoes hang from the walls, waiting to be mended or fetched, and Borin wipes his brow without putting down the hammer."
-  },
-  {
     "id": "07c7494529d5ac",
     "speaker": "narrator",
     "text": "The handle creaks, but it holds. Most things in Willowbrook are like that."
-  },
-  {
-    "id": "07ccfd90396c3a",
-    "speaker": "narrator",
-    "text": "A modest cottage with a straw roof and a cozy hearth. The scent of fresh bread and old books fills the air. Morning sun comes through the lace curtains onto shelves lined with trinkets and memories. A sturdy wooden table sits in the center, with a small loaf cooling on it, and a gentle fire crackles in the hearth. Grandmother stands by it, humming, and keeps an eye on the bread."
   },
   {
     "id": "07d130d329b869",
@@ -1755,6 +1770,11 @@
     "text": "They say the king's taken to his bed in Greendale, and not one physician can name what ails him. And the flour cart didn't come Thursday. Eleven years, and it's never once missed a Thursday."
   },
   {
+    "id": "0adaadf7f8547e",
+    "speaker": "narrator",
+    "text": "Small enough to hold against a shoulder. It is asleep, and it does not cry."
+  },
+  {
     "id": "0ae301ba21b698",
     "speaker": "narrator",
     "text": "The bend is the fisherman's spot. The night before she went away, your mother hid a tin under the smooth stone at the water's edge."
@@ -1763,11 +1783,6 @@
     "id": "0aef4ee95aa626",
     "speaker": "narrator",
     "text": "A divine light surrounds the deer and leaves strength and resolve behind."
-  },
-  {
-    "id": "0af2ce6a3c8b10",
-    "speaker": "narrator",
-    "text": "An old stone well, its surface worn smooth, its shaft disappearing into the depths. The water below is dark and still, and it smells sour, the way milk does when it has turned. Far down, something glints, or you think it does. It is much too deep to reach."
   },
   {
     "id": "0af945a9d2e952",
@@ -1780,14 +1795,14 @@
     "text": "Have you been down to the river yet? He'll be at the bend; he always is."
   },
   {
+    "id": "0afff6a2d804d7",
+    "speaker": "grandmother",
+    "text": "Not with the bread nearly out, you don't. And that room of yours is still dark; you've not even lit the lantern."
+  },
+  {
     "id": "0b01a79754dcc0",
     "speaker": "fisherman",
     "text": "The night before she went away, she pressed a little tin into the mud under that smooth stone yonder, and made me promise to watch over it. Said if her boy ever came asking, he'd know where to look. I reckon you've come asking."
-  },
-  {
-    "id": "0b0388eba615e9",
-    "speaker": "narrator",
-    "text": "You go that way, and it is the same dark, the same rain, the same tune. There is no door in this. There is only the voice, and it says your name."
   },
   {
     "id": "0b05507e4bad39",
@@ -1803,6 +1818,11 @@
     "id": "0b0e05805a4399",
     "speaker": "hemlock",
     "text": "She was last seen near the old well. If you find her, there's a reward in it for you."
+  },
+  {
+    "id": "0b17a39d38b71b",
+    "speaker": "narrator",
+    "text": "Logs burn on a bed of red embers. Borin feeds them without looking."
   },
   {
     "id": "0b221ce0e53214",
@@ -1838,11 +1858,6 @@
     "id": "0b5187ee8276fa",
     "speaker": "narrator",
     "text": "You mended the fisherman's arm, but he won't cast his own line till tomorrow. Today he would still give a good deal for a fresh fish."
-  },
-  {
-    "id": "0b536e37b7bbab",
-    "speaker": "narrator",
-    "text": "She studies your face."
   },
   {
     "id": "0b57d3c3bfc799",
@@ -1920,6 +1935,11 @@
     "text": "The magnet clamps onto the end of the fishing rod: it is a magnetic fishing rod now."
   },
   {
+    "id": "0c0b48d0db913f",
+    "speaker": "narrator",
+    "text": "An old stone well, no higher than your knee, around water that goes down further than you can see. The water is crystal clear now. You can see something shiny at the bottom, but it's still too deep to reach by hand."
+  },
+  {
     "id": "0c0b8c11bb36ee",
     "speaker": "narrator",
     "text": "The fisherman turns it over once and hands it straight back."
@@ -1928,11 +1948,6 @@
     "id": "0c1c29bef30ca9",
     "speaker": "priest",
     "text": "Carry it as though you knew what it was worth."
-  },
-  {
-    "id": "0c22f656ae3349",
-    "speaker": "narrator",
-    "text": "Gone with him, into the dark. It was small enough to hold against a shoulder, and it did not cry."
   },
   {
     "id": "0c24e966302117",
@@ -2050,19 +2065,9 @@
     "text": "The village well smells sour, and far down in the dark water something glints."
   },
   {
-    "id": "0cae7f44582e81",
-    "speaker": "narrator",
-    "text": "The dark lets go of you, and you wake in your own bed. The storm is gone and there is morning sun in the curtains. Your heart is going hard. The tune is still going too, thin and near: someone is humming it, out by the hearth. Three words are already slipping, and you write them down before they can go."
-  },
-  {
     "id": "0cb17cd6836df3",
     "speaker": "narrator",
     "text": "Revive"
-  },
-  {
-    "id": "0cbad1bef0b053",
-    "speaker": "narrator",
-    "text": "You woke with three words written down, somewhere in the dark by your bed, and a tune still going in the house. The lantern would show you where."
   },
   {
     "id": "0cbb1883ab876b",
@@ -2113,6 +2118,11 @@
     "id": "0d1d08d0535a2c",
     "speaker": "narrator",
     "text": "A soft glow fills the shed."
+  },
+  {
+    "id": "0d2225eb4a42b7",
+    "speaker": "narrator",
+    "text": "A modest cottage with a straw roof and a cozy hearth. The scent of fresh bread and old books fills the air. The doorway to your room stands open, and the room beyond it is too dark to see into. A sturdy wooden table sits in the center, with a small loaf cooling on it, and a gentle fire crackles in the hearth. Grandmother stands by your doorway, humming, and keeps an eye on the bread."
   },
   {
     "id": "0d28fe08434f5e",
@@ -2270,11 +2280,6 @@
     "text": "Been to see the priest, have you? He does get through his matches."
   },
   {
-    "id": "0dd4a44e45486f",
-    "speaker": "narrator",
-    "text": "A modest cottage with a straw roof and a cozy hearth. The scent of fresh bread and old books fills the air. Morning sun comes through the lace curtains onto shelves lined with trinkets and memories. A sturdy wooden table sits in the center, and a gentle fire crackles in the hearth. Grandmother stands by it, humming, and keeps an eye on the next batch."
-  },
-  {
     "id": "0dd5c21afbf51c",
     "speaker": "narrator",
     "text": "You can't revive someone who is very much alive!"
@@ -2323,6 +2328,11 @@
     "id": "0e3b27f350aa27",
     "speaker": "narrator",
     "text": "A leather armor vest, stitched double at the seams."
+  },
+  {
+    "id": "0e3c9cf99d724a",
+    "speaker": "narrator",
+    "text": "Hint of magic: You woke with three words written down, somewhere in the dark of your room, and a tune still going in the house. The lantern would show you where."
   },
   {
     "id": "0e4e8bf1670acc",
@@ -2383,6 +2393,11 @@
     "id": "0e9c78c177a2b7",
     "speaker": "narrator",
     "text": "After some careful maneuvering, you manage to retrieve a shiny ring!"
+  },
+  {
+    "id": "0e9d6098935fb4",
+    "speaker": "narrator",
+    "text": "A small hut hung with drying herbs: lavender, sage, and roots in bundles from the rafters. Shelves of bottles line the walls, every one labelled. Mira stands at the window with her back to you, tying a bundle of herbs in the light."
   },
   {
     "id": "0ea1159058b214",
@@ -2530,11 +2545,6 @@
     "text": "The brass is worn smooth where hands have held it. It has lit your way home for as long as you can remember."
   },
   {
-    "id": "0f969b061b4c06",
-    "speaker": "narrator",
-    "text": "Mira looks up from the herbs she is tying."
-  },
-  {
     "id": "0fa0d6f12ce332",
     "speaker": "grandmother",
     "text": "That's her, all over. Telling you what to do from wherever she is."
@@ -2585,11 +2595,6 @@
     "text": "A sturdy table, scrubbed pale. There are knife marks at one end, where the bread is always cut."
   },
   {
-    "id": "0fdd7fd9e8f8ed",
-    "speaker": "narrator",
-    "text": "It is dark, and it is raining hard. You hear it beating on shutters, though you cannot see any. Thunder breaks so close that the dark shakes with it. Shadows drift past like smoke. A man’s hand reaches out of the dark, lifts a child and holds it against his shoulder, and then both of them are gone. Somewhere a slow tune climbs three notes and settles home again. A tall figure stands among the shadows. It has no face you can find. It is too far away to reach, and too close to be only a dream. It is whispering, at the very edge of hearing, and what it whispers is your name."
-  },
-  {
     "id": "0fe509c70e418d",
     "speaker": "narrator",
     "text": "A bundle of green herbs, tied with thread. Mira's hut smells of them."
@@ -2623,6 +2628,11 @@
     "id": "102977a127dee8",
     "speaker": "narrator",
     "text": "You have learned Revive."
+  },
+  {
+    "id": "102dddf6957044",
+    "speaker": "narrator",
+    "text": "Grandmother looks up before you reach the door."
   },
   {
     "id": "103167bad018d7",
@@ -2715,11 +2725,6 @@
     "text": "revive"
   },
   {
-    "id": "10a079820a3ec5",
-    "speaker": "narrator",
-    "text": "He is gone. You saw only his hand, and how carefully it lifted the child."
-  },
-  {
     "id": "10adc84facab35",
     "speaker": "narrator",
     "text": "Borin eyes the dull knife."
@@ -2728,11 +2733,6 @@
     "id": "10b2ab1b98d2c6",
     "speaker": "narrator",
     "text": "It is already light enough here."
-  },
-  {
-    "id": "10c506910d7a04",
-    "speaker": "narrator",
-    "text": "You swing the rusty hoe, but it doesn't seem to have much effect here. It's a sturdy (but rusty) tool, though."
   },
   {
     "id": "10c5fb298c3e23",
@@ -2840,11 +2840,6 @@
     "text": "My dearest Elior, if you are reading this, you found the bend, as I knew you would. The river remembers what the village forgets."
   },
   {
-    "id": "116aac75767bd3",
-    "speaker": "narrator",
-    "text": "A small hut hung with drying herbs: lavender, sage, and roots in bundles from the rafters. Shelves of bottles line the walls, every one labelled. Mira moves among them without looking, the way you move through your own kitchen. The stand where the amulet rested stands empty."
-  },
-  {
     "id": "116f755b0c7a2e",
     "speaker": "narrator",
     "text": "Your grandmother's hands go still in the dough, then start again."
@@ -2908,6 +2903,11 @@
     "id": "11a958a310bf0b",
     "speaker": "narrator",
     "text": "A small, intricately carved silver locket, clearly very old. A tiny crest, a tree under two moons, is worked into its lid. It feels cool to the touch."
+  },
+  {
+    "id": "11b7fecc2c0136",
+    "speaker": "narrator",
+    "text": "A modest cottage with a straw roof and a cozy hearth. The scent of fresh bread and old books fills the air. The doorway to your room stands open, and the room beyond it is too dark to see into. A sturdy wooden table sits in the center, and a gentle fire crackles in the hearth. Grandmother stands by your doorway, humming, and keeps an eye on the next batch."
   },
   {
     "id": "11b854417ed0e2",
@@ -3090,6 +3090,11 @@
     "text": "A small magnet, stronger than it looks."
   },
   {
+    "id": "131d47df7260ef",
+    "speaker": "narrator",
+    "text": "An old stone well sits low in the grass between the field and the forge, a ring of stones worn smooth by countless hands around a deep pool. The water glimmers with a crystalline clarity, and the air is cool and damp. Moss creeps over the stones."
+  },
+  {
     "id": "1326c0d7d01a17",
     "speaker": "narrator",
     "text": "Tilda keeps her floury hands behind her back."
@@ -3190,6 +3195,11 @@
     "text": "The merchant offers a friendly nod."
   },
   {
+    "id": "13b343835e033d",
+    "speaker": "narrator",
+    "text": "You dig at the ground with the rusty trowel, but it doesn't seem to have much effect here. It's a sturdy (but rusty) tool, though."
+  },
+  {
     "id": "13c330bc0272ac",
     "speaker": "narrator",
     "text": "A divine light surrounds Hemlock and leaves strength and resolve behind."
@@ -3238,11 +3248,6 @@
     "id": "13ef03ced059eb",
     "speaker": "narrator",
     "text": "A white feather from one of the hens, still soft."
-  },
-  {
-    "id": "140315ff327bcd",
-    "speaker": "narrator",
-    "text": "An old stone well, its surface worn smooth, its shaft disappearing into the depths. The water within is crystal clear. You can see something shiny at the bottom, but it's still too deep to reach by hand."
   },
   {
     "id": "140734003dbe75",
@@ -3333,6 +3338,11 @@
     "id": "149887ce101956",
     "speaker": "narrator",
     "text": "He wraps it in a dock leaf and sets it by his crate. Then he is quiet a while."
+  },
+  {
+    "id": "149b7fdccff2c4",
+    "speaker": "narrator",
+    "text": "Then she turns, and studies your face."
   },
   {
     "id": "149f26cde1de30",
@@ -3610,11 +3620,6 @@
     "text": "A warm light settles over the merchant and finds nothing that needs mending."
   },
   {
-    "id": "1631094bc20b51",
-    "speaker": "narrator",
-    "text": "A hoe with a rusted blade and a splintered handle."
-  },
-  {
     "id": "16327c5981dd9b",
     "speaker": "narrator",
     "text": "A warm light envelops you, and you feel your wounds mending."
@@ -3685,6 +3690,11 @@
     "text": "So the merchant has her ring now. He showed it me in the square. No, don't fret; she'd have given it for your boots in a heartbeat."
   },
   {
+    "id": "16a19b88e62f5b",
+    "speaker": "narrator",
+    "text": "A modest cottage with a straw roof and a cozy hearth. The scent of fresh bread and old books fills the air. Firelight reaches the shelves, lined with trinkets and memories, and your room is no longer dark. A sturdy wooden table sits in the center, with a small loaf cooling on it, and a gentle fire crackles in the hearth. Grandmother stands by your doorway, humming, and keeps an eye on the bread."
+  },
+  {
     "id": "16b565f80843a4",
     "speaker": "narrator",
     "text": "You tell Tilda it was you: a spell, and a little help from the healer."
@@ -3725,11 +3735,6 @@
     "text": "The magnet snaps to the black iron and holds, and the gears turn on beside it. It would take something threaded through them, not stuck on."
   },
   {
-    "id": "16e6a86be68933",
-    "speaker": "narrator",
-    "text": "A small hut hung with drying herbs: lavender, sage, and roots in bundles from the rafters. Shelves of bottles line the walls, every one labelled. Mira moves among them without looking, the way you move through your own kitchen."
-  },
-  {
     "id": "16e754dcb3d08f",
     "speaker": "grandmother",
     "text": "It was a workshop once... your father's. I never could bring myself to go in. It's dark as a cellar in there, dear; take the lantern with you."
@@ -3740,14 +3745,19 @@
     "text": "Borin eyes the coin."
   },
   {
-    "id": "16f455f6e3c305",
-    "speaker": "narrator",
-    "text": "Rows of withered crops stretch beneath the last grey of the night's storm. The earth is cracked and dry, with only a few stubborn carrots and a rusty hoe hinting at better days. A faint breeze rustles the brittle leaves, carrying the scent of soil and distant rain. These rows were green a month ago."
-  },
-  {
     "id": "16f77bdaa1bb25",
     "speaker": "narrator",
     "text": "Shadows over Willowbrook: Mira is waiting for the rare flower from the Hidden Glade, the one that opens only for someone the land trusts. The millstone fragment is old stone. Borin at the forge knows old stone."
+  },
+  {
+    "id": "1701738076a67d",
+    "speaker": "narrator",
+    "text": "A modest cottage with a straw roof and a cozy hearth. The scent of fresh bread and old books fills the air. Firelight reaches the shelves, lined with trinkets and memories, and your room is no longer dark. A sturdy wooden table sits in the center, and a gentle fire crackles in the hearth. Grandmother stands by your doorway, humming, and keeps an eye on the next batch."
+  },
+  {
+    "id": "1705cca29be816",
+    "speaker": "narrator",
+    "text": "Mira does not turn from the window."
   },
   {
     "id": "1708cfdea28399",
@@ -3858,11 +3868,6 @@
     "id": "179e9d90b46b6a",
     "speaker": "narrator",
     "text": "A plain iron sword. The edge is sharp, and the handle is wrapped in leather."
-  },
-  {
-    "id": "17a70ff3dd4d25",
-    "speaker": "narrator",
-    "text": "A modest cottage with a straw roof and a cozy hearth. The scent of fresh bread and old books fills the air. The curtains are still drawn on a bright morning, and the corner by your bed is too dark to see into. A sturdy wooden table sits in the center, with a small loaf cooling on it, and a gentle fire crackles in the hearth. Grandmother stands by it, humming, and keeps an eye on the bread."
   },
   {
     "id": "17af0d0fc2534a",
@@ -4140,6 +4145,11 @@
     "text": "Preparing for the road"
   },
   {
+    "id": "193e058462b991",
+    "speaker": "narrator",
+    "text": "A trowel with a rusted blade and a worn wooden handle."
+  },
+  {
     "id": "194cf81139e141",
     "speaker": "grandmother",
     "text": "That voice... did it say anything more? Anything but your name?"
@@ -4195,6 +4205,11 @@
     "text": "Know your village: You have not gone up to Mira's Hut, north of the square, in a long while."
   },
   {
+    "id": "19acad80493441",
+    "speaker": "narrator",
+    "text": "The dream lets go of you, and you wake in your own bed. The storm is gone and it is bright morning. Your heart is going hard. The tune is still going too, thin and near: someone is humming it, out by the hearth. Three words are already slipping, and you write them down before they can go."
+  },
+  {
     "id": "19ad071adb2439",
     "speaker": "narrator",
     "text": "Know your village"
@@ -4235,11 +4250,6 @@
     "text": "A faded piece of parchment pinned to the notice board. The ink has run, but you can make out the words:"
   },
   {
-    "id": "19d76ee1d2aa4c",
-    "speaker": "narrator",
-    "text": "A small hut hung with drying herbs: lavender, sage, and roots in bundles from the rafters. Shelves of bottles line the walls, every one labelled. Mira moves among them without looking, the way you move through your own kitchen. On its stand, the ancient amulet glows brighter as you step in, as if something you carry has woken it."
-  },
-  {
     "id": "19d8e9d763c9e4",
     "speaker": "mira",
     "text": "Not yet. There's no blessing on you, and I'll not send you out without one."
@@ -4263,6 +4273,11 @@
     "id": "19f9285c006f4d",
     "speaker": "grandmother",
     "text": "I'll make a pie. You'll be here to eat it, I hope."
+  },
+  {
+    "id": "1a02ee6ad967ad",
+    "speaker": "narrator",
+    "text": "A small hut hung with drying herbs: lavender, sage, and roots in bundles from the rafters. Shelves of bottles line the walls, every one labelled. Mira stands at the window with her back to you, tying a bundle of herbs in the light. The stand where the amulet rested stands empty."
   },
   {
     "id": "1a0584f15d4544",
@@ -4323,11 +4338,6 @@
     "id": "1a62cbd2e7c708",
     "speaker": "tilda",
     "text": "Not with these, love. That's Mira's, and it's not for passing round the square."
-  },
-  {
-    "id": "1a6381572cbf6a",
-    "speaker": "grandmother",
-    "text": "Not with the bread nearly out, you don't. And that corner of yours is still dark; you've not even lit the lantern."
   },
   {
     "id": "1a7e84b599c375",
@@ -4510,6 +4520,11 @@
     "text": "Rusty tools, laid in careful rows long ago and scattered since."
   },
   {
+    "id": "1b82b95b09b8d0",
+    "speaker": "narrator",
+    "text": "You go that way, and it is the same street, the same rain, the same tune. There is no way out of this. There is only the voice, and it says your name."
+  },
+  {
     "id": "1b8f12856cd6c5",
     "speaker": "hemlock",
     "text": "There was to be a reward for bringing her home, and she found a new one. But you'll not leave empty-handed: take this rope, on the house, and there's always an apple to go with it. And the store's open again, so have a look around."
@@ -4543,11 +4558,6 @@
     "id": "1bcce557e73274",
     "speaker": "mira",
     "text": "Still here? Go and say a proper goodbye to your grandmother. Then go."
-  },
-  {
-    "id": "1be208a0d05c61",
-    "speaker": "narrator",
-    "text": "An old stone well stands between the field and the forge, its stones worn smooth by countless hands. The water below glimmers with a crystalline clarity, and the air is cool and damp. Moss creeps up the sides."
   },
   {
     "id": "1bf036c9236f26",
@@ -4603,6 +4613,11 @@
     "id": "1c3baeb777c912",
     "speaker": "narrator",
     "text": "You read them aloud. They mean nothing to you, and yet they stay with you."
+  },
+  {
+    "id": "1c42ff44cc06ad",
+    "speaker": "narrator",
+    "text": "Your hands find nothing. The street has no end and the dream no edges. The whisper comes again, nearer, and it is your name."
   },
   {
     "id": "1c6132c7c2896c",
@@ -5035,19 +5050,9 @@
     "text": "Beneath it lies a folded note. Something in you knows the careful, slanting hand before you have read a word: it is your father's."
   },
   {
-    "id": "1eedd50668e9ec",
-    "speaker": "narrator",
-    "text": "Your hands find nothing. The dark has no floor and the dream no edges. The whisper comes again, nearer, and it is your name."
-  },
-  {
     "id": "1eedfba9ff0936",
     "speaker": "narrator",
     "text": "You search around the Chicken Coop, but find nothing of interest beyond what you can already see."
-  },
-  {
-    "id": "1f0942cb88249f",
-    "speaker": "narrator",
-    "text": "A modest cottage with a straw roof and a cozy hearth. The scent of fresh bread and old books fills the air. The curtains are still drawn on a bright morning, and the corner by your bed is too dark to see into. A sturdy wooden table sits in the center, and a gentle fire crackles in the hearth. Grandmother stands by it, humming, and keeps an eye on the next batch."
   },
   {
     "id": "1f0a016b014864",

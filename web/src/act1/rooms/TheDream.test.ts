@@ -104,7 +104,7 @@ describe('The Dream, where Act I opens', () => {
       expect(answer).not.toContain('and let them rest')
       expect(answer).toContain(
         'The dream lets go of you, and you wake in your own bed. The storm ' +
-          'is gone and it is grey morning. Your heart is going hard.',
+          'is gone and it is bright morning. Your heart is going hard.',
       )
       expect(answer).not.toContain('curtains')
       expect(answer).toContain('someone is humming it, out by the hearth')
@@ -157,9 +157,7 @@ describe('The Dream, where Act I opens', () => {
   it('wakes to a bright morning', () => {
     const game = newGame()
     const answer = executeCommands(game, ['talk to voice'])
-    expect(answer).toContain(
-      'The storm is gone and it is bright morning.',
-    )
+    expect(answer).toContain('The storm is gone and it is bright morning.')
     expect(answer).not.toContain('grey')
   })
 
