@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { onScopeDispose, ref } from 'vue'
-import type { Chip, ChipKind } from '@/lantern/inventoryChanges'
+import type { Change, Chip, ChipKind } from '@/lantern/inventoryChanges'
 import { displayName } from '@/lantern/displayName'
 
 /** How long a gained thing takes to come up on the picture (ms). */
@@ -27,6 +27,17 @@ export interface Flight extends Chip {
   key: number
   /** An item leaving the bag (it rises out of the button), not a gain flying to it. */
   leaving: boolean
+  /** For a change (a carried thing turned into another state of itself), its old name; `name` is the new one. It flies like a gain. */
+  from?: string
+}
+
+/** A change as the gained item it is for the lists: the new name, once. */
+function changeChips(changes: Change[]): Chip[] {
+  return changes.map((change) => ({
+    kind: 'item' as const,
+    name: change.to,
+    count: 1,
+  }))
 }
 
 /** A gained or lost thing's name as the story shows it, with how many when more than one. */
@@ -84,9 +95,9 @@ export const useFlightStore = defineStore('flight', () => {
   }
 
   /** Owe these gained things: their lists hold them back until each one lands (or `clear`). */
-  function owe(chips: Chip[]): void {
+  function owe(chips: Chip[], changes: Change[] = []): void {
     const now = { ...owed.value }
-    for (const chip of chips) {
+    for (const chip of [...chips, ...changeChips(changes)]) {
       const key = owedKey(chip.kind, chip.name)
       now[key] = (now[key] ?? 0) + chip.count
     }
@@ -94,8 +105,9 @@ export const useFlightStore = defineStore('flight', () => {
   }
 
   /** Pay these back without a flight: they will not fly, so their lists show them now. */
-  function forgive(chips: Chip[]): void {
-    for (const chip of chips) pay(chip.kind, chip.name, chip.count)
+  function forgive(chips: Chip[], changes: Change[] = []): void {
+    for (const chip of [...chips, ...changeChips(changes)])
+      pay(chip.kind, chip.name, chip.count)
   }
 
   /** Take `count` of a thing off what is owed. */
@@ -173,18 +185,25 @@ export const useFlightStore = defineStore('flight', () => {
    * to their buttons, after any still flying; each is told at once. Only items
    * leave. With `reduced` they do not move. `shown` is told, as each gain's name
    * comes up, which flight it is (the room picture lets that thing go then).
+   * `changes` (a carried thing turned into another state of itself) come after
+   * the lost items and before the gains, each flown like a gain.
    */
   function launch(
     chips: Chip[],
     lost: Chip[] = [],
     reduced = false,
     shown?: (flight: Flight) => void,
+    changes: Change[] = [],
   ): void {
     onShow = shown
     const leaving = lost.filter((chip) => chip.kind === 'item')
     still = reduced
     told.value = [
       ...leaving.map((chip) => `Lost ${flightLabel(chip)}`),
+      ...changes.map(
+        (change) =>
+          `Changed ${displayName(change.from)} to ${displayName(change.to)}`,
+      ),
       ...chips.map(
         (chip) =>
           `${chip.kind === 'item' ? 'Gained' : 'Learned'} ${flightLabel(chip)}`,
@@ -192,6 +211,12 @@ export const useFlightStore = defineStore('flight', () => {
     ]
     queue.push(
       ...leaving.map((chip) => ({ ...chip, key: nextKey++, leaving: true })),
+      ...changes.map((change) => ({
+        ...changeChips([change])[0],
+        from: change.from,
+        key: nextKey++,
+        leaving: false,
+      })),
       ...chips.map((chip) => ({ ...chip, key: nextKey++, leaving: false })),
     )
     if (!current.value) next()

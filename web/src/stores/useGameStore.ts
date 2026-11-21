@@ -23,7 +23,12 @@ import {
   type SoundFiring,
 } from '@/engine'
 import { withHeldAreas } from '@/lantern/heldPicture'
-import { inventoryChanges, type Chip } from '@/lantern/inventoryChanges'
+import {
+  inventoryChanges,
+  renamedItems,
+  type Change,
+  type Chip,
+} from '@/lantern/inventoryChanges'
 import { routeTo } from '@/lantern/mapRoute'
 import { toQuestNews, type QuestNews } from '@/lantern/questNews'
 import {
@@ -114,6 +119,8 @@ export interface Turn {
   gained: Chip[]
   /** Items and spells this command removed (none for system output). */
   lost: Chip[]
+  /** Carried things that turned into another state of themselves (the bucket filling): told as one change, not in `gained` and `lost`; absent when none. */
+  changed?: Change[]
   /** The room as found on arrival or on a look, kept for the story (null otherwise). */
   arrival: Arrival | null
   /** Quests that started, moved on or were completed with this turn. */
@@ -313,6 +320,8 @@ export const useGameStore = defineStore('game', () => {
   let lastTurnRoom = ''
   // Bag and spells as the bridge listed them after the previous turn
   let lastBag: string[] = []
+  // Each carried item's identity and name, to tell a rename from a loss and a gain
+  let lastIdentities: { id: number; name: string }[] = []
   let lastSpells: string[] = []
   const bagHasNew = ref(false)
   const spellsHaveNew = ref(false)
@@ -753,7 +762,12 @@ export const useGameStore = defineStore('game', () => {
     // Only a player's command changes the bag; arrivals, loads and act
     // changes just set the new starting point.
     const showChips = chips && actRunning
-    const itemChanges = inventoryChanges(lastBag, bag, 'item')
+    const identities = b.controller.getInventoryIdentities()
+    const changed = showChips ? renamedItems(lastIdentities, identities) : []
+    const itemChanges = withoutChanges(
+      inventoryChanges(lastBag, bag, 'item'),
+      changed,
+    )
     const spellChanges = inventoryChanges(lastSpells, spellList, 'spell')
     const itemsGained =
       showChips && hold && panelHoldEnabled
@@ -774,9 +788,11 @@ export const useGameStore = defineStore('game', () => {
       : []
     // A new act starts a new bag: nothing in it is "new" yet.
     if (!actRunning) clearNewDots()
-    if (showChips && itemChanges.gained.length) markNew('bag')
+    if (showChips && (itemChanges.gained.length || changed.length))
+      markNew('bag')
     if (showChips && spellChanges.gained.length) markNew('spells')
     lastBag = bag
+    lastIdentities = identities
     lastSpells = spellList
 
     const shown = actRunning ? description : null
@@ -789,6 +805,7 @@ export const useGameStore = defineStore('game', () => {
       description: shown,
       gained,
       lost,
+      ...(changed.length ? { changed } : {}),
       // The engine only says "You move north to …"; keep what the room looked
       // like now so the story can show it later.
       ...(spells.length ? { spells } : {}),
@@ -810,6 +827,27 @@ export const useGameStore = defineStore('game', () => {
     if (turns.value.length > MAX_TURNS) {
       turns.value.splice(0, turns.value.length - MAX_TURNS)
     }
+  }
+
+  /** The item changes without one of the old name lost and one of the new name gained for each change (`renamedItems`). */
+  function withoutChanges(
+    changes: { gained: Chip[]; lost: Chip[] },
+    changed: Change[],
+  ): { gained: Chip[]; lost: Chip[] } {
+    const take = (chips: Chip[], name: string): Chip[] =>
+      chips
+        .map((chip) =>
+          chip.name.toLowerCase() === name.toLowerCase()
+            ? { ...chip, count: chip.count - 1 }
+            : chip,
+        )
+        .filter((chip) => chip.count > 0)
+    let { gained, lost } = changes
+    for (const { from, to } of changed) {
+      lost = take(lost, from)
+      gained = take(gained, to)
+    }
+    return { gained, lost }
   }
 
   /**
@@ -1349,6 +1387,7 @@ export const useGameStore = defineStore('game', () => {
     turns.value = []
     lastTurnRoom = ''
     lastBag = []
+    lastIdentities = []
     lastSpells = []
     currentAct = null
     actLabel.value = ''
@@ -1835,6 +1874,7 @@ export const useGameStore = defineStore('game', () => {
     })
     lastTurnRoom = b.controller.getRoomName()
     lastBag = b.controller.getInventory().map((entry) => entry.name)
+    lastIdentities = b.controller.getInventoryIdentities()
     lastSpells = b.controller.getSpells().map((entry) => entry.name)
   }
 

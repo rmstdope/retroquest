@@ -1,5 +1,9 @@
 import { describe, it, expect } from 'vitest'
-import { inventoryChanges, parseCountedName } from './inventoryChanges'
+import {
+  inventoryChanges,
+  parseCountedName,
+  renamedItems,
+} from './inventoryChanges'
 
 const item = (name: string) => `[item_name]${name}[/item_name]`
 const spell = (name: string) => `[spell_name]${name}[/spell_name]`
@@ -73,5 +77,37 @@ describe('inventoryChanges', () => {
     expect(
       inventoryChanges([item('Old Key')], [item('old key')], 'item'),
     ).toEqual({ gained: [], lost: [] })
+  })
+})
+
+describe('renamedItems', () => {
+  it('pairs one carried thing that kept its identity and changed its name', () => {
+    expect(
+      renamedItems(
+        [
+          { id: 1, name: 'bucket' },
+          { id: 2, name: 'map' },
+        ],
+        [
+          { id: 1, name: 'bucket (full)' },
+          { id: 2, name: 'map' },
+        ],
+      ),
+    ).toEqual([{ from: 'bucket', to: 'bucket (full)' }])
+  })
+
+  it('ignores things that came or went, and same names in another case', () => {
+    expect(
+      renamedItems(
+        [
+          { id: 1, name: 'rod' },
+          { id: 2, name: 'Map' },
+        ],
+        [
+          { id: 3, name: 'fishing rod' },
+          { id: 2, name: 'map' },
+        ],
+      ),
+    ).toEqual([])
   })
 })

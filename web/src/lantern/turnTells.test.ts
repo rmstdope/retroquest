@@ -31,6 +31,9 @@ describe('turnTells', () => {
   it('is true for chips, quest cards and an arrival', () => {
     const chip = { name: 'Bread', count: 1, kind: 'item' as const }
     expect(turnTells(turn({ gained: [chip] }))).toBe(true)
+    expect(
+      turnTells(turn({ changed: [{ from: 'bucket', to: 'bucket (full)' }] })),
+    ).toBe(true)
     expect(turnTells(turn({ lost: [chip] }))).toBe(true)
     expect(
       turnTells(

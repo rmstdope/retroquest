@@ -65,6 +65,7 @@ function createMockBridge() {
         ] as SayWord[],
     ),
     getInventory: vi.fn(() => [{ name: 'Sword', description: 'Sharp' }]),
+    getInventoryIdentities: vi.fn(() => [{ id: 1, name: 'Sword' }]),
     getSpells: vi.fn(() => [{ name: 'Heal', description: 'Restores HP' }]),
     getActiveQuests: vi.fn((): QuestSummary[] => [
       {
@@ -1786,6 +1787,45 @@ describe('useGameStore', () => {
       ])
       expect(store.bagHasNew).toBe(true)
       expect(store.spellsHaveNew).toBe(true)
+    })
+
+    describe('a carried thing that turns into another state of itself', () => {
+      it('is one change, not a loss and a gain, and marks the bag new', async () => {
+        await startPlaying()
+        bridge.controller.getInventory.mockReturnValue([
+          named('[item_name]Bucket (full)[/item_name]'),
+        ])
+        bridge.controller.getInventoryIdentities.mockReturnValue([
+          { id: 1, name: 'Bucket (full)' },
+        ])
+
+        store.submitCommand('use bucket with well')
+
+        const turn = store.turns.at(-1)
+        expect(turn?.changed).toEqual([{ from: 'Sword', to: 'Bucket (full)' }])
+        expect(turn?.gained).toEqual([])
+        expect(turn?.lost).toEqual([])
+        expect(store.bagHasNew).toBe(true)
+      })
+
+      it('leaves a thing that went while another came as a loss and a gain', async () => {
+        await startPlaying()
+        bridge.controller.getInventory.mockReturnValue([
+          named('[item_name]Bucket[/item_name]'),
+        ])
+        bridge.controller.getInventoryIdentities.mockReturnValue([
+          { id: 2, name: 'Bucket' },
+        ])
+
+        store.submitCommand('combine')
+
+        const turn = store.turns.at(-1)
+        expect(turn?.changed).toBeUndefined()
+        expect(turn?.gained).toEqual([
+          { kind: 'item', name: 'Bucket', count: 1 },
+        ])
+        expect(turn?.lost).toEqual([{ kind: 'item', name: 'Sword', count: 1 }])
+      })
     })
 
     describe('spell news', () => {

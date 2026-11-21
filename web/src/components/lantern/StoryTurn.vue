@@ -162,23 +162,42 @@ const speakerLabels = computed(() => {
   })
 })
 
-/** The bag's changes; a narration card has only its lost spells (a gained thing flies to its button and a lost item out of the Bag, `AcquiredFlight`). */
-const chips = computed(() =>
+/**
+ * The bag's changes; a narration card has only its lost spells (a gained thing
+ * flies to its button, a lost item out of the Bag and a changed thing as one
+ * card, `AcquiredFlight`). A change is one chip, `Bucket → Bucket (full)`.
+ */
+const chips = computed<ChipEntry[]>(() =>
   props.piece && !props.piece.chips
     ? []
     : [
         ...(props.card ? [] : props.turn.gained).map((chip) => ({
-          chip,
+          kind: chip.kind,
+          gained: true,
           sign: '+',
           spoken: 'Gained',
+          label: chipLabel(chip),
+          text: chip.name,
+        })),
+        ...(props.card ? [] : (props.turn.changed ?? [])).map((change) => ({
+          kind: 'item' as const,
+          gained: true,
+          sign: '',
+          spoken: 'Changed',
+          label: `${displayName(change.from)} → ${displayName(change.to)}`,
+          heard: `${displayName(change.from)} to ${displayName(change.to)}`,
+          text: `${change.from} ${change.to}`,
         })),
         ...(props.card
           ? props.turn.lost.filter((chip) => chip.kind !== 'item')
           : props.turn.lost
         ).map((chip) => ({
-          chip,
+          kind: chip.kind,
+          gained: false,
           sign: '−',
           spoken: 'Lost',
+          label: chipLabel(chip),
+          text: chip.name,
         })),
       ],
 )
@@ -233,8 +252,25 @@ function readMs(unit: number): number | undefined {
   if (props.turn.arrival && roomOnCard.value && room)
     ms += readingPauseMs(props.turn.arrival.description)
   if (unit === Number.POSITIVE_INFINITY && fade.value)
-    ms += readingPauseMs(chips.value.map(({ chip }) => chip.name).join(' '))
+    ms += readingPauseMs(chips.value.map((entry) => entry.text).join(' '))
   return ms
+}
+
+/** One chip of the story: a gain, a loss or a change, as it is shown and as it is heard. */
+interface ChipEntry {
+  kind: Chip['kind']
+  /** In the new-thing colour (a gain or a change), else the lost colour. */
+  gained: boolean
+  /** The sign shown before the label; empty for none. */
+  sign: string
+  /** The word a screen reader hears first. */
+  spoken: string
+  /** What is shown. */
+  label: string
+  /** What a screen reader hears after `spoken` when it differs from `label`. */
+  heard?: string
+  /** The words that take time to read. */
+  text: string
 }
 
 function chipLabel(chip: Chip): string {
@@ -389,17 +425,20 @@ function chipLabel(chip: Chip): string {
       :data-read-ms="readMs(Number.POSITIVE_INFINITY)"
     >
       <span
-        v-for="({ chip, sign, spoken }, index) in chips"
+        v-for="(entry, index) in chips"
         :key="index"
         class="lq-chip"
         :class="[
-          `lq-chip-${chip.kind}`,
-          sign === '+' ? 'lq-chip-gained' : 'lq-chip-lost',
+          `lq-chip-${entry.kind}`,
+          entry.gained ? 'lq-chip-gained' : 'lq-chip-lost',
         ]"
         data-testid="chip"
-        ><span aria-hidden="true">{{ sign }}&nbsp;</span
-        ><span class="lq-sr-only">{{ `${spoken} ` }}</span
-        >{{ chipLabel(chip) }}</span
+        ><span v-if="entry.sign" aria-hidden="true">{{ entry.sign }}&nbsp;</span
+        ><span class="lq-sr-only">{{ `${entry.spoken} ` }}</span
+        ><template v-if="entry.heard"
+          ><span aria-hidden="true">{{ entry.label }}</span
+          ><span class="lq-sr-only">{{ entry.heard }}</span></template
+        ><template v-else>{{ entry.label }}</template></span
       >
     </div>
 

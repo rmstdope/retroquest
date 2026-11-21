@@ -16,6 +16,17 @@ export interface NamedItem {
   ringVerbs?: readonly RingVerb[]
 }
 
+/** A carried item's name and its id for as long as it lives (`GameController.getInventoryIdentities`). */
+export interface ItemIdentity {
+  id: number
+  name: string
+}
+
+/** The id each item was given the first time it was listed. */
+const ITEM_IDS = new WeakMap<Item, number>()
+/** The id the next unlisted item gets. */
+let nextItemId = 1
+
 /** Something a merchant in the room sells. */
 export interface RoomWare {
   name: string
@@ -411,6 +422,23 @@ export class GameController {
       })
     }
     return entries
+  }
+
+  /**
+   * Every carried item, one entry each (stacks are not merged), with an id that
+   * stays the same while the item lives, so a thing that only changed its name
+   * (the bucket filling) can be told from one that went and another that came.
+   * Ids are not saved: they are only compared between two calls of one session.
+   */
+  getInventoryIdentities(): ItemIdentity[] {
+    return this.game.state.inventory.map((item) => {
+      let id = ITEM_IDS.get(item)
+      if (id === undefined) {
+        id = nextItemId++
+        ITEM_IDS.set(item, id)
+      }
+      return { id, name: item.name }
+    })
   }
 
   getSpells(): NamedItem[] {

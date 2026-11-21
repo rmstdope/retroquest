@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { Game } from '@/engine'
+import { Game, GameController } from '@/engine'
 import { Act1 } from './Act1'
 import { playDebugScript } from '@/utils/debugScript'
 import { ACT1_COMPLETING_COMMANDS, ACT1_GOLDEN_PATH } from './Act1GoldenPath'
@@ -133,8 +133,13 @@ describe('Act 1 golden path', () => {
     // Step 5: Village Well
     executeCommands(game, ['go west', 'go south', 'go east'])
     expectCurrentRoom(state, 'Village Well')
+    const before = new GameController(game).getInventoryIdentities()
     executeCommands(game, ['examine well', 'use bucket with well'])
     expectItemInInventory(state, 'bucket (full)')
+    // Filling renames the same bucket: a change, not a loss and a gain.
+    const after = new GameController(game).getInventoryIdentities()
+    const bucket = before.find((entry) => entry.name === 'bucket')
+    expect(after).toContainEqual({ id: bucket?.id, name: 'bucket (full)' })
 
     // Step 6: Blacksmith's Forge
     executeCommands(game, ['go east'])

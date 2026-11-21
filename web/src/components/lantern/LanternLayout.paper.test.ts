@@ -387,6 +387,23 @@ describe('the narration paper', () => {
       expect(paper().querySelector('[data-testid="chip"]')).toBeNull()
     })
 
+    it('flies a change (a thing turned into another state of itself) as one card, with no loss', async () => {
+      await mountWith([turn(1, 'First.')])
+      const flights = useFlightStore()
+      game.turns.push({
+        ...turn(2, 'The bucket comes up full.', 'use bucket with well'),
+        changed: [{ from: 'bucket', to: 'bucket (full)' }],
+      })
+      await nextTick()
+      expect(flights.current).toMatchObject({
+        name: 'bucket (full)',
+        from: 'bucket',
+        leaving: false,
+      })
+      expect(flights.owing('item', 'bucket (full)')).toBe(1)
+      expect(flights.told).toEqual(['Changed Bucket to Bucket (full)'])
+    })
+
     it('lights the dots a flight held back once every gain has landed, not before (rq-xxd8)', async () => {
       await mountWith([turn(1, 'First.')])
       const flights = useFlightStore()
