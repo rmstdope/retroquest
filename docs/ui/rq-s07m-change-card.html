@@ -1,0 +1,51 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Bucket state change</title><style>@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Fraunces:opsz,wght@9..144,600&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap');
+:root{--page:#0b0f13;--bg:#10151a;--surface:#161d24;--line:#26313b;--fg:#ece6d6;--prose:#d9d3c3;--muted:#a39d8e;--accent:#ffa914;--accent-text:#ffb836;--accent-line:#a8740f;--item:#e8c27a;--lost:#b9b2a4;--lost-soft:#2a2724;--lost-line:#4a453e;--brass:#c8963d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--page);color:var(--fg);font:15px/1.5 'DM Sans',system-ui,sans-serif;padding:24px 16px}
+.wrap{max-width:1100px;margin:0 auto}
+.kicker{color:var(--accent-text);font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+h1{font:600 26px/1.15 Fraunces,serif;margin:4px 0 8px}
+h3{font:600 18px Fraunces,serif;margin:28px 0 6px}
+.intro{color:var(--prose);max-width:820px}
+.cost{color:var(--muted);font-size:13px;border-left:2px solid var(--accent-line);padding-left:10px;max-width:820px;margin:10px 0 20px}
+.frames{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.frame{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--bg)}
+.frame .cap{padding:8px 12px;font-size:13px;color:var(--muted);background:var(--surface);border-bottom:1px solid var(--line)}
+.frame .cap b{color:var(--fg);font-weight:600}
+.scene{position:relative;height:210px;background:linear-gradient(160deg,#2b3a33,#1a2420 60%,#141b18);overflow:hidden}
+.scene .well{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);width:120px;height:70px;border-radius:10px 10px 4px 4px;background:repeating-linear-gradient(90deg,#5d574c 0 22px,#4d483f 22px 24px);opacity:.75}
+.scene .tag{position:absolute;left:10px;top:8px;font-size:11px;color:#9fb3a8;letter-spacing:.08em;text-transform:uppercase}
+.bagbtn{position:absolute;right:10px;bottom:10px;width:44px;height:44px;border-radius:12px;background:#1c242c;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--fg)}
+.bagbtn svg{width:22px;height:22px}
+.bagbtn.dot::after{content:'';position:absolute;top:5px;right:5px;width:8px;height:8px;border-radius:9px;background:var(--accent)}
+.center{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);display:flex;align-items:center;gap:12px;white-space:nowrap}
+.lostcard{padding:12px 22px;border-radius:14px;border:1px solid var(--lost-line);background:var(--lost-soft);color:var(--lost);box-shadow:0 8px 28px rgba(0,0,0,.28);display:flex;align-items:center;gap:10px;font-weight:500}
+.minus{font:600 28px Fraunces,serif;margin-right:-2px}
+.pocket{width:56px;height:56px;border-radius:999px;border:3px solid var(--brass);background:#2a2216;display:flex;align-items:center;justify-content:center;font:600 22px Fraunces,serif;color:var(--item);flex:none}
+.pocket.sm{width:40px;height:40px;font-size:16px;border-width:2px}
+.pocket.full{background:radial-gradient(circle at 50% 60%,#3e6e8a 0 38%,#2a2216 39%)}
+.namecard{padding:10px 18px 10px 10px;border-radius:14px;border:1px solid var(--accent-line);background:#241d12;color:var(--item);box-shadow:0 8px 28px rgba(0,0,0,.28);display:flex;align-items:center;gap:12px;font-weight:600}
+.namecard .was{color:var(--muted);font-weight:500;text-decoration:none}
+.arrow{color:var(--accent-text);font-weight:600}
+.ghost{opacity:.35}
+.story{padding:14px 18px 8px;font:15px/1.55 'Source Serif 4',Georgia,serif;color:var(--prose)}
+.echo{font:500 13px 'DM Sans';color:var(--accent-text);margin:0 0 6px}
+.it{color:var(--item);font-weight:600}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 6px;font:500 13px 'DM Sans'}
+.chip{padding:3px 10px;border-radius:999px;border:1px solid var(--line)}
+.chip.plus{color:var(--item);border-color:var(--accent-line)}
+.chip.minus2{color:var(--lost);border-color:var(--lost-line)}
+.chip.change{color:var(--item);border-color:var(--accent-line)}
+.today{border:1px dashed #5a3a3a;border-radius:10px;padding:8px 12px;color:var(--muted);font-size:13px;margin:6px 0 18px;max-width:820px}
+.phone{max-width:360px}
+.phone .scene{height:180px}
+.sr{font:13px 'DM Sans';color:var(--muted);border:1px solid var(--line);border-radius:10px;padding:8px 12px;max-width:820px}
+.sr code{color:var(--fg);font-family:inherit;font-weight:600}
+</style></head><body><div class="wrap">
+<div class="kicker">Filling the bucket · agreed</div><h1>The change card</h1><p class="intro">When something in the bag turns into another state of itself, one card comes up on the picture: the old name, an arrow, and the new name with its picture. It rests long enough to read, then flies into the Bag like any new thing. No grey “lost” card at all.</p><p class="cost">Only for one thing in the bag changing its own state (filling, emptying and the like). Combining two things into a new one keeps today’s grey cards and new-thing flight. The waterskin is a made-up long name to test the fit.</p>
+<div class="today"><b>Today:</b> a grey card “− Bucket” rises out of the Bag, then a bucket picture with no name flies back in — the same picture as the empty bucket. It reads as if the bucket was lost.</div>
+<h3>Filling it at the well (desktop)</h3><div class="frames"><div class="frame"><div class="cap"><b>1</b> · comes up on the picture</div><div class="scene "><span class="tag">Village Square</span><div class="well"></div><div class="center"><div class="namecard"><span class="was">Bucket</span><span class="arrow">→</span><div class="pocket full">B</div><span>Bucket (full)</span></div></div><div class="bagbtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7V6a4 4 0 0 1 8 0v1"/><path d="M5 7h14l-1.2 12.2A2 2 0 0 1 15.8 21H8.2a2 2 0 0 1-2-1.8z"/></svg></div></div></div><div class="frame"><div class="cap"><b>2</b> · rests, then shrinks toward the Bag</div><div class="scene "><span class="tag">Village Square</span><div class="well"></div><div class="center" style="left:72%;top:66%;transform:translate(-50%,-50%) scale(.6)"><div class="namecard"><span class="was">Bucket</span><span class="arrow">→</span><div class="pocket full">B</div><span>Bucket (full)</span></div></div><div class="bagbtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7V6a4 4 0 0 1 8 0v1"/><path d="M5 7h14l-1.2 12.2A2 2 0 0 1 15.8 21H8.2a2 2 0 0 1-2-1.8z"/></svg></div></div></div><div class="frame"><div class="cap"><b>3</b> · lands; the Bag shows its new-thing dot</div><div class="scene "><span class="tag">Village Square</span><div class="well"></div><div class="bagbtn dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7V6a4 4 0 0 1 8 0v1"/><path d="M5 7h14l-1.2 12.2A2 2 0 0 1 15.8 21H8.2a2 2 0 0 1-2-1.8z"/></svg></div></div></div></div>
+<h3>Emptying it on the field</h3><div class="frames"><div class="frame"><div class="cap">Watering the field — the same card the other way</div><div class="scene "><span class="tag">Vegetable Field</span><div class="well"></div><div class="center"><div class="namecard"><span class="was">Bucket (full)</span><span class="arrow">→</span><div class="pocket">B</div><span>Bucket</span></div></div><div class="bagbtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7V6a4 4 0 0 1 8 0v1"/><path d="M5 7h14l-1.2 12.2A2 2 0 0 1 15.8 21H8.2a2 2 0 0 1-2-1.8z"/></svg></div></div></div></div>
+<h3>Phone width, or a name too long for one line: the old name stacks above</h3><div class="frames phone" style="max-width:740px;grid-template-columns:repeat(auto-fill,minmax(320px,1fr))"><div class="frame"><div class="cap">phone · short names</div><div class="scene"><span class="tag">Village Square</span><div class="well"></div><div class="center"><div class="namecard"><div class="pocket full">B</div><span style="display:flex;flex-direction:column;line-height:1.2"><span class="was" style="font-size:12px">Bucket →</span><span>Bucket (full)</span></span></div></div><div class="bagbtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7V6a4 4 0 0 1 8 0v1"/><path d="M5 7h14l-1.2 12.2A2 2 0 0 1 15.8 21H8.2a2 2 0 0 1-2-1.8z"/></svg></div></div></div><div class="frame"><div class="cap">phone · long names</div><div class="scene"><span class="tag">Village Square</span><div class="well"></div><div class="center"><div class="namecard"><div class="pocket full">B</div><span style="display:flex;flex-direction:column;line-height:1.2"><span class="was" style="font-size:12px">Waterskin →</span><span>Waterskin (full of river water)</span></span></div></div><div class="bagbtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7V6a4 4 0 0 1 8 0v1"/><path d="M5 7h14l-1.2 12.2A2 2 0 0 1 15.8 21H8.2a2 2 0 0 1-2-1.8z"/></svg></div></div></div></div><h3>In the story, when cards are off or you scroll back</h3><div class="frame" style="max-width:620px"><div class="story"><p class="echo">› use bucket with well</p><p>The <span class="it">bucket</span> comes up from the <span class="it">well</span> full of clear water.</p><div class="chips"><span class="chip change">Bucket → Bucket (full)</span></div></div></div>
+<h3>What a screen reader hears</h3><p class="sr"><code>Changed Bucket to Bucket (full)</code></p>
+</div></body></html>
