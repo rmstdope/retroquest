@@ -313,6 +313,15 @@ describe('useFlightStore', () => {
       expect(flights.current?.name).toBe('lantern')
     })
 
+    it('flies the same under reduced motion (the card is told not to move by its styles)', () => {
+      const flights = useFlightStore()
+      flights.launch([], [], true, undefined, [filling])
+      expect(flights.current?.from).toBe('bucket')
+      vi.advanceTimersByTime(FLIGHT_SHOW_MS + FLIGHT_HOLD_MS + FLIGHT_FLY_MS)
+      expect(flights.current).toBeNull()
+      expect(flights.owing('item', 'bucket (full)')).toBe(0)
+    })
+
     it('is forgiven like a gain when it will not fly', () => {
       const flights = useFlightStore()
       flights.owe([], [filling])

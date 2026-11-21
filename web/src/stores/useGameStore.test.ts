@@ -1808,6 +1808,36 @@ describe('useGameStore', () => {
         expect(store.bagHasNew).toBe(true)
       })
 
+      it('takes only one of the gained stack for the change, the other still gained', async () => {
+        await startPlaying()
+        bridge.controller.getInventory.mockReturnValue([
+          named('[item_name]Sword[/item_name]'),
+          named('[item_name]Sword (lit)[/item_name]'),
+        ])
+        bridge.controller.getInventoryIdentities.mockReturnValue([
+          { id: 1, name: 'Sword' },
+          { id: 9, name: 'Sword (lit)' },
+        ])
+        store.submitCommand('take another')
+        bridge.controller.getInventory.mockReturnValue([
+          named('[item_name]3 Sword[/item_name]'),
+        ])
+        bridge.controller.getInventoryIdentities.mockReturnValue([
+          { id: 1, name: 'Sword' },
+          { id: 9, name: 'Sword' },
+          { id: 10, name: 'Sword' },
+        ])
+
+        store.submitCommand('douse and take')
+
+        const turn = store.turns.at(-1)
+        expect(turn?.changed).toEqual([{ from: 'Sword (lit)', to: 'Sword' }])
+        expect(turn?.gained).toEqual([
+          { kind: 'item', name: 'Sword', count: 1 },
+        ])
+        expect(turn?.lost).toEqual([])
+      })
+
       it('leaves a thing that went while another came as a loss and a gain', async () => {
         await startPlaying()
         bridge.controller.getInventory.mockReturnValue([

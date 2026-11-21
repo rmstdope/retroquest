@@ -119,7 +119,7 @@ export interface Turn {
   gained: Chip[]
   /** Items and spells this command removed (none for system output). */
   lost: Chip[]
-  /** Carried things that turned into another state of themselves (the bucket filling): told as one change, not in `gained` and `lost`; absent when none. */
+  /** Carried things that turned into another state of themselves (the bucket filling): told as one change, not in `gained` and `lost`; absent (not empty) when none, as in turns saved before changes existed. */
   changed?: Change[]
   /** The room as found on arrival or on a look, kept for the story (null otherwise). */
   arrival: Arrival | null

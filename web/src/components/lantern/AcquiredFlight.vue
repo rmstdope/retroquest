@@ -298,17 +298,18 @@ const style = computed(() => {
   grid-template-areas: 'was pic name';
   align-items: center;
   column-gap: 12px;
+  max-width: calc(100vw - 32px);
   padding: 10px 18px 10px 10px;
   border-radius: 14px;
   box-shadow: 0 8px 28px rgba(0, 0, 0, 0.28);
   border: 1px solid var(--lq-item-line);
-  background: #241d12;
+  background: var(--lq-item-soft);
   font-weight: 600;
 }
 .lq-flight-change .lq-flight-was {
   grid-area: was;
   padding-left: 8px;
-  color: var(--lq-muted, #9a8f7c);
+  color: var(--lq-muted);
   font-weight: 500;
 }
 .lq-flight-change .lq-flight-pocket {

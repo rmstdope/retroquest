@@ -116,13 +116,13 @@ describe('columnPieces', () => {
 
   it('puts a change chip on the card that names the new state', () => {
     const t = turn(
-      `The [item_name]bucket[/item_name] comes up full.\n${say('Mira', 'Careful.')}\nShe waits.`,
+      `The [item_name]bucket (full)[/item_name] is heavy.\n${say('Mira', 'Careful.')}\nShe waits.`,
       { changed: [{ from: 'bucket', to: 'bucket (full)' }] },
     )
     const cards = columnPieces(t, parseTurn(t.text)).filter(
       (p) => p.kind === 'card',
     )
-    expect(cards.map((c) => c.chips)).toEqual([false, true])
+    expect(cards.map((c) => c.chips)).toEqual([true, false])
   })
 
   it('falls back to the last card for chips that no card names', () => {
