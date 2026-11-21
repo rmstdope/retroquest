@@ -269,6 +269,26 @@ describe('LanternLayout: dragging from the belt', () => {
     expect(w.get('.lq-belt-caption').text()).toContain('Bread')
   })
 
+  it('shows the caption of a bag picture a missed drag is let go over, as the mouse rests on it', async () => {
+    await cottage()
+    ;(tile('item:bread').element as HTMLElement).focus()
+    await lift()
+    await over(tile('item:bread').element)
+    tile('item:bread').element.dispatchEvent(
+      new PointerEvent('pointerenter', { pointerType: 'mouse' }),
+    )
+    await letGo()
+    w.getComponent({ name: 'DragGhost' }).vm.$emit('done')
+    await flushPromises()
+    expect(w.get('.lq-belt-caption').text()).toContain('Bread')
+    tile('item:bread').element.dispatchEvent(
+      new PointerEvent('pointerleave', { pointerType: 'mouse' }),
+    )
+    await tile('item:bread').trigger('blur')
+    await flushPromises()
+    expect(w.find('.lq-belt-caption').exists()).toBe(false)
+  })
+
   it('does not press the pocket when the drag is let go over it, or anywhere', async () => {
     const store = await cottage()
     await lift()

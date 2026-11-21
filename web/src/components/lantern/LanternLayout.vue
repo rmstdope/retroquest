@@ -1997,14 +1997,14 @@ const returning = ref<{
   to: { x: number; y: number }
 } | null>(null)
 
-/** A drag ended: a drop on a target sends its command as a typed one; anything else sends nothing and the picture glides back. */
+/** A drag ended: a drop on a target sends its command as a typed one; anything else sends nothing and the picture glides back, and either way keys go on quietly from the dragged picture with no caption (a mouse resting on a bag picture still points at it). */
 function onDragEnd(end: DragEnd): void {
   if (end.command) {
     sendFrom(end.command, `belt:${end.pocketKey}`)
     return
   }
   // Keys go on quietly from the dragged picture, and the press's caption goes.
-  focusAfterRing(`belt:${end.pocketKey}`, true)
+  focusAfterRing(`belt:${end.pocketKey}`, true, true)
   const pocket = beltEl.value?.root?.querySelector<HTMLElement>(
     `[data-belt-pic="${end.pocketKey}"]`,
   )
@@ -2111,11 +2111,16 @@ function onBeltPress(picture: BeltPicture, at: { x: number; y: number }): void {
   }
 }
 
-/** Where focus returns to when the ring or the hand is gone: the thing or picture, or if it has gone the show button (for the belt, its first picture). `quiet` (a command was sent) brings back no belt caption. */
-function focusAfterRing(areaId: string, quiet = false): void {
+/** Where focus returns to when the ring or the hand is gone: the thing or picture, or if it has gone the show button (for the belt, its first picture). `quiet` (a command was sent, or a drag ended) brings back no belt caption; `keepPointing` leaves a mouse resting on a bag picture pointing at it. */
+function focusAfterRing(
+  areaId: string,
+  quiet = false,
+  keepPointing = false,
+): void {
   if (areaId.startsWith('belt:')) {
     const key = areaId.slice('belt:'.length)
-    if (beltEl.value?.has(key)) void beltEl.value.focusPicture(key, quiet)
+    if (beltEl.value?.has(key))
+      void beltEl.value.focusPicture(key, quiet, keepPointing)
     else void beltEl.value?.focusBelt(quiet)
     return
   }
