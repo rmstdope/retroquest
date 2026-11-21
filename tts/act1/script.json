@@ -270,11 +270,6 @@
     "text": "Mira looks you over: cloak, boots, pack. She nods once."
   },
   {
-    "id": "017329cff1ecf6",
-    "speaker": "narrator",
-    "text": "Rows of withered crops stretch beneath the last grey of the night's storm. The earth is cracked and dry, with only a few stubborn carrots hinting at better days. A faint breeze rustles the brittle leaves, carrying the scent of soil and distant rain. These rows were green a month ago."
-  },
-  {
     "id": "017e832c934bd2",
     "speaker": "mira",
     "text": "I have told you what I know of it. Keep it hidden, and keep your eyes open."
@@ -513,11 +508,6 @@
     "id": "0329cd9f132a75",
     "speaker": "tilda",
     "text": "Hush, love. Not out loud, not with the fields the way they are."
-  },
-  {
-    "id": "032d0c441e2d2e",
-    "speaker": "narrator",
-    "text": "Rows of withered crops stretch beneath the last grey of the night's storm. The earth is cracked and dry, with only a few stubborn carrots and a rusty trowel hinting at better days. A faint breeze rustles the brittle leaves, carrying the scent of soil and distant rain. These rows were green a month ago."
   },
   {
     "id": "0335c4695a33b6",
@@ -1253,6 +1243,11 @@
     "id": "076bad59847d28",
     "speaker": "priest",
     "text": "Bless you, child. Will you light it for me? My hands shake more than the flame likes."
+  },
+  {
+    "id": "077065c982c321",
+    "speaker": "narrator",
+    "text": "Rows of withered crops stretch beneath the last grey of the night's storm. The earth is cracked and dry, with only a few stubborn carrots and a rusty trowel hinting at better days. A faint breeze rustles the brittle leaves, carrying the scent of soil and distant rain. On market day these rows were green."
   },
   {
     "id": "077371b6666ab7",
@@ -3103,6 +3098,11 @@
     "id": "134864ed490a75",
     "speaker": "grandmother",
     "text": "Your mother loved the river. If anyone remembers what she did there, it's the old fisherman down at the Riverbank. Promise me you'll be careful."
+  },
+  {
+    "id": "134b552251d545",
+    "speaker": "narrator",
+    "text": "Rows of withered crops stretch beneath the last grey of the night's storm. The earth is cracked and dry, with only a few stubborn carrots hinting at better days. A faint breeze rustles the brittle leaves, carrying the scent of soil and distant rain. On market day these rows were green."
   },
   {
     "id": "134f4b8ebc7c4f",

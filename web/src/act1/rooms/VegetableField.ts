@@ -13,12 +13,12 @@ const WITHERED_DESCRIPTION =
   "Rows of withered crops stretch beneath the last grey of the night's storm. " +
   'The earth is cracked and dry, with only a few stubborn carrots and a rusty trowel hinting at ' +
   'better days. A faint breeze rustles the brittle leaves, carrying the scent ' +
-  'of soil and distant rain. These rows were green a month ago.'
+  'of soil and distant rain. On market day these rows were green.'
 const WITHERED_WITHOUT_TROWEL_DESCRIPTION =
   "Rows of withered crops stretch beneath the last grey of the night's storm. " +
   'The earth is cracked and dry, with only a few stubborn carrots hinting at better days. ' +
   'A faint breeze rustles the brittle leaves, carrying the scent of soil and ' +
-  'distant rain. These rows were green a month ago.'
+  'distant rain. On market day these rows were green.'
 const WATERED_DESCRIPTION =
   'Rows of green crops stretch beneath an open sky. The earth is dark and soft ' +
   'where the clean well water soaked in, and young leaves stand tall where ' +

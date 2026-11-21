@@ -404,6 +404,23 @@ describe('GameController', () => {
       expect(lamp.examine(state)).toBe(ctrl.getInventory()[0].description)
     })
 
+    it('tells a carried thing apart from its name: the same item keeps its identity when renamed', () => {
+      const ctrl = makeController()
+      const state = ctrl.game.state
+      const bucket = item('bucket')
+      state.addItemToInventory(bucket)
+      state.addItemToInventory(item('map'))
+      const before = ctrl.getInventoryIdentities()
+      bucket.name = 'bucket (full)'
+      const after = ctrl.getInventoryIdentities()
+      expect(before.map((entry) => entry.name)).toEqual(['bucket', 'map'])
+      expect(after.map((entry) => entry.name)).toEqual(['bucket (full)', 'map'])
+      expect(after.map((entry) => entry.id)).toEqual(
+        before.map((entry) => entry.id),
+      )
+      expect(new Set(after.map((entry) => entry.id)).size).toBe(2)
+    })
+
     it('lists inventory with counts and spells as markup, and quests as data', () => {
       const ctrl = makeController()
       const state = ctrl.game.state

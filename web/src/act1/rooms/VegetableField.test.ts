@@ -16,16 +16,33 @@ describe('Vegetable Field room card', () => {
   })
 })
 
+describe('Vegetable Field blight timeline', () => {
+  it('echoes the overnight blight of Tilda, with and without the trowel', () => {
+    const game = new Game([new Act1()])
+    game.state.currentRoom = game.state.allRooms.VegetableField
+    const controller = new GameController(game)
+    const LAST_SENTENCE = 'On market day these rows were green.'
+    const description = (): string => controller.getRoomDescription()
+    expect(description()).toContain('a rusty trowel')
+    expect(description().endsWith(LAST_SENTENCE)).toBe(true)
+    expect(description()).not.toContain('a month ago')
+    game.commandParser.parse('take rusty trowel')
+    expect(description()).not.toContain('a rusty trowel')
+    expect(description().endsWith(LAST_SENTENCE)).toBe(true)
+    expect(description()).not.toContain('a month ago')
+  })
+})
+
 describe('Vegetable Field weather', () => {
   const STORM_SKY =
     "Rows of withered crops stretch beneath the last grey of the night's storm."
 
-  it('is grey from the storm while withered, with and without the hoe', () => {
+  it('is grey from the storm while withered, with and without the trowel', () => {
     const game = new Game([new Act1()])
     game.state.currentRoom = game.state.allRooms.VegetableField
     const controller = new GameController(game)
     expect(controller.getRoomDescription()).toContain(STORM_SKY)
-    game.commandParser.parse('take rusty hoe')
+    game.commandParser.parse('take rusty trowel')
     expect(controller.getRoomDescription()).toContain(STORM_SKY)
   })
 })
