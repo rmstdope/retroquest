@@ -32,7 +32,7 @@ import {
  * the picture pointed at (a mouse resting on it), focused, held down by a
  * finger for a moment, or `captionFor` (the one whose ring is open) is told
  * to the layout, which draws it above the strap and the words; a picture
- * focused quietly (`focusPicture`, after a command from its ring) shows none,
+ * focused quietly (`focusPicture`, after a command from its ring or a drag that ended) shows none,
  * nor does a mouse left resting there until it moves. The list
  * showing counts as seen, so the amber dot only sits on the stud of the list
  * not showing, and on both while the strap is folded. Which list and whether
@@ -363,16 +363,27 @@ function tiles(): HTMLElement[] {
  * Focus a picture (the first when no key is given) and scroll it into view.
  * `quiet` focuses it without its caption (a command was just sent from its
  * ring, and what it does is told with nothing over the words); the caption
- * shows again when focus next comes to a picture.
+ * shows again when focus next comes to a picture. A quiet focus also clears
+ * the caption of a picture that already held focus (a mouse press, as when a
+ * drag ends). `keepPointing` leaves a mouse resting on a picture pointing at
+ * it (a drag missed over a picture: that caption shows as it does today).
  */
-async function focusPicture(key?: string, quiet = false): Promise<void> {
+async function focusPicture(
+  key?: string,
+  quiet = false,
+  keepPointing = false,
+): Promise<void> {
   await nextTick()
   const all = tiles()
   const el = key ? all.find((t) => t.dataset.beltPic === key) : all[0]
   quietFocus = quiet ? (el?.dataset.beltPic ?? null) : null
   if (quiet) {
-    hoverHushed = true
-    pointed.value = null
+    if (!keepPointing) {
+      hoverHushed = true
+      pointed.value = null
+    }
+    // A tile that already holds focus (a mouse press gave it) fires no focus event, so its caption is cleared here.
+    focused.value = null
   }
   el?.focus()
   quietFocus = null

@@ -188,15 +188,11 @@ export const ACT1_ROOM_AREAS: Record<string, ImageArea[]> = {
 /**
  * The areas of the rooms' other pictures, by room key then picture variant.
  * The shed seen from inside (`AbandonedShed.pictureVariant`) holds what turns
- * up once its door is open; the shut General Store (`GeneralStore.pictureVariant`)
- * holds the room's areas but for Patches, who is not home yet.
+ * up once its door is open.
  */
 export const ACT1_VARIANT_AREAS: Readonly<
   Record<string, Readonly<Record<string, readonly ImageArea[]>>>
 > = {
-  GeneralStore: {
-    shut: ACT1_ROOM_AREAS.GeneralStore.filter((area) => area.id !== 'patches'),
-  },
   AbandonedShed: {
     inside: [
       { id: 'shed-door', title: 'Shed Door' },

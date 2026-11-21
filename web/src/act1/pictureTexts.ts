@@ -26,11 +26,12 @@ export const ACT1_PICTURE_TEXTS: Readonly<
       'corner by the altar swallows the light.',
   },
   GeneralStore: {
-    // The room's own picture is the open shop; the shut shop is `shut`.
+    // The store's one picture is painted from the shut text; the shutters
+    // patch shows the open store.
     '':
-      'A cluttered shop. Rope, apples and trinkets crowd the shelves, and ' +
-      'the air smells of fruit, wax and old wood. Outside, the lane runs ' +
-      'east to the chapel. Hemlock dusts jars between customers.',
+      'A cluttered shop with the shutters half down. Rope, apples and ' +
+      'trinkets crowd the shelves in the gloom. Hemlock stands at his ' +
+      'counter, sorting apples, and keeps glancing at the lane to the chapel.',
   },
   AbandonedShed: {
     inside:
