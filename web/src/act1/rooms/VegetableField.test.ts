@@ -16,6 +16,20 @@ describe('Vegetable Field room card', () => {
   })
 })
 
+describe('Vegetable Field blight timeline', () => {
+  it('echoes the overnight blight of Tilda, with and without the hoe', () => {
+    const game = new Game([new Act1()])
+    game.state.currentRoom = game.state.allRooms.VegetableField
+    const controller = new GameController(game)
+    const LAST_SENTENCE = 'On market day these rows were green.'
+    expect(controller.getRoomDescription()).toContain(LAST_SENTENCE)
+    expect(controller.getRoomDescription()).not.toContain('a month ago')
+    game.commandParser.parse('take rusty hoe')
+    expect(controller.getRoomDescription()).toContain(LAST_SENTENCE)
+    expect(controller.getRoomDescription()).not.toContain('a month ago')
+  })
+})
+
 describe('Vegetable Field weather', () => {
   const STORM_SKY =
     "Rows of withered crops stretch beneath the last grey of the night's storm."
