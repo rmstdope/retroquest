@@ -10,7 +10,7 @@
     "id": "act1-blacksmiths-forge",
     "title": "Blacksmith's Forge",
     "plays": "Act I, Blacksmith's Forge",
-    "text": "instrumental background loop for Blacksmith's Forge: A hot, smoky forge. Coals glow in the hearth and the anvil rings, no vocals",
+    "text": "instrumental background loop for Blacksmith's Forge: A hot, smoky forge. A log fire burns on the hearthstone, and not all of its smoke finds the chimney. A single horseshoe hangs on the wall, no vocals",
     "seconds": 60
   },
   {
@@ -24,7 +24,7 @@
     "id": "act1-eliors-cottage",
     "title": "Elior's Cottage",
     "plays": "Act I, Elior's Cottage",
-    "text": "instrumental background loop for Elior's Cottage: A modest cottage with a straw roof and a cozy hearth. The scent of fresh bread and old books fills the air, no vocals",
+    "text": "instrumental background loop for Elior's Cottage: A modest cottage with a straw roof and a cozy hearth. The scent of fresh bread and old books fills the air. The doorway to your room stands open, and the room beyond it is too dark to see into, no vocals",
     "seconds": 60
   },
   {
@@ -80,14 +80,14 @@
     "id": "act1-the-dream",
     "title": "The Dream",
     "plays": "Act I, The Dream",
-    "text": "instrumental background loop for The Dream: It is dark, and it is raining hard. You hear it beating on shutters, though you cannot see any. Thunder breaks so close that the dark shakes with it. Shadows drift past like smoke, no vocals",
+    "text": "instrumental background loop for The Dream: It is raining hard on a village street. Thunder breaks so close that the shutters shake with it. Shadows drift through the rain like smoke, no vocals",
     "seconds": 60
   },
   {
     "id": "act1-vegetable-field",
     "title": "Vegetable Field",
     "plays": "Act I, Vegetable Field",
-    "text": "instrumental background loop for Vegetable Field: Rows of withered crops stretch beneath the last grey of the night's storm. The earth is cracked and dry, with only a few stubborn carrots and a rusty hoe hinting at better days, no vocals",
+    "text": "instrumental background loop for Vegetable Field: Rows of withered crops stretch beneath the last grey of the night's storm. The earth is cracked and dry, with only a few stubborn carrots and a rusty trowel hinting at better days, no vocals",
     "seconds": 60
   },
   {
@@ -108,7 +108,7 @@
     "id": "act1-village-well",
     "title": "Village Well",
     "plays": "Act I, Village Well",
-    "text": "instrumental background loop for Village Well: An old stone well stands between the field and the forge, its stones worn smooth by countless hands. The water below lies dark and still, and a faint sour smell hangs in the cool, damp air, no vocals",
+    "text": "instrumental background loop for Village Well: An old stone well sits low in the grass between the field and the forge, a ring of stones worn smooth by countless hands around a deep pool, no vocals",
     "seconds": 60
   },
   {

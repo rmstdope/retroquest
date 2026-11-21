@@ -3,15 +3,15 @@ import { Well } from '../items/Well'
 import { Scenery } from '../items/Scenery'
 
 const DESCRIPTION_START =
-  'An old stone well stands between the field and the forge, its stones ' +
-  'worn smooth by countless hands.'
-const DESCRIPTION_END = ' Moss creeps up the sides.'
+  'An old stone well sits low in the grass between the field and the forge, ' +
+  'a ring of stones worn smooth by countless hands around a deep pool.'
+const DESCRIPTION_END = ' Moss creeps over the stones.'
 const MURKY_WATER =
-  ' The water below lies dark and still, and a faint sour smell hangs in the ' +
+  ' Lily pads float on dark green water, and a faint sour smell hangs in the ' +
   'cool, damp air.'
 const CLEAR_WATER =
-  ' The water below glimmers with a crystalline clarity, and the air is cool ' +
-  'and damp.'
+  ' The water glimmers with a crystalline clarity, and the air is cool and ' +
+  'damp.'
 
 /**
  * Village Well room: mystical utility hub foreshadowing purification systems.

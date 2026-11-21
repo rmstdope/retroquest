@@ -17,7 +17,7 @@ import { Magnet } from './Magnet'
 import { Matches } from './Matches'
 import { MillstoneFragment } from './MillstoneFragment'
 import { Rope } from './Rope'
-import { RustyHoe } from './RustyHoe'
+import { RustyTrowel } from './RustyTrowel'
 import { RustySaw } from './RustySaw'
 import { SackOfFlour } from './SackOfFlour'
 import { SharpKnife } from './SharpKnife'
@@ -71,7 +71,7 @@ const ITEMS: Item[] = [
   new Matches(),
   new MillstoneFragment(),
   new Rope(),
-  new RustyHoe(),
+  new RustyTrowel(),
   new RustySaw(),
   new SackOfFlour(),
   new SharpKnife(),

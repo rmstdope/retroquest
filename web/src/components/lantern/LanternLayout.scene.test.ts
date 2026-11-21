@@ -238,7 +238,7 @@ describe('LanternLayout: change of scene', () => {
     const blocks = parseTurn(turn.text)
     const waking = blocks.findIndex(
       (block) =>
-        block.kind === 'text' && block.markup.startsWith('The dark lets go'),
+        block.kind === 'text' && block.markup.startsWith('The dream lets go'),
     )
     // The words up to the voice's are told over the dream, in the dream; the
     // waking and the arrival in the middle wait.
@@ -301,7 +301,7 @@ describe('LanternLayout: change of scene', () => {
     const turn = game.turns.at(-1)!
     const waking = parseTurn(turn.text).findIndex(
       (block) =>
-        block.kind === 'text' && block.markup.startsWith('The dark lets go'),
+        block.kind === 'text' && block.markup.startsWith('The dream lets go'),
     )
     return { id: turn.id, waking }
   }
@@ -323,8 +323,8 @@ describe('LanternLayout: change of scene', () => {
     await w.vm.$nextTick()
     // In the dark: the waking, in the middle, and nothing else.
     expect(scene.phase).toBe('dark')
-    expect(interlude().text()).toContain('The dark lets go of you')
-    expect(story()).not.toContain('The dark lets go of you')
+    expect(interlude().text()).toContain('The dream lets go of you')
+    expect(story()).not.toContain('The dream lets go of you')
     expect(useArrivalStore().active).toBe(false)
     // It is read; then the cottage rises, and its room is told in the middle.
     vi.advanceTimersByTime(readingTimeMs(waking) - 1)
@@ -346,7 +346,7 @@ describe('LanternLayout: change of scene', () => {
     expect(w.get('[data-testid="arrival-on-picture"]').text()).toContain(
       "Elior's Cottage",
     )
-    expect(story()).not.toContain('The dark lets go of you')
+    expect(story()).not.toContain('The dream lets go of you')
   })
 
   /** Answer the voice, unnarrated, and wait until the waking is told in the dark. */
@@ -546,7 +546,7 @@ describe('LanternLayout: change of scene', () => {
     await w.vm.$nextTick()
     await vi.advanceTimersByTimeAsync(0)
     const looked = (): boolean =>
-      w.get('.lq-story').text().includes('it is raining hard')
+      w.get('.lq-story').text().includes('It is raining hard')
     expect(looked()).toBe(true)
     await answerVoice(game)
     // Over the dream, the look is still on the left.
@@ -597,7 +597,7 @@ describe('LanternLayout: change of scene', () => {
     await w.vm.$nextTick()
     expect(narration.revealed(turn.id, turn.waking)).toBe(true)
     const story = w.get('.lq-story').text()
-    expect(story).toContain('The dark lets go of you')
+    expect(story).toContain('The dream lets go of you')
     expect(story).not.toContain('You answer it')
     expect(story).not.toContain('talk to voice')
   })
@@ -630,7 +630,7 @@ describe('LanternLayout: change of scene', () => {
       expect(scene.turn).toBeNull()
       noEmptyCard()
       // The waking is told only in the middle of the dark, which the press skipped.
-      expect(story()).not.toContain('The dark lets go of you')
+      expect(story()).not.toContain('The dream lets go of you')
       expect(story()).not.toContain('talk to voice')
       expect(story()).not.toContain('You answer it')
       expect(story()).not.toContain('The whisper comes once more')
@@ -679,7 +679,7 @@ describe('LanternLayout: change of scene', () => {
     await w.vm.$nextTick()
     const story = w.get('.lq-story').text()
     expect(game.musicRoomKey).toBe('EliorsCottage')
-    expect(story).toContain('The dark lets go of you')
+    expect(story).toContain('The dream lets go of you')
     expect(story).not.toContain('You answer it')
   })
 
@@ -779,7 +779,8 @@ describe('LanternLayout: change of scene', () => {
       const latest = game.turns.at(-1)
       const block = latest
         ? parseTurn(latest.text).find(
-            (b) => b.kind === 'text' && b.markup.startsWith('The dark lets go'),
+            (b) =>
+              b.kind === 'text' && b.markup.startsWith('The dream lets go'),
           )
         : undefined
       return block && 'markup' in block

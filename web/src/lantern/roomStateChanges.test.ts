@@ -22,7 +22,9 @@ const STATE_CHANGES: Record<string, Record<string, StateChange>> = {
   Act1: {
     'EliorsCottage after "use lantern"': { patches: ['lantern-lit'] },
     'EliorsCottage after "take bread"': { patches: ['bread-taken'] },
-    'VegetableField after "take rusty hoe"': { patches: ['rusty-hoe-taken'] },
+    'VegetableField after "take rusty trowel"': {
+      patches: ['rusty-hoe-taken'],
+    },
     'ChickenCoop after "use bread with chicken"': { patches: ['key-appears'] },
     'AbandonedShed after "use key with door"': {
       none: 'the room shows its other picture, the inside, once the door is open (Room.pictureVariant)',

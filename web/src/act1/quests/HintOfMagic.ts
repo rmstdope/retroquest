@@ -10,8 +10,8 @@ import {
  * it finds, then Grandmother at the hearth. Later entries start a new line.
  */
 const STAGES: readonly string[] = [
-  'You woke with three words written down, somewhere in the dark by your ' +
-    'bed, and a tune still going in the house. ' +
+  'You woke with three words written down, somewhere in the dark of your ' +
+    'room, and a tune still going in the house. ' +
     'The [item_name]lantern[/item_name] would show you where.',
   '\nThe [item_name]lantern[/item_name] found your ' +
     '[item_name]journal[/item_name]. ' +

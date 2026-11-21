@@ -1,7 +1,7 @@
 import { Room } from '@/engine'
 import type { GameState } from '@/engine'
 import { WitheredCarrot } from '../items/WitheredCarrot'
-import { RustyHoe } from '../items/RustyHoe'
+import { RustyTrowel } from '../items/RustyTrowel'
 import { DullKnife } from '../items/DullKnife'
 import { Scenery } from '../items/Scenery'
 import {
@@ -11,10 +11,10 @@ import {
 
 const WITHERED_DESCRIPTION =
   "Rows of withered crops stretch beneath the last grey of the night's storm. " +
-  'The earth is cracked and dry, with only a few stubborn carrots and a rusty hoe hinting at ' +
+  'The earth is cracked and dry, with only a few stubborn carrots and a rusty trowel hinting at ' +
   'better days. A faint breeze rustles the brittle leaves, carrying the scent ' +
   'of soil and distant rain. On market day these rows were green.'
-const WITHERED_WITHOUT_HOE_DESCRIPTION =
+const WITHERED_WITHOUT_TROWEL_DESCRIPTION =
   "Rows of withered crops stretch beneath the last grey of the night's storm. " +
   'The earth is cracked and dry, with only a few stubborn carrots hinting at better days. ' +
   'A faint breeze rustles the brittle leaves, carrying the scent of soil and ' +
@@ -32,8 +32,8 @@ const WATERED_DESCRIPTION =
  * Entering the field sets FLAG_INVESTIGATED_WITHERED_CROPS unprompted. Once
  * it is watered with purified well water (FLAG_VEGETABLE_FIELD_WATERED) the
  * description shows the field recovered; `descriptionFor` reads the flag
- * each time the room is shown. The withered field mentions the rusty hoe only
- * while the hoe still lies in it.
+ * each time the room is shown. The withered field mentions the rusty trowel only
+ * while the trowel still lies in it.
  */
 export class VegetableField extends Room {
   /** The sound state of the field before it is watered. */
@@ -47,7 +47,7 @@ export class VegetableField extends Room {
       description: WITHERED_DESCRIPTION,
       items: [
         new WitheredCarrot(),
-        new RustyHoe(),
+        new RustyTrowel(),
         new DullKnife(),
         ...Scenery.forRoom('VegetableField'),
       ],
@@ -72,13 +72,13 @@ export class VegetableField extends Room {
     return [VegetableField.SOUND_WITHERED, VegetableField.SOUND_GREEN]
   }
 
-  /** The field withered (with or without its rusty hoe) or, once watered, recovered. */
+  /** The field withered (with or without its rusty trowel) or, once watered, recovered. */
   override descriptionFor(gameState: GameState): string {
     if (gameState.getStoryFlag(FLAG_VEGETABLE_FIELD_WATERED))
       return WATERED_DESCRIPTION
-    return this.items.some((item) => item instanceof RustyHoe)
+    return this.items.some((item) => item instanceof RustyTrowel)
       ? WITHERED_DESCRIPTION
-      : WITHERED_WITHOUT_HOE_DESCRIPTION
+      : WITHERED_WITHOUT_TROWEL_DESCRIPTION
   }
 
   /** Set the investigation story flag when the player enters the field. */

@@ -7,6 +7,7 @@ import { SharpKnife } from './SharpKnife'
 import { Candle } from './Candle'
 import { Matches } from './Matches'
 import { Mechanism } from './Mechanism'
+import { Rope } from './Rope'
 import { Scenery } from './Scenery'
 import { Vines } from './Vines'
 import { SCENERY_BY_ROOM } from './sceneryLines'
@@ -292,13 +293,23 @@ describe('Scenery that agrees with its room', () => {
     )
   })
 
+  it('forge: the tools do not answer to the name of a rope lying there', () => {
+    const game = gameIn('BlacksmithsForge')
+    game.state.currentRoom.addItem(new Rope())
+    expect(say(game, 'examine rope')).not.toContain('Tongs')
+  })
+
   it('dream: the man, the child and the shadows each read as themselves', () => {
     const game = gameIn('TheDream')
     const man = say(game, 'examine man')
-    expect(man).not.toContain('no face')
-    expect(man).toContain('hand')
-    expect(say(game, 'examine hand')).toBe(man)
-    expect(say(game, 'examine child')).toContain('Gone with him')
+    expect(man).toBe(
+      'His hood hides his face. He holds the child carefully, as if it ' +
+        'might wake.',
+    )
+    expect(say(game, 'examine child')).toBe(
+      'Small enough to hold against a shoulder. It is asleep, and it does ' +
+        'not cry.',
+    )
     expect(say(game, 'examine shadows')).toContain('like smoke')
   })
 })

@@ -99,18 +99,18 @@ describe('Act 1 golden path', () => {
     expect(state.isQuestCompleted(PHOTO)).toBe(false)
 
     // Step 2: Vegetable Field
-    executeCommands(game, ['go south', 'take rusty hoe'])
+    executeCommands(game, ['go south', 'take rusty trowel'])
     expectQuests(state, [MAIN, PHOTO, 'Magic for real', 'Know your village'])
     expectCurrentRoom(state, 'Vegetable Field')
-    expectItemInInventory(state, 'rusty hoe')
-    expectItemInRoom(room(), 'rusty hoe', false)
+    expectItemInInventory(state, 'rusty trowel')
+    expectItemInRoom(room(), 'rusty trowel', false)
 
-    executeCommands(game, ['use hoe', 'take knife', 'cast revive'])
+    executeCommands(game, ['use trowel', 'take knife', 'cast revive'])
     expectItemInInventory(state, 'coin')
     expectItemInInventory(state, 'dull knife')
     const inventoryAfterFirstHoeUse = state.inventory.length
-    executeCommands(game, ['use hoe'])
-    expect(state.inventory.length, 'using hoe again adds nothing').toBe(
+    executeCommands(game, ['use trowel'])
+    expect(state.inventory.length, 'using trowel again adds nothing').toBe(
       inventoryAfterFirstHoeUse,
     )
 
@@ -874,7 +874,7 @@ describe('Act 1 when Elior buys more rope before the knife is sharpened', () => 
     expect(played).toContain('That was my last good rope, lad.')
   })
 
-  it('keeps the hoe coin for Borin when Patches stays home and rope is bought', () => {
+  it('keeps the trowel coin for Borin when Patches stays home and rope is bought', () => {
     const path = [...ACT1_GOLDEN_PATH]
     const home = path.indexOf('talk to patches') + 6
     expect(path[home]).toBe('go north')

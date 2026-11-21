@@ -605,6 +605,16 @@ describe('Mira spoken to again before the flower', () => {
     expect(second.length).toBeLessThan(first.length)
   })
 
+  it('speaks to the window first, then turns and studies his face', () => {
+    const first = executeCommands(gameInMirasHut(), ['talk to mira'])
+    expect(first).toContain('does not turn from the window.')
+    expect(first).toContain('Then she turns, and studies your face.')
+    expect(first.indexOf('does not turn')).toBeLessThan(
+      first.indexOf('Then she turns'),
+    )
+    expect(first).not.toContain('looks up from the herbs')
+  })
+
   it('reminds him of the flower, not the whole request, once she has asked for it', () => {
     const game = gameInMirasHut()
     setThreeSigns(game)

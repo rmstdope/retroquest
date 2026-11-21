@@ -73,7 +73,7 @@ test('pressing a closed way in the picture answers as the typed direction does',
   }
   await page.mouse.click(px, py)
   await expect(
-    page.getByText(/Grandmother looks up from the hearth/).first(),
+    page.getByText(/Grandmother looks up before you reach the door/).first(),
   ).toBeVisible()
   await expect(page.locator('.lq-name-text')).toHaveText("Elior's Cottage")
 })

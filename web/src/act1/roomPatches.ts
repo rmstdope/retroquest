@@ -54,8 +54,8 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
   VegetableField: [
     {
       id: 'rusty-hoe-taken',
-      title: 'Rusty Hoe taken',
-      text: 'Remove the rusty hoe from the picture.',
+      title: 'Rusty Trowel taken',
+      text: 'Remove the rusty trowel from the picture.',
       area: 'rusty-hoe',
       when: 'absent',
     },
@@ -298,7 +298,7 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
     {
       id: 'well-purified',
       title: 'Well purified',
-      text: 'Make the water in the well clear and bright instead of dark and still.',
+      text: 'Make the water in the well clear and bright instead of dark and green.',
       area: 'well',
       when: (c) => {
         const well = c.things.get('well')

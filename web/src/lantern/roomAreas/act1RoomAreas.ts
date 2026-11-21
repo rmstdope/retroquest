@@ -42,7 +42,7 @@ export const ACT1_ROOM_AREAS: Record<string, ImageArea[]> = {
   ],
   VegetableField: [
     { id: 'withered-carrot', title: 'Withered Carrot' },
-    { id: 'rusty-hoe', title: 'Rusty Hoe' },
+    { id: 'rusty-hoe', title: 'Rusty Trowel' },
     { id: 'dull-knife', title: 'Dull Knife' },
     { id: 'scenery-vegetable-field-crops', title: 'Crops' },
     { id: 'scenery-vegetable-field-earth', title: 'Earth' },
@@ -82,9 +82,9 @@ export const ACT1_ROOM_AREAS: Record<string, ImageArea[]> = {
   ],
   BlacksmithsForge: [
     { id: 'horseshoe', title: 'Horseshoe' },
-    { id: 'scenery-blacksmiths-forge-coals', title: 'Coals' },
+    { id: 'scenery-blacksmiths-forge-coals', title: 'Fire' },
     { id: 'scenery-blacksmiths-forge-anvil', title: 'Anvil' },
-    { id: 'scenery-blacksmiths-forge-hinges', title: 'Hinges' },
+    { id: 'scenery-blacksmiths-forge-hinges', title: 'Tools' },
     { id: 'scenery-blacksmiths-forge-hammer', title: 'Hammer' },
     { id: 'blacksmith', title: 'Borin' },
     { id: 'exit-west', title: 'Way west' },

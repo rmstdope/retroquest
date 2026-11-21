@@ -3,10 +3,21 @@ import type { Exits, GameState } from '@/engine'
 import { DreamVoice } from '../characters/DreamVoice'
 import { Scenery } from '../items/Scenery'
 
+const DESCRIPTION =
+  'It is raining hard on a village street. Thunder breaks so close ' +
+  'that the shutters shake with it. Shadows drift through the rain ' +
+  'like smoke. In the street a man in a hooded cloak holds a child ' +
+  'against his shoulder. His hood hides his face. ' +
+  'Somewhere a slow tune climbs three notes and settles home again. ' +
+  'Behind him a tall figure stands among the shadows. It has no face ' +
+  'you can find. It is too far away to reach, and too close to be ' +
+  'only a dream. It is whispering, at the very edge of hearing, and ' +
+  'what it whispers is your name.'
+
 /**
- * The Dream: where the game opens. One dark room with a storm in it, the
- * cradle tune, a man's hand lifting a child, and a tall figure whispering
- * Elior's name. The shadows, the man and the child can be examined, but
+ * The Dream: where the game opens. One room, a rainy village street with a
+ * storm in it, the cradle tune, a hooded man holding a child, and a tall
+ * figure whispering Elior's name. The shadows, the man and the child can be examined, but
  * nothing can be carried out of it and no way leads anywhere;
  * answering the voice (talking to it, or saying anything to it) ends it,
  * and Elior wakes in his cottage. Asking for a hint here points at the
@@ -16,21 +27,16 @@ export class TheDream extends Room {
   constructor() {
     super({
       name: 'The Dream',
-      description:
-        'It is dark, and it is raining hard. You hear it beating on ' +
-        'shutters, though you cannot see any. Thunder breaks so close ' +
-        'that the dark shakes with it. Shadows drift past like smoke. ' +
-        'A man’s hand reaches out of the dark, lifts a child and holds ' +
-        'it against his shoulder, and then both of them are gone. ' +
-        'Somewhere a slow tune climbs three notes and settles home again. ' +
-        'A tall figure stands among the shadows. It has no face you can ' +
-        'find. It is too far away to reach, and too close to be only a dream. ' +
-        'It is whispering, at the very edge of hearing, and what it ' +
-        'whispers is your name.',
+      description: DESCRIPTION,
       items: Scenery.forRoom('TheDream'),
       characters: [new DreamVoice()],
       exits: {},
     })
+  }
+
+  /** The dream in the current words, whatever an older save kept. */
+  override descriptionFor(_gameState: GameState): string {
+    return DESCRIPTION
   }
 
   /** A dream has no ways out of it. */
@@ -38,19 +44,19 @@ export class TheDream extends Room {
     return {}
   }
 
-  /** Every direction is the same dark, and the whisper again. */
+  /** Every direction is the same street, and the whisper again. */
   override blockedExit(_gameState: GameState, _direction: string): string {
     return (
-      'You go that way, and it is the same dark, the same rain, the same ' +
-      'tune. There is no door in this. There is only the voice, and it ' +
+      'You go that way, and it is the same street, the same rain, the same ' +
+      'tune. There is no way out of this. There is only the voice, and it ' +
       'says your name.'
     )
   }
 
-  /** Nothing to find; a dream has no floor. */
+  /** Nothing to find; a dream has no end to its street. */
   override search(_gameState: GameState): string {
     return (
-      'Your hands find nothing. The dark has no floor and the dream no ' +
+      'Your hands find nothing. The street has no end and the dream no ' +
       'edges. The whisper comes again, nearer, and it is your name.'
     )
   }

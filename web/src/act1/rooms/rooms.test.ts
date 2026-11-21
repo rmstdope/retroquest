@@ -162,7 +162,10 @@ describe('Village Well description', () => {
     const game = gameAtWell()
     const description = game.state.currentRoom.describe(game.state)
 
-    expect(description).toContain('dark and still')
+    expect(description).toContain(
+      'Lily pads float on dark green water, and a faint sour smell hangs in ' +
+        'the cool, damp air.',
+    )
     expect(description).not.toContain('crystalline')
     expect(description).not.toContain('rope')
   })
@@ -176,7 +179,7 @@ describe('Village Well description', () => {
 
     const description = new GameController(game).getRoomDescription()
     expect(description).toContain('crystalline clarity')
-    expect(description).not.toContain('dark and still')
+    expect(description).not.toContain('Lily pads')
   })
 
   it('shows clear water once the well is purified', () => {
@@ -188,7 +191,7 @@ describe('Village Well description', () => {
     const description = game.state.currentRoom.describe(game.state)
 
     expect(description).toContain('crystalline clarity')
-    expect(description).not.toContain('dark and still')
+    expect(description).not.toContain('Lily pads')
   })
 })
 

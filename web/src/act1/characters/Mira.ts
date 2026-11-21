@@ -89,13 +89,12 @@ export class Mira extends Character {
     })
   }
 
-  /** Her greeting at the first meeting, up to where she studies his face. */
+  /** Her greeting at the first meeting: she speaks to the window, then turns and studies his face. */
   private firstGreeting(): string {
     return (
-      `${characterName(this.name)} looks up from the herbs she is ` +
-      'tying. ' +
+      `${characterName(this.name)} does not turn from the window. ` +
       speech(`${characterName('Elior')}. Come in, mind the sage.`) +
-      '\nShe studies your face. '
+      '\nThen she turns, and studies your face. '
     )
   }
 

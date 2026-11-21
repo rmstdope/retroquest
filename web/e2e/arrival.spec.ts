@@ -184,6 +184,11 @@ test.describe('the arrival told on the picture', () => {
       await expect(arrival(page).locator('.lq-arrival-line')).toHaveCount(0)
       // The command that plays the turn must not also clear the arrival it starts.
       await enterCommand(page, 'talk to voice')
+      // The waking has no recording yet, so it waits for a press to go on.
+      await expect(page.getByText('Click to continue')).toBeVisible({
+        timeout: 20_000,
+      })
+      await page.keyboard.press('Enter')
       const lines = arrival(page).locator('.lq-arrival-line')
       // The answer is told on the sides first (rq-uqp8); the middle opens on
       // Elior's Cottage, described as any arrival is ("You are in …" is only
@@ -435,13 +440,13 @@ test.describe('a long arrival on a narrow window (rq-fc9f)', () => {
 
   /** Every sentence of the Dream's description, each of which must be shown. */
   const DREAM = [
-    'It is dark, and it is raining hard.',
-    'You hear it beating on shutters, though you cannot see any.',
-    'Thunder breaks so close that the dark shakes with it.',
-    'Shadows drift past like smoke.',
-    'A man’s hand reaches out of the dark, lifts a child and holds it against his shoulder, and then both of them are gone.',
+    'It is raining hard on a village street.',
+    'Thunder breaks so close that the shutters shake with it.',
+    'Shadows drift through the rain like smoke.',
+    'In the street a man in a hooded cloak holds a child against his shoulder.',
+    'His hood hides his face.',
     'Somewhere a slow tune climbs three notes and settles home again.',
-    'A tall figure stands among the shadows.',
+    'Behind him a tall figure stands among the shadows.',
     'It has no face you can find.',
     'It is too far away to reach, and too close to be only a dream.',
     'It is whispering, at the very edge of hearing, and what it whispers is your name.',

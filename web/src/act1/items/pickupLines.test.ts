@@ -24,7 +24,7 @@ import { MothersLetter } from './MothersLetter'
 import { RareFlower } from './RareFlower'
 import { Rope } from './Rope'
 import { RuneToken } from './RuneToken'
-import { RustyHoe } from './RustyHoe'
+import { RustyTrowel } from './RustyTrowel'
 import { RustySaw } from './RustySaw'
 import { SharpKnife } from './SharpKnife'
 import { ShinyPebble } from './ShinyPebble'
@@ -57,7 +57,7 @@ const ITEMS: (new () => Item)[] = [
   BrokenShovel,
   FishingRod,
   Magnet,
-  RustyHoe,
+  RustyTrowel,
   RustySaw,
   DullKnife,
   SharpKnife,

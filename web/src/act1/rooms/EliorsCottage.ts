@@ -23,13 +23,13 @@ const WATCHES_THE_NEXT_BATCH = 'the next batch'
 
 /** The light sentence while the lantern is still dark. */
 const DARK_CORNER =
-  'The curtains are still drawn on a bright morning, and the corner by your ' +
-  'bed is too dark to see into. '
+  'The doorway to your room stands open, and the room beyond it is too ' +
+  'dark to see into. '
 
 /** The light sentence once the lantern has been lit, wherever it is now. */
-const SUNNY_MORNING =
-  'Morning sun comes through the lace curtains onto shelves lined with ' +
-  'trinkets and memories. '
+const FIRELIGHT =
+  'Firelight reaches the shelves, lined with trinkets and memories, and ' +
+  'your room is no longer dark. '
 
 /**
  * The cottage's room text, with the light sentence, the table clause and what
@@ -46,7 +46,7 @@ function descriptionWith(
     lightSentence +
     'A sturdy wooden ' +
     `table sits in the center${tableClause} and a gentle fire crackles in the ` +
-    `hearth. ${characterName('Grandmother')} stands by it, humming, ` +
+    `hearth. ${characterName('Grandmother')} stands by your doorway, humming, ` +
     `and keeps an eye on ${watched}.`
   )
 }
@@ -58,7 +58,7 @@ function descriptionWith(
  * search spawns a FadedPhotograph and sets FLAG_FOUND_PHOTO. The room text
  * names the loaf on the table, and Grandmother keeping an eye on the bread,
  * only while the bread is still in the room, and
- * the dark corner by the bed until the lantern has been lit. Until the exits
+ * the dark room beyond the doorway until the lantern has been lit. Until the exits
  * open, Grandmother stops Elior at the door with what is still unfinished.
  */
 export class EliorsCottage extends Room {
@@ -82,7 +82,7 @@ export class EliorsCottage extends Room {
   }
 
   /**
-   * The room text: the dark corner until the lantern is lit, and the loaf on
+   * The room text: the dark room until the lantern is lit, and the loaf on
    * the table (and Grandmother watching it) only while it lies there; once it
    * is taken she watches the next batch instead.
    */
@@ -90,7 +90,7 @@ export class EliorsCottage extends Room {
     const loafOnTable = this.items.some((item) => item instanceof Bread)
     const lit = gameState.getStoryFlag(FLAG_LANTERN_LIT)
     return descriptionWith(
-      lit ? SUNNY_MORNING : DARK_CORNER,
+      lit ? FIRELIGHT : DARK_CORNER,
       loafOnTable ? LOAF_ON_TABLE : ',',
       loafOnTable ? WATCHES_THE_BREAD : WATCHES_THE_NEXT_BATCH,
     )
@@ -117,9 +117,9 @@ export class EliorsCottage extends Room {
     const grandmother = characterName('Grandmother')
     if (!gameState.getStoryFlag(FLAG_LANTERN_LIT)) {
       return clue(
-        `${grandmother} looks up from the hearth before you reach the door. ` +
+        `${grandmother} looks up before you reach the door. ` +
           speech(
-            "Not with the bread nearly out, you don't. And that corner of " +
+            "Not with the bread nearly out, you don't. And that room of " +
               "yours is still dark; you've not even lit the lantern.",
           ),
       )

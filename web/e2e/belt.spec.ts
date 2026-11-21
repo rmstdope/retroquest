@@ -198,7 +198,7 @@ test('the No match line of the typing box lies over the belt, not under its labe
     const store = app.config.globalProperties.$pinia.state.value.game
     store.rawInventory = [
       'Bread',
-      'Rusty Hoe',
+      'Rusty Trowel',
       'Egg',
       'Feather',
       'Lantern',
