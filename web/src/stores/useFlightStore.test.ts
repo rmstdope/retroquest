@@ -273,4 +273,60 @@ describe('useFlightStore', () => {
       expect(flights.owing('item', 'lantern')).toBe(0)
     })
   })
+
+  describe('a change', () => {
+    const filling = { from: 'bucket', to: 'bucket (full)' }
+
+    it('shows one change, then flies it like a gain; the list waits for the new name', () => {
+      const flights = useFlightStore()
+      flights.owe([], [filling])
+      expect(flights.owing('item', 'bucket (full)')).toBe(1)
+      flights.launch([], [], false, undefined, [filling])
+      expect(flights.current).toMatchObject({
+        kind: 'item',
+        name: 'bucket (full)',
+        from: 'bucket',
+        leaving: false,
+      })
+      expect(flights.told).toEqual(['Changed Bucket to Bucket (full)'])
+      vi.advanceTimersByTime(FLIGHT_SHOW_MS + FLIGHT_HOLD_MS)
+      expect(flights.phase).toBe('fly')
+      vi.advanceTimersByTime(FLIGHT_FLY_MS)
+      expect(flights.current).toBeNull()
+      expect(flights.landedName).toBe('bucket (full)')
+      expect(flights.owing('item', 'bucket (full)')).toBe(0)
+    })
+
+    it('comes after what was lost and before what was gained, each told', () => {
+      const flights = useFlightStore()
+      const lost = { kind: 'item' as const, name: 'map', count: 1 }
+      flights.launch([lantern], [lost], false, undefined, [filling])
+      expect(flights.told).toEqual([
+        'Lost Map',
+        'Changed Bucket to Bucket (full)',
+        'Gained Lantern',
+      ])
+      expect(flights.current?.name).toBe('map')
+      vi.advanceTimersByTime(LEAVE_RISE_MS + LEAVE_REST_MS + LEAVE_SINK_MS)
+      expect(flights.current?.from).toBe('bucket')
+      vi.advanceTimersByTime(FLIGHT_SHOW_MS + FLIGHT_HOLD_MS + FLIGHT_FLY_MS)
+      expect(flights.current?.name).toBe('lantern')
+    })
+
+    it('flies the same under reduced motion (the card is told not to move by its styles)', () => {
+      const flights = useFlightStore()
+      flights.launch([], [], true, undefined, [filling])
+      expect(flights.current?.from).toBe('bucket')
+      vi.advanceTimersByTime(FLIGHT_SHOW_MS + FLIGHT_HOLD_MS + FLIGHT_FLY_MS)
+      expect(flights.current).toBeNull()
+      expect(flights.owing('item', 'bucket (full)')).toBe(0)
+    })
+
+    it('is forgiven like a gain when it will not fly', () => {
+      const flights = useFlightStore()
+      flights.owe([], [filling])
+      flights.forgive([], [filling])
+      expect(flights.owes('item')).toBe(false)
+    })
+  })
 })

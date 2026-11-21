@@ -366,4 +366,54 @@ describe('AcquiredFlight', () => {
     expect(style).toContain('left: 500px')
     expect(style).toContain('top: 300px')
   })
+
+  describe('a change', () => {
+    const filling = { from: 'bucket', to: 'bucket (full)' }
+
+    async function change(
+      change: { from: string; to: string } = filling,
+    ): Promise<ReturnType<VueWrapper['get']>> {
+      w = mount(AcquiredFlight)
+      useFlightStore().launch([], [], false, undefined, [change])
+      await w.vm.$nextTick()
+      return w.get('[data-testid="flight"]')
+    }
+
+    it('shows the old name, an arrow, the new thing in its pocket and its name, on one line', async () => {
+      const flight = await change()
+      expect(flight.classes()).toContain('lq-flight-item')
+      expect(flight.classes()).not.toContain('lq-flight-lost')
+      expect(flight.get('.lq-flight-was').text()).toBe('Bucket →')
+      expect(flight.get('.lq-flight-name').text()).toBe('Bucket (full)')
+      expect(flight.get('.lq-flight-pocket').text()).toBe('B')
+      expect(flight.classes()).not.toContain('lq-flight-stacked')
+    })
+
+    it('stacks the old name above the new one when the names are too long for a line', async () => {
+      const flight = await change({
+        from: 'waterskin',
+        to: 'waterskin (full of river water)',
+      })
+      expect(flight.classes()).toContain('lq-flight-stacked')
+      expect(flight.get('.lq-flight-was').text()).toBe('Waterskin →')
+      expect(flight.get('.lq-flight-name').text()).toBe(
+        'Waterskin (full of River Water)',
+      )
+    })
+
+    it('stacks on a narrow window', async () => {
+      vi.stubGlobal('innerWidth', 390)
+      const flight = await change()
+      expect(flight.classes()).toContain('lq-flight-stacked')
+      vi.unstubAllGlobals()
+    })
+
+    it('is told to a screen reader as a change', async () => {
+      await change()
+      await vi.advanceTimersByTimeAsync(100)
+      expect(w?.get('[aria-live]').text()).toBe(
+        'Changed Bucket to Bucket (full)',
+      )
+    })
+  })
 })

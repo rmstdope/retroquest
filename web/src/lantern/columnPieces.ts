@@ -105,7 +105,14 @@ export function columnPieces(turn: Turn, blocks: TurnBlock[]): ColumnPiece[] {
     if (first?.kind === 'card') first.command = true
     else pieces.unshift({ ...emptyCard(), command: true })
   }
-  const chips = [...turn.gained, ...turn.lost]
+  const chips = [
+    ...turn.gained,
+    ...turn.lost,
+    ...(turn.changed ?? []).flatMap((change) => [
+      { name: change.from },
+      { name: change.to },
+    ]),
+  ]
   if (chips.length) {
     const cards = pieces.filter((p): p is CardPiece => p.kind === 'card')
     const names = chips.map((chip) => displayName(chip.name).toLowerCase())

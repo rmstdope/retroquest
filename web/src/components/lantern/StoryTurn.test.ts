@@ -165,6 +165,32 @@ describe('StoryTurn', () => {
     expect(chips).toEqual(['Gained Bucket', 'Lost Coin ×2'])
   })
 
+  it('shows one chip for a thing that changed into another state of itself, in the new-thing colour', () => {
+    const w = mountTurn({
+      text: 'Done.',
+      changed: [{ from: 'bucket', to: 'bucket (full)' }],
+    })
+
+    const chips = w.findAll('[data-testid="chip"]')
+    expect(chips.map(visibleText)).toEqual(['Bucket → Bucket (full)'])
+    expect(chips.map(spokenText)).toEqual(['Changed Bucket to Bucket (full)'])
+    expect(chips[0].classes()).toContain('lq-chip-gained')
+    expect(chips[0].classes()).toContain('lq-chip-item')
+  })
+
+  it('leaves a change off a narration card, as it flies to its button', () => {
+    const w = mount(StoryTurn, {
+      props: {
+        turn: turn({
+          text: 'Done.',
+          changed: [{ from: 'bucket', to: 'bucket (full)' }],
+        }),
+        card: true,
+      },
+    })
+    expect(w.find('[data-testid="chip"]').exists()).toBe(false)
+  })
+
   it('shows no chip row when nothing changed', () => {
     expect(mountTurn({ text: 'Nothing.' }).find('.lq-chips').exists()).toBe(
       false,

@@ -1368,7 +1368,8 @@ game.setDotGate((tab) => {
     staged.value &&
     !turn.restored &&
     turn.id !== flownTurn &&
-    turn.gained.some((chip) => chip.kind === kind)
+    (turn.gained.some((chip) => chip.kind === kind) ||
+      (kind === 'item' && !!turn.changed?.length))
   )
 })
 watch(
@@ -1397,7 +1398,7 @@ watch(
     if (id === null || !turn || id === owedTurn) return
     owedTurn = id
     if (staged.value && !turn.restored && turn.id !== flownTurn)
-      flights.owe(turn.gained)
+      flights.owe(turn.gained, turn.changed)
   },
 )
 // On the picture stage, a turn's lost items leave the Bag first, then its
@@ -1423,18 +1424,24 @@ watch(
     if (
       staged.value &&
       !turn.restored &&
-      (turn.gained.length || leaving.length)
+      (turn.gained.length || leaving.length || turn.changed?.length)
     )
       // A thing that lay in the picture leaves it as its own name comes up.
-      flights.launch(turn.gained, leaving, motionReduced(), (flight) => {
-        // The rail shows the side the thing is flying to, opened if it was put away.
-        belt.bringBack(flight.kind === 'item' ? 'bag' : 'spells')
-        if (flight.areaId) game.releaseGain(flight.areaId)
-      })
+      flights.launch(
+        turn.gained,
+        leaving,
+        motionReduced(),
+        (flight) => {
+          // The rail shows the side the thing is flying to, opened if it was put away.
+          belt.bringBack(flight.kind === 'item' ? 'bag' : 'spells')
+          if (flight.areaId) game.releaseGain(flight.areaId)
+        },
+        turn.changed,
+      )
     else {
       game.releaseGains()
       // It will not fly (the stage went away meanwhile): the lists show it now.
-      flights.forgive(turn.gained)
+      flights.forgive(turn.gained, turn.changed)
       game.showLandedDots()
     }
     // The quest news (and the narrator) held back for a learnt spell's name
@@ -1452,7 +1459,9 @@ game.setGainFlusher((then) => {
     staged.value &&
     !turn.restored &&
     turn.id !== flownTurn &&
-    (turn.gained.length > 0 || turn.lost.some((chip) => chip.kind === 'item'))
+    (turn.gained.length > 0 ||
+      (turn.changed?.length ?? 0) > 0 ||
+      turn.lost.some((chip) => chip.kind === 'item'))
   if (!game.heldGains.length && !flights.current && !unflown) return false
   presentation.skipTelling()
   void nextTick(() => flights.whenIdle(then))

@@ -67,6 +67,23 @@ const label = computed(() =>
   flights.current ? flightLabel(flights.current) : '',
 )
 
+/** The most letters of both names that share one line on the change card. */
+const ONE_LINE_LETTERS = 28
+/** The window width (px) below which the change card always stacks its names. */
+const NARROW_WINDOW_PX = 520
+
+/** A change card's old name, as the story shows it; empty for any other flight. */
+const was = computed(() =>
+  flights.current?.from ? displayName(flights.current.from) : '',
+)
+
+/** Whether the change card stacks the old name above the new one: a narrow window, or names too long for one line. */
+const stacked = computed(
+  () =>
+    window.innerWidth < NARROW_WINDOW_PX ||
+    was.value.length + label.value.length > ONE_LINE_LETTERS,
+)
+
 // A new flight comes up in the middle of the picture.
 watch(
   () => flights.current?.key,
@@ -206,15 +223,20 @@ const style = computed(() => {
     v-if="flights.current"
     :key="flights.current.key"
     class="lq-flight"
-    :class="
+    :class="[
       flights.current.leaving
         ? 'lq-flight-lost'
-        : `lq-flight-${flights.current.kind}`
-    "
+        : `lq-flight-${flights.current.kind}`,
+      flights.current.from ? 'lq-flight-change' : '',
+      flights.current.from && stacked ? 'lq-flight-stacked' : '',
+    ]"
     :style="style"
     aria-hidden="true"
     data-testid="flight"
   >
+    <span v-if="flights.current.from" class="lq-flight-was">{{
+      `${was} →`
+    }}</span>
     <span v-if="flights.current.leaving" class="lq-flight-minus">−</span>
     <!-- A thing obtained flies as its picture alone, the one the list then shows. -->
     <span
@@ -250,9 +272,11 @@ const style = computed(() => {
         <path d="M5 7h14l-1.2 12.2A2 2 0 0 1 15.8 21H8.2a2 2 0 0 1-2-1.8z" />
       </svg>
     </BeltFace>
-    <span v-if="flights.current.leaving" class="lq-flight-name">{{
-      label
-    }}</span>
+    <span
+      v-if="flights.current.leaving || flights.current.from"
+      class="lq-flight-name"
+      >{{ label }}</span
+    >
   </div>
   <p class="lq-sr-only" aria-live="polite">{{ announcement }}</p>
 </template>
@@ -267,6 +291,50 @@ const style = computed(() => {
   gap: 12px;
   white-space: nowrap;
   pointer-events: none;
+}
+/* A change: the old name, the picture and the new name on one card; stacked, the picture sits left of the two names. */
+.lq-flight-change {
+  display: grid;
+  grid-template-areas: 'was pic name';
+  align-items: center;
+  column-gap: 12px;
+  max-width: calc(100vw - 32px);
+  padding: 10px 18px 10px 10px;
+  border-radius: 14px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.28);
+  border: 1px solid var(--lq-item-line);
+  background: var(--lq-item-soft);
+  font-weight: 600;
+}
+.lq-flight-change .lq-flight-was {
+  grid-area: was;
+  padding-left: 8px;
+  color: var(--lq-muted);
+  font-weight: 500;
+}
+.lq-flight-change .lq-flight-pocket {
+  grid-area: pic;
+}
+.lq-flight-change .lq-flight-name {
+  grid-area: name;
+  font-size: calc(24px * var(--lq-text-scale, 1));
+}
+.lq-flight-stacked {
+  grid-template-areas:
+    'pic was'
+    'pic name';
+  grid-template-columns: auto auto;
+  justify-items: start;
+  row-gap: 2px;
+  max-width: calc(100vw - 32px);
+}
+.lq-flight-stacked .lq-flight-was {
+  padding-left: 0;
+  font-size: calc(12px * var(--lq-text-scale, 1));
+}
+.lq-flight-stacked .lq-flight-name {
+  white-space: normal;
+  font-size: calc(18px * var(--lq-text-scale, 1));
 }
 .lq-flight-item {
   color: var(--lq-item);

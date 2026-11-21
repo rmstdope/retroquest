@@ -68,3 +68,27 @@ export function inventoryChanges(
   }
   return { gained, lost }
 }
+
+/** One carried thing that turned into another state of itself: its name before and after. */
+export interface Change {
+  from: string
+  to: string
+}
+
+/**
+ * The carried things that kept their identity (`ItemIdentity.id`) but whose
+ * name changed between two lists, like the bucket filling: each is one
+ * change rather than a loss and a gain.
+ */
+export function renamedItems(
+  before: { id: number; name: string }[],
+  after: { id: number; name: string }[],
+): Change[] {
+  const was = new Map(before.map((entry) => [entry.id, entry.name]))
+  return after.flatMap((entry) => {
+    const from = was.get(entry.id)
+    return from !== undefined && from.toLowerCase() !== entry.name.toLowerCase()
+      ? [{ from, to: entry.name }]
+      : []
+  })
+}
