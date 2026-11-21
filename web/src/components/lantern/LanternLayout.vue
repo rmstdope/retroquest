@@ -2003,6 +2003,8 @@ function onDragEnd(end: DragEnd): void {
     sendFrom(end.command, `belt:${end.pocketKey}`)
     return
   }
+  // Keys go on quietly from the dragged picture, and the press's caption goes.
+  focusAfterRing(`belt:${end.pocketKey}`, true)
   const pocket = beltEl.value?.root?.querySelector<HTMLElement>(
     `[data-belt-pic="${end.pocketKey}"]`,
   )

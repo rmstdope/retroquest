@@ -373,6 +373,8 @@ async function focusPicture(key?: string, quiet = false): Promise<void> {
   if (quiet) {
     hoverHushed = true
     pointed.value = null
+    // A tile that already holds focus (a mouse press gave it) fires no focus event, so its caption is cleared here.
+    focused.value = null
   }
   el?.focus()
   quietFocus = null

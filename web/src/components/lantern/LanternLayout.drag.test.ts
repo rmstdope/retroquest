@@ -240,6 +240,35 @@ describe('LanternLayout: dragging from the belt', () => {
     expect(tile('item:bread').classes()).not.toContain('lq-belt-lifted')
   })
 
+  it('shows no caption after a drop that sent a command, though a press had focused the picture', async () => {
+    await cottage()
+    ;(tile('item:bread').element as HTMLElement).focus()
+    await lift()
+    await over(hit('grandmother').element)
+    await letGo()
+    await flushPromises()
+    expect(w.find('.lq-belt-caption').exists()).toBe(false)
+  })
+
+  it('shows no caption after a miss or an Escape, and keys go on from the dragged picture', async () => {
+    await cottage()
+    for (const end of ['letgo', 'escape'] as const) {
+      ;(tile('item:bread').element as HTMLElement).focus()
+      await lift()
+      await over(null)
+      if (end === 'letgo') await letGo()
+      else await key('Escape')
+      w.getComponent({ name: 'DragGhost' }).vm.$emit('done')
+      await flushPromises()
+      expect(w.find('.lq-belt-caption').exists()).toBe(false)
+      expect(document.activeElement).toBe(tile('item:bread').element)
+    }
+    // A key landing on a picture (the bag holds only the bread) shows its caption again.
+    await tile('item:bread').trigger('blur')
+    await tile('item:bread').trigger('focus')
+    expect(w.get('.lq-belt-caption').text()).toContain('Bread')
+  })
+
   it('does not press the pocket when the drag is let go over it, or anywhere', async () => {
     const store = await cottage()
     await lift()
