@@ -36,6 +36,7 @@ describe('LanternLayout: the stage on a phone', () => {
     setActivePinia(createPinia())
     screen(kind)
     await startedHoldStore()
+    useGameStore().showTitle = false
     w = mount(LanternLayout, { attachTo: document.body })
     await w.vm.$nextTick()
   }
@@ -58,6 +59,9 @@ describe('LanternLayout: the stage on a phone', () => {
       expect(w.findAll('.lq-nav-bottom .lq-nav-btn')).toHaveLength(5)
       expect(w.find('.lq-buttons').exists()).toBe(false)
       expect(w.get('.lq-float-menu').attributes('aria-label')).toBe('Menu')
+      expect(w.get('.lq-float-feedback').attributes('aria-label')).toBe(
+        'Send feedback',
+      )
     })
 
     it('leaves the room name to the plate', () => {
@@ -143,13 +147,13 @@ describe('LanternLayout: the stage on a phone', () => {
       expect(w.find('.lq-phone-plate').exists()).toBe(false)
     })
 
-    it('has one plate top left, and ☰ alone top right', () => {
+    it('has one plate top left, and ✎ and ☰ alone top right', () => {
       expect(w.find('.lq-float-menu').exists()).toBe(false)
       expect(w.get('.lq-stage-plate').classes()).toContain('lq-plate-compact')
       const labels = w
         .findAll('.lq-stage-buttons .lq-stage-btn')
         .map((b) => b.text().replace(/\s+/g, ' '))
-      expect(labels).toEqual(['☰'])
+      expect(labels).toEqual(['✎', '☰'])
     })
 
     it('has no action bar and no typing box: a phone plays by pointing only', async () => {

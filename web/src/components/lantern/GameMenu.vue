@@ -13,7 +13,8 @@ import type { KeyHint } from './KeyLine.vue'
  * something is new) and Map, each with its key in the corner (J, Q, M, which
  * open them from the game too). Then Quick save and Quick load side by side as
  * amber tiles, then Save, Load, Settings and Help as glass rows that each end
- * in an arrow (they open a window), then Quit. Every entry has a quiet icon,
+ * in an arrow (they open a window), then Send feedback (its key, F2, at its end)
+ * and Quit. Every entry has a quiet icon,
  * hidden from screen readers, so each is named by its word alone (a tile's
  * count is its description).
  * Quick load is dimmed, and says why, when the quick save is from an older
@@ -31,7 +32,8 @@ import type { KeyHint } from './KeyLine.vue'
 export type InfoKind = 'help'
 /** The journey the menu opens first: the journal (the story so far), the quests and the map. */
 export type JourneyKind = 'journal' | 'quests' | 'map'
-export type MenuKind = 'save' | 'load' | 'settings' | InfoKind | JourneyKind
+export type MenuKind =
+  'save' | 'load' | 'settings' | 'feedback' | InfoKind | JourneyKind
 /** The entries that hand focus back to themselves: a window's kind, or `quit`. */
 export type MenuEntry = MenuKind | 'quit'
 
@@ -72,6 +74,7 @@ const ICONS: Record<
   quickLoad: 'M4 12a8 8 0 1 0 2.4-5.7L4 8.5M4 4v4.5h4.5',
   save: 'M5 4h11l3 3v13H5zM8 4v5h7V4M8 20v-6h8v6',
   load: 'M3 8V6a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM3 10h18',
+  feedback: 'M4 20h4L19 9a2.1 2.1 0 0 0-4-4L4 16zM13.5 6.5l4 4',
   settings: 'M4 7h9M17 7h3M4 17h3M11 17h9M15 5v4M9 15v4',
   help: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM9.6 9.2a2.5 2.5 0 1 1 3.4 2.3c-.6.3-1 .8-1 1.5v.5M12 17h.01',
   quit: 'M10 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4M15 16l4-4-4-4M19 12H9',
@@ -114,7 +117,10 @@ const questsNote = computed(() =>
 )
 
 /** The entries that open a window, in order. */
-const ROWS: Array<{ kind: Exclude<MenuKind, JourneyKind>; label: string }> = [
+const ROWS: Array<{
+  kind: Exclude<MenuKind, JourneyKind | 'feedback'>
+  label: string
+}> = [
   { kind: 'save', label: 'Save' },
   { kind: 'load', label: 'Load' },
   { kind: 'settings', label: 'Settings' },
@@ -242,6 +248,21 @@ function onKeydown(event: KeyboardEvent): void {
             <path d="M9 6l6 6-6 6" />
           </svg>
         </button>
+        <button
+          type="button"
+          class="lq-menu-entry lq-menu-row"
+          data-ring
+          aria-label="Send feedback"
+          aria-keyshortcuts="F2"
+          :data-autofocus="starts('feedback') || undefined"
+          @click="choose('feedback')"
+        >
+          <svg class="lq-menu-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path :d="ICONS.feedback" />
+          </svg>
+          <span class="lq-menu-label" aria-hidden="true">Send feedback</span>
+          <kbd class="lq-menu-row-key" aria-hidden="true">F2</kbd>
+        </button>
       </div>
       <button
         type="button"
@@ -295,6 +316,15 @@ function onKeydown(event: KeyboardEvent): void {
   color: var(--lq-muted);
   font: 600 12px var(--lq-font-mono);
   text-align: center;
+}
+.lq-menu-row-key {
+  margin-left: auto;
+  padding: 2px 6px;
+  border: 1px solid color-mix(in srgb, var(--lq-fg) 25%, transparent);
+  border-bottom-width: 2px;
+  border-radius: 6px;
+  color: var(--lq-muted);
+  font: 600 12px var(--lq-font-mono);
 }
 .lq-menu-journey-tally {
   position: absolute;

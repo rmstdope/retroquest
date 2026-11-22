@@ -231,6 +231,16 @@ describe('useBridge', () => {
     })
   })
 
+  describe('saveData', () => {
+    it('is the running game as save data, ready to send with a report', async () => {
+      const bridge = await runningBridge()
+      expect(JSON.parse(bridge.saveData())).toMatchObject({
+        version: 4,
+        actIndex: 0,
+      })
+    })
+  })
+
   describe('quick save', () => {
     it('stores the save data and its details', async () => {
       const bridge = await runningBridge()

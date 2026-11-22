@@ -834,7 +834,10 @@ describe('LanternLayout', () => {
       expect(w.get('[aria-label="Current location"]').text()).toContain(
         'Village Square',
       )
-      expect(w.findAll('.lq-stage-btn').map((b) => b.text())).toEqual(['☰'])
+      expect(w.findAll('.lq-stage-btn').map((b) => b.text())).toEqual([
+        '✎',
+        '☰',
+      ])
       expect(w.find('section[aria-label="Story"]').exists()).toBe(true)
       expect(w.find('section[aria-label="Actions"]').exists()).toBe(false)
       expect(w.find('.lq-composer, .lq-dock').exists()).toBe(false)

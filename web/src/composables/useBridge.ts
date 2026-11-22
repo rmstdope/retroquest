@@ -284,6 +284,11 @@ export function useBridge(loader: () => Promise<ActClass[]> = loadActs) {
     }
   }
 
+  /** The running game as save data (JSON), as a feedback report carries it. */
+  function saveData(): string {
+    return requireGame().game.toSaveData()
+  }
+
   /** The quick save, with `story` (the UI's story so far) stored beside it. */
   function quickSaveGame(story: unknown = null): string {
     const { game } = requireGame()
@@ -461,6 +466,7 @@ export function useBridge(loader: () => Promise<ActClass[]> = loadActs) {
       return requireGame().controller
     },
     pictureState,
+    saveData,
     quickSaveGame,
     quickLoadGame,
     saveNamedGame,

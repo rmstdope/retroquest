@@ -116,11 +116,11 @@ describe('LanternLayout: the Escape menu', () => {
     const label = (): string | null | undefined =>
       document.activeElement?.getAttribute('aria-label')
 
-    it('has no Hint, Quests, Story so far or Map button on the picture, only ☰', () => {
+    it('has no Hint, Quests, Story so far or Map button on the picture, only ✎ and ☰', () => {
       const buttons = w
         .findAll('.lq-stage-buttons [data-button]')
         .map((b) => b.attributes('data-button'))
-      expect(buttons).toEqual(['menu'])
+      expect(buttons).toEqual(['feedback', 'menu'])
       expect(w.find('.lq-map-pop').exists()).toBe(false)
     })
 
