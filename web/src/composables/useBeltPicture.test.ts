@@ -7,13 +7,13 @@ import { useBeltPicture } from './useBeltPicture'
 /** Runs the composable inside a component and returns what it yields. */
 const mounted: { unmount: () => void }[] = []
 
-function run(name: string): { url: () => string | null } {
+function run(name: string | (() => string)): { url: () => string | null } {
   let url = (): string | null => null
   const Probe = defineComponent({
     setup() {
       const picture = useBeltPicture(
         () => 'item',
-        () => name,
+        () => (typeof name === 'string' ? name : name()),
       )
       url = (): string | null => picture.value
       return () => h('div')
@@ -53,6 +53,67 @@ describe('useBeltPicture', () => {
     const belt = run('horseshoe')
     await Promise.resolve()
     await nextTick()
+    expect(belt.url()).toBeNull()
+  })
+
+  /** Lets the pending probes settle. */
+  async function settle(): Promise<void> {
+    for (let i = 0; i < 4; i++) {
+      await Promise.resolve()
+      await nextTick()
+    }
+  }
+
+  it('shows the state picture when it is made', async () => {
+    setPictureProbe(() => Promise.resolve(true))
+    const belt = run('lantern (lit)')
+    await settle()
+    expect(belt.url()).toMatch(/item-lantern-lit\.png$/)
+  })
+
+  it('falls back to the base picture while the state picture is not made', async () => {
+    setPictureProbe((url) => Promise.resolve(!url.includes('-lit')))
+    const belt = run('lantern (lit)')
+    await settle()
+    expect(belt.url()).toMatch(/item-lantern\.png$/)
+  })
+
+  it('shows the base picture for a name that has no state', async () => {
+    setPictureProbe(() => Promise.resolve(true))
+    const belt = run('lantern')
+    await settle()
+    expect(belt.url()).toMatch(/item-lantern\.png$/)
+  })
+
+  it('keeps the old picture while the picture of a new state loads', async () => {
+    setPictureProbe(() => Promise.resolve(true))
+    const name = ref('lantern')
+    const belt = run(() => name.value)
+    await settle()
+    expect(belt.url()).toMatch(/item-lantern\.png$/)
+    const release = ref<(found: boolean) => void>(() => undefined)
+    setPictureProbe(
+      () =>
+        new Promise<boolean>((resolve) => {
+          release.value = resolve
+        }),
+    )
+    name.value = 'lantern (lit)'
+    await settle()
+    expect(belt.url()).toMatch(/item-lantern\.png$/)
+    release.value(true)
+    await settle()
+    expect(belt.url()).toMatch(/item-lantern-lit\.png$/)
+  })
+
+  it('drops the old picture when the thing is another one', async () => {
+    setPictureProbe(() => Promise.resolve(true))
+    const name = ref('lantern')
+    const belt = run(() => name.value)
+    await settle()
+    setPictureProbe(() => new Promise<boolean>(() => undefined))
+    name.value = 'horseshoe'
+    await settle()
     expect(belt.url()).toBeNull()
   })
 })
