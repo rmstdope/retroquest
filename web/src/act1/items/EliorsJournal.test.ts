@@ -33,7 +33,7 @@ describe('EliorsJournal', () => {
     expect(text).toContain('[dialogue]I knew that voice.')
     expect(text).toContain('[dialogue]When I woke, the tune was still going.')
     expect(text).toContain(
-      'Someone out by the hearth was humming it.[/dialogue]',
+      'Someone just outside my door was humming it.[/dialogue]',
     )
   })
 

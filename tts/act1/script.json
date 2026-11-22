@@ -55,11 +55,6 @@
     "text": "Your father's word. If it brings back my herbs, dear, you may say it as often as you like."
   },
   {
-    "id": "0065faa20bb5e8",
-    "speaker": "narrator",
-    "text": "Borin doesn't stop hammering."
-  },
-  {
     "id": "0066806acc1520",
     "speaker": "narrator",
     "text": "His hood hides his face. He holds the child carefully, as if it might wake."
@@ -103,6 +98,11 @@
     "id": "00a3f28fcf7306",
     "speaker": "narrator",
     "text": "Village Well"
+  },
+  {
+    "id": "00a479d910374a",
+    "speaker": "elior",
+    "text": "When I woke, the tune was still going. Someone just outside my door was humming it."
   },
   {
     "id": "00a4c4d212e8de",
@@ -218,11 +218,6 @@
     "id": "012f399dbf78f7",
     "speaker": "narrator",
     "text": "A well-used brass lantern. Its glass is clean and the wick is fresh, ready to light up the darkest corners."
-  },
-  {
-    "id": "013b58e4f830be",
-    "speaker": "narrator",
-    "text": "When you go to her, she is humming at the hearth: a slow tune that climbs three notes and settles home again. You know it. You have known it all your life, and you could not say from where. She stops when she sees your face."
   },
   {
     "id": "014e3249e88e12",
@@ -710,11 +705,6 @@
     "text": "Your grandmother looks at the flower a long time, and does not touch it."
   },
   {
-    "id": "04adba89654611",
-    "speaker": "borin",
-    "text": "Can't hear a word over this, lad. If it's got an edge, bring it here."
-  },
-  {
     "id": "04b08f693320b1",
     "speaker": "narrator",
     "text": "The merchant weighs it in his palm and hands it back."
@@ -888,11 +878,6 @@
     "id": "0572210789703d",
     "speaker": "priest",
     "text": "Come in, child, and shut the door behind you. The draught gets at the candles."
-  },
-  {
-    "id": "0573050eb19dc8",
-    "speaker": "narrator",
-    "text": "He doesn't stop hammering."
   },
   {
     "id": "05731f7673d9e9",
@@ -2000,6 +1985,11 @@
     "text": "A heavy, hooded cloak made for travel. It offers warmth and protection from the elements."
   },
   {
+    "id": "0c5ff9d2f1a91d",
+    "speaker": "narrator",
+    "text": "Borin doesn't take his eyes off the fire."
+  },
+  {
     "id": "0c617e03566713",
     "speaker": "narrator",
     "text": "Moss grows thick on the north side of the stones, where the sun never reaches."
@@ -2300,6 +2290,11 @@
     "text": "Fishing expedition"
   },
   {
+    "id": "0e0d4a40a199b5",
+    "speaker": "narrator",
+    "text": "He doesn't take his eyes off the fire."
+  },
+  {
     "id": "0e163935ed4de0",
     "speaker": "narrator",
     "text": "Know your village: South of the Forest Path lies the Hidden Glade, where you have never once stood."
@@ -2308,6 +2303,11 @@
     "id": "0e1f2012f63bb1",
     "speaker": "narrator",
     "text": "Hemlock scratches his chin."
+  },
+  {
+    "id": "0e212776a235f1",
+    "speaker": "narrator",
+    "text": "Water trickles down the stone tiers into the basin. The rim is worn smooth where people sit, but no one is sitting there today."
   },
   {
     "id": "0e3b27f350aa27",
@@ -2510,6 +2510,11 @@
     "text": "She glances round the square, as if somebody might be listening."
   },
   {
+    "id": "0f69f107738455",
+    "speaker": "narrator",
+    "text": "Grandmother is by your doorway, humming the tune from your dream. She will want to hear about it."
+  },
+  {
     "id": "0f69f116fbf436",
     "speaker": "borin",
     "text": "Magic, eh? Word gets round, young Elior. Can't hammer that into shape, but I'd wager it wants the same as iron: patience, and a steady hand."
@@ -2518,6 +2523,11 @@
     "id": "0f6d6074e56c6a",
     "speaker": "narrator",
     "text": "The brambles grow thick around the edge of the clearing."
+  },
+  {
+    "id": "0f7534bc836f96",
+    "speaker": "narrator",
+    "text": "Hint of magic: Grandmother is by your doorway, humming the tune from your dream. She will want to hear about it."
   },
   {
     "id": "0f87d1fedfdc4a",
@@ -2543,11 +2553,6 @@
     "id": "0faffd5d3f2f06",
     "speaker": "narrator",
     "text": "You read them slowly, and the spell comes with the reading. It does not wake in you the way the others did; this one you read, word by word, off the stone, and it feels like your own."
-  },
-  {
-    "id": "0fb2fdd7cdc033",
-    "speaker": "narrator",
-    "text": "Grandmother is at the hearth, humming the tune from your dream. She will want to hear about it."
   },
   {
     "id": "0fbd21e3b05726",
@@ -2910,11 +2915,6 @@
     "text": "He nods at your pocket."
   },
   {
-    "id": "11d6b2ab7d86fe",
-    "speaker": "narrator",
-    "text": "Hint of magic: Grandmother is at the hearth, humming the tune from your dream. She will want to hear about it."
-  },
-  {
     "id": "11d7fe8ca1b10e",
     "speaker": "narrator",
     "text": "The cut vines lie in a heap at the mouth of the alcove, thorns and all."
@@ -3023,6 +3023,11 @@
     "id": "12999e9d8879cf",
     "speaker": "narrator",
     "text": "A clearing in full sun, deep in the forest. Wildflowers cover the ground, and a light breeze moves the tall grass. In the center, a mossy stone bears an inscription. Beneath it, in a plainer hand, is carved: “Power follows purpose; purpose follows truth.” Beside the mossy stone, the ancient amulet in your hand begins to glow. A deer grazes at the edge of the clearing, and lifts its head to watch you. A rare flower once bloomed near the mossy stone. You picked it."
+  },
+  {
+    "id": "12a40b71df880e",
+    "speaker": "borin",
+    "text": "Fire wants watching, lad. If it's got an edge, bring it here."
   },
   {
     "id": "12bd192e54741b",
@@ -3170,6 +3175,11 @@
     "text": "A divine light surrounds Tilda and leaves strength and resolve behind."
   },
   {
+    "id": "139e8ac6a6ee3e",
+    "speaker": "narrator",
+    "text": "The dream lets go of you, and you wake in your own bed. The storm is gone and it is bright morning. Your heart is going hard. The tune is still going too, thin and near: someone is humming it, just outside your door. Three words are already slipping, and you write them down before they can go."
+  },
+  {
     "id": "13ab0a58c93685",
     "speaker": "narrator",
     "text": "The whisper comes once more, closer than the thunder, and this time there are words in it."
@@ -3188,6 +3198,11 @@
     "id": "13b343835e033d",
     "speaker": "narrator",
     "text": "You dig at the ground with the rusty trowel, but it doesn't seem to have much effect here. It's a sturdy (but rusty) tool, though."
+  },
+  {
+    "id": "13b4550ded07d2",
+    "speaker": "narrator",
+    "text": "When you go to her, she is humming by your doorway: a slow tune that climbs three notes and settles home again. You know it. You have known it all your life, and you could not say from where. She stops when she sees your face."
   },
   {
     "id": "13c330bc0272ac",
@@ -3413,11 +3428,6 @@
     "id": "14f5c990fddabf",
     "speaker": "narrator",
     "text": "Hint of magic: The lantern found your journal. The three words are in it, with the rest of the dream."
-  },
-  {
-    "id": "14f7cc1fe01384",
-    "speaker": "narrator",
-    "text": "Water trickles from the mouth of a stone fish into the basin. The rim is worn smooth where people sit, but no one is sitting there today."
   },
   {
     "id": "14f81e7e1c94a7",
@@ -4195,11 +4205,6 @@
     "text": "Know your village: You have not gone up to Mira's Hut, north of the square, in a long while."
   },
   {
-    "id": "19acad80493441",
-    "speaker": "narrator",
-    "text": "The dream lets go of you, and you wake in your own bed. The storm is gone and it is bright morning. Your heart is going hard. The tune is still going too, thin and near: someone is humming it, out by the hearth. Three words are already slipping, and you write them down before they can go."
-  },
-  {
     "id": "19ad071adb2439",
     "speaker": "narrator",
     "text": "Know your village"
@@ -4303,11 +4308,6 @@
     "id": "1a417e323b4711",
     "speaker": "tilda",
     "text": "Don't go giving your things away, love. People will talk."
-  },
-  {
-    "id": "1a443f8363dfb5",
-    "speaker": "elior",
-    "text": "When I woke, the tune was still going. Someone out by the hearth was humming it."
   },
   {
     "id": "1a45db61dce4e4",

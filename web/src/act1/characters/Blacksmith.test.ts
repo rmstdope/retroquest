@@ -236,6 +236,8 @@ describe('Borin speaks to Elior as a neighbour (rq-m3fy)', () => {
     const first = executeCommands(game, ['talk to blacksmith'])
 
     expect(first).toContain('Mind the sparks, lad.')
+    expect(first).toContain("doesn't take his eyes off the fire")
+    expect(first).not.toContain('hammering')
     expect(first).toContain('Not seen you down here since the harvest.')
     expect(first).toContain('Still the same work: I make what this village')
     expect(first).not.toMatch(/Borin\[\/character_name\]\. I make/)

@@ -36,7 +36,7 @@ describe('Scenery chips', () => {
   it('answers examine with the agreed line, by any typed word', () => {
     const game = gameIn('VillageSquare')
     const line =
-      'Water trickles from the mouth of a stone fish into the basin. ' +
+      'Water trickles down the stone tiers into the basin. ' +
       'The rim is worn smooth where people sit, but no one is sitting there today.'
     expect(say(game, 'examine fountain')).toBe(line)
     expect(say(game, 'examine basin')).toBe(line)

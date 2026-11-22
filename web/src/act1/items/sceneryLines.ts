@@ -296,7 +296,7 @@ export const SCENERY_BY_ROOM: Record<string, SceneryDef[]> = {
       'VillageSquare.fountain',
       'fountain',
       ['basin'],
-      'Water trickles from the mouth of a stone fish into the basin. ' +
+      'Water trickles down the stone tiers into the basin. ' +
         'The rim is worn smooth where people sit, ' +
         'but no one is sitting there today.',
     ),

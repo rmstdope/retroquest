@@ -249,7 +249,7 @@ export class Grandmother extends Character {
    * any greeting.
    */
   private static readonly HUMMING_AT_THE_HEARTH =
-    'When you go to her, she is humming at the hearth: a slow tune that ' +
+    'When you go to her, she is humming by your doorway: a slow tune that ' +
     'climbs three notes and settles home again. You know it. You have ' +
     'known it all your life, and you could not say from where. She ' +
     'stops when she sees your face.'

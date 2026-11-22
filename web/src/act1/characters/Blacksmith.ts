@@ -87,7 +87,7 @@ export class Blacksmith extends Character {
     gameState.setStoryFlag(FLAG_BLACKSMITH_MET, true)
     return (
       speech('Mind the sparks, lad.') +
-      " He doesn't stop hammering. " +
+      " He doesn't take his eyes off the fire. " +
       speech(
         'Not seen you down here since the harvest. Still the same work: ' +
           "I make what this village breaks, and I mend what it won't throw " +
@@ -232,10 +232,8 @@ export class Blacksmith extends Character {
   /** The two answers to a word with no particular reply, given in turn. */
   protected override unknownWordAnswers(): readonly string[] {
     return [
-      `${this.nameInSentence({ atStart: true })} doesn't stop hammering. ` +
-        speech(
-          "Can't hear a word over this, lad. If it's got an edge, bring it here.",
-        ),
+      `${this.nameInSentence({ atStart: true })} doesn't take his eyes off the fire. ` +
+        speech("Fire wants watching, lad. If it's got an edge, bring it here."),
       `${this.nameInSentence({ atStart: true })} lowers the hammer for a moment. ` +
         speech("Words aren't my trade, lad. Iron is."),
     ]
