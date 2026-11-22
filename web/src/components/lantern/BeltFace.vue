@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { onBeforeUnmount, ref, watch } from 'vue'
 import { useBeltPicture } from '@/composables/useBeltPicture'
-import { useReducedMotion } from '@/composables/useReducedMotion'
 
 /** How long the old picture takes to fade into the new one (ms), before reduced motion. */
 const FADE_MS = 500
@@ -34,12 +33,19 @@ const url = useBeltPicture(
   () => props.kind,
   () => props.name,
 )
-const reduced = useReducedMotion()
+/** Whether the player chose reduced motion, which sets the page's `--lq-motion` to 0. */
+function motionReduced(): boolean {
+  const motion = parseFloat(
+    getComputedStyle(document.documentElement).getPropertyValue('--lq-motion'),
+  )
+  return motion === 0
+}
 /** The picture fading out, while it does. */
 const leaving = ref<string | null>(null)
 let timer: ReturnType<typeof setTimeout> | undefined
 watch(url, (now, before) => {
-  if (!props.fade || reduced.value || !now || !before || now === before) return
+  if (!props.fade || motionReduced() || !now || !before || now === before)
+    return
   leaving.value = before
   emit('changed')
   clearTimeout(timer)

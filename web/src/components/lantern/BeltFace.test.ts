@@ -1,20 +1,18 @@
 // @vitest-environment jsdom
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { flushPromises, mount, type VueWrapper } from '@vue/test-utils'
-import { createPinia, setActivePinia } from 'pinia'
 import { setPictureProbe } from '@/lantern/roomPicture'
-import { useSettingsStore } from '@/stores/useSettingsStore'
 import BeltFace from './BeltFace.vue'
 
 describe('BeltFace', () => {
   let w: VueWrapper | undefined
   beforeEach(() => {
     vi.useFakeTimers()
-    setActivePinia(createPinia())
   })
   afterEach(() => {
     w?.unmount()
     setPictureProbe(null)
+    document.documentElement.style.removeProperty('--lq-motion')
     vi.useRealTimers()
   })
 
@@ -87,8 +85,7 @@ describe('BeltFace', () => {
   })
 
   it('swaps instantly when the player wants less motion', async () => {
-    setActivePinia(createPinia())
-    useSettingsStore().reduceMotion = 'on'
+    document.documentElement.style.setProperty('--lq-motion', '0')
     const belt = await face('lantern', true)
     await belt.setProps({ name: 'lantern (lit)' })
     await flushPromises()
