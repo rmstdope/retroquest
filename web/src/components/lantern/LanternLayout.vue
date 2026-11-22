@@ -2574,26 +2574,15 @@ function onMenuKey(event: KeyboardEvent): void {
   if (!fullscreen.supported) return
   fullscreen.toggle()
 }
-/** Whether the feedback window is being made ready (the picture is being taken). */
-let feedbackOpening = false
-
 /**
  * Open the feedback window over whatever is open (F2, the ✎ button or the menu's entry): in
- * play only, never twice. The picture of the screen is taken first, so it shows the game
- * without the window.
+ * play only, never twice. The window opens at once; the picture of the screen is started in the
+ * same moment, so it shows the game as it looked at the press, and fills in when it is ready.
  */
-async function openFeedback(): Promise<void> {
+function openFeedback(): void {
   if (game.showTitle || game.ending || turnPage.value) return
-  if (feedback.open || feedbackOpening) return
-  feedbackOpening = true
-  try {
-    const shot = await captureScreen(rootEl.value ?? document.body)
-    // The game went on meanwhile: the title page or the end may have come.
-    if (game.showTitle || game.ending) return
-    feedback.begin(shot)
-  } finally {
-    feedbackOpening = false
-  }
+  if (feedback.open) return
+  feedback.begin(captureScreen(rootEl.value ?? document.body))
 }
 
 /** Where the player is, as the feedback window names it ("Act I · Riverbank"). */

@@ -38,4 +38,21 @@ describe('captureScreen', () => {
     domToBlob.mockResolvedValue(null as unknown as Blob)
     expect(await captureScreen(el)).toBeNull()
   })
+
+  it('leaves the feedback window out of the picture, whenever it is taken', async () => {
+    domToBlob.mockResolvedValue(blobOf(10))
+    await captureScreen(el)
+    const options = (domToBlob.mock.calls[0] as unknown[])[1] as {
+      filter: (node: Node) => boolean
+    }
+    const game = document.createElement('div')
+    const window = document.createElement('div')
+    window.setAttribute('data-feedback-window', '')
+    const inside = document.createElement('p')
+    window.append(inside)
+    expect(options.filter(game)).toBe(true)
+    expect(options.filter(window)).toBe(false)
+    expect(options.filter(inside)).toBe(false)
+    expect(options.filter(document.createTextNode('x'))).toBe(true)
+  })
 })
