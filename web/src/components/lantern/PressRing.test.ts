@@ -5,7 +5,7 @@ import { mount, type VueWrapper } from '@vue/test-utils'
 import PressRing from './PressRing.vue'
 import type { ActionContext } from '@/lantern/actions'
 import type { AreaThing } from '@/lantern/areaThings'
-import { ringActions, type RingSubject } from '@/lantern/pressRing'
+import { plain, ringActions, type RingSubject } from '@/lantern/pressRing'
 import { carriedRing } from '@/lantern/belt'
 
 const ctx: ActionContext = {
@@ -75,17 +75,54 @@ describe('PressRing', () => {
     expect(
       w
         .findAll('.lq-ring-coin')
-        .map((b) => b.element.childNodes[1].textContent),
+        .map((b) => b.text().replace(b.get('i').text(), '')),
     ).toEqual(
       expect.arrayContaining([
         'Talk to',
         'Say…',
         'Buy…',
-        'Use with…',
+        'Usewith…',
         'Examine',
       ]),
     )
     expect(w.findAll('[role="menuitem"]')).toHaveLength(6)
+  })
+
+  it('draws Open and Close as pictures, never as a character a font might lack (rq-52xk)', async () => {
+    const wrapper = mount(PressRing, {
+      attachTo: document.body,
+      props: {
+        thing: bucket,
+        actions: [
+          plain('open', 'Open', 'open bucket'),
+          plain('close', 'Close', 'close bucket'),
+          plain('examine', 'Examine', 'examine bucket'),
+        ],
+        at: { x: 300, y: 160 },
+        bounds: { w: 568, h: 320 },
+      },
+    })
+    wrappers.push(wrapper)
+    await nextTick()
+    for (const [id, word] of [
+      ['open', 'Open'],
+      ['close', 'Close'],
+    ]) {
+      const button = coin(wrapper, id)
+      expect(button.find('svg[aria-hidden="true"]').exists()).toBe(true)
+      expect(button.find('i').exists()).toBe(false)
+      expect(button.text()).toBe(word)
+    }
+    expect(coin(wrapper, 'examine').find('svg').exists()).toBe(false)
+  })
+
+  it('breaks Use with… after Use, and still speaks it whole (rq-52xk)', async () => {
+    const w = await ring()
+    const button = coin(w, 'usewith')
+    expect(button.attributes('aria-label')).toBe('Use with…')
+    expect(button.find('br').exists()).toBe(true)
+    expect(button.element.textContent).toContain('Usewith…')
+    expect(coin(w, 'examine').find('br').exists()).toBe(false)
   })
 
   it('focuses the first action when it opens', async () => {
