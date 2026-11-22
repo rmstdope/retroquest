@@ -5,6 +5,7 @@ import { useBeltStore } from '@/stores/useBeltStore'
 import { useFlightStore } from '@/stores/useFlightStore'
 import { useSizeWatch } from '@/composables/useSizeWatch'
 import { DRAG_SLOP } from '@/lantern/beltDrag'
+import { beltImageId } from '@/lantern/imageLists'
 import BeltFace from './BeltFace.vue'
 import {
   beltPictures,
@@ -508,6 +509,31 @@ async function focusBelt(quiet = false): Promise<void> {
     ?.focus()
 }
 /** The picture on the belt with this key, or null. */
+/**
+ * What keeps a pocket the same pocket when its thing changes state: the thing's
+ * picture id, which leaves the state in brackets off, so the face can fade from
+ * one picture to the next instead of being replaced.
+ */
+function slotKey(picture: BeltPicture): string {
+  return `${picture.kind}:${beltImageId(picture.kind, picture.name)}`
+}
+
+/** How long the rim glows once a thing has changed state (ms). */
+const GLOW_MS = 600
+/** The pocket whose rim is glowing, by `slotKey`. */
+const glowing = ref<string | null>(null)
+let glowTimer: ReturnType<typeof setTimeout> | undefined
+
+/** Glows the rim of a pocket once. */
+function glow(key: string): void {
+  glowing.value = key
+  clearTimeout(glowTimer)
+  glowTimer = setTimeout(() => {
+    glowing.value = null
+  }, GLOW_MS)
+}
+onUnmounted(() => clearTimeout(glowTimer))
+
 function pictureFor(key: string): BeltPicture | null {
   return pictures.value.find((p) => p.key === key) ?? null
 }
@@ -629,7 +655,7 @@ defineExpose({ focusBelt, focusPicture, has, pictureFor, root })
             </p>
             <button
               v-for="(picture, index) in pictures"
-              :key="picture.key"
+              :key="slotKey(picture)"
               type="button"
               class="lq-belt-pic"
               :class="[
@@ -667,11 +693,17 @@ defineExpose({ focusBelt, focusPicture, has, pictureFor, root })
               @pointercancel="endHold"
               @contextmenu="onPicMenu"
             >
-              <span class="lq-belt-square" aria-hidden="true">
+              <span
+                class="lq-belt-square"
+                :class="{ 'lq-belt-glow': glowing === slotKey(picture) }"
+                aria-hidden="true"
+              >
                 <BeltFace
                   :kind="picture.kind"
                   :name="picture.name"
                   picture-class="lq-belt-face"
+                  fade
+                  @changed="glow(slotKey(picture))"
                 >
                   <span class="lq-belt-letter">{{ picture.letter }}</span>
                 </BeltFace>
@@ -826,6 +858,18 @@ defineExpose({ focusBelt, focusPicture, has, pictureFor, root })
 }
 .lq-belt-folded .lq-belt-reel {
   grid-template-columns: 0fr;
+}
+.lq-belt-glow {
+  /* One amber glow of the rim when a thing changes state (none under reduced motion, where --lq-motion is 0). */
+  animation: lq-belt-glow calc(600ms * var(--lq-motion)) ease-out;
+}
+@keyframes lq-belt-glow {
+  40% {
+    box-shadow:
+      0 0 0 1px #4a3110,
+      0 0 0 3px var(--lq-accent),
+      0 0 18px rgb(255 169 20 / 0.6);
+  }
 }
 .lq-belt-lit {
   /* Lit for a moment by the typed inventory: a still amber ring, the same with reduced motion. */
