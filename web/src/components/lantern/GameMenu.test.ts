@@ -364,7 +364,7 @@ describe('GameMenu', () => {
     const w = mountMenu()
     const entries = w.findAll('.lq-menu-entry')
 
-    expect(entries).toHaveLength(10)
+    expect(entries).toHaveLength(11)
     for (const entry of entries) {
       expect(entry.attributes('data-ring')).toBeDefined()
     }
