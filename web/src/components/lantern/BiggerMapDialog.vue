@@ -8,7 +8,8 @@ import LanternDialog from './LanternDialog.vue'
 /**
  * The bigger map (desktop): a middle window drawing every place of the act
  * the player has visited, and every place seen from one, as named boxes
- * laid out like the small map (see `layoutMap`) and joined by paths. A path
+ * laid out like the small map (see `layoutMap`) and joined by paths that end
+ * at the boxes' edges, never running under a name. A path
  * into a place not visited is dashed; up, down and secret ways carry a tag.
  * Pressing a place (all but the one the player is in) asks the store to walk
  * there and closes the window; × and Escape close it without moving. The
@@ -71,16 +72,37 @@ const boxes = computed(() =>
     }
   }),
 )
+/**
+ * Where the line from one box centre toward another leaves the first box:
+ * the point on its edge, so a path never runs under a box (the boxes are
+ * partly see-through, and a line beneath would strike the name out).
+ */
+function edgeToward(
+  from: { x: number; y: number },
+  to: { x: number; y: number },
+): { x: number; y: number } {
+  const dx = to.x - from.x
+  const dy = to.y - from.y
+  const t = Math.min(
+    dx === 0 ? Infinity : BOX_WIDTH / 2 / Math.abs(dx),
+    dy === 0 ? Infinity : BOX_HEIGHT / 2 / Math.abs(dy),
+  )
+  if (!Number.isFinite(t)) return from
+  return { x: from.x + dx * t, y: from.y + dy * t }
+}
+
 const paths = computed(() =>
   layout.value.paths.map((path) => {
     const from = centre(path.from)
     const to = centre(path.to)
+    const start = edgeToward(from, to)
+    const end = edgeToward(to, from)
     return {
       ...path,
-      x1: from.x,
-      y1: from.y,
-      x2: to.x,
-      y2: to.y,
+      x1: start.x,
+      y1: start.y,
+      x2: end.x,
+      y2: end.y,
       tagStyle: {
         left: `${(from.x + to.x) / 2}px`,
         top: `${(from.y + to.y) / 2}px`,
@@ -141,6 +163,7 @@ onMounted(() => {
             :key="`${path.from}-${path.to}`"
             class="lq-path"
             :class="{ 'lq-dashed': path.dashed }"
+            :data-path-from="path.from"
             :data-path-to="path.to"
             :x1="path.x1"
             :y1="path.y1"

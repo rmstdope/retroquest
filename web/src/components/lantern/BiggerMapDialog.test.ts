@@ -171,6 +171,42 @@ describe('BiggerMapDialog', () => {
     )
   })
 
+  it('ends every path at the edges of its boxes, so no line runs across a name', () => {
+    const w = mountMap()
+    const rect = (name: string) => {
+      const style = (w.get(`[data-place="${name}"]`).element as HTMLElement)
+        .style
+      const left = parseFloat(style.left)
+      const top = parseFloat(style.top)
+      return {
+        left,
+        top,
+        right: left + parseFloat(style.width),
+        bottom: top + parseFloat(style.height),
+      }
+    }
+    const inside = (x: number, y: number, r: ReturnType<typeof rect>) =>
+      x > r.left && x < r.right && y > r.top && y < r.bottom
+    const onEdge = (x: number, y: number, r: ReturnType<typeof rect>) =>
+      x >= r.left &&
+      x <= r.right &&
+      y >= r.top &&
+      y <= r.bottom &&
+      !inside(x, y, r)
+    const lines = w.findAll('line')
+    expect(lines.length).toBeGreaterThan(0)
+    for (const line of lines) {
+      const to = rect(line.attributes('data-path-to')!)
+      const from = rect(line.attributes('data-path-from')!)
+      const x1 = Number(line.attributes('x1'))
+      const y1 = Number(line.attributes('y1'))
+      const x2 = Number(line.attributes('x2'))
+      const y2 = Number(line.attributes('y2'))
+      expect(onEdge(x1, y1, from)).toBe(true)
+      expect(onEdge(x2, y2, to)).toBe(true)
+    }
+  })
+
   it('shows a lone place alone', () => {
     const game = useGameStore()
     game.mapPlaces = [place('Village Well', true, {}, true)]
