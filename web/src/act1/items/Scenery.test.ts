@@ -42,6 +42,16 @@ describe('Scenery chips', () => {
     expect(say(game, 'examine basin')).toBe(line)
   })
 
+  it('describes the market stalls as busy, by any typed word', () => {
+    const game = gameIn('VillageSquare')
+    const line =
+      'Bread, cheese, onions, all laid out under the awnings. ' +
+      'The stallholders weigh and wrap and say only the price.'
+    expect(say(game, 'examine market stalls')).toBe(line)
+    expect(say(game, 'examine stalls')).toBe(line)
+    expect(say(game, 'examine market')).toBe(line)
+  })
+
   it('refuses to be taken with the hearth refusal', () => {
     const game = gameIn('VillageChapel')
     expect(say(game, 'take altar')).toBe(
