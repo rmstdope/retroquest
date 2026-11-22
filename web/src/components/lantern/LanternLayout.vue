@@ -3032,7 +3032,7 @@ watch(namesBlocked, (blocked) => {
           ☰
         </button>
         <button
-          v-if="!wide"
+          v-if="!wide && !game.showTitle"
           type="button"
           class="lq-float-menu lq-float-feedback"
           data-lq-obstacle="keep-clear"

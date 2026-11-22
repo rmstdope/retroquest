@@ -4,7 +4,7 @@ import { useGameStore } from '@/stores/useGameStore'
 
 /**
  * The buttons in the stage's top-right corner: the round ✎ (Send feedback, also on F2)
- * beside the round ☰, which opens the
+ * beside the round ☰ (not on the title page), which opens the
  * menu, holding the journey (Journal, Quests and Map, also on J, Q and M) and
  * the game's windows. It carries the amber dot while a quest has news, since
  * the Quests lie inside the menu. (Hint is the last of the room menu's pills,
@@ -25,6 +25,7 @@ const newsId = useId()
   <div class="lq-buttons" :class="{ 'lq-compact': compact }">
     <div class="lq-button-row">
       <button
+        v-if="!game.showTitle"
         type="button"
         class="lq-stage-btn lq-menu-btn"
         data-lq-obstacle="panel"

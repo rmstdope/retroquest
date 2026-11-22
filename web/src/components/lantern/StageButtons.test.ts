@@ -37,6 +37,11 @@ describe('StageButtons', () => {
     expect(w.emitted('feedback')).toHaveLength(1)
   })
 
+  it('has no ✎ on the title page', () => {
+    useGameStore().showTitle = true
+    expect(mountButtons().find('[data-button="feedback"]').exists()).toBe(false)
+  })
+
   it('asks for the menu from ☰, which is named Menu', async () => {
     const w = mountButtons()
     const menu = w.get('[data-button="menu"]')

@@ -26,7 +26,7 @@ describe('captureScreen', () => {
       .mockResolvedValueOnce(blobOf(3 * 1024 * 1024))
       .mockResolvedValueOnce(small)
     expect(await captureScreen(el)).toBe(small)
-    expect(domToBlob.mock.calls[1][1]).toMatchObject({
+    expect((domToBlob.mock.calls[1] as unknown[])[1]).toMatchObject({
       scale: 0.75,
       type: 'image/jpeg',
     })
