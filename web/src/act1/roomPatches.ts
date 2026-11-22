@@ -30,18 +30,28 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       title: 'Lantern lit',
       text: 'Light the lantern on the table: a small warm flame in the glass.',
       area: 'lantern',
-      // Lit while the lit lantern is in the cottage: on the table, or in
-      // Elior's hands while Elior is there.
+      // Lit while the lit lantern stands on the table.
       when: (c) => {
         const onTable = c.things.get('lantern')
-        const carried =
-          c.state.currentRoom instanceof EliorsCottage
-            ? c.state.inventory.find((item) => item instanceof Lantern)
-            : undefined
-        return [onTable, carried].some(
-          (lantern) => lantern instanceof Lantern && lantern.isLit(),
-        )
+        return onTable instanceof Lantern && onTable.isLit()
       },
+    },
+    {
+      id: 'lantern-carried',
+      title: 'Lantern carried',
+      text:
+        'The lantern is gone from the table: the corner stays lit just as ' +
+        "warmly, as if by a lantern in Elior's hand, and the journal lies on " +
+        'the table.',
+      area: 'lantern',
+      // Until this picture is made, the lit corner with the lantern shows.
+      standsFor: 'lantern-lit',
+      // While Elior is in the cottage carrying the lit lantern.
+      when: (c) =>
+        c.state.currentRoom instanceof EliorsCottage &&
+        c.state.inventory.some(
+          (item) => item instanceof Lantern && item.isLit(),
+        ),
     },
     {
       id: 'patches-appears',

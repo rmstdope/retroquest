@@ -146,6 +146,8 @@ export interface PictureState {
   patchIds: string[]
   /** The area each of the room's patches is about, by patch id (a patch of the whole picture has none). */
   patchAreas: Record<string, string>
+  /** The patch whose picture stands in for each patch that has one until it is made, by patch id. */
+  patchStandIns: Record<string, string>
   things: AreaThing[]
 }
 
@@ -257,6 +259,7 @@ export function useBridge(loader: () => Promise<ActClass[]> = loadActs) {
         variant: '',
         patchIds: [],
         patchAreas: {},
+        patchStandIns: {},
         things: [],
       }
     return {
@@ -279,6 +282,13 @@ export function useBridge(loader: () => Promise<ActClass[]> = loadActs) {
           .roomPatches(roomKey, pictureVariant)
           .flatMap((patch) =>
             patch.area === undefined ? [] : [[patch.id, patch.area]],
+          ),
+      ),
+      patchStandIns: Object.fromEntries(
+        game.acts[game.currentAct]
+          .roomPatches(roomKey, pictureVariant)
+          .flatMap((patch) =>
+            patch.standsFor === undefined ? [] : [[patch.id, patch.standsFor]],
           ),
       ),
     }

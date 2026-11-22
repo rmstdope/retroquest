@@ -852,6 +852,7 @@ describe('useBridge', () => {
         variant: '',
         patchIds: [],
         patchAreas: {},
+        patchStandIns: {},
         things: [],
       })
     })

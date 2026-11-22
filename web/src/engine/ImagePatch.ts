@@ -41,6 +41,12 @@ export interface ImagePatch {
    * the same order. Absent for a patch painted straight on the image.
    */
   over?: string
+  /**
+   * The id of another patch of the same image whose picture shows in this
+   * one's place while this one is applied but not made yet, so a patch that
+   * replaces another leaves today's look until its picture exists.
+   */
+  standsFor?: string
   /** Where the patch lies when several apply: a higher layer over a lower, equal layers in no order. Default 0. */
   layer?: number
 }

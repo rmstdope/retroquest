@@ -13,6 +13,7 @@ function picture(
     variant: '',
     patchIds: Object.keys(patchAreas),
     patchAreas,
+    patchStandIns: {},
     things: things.map((id) => ({
       areaId: id,
       label: id,

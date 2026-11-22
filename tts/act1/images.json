@@ -291,6 +291,12 @@
         "area": "lantern"
       },
       {
+        "id": "lantern-carried",
+        "title": "Lantern carried",
+        "text": "The lantern is gone from the table: the corner stays lit just as warmly, as if by a lantern in Elior's hand, and the journal lies on the table.",
+        "area": "lantern"
+      },
+      {
         "id": "patches-appears",
         "title": "Patches appears",
         "text": "Add Patches, a small cat with ginger, black and white patchwork fur.",
