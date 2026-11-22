@@ -558,13 +558,13 @@ watch(
 .lq-arrival-stage:not(.lq-bare) .lq-arrival-card::before {
   content: '';
   position: absolute;
-  inset: -60px -100px;
+  inset: -90px -180px;
   z-index: -1; /* local: behind the card's words */
   pointer-events: none;
   background: radial-gradient(
     ellipse 50% 50% at 50% 50%,
     rgb(10 8 5 / 0.72) 0%,
-    rgb(10 8 5 / 0.55) 45%,
+    rgb(10 8 5 / 0.6) 55%,
     rgb(10 8 5 / 0) 100%
   );
 }
