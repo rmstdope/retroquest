@@ -68,6 +68,7 @@ describe('GameMenu', () => {
         'Load',
         'Settings',
         'Help',
+        'Send feedback',
         'Quit',
       ]
       for (const label of labels) await item(w, label).trigger('click')
@@ -150,6 +151,7 @@ describe('GameMenu', () => {
       'Load',
       'Settings',
       'Help',
+      'Send feedback',
       'Quit',
     ])
     expect(w.text()).not.toContain('Stats')
@@ -325,6 +327,15 @@ describe('GameMenu', () => {
     key(document.activeElement!, 'ArrowDown')
     expect(focused()).toBe('Journal')
     expect(w.emitted('open')).toBeUndefined()
+  })
+
+  it('has Send feedback between Help and Quit, with the key hint F2, and opens it', async () => {
+    const w = mountMenu()
+    const row = item(w, 'Send feedback')
+    expect(row.get('.lq-menu-row-key').text()).toBe('F2')
+    expect(row.attributes('aria-keyshortcuts')).toBe('F2')
+    await row.trigger('click')
+    expect(w.emitted('open')).toEqual([['feedback']])
   })
 
   it('chooses the focused entry with Enter', async () => {

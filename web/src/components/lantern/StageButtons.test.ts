@@ -21,11 +21,20 @@ describe('StageButtons', () => {
     w?.unmount()
   })
 
-  it('has the round ☰ only: Hint is in the room menu, the journey and the map in this one', () => {
+  it('has the round ✎ and ☰ only: Hint is in the room menu, the journey and the map in this one', () => {
     const labels = mountButtons()
       .findAll('button.lq-stage-btn')
       .map((b) => b.text())
-    expect(labels).toEqual(['☰'])
+    expect(labels).toEqual(['✎', '☰'])
+  })
+
+  it('asks for the feedback window from ✎, which is named Send feedback', async () => {
+    const w = mountButtons()
+    const feedback = w.get('[data-button="feedback"]')
+    expect(feedback.attributes('aria-label')).toBe('Send feedback')
+    expect(feedback.attributes('title')).toBe('Send feedback')
+    await feedback.trigger('click')
+    expect(w.emitted('feedback')).toHaveLength(1)
   })
 
   it('asks for the menu from ☰, which is named Menu', async () => {

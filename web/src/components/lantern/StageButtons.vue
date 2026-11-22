@@ -3,7 +3,8 @@ import { useId } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
 
 /**
- * The button in the stage's top-right corner: the round ☰, which opens the
+ * The buttons in the stage's top-right corner: the round ✎ (Send feedback, also on F2)
+ * beside the round ☰, which opens the
  * menu, holding the journey (Journal, Quests and Map, also on J, Q and M) and
  * the game's windows. It carries the amber dot while a quest has news, since
  * the Quests lie inside the menu. (Hint is the last of the room menu's pills,
@@ -14,7 +15,7 @@ defineProps<{
   /** A sideways phone: a smaller button. */
   compact?: boolean
 }>()
-const emit = defineEmits<{ menu: [] }>()
+const emit = defineEmits<{ menu: []; feedback: [] }>()
 const game = useGameStore()
 /** The hidden words ☰ is described by while a quest has news. */
 const newsId = useId()
@@ -23,6 +24,18 @@ const newsId = useId()
 <template>
   <div class="lq-buttons" :class="{ 'lq-compact': compact }">
     <div class="lq-button-row">
+      <button
+        type="button"
+        class="lq-stage-btn lq-menu-btn"
+        data-lq-obstacle="panel"
+        data-button="feedback"
+        title="Send feedback"
+        aria-label="Send feedback"
+        aria-keyshortcuts="F2"
+        @click="emit('feedback')"
+      >
+        <span aria-hidden="true">✎</span>
+      </button>
       <button
         type="button"
         class="lq-stage-btn lq-menu-btn"
