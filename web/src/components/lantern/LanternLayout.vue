@@ -3800,8 +3800,8 @@ watch(namesBlocked, (blocked) => {
   position: relative;
   z-index: var(--lq-z-page-phone-plate);
   flex: 0 0 auto;
-  /* The right margin leaves the corner to the menu button, so "⟲ Journal" sits beside it. */
-  margin: 8px 60px 0 8px;
+  /* The right margin leaves the corner to the feedback and menu buttons, so "⟲ Journal" sits beside them. */
+  margin: 8px 112px 0 8px;
 }
 /* What is left beside "⟲ Journal" is narrow, so a long room name wraps rather than being cut off. */
 .lq-phone-plate :deep(.lq-room-name) {
