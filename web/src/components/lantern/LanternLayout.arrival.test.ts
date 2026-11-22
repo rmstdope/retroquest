@@ -280,6 +280,22 @@ describe('LanternLayout: the arrival on the picture', () => {
     expect(card(w)).toBe('')
   })
 
+  it('gives the typing box the cursor back when a click takes the arrival away (rq-9g4n)', async () => {
+    const w = await ready()
+    useSettingsStore(pinia).narrationVolume = 0
+    window.dispatchEvent(new KeyboardEvent('keydown', { key: 'F1' }))
+    await vi.advanceTimersByTimeAsync(0)
+    await run('go north')
+    expect(card(w)).not.toBe('')
+    // A browser's mousedown on the card moves focus off the box to the page.
+    ;(document.activeElement as HTMLElement | null)?.blur()
+    expect(document.activeElement).toBe(document.body)
+    await w.get('[data-testid="arrival-on-picture"]').trigger('click')
+    await vi.advanceTimersByTimeAsync(0)
+    expect(card(w)).toBe('')
+    expect(document.activeElement).toBe(w.get('.lq-type-input').element)
+  })
+
   it('clears with a held Space', async () => {
     const w = await ready()
     await run('go north')

@@ -135,6 +135,25 @@ describe('LanternLayout: change of scene', () => {
     expect(scene.turn).toBeNull()
   })
 
+  it('gives the typing box the cursor back when a click skips the change (rq-9g4n)', async () => {
+    const game = await stage()
+    const scene = useSceneStore()
+    window.dispatchEvent(new KeyboardEvent('keydown', { key: 'F1' }))
+    await w.vm.$nextTick()
+    game.submitCommand('go north')
+    await w.vm.$nextTick()
+    await w.vm.$nextTick()
+    expect(scene.turn).not.toBeNull()
+    // A browser's mousedown on the picture moves focus off the box to the page.
+    ;(document.activeElement as HTMLElement | null)?.blur()
+    await w.get('.lq-stage-picture').trigger('click')
+    useArrivalStore().clear()
+    await w.vm.$nextTick()
+    await w.vm.$nextTick()
+    expect(scene.turn).toBeNull()
+    expect(document.activeElement).toBe(w.get('.lq-type-input').element)
+  })
+
   it('changes the room name when the change is skipped before the dark', async () => {
     const game = await stage()
     game.submitCommand('go north')
