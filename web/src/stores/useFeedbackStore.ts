@@ -65,8 +65,9 @@ export const useFeedbackStore = defineStore('feedback', () => {
     open.value = true
   }
 
-  /** Forget the words after a report was taken. */
+  /** Forget the kind and words after a report was taken, so the next opens on Something's wrong. */
   function reset(): void {
+    kind.value = 'bug'
     text.value = ''
     reference.value = null
   }

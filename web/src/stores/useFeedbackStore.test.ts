@@ -125,6 +125,19 @@ describe('useFeedbackStore', () => {
     expect(feedback.phase).toBe('editing')
   })
 
+  it('opens on Something is wrong again once an idea was sent', async () => {
+    answer(201, { reference: 1 })
+    const feedback = useFeedbackStore()
+    feedback.begin(null)
+    feedback.kind = 'feature'
+    feedback.text = 'abc'
+    await feedback.send(CONTEXT)
+    feedback.close()
+    feedback.begin(null)
+    expect(feedback.kind).toBe('bug')
+    expect(feedback.text).toBe('')
+  })
+
   it('keeps what was written when the service refuses, and says why', async () => {
     answer(
       429,
