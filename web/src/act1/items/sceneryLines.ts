@@ -318,8 +318,8 @@ export const SCENERY_BY_ROOM: Record<string, SceneryDef[]> = {
       'VillageSquare.marketStalls',
       'market stalls',
       ['stalls', 'market'],
-      'Half the stalls are bare boards with the awnings rolled up. ' +
-        'The ones still open sell bread, onions and very little else.',
+      'Bread, cheese, onions, all laid out under the awnings. ' +
+        'The stallholders weigh and wrap and say only the price.',
     ),
   ],
   MirasHut: [

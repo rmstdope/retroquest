@@ -660,6 +660,11 @@
     "text": "The wire is pulled tight around the kit's leg, too tight for fingers."
   },
   {
+    "id": "046b962f543d07",
+    "speaker": "narrator",
+    "text": "Bread, cheese, onions, all laid out under the awnings. The stallholders weigh and wrap and say only the price."
+  },
+  {
     "id": "046c8379d4b6f9",
     "speaker": "grandmother",
     "text": "Well, that's settled, then. I'll send word to Hemlock this very afternoon. He's a kind old soul; he'll be glad she's safe, and his store will be open again by the time you get there."
@@ -4783,11 +4788,6 @@
     "id": "1d6162e9c9c902",
     "speaker": "merchant",
     "text": "Good honest iron! A little bent, but the smith in Greendale will straighten it, and my mare will thank you. Here, the wandering boots are yours."
-  },
-  {
-    "id": "1d640862fce075",
-    "speaker": "narrator",
-    "text": "Half the stalls are bare boards with the awnings rolled up. The ones still open sell bread, onions and very little else."
   },
   {
     "id": "1d6486a738f75d",
