@@ -31,7 +31,7 @@ describe('BeltFace', () => {
     return w
   }
 
-  it('shows the letter until the picture is made, then the picture', async () => {
+  it('shows the letter while the picture is not made', async () => {
     const belt = await face('lantern', false, () => false)
     expect(belt.find('img').exists()).toBe(false)
     expect(belt.find('.letter').exists()).toBe(true)

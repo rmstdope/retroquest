@@ -186,7 +186,7 @@ describe('state pictures', () => {
     expect(ids).not.toContain('item-enhanced-lantern-lit')
   })
 
-  it('has a prompt for each listed state and no prompt without one', () => {
+  it('lists every state that has a prompt', () => {
     const ids = new Set(ACTS.flatMap((act) => beltImages(act).map((i) => i.id)))
     for (const id of Object.keys(BELT_STATE_PROMPTS)) expect(ids).toContain(id)
   })

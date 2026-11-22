@@ -69,7 +69,11 @@ const root = ref<HTMLElement | null>(null)
 const strip = ref<HTMLElement | null>(null)
 const pictures = computed(() =>
   beltPictures(
-    withoutOwed(game.rawInventory, (name) => flights.owing('item', name)),
+    withoutOwed(
+      game.rawInventory,
+      (name) => flights.owing('item', name),
+      (name) => flights.standIn('item', name),
+    ),
     withoutOwed(game.rawSpells, (name) => flights.owing('spell', name)),
     belt.list,
   ),
@@ -508,7 +512,6 @@ async function focusBelt(quiet = false): Promise<void> {
     ?.querySelector<HTMLElement>(`[data-belt-switch="${belt.list}"]`)
     ?.focus()
 }
-/** The picture on the belt with this key, or null. */
 /**
  * What keeps a pocket the same pocket when its thing changes state: the thing's
  * picture id, which leaves the state in brackets off, so the face can fade from
@@ -520,7 +523,7 @@ function slotKey(picture: BeltPicture): string {
 
 /** How long the rim glows once a thing has changed state (ms). */
 const GLOW_MS = 600
-/** The pocket whose rim is glowing, by `slotKey`. */
+/** The pocket whose rim is glowing, by `slotKey` (one at a time: the latest change). */
 const glowing = ref<string | null>(null)
 let glowTimer: ReturnType<typeof setTimeout> | undefined
 
@@ -534,6 +537,7 @@ function glow(key: string): void {
 }
 onUnmounted(() => clearTimeout(glowTimer))
 
+/** The picture on the belt with this key, or null. */
 function pictureFor(key: string): BeltPicture | null {
   return pictures.value.find((p) => p.key === key) ?? null
 }

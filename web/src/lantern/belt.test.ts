@@ -208,4 +208,18 @@ describe('withoutOwed', () => {
       'lantern',
     ])
   })
+
+  it('keeps a thing that is owed as a change in its pocket under its old name', () => {
+    const lit = [{ name: 'lantern (lit)', description: 'Lit.' }]
+    const standIn = (name: string): string | null =>
+      name === 'lantern (lit)' ? 'lantern' : null
+    expect(withoutOwed(lit, owing({ 'lantern (lit)': 1 }), standIn)).toEqual([
+      { name: 'lantern', description: 'Lit.' },
+    ])
+  })
+
+  it('shows the new name once the change is paid', () => {
+    const lit = [{ name: 'lantern (lit)', description: 'Lit.' }]
+    expect(withoutOwed(lit, owing({}), () => 'lantern')).toEqual(lit)
+  })
 })

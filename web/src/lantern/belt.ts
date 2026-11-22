@@ -59,17 +59,24 @@ export interface Hand {
 /**
  * The entries a list shows while some of its things are still on their way to
  * it: each counted entry is lowered by what `owing` says is owed for its plain
- * name, and an entry with none left is left out. The rest is as it was.
+ * name, and an entry with none left is left out. The rest is as it was. A
+ * thing owed as a change (a lantern about to be lit) is not left out but kept
+ * under the old name `standIn` gives, so its pocket stays and shows the new
+ * state when the change lands.
  */
 export function withoutOwed(
   entries: NamedItem[],
   owing: (name: string) => number,
+  standIn: (name: string) => string | null = () => null,
 ): NamedItem[] {
   return entries.flatMap((entry) => {
     const { name, count } = parseCountedName(entry.name)
     const owed = owing(name)
     if (owed === 0) return [entry]
-    if (owed >= count) return []
+    if (owed >= count) {
+      const old = standIn(name)
+      return old === null ? [] : [{ ...entry, name: old }]
+    }
     const left = count - owed
     return [{ ...entry, name: left > 1 ? `${left} ${name}` : name }]
   })
