@@ -12,7 +12,7 @@ import { FLAG_WOKE_FROM_DREAM } from '../Act1StoryFlags'
  * Elior's name. Answering it, by talking to it or saying anything to it,
  * makes it say the three words ("…let them rest…") and his
  * name once more, and Elior wakes in his cottage with the tune still going
- * out by the hearth. It never speaks again; it stays in the dream.
+ * just outside his door. It never speaks again; it stays in the dream.
  */
 export class DreamVoice extends Character {
   constructor() {

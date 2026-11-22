@@ -86,7 +86,7 @@ export class Grandmother extends Character {
     let dialogue = ''
     const journalRead = gameState.getStoryFlag(FLAG_JOURNAL_READ)
     const dreamToTell = journalRead && !gameState.hasSpell('revive')
-    if (dreamToTell) dialogue = Grandmother.HUMMING_AT_THE_HEARTH
+    if (dreamToTell) dialogue = Grandmother.HUMMING_BY_THE_DOORWAY
     if (this.dialogueState.initial_talk) {
       dialogue += dialogue ? '\n' : ''
       dialogue +=
@@ -248,7 +248,7 @@ export class Grandmother extends Character {
    * the cradle tune, which she stops. Shown first in that one talk, before
    * any greeting.
    */
-  private static readonly HUMMING_AT_THE_HEARTH =
+  private static readonly HUMMING_BY_THE_DOORWAY =
     'When you go to her, she is humming by your doorway: a slow tune that ' +
     'climbs three notes and settles home again. You know it. You have ' +
     'known it all your life, and you could not say from where. She ' +

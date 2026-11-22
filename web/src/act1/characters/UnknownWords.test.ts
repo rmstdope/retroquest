@@ -176,6 +176,12 @@ describe('Act 1 unknown words', () => {
     )
   })
 
+  it('has Borin watch the fire rather than hammer on an unknown word', () => {
+    const answer = new Blacksmith().sayTo(game().state, 'malakar')
+    expect(answer).toContain("doesn't take his eyes off the fire")
+    expect(answer).not.toContain('hammering')
+  })
+
   it('carries the turn through a save and load', () => {
     const g = game()
     g.state.currentRoom = g.state.allRooms.VillageSquare
