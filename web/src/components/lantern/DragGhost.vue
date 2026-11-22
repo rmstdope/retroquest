@@ -170,7 +170,7 @@ watch(
   background: #241a33;
   color: #c79bf0;
 }
-.lq-drag-face {
+:deep(.lq-drag-face) {
   width: 100%;
   height: 100%;
   border-radius: 999px;
