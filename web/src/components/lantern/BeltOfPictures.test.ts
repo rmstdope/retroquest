@@ -40,6 +40,7 @@ describe('BeltOfPictures', () => {
     ]
   })
   afterEach(() => {
+    vi.useRealTimers()
     setPictureProbe(null)
     w?.unmount()
     vi.unstubAllGlobals()
@@ -670,6 +671,74 @@ describe('BeltOfPictures', () => {
       mountBelt()
       await flushPromises()
       expect(w!.find('[data-belt-pic="item:bread"] img').exists()).toBe(false)
+    })
+  })
+
+  describe('a thing changing state', () => {
+    /** Carries one lantern, with every picture made unless `made` says which. */
+    async function carry(
+      name: string,
+      made: (url: string) => boolean = () => true,
+    ): Promise<void> {
+      setPictureProbe((url) => Promise.resolve(made(url)))
+      useGameStore().rawInventory = [
+        { name: `[item_name]${name}[/item_name]`, description: 'A lantern.' },
+      ]
+      mountBelt()
+      await flushPromises()
+    }
+    /** The lantern becomes `name` in play. */
+    async function become(name: string): Promise<void> {
+      useGameStore().rawInventory = [
+        { name: `[item_name]${name}[/item_name]`, description: 'A lantern.' },
+      ]
+      await flushPromises()
+    }
+    const square = (): string[] => w!.get('.lq-belt-square').classes()
+
+    it('shows the state picture with no glow when the belt loads', async () => {
+      await carry('lantern (lit)')
+      expect(w!.get('img').attributes('src')).toMatch(/item-lantern-lit\.png$/)
+      expect(square()).not.toContain('lq-belt-glow')
+    })
+
+    it('keeps its slot, fades to the new picture and glows once', async () => {
+      vi.useFakeTimers()
+      await carry('lantern')
+      const slot = w!.get('[data-belt-pic]').element
+      await become('lantern (lit)')
+      expect(w!.get('[data-belt-pic]').element).toBe(slot)
+      expect(w!.findAll('img')).toHaveLength(2)
+      expect(square()).toContain('lq-belt-glow')
+      vi.advanceTimersByTime(700)
+      await nextTick()
+      expect(square()).not.toContain('lq-belt-glow')
+      expect(w!.findAll('img')).toHaveLength(1)
+    })
+
+    it('holds the old picture while the change flies, then fades and glows when it lands', async () => {
+      vi.useFakeTimers()
+      await carry('lantern')
+      const slot = w!.get('[data-belt-pic]').element
+      const change = { from: 'lantern', to: 'lantern (lit)' }
+      useFlightStore().owe([], [change])
+      await become('lantern (lit)')
+      expect(w!.findAll('[data-belt-pic]')).toHaveLength(1)
+      expect(w!.get('[data-belt-pic]').element).toBe(slot)
+      expect(w!.get('img').attributes('src')).toMatch(/item-lantern\.png$/)
+      expect(square()).not.toContain('lq-belt-glow')
+      useFlightStore().forgive([], [change])
+      await flushPromises()
+      expect(w!.get('[data-belt-pic]').element).toBe(slot)
+      expect(w!.findAll('img')).toHaveLength(2)
+      expect(square()).toContain('lq-belt-glow')
+    })
+
+    it('does not glow while the state picture is not made', async () => {
+      await carry('lantern', (url) => !url.includes('-lit'))
+      await become('lantern (lit)')
+      expect(w!.get('img').attributes('src')).toMatch(/item-lantern\.png$/)
+      expect(square()).not.toContain('lq-belt-glow')
     })
   })
 })

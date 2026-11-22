@@ -13,7 +13,12 @@
 import { Character, Item, Spell, type Act, type ImagePatch } from '@/engine'
 import { displayName } from './displayName'
 import { narrationText } from './narrationKey'
-import { BELT_STYLE, SPELL_PROMPTS, THING_PROMPTS } from './beltPrompts'
+import {
+  BELT_STATE_PROMPTS,
+  BELT_STYLE,
+  SPELL_PROMPTS,
+  THING_PROMPTS,
+} from './beltPrompts'
 import { ELIOR_PORTRAIT_PROMPT, PORTRAIT_PROMPTS } from './portraitPrompts'
 import { roomTrackId } from './musicLists'
 import { declaredAreas, type ImageArea } from './roomAreas'
@@ -196,6 +201,22 @@ export function beltImageId(kind: 'item' | 'spell', name: string): string {
 }
 
 /**
+ * The id of the picture a thing has for its state, from the state in brackets
+ * at the end of its name ("lantern (lit)" is `item-lantern-lit`), or null when
+ * the name has no state or the list holds no picture for it.
+ */
+export function beltStateImageId(
+  kind: 'item' | 'spell',
+  name: string,
+): string | null {
+  const state = /\(([^)]*)\)\s*$/.exec(name)?.[1]
+  if (state === undefined) return null
+  const slug = state.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+  const id = `${beltImageId(kind, name)}-${slug.replace(/^-+|-+$/g, '')}`
+  return id in BELT_STATE_PROMPTS ? id : null
+}
+
+/**
  * The classes (by class key) of things that are not carriable when built but are
  * handed over or picked up in play, so they reach the belt; a test plays each
  * act's golden path to check it, but only what the path carries; a new
@@ -222,6 +243,12 @@ const CARRIED_LATER: readonly string[] = [
 const RENAMED: Readonly<Record<string, readonly string[]>> = {
   EchoStone: ['enhanced echo stone'],
   WitheredCarrot: ['fresh carrot'],
+}
+
+/** The names a thing takes in play that show with the picture of their state, by class key (a lit lantern, a full bucket). */
+const STATED: Readonly<Record<string, readonly string[]>> = {
+  Bucket: ['bucket (full)'],
+  Lantern: ['lantern (lit)'],
 }
 
 /** A fresh instance of a content class that builds without arguments, else null (scenery that needs its room). */
@@ -258,6 +285,18 @@ export function beltImages(act: Act): GameImage[] {
       text: `${prompt} ${BELT_STYLE}`,
     })
   }
+  /** Lists the picture of a thing's state under the name it has in that state. */
+  const listState = (name: string): void => {
+    const id = beltStateImageId('item', name)
+    if (id === null) throw new Error(`No picture line for state ${name}`)
+    images.set(id, {
+      id,
+      title: displayName(name),
+      width: BELT_SIZE,
+      height: BELT_SIZE,
+      text: `${BELT_STATE_PROMPTS[id]} ${BELT_STYLE}`,
+    })
+  }
   for (const [key, C] of Object.entries(act.classes)) {
     const prototype = (C as { prototype: unknown }).prototype
     if (!(prototype instanceof Item || prototype instanceof Spell)) continue
@@ -269,6 +308,7 @@ export function beltImages(act: Act): GameImage[] {
     ) {
       list('item', thing.name)
       for (const name of RENAMED[key] ?? []) list('item', name)
+      for (const name of STATED[key] ?? []) listState(name)
     }
   }
   return [...images.values()]

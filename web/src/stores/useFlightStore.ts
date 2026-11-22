@@ -76,6 +76,8 @@ export const useFlightStore = defineStore('flight', () => {
   const told = ref<string[]>([])
   /** What the turn gained and has not landed yet, by "kind:name": the lists do not show it before. */
   const owed = ref<Record<string, number>>({})
+  /** For a thing owed as a change, the old name its pocket keeps until the change lands, by "kind:name" of the new one. */
+  const standIns = ref<Record<string, string>>({})
   let queue: Flight[] = []
   /** What waits for every flight to land (`whenIdle`). */
   let waiting: (() => void)[] = []
@@ -102,6 +104,9 @@ export const useFlightStore = defineStore('flight', () => {
       now[key] = (now[key] ?? 0) + chip.count
     }
     owed.value = now
+    const held = { ...standIns.value }
+    for (const change of changes) held[owedKey('item', change.to)] = change.from
+    standIns.value = held
   }
 
   /** Pay these back without a flight: they will not fly, so their lists show them now. */
@@ -115,13 +120,25 @@ export const useFlightStore = defineStore('flight', () => {
     const now = { ...owed.value }
     const left = (now[owedKey(kind, name)] ?? 0) - count
     if (left > 0) now[owedKey(kind, name)] = left
-    else delete now[owedKey(kind, name)]
+    else {
+      delete now[owedKey(kind, name)]
+      const held = { ...standIns.value }
+      delete held[owedKey(kind, name)]
+      standIns.value = held
+    }
     owed.value = now
   }
 
   /** How many of the thing or spell are owed: gained, and still on their way to the list. */
   function owing(kind: ChipKind, name: string): number {
     return owed.value[owedKey(kind, name)] ?? 0
+  }
+
+  /** The old name a thing owed as a change stands in as in its pocket, until it lands; null for any other. */
+  function standIn(kind: ChipKind, name: string): string | null {
+    return owing(kind, name) > 0
+      ? (standIns.value[owedKey(kind, name)] ?? null)
+      : null
   }
 
   /** Whether any thing of this kind is gained and still on its way: its button's new-thing dot waits until it lands. */
@@ -238,6 +255,7 @@ export const useFlightStore = defineStore('flight', () => {
     queue = []
     waiting = []
     owed.value = {}
+    standIns.value = {}
     current.value = null
     landed.value = null
     landedName.value = null
@@ -255,6 +273,7 @@ export const useFlightStore = defineStore('flight', () => {
     owe,
     forgive,
     owing,
+    standIn,
     owes,
     launch,
     whenIdle,

@@ -328,5 +328,22 @@ describe('useFlightStore', () => {
       flights.forgive([], [filling])
       expect(flights.owes('item')).toBe(false)
     })
+
+    it('names the old state a changed thing stands in as while it is owed', () => {
+      const flights = useFlightStore()
+      expect(flights.standIn('item', filling.to)).toBeNull()
+      flights.owe([], [filling])
+      expect(flights.standIn('item', filling.to)).toBe(filling.from)
+      flights.forgive([], [filling])
+      expect(flights.standIn('item', filling.to)).toBeNull()
+    })
+
+    it('does not stand in for the same name gained as a plain thing later', () => {
+      const flights = useFlightStore()
+      flights.owe([], [filling])
+      flights.forgive([], [filling])
+      flights.owe([{ kind: 'item', name: filling.to, count: 1 }])
+      expect(flights.standIn('item', filling.to)).toBeNull()
+    })
   })
 })

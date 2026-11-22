@@ -15,6 +15,19 @@ export const BELT_STYLE =
   'colours, soft even light, the object alone and centred on a plain warm ' +
   'parchment wash, square composition, no text, lettering or border.'
 
+/**
+ * The picture line of each state of a thing that has a picture of its own for
+ * it, by picture id (`beltStateImageId`): the base picture's id and the state.
+ * The belt shows it while the thing is in that state, and the base picture
+ * until it is made.
+ */
+export const BELT_STATE_PROMPTS: Readonly<Record<string, string>> = {
+  'item-bucket-full':
+    'A wooden bucket bound with iron hoops and a rope handle, filled to the brim with water.',
+  'item-lantern-lit':
+    'A tin lantern with a small door and a ring on top, a candle flame glowing warm behind its panes.',
+}
+
 /** The picture line of each thing that can be carried, by picture id. */
 export const THING_PROMPTS: Readonly<Record<string, string>> = {
   'item-ancient-amulet':

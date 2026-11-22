@@ -1,6 +1,6 @@
 /** Where a thing's or a spell's picture is served from. */
 import { describe, expect, it } from 'vitest'
-import { beltPictureUrl } from './beltPicture'
+import { beltPictureUrl, beltStatePictureUrl } from './beltPicture'
 
 describe('beltPictureUrl', () => {
   it('points at the file named by the picture id', () => {
@@ -14,5 +14,21 @@ describe('beltPictureUrl', () => {
 
   it('has none for a name that is empty', () => {
     expect(beltPictureUrl('item', '')).toBe('')
+  })
+})
+
+describe('beltStatePictureUrl', () => {
+  it('points at the picture of the state a name is in', () => {
+    expect(beltStatePictureUrl('item', 'lantern (lit)')).toMatch(
+      /images\/generated\/item-lantern-lit\.png$/,
+    )
+    expect(beltStatePictureUrl('item', 'bucket (full)')).toMatch(
+      /images\/generated\/item-bucket-full\.png$/,
+    )
+  })
+
+  it('has none for a name with no state picture', () => {
+    expect(beltStatePictureUrl('item', 'lantern')).toBe('')
+    expect(beltStatePictureUrl('item', 'horseshoe')).toBe('')
   })
 })
