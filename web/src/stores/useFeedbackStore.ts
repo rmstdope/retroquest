@@ -71,8 +71,9 @@ export const useFeedbackStore = defineStore('feedback', () => {
     reference.value = null
   }
 
-  /** Close the window, sending nothing; a sent report's words are cleared. */
+  /** Close the window, sending nothing (it stays while a report is on its way); a sent report's words are cleared. */
   function close(): void {
+    if (phase.value === 'sending') return
     if (phase.value === 'sent') reset()
     open.value = false
     picture.value = null

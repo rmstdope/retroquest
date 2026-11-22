@@ -166,6 +166,27 @@ describe('useFeedbackStore', () => {
     expect(feedback.error).toBe('')
   })
 
+  it('cannot be closed while sending, and its answer lands in the same window', async () => {
+    let release: (response: Response) => void = () => {}
+    vi.stubGlobal(
+      'fetch',
+      () => new Promise<Response>((resolve) => (release = resolve)),
+    )
+    const feedback = useFeedbackStore()
+    feedback.begin(null)
+    feedback.text = 'abc'
+    const pending = feedback.send(CONTEXT)
+    feedback.close()
+    expect(feedback.open).toBe(true)
+    expect(feedback.phase).toBe('sending')
+    await vi.waitFor(() => expect(feedback.phase).toBe('sending'))
+    await new Promise((r) => setTimeout(r, 0))
+    release(new Response(JSON.stringify({ reference: 5 }), { status: 201 }))
+    await pending
+    expect(feedback.phase).toBe('sent')
+    expect(feedback.reference).toBe(5)
+  })
+
   it('does not send while it is already sending or too short', async () => {
     const mock = answer(201, { reference: 1 })
     const feedback = useFeedbackStore()

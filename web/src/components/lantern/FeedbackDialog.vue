@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, ref, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useFeedbackStore, type FeedbackKind } from '@/stores/useFeedbackStore'
 import { FEEDBACK_MAX } from '@/feedback/feedbackReport'
@@ -33,6 +33,18 @@ const sending = computed(() => phase.value === 'sending')
 const sent = computed(() => phase.value === 'sent')
 const failed = computed(() => phase.value === 'failed')
 
+const dialog = ref<InstanceType<typeof LanternDialog> | null>(null)
+const box = ref<HTMLTextAreaElement | null>(null)
+
+// Focus follows the window's change: to the way back once sent, to the box after a refusal
+// (the control that had it was disabled or removed).
+watch(phase, async (now) => {
+  if (now !== 'sent' && now !== 'failed') return
+  await nextTick()
+  if (now === 'sent') dialog.value?.focusFirst()
+  else box.value?.focus()
+})
+
 /** The small copy of the picture, made from the store's picture while it is ticked. */
 const pictureUrl = ref('')
 watch(
@@ -53,6 +65,7 @@ onBeforeUnmount(() => {
 
 <template>
   <LanternDialog
+    ref="dialog"
     :title="sent ? 'Thank you' : 'Tell us what you found'"
     :eyebrow="sent ? '' : 'Feedback'"
     centered
@@ -81,6 +94,7 @@ onBeforeUnmount(() => {
         </button>
       </div>
       <textarea
+        ref="box"
         v-model="text"
         class="lq-feedback-box"
         data-autofocus

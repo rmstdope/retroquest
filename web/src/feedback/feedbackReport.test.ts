@@ -26,6 +26,17 @@ describe('headingFrom', () => {
     expect(words.startsWith(heading)).toBe(true)
   })
 
+  it('is the first line of at least 3 characters, since the service refuses shorter headings', () => {
+    expect(headingFrom('Hi\nthe door will not open')).toBe(
+      'the door will not open',
+    )
+    expect(headingFrom('!!\nsomething broke')).toBe('something broke')
+  })
+
+  it('joins the lines when none is long enough alone', () => {
+    expect(headingFrom('a\nb\nc')).toBe('a b c')
+  })
+
   it('is cut hard when one word is longer than the limit', () => {
     expect(headingFrom('x'.repeat(300))).toBe('x'.repeat(120))
   })

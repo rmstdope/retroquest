@@ -6,6 +6,9 @@ export const FEEDBACK_MAX = 5000
 /** The fewest letters a report needs before Send is live. */
 export const FEEDBACK_MIN_LETTERS = 3
 
+/** The shortest heading the service takes. */
+const HEADING_MIN = 3
+
 /** The longest heading a report may have. */
 const HEADING_MAX = 120
 
@@ -22,11 +25,14 @@ export function lettersIn(text: string): number {
  * most 120 characters (hard, when a single word is longer than that).
  */
 export function headingFrom(text: string): string {
+  const lines = text
+    .split('\n')
+    .map((candidate) => candidate.trim())
+    .filter((candidate) => candidate !== '')
+  // The service wants a heading of at least 3 characters: the first line long enough, else all of them.
   const line =
-    text
-      .split('\n')
-      .map((candidate) => candidate.trim())
-      .find((candidate) => candidate !== '') ?? ''
+    lines.find((candidate) => candidate.length >= HEADING_MIN) ??
+    lines.join(' ')
   if (line.length <= HEADING_MAX) return line
   const cut = line.slice(0, HEADING_MAX + 1)
   const space = cut.lastIndexOf(' ')

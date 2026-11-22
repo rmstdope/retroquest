@@ -2578,7 +2578,10 @@ async function openFeedback(): Promise<void> {
   if (feedback.open || feedbackOpening) return
   feedbackOpening = true
   try {
-    feedback.begin(await captureScreen(rootEl.value ?? document.body))
+    const shot = await captureScreen(rootEl.value ?? document.body)
+    // The game went on meanwhile: the title page or the end may have come.
+    if (game.showTitle || game.ending) return
+    feedback.begin(shot)
   } finally {
     feedbackOpening = false
   }

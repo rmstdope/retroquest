@@ -151,6 +151,23 @@ describe('FeedbackDialog', () => {
     expect(w.emitted('close')).toHaveLength(1)
   })
 
+  it('puts focus on Back to the game once sent, and in the box after a refusal', async () => {
+    const { w, feedback } = mountDialog()
+    await w.get('textarea').setValue('abc')
+    feedback.phase = 'sent'
+    feedback.reference = 1
+    await nextTick()
+    await nextTick()
+    expect(document.activeElement?.textContent?.trim()).toBe('Back to the game')
+    wrapper?.unmount()
+    const again = mountDialog()
+    again.feedback.phase = 'failed'
+    again.feedback.error = 'x'
+    await nextTick()
+    await nextTick()
+    expect(document.activeElement).toBe(again.w.get('textarea').element)
+  })
+
   it('closes on Cancel, ✕ and Escape, sending nothing', async () => {
     const { w } = mountDialog()
     await button(w, 'Cancel').trigger('click')
