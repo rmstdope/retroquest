@@ -154,6 +154,13 @@ test.describe('a checklist fades what is done (rq-3t6a)', () => {
       news.locator('.lq-check-done'),
       news.locator('.lq-check-pending'),
     )
+    // On the picture a ticked place is only lightly faded, and a soft shade lies behind the card (rq-0ols).
+    await expect(news.locator('.lq-check-done')).toHaveCSS('opacity', '0.8')
+    const shade = await page
+      .locator('.lq-arrival-card')
+      .filter({ has: page.locator('.lq-quest-checklist') })
+      .evaluate((el) => getComputedStyle(el, '::before').backgroundImage)
+    expect(shade).toContain('radial-gradient')
     await skipTelling(page)
     const turn = page.locator('.lq-block-checklist').last()
     await expectDoneFaded(

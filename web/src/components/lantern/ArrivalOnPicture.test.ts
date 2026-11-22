@@ -133,6 +133,31 @@ describe('ArrivalOnPicture', () => {
     expect(withPicture.classes()).not.toContain('lq-bare')
   })
 
+  it('lays a soft edgeless shade behind the words of a card on a picture only (rq-0ols)', () => {
+    const source = read('./ArrivalOnPicture.vue')
+    const rule = source.match(
+      /\.lq-arrival-stage:not\(\.lq-bare\) \.lq-arrival-card::before \{([^}]*)\}/,
+    )
+    expect(rule).not.toBeNull()
+    const body = rule?.[1] ?? ''
+    expect(body).toContain('radial-gradient')
+    expect(body).toMatch(/rgb\([^)]*\/ 0\)\s*100%/)
+    expect(body).toContain('pointer-events: none')
+    expect(body).toContain('z-index: -1')
+    expect(body).not.toMatch(/border|box-shadow/)
+    expect(source).toMatch(/\.lq-arrival-card \{[^}]*isolation: isolate[^}]*\}/)
+  })
+
+  it('fades ticked places to 80% on a picture and keeps 60% elsewhere (rq-0ols)', () => {
+    const css = read('../../lantern/lantern.css')
+    expect(css).toMatch(
+      /\.lq-quest-checklist \.lq-check-done \{\s*opacity: 0\.6;/,
+    )
+    expect(css).toMatch(
+      /\.lq-arrival-stage:not\(\.lq-bare\) \.lq-quest-checklist \.lq-check-done \{\s*opacity: 0\.8;/,
+    )
+  })
+
   it('is a polite live region', () => {
     const w = mount(ArrivalOnPicture, { props: { pictured: true } })
     expect(w.attributes('aria-live')).toBe('polite')

@@ -439,6 +439,10 @@ body {
 .lq-quest-checklist .lq-check-done {
   opacity: 0.6;
 }
+/* On a story card over a picture the ticked places are only lightly faded (rq-0ols). */
+.lq-arrival-stage:not(.lq-bare) .lq-quest-checklist .lq-check-done {
+  opacity: 0.8;
+}
 .lq-quest-checklist .lq-check-done::before {
   content: '✓';
   content: '✓' / 'done';
