@@ -148,6 +148,16 @@ describe('appliedPatchIds', () => {
     )
   })
 
+  it('darkens the cottage corner once Elior carries the lit lantern out of the cottage', () => {
+    const act = new Act1()
+    const game = new Game([act])
+    executeCommands(game, ['talk to voice', 'use lantern', 'take lantern'])
+    game.state.currentRoom = game.state.allRooms.VillageSquare
+    expect(appliedPatchIds(act, 'EliorsCottage', game.state)).not.toContain(
+      'lantern-lit',
+    )
+  })
+
   describe("the vegetable field's carrot", () => {
     /** Act I with Elior in the Vegetable Field. */
     function inField(): { act: Act1; game: Game } {
