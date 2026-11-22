@@ -126,8 +126,35 @@ describe('FeedbackDialog', () => {
     expect(w.find('img.lq-feedback-thumb').exists()).toBe(false)
     await box.setValue(false)
     expect(w.find('.lq-feedback-shim').exists()).toBe(false)
+    expect(w.text()).not.toContain('Taking the picture…')
+    expect(w.text()).toContain('Screenshots are posted publicly')
     await box.setValue(true)
     expect(w.find('.lq-feedback-shim').exists()).toBe(true)
+    expect(w.text()).toContain('Taking the picture…')
+  })
+
+  it('locks the window but keeps the picture line while Send waits for the picture', async () => {
+    const feedback = useFeedbackStore()
+    feedback.begin(new Promise<Blob | null>(() => {}))
+    wrapper = mount(FeedbackDialog, {
+      attachTo: document.body,
+      props: { place: 'Act I · Riverbank' },
+    })
+    const w = wrapper
+    feedback.text = 'abc'
+    feedback.phase = 'sending'
+    await nextTick()
+    expect(sendButton(w).text()).toBe('Sending…')
+    expect(button(w, 'Cancel').attributes('disabled')).toBeDefined()
+    expect(w.text()).toContain('Taking the picture…')
+    expect(w.find('.lq-feedback-shim').exists()).toBe(true)
+  })
+
+  it('marks the whole window, scrim included, so the picture can leave it out', () => {
+    mountDialog()
+    const marked = document.querySelector('[data-feedback-window]')
+    expect(marked?.querySelector('[role="dialog"]')).not.toBeNull()
+    expect(marked?.querySelector('.lq-dialog-scrim')).not.toBeNull()
   })
 
   it('shows the copy and the public-screenshot sentence once the picture is ready', () => {

@@ -339,4 +339,22 @@ describe('useFeedbackStore: the picture arrives after the window opens', () => {
     await feedback.send(CONTEXT)
     expect(sent(mock).screenshots).toBeUndefined()
   })
+
+  it('counts a picture that never arrives as one that could not be taken, so Send goes without it', async () => {
+    vi.useFakeTimers()
+    try {
+      const mock = answer(201, { reference: 3 })
+      const feedback = useFeedbackStore()
+      feedback.begin(slowPicture().shot)
+      feedback.text = 'abc'
+      const pending = feedback.send(CONTEXT)
+      await vi.advanceTimersByTimeAsync(20000)
+      await pending
+      expect(feedback.pictureState).toBe('failed')
+      expect(sent(mock).screenshots).toBeUndefined()
+      expect(feedback.phase).toBe('sent')
+    } finally {
+      vi.useRealTimers()
+    }
+  })
 })

@@ -127,7 +127,10 @@ onBeforeUnmount(() => {
           aria-hidden="true"
         ></span>
       </label>
-      <p v-if="pictureState === 'taking'" class="lq-feedback-quiet">
+      <p
+        v-if="pictureState === 'taking' && includePicture"
+        class="lq-feedback-quiet"
+      >
         Taking the picture…
       </p>
       <p v-else-if="pictureState === 'failed'" class="lq-feedback-quiet">

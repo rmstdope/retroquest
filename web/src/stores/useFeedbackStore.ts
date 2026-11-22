@@ -30,6 +30,9 @@ export type FeedbackPhase = 'editing' | 'sending' | 'sent' | 'failed'
 /** The picture of the screen: being taken, ready, or one that could not be taken. */
 export type FeedbackPictureState = 'taking' | 'ready' | 'failed'
 
+/** How long the picture may take before it counts as one that could not be taken. */
+const PICTURE_PATIENCE_MS = 20000
+
 /** The beacon client ID the service knows the game by. */
 const CLIENT_ID = 'retroquest'
 
@@ -37,7 +40,7 @@ const CLIENT_ID = 'retroquest'
  * The feedback window's state, the one owner of what the player wrote. The kind and the words
  * outlive the window (reopening shows them) until a report is sent; nothing is stored, so a
  * reload loses them. `begin` opens the window with the picture of the screen taken just before
- * it, with the picture box ticked each time; the picture arrives later (`pictureState` says
+ * it (the picture is started at the press and arrives later, or counts as failed after 20 seconds) with the picture box ticked each time (`pictureState` says
  * whether it is being taken, ready or could not be taken); `send` files the report and moves
  * `phase` through sending to sent or failed (`error` then holds the words the player reads).
  */
@@ -73,7 +76,10 @@ export const useFeedbackStore = defineStore('feedback', () => {
     picture.value = null
     pictureState.value = 'taking'
     includePicture.value = true
-    pending = shot
+    const patience = new Promise<null>((resolve) =>
+      setTimeout(() => resolve(null), PICTURE_PATIENCE_MS),
+    )
+    pending = Promise.race([shot, patience])
       .catch((): Blob | null => null)
       .then((blob) => {
         if (mine !== opening) return

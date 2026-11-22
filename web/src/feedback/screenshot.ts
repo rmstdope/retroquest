@@ -13,7 +13,8 @@ function belongsInPicture(node: Node): boolean {
 
 /**
  * The game as it looks now, as an image the feedback service takes (PNG, else JPEG at a smaller
- * scale until it is under 2 MB), without the feedback window even when it opened meanwhile; null when it cannot be taken, so the window offers no picture.
+ * scale until it is under 2 MB), without the feedback window even when it opened meanwhile;
+ * null when it cannot be taken, so the window offers no picture.
  */
 export async function captureScreen(
   element: HTMLElement,
