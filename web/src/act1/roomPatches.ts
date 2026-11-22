@@ -2,6 +2,7 @@ import type { ImagePatch } from '@/engine'
 import { Candle } from './items/Candle'
 import { Lantern } from './items/Lantern'
 import { Mechanism } from './items/Mechanism'
+import { EliorsCottage } from './rooms/EliorsCottage'
 import { Shopkeeper } from './characters/Shopkeeper'
 import { Snare } from './items/Snare'
 import { Well } from './items/Well'
@@ -29,9 +30,17 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       title: 'Lantern lit',
       text: 'Light the lantern on the table: a small warm flame in the glass.',
       area: 'lantern',
+      // Lit while the lit lantern is in the cottage: on the table, or in
+      // Elior's hands while Elior is there.
       when: (c) => {
-        const lantern = c.things.get('lantern')
-        return lantern instanceof Lantern && lantern.isLit()
+        const onTable = c.things.get('lantern')
+        const carried =
+          c.state.currentRoom instanceof EliorsCottage
+            ? c.state.inventory.find((item) => item instanceof Lantern)
+            : undefined
+        return [onTable, carried].some(
+          (lantern) => lantern instanceof Lantern && lantern.isLit(),
+        )
       },
     },
     {

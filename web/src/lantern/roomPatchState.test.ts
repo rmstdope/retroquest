@@ -127,7 +127,7 @@ describe('appliedPatchIds', () => {
     })
   })
 
-  it('shows a lit lantern only once it is lit, and the dark corner again once it is taken', () => {
+  it('shows a lit lantern only once it is lit, and keeps its corner lit while Elior carries it in the cottage', () => {
     const act = new Act1()
     const game = new Game([act])
     expect(appliedPatchIds(act, 'EliorsCottage', game.state)).not.toContain(
@@ -138,7 +138,12 @@ describe('appliedPatchIds', () => {
       'lantern-lit',
     )
     executeCommands(game, ['take lantern'])
-    expect(appliedPatchIds(act, 'EliorsCottage', game.state)).not.toContain(
+    expect(game.state.inventory.some((i) => i instanceof Lantern)).toBe(true)
+    expect(appliedPatchIds(act, 'EliorsCottage', game.state)).toContain(
+      'lantern-lit',
+    )
+    executeCommands(game, ['drop lantern'])
+    expect(appliedPatchIds(act, 'EliorsCottage', game.state)).toContain(
       'lantern-lit',
     )
   })
