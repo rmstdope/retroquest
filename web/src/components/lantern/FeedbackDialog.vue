@@ -22,7 +22,7 @@ defineProps<{
 }>()
 const emit = defineEmits<{ close: []; send: [] }>()
 const feedback = useFeedbackStore()
-const { kind, text, includePicture, phase, error, reference } =
+const { kind, text, includePicture, phase, error, reference, pictureState } =
   storeToRefs(feedback)
 
 const KINDS: Array<{ kind: FeedbackKind; label: string }> = [
@@ -66,6 +66,7 @@ onBeforeUnmount(() => {
 <template>
   <LanternDialog
     ref="dialog"
+    data-feedback-window
     :title="sent ? 'Thank you' : 'Tell us what you found'"
     :eyebrow="sent ? '' : 'Feedback'"
     centered
@@ -111,7 +112,7 @@ onBeforeUnmount(() => {
         <input
           v-model="includePicture"
           type="checkbox"
-          :disabled="sending || !feedback.hasPicture"
+          :disabled="sending || pictureState === 'failed'"
         />
         <span>Include a picture of the screen</span>
         <img
@@ -120,8 +121,19 @@ onBeforeUnmount(() => {
           :src="pictureUrl"
           alt=""
         />
+        <span
+          v-else-if="includePicture && pictureState === 'taking'"
+          class="lq-feedback-shim"
+          aria-hidden="true"
+        ></span>
       </label>
-      <p class="lq-feedback-quiet">
+      <p v-if="pictureState === 'taking'" class="lq-feedback-quiet">
+        Taking the picture…
+      </p>
+      <p v-else-if="pictureState === 'failed'" class="lq-feedback-quiet">
+        The picture couldn't be taken. Your report can still be sent without it.
+      </p>
+      <p v-else class="lq-feedback-quiet">
         Screenshots are posted publicly with your report. Check they show
         nothing private.
       </p>
@@ -231,6 +243,35 @@ onBeforeUnmount(() => {
   object-fit: cover;
   border-radius: 6px;
   border: 1px solid var(--lq-line2);
+}
+.lq-feedback-shim {
+  margin-left: auto;
+  width: 96px;
+  aspect-ratio: 16 / 9;
+  box-sizing: border-box;
+  border-radius: 6px;
+  border: 1px dashed var(--lq-line2);
+  background: linear-gradient(
+    90deg,
+    rgb(243 234 214 / 0.05),
+    rgb(243 234 214 / 0.16),
+    rgb(243 234 214 / 0.05)
+  );
+  background-size: 200% 100%;
+  animation: lq-feedback-shimmer 1.2s linear infinite;
+}
+@keyframes lq-feedback-shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: 0 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lq-feedback-shim {
+    animation: none;
+  }
 }
 .lq-feedback-quiet {
   margin: 0;

@@ -23,9 +23,13 @@ describe('FeedbackDialog', () => {
     vi.unstubAllGlobals()
   })
 
+  /** The window with its picture already settled (a Blob, or null for one that failed). */
   function mountDialog(picture: Blob | null = new Blob(['x'])) {
     const feedback = useFeedbackStore()
-    feedback.begin(picture)
+    feedback.begin(Promise.resolve(picture))
+    feedback.pictureState = picture ? 'ready' : 'failed'
+    feedback.picture = picture
+    feedback.includePicture = picture !== null
     wrapper = mount(FeedbackDialog, {
       attachTo: document.body,
       props: { place: 'Act I · Riverbank' },
@@ -103,6 +107,44 @@ describe('FeedbackDialog', () => {
     const box = w.get('input[type=checkbox]')
     expect((box.element as HTMLInputElement).checked).toBe(false)
     expect(box.attributes('disabled')).toBeDefined()
+  })
+
+  it('says the picture is being taken, with the box ticked and usable, and a shimmer for the copy', async () => {
+    const feedback = useFeedbackStore()
+    feedback.begin(new Promise<Blob | null>(() => {}))
+    wrapper = mount(FeedbackDialog, {
+      attachTo: document.body,
+      props: { place: 'Act I · Riverbank' },
+    })
+    const w = wrapper
+    const box = w.get('input[type=checkbox]')
+    expect((box.element as HTMLInputElement).checked).toBe(true)
+    expect(box.attributes('disabled')).toBeUndefined()
+    expect(w.text()).toContain('Taking the picture…')
+    expect(w.text()).not.toContain('Screenshots are posted publicly')
+    expect(w.find('.lq-feedback-shim').exists()).toBe(true)
+    expect(w.find('img.lq-feedback-thumb').exists()).toBe(false)
+    await box.setValue(false)
+    expect(w.find('.lq-feedback-shim').exists()).toBe(false)
+    await box.setValue(true)
+    expect(w.find('.lq-feedback-shim').exists()).toBe(true)
+  })
+
+  it('shows the copy and the public-screenshot sentence once the picture is ready', () => {
+    const { w } = mountDialog()
+    expect(w.text()).not.toContain('Taking the picture…')
+    expect(w.text()).toContain('Screenshots are posted publicly')
+    expect(w.find('.lq-feedback-shim').exists()).toBe(false)
+  })
+
+  it('says the picture could not be taken, with a dim unticked box and no copy', () => {
+    const { w } = mountDialog(null)
+    expect(w.text()).toContain(
+      "The picture couldn't be taken. Your report can still be sent without it.",
+    )
+    expect(w.text()).not.toContain('Screenshots are posted publicly')
+    expect(w.find('img.lq-feedback-thumb').exists()).toBe(false)
+    expect(w.find('.lq-feedback-shim').exists()).toBe(false)
   })
 
   it('asks the layout to send, on Send', async () => {

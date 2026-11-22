@@ -27,6 +27,9 @@ export type FeedbackKind = 'bug' | 'feature'
 /** Where the window is: being written, on its way, taken by the service, or refused. */
 export type FeedbackPhase = 'editing' | 'sending' | 'sent' | 'failed'
 
+/** The picture of the screen: being taken, ready, or one that could not be taken. */
+export type FeedbackPictureState = 'taking' | 'ready' | 'failed'
+
 /** The beacon client ID the service knows the game by. */
 const CLIENT_ID = 'retroquest'
 
@@ -34,7 +37,8 @@ const CLIENT_ID = 'retroquest'
  * The feedback window's state, the one owner of what the player wrote. The kind and the words
  * outlive the window (reopening shows them) until a report is sent; nothing is stored, so a
  * reload loses them. `begin` opens the window with the picture of the screen taken just before
- * it (or none), with the picture box ticked each time; `send` files the report and moves
+ * it, with the picture box ticked each time; the picture arrives later (`pictureState` says
+ * whether it is being taken, ready or could not be taken); `send` files the report and moves
  * `phase` through sending to sent or failed (`error` then holds the words the player reads).
  */
 export const useFeedbackStore = defineStore('feedback', () => {
@@ -43,6 +47,11 @@ export const useFeedbackStore = defineStore('feedback', () => {
   const text = ref('')
   const includePicture = ref(false)
   const picture = ref<Blob | null>(null)
+  const pictureState = ref<FeedbackPictureState>('failed')
+  /** The picture being taken for this window, which `send` waits for; null once it is settled. */
+  let pending: Promise<void> | null = null
+  /** Which opening of the window a picture belongs to; a closed window's picture is thrown away. */
+  let opening = 0
   const phase = ref<FeedbackPhase>('editing')
   const error = ref('')
   const reference = ref<number | null>(null)
@@ -55,10 +64,24 @@ export const useFeedbackStore = defineStore('feedback', () => {
       lettersIn(text.value) >= FEEDBACK_MIN_LETTERS,
   )
 
-  /** Open the window over the game, with `shot` as the picture of the screen (null: none). */
-  function begin(shot: Blob | null): void {
-    picture.value = shot
-    includePicture.value = shot !== null
+  /**
+   * Open the window over the game at once, with `shot` as the picture of the screen being taken
+   * (it resolves to null when it cannot be). The box is ticked; the picture fills in when it arrives.
+   */
+  function begin(shot: Promise<Blob | null>): void {
+    const mine = ++opening
+    picture.value = null
+    pictureState.value = 'taking'
+    includePicture.value = true
+    pending = shot
+      .catch((): Blob | null => null)
+      .then((blob) => {
+        if (mine !== opening) return
+        pending = null
+        picture.value = blob
+        pictureState.value = blob ? 'ready' : 'failed'
+        if (!blob) includePicture.value = false
+      })
     if (phase.value === 'sent') reset()
     phase.value = 'editing'
     error.value = ''
@@ -77,6 +100,8 @@ export const useFeedbackStore = defineStore('feedback', () => {
     if (phase.value === 'sending') return
     if (phase.value === 'sent') reset()
     open.value = false
+    opening++
+    pending = null
     picture.value = null
     phase.value = 'editing'
     error.value = ''
@@ -87,6 +112,7 @@ export const useFeedbackStore = defineStore('feedback', () => {
     if (!canSend.value) return
     phase.value = 'sending'
     error.value = ''
+    if (includePicture.value && pending) await pending
     const pictured = includePicture.value && picture.value !== null
     const beacon = createBeacon({
       clientId: CLIENT_ID,
@@ -114,6 +140,7 @@ export const useFeedbackStore = defineStore('feedback', () => {
     text,
     includePicture,
     picture,
+    pictureState,
     phase,
     error,
     reference,

@@ -66,7 +66,17 @@ describe('LanternLayout: feedback', () => {
     expect(document.activeElement).toBe(document.querySelector('textarea'))
   })
 
-  it('takes the picture before the window is there, of the game itself', async () => {
+  it('opens at once, with focus in the box, while the picture is still being taken', async () => {
+    capture.screen.mockReturnValue(new Promise<Blob | null>(() => {}))
+    await press('F2')
+    expect(feedbackOpen()).toBe(true)
+    expect(useFeedbackStore().pictureState).toBe('taking')
+    expect(document.activeElement).toBe(document.querySelector('textarea'))
+    await press('F2')
+    expect(capture.screen).toHaveBeenCalledOnce()
+  })
+
+  it('takes the picture when pressed, of the game itself', async () => {
     await press('F2')
     expect(capture.screen).toHaveBeenCalledOnce()
     const [element] = capture.screen.mock.calls[0]
