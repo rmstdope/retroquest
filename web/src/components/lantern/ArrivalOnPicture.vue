@@ -544,6 +544,29 @@ watch(
   text-align: center;
   color: var(--lq-arrival-ink);
   text-shadow: var(--lq-arrival-glow);
+  /* Its own stacking context, so the shade below stays behind the words and in front of the picture. */
+  position: relative;
+  isolation: isolate;
+}
+/*
+ * On a picture a soft, edgeless dark shade lies behind the card's words: darkest
+ * in the middle, fading to nothing past the card's edges, so the rest of the
+ * picture stays as bright as it is. It is part of the card, so it comes and
+ * goes with the card's own fade, takes the card's height and width, and cannot
+ * be clicked. On the paper (`lq-bare`) there is none.
+ */
+.lq-arrival-stage:not(.lq-bare) .lq-arrival-card::before {
+  content: '';
+  position: absolute;
+  inset: -60px -100px;
+  z-index: -1; /* local: behind the card's words */
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 50% 50% at 50% 50%,
+    rgb(10 8 5 / 0.72) 0%,
+    rgb(10 8 5 / 0.55) 45%,
+    rgb(10 8 5 / 0) 100%
+  );
 }
 /*
  * The text scrolls here when it is too tall. The padding and the opposite
