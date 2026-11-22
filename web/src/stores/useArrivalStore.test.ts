@@ -127,6 +127,14 @@ describe('useArrivalStore', () => {
       expect(arrival.active).toBe(false)
     })
 
+    it('still lingers 1.3 s after it goes by itself, where a click aimed at the card was seen to land (rq-6sfp)', () => {
+      arrival.show(1, parts(false, false), false)
+      vi.advanceTimersByTime(12000)
+      expect(arrival.active).toBe(false)
+      vi.advanceTimersByTime(1300)
+      expect(arrival.lingering).toBe(true)
+    })
+
     it('lingers for a press a moment after it goes by itself, and not after a press or a clear (rq-v29l.4)', () => {
       arrival.show(1, parts(false, false), false)
       vi.advanceTimersByTime(12000)
