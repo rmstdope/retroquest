@@ -1770,6 +1770,11 @@ export const useGameStore = defineStore('game', () => {
     afterLoad(b, command, read(b), notice)
   }
 
+  /** The running game as save data (JSON), for a feedback report. */
+  function saveData(): string {
+    return requireBridge().saveData()
+  }
+
   /** Quick save; true when the game was saved (a failure goes in the story). */
   function saveGame(command: string | null = null): boolean {
     return saveWith(
@@ -2317,6 +2322,7 @@ export const useGameStore = defineStore('game', () => {
     submitCommand,
     refreshPanels,
     saveGame,
+    saveData,
     loadGame,
     saveNamedGame,
     loadNamedGame,

@@ -10,6 +10,8 @@ import {
 } from 'vue'
 import { GAME_NAME } from '@/engine'
 import { useGameStore } from '@/stores/useGameStore'
+import { useFeedbackStore } from '@/stores/useFeedbackStore'
+import { captureScreen } from '@/feedback/screenshot'
 import { renderMarkup } from '@/utils/theme'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
@@ -68,6 +70,7 @@ import {
 } from '@/composables/useMediaQuery'
 import CommandBox from './CommandBox.vue'
 import F1Note from './F1Note.vue'
+import FeedbackDialog from './FeedbackDialog.vue'
 import ArrivalOnPicture from './ArrivalOnPicture.vue'
 import AreaNames from './AreaNames.vue'
 import AreaPress from './AreaPress.vue'
@@ -212,6 +215,7 @@ import type { SaveSlot } from '@/types/bridge'
 const game = useGameStore()
 const settings = useSettingsStore()
 const narration = useNarrationStore()
+const feedback = useFeedbackStore()
 const speech = useStageSpeechStore()
 const arrival = useArrivalStore()
 const scene = useSceneStore()
@@ -1047,6 +1051,7 @@ function dialogOpen(): boolean {
     game.quitAsked ||
     game.shownQuest ||
     gameDialog.value ||
+    feedback.open ||
     nameMenu.value
   )
 }
@@ -2316,6 +2321,10 @@ function openGameDialog(kind: 'menu' | MenuKind): void {
  * menu waits; closing either comes back to the menu, focus on its entry.
  */
 function openFromMenu(kind: MenuKind): void {
+  if (kind === 'feedback') {
+    void openFeedback()
+    return
+  }
   if (kind === 'map' && drawerTab.value) putDrawerAway()
   if (kind !== 'journal' && kind !== 'quests') {
     openGameDialog(kind)
@@ -2513,7 +2522,8 @@ watch(
     (gameDialog.value !== null &&
       !(gameDialog.value === 'map' && menuEntry.value === null)) ||
     drawerFromMenu.value ||
-    game.quitAsked,
+    game.quitAsked ||
+    feedback.open,
   (open) => (open ? narration.pause() : narration.resume()),
 )
 
@@ -2531,6 +2541,11 @@ const uiSounds = useUiSounds()
 function onMenuKey(event: KeyboardEvent): void {
   if (event.defaultPrevented || event.repeat) return
   if (event.ctrlKey || event.metaKey || event.altKey) return
+  if (event.key === 'F2') {
+    event.preventDefault()
+    void openFeedback()
+    return
+  }
   if (event.key === 'Escape') {
     if (
       game.ending ||
@@ -2549,6 +2564,39 @@ function onMenuKey(event: KeyboardEvent): void {
   if (target?.closest('input, textarea, select, [contenteditable]')) return
   if (!fullscreen.supported) return
   fullscreen.toggle()
+}
+/** Whether the feedback window is being made ready (the picture is being taken). */
+let feedbackOpening = false
+
+/**
+ * Open the feedback window over whatever is open (F2, the ✎ button or the menu's entry): in
+ * play only, never twice. The picture of the screen is taken first, so it shows the game
+ * without the window.
+ */
+async function openFeedback(): Promise<void> {
+  if (game.showTitle || game.ending || turnPage.value) return
+  if (feedback.open || feedbackOpening) return
+  feedbackOpening = true
+  try {
+    feedback.begin(await captureScreen(rootEl.value ?? document.body))
+  } finally {
+    feedbackOpening = false
+  }
+}
+
+/** Where the player is, as the feedback window names it ("Act I · Riverbank"). */
+const feedbackPlace = computed(() =>
+  [game.actLabel, game.roomName].filter(Boolean).join(' · '),
+)
+
+/** Send the report with what only the layout can bring: the save, the place and the version. */
+function sendFeedback(): void {
+  void feedback.send({
+    saveData: game.saveData(),
+    act: game.actLabel,
+    room: game.roomName,
+    version: __APP_VERSION__,
+  })
 }
 onMounted(() => document.addEventListener('keydown', onMenuKey))
 onUnmounted(() => document.removeEventListener('keydown', onMenuKey))
@@ -2575,6 +2623,9 @@ const ESCAPE_KEY_HELP = "\nEsc — close what's open, or open the menu\n"
 
 /** Help's line for the full-screen key (laptop only, where full screen works). */
 const FULLSCREEN_KEY_HELP = '\nF — full screen on or off\n'
+
+/** Help's line for the key that opens the feedback window (laptop only). */
+const FEEDBACK_KEY_HELP = '\nF2 — send feedback\n'
 
 /** Help's line for the key that hides the narration paper (laptop only). */
 const NARRATION_KEY_HELP = '\nN — hide or show the words\n'
@@ -2635,7 +2686,8 @@ const infoHtml = computed(() => {
     (laptop.value
       ? renderMarkup(ESCAPE_KEY_HELP) +
         (fullscreen.supported ? renderMarkup(FULLSCREEN_KEY_HELP) : '') +
-        renderMarkup(NARRATION_KEY_HELP)
+        renderMarkup(NARRATION_KEY_HELP) +
+        renderMarkup(FEEDBACK_KEY_HELP)
       : '') +
     music.buildAttributionHtml()
   )
@@ -2979,6 +3031,17 @@ watch(namesBlocked, (blocked) => {
         >
           ☰
         </button>
+        <button
+          v-if="!wide"
+          type="button"
+          class="lq-float-menu lq-float-feedback"
+          data-lq-obstacle="keep-clear"
+          title="Send feedback"
+          aria-label="Send feedback"
+          @click="openFeedback"
+        >
+          <span aria-hidden="true">✎</span>
+        </button>
 
         <main
           ref="mainEl"
@@ -3040,6 +3103,7 @@ watch(namesBlocked, (blocked) => {
               :compact="sideways"
               class="lq-stage-buttons"
               @menu="openGameDialog('menu')"
+              @feedback="openFeedback"
             />
             <!-- The typing box (F1) and the note about F1 stand at the foot of the picture, where the action bar used to be. -->
             <CommandBox
@@ -3474,6 +3538,14 @@ watch(namesBlocked, (blocked) => {
 
         <!-- Save before finishing, over the last act's chapter page. -->
         <FinishDialog v-if="game.showModal && game.finishAsked" />
+
+        <!-- Feedback, over everything in play (a pop-up, the menu, a drawer). -->
+        <FeedbackDialog
+          v-if="feedback.open"
+          :place="feedbackPlace"
+          @close="feedback.close()"
+          @send="sendFeedback"
+        />
       </template>
     </div>
     <!-- The dark the screen goes through into a started or loaded game. -->
@@ -3814,9 +3886,13 @@ watch(namesBlocked, (blocked) => {
   cursor: pointer;
   box-shadow: 0 4px 16px rgb(0 0 0 / 0.2);
 }
-/* The tabs of the text page leave the corner to the menu button. */
+/* ✎ sits beside ☰, to its left. */
+.lq-float-feedback {
+  right: 60px;
+}
+/* The tabs of the text page leave the corner to the two buttons. */
 .lq-nav-top {
-  padding-right: 60px;
+  padding-right: 112px;
 }
 .lq-sideways .lq-stage-plate {
   top: 8px;
