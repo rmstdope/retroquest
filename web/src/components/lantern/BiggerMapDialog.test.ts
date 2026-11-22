@@ -23,6 +23,14 @@ function place(
   }
 }
 
+/** A box's edges on the map, in pixels. */
+interface Rect {
+  left: number
+  top: number
+  right: number
+  bottom: number
+}
+
 describe('BiggerMapDialog', () => {
   let wrapper: VueWrapper | undefined
   let travel: ReturnType<typeof vi.fn<(key: string) => void>>
@@ -173,7 +181,7 @@ describe('BiggerMapDialog', () => {
 
   it('ends every path at the edges of its boxes, so no line runs across a name', () => {
     const w = mountMap()
-    const rect = (name: string) => {
+    const rect = (name: string): Rect => {
       const style = (w.get(`[data-place="${name}"]`).element as HTMLElement)
         .style
       const left = parseFloat(style.left)
@@ -185,9 +193,9 @@ describe('BiggerMapDialog', () => {
         bottom: top + parseFloat(style.height),
       }
     }
-    const inside = (x: number, y: number, r: ReturnType<typeof rect>) =>
+    const inside = (x: number, y: number, r: Rect): boolean =>
       x > r.left && x < r.right && y > r.top && y < r.bottom
-    const onEdge = (x: number, y: number, r: ReturnType<typeof rect>) =>
+    const onEdge = (x: number, y: number, r: Rect): boolean =>
       x >= r.left &&
       x <= r.right &&
       y >= r.top &&
