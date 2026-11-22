@@ -12,7 +12,7 @@ const ENTRY_JOURNAL =
   'The [item_name]lantern[/item_name] found your [item_name]journal[/item_name]. ' +
   'The three words are in it, with the rest of the dream.'
 const ENTRY_GRANDMOTHER =
-  '[character_name]Grandmother[/character_name] is at the hearth, humming ' +
+  '[character_name]Grandmother[/character_name] is by your doorway, humming ' +
   'the tune from your dream. She will want to hear about it.'
 
 const DARK_CORNER =

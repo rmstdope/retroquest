@@ -56,7 +56,7 @@ export class EliorsJournal extends Item {
       dialogue(
         'Elior',
         'When I woke, the tune was still going. ' +
-          'Someone out by the hearth was humming it.',
+          'Someone just outside my door was humming it.',
       ) +
       '\n'
     gameState.setStoryFlag(FLAG_JOURNAL_READ, true)

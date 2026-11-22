@@ -107,7 +107,7 @@ describe('The Dream, where Act I opens', () => {
           'is gone and it is bright morning. Your heart is going hard.',
       )
       expect(answer).not.toContain('curtains')
-      expect(answer).toContain('someone is humming it, out by the hearth')
+      expect(answer).toContain('someone is humming it, just outside your door')
       expect(answer).toContain("[room_name]Elior's Cottage[/room_name]")
       expectCurrentRoom(game.state, "Elior's Cottage")
       expectStoryFlag(game.state, FLAG_WOKE_FROM_DREAM, true)

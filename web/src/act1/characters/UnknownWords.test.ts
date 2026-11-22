@@ -41,7 +41,7 @@ const ANSWERS: [string, () => Character, string, string][] = [
   [
     'Borin',
     () => new Blacksmith(),
-    "Can't hear a word over this, lad. If it's got an edge, bring it here.",
+    "Fire wants watching, lad. If it's got an edge, bring it here.",
     "Words aren't my trade, lad. Iron is.",
   ],
   [
@@ -172,8 +172,14 @@ describe('Act 1 unknown words', () => {
   it('has others answer Malakar as any unknown word', () => {
     const g = game().state
     expect(new Blacksmith().sayTo(g, 'malakar')).toContain(
-      "Can't hear a word over this",
+      'Fire wants watching, lad.',
     )
+  })
+
+  it('has Borin watch the fire rather than hammer on an unknown word', () => {
+    const answer = new Blacksmith().sayTo(game().state, 'malakar')
+    expect(answer).toContain("doesn't take his eyes off the fire")
+    expect(answer).not.toContain('hammering')
   })
 
   it('carries the turn through a save and load', () => {

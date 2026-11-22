@@ -7,7 +7,7 @@ import {
 
 /**
  * The log's entries, one per step of the opening: the lantern, the journal
- * it finds, then Grandmother at the hearth. Later entries start a new line.
+ * it finds, then Grandmother by the doorway. Later entries start a new line.
  */
 const STAGES: readonly string[] = [
   'You woke with three words written down, somewhere in the dark of your ' +
@@ -16,7 +16,7 @@ const STAGES: readonly string[] = [
   '\nThe [item_name]lantern[/item_name] found your ' +
     '[item_name]journal[/item_name]. ' +
     'The three words are in it, with the rest of the dream.',
-  `\n${characterName('Grandmother')} is at the hearth, ` +
+  `\n${characterName('Grandmother')} is by your doorway, ` +
     'humming the tune from your dream. She will want to hear about it.',
 ]
 
