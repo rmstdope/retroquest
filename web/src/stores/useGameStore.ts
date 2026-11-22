@@ -351,6 +351,7 @@ export const useGameStore = defineStore('game', () => {
     variant: '',
     patchIds: [],
     patchAreas: {},
+    patchStandIns: {},
     things: [],
   })
   /** The same as the engine says now, which `shownPicture` takes on release. */
@@ -359,6 +360,7 @@ export const useGameStore = defineStore('game', () => {
     variant: '',
     patchIds: [],
     patchAreas: {},
+    patchStandIns: {},
     things: [],
   })
   /**
@@ -677,7 +679,8 @@ export const useGameStore = defineStore('game', () => {
   /**
    * The URLs of the patches laid over the room's picture: the ones that apply
    * to the story (what the held `picture` group shows; after a move to
-   * another room, that room's at once) and that the manifest lists as made.
+   * another room, that room's at once) and that the manifest lists as made;
+   * a patch not made yet shows the picture of the patch it stands in for.
    */
   const roomPatchUrls = computed<string[]>(() => {
     const room = musicRoomKey.value
@@ -688,7 +691,11 @@ export const useGameStore = defineStore('game', () => {
     // Patches belong to their own picture: none lie over the room's own while it stands in for a variant not made yet.
     if (variant && id === roomTrackId(musicActName.value, room)) return []
     const made = madePatches(imageManifest.value, id)
-    return shown.patchIds
+    // A patch not made yet shows the picture of the patch it stands in for.
+    const pictured = shown.patchIds.map((patch) =>
+      made.includes(patch) ? patch : (shown.patchStandIns[patch] ?? patch),
+    )
+    return [...new Set(pictured)]
       .filter((patch) => made.includes(patch))
       .map((patch) => roomPatchUrl(musicActName.value, room, patch, variant))
   })

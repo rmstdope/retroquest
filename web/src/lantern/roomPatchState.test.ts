@@ -127,24 +127,37 @@ describe('appliedPatchIds', () => {
     })
   })
 
-  it('shows a lit lantern only once it is lit, and keeps its corner lit while Elior carries it in the cottage', () => {
+  it('shows the lit lantern on the table, then the carried picture while Elior carries it in the cottage', () => {
     const act = new Act1()
     const game = new Game([act])
-    expect(appliedPatchIds(act, 'EliorsCottage', game.state)).not.toContain(
-      'lantern-lit',
-    )
+    const cottage = (): string[] =>
+      appliedPatchIds(act, 'EliorsCottage', game.state)
+    expect(cottage()).not.toContain('lantern-lit')
+    expect(cottage()).not.toContain('lantern-carried')
     executeCommands(game, ['talk to voice', 'use lantern'])
-    expect(appliedPatchIds(act, 'EliorsCottage', game.state)).toContain(
-      'lantern-lit',
-    )
+    expect(cottage()).toContain('lantern-lit')
+    expect(cottage()).not.toContain('lantern-carried')
     executeCommands(game, ['take lantern'])
     expect(game.state.inventory.some((i) => i instanceof Lantern)).toBe(true)
-    expect(appliedPatchIds(act, 'EliorsCottage', game.state)).toContain(
-      'lantern-lit',
-    )
-    executeCommands(game, ['drop lantern'])
-    expect(appliedPatchIds(act, 'EliorsCottage', game.state)).toContain(
-      'lantern-lit',
+    expect(cottage()).toContain('lantern-carried')
+    expect(cottage()).not.toContain('lantern-lit')
+    // The game has no drop verb: put the lantern back on the table by hand.
+    const lantern = game.state.inventory.find((i) => i instanceof Lantern)
+    if (!lantern) throw new Error('Elior should carry the lantern')
+    game.state.removeItemFromInventory(lantern.name)
+    game.state.allRooms.EliorsCottage.addItem(lantern)
+    expect(cottage()).toContain('lantern-lit')
+    expect(cottage()).not.toContain('lantern-carried')
+  })
+
+  it('shows the carried picture again when a saved game carrying the lit lantern is loaded', () => {
+    const act = new Act1()
+    const game = new Game([act])
+    executeCommands(game, ['talk to voice', 'use lantern', 'take lantern'])
+    const loaded = new Game([new Act1()])
+    loaded.loadSaveData(game.toSaveData())
+    expect(appliedPatchIds(act, 'EliorsCottage', loaded.state)).toContain(
+      'lantern-carried',
     )
   })
 
@@ -153,9 +166,9 @@ describe('appliedPatchIds', () => {
     const game = new Game([act])
     executeCommands(game, ['talk to voice', 'use lantern', 'take lantern'])
     game.state.currentRoom = game.state.allRooms.VillageSquare
-    expect(appliedPatchIds(act, 'EliorsCottage', game.state)).not.toContain(
-      'lantern-lit',
-    )
+    const applied = appliedPatchIds(act, 'EliorsCottage', game.state)
+    expect(applied).not.toContain('lantern-lit')
+    expect(applied).not.toContain('lantern-carried')
   })
 
   describe("the vegetable field's carrot", () => {

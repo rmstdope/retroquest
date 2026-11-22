@@ -53,9 +53,18 @@ watch(
     if (!base || files.value !== key) return
     // The patches belong to the picture they were made for, as on the stage:
     // none over the plain picture that stands in for an unmade other one.
-    const found = first ? await Promise.all(urls.patches.map(drawable)) : []
+    // A patch not made yet shows the one that stands in for it.
+    const found = first
+      ? await Promise.all(
+          urls.patches.map(
+            async (url, at) =>
+              (await drawable(url)) ||
+              (urls.standIns[at] ? await drawable(urls.standIns[at]) : ''),
+          ),
+        )
+      : []
     if (files.value !== key) return
-    thumb.value = { base, patches: found.filter(Boolean) }
+    thumb.value = { base, patches: [...new Set(found.filter(Boolean))] }
   },
   { immediate: true },
 )

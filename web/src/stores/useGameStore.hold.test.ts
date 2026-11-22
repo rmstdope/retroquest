@@ -478,6 +478,23 @@ describe('useGameStore: panels held while a turn is narrated', () => {
       ])
     })
 
+    it('shows the lit corner in place of the carried lantern picture until that is made', async () => {
+      const store = await cottage()
+      for (const command of ['use lantern', 'take lantern']) {
+        store.submitCommand(command)
+        store.releasePanels(store.turns.at(-1)!.id, [...PANEL_GROUPS], false)
+        store.releaseGains()
+      }
+      made(store, ['lantern-lit'])
+      expect(store.roomPatchUrls).toEqual([
+        expect.stringContaining('act1-eliors-cottage.lantern-lit.png'),
+      ])
+      made(store, ['lantern-lit', 'lantern-carried'])
+      expect(store.roomPatchUrls).toEqual([
+        expect.stringContaining('act1-eliors-cottage.lantern-carried.png'),
+      ])
+    })
+
     it('keeps the old patches until the narration reaches the picture group', async () => {
       const store = await cottage()
       made(store, ['bread-taken'])
