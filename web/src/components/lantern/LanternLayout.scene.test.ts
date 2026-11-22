@@ -147,6 +147,7 @@ describe('LanternLayout: change of scene', () => {
     // A browser's mousedown on the picture moves focus off the box to the page.
     ;(document.activeElement as HTMLElement | null)?.blur()
     await w.get('.lq-stage-picture').trigger('click')
+    // The Garden is a first visit, so its arrival follows the skipped change; the cursor comes back once both have gone.
     useArrivalStore().clear()
     await w.vm.$nextTick()
     await w.vm.$nextTick()

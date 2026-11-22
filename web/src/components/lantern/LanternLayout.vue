@@ -907,11 +907,11 @@ function focusActions(): void {
   if (typingOpen.value) commandBoxEl.value?.focus()
 }
 
-// A story card (an arrival or a scene) clicked away took the cursor from the typing box to the page: it goes back (rq-9g4n).
+// A story card (an arrival or a scene) clicked away took the cursor from the typing box to the page: it goes back (rq-9g4n), unless a window or the menu is up.
 watch(
   () => arrival.active || scene.turn !== null,
   (shown) => {
-    if (!shown && document.activeElement === document.body && !game.showModal)
+    if (!shown && document.activeElement === document.body && !dialogOpen())
       void nextTick(focusActions)
   },
 )
