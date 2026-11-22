@@ -452,7 +452,8 @@ watch(
     if (belt.away || pictures.value.every((p) => p.kind !== flight.kind)) return
     await nextTick()
     const el = tiles().find(
-      (t) => t.dataset.beltPic === `${flight.kind}:${flight.name}`,
+      (t) =>
+        t.dataset.beltPic === `${flight.kind}:${flight.from ?? flight.name}`,
     )
     el?.scrollIntoView?.({ block: 'nearest', inline: 'nearest' })
   },

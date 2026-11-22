@@ -120,7 +120,12 @@ export const useFlightStore = defineStore('flight', () => {
     const now = { ...owed.value }
     const left = (now[owedKey(kind, name)] ?? 0) - count
     if (left > 0) now[owedKey(kind, name)] = left
-    else delete now[owedKey(kind, name)]
+    else {
+      delete now[owedKey(kind, name)]
+      const held = { ...standIns.value }
+      delete held[owedKey(kind, name)]
+      standIns.value = held
+    }
     owed.value = now
   }
 

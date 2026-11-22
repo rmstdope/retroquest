@@ -120,6 +120,20 @@ describe('AcquiredFlight', () => {
     expect(style).toContain('top: 746px')
   })
 
+  it("flies to a changed thing's pocket, which keeps its old name until it lands", async () => {
+    target('item', 20, 790)
+    picture('item:bucket', 500)
+    w = mount(AcquiredFlight, { attachTo: document.body })
+    useFlightStore().launch([], [], false, undefined, [
+      { from: 'bucket', to: 'bucket (full)' },
+    ])
+    await w.vm.$nextTick()
+    vi.advanceTimersByTime(FLIGHT_SHOW_MS + FLIGHT_HOLD_MS)
+    await w.vm.$nextTick()
+    const style = w.get('[data-testid="flight"]').attributes('style') ?? ''
+    expect(style).toContain('left: 500px')
+  })
+
   it('flies to the tiny button of its kind when its picture is out of sight', async () => {
     target('item', 20, 790)
     picture('item:key', 3000, { from: 100, to: 600 })

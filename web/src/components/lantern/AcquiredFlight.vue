@@ -138,11 +138,11 @@ watch(
   ([key, phase]) => {
     const flight = flights.current
     if (key === undefined || !flight || phase !== 'fly') return
-    // To its own picture on the belt when that is in view, else to the tiny button of its kind.
+    // To its own picture on the belt (a changed thing's pocket keeps its old name until it lands) when that is in view, else to the tiny button of its kind.
     const own = Array.from(document.querySelectorAll('[data-belt-pic]')).find(
       (el) =>
         el instanceof HTMLElement &&
-        el.dataset.beltPic === `${flight.kind}:${flight.name}`,
+        el.dataset.beltPic === `${flight.kind}:${flight.from ?? flight.name}`,
     )
     const strip = own?.closest('.lq-belt-strip')?.getBoundingClientRect()
     const spot = centre(own ?? null)
