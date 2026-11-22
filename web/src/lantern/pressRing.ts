@@ -46,7 +46,7 @@ export interface RingChoice {
 export interface RingAction {
   id: string
   label: string
-  /** A small picture for the button: one glyph. */
+  /** A small picture for the button: one glyph, or empty when the button draws its own picture (Open, Close). */
   icon: string
   /** The command it sends at once (absent when it asks for more first). */
   command?: string
@@ -64,13 +64,13 @@ export interface Point {
   y: number
 }
 
-/** The glyph on each action's button. */
+/** The glyph on each action's button; Open and Close are drawn by the button and have none. */
 export const ICONS: Record<string, string> = {
   take: '✋',
   use: '⚙',
   usewith: '⚯',
-  open: '▯',
-  close: '▮',
+  open: '',
+  close: '',
   caston: '✦',
   examine: '◉',
   talk: '☺',

@@ -227,7 +227,11 @@ onBeforeUnmount(() =>
       }"
       :data-ring-action="action.id"
       :aria-label="
-        action.dot ? `${action.label.replace('…', '')}, new words` : undefined
+        action.dot
+          ? `${action.label.replace('…', '')}, new words`
+          : action.id === 'usewith'
+            ? action.label
+            : undefined
       "
       :aria-haspopup="action.choices ? 'menu' : undefined"
       :aria-expanded="
@@ -245,8 +249,46 @@ onBeforeUnmount(() =>
       }"
       @click="press(action)"
     >
-      <i aria-hidden="true">{{ action.icon }}</i>{{ action.label
-      }}<span v-if="action.dot" class="lq-ring-dot" aria-hidden="true"></span>
+      <svg
+        v-if="action.id === 'open'"
+        class="lq-ring-drawn"
+        viewBox="0 0 24 24"
+        width="22"
+        height="22"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.9"
+        stroke-linejoin="round"
+        stroke-linecap="round"
+        aria-hidden="true"
+      >
+        <path d="M4 21V3h11v4" />
+        <path d="M15 17v4H4" />
+        <path d="M9 4.2l9-2v19.6l-9-2z" />
+        <circle cx="11.6" cy="12" r="0.9" fill="currentColor" stroke="none" />
+      </svg>
+      <svg
+        v-else-if="action.id === 'close'"
+        class="lq-ring-drawn"
+        viewBox="0 0 24 24"
+        width="22"
+        height="22"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.9"
+        stroke-linejoin="round"
+        stroke-linecap="round"
+        aria-hidden="true"
+      >
+        <path d="M5 21V3h14v18z" />
+        <path d="M3 21h18" />
+        <circle cx="15.5" cy="12" r="0.9" fill="currentColor" stroke="none" />
+      </svg>
+      <i v-else aria-hidden="true">{{ action.icon }}</i><template
+        v-if="action.id === 'usewith'"
+        >Use<br />with…</template
+      ><template v-else>{{ action.label }}</template
+      ><span v-if="action.dot" class="lq-ring-dot" aria-hidden="true"></span>
     </button>
     <div
       v-if="fan && opened"
@@ -340,6 +382,11 @@ onBeforeUnmount(() =>
 .lq-ring-coin i {
   font-style: normal;
   font-size: 19px;
+}
+.lq-ring-coin .lq-ring-drawn {
+  flex: none;
+  width: 22px;
+  height: 22px;
 }
 .lq-ring-coin:focus-visible,
 .lq-ring-pill:focus-visible {
