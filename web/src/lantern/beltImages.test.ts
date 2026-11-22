@@ -22,8 +22,19 @@ import { Act4 } from '@/act4/Act4'
 import { ACT4_GOLDEN_PATH } from '@/act4/Act4GoldenPath'
 import { Game, type Act } from '@/engine'
 import { executeCommands } from '@/testing/gameHelpers'
-import { BELT_STYLE, SPELL_PROMPTS, THING_PROMPTS } from './beltPrompts'
-import { BELT_SIZE, allImages, beltImageId, beltImages } from './imageLists'
+import {
+  BELT_STATE_PROMPTS,
+  BELT_STYLE,
+  SPELL_PROMPTS,
+  THING_PROMPTS,
+} from './beltPrompts'
+import {
+  BELT_SIZE,
+  allImages,
+  beltImageId,
+  beltImages,
+  beltStateImageId,
+} from './imageLists'
 
 const ACTS: Act[] = [new Act1(), new Act2(), new Act3(), new Act4()]
 const SLUG = /^(item|spell)-[a-z0-9]+(-[a-z0-9]+)*$/
@@ -83,7 +94,11 @@ describe('beltImages', () => {
 
   it('has a prompt for each entry and no prompt without an entry', () => {
     const ids = new Set(ACTS.flatMap((act) => beltImages(act).map((i) => i.id)))
-    const prompts = Object.keys({ ...THING_PROMPTS, ...SPELL_PROMPTS })
+    const prompts = Object.keys({
+      ...THING_PROMPTS,
+      ...SPELL_PROMPTS,
+      ...BELT_STATE_PROMPTS,
+    })
     expect([...ids].filter((id) => !prompts.includes(id))).toEqual([])
     expect(prompts.filter((id) => !ids.has(id))).toEqual([])
   })
@@ -133,4 +148,46 @@ describe('the belt in play', () => {
     },
     120_000,
   )
+})
+
+describe('state pictures', () => {
+  it('names the picture of a state by its base picture and the state', () => {
+    expect(beltStateImageId('item', 'lantern (lit)')).toBe('item-lantern-lit')
+    expect(beltStateImageId('item', 'bucket (full)')).toBe('item-bucket-full')
+  })
+
+  it('has none for a name without a listed state', () => {
+    expect(beltStateImageId('item', 'lantern')).toBeNull()
+    expect(beltStateImageId('item', 'bucket')).toBeNull()
+    expect(beltStateImageId('item', 'horseshoe (bent)')).toBeNull()
+    expect(beltStateImageId('item', '')).toBeNull()
+  })
+
+  it('lists the lit lantern and the full bucket in the shared item style', () => {
+    const images = beltImages(new Act1())
+    const lit = images.find((i) => i.id === 'item-lantern-lit')
+    const full = images.find((i) => i.id === 'item-bucket-full')
+    expect(lit?.title).toBe('Lantern (lit)')
+    expect(full?.title).toBe('Bucket (full)')
+    expect(lit?.text).toBe(
+      'A tin lantern with a small door and a ring on top, a candle flame ' +
+        `glowing warm behind its panes. ${BELT_STYLE}`,
+    )
+    expect(full?.text).toBe(
+      'A wooden bucket bound with iron hoops and a rope handle, filled to ' +
+        `the brim with water. ${BELT_STYLE}`,
+    )
+    expect([lit?.width, lit?.height]).toEqual([BELT_SIZE, BELT_SIZE])
+  })
+
+  it('leaves the Act 2 enhanced lantern with its one picture', () => {
+    const ids = beltImages(new Act2()).map((i) => i.id)
+    expect(ids).toContain('item-enhanced-lantern')
+    expect(ids).not.toContain('item-enhanced-lantern-lit')
+  })
+
+  it('has a prompt for each listed state and no prompt without one', () => {
+    const ids = new Set(ACTS.flatMap((act) => beltImages(act).map((i) => i.id)))
+    for (const id of Object.keys(BELT_STATE_PROMPTS)) expect(ids).toContain(id)
+  })
 })

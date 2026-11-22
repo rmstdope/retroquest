@@ -1088,6 +1088,13 @@
     "text": "A wooden bucket bound with iron hoops and a rope handle. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
   },
   {
+    "id": "item-bucket-full",
+    "title": "Bucket (full)",
+    "width": 256,
+    "height": 256,
+    "text": "A wooden bucket bound with iron hoops and a rope handle, filled to the brim with water. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
     "id": "item-coin",
     "title": "Coin",
     "width": 256,
@@ -1177,6 +1184,13 @@
     "width": 256,
     "height": 256,
     "text": "A tin lantern with a small door and a ring on top, its candle burnt low. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-lantern-lit",
+    "title": "Lantern (lit)",
+    "width": 256,
+    "height": 256,
+    "text": "A tin lantern with a small door and a ring on top, a candle flame glowing warm behind its panes. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
   },
   {
     "id": "item-locket",
