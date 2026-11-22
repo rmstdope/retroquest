@@ -380,13 +380,13 @@ const style = computed(() => {
   background: #241a33;
   color: #c79bf0;
 }
-.lq-flight-pic {
+:deep(.lq-flight-pic) {
   width: 100%;
   height: 100%;
   border-radius: 999px;
   object-fit: cover;
 }
-.lq-flight-face {
+:deep(.lq-flight-face) {
   /* A small square of the picture, in the thin coloured edge of its kind (amber thing, blue spell), also on the grey card of a loss. */
   width: calc(44px * var(--lq-text-scale, 1));
   height: calc(44px * var(--lq-text-scale, 1));
@@ -396,10 +396,10 @@ const style = computed(() => {
   border-radius: 8px;
   object-fit: cover;
 }
-.lq-flight-face-item {
+:deep(.lq-flight-face-item) {
   border-color: var(--lq-item-line);
 }
-.lq-flight-face-spell {
+:deep(.lq-flight-face-spell) {
   border-color: var(--lq-spell-line);
 }
 .lq-flight-icon {

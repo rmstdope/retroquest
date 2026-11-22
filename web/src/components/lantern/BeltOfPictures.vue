@@ -958,7 +958,7 @@ defineExpose({ focusBelt, focusPicture, has, pictureFor, root })
     box-shadow calc(150ms * var(--lq-motion)),
     border-color calc(150ms * var(--lq-motion));
 }
-.lq-belt-face {
+:deep(.lq-belt-face) {
   width: 100%;
   height: 100%;
   border-radius: 999px;

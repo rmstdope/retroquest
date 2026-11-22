@@ -118,7 +118,7 @@ defineExpose({ cancelButton })
   box-shadow: 0 4px 12px rgb(0 0 0 / 0.3);
   pointer-events: none;
 }
-.lq-hand-ghost-face {
+:deep(.lq-hand-ghost-face) {
   width: 100%;
   height: 100%;
   border-radius: 7px;
