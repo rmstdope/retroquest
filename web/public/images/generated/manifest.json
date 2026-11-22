@@ -820,6 +820,11 @@
         "file": "act1-general-store.rope-gone.png",
         "width": 1920,
         "height": 1080
+      },
+      "shutters-raised": {
+        "file": "act1-general-store.shutters-raised.png",
+        "width": 1920,
+        "height": 1080
       }
     },
     "areas": {
@@ -1504,10 +1509,14 @@
         "height": 0.092593
       },
       "rusty-hoe": {
-        "x": 0.023438,
-        "y": 0.199074,
-        "width": 0.283333,
-        "height": 0.625
+        "x": 0.033854,
+        "y": 0.602778,
+        "width": 0.291667,
+        "height": 0.349074,
+        "mark": {
+          "x": 0.147396,
+          "y": 0.77963
+        }
       },
       "dull-knife": {
         "x": 0.697396,
@@ -1519,13 +1528,17 @@
         "x": 0,
         "y": 0.277778,
         "width": 0.995833,
-        "height": 0.483333
+        "height": 0.483333,
+        "mark": {
+          "x": 0.252604,
+          "y": 0.47963
+        }
       },
       "scenery-vegetable-field-earth": {
-        "x": 0.227604,
-        "y": 0.784259,
-        "width": 0.584375,
-        "height": 0.158333,
+        "x": 0.325,
+        "y": 0.601852,
+        "width": 0.372917,
+        "height": 0.340741,
         "mark": {
           "x": 0.373438,
           "y": 0.819444
@@ -2681,6 +2694,11 @@
   },
   "item-rusty-saw": {
     "file": "item-rusty-saw.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-rusty-trowel": {
+    "file": "item-rusty-trowel.png",
     "width": 256,
     "height": 256
   },
