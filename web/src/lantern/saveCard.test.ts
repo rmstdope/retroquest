@@ -204,6 +204,21 @@ describe('continuePictureUrls', () => {
     expect(urls?.base[1]).not.toMatch(/-night/)
     expect(urls?.patches).toHaveLength(1)
     expect(urls?.patches[0]).toMatch(/\.lamp\.png$/)
+    expect(urls?.standIns).toEqual([''])
+  })
+
+  it('lists the patch that stands in for a patch not made yet', () => {
+    const urls = continuePictureUrls({
+      ...base,
+      picture: {
+        actName: 'Act1',
+        roomKey: 'Forge',
+        variant: '',
+        patchIds: ['lamp-carried'],
+        patchStandIns: { 'lamp-carried': 'lamp-lit' },
+      },
+    })
+    expect(urls?.standIns[0]).toMatch(/\.lamp-lit\.png$/)
   })
 
   it("lists only the room's plain picture when it has no other", () => {

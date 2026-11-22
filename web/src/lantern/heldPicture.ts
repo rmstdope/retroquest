@@ -43,7 +43,6 @@ export function withHeldAreas(
     ...latest,
     patchIds,
     patchAreas: areas,
-    patchStandIns: { ...before.patchStandIns, ...latest.patchStandIns },
     things: [...latest.things, ...kept],
   }
 }

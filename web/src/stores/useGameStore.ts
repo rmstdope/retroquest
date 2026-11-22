@@ -679,7 +679,8 @@ export const useGameStore = defineStore('game', () => {
   /**
    * The URLs of the patches laid over the room's picture: the ones that apply
    * to the story (what the held `picture` group shows; after a move to
-   * another room, that room's at once) and that the manifest lists as made.
+   * another room, that room's at once) and that the manifest lists as made;
+   * a patch not made yet shows the picture of the patch it stands in for.
    */
   const roomPatchUrls = computed<string[]>(() => {
     const room = musicRoomKey.value

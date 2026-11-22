@@ -25,6 +25,8 @@ export interface SavePicture {
   variant: string
   /** The ids of the patches that applied to the story when it was saved. */
   patchIds: string[]
+  /** The patch whose picture stands in for each patch that has one until it is made, by patch id; absent in older saves. */
+  patchStandIns?: Record<string, string>
 }
 
 /** One entry in the 8-slot save system. */

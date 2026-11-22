@@ -216,13 +216,15 @@ export function useBridge(loader: () => Promise<ActClass[]> = loadActs) {
   function saveDetails(): Omit<StoredSave, 'data' | 'story'> {
     const { controller, game } = requireGame()
     const { actName } = game.currentMusicPlace()
-    const { roomKey, variant, patchIds } = pictureState()
+    const { roomKey, variant, patchIds, patchStandIns } = pictureState()
     return {
       act: controller.getActName(),
       room: controller.getRoomName(),
       timestamp: new Date().toISOString(),
       quests: readQuests(),
-      ...(roomKey ? { picture: { actName, roomKey, variant, patchIds } } : {}),
+      ...(roomKey
+        ? { picture: { actName, roomKey, variant, patchIds, patchStandIns } }
+        : {}),
     }
   }
 
