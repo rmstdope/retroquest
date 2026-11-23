@@ -44,9 +44,12 @@ export const ACT2_ROOM_PATCHES: Record<string, ImagePatch[]> = {
     {
       id: 'gate-captain-gone',
       title: 'Gate Captain gone, way north open',
-      text: 'Remove Gate Captain from the picture and show the way north open and passable.',
+      text:
+        'Remove Gate Captain from the picture and ' +
+        'show the way north open and passable.',
       area: 'gate-captain',
-      // He leaves in the turn the way north opens, so one patch shows both.
+      // He leaves in the turn the way north opens, so one patch shows both
+      // (an older save with the pass given and him still there shows neither).
       when: 'absent',
     },
     {
