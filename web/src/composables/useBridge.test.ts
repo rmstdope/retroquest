@@ -826,11 +826,9 @@ describe('useBridge', () => {
   })
 
   describe('pictureState', () => {
-    it('names the patch whose picture stands in for a patch not made yet', async () => {
+    it('names no stand-in in the cottage, whose carried patch lies over the lit one', async () => {
       const bridge = await runningBridge()
-      expect(bridge.pictureState().patchStandIns).toEqual({
-        'lantern-carried': 'lantern-lit',
-      })
+      expect(bridge.pictureState().patchStandIns).toEqual({})
     })
 
     it('names the room and the patches of its picture that apply', async () => {
