@@ -2595,12 +2595,80 @@
     "act2-ancient-grove": {
       "text": "A ring of trees so old their trunks are wider than a cottage. Text is carved in their bark, older than any letters you know. In the middle stands one tree taller than the rest, with bark the colour of tarnished silver. There are no houses here.",
       "gameWas": "A ring of trees so old their trunks are wider than a cottage. Signs are carved in their bark, older than any letters you know. In the middle stands one tree taller than the rest, with bark the colour of tarnished silver.",
+      "patches": {
+        "ancient-tree-spirit-appears": {
+          "text": "A stern, ancient face grows out of the silver-white bark of the central tree, made of the wood itself: bark ridges for brow and cheeks, a deep red-brown crack running down through the forehead and chin, pale green eyes, eyebrows and a drooping moustache of green moss. Its edges melt into the trunk; no hair, no skin, no separate head.",
+          "gameWas": "Add Ancient Tree Spirit to the picture."
+        },
+        "exit-south-open": {
+          "text": "The brambles and roots in this gap have drawn back and parted like a curtain, leaving a clear opening with a narrow earthen footpath leading through it into the green forest beyond. The torn bramble ends curl aside on both sides of the opening.",
+          "gameWas": "Show the way south open and passable."
+        },
+        "silver-leaves-appears": {
+          "text": "A small scatter of fallen leaves with a bright silver sheen lies on the grass at the foot of the silver-barked tree, between its roots. Only the leaves are added; the grass, roots and brambles around them stay exactly as they are.",
+          "gameWas": "Add the silver leaves to the picture."
+        }
+      },
+      "takeAreas": {
+        "9": {
+          "ancient-tree-spirit": {
+            "x": 834,
+            "y": 225,
+            "width": 281,
+            "height": 525
+          },
+          "exit-north": {
+            "x": 525,
+            "y": 954,
+            "width": 863,
+            "height": 126,
+            "point": {
+              "x": 690,
+              "y": 971
+            }
+          },
+          "exit-south": {
+            "x": 1125,
+            "y": 375,
+            "width": 300,
+            "height": 544,
+            "point": {
+              "x": 1275,
+              "y": 712
+            }
+          },
+          "silver-leaves": {
+            "x": 759,
+            "y": 900,
+            "width": 450,
+            "height": 150
+          },
+          "silver-tree": {
+            "x": 656,
+            "y": 0,
+            "width": 638,
+            "height": 919,
+            "point": {
+              "x": 975,
+              "y": 806
+            }
+          }
+        }
+      },
       "effects": {
         "dust": {
           "title": "Dust",
           "on": true,
           "settings": {
-            "amount": 1,
+            "amount": 3.35,
+            "speed": 1
+          }
+        },
+        "fireflies": {
+          "title": "Fireflies",
+          "on": true,
+          "settings": {
+            "amount": 2.25,
             "speed": 1
           }
         },
@@ -2608,7 +2676,7 @@
           "title": "Leaves",
           "on": true,
           "settings": {
-            "amount": 1,
+            "amount": 5,
             "speed": 1
           }
         }

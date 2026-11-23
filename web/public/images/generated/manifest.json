@@ -1979,18 +1979,86 @@
     "file": "act2-ancient-grove.png",
     "width": 1920,
     "height": 1080,
+    "patches": {
+      "ancient-tree-spirit-appears": {
+        "file": "act2-ancient-grove.ancient-tree-spirit-appears.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "exit-south-open": {
+        "file": "act2-ancient-grove.exit-south-open.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "silver-leaves-appears": {
+        "file": "act2-ancient-grove.silver-leaves-appears.png",
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "areas": {
+      "silver-tree": {
+        "x": 0.341667,
+        "y": 0,
+        "width": 0.332292,
+        "height": 0.850926,
+        "mark": {
+          "x": 0.507813,
+          "y": 0.746296
+        }
+      },
+      "exit-north": {
+        "x": 0.273438,
+        "y": 0.883333,
+        "width": 0.449479,
+        "height": 0.116667,
+        "mark": {
+          "x": 0.359375,
+          "y": 0.899074
+        }
+      },
+      "ancient-tree-spirit": {
+        "x": 0.434375,
+        "y": 0.208333,
+        "width": 0.146354,
+        "height": 0.486111
+      },
+      "silver-leaves": {
+        "x": 0.395313,
+        "y": 0.833333,
+        "width": 0.234375,
+        "height": 0.138889
+      },
+      "exit-south": {
+        "x": 0.585938,
+        "y": 0.347222,
+        "width": 0.15625,
+        "height": 0.503704,
+        "mark": {
+          "x": 0.664063,
+          "y": 0.659259
+        }
+      }
+    },
     "effects": [
       {
         "kind": "dust",
         "settings": {
-          "amount": 1,
+          "amount": 3.35,
+          "speed": 1
+        }
+      },
+      {
+        "kind": "fireflies",
+        "settings": {
+          "amount": 2.25,
           "speed": 1
         }
       },
       {
         "kind": "leaves",
         "settings": {
-          "amount": 1,
+          "amount": 5,
           "speed": 1
         }
       }
