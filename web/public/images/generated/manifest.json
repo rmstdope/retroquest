@@ -1989,11 +1989,6 @@
         "file": "act2-ancient-grove.exit-south-open.png",
         "width": 1920,
         "height": 1080
-      },
-      "silver-leaves-appears": {
-        "file": "act2-ancient-grove.silver-leaves-appears.png",
-        "width": 1920,
-        "height": 1080
       }
     },
     "areas": {
