@@ -293,8 +293,9 @@
       {
         "id": "lantern-carried",
         "title": "Lantern carried",
-        "text": "The lantern is gone from the table: the corner stays lit just as warmly, as if by a lantern in Elior's hand, and the journal lies on the table.",
-        "area": "lantern"
+        "text": "Lies on the lit corner and takes only the lantern off the table: the corner stays lit just as warmly, as if by a lantern in Elior's hand, and the journal lies on the table.",
+        "area": "lantern",
+        "over": "lantern-lit"
       },
       {
         "id": "patches-appears",

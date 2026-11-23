@@ -127,7 +127,7 @@ describe('appliedPatchIds', () => {
     })
   })
 
-  it('shows the lit lantern on the table, then the carried picture while Elior carries it in the cottage', () => {
+  it('shows the lit lantern on the table, then the carried picture on top of it while Elior carries it in the cottage', () => {
     const act = new Act1()
     const game = new Game([act])
     const cottage = (): string[] =>
@@ -139,8 +139,12 @@ describe('appliedPatchIds', () => {
     expect(cottage()).not.toContain('lantern-carried')
     executeCommands(game, ['take lantern'])
     expect(game.state.inventory.some((i) => i instanceof Lantern)).toBe(true)
-    expect(cottage()).toContain('lantern-carried')
-    expect(cottage()).not.toContain('lantern-lit')
+    expect(cottage()).toEqual(
+      expect.arrayContaining(['lantern-lit', 'lantern-carried']),
+    )
+    expect(cottage().indexOf('lantern-lit')).toBeLessThan(
+      cottage().indexOf('lantern-carried'),
+    )
     // The game has no drop verb: put the lantern back on the table by hand.
     const lantern = game.state.inventory.find((i) => i instanceof Lantern)
     if (!lantern) throw new Error('Elior should carry the lantern')

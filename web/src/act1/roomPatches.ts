@@ -1,4 +1,4 @@
-import type { ImagePatch } from '@/engine'
+import type { ImagePatch, PatchContext } from '@/engine'
 import { Candle } from './items/Candle'
 import { Lantern } from './items/Lantern'
 import { Mechanism } from './items/Mechanism'
@@ -7,6 +7,14 @@ import { Shopkeeper } from './characters/Shopkeeper'
 import { Snare } from './items/Snare'
 import { Well } from './items/Well'
 import { WitheredCarrot } from './items/WitheredCarrot'
+
+/** Whether Elior is in the cottage carrying the lit lantern. */
+function carriesLitLanternInCottage(c: PatchContext): boolean {
+  return (
+    c.state.currentRoom instanceof EliorsCottage &&
+    c.state.inventory.some((item) => item instanceof Lantern && item.isLit())
+  )
+}
 
 /**
  * The declared patches of each room of Act 1, by room key: the small changes
@@ -30,28 +38,28 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       title: 'Lantern lit',
       text: 'Light the lantern on the table: a small warm flame in the glass.',
       area: 'lantern',
-      // Lit while the lit lantern stands on the table.
+      // Lit while the lit lantern is in the cottage: on the table, or in
+      // Elior's hand (the carried patch then lies on top of this one).
       when: (c) => {
         const onTable = c.things.get('lantern')
-        return onTable instanceof Lantern && onTable.isLit()
+        return (
+          (onTable instanceof Lantern && onTable.isLit()) ||
+          carriesLitLanternInCottage(c)
+        )
       },
     },
     {
       id: 'lantern-carried',
       title: 'Lantern carried',
       text:
-        'The lantern is gone from the table: the corner stays lit just as ' +
-        "warmly, as if by a lantern in Elior's hand, and the journal lies on " +
-        'the table.',
+        'Lies on the lit corner and takes only the lantern off the table: ' +
+        "the corner stays lit just as warmly, as if by a lantern in Elior's " +
+        'hand, and the journal lies on the table.',
       area: 'lantern',
-      // Until this picture is made, the lit corner with the lantern shows.
-      standsFor: 'lantern-lit',
+      over: 'lantern-lit',
+      layer: 1,
       // While Elior is in the cottage carrying the lit lantern.
-      when: (c) =>
-        c.state.currentRoom instanceof EliorsCottage &&
-        c.state.inventory.some(
-          (item) => item instanceof Lantern && item.isLit(),
-        ),
+      when: carriesLitLanternInCottage,
     },
     {
       id: 'patches-appears',

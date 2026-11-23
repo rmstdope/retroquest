@@ -478,7 +478,7 @@ describe('useGameStore: panels held while a turn is narrated', () => {
       ])
     })
 
-    it('shows the lit corner in place of the carried lantern picture until that is made', async () => {
+    it('keeps the lit corner under the carried lantern picture, which shows once it is made', async () => {
       const store = await cottage()
       for (const command of ['use lantern', 'take lantern']) {
         store.submitCommand(command)
@@ -491,6 +491,7 @@ describe('useGameStore: panels held while a turn is narrated', () => {
       ])
       made(store, ['lantern-lit', 'lantern-carried'])
       expect(store.roomPatchUrls).toEqual([
+        expect.stringContaining('act1-eliors-cottage.lantern-lit.png'),
         expect.stringContaining('act1-eliors-cottage.lantern-carried.png'),
       ])
     })
