@@ -160,8 +160,12 @@ describe('appliedPatchIds', () => {
     executeCommands(game, ['talk to voice', 'use lantern', 'take lantern'])
     const loaded = new Game([new Act1()])
     loaded.loadSaveData(game.toSaveData())
-    expect(appliedPatchIds(act, 'EliorsCottage', loaded.state)).toContain(
-      'lantern-carried',
+    const applied = appliedPatchIds(act, 'EliorsCottage', loaded.state)
+    expect(applied).toEqual(
+      expect.arrayContaining(['lantern-lit', 'lantern-carried']),
+    )
+    expect(applied.indexOf('lantern-lit')).toBeLessThan(
+      applied.indexOf('lantern-carried'),
     )
   })
 

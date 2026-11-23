@@ -52,9 +52,8 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       id: 'lantern-carried',
       title: 'Lantern carried',
       text:
-        'Lies on the lit corner and takes only the lantern off the table: ' +
-        "the corner stays lit just as warmly, as if by a lantern in Elior's " +
-        'hand, and the journal lies on the table.',
+        'Lying on the lit corner: take the lantern off the table, as if ' +
+        'Elior had it in her hand; nothing else changes.',
       area: 'lantern',
       over: 'lantern-lit',
       layer: 1,
