@@ -224,6 +224,10 @@ export const ACT2_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       text: 'Show the way south open and passable.',
       area: 'exit-south',
       when: 'present',
+      // The way opens only once the spirit is awake, and its picture reaches
+      // the spirit's trunk, so it is painted on the spirit's result.
+      over: 'ancient-tree-spirit-appears',
+      layer: 1,
     },
     {
       id: 'ancient-tree-spirit-appears',
@@ -238,6 +242,9 @@ export const ACT2_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       text: 'Add the silver leaves to the picture.',
       area: 'silver-leaves',
       when: 'present',
+      // The leaves lie on the ground, the opened path included; they show
+      // while the way is shut too, so they lie above it but not over it.
+      layer: 2,
     },
   ],
   WhisperingGlade: [
