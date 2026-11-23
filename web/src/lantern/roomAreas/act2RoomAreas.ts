@@ -18,7 +18,11 @@ export const ACT2_ROOM_AREAS: Record<string, ImageArea[]> = {
   GreendaleGates: [
     { id: 'gate-captain', title: 'Gate Captain' },
     { id: 'exit-south', title: 'Way south' },
-    { id: 'exit-north', title: 'Way north' },
+    {
+      id: 'exit-north',
+      title: 'Way north',
+      unpatched: 'the gate-captain-gone patch opens the way as he leaves',
+    },
     { id: 'city-map', title: 'City Map' },
   ],
   MainSquare: [
@@ -105,7 +109,12 @@ export const ACT2_ROOM_AREAS: Record<string, ImageArea[]> = {
     { id: 'enchanted-acorn', title: 'Enchanted Acorn' },
     { id: 'forest-sprites', title: 'Forest Sprites' },
     { id: 'exit-west', title: 'Way west' },
-    { id: 'exit-south', title: 'Way south' },
+    {
+      id: 'exit-south',
+      title: 'Way south',
+      unpatched:
+        'the forest-sprites-aside patch opens the way as the sprites move',
+    },
     { id: 'exit-east', title: 'Way east' },
     { id: 'ravine', title: 'Ravine' },
     { id: 'caravan', title: 'Caravan' },

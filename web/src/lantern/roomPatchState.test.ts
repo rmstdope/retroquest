@@ -270,18 +270,44 @@ describe('appliedPatchIds', () => {
     expect(stick && listedPatch(stick).over).toBe('vines-cut')
   })
 
-  it('lays the ancient grove way south over the tree spirit and the silver leaves on top of both', () => {
+  it('lays the ancient grove way south and silver leaves over the tree spirit, the leaves on top', () => {
     const patches = new Act2().roomPatches('AncientGrove')
     const way = patches.find((p) => p.id === 'exit-south-open')
     expect(way && listedPatch(way).over).toBe('ancient-tree-spirit-appears')
-    expect(
-      patches.find((p) => p.id === 'silver-leaves-appears')?.over,
-    ).toBeUndefined()
+    expect(patches.find((p) => p.id === 'silver-leaves-appears')?.over).toBe(
+      'ancient-tree-spirit-appears',
+    )
     expect(layeredIds(patches)).toEqual([
       'ancient-tree-spirit-appears',
       'exit-south-open',
       'silver-leaves-appears',
     ])
+  })
+
+  it('merges the Act 2 patches that always show together and stacks those that follow another', () => {
+    const act = new Act2()
+    const ids = (room: string): string[] =>
+      act.roomPatches(room).map((p) => p.id)
+    const overOf = (room: string, id: string): string | undefined =>
+      act.roomPatches(room).find((p) => p.id === id)?.over
+    // One patch for what changes in the same turn.
+    expect(ids('GreendaleGates')).not.toContain('exit-north-open')
+    expect(ids('ForestEntrance')).not.toContain('exit-south-open')
+    // A patch that always follows another lies over it.
+    expect(overOf('GreendaleGates', 'city-map-appears')).toBe(
+      'gate-captain-gone',
+    )
+    expect(overOf('ForestEntrance', 'caravan-appears')).toBe('ravine-appears')
+    expect(overOf('SilverStagInn', 'exit-east-open')).toBe('room-key-gone')
+    expect(overOf('AncientGrove', 'silver-leaves-appears')).toBe(
+      'ancient-tree-spirit-appears',
+    )
+    expect(overOf('WhisperingGlade', 'crystal-clear-water-appears')).toBe(
+      'water-nymphs-appears',
+    )
+    expect(overOf('WhisperingGlade', 'moonflowers-appears')).toBe(
+      'water-nymphs-appears',
+    )
   })
 
   it.each(ACTS.map((make) => [make().name, make] as const))(

@@ -45,7 +45,8 @@
         "id": "silver-leaves-appears",
         "title": "Silver Leaves appears",
         "text": "Add the silver leaves to the picture.",
-        "area": "silver-leaves"
+        "area": "silver-leaves",
+        "over": "ancient-tree-spirit-appears"
       }
     ]
   },
@@ -171,12 +172,6 @@
         "area": "enchanted-acorn"
       },
       {
-        "id": "exit-south-open",
-        "title": "Way south open",
-        "text": "Show the way south open and passable.",
-        "area": "exit-south"
-      },
-      {
         "id": "exit-east-open",
         "title": "Way east open",
         "text": "Show the way east open and passable.",
@@ -192,12 +187,13 @@
         "id": "caravan-appears",
         "title": "Caravan appears",
         "text": "Add the caravan to the picture.",
-        "area": "caravan"
+        "area": "caravan",
+        "over": "ravine-appears"
       },
       {
         "id": "forest-sprites-aside",
-        "title": "Forest sprites drawn aside",
-        "text": "Move the forest sprites away from the southern path, among the trees.",
+        "title": "Forest sprites drawn aside, way south open",
+        "text": "Move the forest sprites away from the southern path, among the trees, and show the way south open and passable.",
         "area": "forest-sprites"
       }
     ]
@@ -287,21 +283,16 @@
     "patches": [
       {
         "id": "gate-captain-gone",
-        "title": "Gate Captain gone",
-        "text": "Remove Gate Captain from the picture.",
+        "title": "Gate Captain gone, way north open",
+        "text": "Remove Gate Captain from the picture and show the way north open and passable.",
         "area": "gate-captain"
-      },
-      {
-        "id": "exit-north-open",
-        "title": "Way north open",
-        "text": "Show the way north open and passable.",
-        "area": "exit-north"
       },
       {
         "id": "city-map-appears",
         "title": "City Map appears",
         "text": "Add the city map to the picture.",
-        "area": "city-map"
+        "area": "city-map",
+        "over": "gate-captain-gone"
       }
     ]
   },
@@ -846,7 +837,8 @@
         "id": "exit-east-open",
         "title": "Way east open",
         "text": "Show the way east open and passable.",
-        "area": "exit-east"
+        "area": "exit-east",
+        "over": "room-key-gone"
       }
     ]
   },
@@ -885,13 +877,15 @@
         "id": "crystal-clear-water-appears",
         "title": "Crystal-Clear Water appears",
         "text": "Add the crystal-clear water to the picture.",
-        "area": "crystal-clear-water"
+        "area": "crystal-clear-water",
+        "over": "water-nymphs-appears"
       },
       {
         "id": "moonflowers-appears",
         "title": "Moonflowers appears",
         "text": "Add the moonflowers to the picture.",
-        "area": "moonflowers"
+        "area": "moonflowers",
+        "over": "water-nymphs-appears"
       }
     ]
   },

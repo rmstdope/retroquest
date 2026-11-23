@@ -43,17 +43,14 @@ export const ACT2_ROOM_PATCHES: Record<string, ImagePatch[]> = {
   GreendaleGates: [
     {
       id: 'gate-captain-gone',
-      title: 'Gate Captain gone',
-      text: 'Remove Gate Captain from the picture.',
+      title: 'Gate Captain gone, way north open',
+      text:
+        'Remove Gate Captain from the picture and ' +
+        'show the way north open and passable.',
       area: 'gate-captain',
+      // He leaves in the turn the way north opens, so one patch shows both
+      // (an older save with the pass given and him still there shows neither).
       when: 'absent',
-    },
-    {
-      id: 'exit-north-open',
-      title: 'Way north open',
-      text: 'Show the way north open and passable.',
-      area: 'exit-north',
-      when: 'present',
     },
     {
       id: 'city-map-appears',
@@ -61,6 +58,9 @@ export const ACT2_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       text: 'Add the city map to the picture.',
       area: 'city-map',
       when: 'present',
+      // The map turns up only after the captain has gone.
+      over: 'gate-captain-gone',
+      layer: 1,
     },
   ],
   MainSquare: [
@@ -109,6 +109,9 @@ export const ACT2_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       text: 'Show the way east open and passable.',
       area: 'exit-east',
       when: 'present',
+      // The key is bought before it opens the door, so the way lies over the key's patch.
+      over: 'room-key-gone',
+      layer: 1,
     },
   ],
   InnRooms: [
@@ -181,13 +184,6 @@ export const ACT2_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       when: 'absent',
     },
     {
-      id: 'exit-south-open',
-      title: 'Way south open',
-      text: 'Show the way south open and passable.',
-      area: 'exit-south',
-      when: 'present',
-    },
-    {
       id: 'exit-east-open',
       title: 'Way east open',
       text: 'Show the way east open and passable.',
@@ -207,12 +203,18 @@ export const ACT2_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       text: 'Add the caravan to the picture.',
       area: 'caravan',
       when: 'present',
+      // The rope is used on the ravine, so the caravan lies over it.
+      over: 'ravine-appears',
+      layer: 1,
     },
     {
       id: 'forest-sprites-aside',
-      title: 'Forest sprites drawn aside',
-      text: 'Move the forest sprites away from the southern path, among the trees.',
+      title: 'Forest sprites drawn aside, way south open',
+      text:
+        'Move the forest sprites away from the southern path, among the trees, ' +
+        'and show the way south open and passable.',
       area: 'forest-sprites',
+      // The charm that draws them aside is what opens the way south, so one patch shows both.
       when: (c) =>
         c.state.getStoryFlag(FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE),
     },
@@ -242,8 +244,10 @@ export const ACT2_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       text: 'Add the silver leaves to the picture.',
       area: 'silver-leaves',
       when: 'present',
-      // The leaves lie on the ground, the opened path included; they show
-      // while the way is shut too, so they lie above it but not over it.
+      // The spirit gives the leaves, so they lie over its patch. They lie on
+      // the ground, the opened path included, and show while the way is shut
+      // too, so they lie above the way but not over it.
+      over: 'ancient-tree-spirit-appears',
       layer: 2,
     },
   ],
@@ -261,6 +265,9 @@ export const ACT2_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       text: 'Add the crystal-clear water to the picture.',
       area: 'crystal-clear-water',
       when: 'present',
+      // The nymphs bring it, so it lies over their patch.
+      over: 'water-nymphs-appears',
+      layer: 1,
     },
     {
       id: 'moonflowers-appears',
@@ -268,6 +275,9 @@ export const ACT2_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       text: 'Add the moonflowers to the picture.',
       area: 'moonflowers',
       when: 'present',
+      // The nymphs bring it, so it lies over their patch.
+      over: 'water-nymphs-appears',
+      layer: 1,
     },
   ],
   HeartOfTheForest: [
