@@ -270,6 +270,20 @@ describe('appliedPatchIds', () => {
     expect(stick && listedPatch(stick).over).toBe('vines-cut')
   })
 
+  it('lays the ancient grove way south over the tree spirit and the silver leaves on top of both', () => {
+    const patches = new Act2().roomPatches('AncientGrove')
+    const way = patches.find((p) => p.id === 'exit-south-open')
+    expect(way && listedPatch(way).over).toBe('ancient-tree-spirit-appears')
+    expect(
+      patches.find((p) => p.id === 'silver-leaves-appears')?.over,
+    ).toBeUndefined()
+    expect(layeredIds(patches)).toEqual([
+      'ancient-tree-spirit-appears',
+      'exit-south-open',
+      'silver-leaves-appears',
+    ])
+  })
+
   it.each(ACTS.map((make) => [make().name, make] as const))(
     'of %s lays every patch that lies over another on a higher layer',
     (_name, make) => {

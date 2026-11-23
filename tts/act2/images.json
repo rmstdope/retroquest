@@ -32,7 +32,8 @@
         "id": "exit-south-open",
         "title": "Way south open",
         "text": "Show the way south open and passable.",
-        "area": "exit-south"
+        "area": "exit-south",
+        "over": "ancient-tree-spirit-appears"
       },
       {
         "id": "ancient-tree-spirit-appears",
