@@ -2683,6 +2683,48 @@
       }
     },
     "act2-castle-approach": {
+      "patches": {
+        "exit-west-open": {
+          "text": "Remove the iron gate leaves and their bars from between the two gateposts, leaving an empty gateway through which the paved path and the lawn behind are seen clearly. Nothing else changes.",
+          "gameWas": "Show the way west open and passable."
+        }
+      },
+      "takeAreas": {
+        "9": {
+          "castle-guard-captain": {
+            "x": 1365,
+            "y": 750,
+            "width": 150,
+            "height": 278
+          },
+          "exit-south": {
+            "x": 675,
+            "y": 994,
+            "width": 694,
+            "height": 86,
+            "point": {
+              "x": 960,
+              "y": 1042
+            }
+          },
+          "exit-west": {
+            "x": 296,
+            "y": 741,
+            "width": 113,
+            "height": 244,
+            "point": {
+              "x": 356,
+              "y": 900
+            }
+          },
+          "herald": {
+            "x": 525,
+            "y": 773,
+            "width": 150,
+            "height": 281
+          }
+        }
+      },
       "effects": {
         "dust": {
           "title": "Dust",

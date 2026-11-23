@@ -2068,6 +2068,47 @@
     "file": "act2-castle-approach.png",
     "width": 1920,
     "height": 1080,
+    "patches": {
+      "exit-west-open": {
+        "file": "act2-castle-approach.exit-west-open.png",
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "areas": {
+      "herald": {
+        "x": 0.273438,
+        "y": 0.715741,
+        "width": 0.078125,
+        "height": 0.260185
+      },
+      "castle-guard-captain": {
+        "x": 0.710938,
+        "y": 0.694444,
+        "width": 0.078125,
+        "height": 0.257407
+      },
+      "exit-south": {
+        "x": 0.351563,
+        "y": 0.92037,
+        "width": 0.361458,
+        "height": 0.07963,
+        "mark": {
+          "x": 0.5,
+          "y": 0.964815
+        }
+      },
+      "exit-west": {
+        "x": 0.154167,
+        "y": 0.686111,
+        "width": 0.058854,
+        "height": 0.225926,
+        "mark": {
+          "x": 0.185417,
+          "y": 0.833333
+        }
+      }
+    },
     "effects": [
       {
         "kind": "dust",
@@ -2635,6 +2676,11 @@
     "width": 256,
     "height": 256
   },
+  "item-bucket-full": {
+    "file": "item-bucket-full.png",
+    "width": 256,
+    "height": 256
+  },
   "item-coin": {
     "file": "item-coin.png",
     "width": 256,
@@ -2697,6 +2743,11 @@
   },
   "item-lantern": {
     "file": "item-lantern.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-lantern-lit": {
+    "file": "item-lantern-lit.png",
     "width": 256,
     "height": 256
   },
