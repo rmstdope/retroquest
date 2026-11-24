@@ -51,7 +51,7 @@ export const THING_PROMPTS: Readonly<Record<string, string>> = {
   'item-city-map':
     'A folded map of a walled city, with streets inked in brown and a red mark near the middle.',
   'item-coin': 'A single round copper coin with a worn, stamped face.',
-  'item-coins': 'A single round silver coin with a crowned head stamped on it.',
+  'item-coins': 'A single round gold coin with a crowned head stamped on it.',
   'item-cooled-slag':
     'A dull, glassy lump of black slag with a rusty-orange vein through it.',
   'item-crystal-clear-water':
