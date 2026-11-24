@@ -305,7 +305,10 @@ describe('appliedPatchIds', () => {
     expect(overOf('GreendaleGates', 'city-map-appears')).toBe(
       'gate-captain-gone',
     )
-    expect(overOf('ForestEntrance', 'caravan-appears')).toBe('ravine-appears')
+    // The ravine stays hidden beyond the thickest trees, so it has no patch
+    // and the caravan lies straight on the picture.
+    expect(ids('ForestEntrance')).not.toContain('ravine-appears')
+    expect(overOf('ForestEntrance', 'caravan-appears')).toBeUndefined()
     expect(overOf('SilverStagInn', 'exit-east-open')).toBe('room-key-gone')
     expect(overOf('AncientGrove', 'silver-leaves-appears')).toBe(
       'ancient-tree-spirit-appears',
