@@ -1,36 +1,32 @@
 # Dependabot opens pull requests that keep RetroQuest's dependencies current.
 #
 # Policy:
-# - Minor and patch updates arrive together, once a week, in one grouped pull
-#   request per ecosystem. CI is the safety net.
-# - Each major update arrives in its own pull request. Read its changelog or
-#   migration guide before merging; a major that needs code changes becomes a
-#   bead.
+# - Dependabot checks every day, for npm, GitHub Actions and Docker.
+# - Every package upgrade, minor, patch or major, arrives in its own pull
+#   request, never grouped, so a failing upgrade is pinned to one package. CI
+#   is the safety net. Read a major's changelog or migration guide before
+#   merging; a major that needs code changes becomes a bead.
+# - The open-pull-request limit is 20 per ecosystem, no practical cap.
 # - A release must be at least a few days old before Dependabot proposes it,
 #   so a broken release has time to be pulled.
+# - The .cerebro/cerebro submodule is not covered; it is bumped by hand.
 # - Security updates ignore the schedule and the cooldown. Turn them on under
 #   Settings → Code security → Dependabot security updates.
 #
-# Nothing here merges on its own: every Dependabot pull request goes through
-# the same review and checks as any other change.
+# Green pull requests merge through the Dependabot sweep; every one goes
+# through the same checks as any other change.
 version: 2
 updates:
   # The web application: its npm dependencies and dev tools.
   - package-ecosystem: npm
     directory: /web
     schedule:
-      interval: weekly
-      day: monday
+      interval: daily
     cooldown:
       default-days: 5
-    open-pull-requests-limit: 5
+    open-pull-requests-limit: 20
     commit-message:
       prefix: chore(deps)
-    groups:
-      minor-and-patch:
-        update-types:
-          - minor
-          - patch
 
   # The actions the CI workflow uses.
   - package-ecosystem: github-actions
@@ -40,25 +36,21 @@ updates:
     exclude-paths:
       - .github/workflows/issue-enhancer.lock.yml
     schedule:
-      interval: weekly
-      day: monday
+      interval: daily
     cooldown:
       default-days: 5
+    open-pull-requests-limit: 20
     commit-message:
       prefix: chore(ci)
-    groups:
-      minor-and-patch:
-        update-types:
-          - minor
-          - patch
 
   # The base images in the Dockerfile (node for the build, caddy to serve).
   - package-ecosystem: docker
     directory: /
     schedule:
-      interval: monthly
+      interval: daily
     cooldown:
       default-days: 5
+    open-pull-requests-limit: 20
     commit-message:
       prefix: chore(docker)
     # CI pins node-version in ci.yml, which Dependabot never touches. Move to
