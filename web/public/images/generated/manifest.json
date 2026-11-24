@@ -2778,6 +2778,63 @@
     "file": "act2-main-square.png",
     "width": 1920,
     "height": 1080,
+    "patches": {
+      "merchants-flyer-taken": {
+        "file": "act2-main-square.merchants-flyer-taken.png",
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "areas": {
+      "city-notice-board": {
+        "x": 0.625,
+        "y": 0.468519,
+        "width": 0.195313,
+        "height": 0.451852
+      },
+      "merchants-flyer": {
+        "x": 0.710938,
+        "y": 0.75,
+        "width": 0.04375,
+        "height": 0.061111
+      },
+      "town-crier": {
+        "x": 0.239063,
+        "y": 0.702778,
+        "width": 0.082813,
+        "height": 0.260185
+      },
+      "exit-south": {
+        "x": 0.292708,
+        "y": 0.951852,
+        "width": 0.429688,
+        "height": 0.048148,
+        "mark": {
+          "x": 0.507813,
+          "y": 0.975926
+        }
+      },
+      "exit-north": {
+        "x": 0.263542,
+        "y": 0.103704,
+        "width": 0.185417,
+        "height": 0.347222,
+        "mark": {
+          "x": 0.35625,
+          "y": 0.347222
+        }
+      },
+      "exit-east": {
+        "x": 0.820313,
+        "y": 0.451852,
+        "width": 0.179688,
+        "height": 0.277778,
+        "mark": {
+          "x": 0.908333,
+          "y": 0.625
+        }
+      }
+    },
     "effects": [
       {
         "kind": "dust",
@@ -2785,6 +2842,33 @@
           "amount": 1,
           "speed": 1
         }
+      },
+      {
+        "kind": "water",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        },
+        "spot": [
+          [
+            [
+              0.4297,
+              0.3993
+            ],
+            [
+              0.5859,
+              0.3993
+            ],
+            [
+              0.5859,
+              0.6944
+            ],
+            [
+              0.4297,
+              0.6944
+            ]
+          ]
+        ]
       }
     ]
   },

@@ -3392,14 +3392,98 @@
     "act2-main-square": {
       "text": "The heart of Greendale: a great fountain with statues of old heroes fighting beasts, stalls under bright awnings, red roofs all round. The square is crowded, but the talk is low, and it stops when a guard walks past. Castle towers rise to the north.",
       "gameWas": "The heart of Greendale: a great fountain of old heroes fighting beasts, stalls under bright awnings, red roofs all round. The square is crowded, but the talk is low, and it stops when a guard walks past. Castle towers rise to the north.",
+      "patches": {
+        "merchants-flyer-taken": {
+          "text": "Remove the bright yellow flyer from the lower corner of the notice board; only bare board wood and a small empty pin remain there. The other notices stay exactly the same.",
+          "gameWas": "Remove the merchant's flyer from the picture."
+        }
+      },
+      "takeAreas": {
+        "12": {
+          "city-notice-board": {
+            "x": 1200,
+            "y": 506,
+            "width": 375,
+            "height": 488
+          },
+          "exit-east": {
+            "x": 1575,
+            "y": 488,
+            "width": 345,
+            "height": 300,
+            "point": {
+              "x": 1744,
+              "y": 675
+            }
+          },
+          "exit-north": {
+            "x": 506,
+            "y": 112,
+            "width": 356,
+            "height": 375,
+            "point": {
+              "x": 684,
+              "y": 375
+            }
+          },
+          "exit-south": {
+            "x": 562,
+            "y": 1028,
+            "width": 825,
+            "height": 52,
+            "point": {
+              "x": 975,
+              "y": 1054
+            }
+          },
+          "merchants-flyer": {
+            "x": 1365,
+            "y": 810,
+            "width": 84,
+            "height": 66
+          },
+          "town-crier": {
+            "x": 459,
+            "y": 759,
+            "width": 159,
+            "height": 281
+          }
+        }
+      },
       "effects": {
         "dust": {
-          "title": "Dust",
           "on": true,
           "settings": {
             "amount": 1,
             "speed": 1
           }
+        },
+        "water": {
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          },
+          "spot": [
+            [
+              [
+                0.4297,
+                0.3993
+              ],
+              [
+                0.5859,
+                0.3993
+              ],
+              [
+                0.5859,
+                0.6944
+              ],
+              [
+                0.4297,
+                0.6944
+              ]
+            ]
+          ]
         }
       }
     },
