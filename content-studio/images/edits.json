@@ -2827,7 +2827,7 @@
       }
     },
     "act2-forest-entrance": {
-      "text": "You are at the entrance of a thick forest with Massive trees. Dappled sunlight filters through the dense canopy, and the path ahead disappears into green shadows. The air is alive with birds and rustling leaves, but beneath it lies an expectant silence, as if the forest itself is watching.",
+      "text": "You standing in front dof a thick forest with Massive trees looming over you. Dappled sunlight filters through the dense canopy. The air is alive with birds and rustling leaves, but beneath it lies an expectant silence, as if the forest itself is watching.",
       "gameWas": "Massive trees create a natural cathedral as you enter the Enchanted Forest. Dappled sunlight filters through the dense canopy, and the path ahead disappears into green shadows. The air is alive with birds and rustling leaves, but beneath it lies an expectant silence, as if the forest itself is watching.",
       "patches": {
         "caravan-appears": {
@@ -3861,22 +3861,129 @@
     "act2-whispering-glade": {
       "text": "In the midst of the forest, a meadow opens round a small stream that runs over smooth stones and ends up in a small pond. Wildflowers grow thick to the water's edge. Under the sound of the water there are other sounds, almost voices, and they stop when you listen for them.",
       "gameWas": "A meadow opens round a small stream that runs over smooth stones. Wildflowers grow thick to the water's edge. Under the sound of the water there are other sounds, almost voices, and they stop when you listen for them.",
+      "patches": {
+        "crystal-clear-water-appears": {
+          "text": "A small corked glass flask of very clear water, no bigger than a hand, painted in the same soft gouache storybook style as the scene with soft edges, sits on the flat stone at the stream's edge. Nothing else changes.",
+          "gameWas": "Add the crystal-clear water to the picture."
+        },
+        "moonflowers-appears": {
+          "text": "A small bunch of pure white flowers, their petals open and glowing faintly with a soft silvery light of their own, lies on the bank at the water's edge. Nothing else changes.",
+          "gameWas": "Add the moonflowers to the picture."
+        },
+        "water-nymphs-appears": {
+          "text": "Three slender water nymphs sit waist-deep in the stream a little way off, small at this distance, their bodies made of the stream's own clear water: translucent, glassy and pale blue, with the rippling water and stones showing through them and their long hair flowing like running water. Ethereal and half-seen, not solid women. The stones and banks stay as they are.",
+          "gameWas": "Add Water Nymphs to the picture."
+        }
+      },
+      "takeAreas": {
+        "10": {
+          "crystal-clear-water": {
+            "x": 1012,
+            "y": 825,
+            "width": 131,
+            "height": 188
+          },
+          "exit-west": {
+            "x": 0,
+            "y": 375,
+            "width": 225,
+            "height": 469,
+            "point": {
+              "x": 94,
+              "y": 619
+            }
+          },
+          "moonflowers": {
+            "x": 516,
+            "y": 862,
+            "width": 262,
+            "height": 178
+          },
+          "water-nymphs": {
+            "x": 806,
+            "y": 619,
+            "width": 338,
+            "height": 150
+          }
+        }
+      },
       "effects": {
         "dust": {
-          "title": "Dust",
           "on": true,
           "settings": {
-            "amount": 1,
-            "speed": 1
+            "amount": 0.8,
+            "speed": 0.8
           }
         },
         "fireflies": {
-          "title": "Fireflies",
+          "on": true,
+          "settings": {
+            "amount": 1.2,
+            "speed": 0.8
+          }
+        },
+        "water": {
           "on": true,
           "settings": {
             "amount": 1,
-            "speed": 1
-          }
+            "speed": 0.9
+          },
+          "spot": [
+            [
+              [
+                0.4883,
+                0.3733
+              ],
+              [
+                0.5469,
+                0.3559
+              ],
+              [
+                0.6836,
+                0.434
+              ],
+              [
+                0.6445,
+                0.5208
+              ],
+              [
+                0.7031,
+                0.6944
+              ],
+              [
+                0.625,
+                0.816
+              ],
+              [
+                0.5469,
+                0.9375
+              ],
+              [
+                0.293,
+                0.9375
+              ],
+              [
+                0.2344,
+                0.7465
+              ],
+              [
+                0.3223,
+                0.625
+              ],
+              [
+                0.4688,
+                0.5729
+              ],
+              [
+                0.5859,
+                0.5208
+              ],
+              [
+                0.6055,
+                0.434
+              ]
+            ]
+          ]
         }
       }
     },

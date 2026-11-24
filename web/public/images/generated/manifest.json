@@ -2299,6 +2299,11 @@
       }
     ],
     "patches": {
+      "caravan-appears": {
+        "file": "act2-forest-entrance.caravan-appears.png",
+        "width": 1920,
+        "height": 1080
+      },
       "enchanted-acorn-taken": {
         "file": "act2-forest-entrance.enchanted-acorn-taken.png",
         "width": 1920,
@@ -3354,20 +3359,130 @@
     "file": "act2-whispering-glade.png",
     "width": 1920,
     "height": 1080,
+    "patches": {
+      "crystal-clear-water-appears": {
+        "file": "act2-whispering-glade.crystal-clear-water-appears.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "moonflowers-appears": {
+        "file": "act2-whispering-glade.moonflowers-appears.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "water-nymphs-appears": {
+        "file": "act2-whispering-glade.water-nymphs-appears.png",
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "areas": {
+      "exit-west": {
+        "x": 0,
+        "y": 0.347222,
+        "width": 0.117188,
+        "height": 0.434259,
+        "mark": {
+          "x": 0.048958,
+          "y": 0.573148
+        }
+      },
+      "water-nymphs": {
+        "x": 0.419792,
+        "y": 0.573148,
+        "width": 0.176042,
+        "height": 0.138889
+      },
+      "crystal-clear-water": {
+        "x": 0.527083,
+        "y": 0.763889,
+        "width": 0.068229,
+        "height": 0.174074
+      },
+      "moonflowers": {
+        "x": 0.26875,
+        "y": 0.798148,
+        "width": 0.136458,
+        "height": 0.164815
+      }
+    },
     "effects": [
       {
         "kind": "dust",
         "settings": {
-          "amount": 1,
-          "speed": 1
+          "amount": 0.8,
+          "speed": 0.8
         }
       },
       {
         "kind": "fireflies",
         "settings": {
-          "amount": 1,
-          "speed": 1
+          "amount": 1.2,
+          "speed": 0.8
         }
+      },
+      {
+        "kind": "water",
+        "settings": {
+          "amount": 1,
+          "speed": 0.9
+        },
+        "spot": [
+          [
+            [
+              0.4883,
+              0.3733
+            ],
+            [
+              0.5469,
+              0.3559
+            ],
+            [
+              0.6836,
+              0.434
+            ],
+            [
+              0.6445,
+              0.5208
+            ],
+            [
+              0.7031,
+              0.6944
+            ],
+            [
+              0.625,
+              0.816
+            ],
+            [
+              0.5469,
+              0.9375
+            ],
+            [
+              0.293,
+              0.9375
+            ],
+            [
+              0.2344,
+              0.7465
+            ],
+            [
+              0.3223,
+              0.625
+            ],
+            [
+              0.4688,
+              0.5729
+            ],
+            [
+              0.5859,
+              0.5208
+            ],
+            [
+              0.6055,
+              0.434
+            ]
+          ]
+        ]
       }
     ]
   },
