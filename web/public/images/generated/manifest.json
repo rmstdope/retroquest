@@ -2728,12 +2728,48 @@
     "file": "act2-inn-rooms.png",
     "width": 1920,
     "height": 1080,
+    "patches": {
+      "coins-taken": {
+        "file": "act2-inn-rooms.coins-taken.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "travelers-journal-appears": {
+        "file": "act2-inn-rooms.travelers-journal-appears.png",
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "areas": {
+      "coins": {
+        "x": 0.034375,
+        "y": 0.599074,
+        "width": 0.136458,
+        "height": 0.077778
+      },
+      "exit-west": {
+        "x": 0,
+        "y": 0.902778,
+        "width": 0.410417,
+        "height": 0.097222,
+        "mark": {
+          "x": 0.195313,
+          "y": 0.95463
+        }
+      },
+      "travelers-journal": {
+        "x": 0.625,
+        "y": 0.807407,
+        "width": 0.136458,
+        "height": 0.138889
+      }
+    },
     "effects": [
       {
         "kind": "dust",
         "settings": {
-          "amount": 1,
-          "speed": 1
+          "amount": 1.2,
+          "speed": 0.5
         }
       }
     ]

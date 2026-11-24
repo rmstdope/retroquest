@@ -3343,13 +3343,48 @@
     "act2-inn-rooms": {
       "text": "A comfortable guest room. in a medieval inn. The room has a cozy bed, a writing desk, and a window overlooking the Market District. The room is clean and well-maintained, offering a peaceful retreat for travelers. Faint conversation drifts up from the common room below.",
       "gameWas": "Comfortable guest rooms on the upper floor of The Silver Stag Inn. Each room has a cozy bed, a writing desk, and a window overlooking the Market District. The rooms are clean and well-maintained, offering a peaceful retreat for travelers. Faint conversation drifts up from the common room below.",
+      "patches": {
+        "coins-taken": {
+          "text": "Remove the pile of gold coins from the bedside table top; only the bare wooden table top and the candlestick remain. Nothing else changes.",
+          "gameWas": "Remove the coins from the picture."
+        },
+        "travelers-journal-appears": {
+          "text": "One floorboard beside the foot of the bed has been lifted and leans aside, showing a dusty hollow beneath, and in it lies a plain worn brown leather journal. The rest of the floor stays the same.",
+          "gameWas": "Add the traveler's journal to the picture."
+        }
+      },
+      "takeAreas": {
+        "14": {
+          "coins": {
+            "x": 66,
+            "y": 647,
+            "width": 262,
+            "height": 84
+          },
+          "exit-west": {
+            "x": 0,
+            "y": 975,
+            "width": 788,
+            "height": 105,
+            "point": {
+              "x": 375,
+              "y": 1031
+            }
+          },
+          "travelers-journal": {
+            "x": 1200,
+            "y": 872,
+            "width": 262,
+            "height": 150
+          }
+        }
+      },
       "effects": {
         "dust": {
-          "title": "Dust",
           "on": true,
           "settings": {
-            "amount": 1,
-            "speed": 1
+            "amount": 1.2,
+            "speed": 0.5
           }
         }
       }
