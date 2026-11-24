@@ -3210,6 +3210,57 @@
     "file": "act2-residential-quarter.png",
     "width": 1920,
     "height": 1080,
+    "patches": {
+      "exit-secret-passage-open": {
+        "file": "act2-residential-quarter.exit-secret-passage-open.png",
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "areas": {
+      "local-craftsmen": {
+        "x": 0.097917,
+        "y": 0.512037,
+        "width": 0.224479,
+        "height": 0.208333
+      },
+      "families": {
+        "x": 0.66875,
+        "y": 0.52037,
+        "width": 0.15625,
+        "height": 0.174074
+      },
+      "exit-south": {
+        "x": 0.146354,
+        "y": 0.951852,
+        "width": 0.585938,
+        "height": 0.048148,
+        "mark": {
+          "x": 0.439583,
+          "y": 0.975926
+        }
+      },
+      "exit-north": {
+        "x": 0.585938,
+        "y": 0.399074,
+        "width": 0.053646,
+        "height": 0.190741,
+        "mark": {
+          "x": 0.610417,
+          "y": 0.52037
+        }
+      },
+      "exit-secret-passage": {
+        "x": 0.488542,
+        "y": 0.412963,
+        "width": 0.097917,
+        "height": 0.174074,
+        "mark": {
+          "x": 0.535417,
+          "y": 0.52037
+        }
+      }
+    },
     "effects": [
       {
         "kind": "dust",
@@ -3221,7 +3272,7 @@
       {
         "kind": "leaves",
         "settings": {
-          "amount": 1,
+          "amount": 0.8,
           "speed": 1
         }
       }

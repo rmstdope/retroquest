@@ -2827,8 +2827,6 @@
       }
     },
     "act2-forest-entrance": {
-      "text": "Massive trees create a natural cathedral as you enter the Enchanted Forest. Dappled sunlight filters through the dense canopy, and the path ahead disappears into green shadows. The air is alive with birds and rustling leaves, but beneath it lies an expectant silence, as if the forest itself is watching. the further into the forest you look, the more trees there are.",
-      "gameWas": "Massive trees create a natural cathedral as you enter the Enchanted Forest. Dappled sunlight filters through the dense canopy, and the path ahead disappears into green shadows. The air is alive with birds and rustling leaves, but beneath it lies an expectant silence, as if the forest itself is watching.",
       "patches": {
         "caravan-appears": {
           "text": "A small group of battered, weary merchants in travel-stained clothes sit and stand on the grass among a few wooden crates, sacks and bundles of goods they carried up; a coil of rope is tied around a tree trunk and trails away behind it. Life-size for where they are, the same painted style. The trees and ferns stay exactly as they are.",
@@ -3718,9 +3716,60 @@
     "act2-residential-quarter": {
       "text": "Quiet lanes of two-storey houses in the midst of a medieval city, each with a small garden and a workshop. Craftsmen work at benches in the open doorways, and neighbours sit on their steps. Half the garden plots have gone grey.",
       "gameWas": "Quiet lanes of two-storey houses, each with a small garden and a workshop. Craftsmen work at benches in the open doorways, and neighbours sit on their steps. Half the garden plots have gone grey.",
+      "patches": {
+        "exit-secret-passage-open": {
+          "text": "Remove the bricks filling the arched cellar doorway, so the arch stands open and dark, with worn stone steps leading down into the shadow; a few loose bricks lie on the ground beside it. The wall around it stays the same.",
+          "gameWas": "Show the way secret_passage open and passable."
+        }
+      },
+      "takeAreas": {
+        "9": {
+          "exit-north": {
+            "x": 1125,
+            "y": 431,
+            "width": 103,
+            "height": 206,
+            "point": {
+              "x": 1172,
+              "y": 562
+            }
+          },
+          "exit-secret-passage": {
+            "x": 938,
+            "y": 446,
+            "width": 188,
+            "height": 188,
+            "point": {
+              "x": 1028,
+              "y": 562
+            }
+          },
+          "exit-south": {
+            "x": 281,
+            "y": 1028,
+            "width": 1125,
+            "height": 52,
+            "point": {
+              "x": 844,
+              "y": 1054
+            }
+          },
+          "families": {
+            "x": 1284,
+            "y": 562,
+            "width": 300,
+            "height": 188
+          },
+          "local-craftsmen": {
+            "x": 188,
+            "y": 553,
+            "width": 431,
+            "height": 225
+          }
+        }
+      },
       "effects": {
         "dust": {
-          "title": "Dust",
           "on": true,
           "settings": {
             "amount": 1,
@@ -3728,10 +3777,9 @@
           }
         },
         "leaves": {
-          "title": "Leaves",
           "on": true,
           "settings": {
-            "amount": 1,
+            "amount": 0.8,
             "speed": 1
           }
         }
