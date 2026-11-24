@@ -2830,6 +2830,10 @@
       "text": "Massive trees create a natural cathedral as you enter the Enchanted Forest. Dappled sunlight filters through the dense canopy, and the path ahead disappears into green shadows. The air is alive with birds and rustling leaves, but beneath it lies an expectant silence, as if the forest itself is watching. the further into the forest you look, the more trees there are.",
       "gameWas": "Massive trees create a natural cathedral as you enter the Enchanted Forest. Dappled sunlight filters through the dense canopy, and the path ahead disappears into green shadows. The air is alive with birds and rustling leaves, but beneath it lies an expectant silence, as if the forest itself is watching.",
       "patches": {
+        "caravan-appears": {
+          "text": "A small group of battered, weary merchants in travel-stained clothes sit and stand on the grass among a few wooden crates, sacks and bundles of goods they carried up; a coil of rope is tied around a tree trunk and trails away behind it. Life-size for where they are, the same painted style. The trees and ferns stay exactly as they are.",
+          "gameWas": "Add the caravan to the picture."
+        },
         "enchanted-acorn-taken": {
           "text": "Remove the acorn from the edge of the path; where it lay there is only the same path, grass and earth. Nothing else changes.",
           "gameWas": "Remove the enchanted acorn from the picture."
@@ -2849,6 +2853,12 @@
       },
       "takeAreas": {
         "11": {
+          "caravan": {
+            "x": 1125,
+            "y": 750,
+            "width": 488,
+            "height": 281
+          },
           "enchanted-acorn": {
             "x": 844,
             "y": 943,
@@ -2890,6 +2900,16 @@
             "y": 356,
             "width": 450,
             "height": 262
+          },
+          "ravine": {
+            "x": 1538,
+            "y": 225,
+            "width": 338,
+            "height": 525,
+            "point": {
+              "x": 1688,
+              "y": 469
+            }
           }
         }
       },

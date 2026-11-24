@@ -2216,6 +2216,11 @@
     "width": 1920,
     "height": 1080,
     "patches": {
+      "caravan-appears": {
+        "file": "act2-forest-entrance.caravan-appears.png",
+        "width": 1920,
+        "height": 1080
+      },
       "enchanted-acorn-taken": {
         "file": "act2-forest-entrance.enchanted-acorn-taken.png",
         "width": 1920,
@@ -2274,6 +2279,22 @@
           "x": 0.048958,
           "y": 0.659259
         }
+      },
+      "ravine": {
+        "x": 0.801042,
+        "y": 0.208333,
+        "width": 0.176042,
+        "height": 0.486111,
+        "mark": {
+          "x": 0.879167,
+          "y": 0.434259
+        }
+      },
+      "caravan": {
+        "x": 0.585938,
+        "y": 0.694444,
+        "width": 0.254167,
+        "height": 0.260185
       }
     },
     "effects": [
