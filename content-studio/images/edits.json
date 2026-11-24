@@ -2827,6 +2827,8 @@
       }
     },
     "act2-forest-entrance": {
+      "text": "You are at the entrance of a thick forest with Massive trees. Dappled sunlight filters through the dense canopy, and the path ahead disappears into green shadows. The air is alive with birds and rustling leaves, but beneath it lies an expectant silence, as if the forest itself is watching.",
+      "gameWas": "Massive trees create a natural cathedral as you enter the Enchanted Forest. Dappled sunlight filters through the dense canopy, and the path ahead disappears into green shadows. The air is alive with birds and rustling leaves, but beneath it lies an expectant silence, as if the forest itself is watching.",
       "patches": {
         "caravan-appears": {
           "text": "A small group of battered, weary merchants in travel-stained clothes sit and stand on the grass among a few wooden crates, sacks and bundles of goods they carried up; a coil of rope is tied around a tree trunk and trails away behind it. Life-size for where they are, the same painted style. The trees and ferns stay exactly as they are.",
@@ -3788,13 +3790,70 @@
     "act2-silver-stag-inn": {
       "text": "The inside of a medieval/fantasy inn glows with warm yellow light. Conversations from travelers and locals merge into a comforting din while tales are traded over bread and ale. All people are wearing medieval clothes. Stag mounts and adventuring trophies line the walls. The place feels welcoming; information flows here as freely as the drink.",
       "gameWas": "A three-story inn glows with warm yellow light. Conversations from travelers and locals merge into a comforting din while tales are traded over bread and ale. Stag mounts and adventuring trophies line the walls. The place feels welcoming; information flows here as freely as the drink.",
+      "patches": {
+        "exit-east-open": {
+          "text": "Remove the closed wooden door from its arched doorway, leaving the doorway open: through it a narrow wooden staircase climbs upward in warm lamplight. The frame, the wall, the deer heads and the drinkers stay exactly as they are.",
+          "gameWas": "Show the way east open and passable."
+        },
+        "room-key-gone": {
+          "text": "Remove the brass key from the hook on the wooden post; only the empty iron hook remains. Nothing else changes.",
+          "gameWas": "Remove the room key from the picture."
+        }
+      },
+      "takeAreas": {
+        "23": {
+          "barmaid-elena": {
+            "x": 788,
+            "y": 469,
+            "width": 262,
+            "height": 506
+          },
+          "door": {
+            "x": 1219,
+            "y": 291,
+            "width": 178,
+            "height": 300
+          },
+          "exit-east": {
+            "x": 1219,
+            "y": 291,
+            "width": 178,
+            "height": 300,
+            "point": {
+              "x": 1307,
+              "y": 469
+            }
+          },
+          "exit-south": {
+            "x": 469,
+            "y": 1028,
+            "width": 975,
+            "height": 52,
+            "point": {
+              "x": 956,
+              "y": 1054
+            }
+          },
+          "innkeeper-marcus": {
+            "x": 581,
+            "y": 338,
+            "width": 206,
+            "height": 656
+          },
+          "room-key": {
+            "x": 769,
+            "y": 262,
+            "width": 56,
+            "height": 112
+          }
+        }
+      },
       "effects": {
         "dust": {
-          "title": "Dust",
           "on": true,
           "settings": {
-            "amount": 1,
-            "speed": 1
+            "amount": 1.6,
+            "speed": 0.5
           }
         }
       }

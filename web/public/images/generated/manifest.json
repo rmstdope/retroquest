@@ -3282,12 +3282,70 @@
     "file": "act2-silver-stag-inn.png",
     "width": 1920,
     "height": 1080,
+    "patches": {
+      "exit-east-open": {
+        "file": "act2-silver-stag-inn.exit-east-open.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "room-key-gone": {
+        "file": "act2-silver-stag-inn.room-key-gone.png",
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "areas": {
+      "room-key": {
+        "x": 0.400521,
+        "y": 0.242593,
+        "width": 0.029167,
+        "height": 0.103704
+      },
+      "door": {
+        "x": 0.634896,
+        "y": 0.269444,
+        "width": 0.092708,
+        "height": 0.277778
+      },
+      "innkeeper-marcus": {
+        "x": 0.302604,
+        "y": 0.312963,
+        "width": 0.107292,
+        "height": 0.607407
+      },
+      "barmaid-elena": {
+        "x": 0.410417,
+        "y": 0.434259,
+        "width": 0.136458,
+        "height": 0.468519
+      },
+      "exit-south": {
+        "x": 0.244271,
+        "y": 0.951852,
+        "width": 0.507813,
+        "height": 0.048148,
+        "mark": {
+          "x": 0.497917,
+          "y": 0.975926
+        }
+      },
+      "exit-east": {
+        "x": 0.634896,
+        "y": 0.269444,
+        "width": 0.092708,
+        "height": 0.277778,
+        "mark": {
+          "x": 0.680729,
+          "y": 0.434259
+        }
+      }
+    },
     "effects": [
       {
         "kind": "dust",
         "settings": {
-          "amount": 1,
-          "speed": 1
+          "amount": 1.6,
+          "speed": 0.5
         }
       }
     ]
