@@ -2978,13 +2978,44 @@
       }
     },
     "act2-great-hall": {
+      "takeAreas": {
+        "7": {
+          "court-herald": {
+            "x": 328,
+            "y": 544,
+            "width": 356,
+            "height": 525
+          },
+          "exit-east": {
+            "x": 712,
+            "y": 1028,
+            "width": 562,
+            "height": 52,
+            "point": {
+              "x": 994,
+              "y": 1050
+            }
+          },
+          "historians": {
+            "x": 1331,
+            "y": 684,
+            "width": 525,
+            "height": 384
+          },
+          "lord-commander": {
+            "x": 778,
+            "y": 684,
+            "width": 206,
+            "height": 347
+          }
+        }
+      },
       "effects": {
         "dust": {
-          "title": "Dust",
           "on": true,
           "settings": {
-            "amount": 1,
-            "speed": 1
+            "amount": 1.8,
+            "speed": 0.6
           }
         }
       }

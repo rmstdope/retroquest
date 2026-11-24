@@ -2366,12 +2366,42 @@
     "file": "act2-great-hall.png",
     "width": 1920,
     "height": 1080,
+    "areas": {
+      "court-herald": {
+        "x": 0.170833,
+        "y": 0.503704,
+        "width": 0.185417,
+        "height": 0.486111
+      },
+      "historians": {
+        "x": 0.693229,
+        "y": 0.633333,
+        "width": 0.273438,
+        "height": 0.355556
+      },
+      "lord-commander": {
+        "x": 0.405208,
+        "y": 0.633333,
+        "width": 0.107292,
+        "height": 0.321296
+      },
+      "exit-east": {
+        "x": 0.370833,
+        "y": 0.951852,
+        "width": 0.292708,
+        "height": 0.048148,
+        "mark": {
+          "x": 0.517708,
+          "y": 0.972222
+        }
+      }
+    },
     "effects": [
       {
         "kind": "dust",
         "settings": {
-          "amount": 1,
-          "speed": 1
+          "amount": 1.8,
+          "speed": 0.6
         }
       }
     ]
