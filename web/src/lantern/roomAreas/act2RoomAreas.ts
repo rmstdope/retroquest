@@ -116,7 +116,11 @@ export const ACT2_ROOM_AREAS: Record<string, ImageArea[]> = {
         'the forest-sprites-aside patch opens the way as the sprites move',
     },
     { id: 'exit-east', title: 'Way east' },
-    { id: 'ravine', title: 'Ravine' },
+    {
+      id: 'ravine',
+      title: 'Ravine',
+      unpatched: 'it lies hidden beyond the thickest trees, so it is not seen',
+    },
     { id: 'caravan', title: 'Caravan' },
   ],
   AncientGrove: [

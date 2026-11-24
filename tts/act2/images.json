@@ -178,17 +178,10 @@
         "area": "exit-east"
       },
       {
-        "id": "ravine-appears",
-        "title": "Ravine appears",
-        "text": "Add the ravine to the picture.",
-        "area": "ravine"
-      },
-      {
         "id": "caravan-appears",
         "title": "Caravan appears",
         "text": "Add the caravan to the picture.",
-        "area": "caravan",
-        "over": "ravine-appears"
+        "area": "caravan"
       },
       {
         "id": "forest-sprites-aside",

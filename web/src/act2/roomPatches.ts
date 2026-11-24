@@ -190,22 +190,14 @@ export const ACT2_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       area: 'exit-east',
       when: 'present',
     },
-    {
-      id: 'ravine-appears',
-      title: 'Ravine appears',
-      text: 'Add the ravine to the picture.',
-      area: 'ravine',
-      when: 'present',
-    },
+    // The ravine has no patch: it lies hidden beyond the thickest trees, so
+    // the picture never shows it; its named area marks where it hides.
     {
       id: 'caravan-appears',
       title: 'Caravan appears',
       text: 'Add the caravan to the picture.',
       area: 'caravan',
       when: 'present',
-      // The rope is used on the ravine, so the caravan lies over it.
-      over: 'ravine-appears',
-      layer: 1,
     },
     {
       id: 'forest-sprites-aside',
