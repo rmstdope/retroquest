@@ -28,6 +28,14 @@ updates:
     open-pull-requests-limit: 20
     commit-message:
       prefix: chore(deps)
+    # TypeScript 7 is the native (Go) compiler and ships no compiler API, which
+    # typescript-eslint (typed lint) and vue-tsc (the type check) are built on;
+    # typescript-eslint's peer range also stops below 6.1. Lift this ignore once
+    # both support TypeScript 7 (rq-tqxu, PR #1377).
+    ignore:
+      - dependency-name: typescript
+        update-types:
+          - version-update:semver-major
 
   # The actions the CI workflow uses.
   - package-ecosystem: github-actions
