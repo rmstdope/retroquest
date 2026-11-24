@@ -10,7 +10,7 @@ RUN printf '%s' "$VCS_REF" | grep -Eq '^[0-9a-f]{40}$' \
     && npm run build \
     && printf '{"revision":"%s"}\n' "$VCS_REF" > dist/release.json
 
-FROM caddy:2.11.8-alpine
+FROM caddy:2.11.9-alpine
 COPY deploy/Caddyfile /etc/caddy/Caddyfile
 COPY --from=build /app/web/dist /srv
 EXPOSE 8080
