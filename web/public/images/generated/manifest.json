@@ -462,6 +462,11 @@
         "width": 1920,
         "height": 1080
       },
+      "lantern-carried": {
+        "file": "act1-eliors-cottage.lantern-carried.png",
+        "width": 1920,
+        "height": 1080
+      },
       "lantern-lit": {
         "file": "act1-eliors-cottage.lantern-lit.png",
         "width": 1920,
@@ -1989,6 +1994,11 @@
         "file": "act2-ancient-grove.exit-south-open.png",
         "width": 1920,
         "height": 1080
+      },
+      "silver-leaves-appears": {
+        "file": "act2-ancient-grove.silver-leaves-appears.png",
+        "width": 1920,
+        "height": 1080
       }
     },
     "areas": {
@@ -2559,6 +2569,16 @@
         "height": 0.565741
       }
     }
+  },
+  "act3-miras-hut": {
+    "file": "act3-miras-hut.png",
+    "width": 1920,
+    "height": 1080
+  },
+  "act3-portrait-ancient-dragon": {
+    "file": "act3-portrait-ancient-dragon.png",
+    "width": 480,
+    "height": 640
   },
   "act4-chamber-of-whispers": {
     "file": "act4-chamber-of-whispers.png",
