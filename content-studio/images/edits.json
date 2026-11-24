@@ -3173,6 +3173,34 @@
               ]
             ]
           ]
+        },
+        "smoke": {
+          "title": "Smoke",
+          "on": true,
+          "settings": {
+            "amount": 2.4,
+            "speed": 1
+          },
+          "spot": [
+            [
+              [
+                0.3762,
+                0.6012
+              ],
+              [
+                0.2859,
+                0.6011
+              ],
+              [
+                0.2909,
+                0.8092
+              ],
+              [
+                0.3346,
+                0.8062
+              ]
+            ]
+          ]
         }
       }
     },
@@ -3231,13 +3259,63 @@
     "act2-hidden-library": {
       "text": "Discovered beneath Greendale through a secret passage, this ancient library holds countless volumes of magical lore. Glowing crystals mounted as torches provide soft illumination and the air hums with residual energy. Protective enchantments shimmer around the most valuable texts. Somewhere on these shelves may be an answer about the mark you carry.",
       "gameWas": "Discovered beneath Greendale through a secret passage, this ancient library holds countless volumes of magical lore. Glowing crystals provide soft illumination and the air hums with residual energy. Protective enchantments shimmer around the most valuable texts. Somewhere on these shelves may be an answer about the mark you carry.",
+      "patches": {
+        "crystal-focus-appears": {
+          "text": "On the stone floor lies a small folded blue cloth, no bigger than a hand and much smaller than the book on the cabinet, with a tiny clear crystal on it that catches the light in a single bright glint. Small in the scene; the floor around stays the same.",
+          "gameWas": "Add the crystal focus to the picture."
+        }
+      },
+      "takeAreas": {
+        "12": {
+          "ancient-chronicle": {
+            "x": 853,
+            "y": 619,
+            "width": 234,
+            "height": 103
+          },
+          "crystal-focus": {
+            "x": 759,
+            "y": 947,
+            "width": 150,
+            "height": 66
+          },
+          "exit-secret-passage": {
+            "x": 469,
+            "y": 1028,
+            "width": 938,
+            "height": 52,
+            "point": {
+              "x": 938,
+              "y": 1054
+            }
+          },
+          "protective-enchantments": {
+            "x": 1256,
+            "y": 281,
+            "width": 506,
+            "height": 619
+          },
+          "spectral-librarian": {
+            "x": 1088,
+            "y": 478,
+            "width": 169,
+            "height": 506
+          }
+        }
+      },
       "effects": {
         "dust": {
-          "title": "Dust",
           "on": true,
           "settings": {
-            "amount": 1,
-            "speed": 1
+            "amount": 1.4,
+            "speed": 0.5
+          }
+        },
+        "fireflies": {
+          "on": true,
+          "settings": {
+            "amount": 0.6,
+            "speed": 0.5
           }
         }
       }
