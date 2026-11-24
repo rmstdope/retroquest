@@ -5,11 +5,13 @@ description: Work a RetroQuest image (room picture, patch, fine-tune, named area
 
 # Working images in Content Studio
 
-The images on the game's image list are the navigator's (`CLAUDE.md`, *Images*). You work
-them through the studio's MCP **when the navigator asks you to, in a session they are
-driving**. Never edit `content-studio/images/*.json` or `web/public/images/generated/` by
+`CLAUDE.md` (*Images*) says no agent generates, draws or picks a game image. This skill is the
+exception the navigator made for studio work: you may make takes (fine-tunes, patch takes)
+through the studio's MCP **only when the navigator asks you to, in a session they are
+driving**, and **the navigator picks every take** unless they hand a choice over, in words,
+for that choice. Never edit `content-studio/images/*.json` or `web/public/images/generated/` by
 hand. A change to the game's patch list or area list (`web/src/lantern/roomPatches.ts`,
-`roomAreas/`, and the acts' `roomPatches`) is a bead and a PR, never a studio-side shortcut.
+`roomAreas/`, and `web/src/act<N>/roomPatches.ts`) is a bead and a PR, never a studio-side shortcut.
 
 ## Connecting
 
@@ -29,25 +31,31 @@ hand. A change to the game's patch list or area list (`web/src/lantern/roomPatch
 | --- | --- |
 | Patch or fine-tune mark / `area` (`{x,y,width,height}`) | the **take's pixels**, 1024 × 576 |
 | Named area box and its `point` | **game pixels**, 1920 × 1080 |
-| Effect spots (polygons), `mark` | **picture fractions**, 0 to 1 |
+| Effect spots (polygons) and `mark`, in the exported manifest | **picture fractions**, 0 to 1 |
 
 A patch take is `{count, area}`. An exit you arrive from is a band along the bottom edge
-with a `point`; an exit into the picture is a box on the opening.
+with a `point`; an exit into the picture is a box on the opening. The MCP's area action
+(`PUT /api/images/:id/areas/:area`) takes only `{ box }`: it cannot set the `point`. Say so,
+and leave the point to the navigator in the studio's UI.
 
 ## Order of work for a room
 
 1. **Read the room**: its class in `web/src/act<N>/rooms/`, the things it can hold
-   (`roomAreas/act<N>RoomAreas.ts`), its patches (`roomPatches` of the act) and their
+   (`web/src/lantern/roomAreas/act<N>RoomAreas.ts`), its patches (`web/src/act<N>/roomPatches.ts`) and their
    `when` rules. The base picture shows the room **as the game starts**.
 2. **Look at the picture**: `studio_fetch /api/images/:id/current`.
 3. **Fine-tune the base** (`/api/images/:id/fine-tunes`) until it matches the room's text
    and its start state. Fine-tunes go **one at a time**: `fine-tunes/use` makes the take
    the next chosen take and **drops the other fine-tunes**.
 4. **Patches** (`/api/images/:id/patches/:patch/takes`): taken / gone / appears / open.
-5. **Named areas** (`PUT /api/images/:id/areas/:area`).
-6. **Effects** (`PUT /api/images/:id/effects`, zoom).
-7. **Accept if out of date** (`/accept`, `/compare` with `keep` or `game`) for pictures whose
-   game text changed.
+5. **Named areas** (`PUT /api/images/:id/areas/:area`, body `{ box }` or `null`).
+6. **Effects**: `PUT /api/images/:id/effects` takes `{ effects: { [type]: { on, settings } } }`
+   and has no spot or `mark`; drawing spots is the navigator's, in the studio's UI. Zoom is
+   its own route, `PUT /api/images/:id/zoom`.
+7. **Settle what is out of date**: an image whose game text changed,
+   `POST /api/images/:id/compare` (`keep` or `game`); a patch whose words changed,
+   `POST /api/images/:id/game-patches/:patch/compare` (`keep` or `game`);
+   `/accept` takes the picture the game already has as it is.
 8. **Commit** the studio's files (`content-studio/images/`, generated pictures) only as the
    navigator directs.
 
@@ -85,7 +93,7 @@ look at the crop. A **tiny file size means an empty take**. Mark seen takes (`/s
 ## What you decide and what you ask
 
 - **The navigator chooses** every take and every box, with options, unless they hand the
-  choice over. Spending steps (`make-all`, remakes) carry what they cost: say it first.
+  choice over. Steps marked `confirm` (`make-all`, remakes, drops) need the navigator's yes: say what they do and how long they run first.
 - You decide: the wording of an edit within what the room's text says, and which take to
   recommend.
 - Ask: anything that changes what the room shows beyond its text, any patch to add, split or
