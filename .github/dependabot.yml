@@ -6,7 +6,8 @@
 #   request, never grouped, so a failing upgrade is pinned to one package. CI
 #   is the safety net. Read a major's changelog or migration guide before
 #   merging; a major that needs code changes becomes a bead.
-# - The open-pull-request limit is 20 per ecosystem, no practical cap.
+# - The open-pull-request limit is 20 per ecosystem, high enough to be no
+#   practical cap.
 # - A release must be at least a few days old before Dependabot proposes it,
 #   so a broken release has time to be pulled.
 # - The .cerebro/cerebro submodule is not covered; it is bumped by hand.
