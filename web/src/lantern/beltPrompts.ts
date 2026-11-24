@@ -146,7 +146,7 @@ export const THING_PROMPTS: Readonly<Record<string, string>> = {
   'item-mothers-letter':
     'A folded letter of cream paper sealed with a blob of red wax.',
   'item-mountain-flower':
-    'A single blue mountain flower with five narrow petals and a thin stem.',
+    'A single purple mountain flower with five narrow petals and a thin stem.',
   'item-nyxs-token': 'A small, dark green leaf-shaped token on a loop of cord.',
   'item-old-oath-scrolls':
     'Two rolled parchment scrolls tied with a faded red ribbon.',

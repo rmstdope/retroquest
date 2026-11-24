@@ -98,6 +98,12 @@ describe('beltImages', () => {
     expect(coins?.text).not.toContain('silver')
   })
 
+  it('paints the mountain flower purple, as the game describes it', () => {
+    const flower = THING_PROMPTS['item-mountain-flower']
+    expect(flower).toContain('purple')
+    expect(flower).not.toContain('blue')
+  })
+
   it('has a prompt for each entry and no prompt without an entry', () => {
     const ids = new Set(ACTS.flatMap((act) => beltImages(act).map((i) => i.id)))
     const prompts = Object.keys({
