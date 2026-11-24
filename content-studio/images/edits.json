@@ -3023,13 +3023,65 @@
     "act2-greendale-gates": {
       "text": "In the city walls stands a magnificent stone archway with sturdy wooden doors that marks the entrance to the largest settlement you have encountered. Guards in polished mail stand watch, banners fluttering in the mountain breeze. Beyond, cobblestone streets wind between stone houses and bustling shops. The air carries the sounds of commerce—a stark contrast to Willowbrook's quiet charm.",
       "gameWas": "A magnificent stone archway marks the entrance to Greendale, the largest settlement you have encountered. Guards in polished mail stand watch, banners fluttering in the mountain breeze. Beyond, cobblestone streets wind between stone houses and bustling shops. The air carries the sounds of commerce—a stark contrast to Willowbrook's quiet charm.",
+      "patches": {
+        "city-map-appears": {
+          "text": "A folded parchment map of the city, drawn in brown and grey ink, is pinned to the small hanging wooden sign by the door, partly unfolded so its streets show. Nothing else changes.",
+          "gameWas": "Add the city map to the picture."
+        },
+        "gate-captain-gone": {
+          "text": "Remove the gate captain standing in the middle of the road; where he stood, the cobbled street runs on clear through the open archway into the town. The gates, guards and everything else stay exactly the same.",
+          "gameWas": "Remove Gate Captain from the picture and show the way north open and passable."
+        }
+      },
+      "takeAreas": {
+        "11": {
+          "city-map": {
+            "x": 41,
+            "y": 722,
+            "width": 94,
+            "height": 90
+          },
+          "exit-north": {
+            "x": 788,
+            "y": 469,
+            "width": 356,
+            "height": 375,
+            "point": {
+              "x": 956,
+              "y": 750
+            }
+          },
+          "exit-south": {
+            "x": 338,
+            "y": 1028,
+            "width": 975,
+            "height": 52,
+            "point": {
+              "x": 825,
+              "y": 1054
+            }
+          },
+          "gate-captain": {
+            "x": 872,
+            "y": 619,
+            "width": 262,
+            "height": 431
+          }
+        }
+      },
       "effects": {
         "dust": {
-          "title": "Dust",
           "on": true,
           "settings": {
             "amount": 1,
             "speed": 1
+          }
+        },
+        "leaves": {
+          "on": true,
+          "settings": {
+            "amount": 0.6,
+            "speed": 1.2
           }
         }
       }

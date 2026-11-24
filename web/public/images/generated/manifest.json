@@ -2410,12 +2410,65 @@
     "file": "act2-greendale-gates.png",
     "width": 1920,
     "height": 1080,
+    "patches": {
+      "city-map-appears": {
+        "file": "act2-greendale-gates.city-map-appears.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "gate-captain-gone": {
+        "file": "act2-greendale-gates.gate-captain-gone.png",
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "areas": {
+      "gate-captain": {
+        "x": 0.454167,
+        "y": 0.573148,
+        "width": 0.136458,
+        "height": 0.399074
+      },
+      "exit-south": {
+        "x": 0.176042,
+        "y": 0.951852,
+        "width": 0.507813,
+        "height": 0.048148,
+        "mark": {
+          "x": 0.429688,
+          "y": 0.975926
+        }
+      },
+      "exit-north": {
+        "x": 0.410417,
+        "y": 0.434259,
+        "width": 0.185417,
+        "height": 0.347222,
+        "mark": {
+          "x": 0.497917,
+          "y": 0.694444
+        }
+      },
+      "city-map": {
+        "x": 0.021354,
+        "y": 0.668519,
+        "width": 0.048958,
+        "height": 0.083333
+      }
+    },
     "effects": [
       {
         "kind": "dust",
         "settings": {
           "amount": 1,
           "speed": 1
+        }
+      },
+      {
+        "kind": "leaves",
+        "settings": {
+          "amount": 0.6,
+          "speed": 1.2
         }
       }
     ]
