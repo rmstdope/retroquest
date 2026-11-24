@@ -2996,12 +2996,97 @@
     "file": "act2-mountain-path.png",
     "width": 1920,
     "height": 1080,
+    "patches": {
+      "entry-pass-appears": {
+        "file": "act2-mountain-path.entry-pass-appears.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "exit-east-open": {
+        "file": "act2-mountain-path.exit-east-open.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "mountain-flower-taken": {
+        "file": "act2-mountain-path.mountain-flower-taken.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "walking-stick-taken": {
+        "file": "act2-mountain-path.walking-stick-taken.png",
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "areas": {
+      "mountain-flower": {
+        "x": 0.546875,
+        "y": 0.833333,
+        "width": 0.092708,
+        "height": 0.138889
+      },
+      "walking-stick": {
+        "x": 0.507813,
+        "y": 0.686111,
+        "width": 0.053646,
+        "height": 0.251852
+      },
+      "camp-site": {
+        "x": 0.2,
+        "y": 0.763889,
+        "width": 0.170833,
+        "height": 0.208333,
+        "mark": {
+          "x": 0.283333,
+          "y": 0.868519
+        }
+      },
+      "mountain-hermit": {
+        "x": 0.370833,
+        "y": 0.694444,
+        "width": 0.092708,
+        "height": 0.234259
+      },
+      "exit-north": {
+        "x": 0.546875,
+        "y": 0.52037,
+        "width": 0.254167,
+        "height": 0.190741,
+        "mark": {
+          "x": 0.673958,
+          "y": 0.607407
+        }
+      },
+      "entry-pass": {
+        "x": 0.283333,
+        "y": 0.911111,
+        "width": 0.078125,
+        "height": 0.077778
+      },
+      "exit-east": {
+        "x": 0.859375,
+        "y": 0.72963,
+        "width": 0.140625,
+        "height": 0.27037,
+        "mark": {
+          "x": 0.927604,
+          "y": 0.937037
+        }
+      }
+    },
     "effects": [
+      {
+        "kind": "leaves",
+        "settings": {
+          "amount": 0.5,
+          "speed": 1
+        }
+      },
       {
         "kind": "mist",
         "settings": {
-          "amount": 1,
-          "speed": 1
+          "amount": 0.8,
+          "speed": 0.7
         }
       }
     ]
