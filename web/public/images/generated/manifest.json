@@ -2215,28 +2215,6 @@
     "file": "act2-forest-entrance.png",
     "width": 1920,
     "height": 1080,
-    "patches": {
-      "caravan-appears": {
-        "file": "act2-forest-entrance.caravan-appears.png",
-        "width": 1920,
-        "height": 1080
-      },
-      "enchanted-acorn-taken": {
-        "file": "act2-forest-entrance.enchanted-acorn-taken.png",
-        "width": 1920,
-        "height": 1080
-      },
-      "exit-east-open": {
-        "file": "act2-forest-entrance.exit-east-open.png",
-        "width": 1920,
-        "height": 1080
-      },
-      "forest-sprites-aside": {
-        "file": "act2-forest-entrance.forest-sprites-aside.png",
-        "width": 1920,
-        "height": 1080
-      }
-    },
     "areas": {
       "enchanted-acorn": {
         "x": 0.439583,
@@ -2319,7 +2297,24 @@
           "speed": 1
         }
       }
-    ]
+    ],
+    "patches": {
+      "enchanted-acorn-taken": {
+        "file": "act2-forest-entrance.enchanted-acorn-taken.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "exit-east-open": {
+        "file": "act2-forest-entrance.exit-east-open.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "forest-sprites-aside": {
+        "file": "act2-forest-entrance.forest-sprites-aside.png",
+        "width": 1920,
+        "height": 1080
+      }
+    }
   },
   "act2-forest-transition": {
     "file": "act2-forest-transition.png",
@@ -2969,12 +2964,30 @@
     "file": "act2-merchants-warehouse.png",
     "width": 1920,
     "height": 1080,
+    "areas": {
+      "brenn": {
+        "x": 0.752083,
+        "y": 0.373148,
+        "width": 0.219792,
+        "height": 0.625
+      },
+      "exit-north": {
+        "x": 0.292708,
+        "y": 0.951852,
+        "width": 0.429688,
+        "height": 0.048148,
+        "mark": {
+          "x": 0.507813,
+          "y": 0.975926
+        }
+      }
+    },
     "effects": [
       {
         "kind": "dust",
         "settings": {
-          "amount": 1,
-          "speed": 1
+          "amount": 1.5,
+          "speed": 0.4
         }
       }
     ]

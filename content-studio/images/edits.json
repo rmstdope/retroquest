@@ -3579,13 +3579,32 @@
     "act2-merchants-warehouse": {
       "text": "The inside of a large stone building packed with goods from distant lands. Crates and barrels form narrow corridors between tall shelving. Exotic spice and lacquer aromas mingle in the cool still air. This is where the most valuable inventory rests under quiet watch.",
       "gameWas": "A large stone building packed with goods from distant lands. Crates and barrels form narrow corridors between tall shelving. Exotic spice and lacquer aromas mingle in the cool still air. This is where the most valuable inventory rests under quiet watch.",
+      "takeAreas": {
+        "13": {
+          "brenn": {
+            "x": 1444,
+            "y": 403,
+            "width": 422,
+            "height": 675
+          },
+          "exit-north": {
+            "x": 562,
+            "y": 1028,
+            "width": 825,
+            "height": 52,
+            "point": {
+              "x": 975,
+              "y": 1054
+            }
+          }
+        }
+      },
       "effects": {
         "dust": {
-          "title": "Dust",
           "on": true,
           "settings": {
-            "amount": 1,
-            "speed": 1
+            "amount": 1.5,
+            "speed": 0.4
           }
         }
       }
