@@ -2749,9 +2749,68 @@
       }
     },
     "act2-castle-courtyard": {
+      "patches": {
+        "squires-diary-appears": {
+          "text": "A small, worn brown leather diary lies on the grass in the shadow under the left stone bench, partly hidden by the bench seat. Only the diary is added; the bench, grass and everything else stay exactly as they are.",
+          "gameWas": "Add the squire's diary to the picture."
+        }
+      },
+      "takeAreas": {
+        "5": {
+          "exit-east": {
+            "x": 525,
+            "y": 1012,
+            "width": 862,
+            "height": 68,
+            "point": {
+              "x": 960,
+              "y": 1050
+            }
+          },
+          "exit-north": {
+            "x": 1828,
+            "y": 338,
+            "width": 92,
+            "height": 562,
+            "point": {
+              "x": 1875,
+              "y": 638
+            }
+          },
+          "exit-west": {
+            "x": 915,
+            "y": 502,
+            "width": 150,
+            "height": 257
+          },
+          "sir-cedric": {
+            "x": 309,
+            "y": 628,
+            "width": 112,
+            "height": 262
+          },
+          "squires": {
+            "x": 619,
+            "y": 666,
+            "width": 272,
+            "height": 216
+          },
+          "squires-diary": {
+            "x": 272,
+            "y": 1012,
+            "width": 84,
+            "height": 56
+          },
+          "training-master": {
+            "x": 1072,
+            "y": 634,
+            "width": 109,
+            "height": 253
+          }
+        }
+      },
       "effects": {
         "dust": {
-          "title": "Dust",
           "on": true,
           "settings": {
             "amount": 1,
@@ -2759,10 +2818,9 @@
           }
         },
         "leaves": {
-          "title": "Leaves",
           "on": true,
           "settings": {
-            "amount": 1,
+            "amount": 1.5,
             "speed": 1
           }
         }

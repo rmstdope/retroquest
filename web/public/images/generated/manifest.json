@@ -2135,6 +2135,65 @@
     "file": "act2-castle-courtyard.png",
     "width": 1920,
     "height": 1080,
+    "patches": {
+      "squires-diary-appears": {
+        "file": "act2-castle-courtyard.squires-diary-appears.png",
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "areas": {
+      "sir-cedric": {
+        "x": 0.160938,
+        "y": 0.581481,
+        "width": 0.058333,
+        "height": 0.242593
+      },
+      "training-master": {
+        "x": 0.558333,
+        "y": 0.587037,
+        "width": 0.056771,
+        "height": 0.234259
+      },
+      "squires": {
+        "x": 0.322396,
+        "y": 0.616667,
+        "width": 0.141667,
+        "height": 0.2
+      },
+      "exit-east": {
+        "x": 0.273438,
+        "y": 0.937037,
+        "width": 0.448958,
+        "height": 0.062963,
+        "mark": {
+          "x": 0.5,
+          "y": 0.972222
+        }
+      },
+      "exit-north": {
+        "x": 0.952083,
+        "y": 0.312963,
+        "width": 0.047917,
+        "height": 0.52037,
+        "mark": {
+          "x": 0.976563,
+          "y": 0.590741
+        }
+      },
+      "exit-west": {
+        "x": 0.476563,
+        "y": 0.464815,
+        "width": 0.078125,
+        "height": 0.237963
+      },
+      "squires-diary": {
+        "x": 0.141667,
+        "y": 0.937037,
+        "width": 0.04375,
+        "height": 0.051852
+      }
+    },
     "effects": [
       {
         "kind": "dust",
@@ -2146,7 +2205,7 @@
       {
         "kind": "leaves",
         "settings": {
-          "amount": 1,
+          "amount": 1.5,
           "speed": 1
         }
       }
