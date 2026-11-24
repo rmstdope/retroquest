@@ -3089,22 +3089,88 @@
     "act2-healers-house": {
       "text": "Inside of a small stone house that smells of crushed herbs. A few bundles of dried plants still hang from the rafters, but the shelves below them are nearly bare: rows of empty bottles, rinsed and waiting. A fire burns in the hearth, and a door at the back stands half shut.",
       "gameWas": "A small stone house that smells of crushed herbs. A few bundles of dried plants still hang from the rafters, but the shelves below them are nearly bare: rows of empty bottles, rinsed and waiting. A fire burns in the hearth, and a door at the back stands half shut.",
+      "takeAreas": {
+        "14": {
+          "exit-south": {
+            "x": 562,
+            "y": 1022,
+            "width": 788,
+            "height": 58,
+            "point": {
+              "x": 956,
+              "y": 1050
+            }
+          },
+          "master-healer-lyria": {
+            "x": 1088,
+            "y": 394,
+            "width": 262,
+            "height": 600
+          }
+        }
+      },
       "effects": {
         "dust": {
-          "title": "Dust",
           "on": true,
           "settings": {
             "amount": 1,
-            "speed": 1
+            "speed": 0.8
           }
         },
         "embers": {
-          "title": "Embers",
+          "on": true,
+          "settings": {
+            "amount": 1.2,
+            "speed": 1
+          },
+          "spot": [
+            [
+              [
+                0.2637,
+                0.5729
+              ],
+              [
+                0.3906,
+                0.5729
+              ],
+              [
+                0.3906,
+                0.8681
+              ],
+              [
+                0.2637,
+                0.8681
+              ]
+            ]
+          ]
+        },
+        "fire": {
           "on": true,
           "settings": {
             "amount": 1,
+            "glow": 1.2,
             "speed": 1
-          }
+          },
+          "spot": [
+            [
+              [
+                0.2783,
+                0.6944
+              ],
+              [
+                0.376,
+                0.6944
+              ],
+              [
+                0.376,
+                0.8681
+              ],
+              [
+                0.2783,
+                0.8681
+              ]
+            ]
+          ]
         }
       }
     },
