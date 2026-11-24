@@ -369,15 +369,18 @@ test.describe('the arrival told on the picture', () => {
       await expect(arrival(page).locator('.lq-arrival-card')).toHaveCount(1)
       const lines = arrival(page).locator('.lq-arrival-line')
       const seen: string[] = []
+      // Space turns every page up to the room's, the last part; a Space there
+      // would clear the arrival, so the loop stops before it (rq-h3xx).
       for (let i = 0; i < 6; i++) {
         const text = (await lines.allTextContents()).join(' | ')
         seen.push(text)
         if (text.includes('let them rest')) expect(text).toContain('whisper')
+        if (text.includes('Elior')) break
         await page.keyboard.press('Space')
         await expect(arrival(page).locator('.lq-arrival-card')).toHaveCount(1)
-        if (text.includes('Elior')) break
       }
       expect(seen.some((text) => text.includes('let them rest'))).toBe(true)
+      expect(seen.at(-1)).toContain('Elior')
       await skipTelling(page)
       await expect(lines).toHaveCount(0)
     })
