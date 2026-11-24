@@ -3656,8 +3656,33 @@
     "width": 256,
     "height": 256
   },
+  "item-city-map": {
+    "file": "item-city-map.png",
+    "width": 256,
+    "height": 256
+  },
   "item-coin": {
     "file": "item-coin.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-coins": {
+    "file": "item-coins.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-crystal-clear-water": {
+    "file": "item-crystal-clear-water.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-crystal-focus": {
+    "file": "item-crystal-focus.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-druidic-charm": {
+    "file": "item-druidic-charm.png",
     "width": 256,
     "height": 256
   },
@@ -3668,6 +3693,21 @@
   },
   "item-egg": {
     "file": "item-egg.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-enchanted-acorn": {
+    "file": "item-enchanted-acorn.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-enhanced-lantern": {
+    "file": "item-enhanced-lantern.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-entry-pass": {
+    "file": "item-entry-pass.png",
     "width": 256,
     "height": 256
   },
@@ -3696,6 +3736,16 @@
     "width": 256,
     "height": 256
   },
+  "item-forest-heart-crystal": {
+    "file": "item-forest-heart-crystal.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-forest-survival-kit": {
+    "file": "item-forest-survival-kit.png",
+    "width": 256,
+    "height": 256
+  },
   "item-fresh-bread": {
     "file": "item-fresh-bread.png",
     "width": 256,
@@ -3703,6 +3753,11 @@
   },
   "item-fresh-carrot": {
     "file": "item-fresh-carrot.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-healing-herbs": {
+    "file": "item-healing-herbs.png",
     "width": 256,
     "height": 256
   },
@@ -3751,8 +3806,18 @@
     "width": 256,
     "height": 256
   },
+  "item-merchants-flyer": {
+    "file": "item-merchants-flyer.png",
+    "width": 256,
+    "height": 256
+  },
   "item-millstone-fragment": {
     "file": "item-millstone-fragment.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-moonflowers": {
+    "file": "item-moonflowers.png",
     "width": 256,
     "height": 256
   },
@@ -3761,13 +3826,43 @@
     "width": 256,
     "height": 256
   },
+  "item-mountain-flower": {
+    "file": "item-mountain-flower.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-natures-charm": {
+    "file": "item-natures-charm.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-nyxs-token": {
+    "file": "item-nyxs-token.png",
+    "width": 256,
+    "height": 256
+  },
   "item-patches": {
     "file": "item-patches.png",
     "width": 256,
     "height": 256
   },
+  "item-protective-charm": {
+    "file": "item-protective-charm.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-quality-rope": {
+    "file": "item-quality-rope.png",
+    "width": 256,
+    "height": 256
+  },
   "item-rare-flower": {
     "file": "item-rare-flower.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-room-key": {
+    "file": "item-room-key.png",
     "width": 256,
     "height": 256
   },
@@ -3796,6 +3891,11 @@
     "width": 256,
     "height": 256
   },
+  "item-secret-documents": {
+    "file": "item-secret-documents.png",
+    "width": 256,
+    "height": 256
+  },
   "item-sharp-knife": {
     "file": "item-sharp-knife.png",
     "width": 256,
@@ -3811,6 +3911,16 @@
     "width": 256,
     "height": 256
   },
+  "item-silver-leaves": {
+    "file": "item-silver-leaves.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-squires-diary": {
+    "file": "item-squires-diary.png",
+    "width": 256,
+    "height": 256
+  },
   "item-stick": {
     "file": "item-stick.png",
     "width": 256,
@@ -3821,8 +3931,23 @@
     "width": 256,
     "height": 256
   },
+  "item-training-sword": {
+    "file": "item-training-sword.png",
+    "width": 256,
+    "height": 256
+  },
   "item-travel-cloak": {
     "file": "item-travel-cloak.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-travelers-journal": {
+    "file": "item-travelers-journal.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-walking-stick": {
+    "file": "item-walking-stick.png",
     "width": 256,
     "height": 256
   },
@@ -3871,6 +3996,21 @@
     "width": 256,
     "height": 256
   },
+  "spell-dispel": {
+    "file": "spell-dispel.png",
+    "width": 256,
+    "height": 256
+  },
+  "spell-forest-speech": {
+    "file": "spell-forest-speech.png",
+    "width": 256,
+    "height": 256
+  },
+  "spell-greater-heal": {
+    "file": "spell-greater-heal.png",
+    "width": 256,
+    "height": 256
+  },
   "spell-grow": {
     "file": "spell-grow.png",
     "width": 256,
@@ -3883,6 +4023,21 @@
   },
   "spell-light": {
     "file": "spell-light.png",
+    "width": 256,
+    "height": 256
+  },
+  "spell-mend": {
+    "file": "spell-mend.png",
+    "width": 256,
+    "height": 256
+  },
+  "spell-nature-sense": {
+    "file": "spell-nature-sense.png",
+    "width": 256,
+    "height": 256
+  },
+  "spell-prophetic-vision": {
+    "file": "spell-prophetic-vision.png",
     "width": 256,
     "height": 256
   },
