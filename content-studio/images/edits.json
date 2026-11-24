@@ -3111,17 +3111,19 @@
       },
       "effects": {
         "dust": {
+          "title": "Dust",
           "on": true,
           "settings": {
-            "amount": 1,
+            "amount": 2.65,
             "speed": 0.8
           }
         },
         "embers": {
+          "title": "Embers",
           "on": true,
           "settings": {
-            "amount": 1.2,
-            "speed": 1
+            "amount": 5,
+            "speed": 1.95
           },
           "spot": [
             [
@@ -3177,21 +3179,51 @@
     "act2-heart-of-the-forest": {
       "text": "The deepest part of the forest. The light here is green and gold and does not seem to come from the sky. A tree vaster than any other holds up the branches overhead, and before it stands an altar with a carved star on it The forest is so thick so the only way out is back the way you came..",
       "gameWas": "The deepest part of the forest. The light here is green and gold and does not seem to come from the sky. A tree vaster than any other holds up the branches overhead, and before it stands an altar of starstone. The only way out is back north, to the grove.",
+      "patches": {
+        "nyx-appears": {
+          "text": "A slender barefoot woman stands on the grass to the right of the altar, facing the viewer: shoulder-length wavy brown hair with green leaves caught in it, a simple long pale linen dress, calm green eyes. The moss at her feet is a brighter green. Life-size beside the altar, in the same painted style. The altar, roots and tree stay exactly the same.",
+          "gameWas": "Add Nyx to the picture."
+        }
+      },
+      "takeAreas": {
+        "9": {
+          "exit-north": {
+            "x": 750,
+            "y": 975,
+            "width": 488,
+            "height": 105,
+            "point": {
+              "x": 994,
+              "y": 1031
+            }
+          },
+          "nyx": {
+            "x": 1303,
+            "y": 422,
+            "width": 178,
+            "height": 638
+          },
+          "offering-altar": {
+            "x": 788,
+            "y": 656,
+            "width": 375,
+            "height": 253
+          }
+        }
+      },
       "effects": {
         "dust": {
-          "title": "Dust",
           "on": true,
           "settings": {
-            "amount": 1,
-            "speed": 1
+            "amount": 1.6,
+            "speed": 0.6
           }
         },
         "fireflies": {
-          "title": "Fireflies",
           "on": true,
           "settings": {
-            "amount": 1,
-            "speed": 1
+            "amount": 1.8,
+            "speed": 0.8
           }
         }
       }

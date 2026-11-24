@@ -2499,15 +2499,15 @@
       {
         "kind": "dust",
         "settings": {
-          "amount": 1,
+          "amount": 2.65,
           "speed": 0.8
         }
       },
       {
         "kind": "embers",
         "settings": {
-          "amount": 1.2,
-          "speed": 1
+          "amount": 5,
+          "speed": 1.95
         },
         "spot": [
           [
@@ -2564,19 +2564,50 @@
     "file": "act2-heart-of-the-forest.png",
     "width": 1920,
     "height": 1080,
+    "patches": {
+      "nyx-appears": {
+        "file": "act2-heart-of-the-forest.nyx-appears.png",
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "areas": {
+      "offering-altar": {
+        "x": 0.410417,
+        "y": 0.607407,
+        "width": 0.195313,
+        "height": 0.234259
+      },
+      "exit-north": {
+        "x": 0.390625,
+        "y": 0.902778,
+        "width": 0.254167,
+        "height": 0.097222,
+        "mark": {
+          "x": 0.517708,
+          "y": 0.95463
+        }
+      },
+      "nyx": {
+        "x": 0.678646,
+        "y": 0.390741,
+        "width": 0.092708,
+        "height": 0.590741
+      }
+    },
     "effects": [
       {
         "kind": "dust",
         "settings": {
-          "amount": 1,
-          "speed": 1
+          "amount": 1.6,
+          "speed": 0.6
         }
       },
       {
         "kind": "fireflies",
         "settings": {
-          "amount": 1,
-          "speed": 1
+          "amount": 1.8,
+          "speed": 0.8
         }
       }
     ]
