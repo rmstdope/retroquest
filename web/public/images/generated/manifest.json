@@ -2876,12 +2876,91 @@
     "file": "act2-market-district.png",
     "width": 1920,
     "height": 1080,
+    "patches": {
+      "enhanced-lantern-appears": {
+        "file": "act2-market-district.enhanced-lantern-appears.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "forest-survival-kit-appears": {
+        "file": "act2-market-district.forest-survival-kit-appears.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "quality-rope-appears": {
+        "file": "act2-market-district.quality-rope-appears.png",
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "areas": {
+      "master-merchant-aldric": {
+        "x": 0.761458,
+        "y": 0.581481,
+        "width": 0.097917,
+        "height": 0.408333
+      },
+      "caravan-master-thorne": {
+        "x": 0.310417,
+        "y": 0.590741,
+        "width": 0.082813,
+        "height": 0.390741
+      },
+      "exit-west": {
+        "x": 0,
+        "y": 0.52037,
+        "width": 0.058333,
+        "height": 0.399074,
+        "mark": {
+          "x": 0.029167,
+          "y": 0.72963
+        }
+      },
+      "exit-north": {
+        "x": 0.458854,
+        "y": 0.52037,
+        "width": 0.117188,
+        "height": 0.208333,
+        "mark": {
+          "x": 0.517708,
+          "y": 0.659259
+        }
+      },
+      "exit-south": {
+        "x": 0.254167,
+        "y": 0.951852,
+        "width": 0.488542,
+        "height": 0.048148,
+        "mark": {
+          "x": 0.497917,
+          "y": 0.975926
+        }
+      },
+      "forest-survival-kit": {
+        "x": 0.864063,
+        "y": 0.72963,
+        "width": 0.092708,
+        "height": 0.147222
+      },
+      "enhanced-lantern": {
+        "x": 0.834896,
+        "y": 0.512037,
+        "width": 0.058333,
+        "height": 0.121296
+      },
+      "quality-rope": {
+        "x": 0.820313,
+        "y": 0.714815,
+        "width": 0.053646,
+        "height": 0.077778
+      }
+    },
     "effects": [
       {
         "kind": "dust",
         "settings": {
-          "amount": 1,
-          "speed": 1
+          "amount": 1.3,
+          "speed": 0.8
         }
       }
     ]

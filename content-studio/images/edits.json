@@ -3488,13 +3488,90 @@
       }
     },
     "act2-market-district": {
+      "patches": {
+        "enhanced-lantern-appears": {
+          "text": "A brass lantern with a bright, steady, faintly bluish magical glow hangs from a hook on the stall beam above the counter. Nothing else changes.",
+          "gameWas": "Add the enhanced lantern to the picture."
+        },
+        "forest-survival-kit-appears": {
+          "text": "A rolled-up canvas bedroll tied with leather straps, with a small pouch and a tin cup bound to it, lies on the right end of the wooden counter top. Nothing else changes.",
+          "gameWas": "Add the forest survival kit to the picture."
+        },
+        "quality-rope-appears": {
+          "text": "A small neat coil of thick hemp rope sits on the left end of the wooden counter top, next to the man's hands. Only the rope is added; nothing else changes.",
+          "gameWas": "Add the quality rope to the picture."
+        }
+      },
+      "takeAreas": {
+        "6": {
+          "caravan-master-thorne": {
+            "x": 596,
+            "y": 638,
+            "width": 159,
+            "height": 422
+          },
+          "enhanced-lantern": {
+            "x": 1603,
+            "y": 553,
+            "width": 112,
+            "height": 131
+          },
+          "exit-north": {
+            "x": 881,
+            "y": 562,
+            "width": 225,
+            "height": 225,
+            "point": {
+              "x": 994,
+              "y": 712
+            }
+          },
+          "exit-south": {
+            "x": 488,
+            "y": 1028,
+            "width": 938,
+            "height": 52,
+            "point": {
+              "x": 956,
+              "y": 1054
+            }
+          },
+          "exit-west": {
+            "x": 0,
+            "y": 562,
+            "width": 112,
+            "height": 431,
+            "point": {
+              "x": 56,
+              "y": 788
+            }
+          },
+          "forest-survival-kit": {
+            "x": 1659,
+            "y": 788,
+            "width": 178,
+            "height": 159
+          },
+          "master-merchant-aldric": {
+            "x": 1462,
+            "y": 628,
+            "width": 188,
+            "height": 441
+          },
+          "quality-rope": {
+            "x": 1575,
+            "y": 772,
+            "width": 103,
+            "height": 84
+          }
+        }
+      },
       "effects": {
         "dust": {
-          "title": "Dust",
           "on": true,
           "settings": {
-            "amount": 1,
-            "speed": 1
+            "amount": 1.3,
+            "speed": 0.8
           }
         }
       }
