@@ -2829,9 +2829,72 @@
     "act2-forest-entrance": {
       "text": "Massive trees create a natural cathedral as you enter the Enchanted Forest. Dappled sunlight filters through the dense canopy, and the path ahead disappears into green shadows. The air is alive with birds and rustling leaves, but beneath it lies an expectant silence, as if the forest itself is watching. the further into the forest you look, the more trees there are.",
       "gameWas": "Massive trees create a natural cathedral as you enter the Enchanted Forest. Dappled sunlight filters through the dense canopy, and the path ahead disappears into green shadows. The air is alive with birds and rustling leaves, but beneath it lies an expectant silence, as if the forest itself is watching.",
+      "patches": {
+        "enchanted-acorn-taken": {
+          "text": "Remove the acorn from the edge of the path; where it lay there is only the same path, grass and earth. Nothing else changes.",
+          "gameWas": "Remove the enchanted acorn from the picture."
+        },
+        "exit-east-open": {
+          "text": "A soft blue lantern light shines into the dark tangled undergrowth at the far left, picking out a narrow path that winds through it into the trees. The big trunk and the ferns in front stay as they are.",
+          "gameWas": "Show the way east open and passable."
+        },
+        "forest-sprites-aside": {
+          "text": "Remove the cloud of glowing motes from above the path so the way ahead is clear and passable; a few small glowing motes now hover off to the sides among the tree trunks. The trees, path and light stay exactly as they are.",
+          "gameWas": "Move the forest sprites away from the southern path, among the trees, and show the way south open and passable."
+        },
+        "ravine-appears": {
+          "text": "Far in the background, low between the distant trees, a small glimpse of a rocky drop: the forest floor breaks off at a mossy edge and a narrow grey stone gorge falls away into shadow. It is distant, small and soft in the misty light, blending into the forest. The two near trunks stay exactly as they are.",
+          "gameWas": "Add the ravine to the picture."
+        }
+      },
+      "takeAreas": {
+        "11": {
+          "enchanted-acorn": {
+            "x": 844,
+            "y": 943,
+            "width": 131,
+            "height": 98
+          },
+          "exit-east": {
+            "x": 0,
+            "y": 469,
+            "width": 206,
+            "height": 450,
+            "point": {
+              "x": 94,
+              "y": 712
+            }
+          },
+          "exit-south": {
+            "x": 853,
+            "y": 619,
+            "width": 262,
+            "height": 300,
+            "point": {
+              "x": 975,
+              "y": 825
+            }
+          },
+          "exit-west": {
+            "x": 1838,
+            "y": 375,
+            "width": 82,
+            "height": 562,
+            "point": {
+              "x": 1875,
+              "y": 656
+            }
+          },
+          "forest-sprites": {
+            "x": 750,
+            "y": 356,
+            "width": 450,
+            "height": 262
+          }
+        }
+      },
       "effects": {
         "dust": {
-          "title": "Dust",
           "on": true,
           "settings": {
             "amount": 1,
@@ -2839,18 +2902,16 @@
           }
         },
         "leaves": {
-          "title": "Leaves",
           "on": true,
           "settings": {
-            "amount": 1,
+            "amount": 1.5,
             "speed": 1
           }
         },
         "mist": {
-          "title": "Mist",
           "on": true,
           "settings": {
-            "amount": 1,
+            "amount": 1.2,
             "speed": 1
           }
         }
