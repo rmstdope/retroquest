@@ -4055,6 +4055,83 @@
         }
       }
     },
+    "act3-collapsed-galleries": {
+      "text": "A mine tunnel deep underground, cut through rough rock and lit by a hanging lantern. At its far end the tunnel is choked with fallen stone, floor to roof. Snapped timber props lie under the pile, and dust hangs in the still air. No windows, no daylight.",
+      "gameWas": "A gallery choked with fallen stone, floor to roof. The timbers that held it lie snapped under the pile, and dust hangs in the still air.",
+      "patches": {
+        "exit-east-open": {
+          "text": "Clear away the fallen stone from the end of the tunnel, showing the open mine tunnel running on into the dark beyond, shored with fresh upright timber props. The lantern and the side walls stay.",
+          "gameWas": "Show the way east open and passable."
+        },
+        "fallen-rock-gone": {
+          "text": "Clear away the great pile of fallen stone at the end of the tunnel, showing the mine tunnel running on into the dark beyond, shored with fresh upright timber props, a few loose stones left on the floor. The lantern, the side walls and the knight stay.",
+          "gameWas": "Remove the fallen rock from the picture."
+        },
+        "miners-appears": {
+          "text": "Add a group of five miners grey with rock dust, in worn work clothes and leather caps, passing a timber prop from hand to hand across the tunnel floor, the oldest at the front pointing. Each miner no taller than the knight at the right. The knight, the lantern and the tunnel walls stay.",
+          "gameWas": "Add Miners to the picture."
+        },
+        "tobin-appears": {
+          "text": "Add a thin boy of about fifteen sitting alone on an upturned wooden bucket on the tunnel floor, knees drawn up, holding a small cracked lamp in his lap, his head lower than the knight's chest. The side tunnel and the stones stay.",
+          "gameWas": "Add Tobin to the picture."
+        }
+      },
+      "takeAreas": {
+        "15": {
+          "exit-east": {
+            "x": 788,
+            "y": 338,
+            "width": 319,
+            "height": 412
+          },
+          "exit-south": {
+            "x": 0,
+            "y": 994,
+            "width": 1920,
+            "height": 86
+          },
+          "exit-west": {
+            "x": 94,
+            "y": 319,
+            "width": 225,
+            "height": 431
+          },
+          "fallen-rock": {
+            "x": 638,
+            "y": 262,
+            "width": 581,
+            "height": 544
+          },
+          "miners": {
+            "x": 619,
+            "y": 562,
+            "width": 544,
+            "height": 412
+          },
+          "sir-cedric": {
+            "x": 1153,
+            "y": 506,
+            "width": 159,
+            "height": 478
+          },
+          "tobin": {
+            "x": 394,
+            "y": 675,
+            "width": 188,
+            "height": 300
+          }
+        }
+      },
+      "effects": {
+        "dust": {
+          "on": true,
+          "settings": {
+            "amount": 1.6,
+            "speed": 0.3
+          }
+        }
+      }
+    },
     "act3-collapsed-pier": {
       "patches": {
         "prism-lantern-appears": {

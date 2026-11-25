@@ -3530,6 +3530,86 @@
       }
     }
   },
+  "act3-collapsed-galleries": {
+    "file": "act3-collapsed-galleries.png",
+    "width": 1920,
+    "height": 1080,
+    "patches": {
+      "exit-east-open": {
+        "file": "act3-collapsed-galleries.exit-east-open.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "fallen-rock-gone": {
+        "file": "act3-collapsed-galleries.fallen-rock-gone.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "miners-appears": {
+        "file": "act3-collapsed-galleries.miners-appears.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "tobin-appears": {
+        "file": "act3-collapsed-galleries.tobin-appears.png",
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "areas": {
+      "fallen-rock": {
+        "x": 0.332292,
+        "y": 0.242593,
+        "width": 0.302604,
+        "height": 0.503704
+      },
+      "exit-south": {
+        "x": 0,
+        "y": 0.92037,
+        "width": 1,
+        "height": 0.07963
+      },
+      "exit-west": {
+        "x": 0.048958,
+        "y": 0.29537,
+        "width": 0.117188,
+        "height": 0.399074
+      },
+      "sir-cedric": {
+        "x": 0.600521,
+        "y": 0.468519,
+        "width": 0.082813,
+        "height": 0.442593
+      },
+      "miners": {
+        "x": 0.322396,
+        "y": 0.52037,
+        "width": 0.283333,
+        "height": 0.381481
+      },
+      "tobin": {
+        "x": 0.205208,
+        "y": 0.625,
+        "width": 0.097917,
+        "height": 0.277778
+      },
+      "exit-east": {
+        "x": 0.410417,
+        "y": 0.312963,
+        "width": 0.166146,
+        "height": 0.381481
+      }
+    },
+    "effects": [
+      {
+        "kind": "dust",
+        "settings": {
+          "amount": 1.6,
+          "speed": 0.3
+        }
+      }
+    ]
+  },
   "act3-collapsed-pier": {
     "file": "act3-collapsed-pier.png",
     "width": 1920,
