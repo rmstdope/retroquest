@@ -5073,6 +5073,106 @@
       }
     ]
   },
+  "act3-stillness-vestibule": {
+    "file": "act3-stillness-vestibule.png",
+    "width": 1920,
+    "height": 1080,
+    "patches": {
+      "quiet-charm-taken": {
+        "file": "act3-stillness-vestibule.quiet-charm-taken.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "stillwater-phial-taken": {
+        "file": "act3-stillness-vestibule.stillwater-phial-taken.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "wandering-phantoms-gone": {
+        "file": "act3-stillness-vestibule.wandering-phantoms-gone.png",
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "areas": {
+      "echo-stones": {
+        "x": 0.395313,
+        "y": 0.52037,
+        "width": 0.209896,
+        "height": 0.251852
+      },
+      "dark-pool": {
+        "x": 0,
+        "y": 0.815741,
+        "width": 0.322396,
+        "height": 0.184259
+      },
+      "stillwater-phial": {
+        "x": 0.363542,
+        "y": 0.772222,
+        "width": 0.033333,
+        "height": 0.090741
+      },
+      "quiet-charm": {
+        "x": 0.613542,
+        "y": 0.868519,
+        "width": 0.073438,
+        "height": 0.048148
+      },
+      "silence-keeper": {
+        "x": 0.2,
+        "y": 0.464815,
+        "width": 0.063542,
+        "height": 0.32963
+      },
+      "wandering-phantoms": {
+        "x": 0.683333,
+        "y": 0.464815,
+        "width": 0.239063,
+        "height": 0.390741
+      },
+      "exit-north": {
+        "x": 0.429688,
+        "y": 0.347222,
+        "width": 0.136458,
+        "height": 0.174074
+      },
+      "exit-west": {
+        "x": 0.092708,
+        "y": 0.321296,
+        "width": 0.053646,
+        "height": 0.468519
+      },
+      "sir-cedric": {
+        "x": 0.421875,
+        "y": 0.551852,
+        "width": 0.068229,
+        "height": 0.333333
+      },
+      "exit-east": {
+        "x": 0.820313,
+        "y": 0.29537,
+        "width": 0.082813,
+        "height": 0.486111
+      }
+    },
+    "effects": [
+      {
+        "kind": "dust",
+        "settings": {
+          "amount": 0.6,
+          "speed": 0.2
+        }
+      },
+      {
+        "kind": "mist",
+        "settings": {
+          "amount": 0.4,
+          "speed": 0.2
+        }
+      }
+    ]
+  },
   "act3-submerged-antechamber": {
     "file": "act3-submerged-antechamber.png",
     "width": 1920,
