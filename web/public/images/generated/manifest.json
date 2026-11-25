@@ -3880,6 +3880,110 @@
     "width": 480,
     "height": 640
   },
+  "act3-sanctum-of-the-tide": {
+    "file": "act3-sanctum-of-the-tide.png",
+    "width": 1920,
+    "height": 1080,
+    "patches": {
+      "crystal-of-light-appears": {
+        "file": "act3-sanctum-of-the-tide.crystal-of-light-appears.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "exit-east-closed": {
+        "file": "act3-sanctum-of-the-tide.exit-east-closed.png",
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "areas": {
+      "tide-born-guardian": {
+        "x": 0.727604,
+        "y": 0.29537,
+        "width": 0.073438,
+        "height": 0.425
+      },
+      "exit-west": {
+        "x": 0,
+        "y": 0.868519,
+        "width": 1,
+        "height": 0.131481
+      },
+      "exit-east": {
+        "x": 0.849479,
+        "y": 0.355556,
+        "width": 0.1125,
+        "height": 0.321296
+      },
+      "sir-cedric": {
+        "x": 0.097917,
+        "y": 0.416667,
+        "width": 0.070313,
+        "height": 0.390741
+      },
+      "crystal-of-light": {
+        "x": 0.473438,
+        "y": 0.599074,
+        "width": 0.058333,
+        "height": 0.112963
+      }
+    },
+    "effects": [
+      {
+        "kind": "fireflies",
+        "settings": {
+          "amount": 0.8,
+          "speed": 0.4
+        }
+      },
+      {
+        "kind": "ripples",
+        "settings": {
+          "amount": 0.6,
+          "speed": 0.4,
+          "strength": 0.5
+        },
+        "spot": [
+          [
+            [
+              0,
+              0.7292
+            ],
+            [
+              1,
+              0.7292
+            ],
+            [
+              1,
+              1
+            ],
+            [
+              0,
+              1
+            ]
+          ],
+          [
+            [
+              0.3223,
+              0.6597
+            ],
+            [
+              0.6836,
+              0.6597
+            ],
+            [
+              0.6836,
+              0.7639
+            ],
+            [
+              0.3223,
+              0.7639
+            ]
+          ]
+        ]
+      }
+    ]
+  },
   "act3-shoreline-markers": {
     "file": "act3-shoreline-markers.png",
     "width": 1920,

@@ -4391,6 +4391,107 @@
         }
       }
     },
+    "act3-sanctum-of-the-tide": {
+      "patches": {
+        "crystal-of-light-appears": {
+          "text": "Add a clear palm-sized crystal prism resting at the centre of the glowing basin, cold and bright, light moving inside it like moonlit water. The basin rim and the water stay.",
+          "gameWas": "Add the crystal of light to the picture."
+        },
+        "exit-east-closed": {
+          "text": "Fill the dark tunnel opening at the right with fitted grey stone blocks, closing it completely so the arch is a solid wall. The arch stones around it and the water stay.",
+          "gameWas": "Show the way east closed off."
+        }
+      },
+      "takeAreas": {
+        "11": {
+          "crystal-of-light": {
+            "x": 909,
+            "y": 647,
+            "width": 112,
+            "height": 122
+          },
+          "exit-east": {
+            "x": 1631,
+            "y": 384,
+            "width": 216,
+            "height": 347
+          },
+          "exit-west": {
+            "x": 0,
+            "y": 938,
+            "width": 1920,
+            "height": 142
+          },
+          "sir-cedric": {
+            "x": 188,
+            "y": 450,
+            "width": 135,
+            "height": 422
+          },
+          "tide-born-guardian": {
+            "x": 1397,
+            "y": 319,
+            "width": 141,
+            "height": 459
+          }
+        }
+      },
+      "effects": {
+        "fireflies": {
+          "on": true,
+          "settings": {
+            "amount": 0.8,
+            "speed": 0.4
+          }
+        },
+        "ripples": {
+          "on": true,
+          "settings": {
+            "amount": 0.6,
+            "speed": 0.4,
+            "strength": 0.5
+          },
+          "spot": [
+            [
+              [
+                0,
+                0.7292
+              ],
+              [
+                1,
+                0.7292
+              ],
+              [
+                1,
+                1
+              ],
+              [
+                0,
+                1
+              ]
+            ],
+            [
+              [
+                0.3223,
+                0.6597
+              ],
+              [
+                0.6836,
+                0.6597
+              ],
+              [
+                0.6836,
+                0.7639
+              ],
+              [
+                0.3223,
+                0.7639
+              ]
+            ]
+          ]
+        }
+      }
+    },
     "act3-shoreline-markers": {
       "patches": {
         "moon-rune-shards-appears": {
