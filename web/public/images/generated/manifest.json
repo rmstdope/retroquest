@@ -4093,6 +4093,121 @@
       }
     ]
   },
+  "act3-fortress-entrance": {
+    "file": "act3-fortress-entrance.png",
+    "width": 1920,
+    "height": 1080,
+    "patches": {
+      "mira-appears": {
+        "file": "act3-fortress-entrance.mira-appears.png",
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "areas": {
+      "fortress-gates": {
+        "x": 0.322396,
+        "y": 0.242593,
+        "width": 0.1125,
+        "height": 0.312963
+      },
+      "mira": {
+        "x": 0.382813,
+        "y": 0.662963,
+        "width": 0.063542,
+        "height": 0.286111
+      },
+      "sir-cedric": {
+        "x": 0.209896,
+        "y": 0.628704,
+        "width": 0.063542,
+        "height": 0.315741
+      }
+    },
+    "effects": [
+      {
+        "kind": "clouds",
+        "settings": {
+          "amount": 0.7,
+          "speed": 0.5
+        },
+        "spot": [
+          [
+            [
+              0,
+              0
+            ],
+            [
+              1,
+              0
+            ],
+            [
+              1,
+              0.5208
+            ],
+            [
+              0,
+              0.5208
+            ]
+          ]
+        ]
+      },
+      {
+        "kind": "glints",
+        "settings": {
+          "amount": 0.6,
+          "speed": 0.3
+        },
+        "spot": [
+          [
+            [
+              0.332,
+              0.2951
+            ],
+            [
+              0.4297,
+              0.2951
+            ],
+            [
+              0.4297,
+              0.5208
+            ],
+            [
+              0.332,
+              0.5208
+            ]
+          ]
+        ]
+      },
+      {
+        "kind": "smoke",
+        "settings": {
+          "amount": 0.5,
+          "speed": 0.5
+        },
+        "spot": [
+          [
+            [
+              0.1855,
+              0.3993
+            ],
+            [
+              0.2832,
+              0.3993
+            ],
+            [
+              0.2832,
+              0.5903
+            ],
+            [
+              0.1855,
+              0.5903
+            ]
+          ]
+        ]
+      }
+    ]
+  },
   "act3-fumarole-passages": {
     "file": "act3-fumarole-passages.png",
     "width": 1920,

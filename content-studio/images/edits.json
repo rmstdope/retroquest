@@ -4603,6 +4603,119 @@
         }
       }
     },
+    "act3-fortress-entrance": {
+      "patches": {
+        "mira-appears": {
+          "text": "A small figure of a woman in a long dark green hooded cloak stands on the grassy rocks, seen from behind, looking up at the gate, the same small size as the knight at the left.",
+          "gameWas": "Add Mira to the picture."
+        }
+      },
+      "takeAreas": {
+        "9": {
+          "fortress-gates": {
+            "x": 619,
+            "y": 262,
+            "width": 216,
+            "height": 338
+          },
+          "mira": {
+            "x": 735,
+            "y": 716,
+            "width": 122,
+            "height": 309
+          },
+          "sir-cedric": {
+            "x": 403,
+            "y": 679,
+            "width": 122,
+            "height": 341
+          }
+        }
+      },
+      "effects": {
+        "clouds": {
+          "on": true,
+          "settings": {
+            "amount": 0.7,
+            "speed": 0.5
+          },
+          "spot": [
+            [
+              [
+                0,
+                0
+              ],
+              [
+                1,
+                0
+              ],
+              [
+                1,
+                0.5208
+              ],
+              [
+                0,
+                0.5208
+              ]
+            ]
+          ]
+        },
+        "glints": {
+          "on": true,
+          "settings": {
+            "amount": 0.6,
+            "speed": 0.3
+          },
+          "spot": [
+            [
+              [
+                0.332,
+                0.2951
+              ],
+              [
+                0.4297,
+                0.2951
+              ],
+              [
+                0.4297,
+                0.5208
+              ],
+              [
+                0.332,
+                0.5208
+              ]
+            ]
+          ]
+        },
+        "smoke": {
+          "on": true,
+          "settings": {
+            "amount": 0.5,
+            "speed": 0.5
+          },
+          "spot": [
+            [
+              [
+                0.1855,
+                0.3993
+              ],
+              [
+                0.2832,
+                0.3993
+              ],
+              [
+                0.2832,
+                0.5903
+              ],
+              [
+                0.1855,
+                0.5903
+              ]
+            ]
+          ]
+        }
+      }
+    },
     "act3-fumarole-passages": {
       "patches": {
         "exit-south-open": {
