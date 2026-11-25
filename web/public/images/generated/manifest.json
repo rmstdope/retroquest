@@ -3659,6 +3659,127 @@
       }
     ]
   },
+  "act3-fumarole-passages": {
+    "file": "act3-fumarole-passages.png",
+    "width": 1920,
+    "height": 1080,
+    "patches": {
+      "exit-south-open": {
+        "file": "act3-fumarole-passages.exit-south-open.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "vent-stone-taken": {
+        "file": "act3-fumarole-passages.vent-stone-taken.png",
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "areas": {
+      "vent-stone": {
+        "x": 0.558333,
+        "y": 0.837037,
+        "width": 0.170833,
+        "height": 0.077778
+      },
+      "phoenix-guardian": {
+        "x": 0.297917,
+        "y": 0.269444,
+        "width": 0.1125,
+        "height": 0.633333
+      },
+      "exit-west": {
+        "x": 0,
+        "y": 0.92037,
+        "width": 1,
+        "height": 0.07963
+      },
+      "sir-cedric": {
+        "x": 0.636458,
+        "y": 0.541667,
+        "width": 0.070313,
+        "height": 0.286111
+      },
+      "exit-south": {
+        "x": 0.429688,
+        "y": 0.312963,
+        "width": 0.195313,
+        "height": 0.347222
+      }
+    },
+    "effects": [
+      {
+        "kind": "embers",
+        "settings": {
+          "amount": 0.6,
+          "speed": 0.8
+        }
+      },
+      {
+        "kind": "smoke",
+        "settings": {
+          "amount": 0.8,
+          "speed": 0.5
+        },
+        "spot": [
+          [
+            [
+              0.1758,
+              0.434
+            ],
+            [
+              0.293,
+              0.434
+            ],
+            [
+              0.293,
+              0.6597
+            ],
+            [
+              0.1758,
+              0.6597
+            ]
+          ],
+          [
+            [
+              0.7031,
+              0.434
+            ],
+            [
+              0.8789,
+              0.434
+            ],
+            [
+              0.8789,
+              0.7292
+            ],
+            [
+              0.7031,
+              0.7292
+            ]
+          ],
+          [
+            [
+              0.4199,
+              0.3125
+            ],
+            [
+              0.6348,
+              0.3125
+            ],
+            [
+              0.6348,
+              0.6944
+            ],
+            [
+              0.4199,
+              0.6944
+            ]
+          ]
+        ]
+      }
+    ]
+  },
   "act3-lower-switchbacks": {
     "file": "act3-lower-switchbacks.png",
     "width": 1920,

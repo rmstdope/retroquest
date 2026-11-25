@@ -4181,6 +4181,124 @@
         }
       }
     },
+    "act3-fumarole-passages": {
+      "patches": {
+        "exit-south-open": {
+          "text": "Remove the thick wall of steam and its orange glow from the far end of the tunnel, showing the stone tunnel running on into the distance with only a thin wisp of steam. The robed figure, the knight and the tunnel walls stay.",
+          "gameWas": "Show the way south open and passable."
+        },
+        "vent-stone-taken": {
+          "text": "Remove the three dark grooved stones from the floor, showing the bare paving stones. The brass bracket, the knight's feet and the bolt heads stay.",
+          "gameWas": "Remove the vent stone from the picture."
+        }
+      },
+      "takeAreas": {
+        "14": {
+          "exit-south": {
+            "x": 825,
+            "y": 338,
+            "width": 375,
+            "height": 375
+          },
+          "exit-west": {
+            "x": 0,
+            "y": 994,
+            "width": 1920,
+            "height": 86
+          },
+          "phoenix-guardian": {
+            "x": 572,
+            "y": 291,
+            "width": 216,
+            "height": 684
+          },
+          "sir-cedric": {
+            "x": 1222,
+            "y": 585,
+            "width": 135,
+            "height": 309
+          },
+          "vent-stone": {
+            "x": 1072,
+            "y": 904,
+            "width": 328,
+            "height": 84
+          }
+        }
+      },
+      "effects": {
+        "embers": {
+          "on": true,
+          "settings": {
+            "amount": 0.6,
+            "speed": 0.8
+          }
+        },
+        "smoke": {
+          "on": true,
+          "settings": {
+            "amount": 0.8,
+            "speed": 0.5
+          },
+          "spot": [
+            [
+              [
+                0.1758,
+                0.434
+              ],
+              [
+                0.293,
+                0.434
+              ],
+              [
+                0.293,
+                0.6597
+              ],
+              [
+                0.1758,
+                0.6597
+              ]
+            ],
+            [
+              [
+                0.7031,
+                0.434
+              ],
+              [
+                0.8789,
+                0.434
+              ],
+              [
+                0.8789,
+                0.7292
+              ],
+              [
+                0.7031,
+                0.7292
+              ]
+            ],
+            [
+              [
+                0.4199,
+                0.3125
+              ],
+              [
+                0.6348,
+                0.3125
+              ],
+              [
+                0.6348,
+                0.6944
+              ],
+              [
+                0.4199,
+                0.6944
+              ]
+            ]
+          ]
+        }
+      }
+    },
     "act3-lower-switchbacks": {
       "patches": {
         "brass-mirror-segment-appears": {
