@@ -4055,6 +4055,65 @@
         }
       }
     },
+    "act3-miras-hut": {
+      "patches": {
+        "healing-herbs-gone": {
+          "text": "Remove the bundles of silvery herb stems from the counter, leaving the bare wooden counter. The bottles on the shelves stay.",
+          "gameWas": "Remove the healing herbs from the picture."
+        },
+        "lifelight-elixir-appears": {
+          "text": "Add a small glass vial of pale golden liquid, glowing softly with the colour of first light, standing on the wooden counter beside the crystal prism, no taller than half the prism. The crystal prism and the bottles stay.",
+          "gameWas": "Add the lifelight elixir to the picture."
+        },
+        "mira-gone": {
+          "text": "Remove the hooded woman in the green cloak, showing the wooden floor, the cupboards and the window behind where she stood. The knight, the herb bundles on the counter and the shelves stay.",
+          "gameWas": "Remove Mira from the picture."
+        }
+      },
+      "takeAreas": {
+        "12": {
+          "healing-herbs": {
+            "x": 270,
+            "y": 699,
+            "width": 351,
+            "height": 161
+          },
+          "lifelight-elixir": {
+            "x": 1568,
+            "y": 679,
+            "width": 64,
+            "height": 90
+          },
+          "mira": {
+            "x": 609,
+            "y": 334,
+            "width": 321,
+            "height": 746
+          },
+          "sir-cedric": {
+            "x": 1170,
+            "y": 375,
+            "width": 161,
+            "height": 699
+          },
+          "teleportation-focus": {
+            "x": 1519,
+            "y": 609,
+            "width": 103,
+            "height": 135
+          }
+        }
+      },
+      "effects": {
+        "dust": {
+          "on": true,
+          "settings": {
+            "amount": 1.4,
+            "speed": 0.5
+          }
+        }
+      }
+    },
     "act4-chamber-of-whispers": {
       "patches": {
         "sorceress-of-lies-unmasked": {

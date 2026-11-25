@@ -2215,6 +2215,28 @@
     "file": "act2-forest-entrance.png",
     "width": 1920,
     "height": 1080,
+    "patches": {
+      "caravan-appears": {
+        "file": "act2-forest-entrance.caravan-appears.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "enchanted-acorn-taken": {
+        "file": "act2-forest-entrance.enchanted-acorn-taken.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "exit-east-open": {
+        "file": "act2-forest-entrance.exit-east-open.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "forest-sprites-aside": {
+        "file": "act2-forest-entrance.forest-sprites-aside.png",
+        "width": 1920,
+        "height": 1080
+      }
+    },
     "areas": {
       "enchanted-acorn": {
         "x": 0.439583,
@@ -2297,29 +2319,7 @@
           "speed": 1
         }
       }
-    ],
-    "patches": {
-      "caravan-appears": {
-        "file": "act2-forest-entrance.caravan-appears.png",
-        "width": 1920,
-        "height": 1080
-      },
-      "enchanted-acorn-taken": {
-        "file": "act2-forest-entrance.enchanted-acorn-taken.png",
-        "width": 1920,
-        "height": 1080
-      },
-      "exit-east-open": {
-        "file": "act2-forest-entrance.exit-east-open.png",
-        "width": 1920,
-        "height": 1080
-      },
-      "forest-sprites-aside": {
-        "file": "act2-forest-entrance.forest-sprites-aside.png",
-        "width": 1920,
-        "height": 1080
-      }
-    }
+    ]
   },
   "act2-forest-transition": {
     "file": "act2-forest-transition.png",
@@ -3533,7 +3533,65 @@
   "act3-miras-hut": {
     "file": "act3-miras-hut.png",
     "width": 1920,
-    "height": 1080
+    "height": 1080,
+    "patches": {
+      "healing-herbs-gone": {
+        "file": "act3-miras-hut.healing-herbs-gone.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "lifelight-elixir-appears": {
+        "file": "act3-miras-hut.lifelight-elixir-appears.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "mira-gone": {
+        "file": "act3-miras-hut.mira-gone.png",
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "areas": {
+      "healing-herbs": {
+        "x": 0.140625,
+        "y": 0.647222,
+        "width": 0.182813,
+        "height": 0.149074
+      },
+      "teleportation-focus": {
+        "x": 0.791146,
+        "y": 0.563889,
+        "width": 0.053646,
+        "height": 0.125
+      },
+      "mira": {
+        "x": 0.317188,
+        "y": 0.309259,
+        "width": 0.167188,
+        "height": 0.690741
+      },
+      "sir-cedric": {
+        "x": 0.609375,
+        "y": 0.347222,
+        "width": 0.083854,
+        "height": 0.647222
+      },
+      "lifelight-elixir": {
+        "x": 0.816667,
+        "y": 0.628704,
+        "width": 0.033333,
+        "height": 0.083333
+      }
+    },
+    "effects": [
+      {
+        "kind": "dust",
+        "settings": {
+          "amount": 1.4,
+          "speed": 0.5
+        }
+      }
+    ]
   },
   "act3-portrait-ancient-dragon": {
     "file": "act3-portrait-ancient-dragon.png",
