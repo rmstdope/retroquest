@@ -4181,6 +4181,221 @@
         }
       }
     },
+    "act3-lower-switchbacks": {
+      "patches": {
+        "brass-mirror-segment-appears": {
+          "text": "Add a curved segment of polished brass mirror, its face catching the light, lying flat on the workbench between the stones and the tools, about as wide as the tray. The workbench and the tools stay.",
+          "gameWas": "Add the brass mirror segment to the picture."
+        },
+        "emberwater-canteen-taken": {
+          "text": "Remove the small tin flask and its strap, leaving the bare dark ground and stones. The scholar and the workbench stay.",
+          "gameWas": "Remove the emberwater canteen from the picture."
+        },
+        "mira-appears": {
+          "text": "Add one woman in a long dark green hooded cloak standing on the dark ground in front of the light tent, beside the stream, her head no higher than the knight's at the left. Only the woman is added. The tent, the braziers, the knight and the scholar stay.",
+          "gameWas": "Add Mira to the picture."
+        }
+      },
+      "takeAreas": {
+        "11": {
+          "ash-scholar": {
+            "x": 881,
+            "y": 619,
+            "width": 150,
+            "height": 384
+          },
+          "brass-mirror-segment": {
+            "x": 1303,
+            "y": 769,
+            "width": 141,
+            "height": 56
+          },
+          "emberwater-canteen": {
+            "x": 1059,
+            "y": 928,
+            "width": 122,
+            "height": 79
+          },
+          "exit-east": {
+            "x": 1650,
+            "y": 525,
+            "width": 270,
+            "height": 469
+          },
+          "exit-north": {
+            "x": 712,
+            "y": 338,
+            "width": 375,
+            "height": 206
+          },
+          "mira": {
+            "x": 435,
+            "y": 690,
+            "width": 60,
+            "height": 159
+          },
+          "sir-cedric": {
+            "x": 328,
+            "y": 684,
+            "width": 84,
+            "height": 188
+          }
+        }
+      },
+      "effects": {
+        "embers": {
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 1
+          }
+        },
+        "fire": {
+          "on": true,
+          "settings": {
+            "amount": 0.8,
+            "glow": 1,
+            "speed": 1
+          },
+          "spot": [
+            [
+              [
+                0.3564,
+                0.6597
+              ],
+              [
+                0.376,
+                0.6597
+              ],
+              [
+                0.376,
+                0.7118
+              ],
+              [
+                0.3564,
+                0.7118
+              ]
+            ],
+            [
+              [
+                0.4395,
+                0.6684
+              ],
+              [
+                0.459,
+                0.6684
+              ],
+              [
+                0.459,
+                0.7031
+              ],
+              [
+                0.4395,
+                0.7031
+              ]
+            ],
+            [
+              [
+                0.5352,
+                0.7292
+              ],
+              [
+                0.5547,
+                0.7292
+              ],
+              [
+                0.5547,
+                0.7726
+              ],
+              [
+                0.5352,
+                0.7726
+              ]
+            ]
+          ]
+        },
+        "smoke": {
+          "on": true,
+          "settings": {
+            "amount": 0.7,
+            "speed": 0.4
+          },
+          "spot": [
+            [
+              [
+                0.1465,
+                0.2083
+              ],
+              [
+                0.2539,
+                0.2083
+              ],
+              [
+                0.2539,
+                0.4688
+              ],
+              [
+                0.1465,
+                0.4688
+              ]
+            ],
+            [
+              [
+                0.4102,
+                0.1389
+              ],
+              [
+                0.5078,
+                0.1389
+              ],
+              [
+                0.5078,
+                0.2951
+              ],
+              [
+                0.4102,
+                0.2951
+              ]
+            ]
+          ]
+        },
+        "water": {
+          "on": true,
+          "settings": {
+            "amount": 0.8,
+            "speed": 0.6
+          },
+          "spot": [
+            [
+              [
+                0.2148,
+                0.7639
+              ],
+              [
+                0.459,
+                0.7378
+              ],
+              [
+                0.459,
+                0.816
+              ],
+              [
+                0.293,
+                0.9722
+              ],
+              [
+                0.1953,
+                1
+              ],
+              [
+                0.1953,
+                0.8333
+              ]
+            ]
+          ]
+        }
+      }
+    },
     "act3-miras-hut": {
       "patches": {
         "healing-herbs-gone": {

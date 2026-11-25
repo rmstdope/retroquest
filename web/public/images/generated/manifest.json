@@ -3659,6 +3659,225 @@
       }
     ]
   },
+  "act3-lower-switchbacks": {
+    "file": "act3-lower-switchbacks.png",
+    "width": 1920,
+    "height": 1080,
+    "patches": {
+      "brass-mirror-segment-appears": {
+        "file": "act3-lower-switchbacks.brass-mirror-segment-appears.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "emberwater-canteen-taken": {
+        "file": "act3-lower-switchbacks.emberwater-canteen-taken.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "mira-appears": {
+        "file": "act3-lower-switchbacks.mira-appears.png",
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "areas": {
+      "emberwater-canteen": {
+        "x": 0.551563,
+        "y": 0.859259,
+        "width": 0.063542,
+        "height": 0.073148
+      },
+      "ash-scholar": {
+        "x": 0.458854,
+        "y": 0.573148,
+        "width": 0.078125,
+        "height": 0.355556
+      },
+      "exit-north": {
+        "x": 0.370833,
+        "y": 0.312963,
+        "width": 0.195313,
+        "height": 0.190741
+      },
+      "exit-east": {
+        "x": 0.859375,
+        "y": 0.486111,
+        "width": 0.140625,
+        "height": 0.434259
+      },
+      "mira": {
+        "x": 0.226563,
+        "y": 0.638889,
+        "width": 0.03125,
+        "height": 0.147222
+      },
+      "sir-cedric": {
+        "x": 0.170833,
+        "y": 0.633333,
+        "width": 0.04375,
+        "height": 0.174074
+      },
+      "brass-mirror-segment": {
+        "x": 0.678646,
+        "y": 0.712037,
+        "width": 0.073438,
+        "height": 0.051852
+      }
+    },
+    "effects": [
+      {
+        "kind": "embers",
+        "settings": {
+          "amount": 1,
+          "speed": 1
+        }
+      },
+      {
+        "kind": "fire",
+        "settings": {
+          "amount": 0.8,
+          "glow": 1,
+          "speed": 1
+        },
+        "spot": [
+          [
+            [
+              0.3564,
+              0.6597
+            ],
+            [
+              0.376,
+              0.6597
+            ],
+            [
+              0.376,
+              0.7118
+            ],
+            [
+              0.3564,
+              0.7118
+            ]
+          ],
+          [
+            [
+              0.4395,
+              0.6684
+            ],
+            [
+              0.459,
+              0.6684
+            ],
+            [
+              0.459,
+              0.7031
+            ],
+            [
+              0.4395,
+              0.7031
+            ]
+          ],
+          [
+            [
+              0.5352,
+              0.7292
+            ],
+            [
+              0.5547,
+              0.7292
+            ],
+            [
+              0.5547,
+              0.7726
+            ],
+            [
+              0.5352,
+              0.7726
+            ]
+          ]
+        ]
+      },
+      {
+        "kind": "smoke",
+        "settings": {
+          "amount": 0.7,
+          "speed": 0.4
+        },
+        "spot": [
+          [
+            [
+              0.1465,
+              0.2083
+            ],
+            [
+              0.2539,
+              0.2083
+            ],
+            [
+              0.2539,
+              0.4688
+            ],
+            [
+              0.1465,
+              0.4688
+            ]
+          ],
+          [
+            [
+              0.4102,
+              0.1389
+            ],
+            [
+              0.5078,
+              0.1389
+            ],
+            [
+              0.5078,
+              0.2951
+            ],
+            [
+              0.4102,
+              0.2951
+            ]
+          ]
+        ]
+      },
+      {
+        "kind": "water",
+        "settings": {
+          "amount": 0.8,
+          "speed": 0.6
+        },
+        "spot": [
+          [
+            [
+              0.2148,
+              0.7639
+            ],
+            [
+              0.459,
+              0.7378
+            ],
+            [
+              0.459,
+              0.816
+            ],
+            [
+              0.293,
+              0.9722
+            ],
+            [
+              0.1953,
+              1
+            ],
+            [
+              0.1953,
+              0.8333
+            ]
+          ]
+        ]
+      }
+    ]
+  },
   "act3-miras-hut": {
     "file": "act3-miras-hut.png",
     "width": 1920,
