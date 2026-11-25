@@ -3659,6 +3659,137 @@
       }
     ]
   },
+  "act3-ember-gallery": {
+    "file": "act3-ember-gallery.png",
+    "width": 1920,
+    "height": 1080,
+    "patches": {
+      "ash-fern-appears": {
+        "file": "act3-ember-gallery.ash-fern-appears.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "cooled-slag-appears": {
+        "file": "act3-ember-gallery.cooled-slag-appears.png",
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "areas": {
+      "exit-north": {
+        "x": 0.434375,
+        "y": 0.381481,
+        "width": 0.146354,
+        "height": 0.269444
+      },
+      "exit-west": {
+        "x": 0,
+        "y": 0.277778,
+        "width": 0.088021,
+        "height": 0.451852
+      },
+      "sir-cedric": {
+        "x": 0.509896,
+        "y": 0.442593,
+        "width": 0.066667,
+        "height": 0.312963
+      },
+      "ash-fern": {
+        "x": 0.292708,
+        "y": 0.668519,
+        "width": 0.092708,
+        "height": 0.09537
+      },
+      "cooled-slag": {
+        "x": 0.382813,
+        "y": 0.859259,
+        "width": 0.082813,
+        "height": 0.103704
+      }
+    },
+    "effects": [
+      {
+        "kind": "embers",
+        "settings": {
+          "amount": 0.8,
+          "speed": 0.8
+        }
+      },
+      {
+        "kind": "fire",
+        "settings": {
+          "amount": 0.6,
+          "glow": 1,
+          "speed": 1
+        },
+        "spot": [
+          [
+            [
+              0.2441,
+              0.5729
+            ],
+            [
+              0.3125,
+              0.5729
+            ],
+            [
+              0.3125,
+              0.6597
+            ],
+            [
+              0.2441,
+              0.6597
+            ]
+          ]
+        ]
+      },
+      {
+        "kind": "smoke",
+        "settings": {
+          "amount": 0.8,
+          "speed": 0.5
+        },
+        "spot": [
+          [
+            [
+              0.1758,
+              0.3472
+            ],
+            [
+              0.4102,
+              0.3472
+            ],
+            [
+              0.4102,
+              0.6597
+            ],
+            [
+              0.1758,
+              0.6597
+            ]
+          ],
+          [
+            [
+              0.6055,
+              0.4167
+            ],
+            [
+              0.9375,
+              0.4167
+            ],
+            [
+              0.9375,
+              0.6424
+            ],
+            [
+              0.6055,
+              0.6424
+            ]
+          ]
+        ]
+      }
+    ]
+  },
   "act3-fumarole-passages": {
     "file": "act3-fumarole-passages.png",
     "width": 1920,

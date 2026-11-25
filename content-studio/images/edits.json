@@ -4181,6 +4181,134 @@
         }
       }
     },
+    "act3-ember-gallery": {
+      "patches": {
+        "ash-fern-appears": {
+          "text": "Add a few brittle fern fronds blackened by heat, lying on the near end of the wooden table, about as long as the heap beside them. The heaps and the table stay.",
+          "gameWas": "Add the ash-fern to the picture."
+        },
+        "cooled-slag-appears": {
+          "text": "Add a small heap of rough glassy black-and-grey slag fragments lying on the stone floor at the foot of the table, about as high as a bucket. The floor, the table legs and the glowing cracks stay.",
+          "gameWas": "Add the cooled slag to the picture."
+        }
+      },
+      "takeAreas": {
+        "9": {
+          "ash-fern": {
+            "x": 562,
+            "y": 722,
+            "width": 178,
+            "height": 103
+          },
+          "cooled-slag": {
+            "x": 735,
+            "y": 928,
+            "width": 159,
+            "height": 112
+          },
+          "exit-north": {
+            "x": 834,
+            "y": 412,
+            "width": 281,
+            "height": 291
+          },
+          "exit-west": {
+            "x": 0,
+            "y": 300,
+            "width": 169,
+            "height": 488
+          },
+          "sir-cedric": {
+            "x": 979,
+            "y": 478,
+            "width": 128,
+            "height": 338
+          }
+        }
+      },
+      "effects": {
+        "embers": {
+          "on": true,
+          "settings": {
+            "amount": 0.8,
+            "speed": 0.8
+          }
+        },
+        "fire": {
+          "on": true,
+          "settings": {
+            "amount": 0.6,
+            "glow": 1,
+            "speed": 1
+          },
+          "spot": [
+            [
+              [
+                0.2441,
+                0.5729
+              ],
+              [
+                0.3125,
+                0.5729
+              ],
+              [
+                0.3125,
+                0.6597
+              ],
+              [
+                0.2441,
+                0.6597
+              ]
+            ]
+          ]
+        },
+        "smoke": {
+          "on": true,
+          "settings": {
+            "amount": 0.8,
+            "speed": 0.5
+          },
+          "spot": [
+            [
+              [
+                0.1758,
+                0.3472
+              ],
+              [
+                0.4102,
+                0.3472
+              ],
+              [
+                0.4102,
+                0.6597
+              ],
+              [
+                0.1758,
+                0.6597
+              ]
+            ],
+            [
+              [
+                0.6055,
+                0.4167
+              ],
+              [
+                0.9375,
+                0.4167
+              ],
+              [
+                0.9375,
+                0.6424
+              ],
+              [
+                0.6055,
+                0.6424
+              ]
+            ]
+          ]
+        }
+      }
+    },
     "act3-fumarole-passages": {
       "patches": {
         "exit-south-open": {
