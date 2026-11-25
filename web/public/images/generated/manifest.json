@@ -3739,6 +3739,171 @@
       }
     ]
   },
+  "act3-dragons-hall": {
+    "file": "act3-dragons-hall.png",
+    "width": 1920,
+    "height": 1080,
+    "patches": {
+      "dragons-scale-appears": {
+        "file": "act3-dragons-hall.dragons-scale-appears.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "sigils-dimmed": {
+        "file": "act3-dragons-hall.sigils-dimmed.png",
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "areas": {
+      "sigils": {
+        "x": 0.176042,
+        "y": 0.712037,
+        "width": 0.634896,
+        "height": 0.287963
+      },
+      "ancient-dragon": {
+        "x": 0.263542,
+        "y": 0.503704,
+        "width": 0.439583,
+        "height": 0.364815
+      },
+      "exit-west": {
+        "x": 0,
+        "y": 0.92037,
+        "width": 1,
+        "height": 0.07963
+      },
+      "sir-cedric": {
+        "x": 0.154167,
+        "y": 0.541667,
+        "width": 0.056771,
+        "height": 0.321296
+      },
+      "dragons-scale": {
+        "x": 0.688542,
+        "y": 0.82963,
+        "width": 0.068229,
+        "height": 0.069444
+      }
+    },
+    "effects": [
+      {
+        "kind": "dust",
+        "settings": {
+          "amount": 0.6,
+          "speed": 0.3
+        }
+      },
+      {
+        "kind": "embers",
+        "settings": {
+          "amount": 0.6,
+          "speed": 0.5
+        }
+      },
+      {
+        "kind": "fire",
+        "settings": {
+          "amount": 0.7,
+          "glow": 1,
+          "speed": 0.8
+        },
+        "spot": [
+          [
+            [
+              0.0879,
+              0.7292
+            ],
+            [
+              0.1172,
+              0.7292
+            ],
+            [
+              0.1172,
+              0.8073
+            ],
+            [
+              0.0879,
+              0.8073
+            ]
+          ],
+          [
+            [
+              0.2002,
+              0.6771
+            ],
+            [
+              0.2197,
+              0.6771
+            ],
+            [
+              0.2197,
+              0.7292
+            ],
+            [
+              0.2002,
+              0.7292
+            ]
+          ],
+          [
+            [
+              0.9033,
+              0.7639
+            ],
+            [
+              0.9326,
+              0.7639
+            ],
+            [
+              0.9326,
+              0.8333
+            ],
+            [
+              0.9033,
+              0.8333
+            ]
+          ],
+          [
+            [
+              0.8105,
+              0.7205
+            ],
+            [
+              0.8301,
+              0.7205
+            ],
+            [
+              0.8301,
+              0.7639
+            ],
+            [
+              0.8105,
+              0.7639
+            ]
+          ],
+          [
+            [
+              0.7715,
+              0.6684
+            ],
+            [
+              0.791,
+              0.6684
+            ],
+            [
+              0.791,
+              0.7118
+            ],
+            [
+              0.7715,
+              0.7118
+            ]
+          ]
+        ]
+      }
+    ]
+  },
   "act3-echo-chambers": {
     "file": "act3-echo-chambers.png",
     "width": 1920,

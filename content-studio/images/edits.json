@@ -4258,6 +4258,168 @@
         }
       }
     },
+    "act3-dragons-hall": {
+      "patches": {
+        "dragons-scale-appears": {
+          "text": "Add one single dragon scale lying on the black tiles inside the sigil ring, dark as midnight with veins of deep gold, about the size of the knight's hand. The tiles, the sigils and the dragon stay.",
+          "gameWas": "Add the dragon's scale to the picture."
+        },
+        "sigils-dimmed": {
+          "text": "Make the glowing white sigils of the rings faint and dull grey, barely visible, and split the nearest ring with a long jagged crack across the tiles. The dragon, the knight and the candles stay exactly as they are.",
+          "gameWas": "Dim the sigils around the dragon and split the nearest ring with a crack."
+        }
+      },
+      "takeAreas": {
+        "9": {
+          "ancient-dragon": {
+            "x": 506,
+            "y": 544,
+            "width": 844,
+            "height": 394
+          },
+          "dragons-scale": {
+            "x": 1322,
+            "y": 896,
+            "width": 131,
+            "height": 75
+          },
+          "exit-west": {
+            "x": 0,
+            "y": 994,
+            "width": 1920,
+            "height": 86
+          },
+          "sigils": {
+            "x": 338,
+            "y": 769,
+            "width": 1219,
+            "height": 311
+          },
+          "sir-cedric": {
+            "x": 296,
+            "y": 585,
+            "width": 109,
+            "height": 347
+          }
+        }
+      },
+      "effects": {
+        "dust": {
+          "on": true,
+          "settings": {
+            "amount": 0.6,
+            "speed": 0.3
+          }
+        },
+        "embers": {
+          "on": true,
+          "settings": {
+            "amount": 0.6,
+            "speed": 0.5
+          }
+        },
+        "fire": {
+          "on": true,
+          "settings": {
+            "amount": 0.7,
+            "glow": 1,
+            "speed": 0.8
+          },
+          "spot": [
+            [
+              [
+                0.0879,
+                0.7292
+              ],
+              [
+                0.1172,
+                0.7292
+              ],
+              [
+                0.1172,
+                0.8073
+              ],
+              [
+                0.0879,
+                0.8073
+              ]
+            ],
+            [
+              [
+                0.2002,
+                0.6771
+              ],
+              [
+                0.2197,
+                0.6771
+              ],
+              [
+                0.2197,
+                0.7292
+              ],
+              [
+                0.2002,
+                0.7292
+              ]
+            ],
+            [
+              [
+                0.9033,
+                0.7639
+              ],
+              [
+                0.9326,
+                0.7639
+              ],
+              [
+                0.9326,
+                0.8333
+              ],
+              [
+                0.9033,
+                0.8333
+              ]
+            ],
+            [
+              [
+                0.8105,
+                0.7205
+              ],
+              [
+                0.8301,
+                0.7205
+              ],
+              [
+                0.8301,
+                0.7639
+              ],
+              [
+                0.8105,
+                0.7639
+              ]
+            ],
+            [
+              [
+                0.7715,
+                0.6684
+              ],
+              [
+                0.791,
+                0.6684
+              ],
+              [
+                0.791,
+                0.7118
+              ],
+              [
+                0.7715,
+                0.7118
+              ]
+            ]
+          ]
+        }
+      }
+    },
     "act3-echo-chambers": {
       "patches": {
         "old-oath-scrolls-appears": {
