@@ -5195,6 +5195,86 @@
       }
     ]
   },
+  "act3-tool-cache": {
+    "file": "act3-tool-cache.png",
+    "width": 1920,
+    "height": 1080,
+    "patches": {
+      "reinforced-braces-appears": {
+        "file": "act3-tool-cache.reinforced-braces-appears.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "supply-crate-appears": {
+        "file": "act3-tool-cache.supply-crate-appears.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "support-straps-appears": {
+        "file": "act3-tool-cache.support-straps-appears.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "wedge-blocks-appears": {
+        "file": "act3-tool-cache.wedge-blocks-appears.png",
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "areas": {
+      "exit-south": {
+        "x": 0,
+        "y": 0.937037,
+        "width": 0.332292,
+        "height": 0.062963
+      },
+      "exit-east": {
+        "x": 0.888542,
+        "y": 0.32963,
+        "width": 0.082813,
+        "height": 0.537963
+      },
+      "sir-cedric": {
+        "x": 0.629688,
+        "y": 0.442593,
+        "width": 0.082813,
+        "height": 0.416667
+      },
+      "supply-crate": {
+        "x": 0.390625,
+        "y": 0.763889,
+        "width": 0.117188,
+        "height": 0.164815
+      },
+      "reinforced-braces": {
+        "x": 0.507813,
+        "y": 0.825,
+        "width": 0.185417,
+        "height": 0.164815
+      },
+      "support-straps": {
+        "x": 0.688542,
+        "y": 0.825,
+        "width": 0.136458,
+        "height": 0.121296
+      },
+      "wedge-blocks": {
+        "x": 0.332292,
+        "y": 0.876852,
+        "width": 0.082813,
+        "height": 0.112963
+      }
+    },
+    "effects": [
+      {
+        "kind": "dust",
+        "settings": {
+          "amount": 1.2,
+          "speed": 0.4
+        }
+      }
+    ]
+  },
   "act4-chamber-of-whispers": {
     "file": "act4-chamber-of-whispers.png",
     "width": 1920,

@@ -5676,6 +5676,81 @@
         }
       }
     },
+    "act3-tool-cache": {
+      "patches": {
+        "reinforced-braces-appears": {
+          "text": "Add two heavy iron-bound timber braces lying crossed on the floor, each about as long as a crate is wide. The floor and the crates stay.",
+          "gameWas": "Add the reinforced braces to the picture."
+        },
+        "supply-crate-appears": {
+          "text": "Add one closed wooden supply crate with iron corners standing on the floor, a little smaller than the crates stacked behind it. The crates behind and the floor stay.",
+          "gameWas": "Add the supply crate to the picture."
+        },
+        "support-straps-appears": {
+          "text": "Add a coil of thick leather support straps with iron buckles lying on the floor, about the size of a coiled rope. The floor, the knight and the timber post stay.",
+          "gameWas": "Add the support straps to the picture."
+        },
+        "wedge-blocks-appears": {
+          "text": "Add a small pile of three wooden wedge blocks lying on the floor, each about the size of a brick. The floor and the crates stay.",
+          "gameWas": "Add the wedge blocks to the picture."
+        }
+      },
+      "takeAreas": {
+        "10": {
+          "exit-east": {
+            "x": 1706,
+            "y": 356,
+            "width": 159,
+            "height": 581
+          },
+          "exit-south": {
+            "x": 0,
+            "y": 1012,
+            "width": 638,
+            "height": 68
+          },
+          "reinforced-braces": {
+            "x": 975,
+            "y": 891,
+            "width": 356,
+            "height": 178
+          },
+          "sir-cedric": {
+            "x": 1209,
+            "y": 478,
+            "width": 159,
+            "height": 450
+          },
+          "supply-crate": {
+            "x": 750,
+            "y": 825,
+            "width": 225,
+            "height": 178
+          },
+          "support-straps": {
+            "x": 1322,
+            "y": 891,
+            "width": 262,
+            "height": 131
+          },
+          "wedge-blocks": {
+            "x": 638,
+            "y": 947,
+            "width": 159,
+            "height": 122
+          }
+        }
+      },
+      "effects": {
+        "dust": {
+          "on": true,
+          "settings": {
+            "amount": 1.2,
+            "speed": 0.4
+          }
+        }
+      }
+    },
     "act4-chamber-of-whispers": {
       "patches": {
         "sorceress-of-lies-unmasked": {
