@@ -92,6 +92,12 @@ describe('beltImages', () => {
     )
   })
 
+  it("paints Act 2's coins gold, as the game calls them", () => {
+    const coins = beltImages(new Act2()).find((i) => i.id === 'item-coins')
+    expect(coins?.text).toContain('gold coin')
+    expect(coins?.text).not.toContain('silver')
+  })
+
   it('has a prompt for each entry and no prompt without an entry', () => {
     const ids = new Set(ACTS.flatMap((act) => beltImages(act).map((i) => i.id)))
     const prompts = Object.keys({
