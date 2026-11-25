@@ -4114,6 +4114,132 @@
         }
       }
     },
+    "act3-shoreline-markers": {
+      "patches": {
+        "moon-rune-shards-appears": {
+          "text": "Add a small heap of bright silver-white stone shards glowing softly with pale moonlight, clearly visible on the sand at the foot of the stele, the heap about as wide as the knight's shoulders. The stele and the sand stay.",
+          "gameWas": "Add the moon rune shards to the picture."
+        },
+        "polished-shell-taken": {
+          "text": "Remove the pearly sea shell, showing smooth sand and a few pebbles where it lay. The stele and the sand around it stay.",
+          "gameWas": "Remove the polished shell from the picture."
+        }
+      },
+      "takeAreas": {
+        "10": {
+          "exit-east": {
+            "x": 1688,
+            "y": 497,
+            "width": 232,
+            "height": 188
+          },
+          "exit-south": {
+            "x": 0,
+            "y": 975,
+            "width": 1920,
+            "height": 105
+          },
+          "moon-rune-shards": {
+            "x": 1312,
+            "y": 821,
+            "width": 341,
+            "height": 154
+          },
+          "polished-shell": {
+            "x": 491,
+            "y": 834,
+            "width": 188,
+            "height": 150
+          },
+          "sir-cedric": {
+            "x": 943,
+            "y": 491,
+            "width": 141,
+            "height": 394
+          },
+          "steles": {
+            "x": 234,
+            "y": 178,
+            "width": 403,
+            "height": 694
+          }
+        }
+      },
+      "effects": {
+        "clouds": {
+          "on": true,
+          "settings": {
+            "amount": 0.6,
+            "speed": 0.4
+          },
+          "spot": [
+            [
+              [
+                0,
+                0
+              ],
+              [
+                1,
+                0
+              ],
+              [
+                1,
+                0.191
+              ],
+              [
+                0,
+                0.191
+              ]
+            ]
+          ]
+        },
+        "glints": {
+          "on": true,
+          "settings": {
+            "amount": 0.6,
+            "speed": 0.5
+          },
+          "spot": [
+            [
+              [
+                0.332,
+                0.5469
+              ],
+              [
+                0.3906,
+                0.5469
+              ],
+              [
+                0.3906,
+                0.599
+              ],
+              [
+                0.332,
+                0.599
+              ]
+            ],
+            [
+              [
+                0.6152,
+                0.5469
+              ],
+              [
+                0.7129,
+                0.5469
+              ],
+              [
+                0.7129,
+                0.599
+              ],
+              [
+                0.6152,
+                0.599
+              ]
+            ]
+          ]
+        }
+      }
+    },
     "act3-tidal-causeway": {
       "patches": {
         "mira-appears": {

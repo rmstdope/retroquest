@@ -3598,6 +3598,135 @@
     "width": 480,
     "height": 640
   },
+  "act3-shoreline-markers": {
+    "file": "act3-shoreline-markers.png",
+    "width": 1920,
+    "height": 1080,
+    "patches": {
+      "moon-rune-shards-appears": {
+        "file": "act3-shoreline-markers.moon-rune-shards-appears.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "polished-shell-taken": {
+        "file": "act3-shoreline-markers.polished-shell-taken.png",
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "areas": {
+      "steles": {
+        "x": 0.121875,
+        "y": 0.164815,
+        "width": 0.209896,
+        "height": 0.642593
+      },
+      "polished-shell": {
+        "x": 0.255729,
+        "y": 0.772222,
+        "width": 0.097917,
+        "height": 0.138889
+      },
+      "exit-south": {
+        "x": 0,
+        "y": 0.902778,
+        "width": 1,
+        "height": 0.097222
+      },
+      "exit-east": {
+        "x": 0.879167,
+        "y": 0.460185,
+        "width": 0.120833,
+        "height": 0.174074
+      },
+      "sir-cedric": {
+        "x": 0.491146,
+        "y": 0.45463,
+        "width": 0.073438,
+        "height": 0.364815
+      },
+      "moon-rune-shards": {
+        "x": 0.683333,
+        "y": 0.760185,
+        "width": 0.177604,
+        "height": 0.142593
+      }
+    },
+    "effects": [
+      {
+        "kind": "clouds",
+        "settings": {
+          "amount": 0.6,
+          "speed": 0.4
+        },
+        "spot": [
+          [
+            [
+              0,
+              0
+            ],
+            [
+              1,
+              0
+            ],
+            [
+              1,
+              0.191
+            ],
+            [
+              0,
+              0.191
+            ]
+          ]
+        ]
+      },
+      {
+        "kind": "glints",
+        "settings": {
+          "amount": 0.6,
+          "speed": 0.5
+        },
+        "spot": [
+          [
+            [
+              0.332,
+              0.5469
+            ],
+            [
+              0.3906,
+              0.5469
+            ],
+            [
+              0.3906,
+              0.599
+            ],
+            [
+              0.332,
+              0.599
+            ]
+          ],
+          [
+            [
+              0.6152,
+              0.5469
+            ],
+            [
+              0.7129,
+              0.5469
+            ],
+            [
+              0.7129,
+              0.599
+            ],
+            [
+              0.6152,
+              0.599
+            ]
+          ]
+        ]
+      }
+    ]
+  },
   "act3-tidal-causeway": {
     "file": "act3-tidal-causeway.png",
     "width": 1920,
