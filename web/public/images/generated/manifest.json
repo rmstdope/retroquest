@@ -3941,6 +3941,91 @@
       }
     ]
   },
+  "act3-obsidian-outcrops": {
+    "file": "act3-obsidian-outcrops.png",
+    "width": 1920,
+    "height": 1080,
+    "patches": {
+      "binding-resin-appears": {
+        "file": "act3-obsidian-outcrops.binding-resin-appears.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "brass-mirror-segment-appears": {
+        "file": "act3-obsidian-outcrops.brass-mirror-segment-appears.png",
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "areas": {
+      "exit-south": {
+        "x": 0,
+        "y": 0.911111,
+        "width": 1,
+        "height": 0.088889
+      },
+      "exit-east": {
+        "x": 0.859375,
+        "y": 0.52037,
+        "width": 0.140625,
+        "height": 0.277778
+      },
+      "sir-cedric": {
+        "x": 0.460938,
+        "y": 0.628704,
+        "width": 0.060417,
+        "height": 0.251852
+      },
+      "brass-mirror-segment": {
+        "x": 0.255729,
+        "y": 0.815741,
+        "width": 0.048958,
+        "height": 0.069444
+      },
+      "binding-resin": {
+        "x": 0.629688,
+        "y": 0.841667,
+        "width": 0.063542,
+        "height": 0.103704
+      }
+    },
+    "effects": [
+      {
+        "kind": "clouds",
+        "settings": {
+          "amount": 0.5,
+          "speed": 0.3
+        },
+        "spot": [
+          [
+            [
+              0,
+              0
+            ],
+            [
+              1,
+              0
+            ],
+            [
+              1,
+              0.3125
+            ],
+            [
+              0,
+              0.3125
+            ]
+          ]
+        ]
+      },
+      {
+        "kind": "dust",
+        "settings": {
+          "amount": 1.2,
+          "speed": 0.9
+        }
+      }
+    ]
+  },
   "act3-outer-wards": {
     "file": "act3-outer-wards.png",
     "width": 1920,

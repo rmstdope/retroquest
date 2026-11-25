@@ -4455,6 +4455,88 @@
         }
       }
     },
+    "act3-obsidian-outcrops": {
+      "patches": {
+        "binding-resin-appears": {
+          "text": "Add a small clay pot of thick amber resin, sticky and glistening, sitting on the ash ground at the foot of the right obsidian tower, no taller than the rocks beside it. The rocks and the glass flakes stay.",
+          "gameWas": "Add the binding resin to the picture."
+        },
+        "brass-mirror-segment-appears": {
+          "text": "Add a small curved brass mirror segment lying on the ground among the glass flakes, no bigger than the clay pot at the right, its face catching the light. The rocks and flakes around it stay.",
+          "gameWas": "Add the brass mirror segment to the picture."
+        }
+      },
+      "takeAreas": {
+        "10": {
+          "binding-resin": {
+            "x": 1209,
+            "y": 909,
+            "width": 122,
+            "height": 112
+          },
+          "brass-mirror-segment": {
+            "x": 491,
+            "y": 881,
+            "width": 94,
+            "height": 75
+          },
+          "exit-east": {
+            "x": 1650,
+            "y": 562,
+            "width": 270,
+            "height": 300
+          },
+          "exit-south": {
+            "x": 0,
+            "y": 984,
+            "width": 1920,
+            "height": 96
+          },
+          "sir-cedric": {
+            "x": 885,
+            "y": 679,
+            "width": 116,
+            "height": 272
+          }
+        }
+      },
+      "effects": {
+        "clouds": {
+          "on": true,
+          "settings": {
+            "amount": 0.5,
+            "speed": 0.3
+          },
+          "spot": [
+            [
+              [
+                0,
+                0
+              ],
+              [
+                1,
+                0
+              ],
+              [
+                1,
+                0.3125
+              ],
+              [
+                0,
+                0.3125
+              ]
+            ]
+          ]
+        },
+        "dust": {
+          "on": true,
+          "settings": {
+            "amount": 1.2,
+            "speed": 0.9
+          }
+        }
+      }
+    },
     "act3-outer-wards": {
       "patches": {
         "warding-pillars-purified": {
