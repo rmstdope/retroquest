@@ -4009,6 +4009,92 @@
       }
     ]
   },
+  "act3-submerged-antechamber": {
+    "file": "act3-submerged-antechamber.png",
+    "width": 1920,
+    "height": 1080,
+    "patches": {
+      "exit-east-open": {
+        "file": "act3-submerged-antechamber.exit-east-open.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "lantern-bracket-appears": {
+        "file": "act3-submerged-antechamber.lantern-bracket-appears.png",
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "areas": {
+      "exit-north": {
+        "x": 0.448958,
+        "y": 0.468519,
+        "width": 0.088021,
+        "height": 0.225926
+      },
+      "exit-west": {
+        "x": 0.136458,
+        "y": 0.208333,
+        "width": 0.102604,
+        "height": 0.468519
+      },
+      "sir-cedric": {
+        "x": 0.441667,
+        "y": 0.573148,
+        "width": 0.066667,
+        "height": 0.234259
+      },
+      "lantern-bracket": {
+        "x": 0.261458,
+        "y": 0.52037,
+        "width": 0.056771,
+        "height": 0.121296
+      },
+      "exit-east": {
+        "x": 0.766667,
+        "y": 0.269444,
+        "width": 0.121875,
+        "height": 0.555556
+      }
+    },
+    "effects": [
+      {
+        "kind": "dust",
+        "settings": {
+          "amount": 0.8,
+          "speed": 0.4
+        }
+      },
+      {
+        "kind": "ripples",
+        "settings": {
+          "amount": 0.6,
+          "speed": 0.4,
+          "strength": 0.5
+        },
+        "spot": [
+          [
+            [
+              0.1465,
+              0.7118
+            ],
+            [
+              0.8789,
+              0.7118
+            ],
+            [
+              1,
+              1
+            ],
+            [
+              0,
+              1
+            ]
+          ]
+        ]
+      }
+    ]
+  },
   "act3-tidal-causeway": {
     "file": "act3-tidal-causeway.png",
     "width": 1920,

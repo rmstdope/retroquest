@@ -4517,6 +4517,89 @@
         }
       }
     },
+    "act3-submerged-antechamber": {
+      "patches": {
+        "exit-east-open": {
+          "text": "Remove the iron portcullis from the right-hand archway, showing the open stone passage beyond with water on its floor. The carved pillars on both sides stay.",
+          "gameWas": "Show the way east open and passable."
+        },
+        "lantern-bracket-appears": {
+          "text": "Carve a small empty arched niche into the face of the stone pillar, its back plain stone, with a small curved brass hook fixed at the top of the niche. The niche is empty: no lantern, no light. The pillar around it stays.",
+          "gameWas": "Add the lantern bracket to the picture."
+        }
+      },
+      "takeAreas": {
+        "11": {
+          "exit-east": {
+            "x": 1472,
+            "y": 291,
+            "width": 234,
+            "height": 600
+          },
+          "exit-north": {
+            "x": 862,
+            "y": 506,
+            "width": 169,
+            "height": 244
+          },
+          "exit-west": {
+            "x": 262,
+            "y": 225,
+            "width": 197,
+            "height": 506
+          },
+          "lantern-bracket": {
+            "x": 502,
+            "y": 562,
+            "width": 109,
+            "height": 131
+          },
+          "sir-cedric": {
+            "x": 848,
+            "y": 619,
+            "width": 128,
+            "height": 253
+          }
+        }
+      },
+      "effects": {
+        "dust": {
+          "on": true,
+          "settings": {
+            "amount": 0.8,
+            "speed": 0.4
+          }
+        },
+        "ripples": {
+          "on": true,
+          "settings": {
+            "amount": 0.6,
+            "speed": 0.4,
+            "strength": 0.5
+          },
+          "spot": [
+            [
+              [
+                0.1465,
+                0.7118
+              ],
+              [
+                0.8789,
+                0.7118
+              ],
+              [
+                1,
+                1
+              ],
+              [
+                0,
+                1
+              ]
+            ]
+          ]
+        }
+      }
+    },
     "act3-tidal-causeway": {
       "patches": {
         "mira-appears": {
