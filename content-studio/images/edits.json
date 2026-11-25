@@ -4258,6 +4258,61 @@
         }
       }
     },
+    "act3-echo-chambers": {
+      "patches": {
+        "old-oath-scrolls-appears": {
+          "text": "Add a small bundle of old rolled parchment scrolls tied with faded cord, lying on the stone ledge in the alcove, about as long as the ledge is deep. The ledge and the alcove stay.",
+          "gameWas": "Add the old oath scrolls to the picture."
+        },
+        "resonant-chant-rubbings-appears": {
+          "text": "Add a few loose sheets of paper covered in charcoal rubbings of runes, lying scattered on the cavern floor, each sheet about the size of the knight's hand spread wide. The floor stones stay.",
+          "gameWas": "Add the resonant chant rubbings to the picture."
+        }
+      },
+      "takeAreas": {
+        "9": {
+          "exit-west": {
+            "x": 0,
+            "y": 994,
+            "width": 1920,
+            "height": 86
+          },
+          "old-oath-scrolls": {
+            "x": 262,
+            "y": 788,
+            "width": 169,
+            "height": 84
+          },
+          "resonant-chant-rubbings": {
+            "x": 806,
+            "y": 872,
+            "width": 262,
+            "height": 131
+          },
+          "runic-walls": {
+            "x": 1350,
+            "y": 169,
+            "width": 431,
+            "height": 675
+          },
+          "sir-cedric": {
+            "x": 1241,
+            "y": 562,
+            "width": 131,
+            "height": 431
+          }
+        }
+      },
+      "effects": {
+        "dust": {
+          "on": true,
+          "settings": {
+            "amount": 0.8,
+            "speed": 0.3
+          }
+        }
+      }
+    },
     "act3-ember-gallery": {
       "patches": {
         "ash-fern-appears": {

@@ -3739,6 +3739,64 @@
       }
     ]
   },
+  "act3-echo-chambers": {
+    "file": "act3-echo-chambers.png",
+    "width": 1920,
+    "height": 1080,
+    "patches": {
+      "old-oath-scrolls-appears": {
+        "file": "act3-echo-chambers.old-oath-scrolls-appears.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "resonant-chant-rubbings-appears": {
+        "file": "act3-echo-chambers.resonant-chant-rubbings-appears.png",
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "areas": {
+      "runic-walls": {
+        "x": 0.703125,
+        "y": 0.156481,
+        "width": 0.224479,
+        "height": 0.625
+      },
+      "exit-west": {
+        "x": 0,
+        "y": 0.92037,
+        "width": 1,
+        "height": 0.07963
+      },
+      "sir-cedric": {
+        "x": 0.646354,
+        "y": 0.52037,
+        "width": 0.068229,
+        "height": 0.399074
+      },
+      "old-oath-scrolls": {
+        "x": 0.136458,
+        "y": 0.72963,
+        "width": 0.088021,
+        "height": 0.077778
+      },
+      "resonant-chant-rubbings": {
+        "x": 0.419792,
+        "y": 0.807407,
+        "width": 0.136458,
+        "height": 0.121296
+      }
+    },
+    "effects": [
+      {
+        "kind": "dust",
+        "settings": {
+          "amount": 0.8,
+          "speed": 0.3
+        }
+      }
+    ]
+  },
   "act3-ember-gallery": {
     "file": "act3-ember-gallery.png",
     "width": 1920,
