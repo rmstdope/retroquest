@@ -5083,6 +5083,119 @@
         }
       }
     },
+    "act3-phoenix-crater": {
+      "text": "A wide volcanic crater high on a bare mountain, seen from its rim: a deep round hollow whose rock walls have melted smooth into dark shining glass, open to the sky. Warm drafts turn in it and carry glowing cinders round in slow spirals. No houses, no people.",
+      "gameWas": "A bowl of rock melted to glass, open to the sky. Warm drafts turn in it and carry cinders round in slow spirals. The air smells of hot iron.",
+      "patches": {
+        "phoenix-appears": {
+          "text": "Add a great fire bird like a huge eagle with a long sweeping tail of flame-coloured plumes, lying low on the dark glass floor at the bottom of the crater, wings folded, head raised and watching, its feathers glowing gold shading into red. It sits on the crater floor itself, nothing under it. The crater walls and the spiralling cinders stay.",
+          "gameWas": "Add Phoenix to the picture."
+        }
+      },
+      "takeAreas": {
+        "13": {
+          "exit-north": {
+            "x": 0,
+            "y": 975,
+            "width": 1920,
+            "height": 105
+          },
+          "phoenix": {
+            "x": 488,
+            "y": 394,
+            "width": 731,
+            "height": 469
+          },
+          "sir-cedric": {
+            "x": 184,
+            "y": 716,
+            "width": 98,
+            "height": 285
+          }
+        }
+      },
+      "effects": {
+        "clouds": {
+          "on": true,
+          "settings": {
+            "amount": 0.5,
+            "speed": 0.3
+          },
+          "spot": [
+            [
+              [
+                0,
+                0
+              ],
+              [
+                1,
+                0
+              ],
+              [
+                1,
+                0.2431
+              ],
+              [
+                0,
+                0.2431
+              ]
+            ]
+          ]
+        },
+        "embers": {
+          "on": true,
+          "settings": {
+            "amount": 1.2,
+            "speed": 0.7
+          }
+        },
+        "smoke": {
+          "on": true,
+          "settings": {
+            "amount": 0.6,
+            "speed": 0.4
+          },
+          "spot": [
+            [
+              [
+                0.3418,
+                0.1562
+              ],
+              [
+                0.4395,
+                0.1562
+              ],
+              [
+                0.4395,
+                0.434
+              ],
+              [
+                0.3418,
+                0.434
+              ]
+            ],
+            [
+              [
+                0.5859,
+                0.191
+              ],
+              [
+                0.6836,
+                0.191
+              ],
+              [
+                0.6836,
+                0.4688
+              ],
+              [
+                0.5859,
+                0.4688
+              ]
+            ]
+          ]
+        }
+      }
+    },
     "act3-sanctum-of-the-tide": {
       "patches": {
         "crystal-of-light-appears": {

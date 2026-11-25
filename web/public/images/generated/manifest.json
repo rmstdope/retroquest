@@ -4584,6 +4584,119 @@
       }
     ]
   },
+  "act3-phoenix-crater": {
+    "file": "act3-phoenix-crater.png",
+    "width": 1920,
+    "height": 1080,
+    "patches": {
+      "phoenix-appears": {
+        "file": "act3-phoenix-crater.phoenix-appears.png",
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "areas": {
+      "exit-north": {
+        "x": 0,
+        "y": 0.902778,
+        "width": 1,
+        "height": 0.097222
+      },
+      "sir-cedric": {
+        "x": 0.095833,
+        "y": 0.662963,
+        "width": 0.051042,
+        "height": 0.263889
+      },
+      "phoenix": {
+        "x": 0.254167,
+        "y": 0.364815,
+        "width": 0.380729,
+        "height": 0.434259
+      }
+    },
+    "effects": [
+      {
+        "kind": "clouds",
+        "settings": {
+          "amount": 0.5,
+          "speed": 0.3
+        },
+        "spot": [
+          [
+            [
+              0,
+              0
+            ],
+            [
+              1,
+              0
+            ],
+            [
+              1,
+              0.2431
+            ],
+            [
+              0,
+              0.2431
+            ]
+          ]
+        ]
+      },
+      {
+        "kind": "embers",
+        "settings": {
+          "amount": 1.2,
+          "speed": 0.7
+        }
+      },
+      {
+        "kind": "smoke",
+        "settings": {
+          "amount": 0.6,
+          "speed": 0.4
+        },
+        "spot": [
+          [
+            [
+              0.3418,
+              0.1562
+            ],
+            [
+              0.4395,
+              0.1562
+            ],
+            [
+              0.4395,
+              0.434
+            ],
+            [
+              0.3418,
+              0.434
+            ]
+          ],
+          [
+            [
+              0.5859,
+              0.191
+            ],
+            [
+              0.6836,
+              0.191
+            ],
+            [
+              0.6836,
+              0.4688
+            ],
+            [
+              0.5859,
+              0.4688
+            ]
+          ]
+        ]
+      }
+    ]
+  },
   "act3-portrait-ancient-dragon": {
     "file": "act3-portrait-ancient-dragon.png",
     "width": 480,
