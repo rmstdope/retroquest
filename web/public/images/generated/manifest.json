@@ -3941,6 +3941,159 @@
       }
     ]
   },
+  "act3-mirror-terraces": {
+    "file": "act3-mirror-terraces.png",
+    "width": 1920,
+    "height": 1080,
+    "patches": {
+      "brass-mirror-segment-appears": {
+        "file": "act3-mirror-terraces.brass-mirror-segment-appears.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "exit-east-open": {
+        "file": "act3-mirror-terraces.exit-east-open.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "mirror-mount-mended": {
+        "file": "act3-mirror-terraces.mirror-mount-mended.png",
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "areas": {
+      "mirror-mount": {
+        "x": 0.746875,
+        "y": 0.251852,
+        "width": 0.127083,
+        "height": 0.399074
+      },
+      "charred-inscription": {
+        "x": 0.146354,
+        "y": 0.52037,
+        "width": 0.151563,
+        "height": 0.242593
+      },
+      "exit-south": {
+        "x": 0.292708,
+        "y": 0.92037,
+        "width": 0.322396,
+        "height": 0.07963
+      },
+      "exit-west": {
+        "x": 0,
+        "y": 0.277778,
+        "width": 0.127083,
+        "height": 0.347222
+      },
+      "sir-cedric": {
+        "x": 0.542188,
+        "y": 0.625,
+        "width": 0.04375,
+        "height": 0.208333
+      },
+      "brass-mirror-segment": {
+        "x": 0.125,
+        "y": 0.79537,
+        "width": 0.058333,
+        "height": 0.051852
+      },
+      "exit-east": {
+        "x": 0.942188,
+        "y": 0.164815,
+        "width": 0.057813,
+        "height": 0.416667
+      }
+    },
+    "effects": [
+      {
+        "kind": "clouds",
+        "settings": {
+          "amount": 0.5,
+          "speed": 0.3
+        },
+        "spot": [
+          [
+            [
+              0,
+              0
+            ],
+            [
+              0.7227,
+              0
+            ],
+            [
+              0.7227,
+              0.1736
+            ],
+            [
+              0,
+              0.1736
+            ]
+          ]
+        ]
+      },
+      {
+        "kind": "dust",
+        "settings": {
+          "amount": 1,
+          "speed": 0.7
+        }
+      },
+      {
+        "kind": "water",
+        "settings": {
+          "amount": 0.7,
+          "speed": 0.6
+        },
+        "spot": [
+          [
+            [
+              0.7178,
+              0.1736
+            ],
+            [
+              0.7422,
+              0.1736
+            ],
+            [
+              0.6445,
+              0.434
+            ],
+            [
+              0.5078,
+              0.5729
+            ],
+            [
+              0.4297,
+              0.6944
+            ],
+            [
+              0.3906,
+              0.8333
+            ],
+            [
+              0.3711,
+              0.8333
+            ],
+            [
+              0.4102,
+              0.6771
+            ],
+            [
+              0.4932,
+              0.5556
+            ],
+            [
+              0.625,
+              0.4167
+            ]
+          ]
+        ]
+      }
+    ]
+  },
   "act3-obsidian-outcrops": {
     "file": "act3-obsidian-outcrops.png",
     "width": 1920,
