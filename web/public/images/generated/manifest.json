@@ -3593,6 +3593,159 @@
       }
     ]
   },
+  "act3-outer-wards": {
+    "file": "act3-outer-wards.png",
+    "width": 1920,
+    "height": 1080,
+    "patches": {
+      "warding-pillars-purified": {
+        "file": "act3-outer-wards.warding-pillars-purified.png",
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "areas": {
+      "warding-pillars": {
+        "x": 0.219792,
+        "y": 0.103704,
+        "width": 0.542188,
+        "height": 0.72963
+      },
+      "seaweed-tangle": {
+        "x": 0,
+        "y": 0.737963,
+        "width": 0.297917,
+        "height": 0.262037
+      },
+      "exit-south": {
+        "x": 0.322396,
+        "y": 0.911111,
+        "width": 0.507813,
+        "height": 0.088889
+      },
+      "exit-east": {
+        "x": 0.879167,
+        "y": 0.763889,
+        "width": 0.120833,
+        "height": 0.236111
+      },
+      "exit-west": {
+        "x": 0,
+        "y": 0.599074,
+        "width": 0.214583,
+        "height": 0.138889
+      },
+      "sir-cedric": {
+        "x": 0.917708,
+        "y": 0.492593,
+        "width": 0.076042,
+        "height": 0.409259
+      }
+    },
+    "effects": [
+      {
+        "kind": "clouds",
+        "settings": {
+          "amount": 0.5,
+          "speed": 0.3
+        },
+        "spot": [
+          [
+            [
+              0,
+              0
+            ],
+            [
+              1,
+              0
+            ],
+            [
+              1,
+              0.3472
+            ],
+            [
+              0,
+              0.3472
+            ]
+          ]
+        ]
+      },
+      {
+        "kind": "moonglow",
+        "settings": {
+          "amount": 0.8,
+          "glow": 1,
+          "speed": 0.5
+        },
+        "spot": [
+          [
+            [
+              0.6348,
+              0.0174
+            ],
+            [
+              0.7422,
+              0.0174
+            ],
+            [
+              0.7422,
+              0.191
+            ],
+            [
+              0.6348,
+              0.191
+            ]
+          ]
+        ]
+      },
+      {
+        "kind": "ripples",
+        "settings": {
+          "amount": 0.7,
+          "speed": 0.5,
+          "strength": 0.6
+        },
+        "spot": [
+          [
+            [
+              0.332,
+              0.7639
+            ],
+            [
+              0.6055,
+              0.7639
+            ],
+            [
+              0.6055,
+              0.9375
+            ],
+            [
+              0.332,
+              0.9375
+            ]
+          ],
+          [
+            [
+              0.6055,
+              0.6424
+            ],
+            [
+              0.8398,
+              0.6424
+            ],
+            [
+              0.8398,
+              0.7465
+            ],
+            [
+              0.6055,
+              0.7465
+            ]
+          ]
+        ]
+      }
+    ]
+  },
   "act3-portrait-ancient-dragon": {
     "file": "act3-portrait-ancient-dragon.png",
     "width": 480,

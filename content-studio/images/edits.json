@@ -4114,6 +4114,157 @@
         }
       }
     },
+    "act3-outer-wards": {
+      "patches": {
+        "warding-pillars-purified": {
+          "text": "Make the three stone pillars clean and pale, washed free of moss and brine, their carved marks glowing with a clear steady silver-blue light. The shape and place of each pillar, the water, the moon and the sky stay.",
+          "gameWas": "Show the warding pillars cleansed, their glow clear and steady."
+        }
+      },
+      "takeAreas": {
+        "11": {
+          "exit-east": {
+            "x": 1688,
+            "y": 825,
+            "width": 232,
+            "height": 255
+          },
+          "exit-south": {
+            "x": 619,
+            "y": 984,
+            "width": 975,
+            "height": 96
+          },
+          "exit-west": {
+            "x": 0,
+            "y": 647,
+            "width": 412,
+            "height": 150
+          },
+          "seaweed-tangle": {
+            "x": 0,
+            "y": 797,
+            "width": 572,
+            "height": 283
+          },
+          "sir-cedric": {
+            "x": 1762,
+            "y": 532,
+            "width": 146,
+            "height": 442
+          },
+          "warding-pillars": {
+            "x": 422,
+            "y": 112,
+            "width": 1041,
+            "height": 788
+          }
+        }
+      },
+      "effects": {
+        "clouds": {
+          "on": true,
+          "settings": {
+            "amount": 0.5,
+            "speed": 0.3
+          },
+          "spot": [
+            [
+              [
+                0,
+                0
+              ],
+              [
+                1,
+                0
+              ],
+              [
+                1,
+                0.3472
+              ],
+              [
+                0,
+                0.3472
+              ]
+            ]
+          ]
+        },
+        "moonglow": {
+          "on": true,
+          "settings": {
+            "amount": 0.8,
+            "glow": 1,
+            "speed": 0.5
+          },
+          "spot": [
+            [
+              [
+                0.6348,
+                0.0174
+              ],
+              [
+                0.7422,
+                0.0174
+              ],
+              [
+                0.7422,
+                0.191
+              ],
+              [
+                0.6348,
+                0.191
+              ]
+            ]
+          ]
+        },
+        "ripples": {
+          "on": true,
+          "settings": {
+            "amount": 0.7,
+            "speed": 0.5,
+            "strength": 0.6
+          },
+          "spot": [
+            [
+              [
+                0.332,
+                0.7639
+              ],
+              [
+                0.6055,
+                0.7639
+              ],
+              [
+                0.6055,
+                0.9375
+              ],
+              [
+                0.332,
+                0.9375
+              ]
+            ],
+            [
+              [
+                0.6055,
+                0.6424
+              ],
+              [
+                0.8398,
+                0.6424
+              ],
+              [
+                0.8398,
+                0.7465
+              ],
+              [
+                0.6055,
+                0.7465
+              ]
+            ]
+          ]
+        }
+      }
+    },
     "act3-shoreline-markers": {
       "patches": {
         "moon-rune-shards-appears": {
