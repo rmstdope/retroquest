@@ -4114,6 +4114,121 @@
         }
       }
     },
+    "act3-tidal-causeway": {
+      "patches": {
+        "mira-appears": {
+          "text": "Add one woman in a long dark green hooded cloak standing on the middle causeway, facing the mural, her head no higher than the knight's at the left. Only the woman is added. The paving stones, the water and the knight stay.",
+          "gameWas": "Add Mira to the picture."
+        },
+        "rusted-locker-key-appears": {
+          "text": "Add a small corroded iron key, orange with rust, lying on the stone ledge in the dark shadow at the foot of the arch below the mural, about half the size of one paving stone. The stones and the mural stay.",
+          "gameWas": "Add the rusted locker key to the picture."
+        },
+        "sea-sealed-letter-appears": {
+          "text": "Add a small cream parchment letter with a green wax seal lying on the stone ledge below the mural, no bigger than a single paving stone of the ledge. The stone ledge and the mural stay.",
+          "gameWas": "Add the sea-sealed letter to the picture."
+        }
+      },
+      "takeAreas": {
+        "12": {
+          "barnacled-beam-fragment": {
+            "x": 1312,
+            "y": 469,
+            "width": 309,
+            "height": 431
+          },
+          "exit-east": {
+            "x": 1744,
+            "y": 600,
+            "width": 176,
+            "height": 412
+          },
+          "exit-north": {
+            "x": 347,
+            "y": 347,
+            "width": 281,
+            "height": 216
+          },
+          "mira": {
+            "x": 971,
+            "y": 502,
+            "width": 105,
+            "height": 300
+          },
+          "mural": {
+            "x": 788,
+            "y": 347,
+            "width": 356,
+            "height": 178
+          },
+          "rusted-locker-key": {
+            "x": 1035,
+            "y": 559,
+            "width": 103,
+            "height": 41
+          },
+          "sea-sealed-letter": {
+            "x": 624,
+            "y": 585,
+            "width": 150,
+            "height": 60
+          },
+          "sir-cedric": {
+            "x": 188,
+            "y": 456,
+            "width": 128,
+            "height": 412
+          }
+        }
+      },
+      "effects": {
+        "water": {
+          "on": true,
+          "settings": {
+            "amount": 0.8,
+            "speed": 0.6
+          },
+          "spot": [
+            [
+              [
+                0.4199,
+                0.5816
+              ],
+              [
+                0.4609,
+                0.5816
+              ],
+              [
+                0.4102,
+                0.9896
+              ],
+              [
+                0.2441,
+                0.9896
+              ]
+            ],
+            [
+              [
+                0.584,
+                0.5816
+              ],
+              [
+                0.6836,
+                0.5816
+              ],
+              [
+                0.7031,
+                0.9896
+              ],
+              [
+                0.625,
+                0.9896
+              ]
+            ]
+          ]
+        }
+      }
+    },
     "act4-chamber-of-whispers": {
       "patches": {
         "sorceress-of-lies-unmasked": {

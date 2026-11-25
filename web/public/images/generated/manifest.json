@@ -3598,6 +3598,125 @@
     "width": 480,
     "height": 640
   },
+  "act3-tidal-causeway": {
+    "file": "act3-tidal-causeway.png",
+    "width": 1920,
+    "height": 1080,
+    "patches": {
+      "mira-appears": {
+        "file": "act3-tidal-causeway.mira-appears.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "rusted-locker-key-appears": {
+        "file": "act3-tidal-causeway.rusted-locker-key-appears.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "sea-sealed-letter-appears": {
+        "file": "act3-tidal-causeway.sea-sealed-letter-appears.png",
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "areas": {
+      "mural": {
+        "x": 0.410417,
+        "y": 0.321296,
+        "width": 0.185417,
+        "height": 0.164815
+      },
+      "barnacled-beam-fragment": {
+        "x": 0.683333,
+        "y": 0.434259,
+        "width": 0.160938,
+        "height": 0.399074
+      },
+      "exit-north": {
+        "x": 0.180729,
+        "y": 0.321296,
+        "width": 0.146354,
+        "height": 0.2
+      },
+      "exit-east": {
+        "x": 0.908333,
+        "y": 0.555556,
+        "width": 0.091667,
+        "height": 0.381481
+      },
+      "mira": {
+        "x": 0.505729,
+        "y": 0.464815,
+        "width": 0.054688,
+        "height": 0.277778
+      },
+      "sir-cedric": {
+        "x": 0.097917,
+        "y": 0.422222,
+        "width": 0.066667,
+        "height": 0.381481
+      },
+      "sea-sealed-letter": {
+        "x": 0.325,
+        "y": 0.541667,
+        "width": 0.078125,
+        "height": 0.055556
+      },
+      "rusted-locker-key": {
+        "x": 0.539063,
+        "y": 0.517593,
+        "width": 0.053646,
+        "height": 0.037963
+      }
+    },
+    "effects": [
+      {
+        "kind": "water",
+        "settings": {
+          "amount": 0.8,
+          "speed": 0.6
+        },
+        "spot": [
+          [
+            [
+              0.4199,
+              0.5816
+            ],
+            [
+              0.4609,
+              0.5816
+            ],
+            [
+              0.4102,
+              0.9896
+            ],
+            [
+              0.2441,
+              0.9896
+            ]
+          ],
+          [
+            [
+              0.584,
+              0.5816
+            ],
+            [
+              0.6836,
+              0.5816
+            ],
+            [
+              0.7031,
+              0.9896
+            ],
+            [
+              0.625,
+              0.9896
+            ]
+          ]
+        ]
+      }
+    ]
+  },
   "act4-chamber-of-whispers": {
     "file": "act4-chamber-of-whispers.png",
     "width": 1920,
