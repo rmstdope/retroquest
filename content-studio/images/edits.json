@@ -4055,6 +4055,132 @@
         }
       }
     },
+    "act3-collapsed-pier": {
+      "patches": {
+        "prism-lantern-appears": {
+          "text": "Add a small brass lantern with clear prism-cut glass panes, catching the light in tiny rainbows, sitting on top of the rusty locker, no taller than half the locker. The locker and the timbers stay.",
+          "gameWas": "Add the prism lantern to the picture."
+        },
+        "weathered-coin-taken": {
+          "text": "Remove the green coin from the top of the wooden post, leaving the bare weathered wood. The post and the knight stay.",
+          "gameWas": "Remove the weathered coin from the picture."
+        }
+      },
+      "takeAreas": {
+        "13": {
+          "exit-west": {
+            "x": 0,
+            "y": 356,
+            "width": 169,
+            "height": 188
+          },
+          "locker": {
+            "x": 478,
+            "y": 591,
+            "width": 184,
+            "height": 216
+          },
+          "pier-warden": {
+            "x": 1172,
+            "y": 384,
+            "width": 103,
+            "height": 141
+          },
+          "prism-lantern": {
+            "x": 540,
+            "y": 493,
+            "width": 82,
+            "height": 124
+          },
+          "sir-cedric": {
+            "x": 510,
+            "y": 178,
+            "width": 98,
+            "height": 188
+          },
+          "weathered-coin": {
+            "x": 668,
+            "y": 214,
+            "width": 68,
+            "height": 56
+          }
+        }
+      },
+      "effects": {
+        "clouds": {
+          "on": true,
+          "settings": {
+            "amount": 0.6,
+            "speed": 0.4
+          },
+          "spot": [
+            [
+              [
+                0,
+                0
+              ],
+              [
+                1,
+                0
+              ],
+              [
+                1,
+                0.2951
+              ],
+              [
+                0,
+                0.2951
+              ]
+            ]
+          ]
+        },
+        "water": {
+          "on": true,
+          "settings": {
+            "amount": 1,
+            "speed": 0.7
+          },
+          "spot": [
+            [
+              [
+                0,
+                0.7639
+              ],
+              [
+                1,
+                0.6597
+              ],
+              [
+                1,
+                1
+              ],
+              [
+                0,
+                1
+              ]
+            ],
+            [
+              [
+                0.7422,
+                0.5035
+              ],
+              [
+                1,
+                0.4688
+              ],
+              [
+                1,
+                0.6597
+              ],
+              [
+                0.7422,
+                0.6771
+              ]
+            ]
+          ]
+        }
+      }
+    },
     "act3-miras-hut": {
       "patches": {
         "healing-herbs-gone": {

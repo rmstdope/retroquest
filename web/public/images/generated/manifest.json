@@ -3530,6 +3530,135 @@
       }
     }
   },
+  "act3-collapsed-pier": {
+    "file": "act3-collapsed-pier.png",
+    "width": 1920,
+    "height": 1080,
+    "patches": {
+      "prism-lantern-appears": {
+        "file": "act3-collapsed-pier.prism-lantern-appears.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "weathered-coin-taken": {
+        "file": "act3-collapsed-pier.weathered-coin-taken.png",
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "areas": {
+      "locker": {
+        "x": 0.248958,
+        "y": 0.547222,
+        "width": 0.095833,
+        "height": 0.2
+      },
+      "weathered-coin": {
+        "x": 0.347917,
+        "y": 0.198148,
+        "width": 0.035417,
+        "height": 0.051852
+      },
+      "pier-warden": {
+        "x": 0.610417,
+        "y": 0.355556,
+        "width": 0.053646,
+        "height": 0.130556
+      },
+      "exit-west": {
+        "x": 0,
+        "y": 0.32963,
+        "width": 0.088021,
+        "height": 0.174074
+      },
+      "sir-cedric": {
+        "x": 0.265625,
+        "y": 0.164815,
+        "width": 0.051042,
+        "height": 0.174074
+      },
+      "prism-lantern": {
+        "x": 0.28125,
+        "y": 0.456481,
+        "width": 0.042708,
+        "height": 0.114815
+      }
+    },
+    "effects": [
+      {
+        "kind": "clouds",
+        "settings": {
+          "amount": 0.6,
+          "speed": 0.4
+        },
+        "spot": [
+          [
+            [
+              0,
+              0
+            ],
+            [
+              1,
+              0
+            ],
+            [
+              1,
+              0.2951
+            ],
+            [
+              0,
+              0.2951
+            ]
+          ]
+        ]
+      },
+      {
+        "kind": "water",
+        "settings": {
+          "amount": 1,
+          "speed": 0.7
+        },
+        "spot": [
+          [
+            [
+              0,
+              0.7639
+            ],
+            [
+              1,
+              0.6597
+            ],
+            [
+              1,
+              1
+            ],
+            [
+              0,
+              1
+            ]
+          ],
+          [
+            [
+              0.7422,
+              0.5035
+            ],
+            [
+              1,
+              0.4688
+            ],
+            [
+              1,
+              0.6597
+            ],
+            [
+              0.7422,
+              0.6771
+            ]
+          ]
+        ]
+      }
+    ]
+  },
   "act3-miras-hut": {
     "file": "act3-miras-hut.png",
     "width": 1920,
