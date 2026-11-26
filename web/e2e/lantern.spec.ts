@@ -477,11 +477,14 @@ test.describe('Lantern UI (the default)', () => {
     await page.evaluate(() => {
       const seen = window as unknown as { voiceLines: string[] }
       seen.voiceLines = []
-      new MutationObserver(() => {
+      const observer = new MutationObserver(() => {
         const shown = document.querySelectorAll('[data-testid="speech-line"]')
         const right = document.querySelector('.lq-line-right')?.textContent
-        if (shown.length === 1 && right) seen.voiceLines.push(right)
-      }).observe(document.body, {
+        if (shown.length !== 1 || !right) return
+        seen.voiceLines.push(right)
+        if (right.includes('let them rest')) observer.disconnect()
+      })
+      observer.observe(document.body, {
         childList: true,
         subtree: true,
         characterData: true,

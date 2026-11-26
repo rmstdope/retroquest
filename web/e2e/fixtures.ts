@@ -145,8 +145,7 @@ const HOLD_TO_SKIP_MS = 700
  */
 export async function keepWords(page: Page): Promise<void> {
   await page.addStyleTag({
-    content:
-      '[data-fade][data-fade][data-fade] { animation: none !important; }',
+    content: "[data-fade='away'] { animation: none !important; }",
   })
 }
 

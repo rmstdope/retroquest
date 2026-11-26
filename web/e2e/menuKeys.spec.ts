@@ -109,8 +109,11 @@ test('Help scrolls with the keys; Quit moves between its buttons', async ({
     )
     .toBe(true)
   // The body can still grow or reflow after the guard above, which leaves an
-  // End pressed before it short of the new bottom: press until one lands there.
+  // End pressed before it short of the new bottom: try again until one End,
+  // from the top, lands there.
   await expect(async () => {
+    await page.keyboard.press('Home')
+    await expect.poll(() => body.evaluate((el) => el.scrollTop)).toBe(0)
     await page.keyboard.press('End')
     expect(
       await body.evaluate(
