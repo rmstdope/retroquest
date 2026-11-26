@@ -1,4 +1,4 @@
-import { test, expect, enterCommand as enter } from './fixtures'
+import { test, expect, keepWords, enterCommand as enter } from './fixtures'
 /**
  * Speech is a chat-style column at the right of the picture (rq-c15r.2):
  * small round portraits of a fixed size, Elior at the left of the column,
@@ -11,6 +11,7 @@ for (const width of [1440]) {
   }): Promise<void> => {
     await page.setViewportSize({ width, height: 800 })
     await page.goto('/')
+    await keepWords(page)
     await page.getByRole('button', { name: 'Start', exact: true }).click()
     await page.locator('.lq-chapter-button').click()
     await enter(page, 'talk to voice')
