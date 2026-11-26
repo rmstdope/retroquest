@@ -136,6 +136,19 @@ export async function skipTelling(page: Page): Promise<void> {
 /** How long Space is held to skip a telling (the app's `HOLD_TO_SKIP_MS`, with a margin kept by the helper). */
 const HOLD_TO_SKIP_MS = 700
 
+/**
+ * Keep the lines on the picture where they are: a line fades away once it has
+ * been read, and on a slow CI runner it goes while a spec is still looking at
+ * it (rq-vjbs). With no fade animation a line never ends its fade, so it keeps
+ * its place and its room. Call it after `page.goto`; not for a spec about the
+ * fade.
+ */
+export async function keepWords(page: Page): Promise<void> {
+  await page.addStyleTag({
+    content: "[data-fade='away'] { animation: none !important; }",
+  })
+}
+
 /** The part of the game store the helpers below drive. */
 interface GameStoreHandle {
   acceptInput: boolean

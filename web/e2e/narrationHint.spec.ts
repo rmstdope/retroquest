@@ -32,6 +32,18 @@ async function quickNarrationClips(page: Page): Promise<void> {
   })
 }
 
+/**
+ * Open the game and wait for Act I's list of recordings: a Start pressed before
+ * it has arrived leaves the dream unread (rq-vjbs).
+ */
+async function openWithRecordings(page: Page): Promise<void> {
+  const recordings = page.waitForResponse(
+    '**/audio/narration/act1/manifest.json',
+  )
+  await page.goto('/')
+  await (await recordings).finished()
+}
+
 /** What one reading showed, frame by frame. */
 interface Reading {
   /** Words of a paragraph being read that showed under the hint. */
@@ -50,14 +62,24 @@ interface Reading {
 }
 
 /**
- * Watch the reading of the newest turn frame by frame until it ends, collect
+ * Watch the reading of the next turn frame by frame until it ends, collect
  * every word of a paragraph being read that showed under the hint (only the
  * part of a line inside the story counts: the rest is clipped), then see
- * whether the last paragraph read moves down as the story is let go.
+ * whether the last paragraph read moves down as the story is let go. The watch
+ * is running when this returns, so call it before whatever brings the turn: a
+ * clip can end before a watch started afterwards (rq-vjbs). What it returns
+ * waits for the reading. The next turn is one that is not on the page yet; the
+ * opening's may be there already, behind the chapter page, so `opening` counts it.
  */
-async function watchReading(page: Page): Promise<Reading> {
-  return page.evaluate(
-    () =>
+async function watchReading(
+  page: Page,
+  { opening = false } = {},
+): Promise<() => Promise<Reading>> {
+  await page.evaluate((opening) => {
+    const earlier = new Set(
+      opening ? [] : document.querySelectorAll('[data-testid="turn"]'),
+    )
+    ;(window as unknown as { reading: Promise<Reading> }).reading =
       new Promise<Reading>((resolve) => {
         const covered = new Set<string>()
         const started = performance.now()
@@ -92,16 +114,19 @@ async function watchReading(page: Page): Promise<Reading> {
           const story = document.querySelector('.lq-story')
           const hint = document.querySelector('.lq-narration-hint')
           const turns = document.querySelectorAll('[data-testid="turn"]')
+          const newest = turns[turns.length - 1]
           const speaking =
-            turns[turns.length - 1]?.querySelector('.lq-speaking')
+            newest && !earlier.has(newest)
+              ? newest.querySelector('.lq-speaking')
+              : null
           if (speaking) {
             seen = true
             last = speaking
             lastTop = speaking.getBoundingClientRect().top
           }
-          if (hint) hintSeen = true
+          if (hint && seen) hintSeen = true
           const hide = document.querySelector('.lq-words-hide')
-          if (hint && hide) {
+          if (hint && hide && seen) {
             const a = hint.getBoundingClientRect()
             const b = hide.getBoundingClientRect()
             const gap = Math.abs(a.top + a.height / 2 - (b.top + b.height / 2))
@@ -139,8 +164,12 @@ async function watchReading(page: Page): Promise<Reading> {
           else requestAnimationFrame(check)
         }
         requestAnimationFrame(check)
-      }),
-  )
+      })
+  }, opening)
+  return () =>
+    page.evaluate(
+      () => (window as unknown as { reading: Promise<Reading> }).reading,
+    )
 }
 
 /** The reading was measured, nothing read sat under the hint, and the story did not drop when let go. */
@@ -162,18 +191,19 @@ for (const { name, width, height } of [
   }): Promise<void> => {
     await page.setViewportSize({ width, height })
     await quickNarrationClips(page)
-    await page.goto('/')
+    await openWithRecordings(page)
     await page.getByRole('button', { name: 'Start', exact: true }).click()
+    const dream = await watchReading(page, { opening: true })
     await page.locator('.lq-chapter-button').click()
     // The dream is read first; the voice wakes the hero in the cottage,
     // whose arrival is read; then the lantern. Each is checked to its end.
-    expectClear(await watchReading(page), 'the dream')
+    expectClear(await dream(), 'the dream')
     for (const command of ['talk to voice', 'examine lantern']) {
+      const reading = await watchReading(page)
       await enterCommand(page, command)
       // Space is a letter in the command box, where no hint shows: leave it.
       await closeTypingBox(page)
-      await expect(page.locator('.lq-narration-hint')).toBeVisible()
-      expectClear(await watchReading(page), command)
+      expectClear(await reading(), command)
     }
   })
 }
@@ -190,7 +220,7 @@ test('on a wide desktop the hint sits at the height of the Hide button and cover
 }): Promise<void> => {
   await page.setViewportSize({ width: 1280, height: 800 })
   await quickNarrationClips(page)
-  await page.goto('/')
+  await openWithRecordings(page)
   await page.getByRole('button', { name: 'Start', exact: true }).click()
   await page.locator('.lq-chapter-button').click()
   const enter = async (command: string): Promise<void> => {
@@ -202,9 +232,9 @@ test('on a wide desktop the hint sits at the height of the Hide button and cover
   // picture; the next command clears it and is read on the cards.
   await enter('talk to voice')
   await expect(page.getByTestId('arrival-on-picture')).toBeVisible()
+  const look = await watchReading(page)
   await enter('look')
-  await expect(page.locator('.lq-narration-hint')).toBeVisible()
-  const reading = await watchReading(page)
+  const reading = await look()
   expectClear(reading, 'look')
   expect(reading.offHide, 'the hint beside the Hide').not.toBeNull()
   expect(
@@ -229,7 +259,7 @@ for (const { name, width, height } of [
   }): Promise<void> => {
     await page.setViewportSize({ width, height })
     await quickNarrationClips(page)
-    await page.goto('/')
+    await openWithRecordings(page)
     await page.getByRole('button', { name: 'Start', exact: true }).click()
     await page.locator('.lq-chapter-button').click()
     const enter = async (command: string): Promise<void> => {
@@ -239,9 +269,9 @@ for (const { name, width, height } of [
     }
     await enter('talk to voice')
     await expect(page.getByTestId('arrival-on-picture')).toBeVisible()
+    const reading = await watchReading(page)
     await enter('look')
-    await expect(page.locator('.lq-narration-hint')).toBeVisible()
     await expect(page.locator('.lq-story-wrap.lq-one-column')).toBeVisible()
-    expectClear(await watchReading(page), 'look')
+    expectClear(await reading(), 'look')
   })
 }

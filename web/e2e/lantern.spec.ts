@@ -472,9 +472,32 @@ test.describe('Lantern UI (the default)', () => {
     // Talking to the Voice wakes Elior in his cottage: the talk is told as
     // any conversation is (rq-uqp8), the Voice's line on the right, and
     // leaves the screen with the dream.
+    // That line is gone with the dream before a slow runner may look, so it is
+    // recorded as it shows (rq-vjbs).
+    await page.evaluate(() => {
+      const seen = window as unknown as { voiceLines: string[] }
+      seen.voiceLines = []
+      const observer = new MutationObserver(() => {
+        const shown = document.querySelectorAll('[data-testid="speech-line"]')
+        const right = document.querySelector('.lq-line-right')?.textContent
+        if (shown.length !== 1 || !right) return
+        seen.voiceLines.push(right)
+        if (right.includes('let them rest')) observer.disconnect()
+      })
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+        characterData: true,
+      })
+    })
     await enterCommand(page, 'talk to voice')
-    await expect(lines).toHaveCount(1)
-    await expect(page.locator('.lq-line-right')).toContainText('let them rest')
+    await expect
+      .poll(() =>
+        page.evaluate(() =>
+          (window as unknown as { voiceLines: string[] }).voiceLines.join(' '),
+        ),
+      )
+      .toContain('let them rest')
     await expect(
       page.getByRole('region', { name: 'Current location' }),
     ).toContainText("Elior's Cottage")
@@ -1081,6 +1104,10 @@ test.describe('Lantern UI (the default)', () => {
       const block = page.locator('.lq-chapter-block').first()
       const body = page.locator('.lq-chapter-body')
       await expect(block).toBeVisible()
+      // The line is narrower or wider until its web font has come.
+      await page.evaluate(async () => {
+        await document.fonts.ready
+      })
       const before = (await block.boundingBox())!
       const column = (await body.boundingBox())!
       // The block wraps its short line instead of spanning the column, centred in it.

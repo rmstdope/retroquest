@@ -174,6 +174,7 @@ describe('ci.yml', () => {
       'web-typecheck',
       'web-test',
       'web-e2e',
+      'web-e2e-quarantine',
       'web-build',
       'container-smoke',
       'publish-image',
@@ -184,6 +185,7 @@ describe('ci.yml', () => {
     'web-lint',
     'web-typecheck',
     'web-test',
+    'web-e2e-quarantine',
     'web-build',
     'container-smoke',
   ])('runs %s unless the answer was to skip', (name) => {
