@@ -125,8 +125,14 @@ describe('ci.yml and the flakes', () => {
 
   it('runs the quarantined tests in a job of their own', () => {
     expect(job('web-e2e-quarantine')).toContain(
-      'run: npx playwright test --grep @quarantine --pass-with-no-tests\n',
+      'run: npx playwright test --grep @quarantine --pass-with-no-tests --trace retain-on-failure\n',
     )
+  })
+
+  it('uploads the trace of every failed quarantined attempt, the first one too (rq-4zhj)', () => {
+    const upload = step('web-e2e-quarantine', 'uses: actions/upload-artifact')
+    expect(upload).toContain('if: ${{ !cancelled() }}\n')
+    expect(upload).toContain('path: web/test-results/\n')
   })
 
   it.each([INSTALL, '--grep @quarantine'])(
