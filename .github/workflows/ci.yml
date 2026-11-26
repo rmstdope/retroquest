@@ -184,7 +184,6 @@ jobs:
                   name: quarantine-traces
                   path: web/test-results/
                   if-no-files-found: ignore
-                  retention-days: 30
 
     web-build:
         needs: changes
