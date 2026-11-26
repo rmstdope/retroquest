@@ -237,4 +237,14 @@ describe('the pre-commit hook', { timeout: 120_000 }, () => {
 
     expect(git('show', 'HEAD:web/src/answer.ts')).toBe(UNTIDY)
   })
+
+  it('lets the commit through in a tree without the formatting step', () => {
+    rmSync(join(repo, 'web', 'formatStaged.config.ts'))
+    mkdirSync(join(repo, 'web/src'), { recursive: true })
+    writeFileSync(join(repo, 'web/src/answer.ts'), UNTIDY)
+    git('add', 'web/src')
+    git('commit', '--message', 'no step')
+
+    expect(git('show', 'HEAD:web/src/answer.ts')).toBe(UNTIDY)
+  })
 })
