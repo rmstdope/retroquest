@@ -13,7 +13,31 @@ permissions:
     contents: read
 
 jobs:
+    # Decides whether this run has anything to check. A pull request that only touches docs/
+    # skips the checks below, and they still report success. Not `paths-ignore`, which would
+    # leave the checks pending. Everything tests the answer against 'false', so a run where
+    # this job fails or answers nothing checks everything.
+    changes:
+        runs-on: ubuntu-latest
+        outputs:
+            run: ${{ steps.decide.outputs.run }}
+        steps:
+            - uses: actions/checkout@v7
+              with:
+                  # A pull request is checked out as its merge commit; two commits are the
+                  # whole diff.
+                  fetch-depth: 2
+                  sparse-checkout: .github
+
+            - name: Decide whether the checks are needed
+              id: decide
+              env:
+                  EVENT: ${{ github.event_name }}
+              run: bash .github/scripts/ci-needed.sh "$EVENT" >> "$GITHUB_OUTPUT"
+
     web-lint:
+        needs: changes
+        if: ${{ !cancelled() && needs.changes.outputs.run != 'false' }}
         runs-on: ubuntu-latest
         defaults:
             run:
@@ -38,6 +62,8 @@ jobs:
               run: npx prettier --check "src/**/*.{ts,vue}" "*.config.*"
 
     web-typecheck:
+        needs: changes
+        if: ${{ !cancelled() && needs.changes.outputs.run != 'false' }}
         runs-on: ubuntu-latest
         defaults:
             run:
@@ -59,6 +85,8 @@ jobs:
               run: npx vue-tsc --noEmit
 
     web-test:
+        needs: changes
+        if: ${{ !cancelled() && needs.changes.outputs.run != 'false' }}
         runs-on: ubuntu-latest
         defaults:
             run:
@@ -81,6 +109,10 @@ jobs:
 
     web-e2e:
         name: web-e2e (${{ matrix.shard }})
+        needs: changes
+        # The skip is on the steps: a skipped matrix job reports one check under the unexpanded
+        # name, and the three shard checks would never arrive.
+        if: ${{ !cancelled() }}
         runs-on: ubuntu-latest
         strategy:
             fail-fast: false
@@ -91,8 +123,10 @@ jobs:
                 working-directory: web
         steps:
             - uses: actions/checkout@v7
+              if: needs.changes.outputs.run != 'false'
 
             - name: Set up Node.js
+              if: needs.changes.outputs.run != 'false'
               uses: actions/setup-node@v7
               with:
                   node-version: "26"
@@ -100,15 +134,20 @@ jobs:
                   cache-dependency-path: web/package-lock.json
 
             - name: Install dependencies
+              if: needs.changes.outputs.run != 'false'
               run: npm ci
 
             - name: Install Playwright browsers
+              if: needs.changes.outputs.run != 'false'
               run: npx playwright install --with-deps chromium
 
             - name: Run E2E tests (shard ${{ matrix.shard }})
+              if: needs.changes.outputs.run != 'false'
               run: npx playwright test --shard=${{ matrix.shard }}
 
     web-build:
+        needs: changes
+        if: ${{ !cancelled() && needs.changes.outputs.run != 'false' }}
         runs-on: ubuntu-latest
         defaults:
             run:
@@ -130,6 +169,8 @@ jobs:
               run: npm run build
 
     container-smoke:
+        needs: changes
+        if: ${{ !cancelled() && needs.changes.outputs.run != 'false' }}
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v7
