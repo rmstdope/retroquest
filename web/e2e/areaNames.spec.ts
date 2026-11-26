@@ -93,7 +93,12 @@ test(
     await expect(
       page.getByRole('button', { name: /Show what's here/ }),
     ).toHaveCount(0)
-    await expect(page.locator('[data-area-mark]')).toHaveCount(0)
+    // The Space held to skip the telling is an input too, so the marks have
+    // already had one round: wait it out (4 seconds and the fade) before the
+    // mouse starts its own.
+    await expect(page.locator('[data-area-mark]')).toHaveCount(0, {
+      timeout: 10_000,
+    })
     await showNames(page)
     await expect(page.locator('[data-area-mark]')).toHaveCount(3)
     await expect(page.locator('[data-area-name="bread"]')).toHaveText('Bread')

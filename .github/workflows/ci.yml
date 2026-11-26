@@ -146,7 +146,9 @@ jobs:
               run: npx playwright test --shard=${{ matrix.shard }} --grep-invert @quarantine
 
     # Flaky tests set aside until their bead fixes them: tagged @quarantine, they still run
-    # here, and a failure is shown on the run without turning any check red.
+    # here, and a failure is shown on the run without turning any check red. Every failed
+    # attempt keeps its trace, the first one too even when the retry passes, and the traces
+    # are uploaded so the bead can read what happened (rq-4zhj).
     web-e2e-quarantine:
         needs: changes
         if: ${{ !cancelled() && needs.changes.outputs.run != 'false' }}
@@ -173,7 +175,16 @@ jobs:
 
             - name: Run quarantined E2E tests
               continue-on-error: true
-              run: npx playwright test --grep @quarantine --pass-with-no-tests
+              run: npx playwright test --grep @quarantine --pass-with-no-tests --trace retain-on-failure
+
+            - name: Upload traces of failed quarantined tests
+              if: ${{ !cancelled() }}
+              uses: actions/upload-artifact@v7
+              with:
+                  name: quarantine-traces
+                  path: web/test-results/
+                  if-no-files-found: ignore
+                  retention-days: 30
 
     web-build:
         needs: changes
