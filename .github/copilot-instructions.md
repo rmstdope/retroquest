@@ -64,6 +64,8 @@ Violation of any item is grounds for rejection in code review / CI.
 
 ### Developer Completion Checklist (Must Pass Before Commit)
 
+The pre-commit hook (`.beads/hooks/pre-commit`) runs ESLint's fixes and Prettier on the staged `.ts` and `.vue` files under `web/src/`, so do not run either only to fix formatting there; the gate reports what cannot be fixed automatically.
+
 For every TypeScript / Vue file, ensure:
 
 - [ ] Formatted with Prettier (`npm run format` in `web/`).

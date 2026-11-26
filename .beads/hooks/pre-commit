@@ -57,3 +57,12 @@ if command -v bd >/dev/null 2>&1; then
   if [ "$_bd_exit" -ne 0 ]; then exit "$_bd_exit"; fi
 fi
 # --- END BEADS INTEGRATION vHEAD-5b9e938 ---
+
+# Format and lint-fix the staged files under web/src with the script of the tree being
+# committed (web/formatStaged.config.ts). It never blocks a commit: the gate and CI report
+# what cannot be fixed.
+_format_script="$(git rev-parse --show-toplevel)/web/formatStaged.config.ts"
+if [ -f "$_format_script" ] && command -v node >/dev/null 2>&1; then
+  node "$_format_script" ||
+    echo >&2 "format-staged: failed - committing the staged files as they are"
+fi
