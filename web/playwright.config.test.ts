@@ -3,7 +3,7 @@
  * `E2E_PORT` (5173 when unset) and the production preview takes the next
  * port; a run never reuses a server it did not start, so parallel worktrees
  * each test their own tree; the specs that need the dev-only `debug` command
- * stay on the dev server; and CI runs in parallel and fails on a test that
+ * stay on the dev server; and CI runs on 4 workers and fails on a test that
  * passes only on its retry.
  */
 import { afterEach, describe, expect, it, vi } from 'vitest'
@@ -115,11 +115,11 @@ describe('playwright.config', () => {
     }
   })
 
-  it('runs in parallel in CI and fails on a test that passes only on retry', async () => {
+  it('runs on all 4 runner cores in CI and fails on a test that passes only on retry', async () => {
     vi.stubEnv('CI', '1')
     const config = await loadConfig()
     expect(config.fullyParallel).toBe(true)
-    expect(config.workers).toBeGreaterThan(1)
+    expect(config.workers).toBe(4)
     expect(config.failOnFlakyTests).toBe(true)
   })
 

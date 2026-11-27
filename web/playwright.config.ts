@@ -71,7 +71,8 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   failOnFlakyTests: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
-  workers: process.env.CI ? 2 : 1,
+  // CI's runners have 4 vCPUs, and the suite is its slowest job (rq-c09g).
+  workers: process.env.CI ? 4 : 1,
   reporter: process.env.CI ? [['list'], ['github']] : 'list',
   timeout: 30_000,
   expect: {
