@@ -156,8 +156,9 @@ describe('Act IV items narrate their effect', () => {
     expect(nonText(new ServantsPendant().use(courtyard))).toEqual([])
     expect(nonText(new GuardiansEssence().use(courtyard))).toEqual([])
     expect(nonText(new SorceressTruth().use(courtyard))).toEqual([])
-    expect(new SorceressTruth().use(courtyard)).toMatch(
-      /^You turn the mask over in your hands\. Somewhere ahead is someone who needs to see/,
+    expect(new SorceressTruth().use(courtyard)).toBe(
+      'You turn the mask over in your hands. Somewhere ahead is someone who ' +
+        'needs to see that a liar can choose the truth.',
     )
   })
 
