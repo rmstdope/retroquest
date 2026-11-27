@@ -590,7 +590,7 @@ describe('useBridge', () => {
       stored[0].picture = null
       localStorageMock._setRaw('retroquest_save_slots', JSON.stringify(stored))
       const card = bridge.getSaveSlots()[0]
-      expect(card.room).toBe("Elior's Cottage")
+      expect(card.room).toBe('Orchard')
       expect(card.picture).toBeUndefined()
     })
 
