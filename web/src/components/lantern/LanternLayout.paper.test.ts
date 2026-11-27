@@ -11,6 +11,11 @@ import { useFlightStore } from '@/stores/useFlightStore'
 import { useArrivalStore } from '@/stores/useArrivalStore'
 import { useSceneStore } from '@/stores/useSceneStore'
 import { minimumReadMs } from '@/lantern/lineFade'
+import {
+  SHORT_QUERY,
+  SIDES_QUERY,
+  WIDE_QUERY,
+} from '@/composables/useMediaQuery'
 
 /** A turn that tells `text` (nothing when empty). */
 function turn(id: number, text: string, command: string | null = 'look'): Turn {
@@ -30,7 +35,7 @@ function stubScreen(wide: boolean | 'short'): void {
   vi.stubGlobal(
     'matchMedia',
     vi.fn((query: string) => ({
-      matches: wide === 'short' ? query.includes('519px') : wide,
+      matches: wide === 'short' ? query === SHORT_QUERY : wide,
       addEventListener: vi.fn(),
       removeEventListener: vi.fn(),
     })),
@@ -900,7 +905,7 @@ describe('the narration paper', () => {
       'matchMedia',
       vi.fn((query: string) => ({
         // A 1060 x 800 laptop with a mouse: wide and keyboard, not short, not 1100 wide.
-        matches: !query.includes('1100px') && !query.includes('max-height'),
+        matches: query !== SIDES_QUERY && !query.includes('max-height'),
         addEventListener: vi.fn(),
         removeEventListener: vi.fn(),
       })),
@@ -922,7 +927,7 @@ describe('the narration paper', () => {
       'matchMedia',
       vi.fn((query: string) => ({
         matches:
-          query.includes('1100px') || query.includes('1024px')
+          query === SIDES_QUERY || query === WIDE_QUERY
             ? sides
             : !query.includes('max-height'),
         addEventListener: (

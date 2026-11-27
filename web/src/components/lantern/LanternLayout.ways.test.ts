@@ -12,6 +12,7 @@ import { useSceneStore } from '@/stores/useSceneStore'
 import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
 import { useArrivalStore } from '@/stores/useArrivalStore'
 import { setPictureProbe } from '@/lantern/roomPicture'
+import { WIDE_QUERY } from '@/composables/useMediaQuery'
 
 describe('LanternLayout: leaving by pressing a way out in the picture', () => {
   let w: VueWrapper
@@ -36,7 +37,7 @@ describe('LanternLayout: leaving by pressing a way out in the picture', () => {
       'matchMedia',
       vi.fn((query: string) => ({
         matches:
-          query.includes('min-width') && (laptop || !query.includes('1024px')),
+          query.includes('min-width') && (laptop || query !== WIDE_QUERY),
         addEventListener: vi.fn(),
         removeEventListener: vi.fn(),
       })),

@@ -26,6 +26,7 @@ import { SCENE_PAUSE_MS } from '@/lantern/narrationUnits'
 import { ARRIVAL_CLEAR_AFTER_MS } from '@/lantern/stageArrival'
 import { PASSAGE_HALF_MS } from '@/stores/usePassageStore'
 import { startedHoldStore } from '@/testing/holdGame'
+import { SHORT_QUERY } from '@/composables/useMediaQuery'
 
 const GARDEN = arrivalBlocks('Garden', 'A green garden.')
 
@@ -53,7 +54,7 @@ describe('LanternLayout: the arrival on the picture', () => {
       vi.fn((query: string) => ({
         matches:
           wide === 'short'
-            ? query.includes('519px')
+            ? query === SHORT_QUERY
             : wide === 'sideways'
               ? query.includes('hover: none') ||
                 query.includes('orientation: landscape')
