@@ -7,6 +7,7 @@ import { GameState } from './GameState'
 import { Item } from './Item'
 import { Quest } from './Quest'
 import { Room } from './Room'
+import { Seller, type Ware } from './Seller'
 import { Spell } from './Spell'
 
 function item(name: string, shortName?: string): Item {
@@ -45,6 +46,22 @@ class FlagQuest extends SimpleQuest {
 class FlagAct extends Act {
   override isCompleted(gameState: GameState): boolean {
     return gameState.getStoryFlag(FLAG_ACT_DONE)
+  }
+}
+
+/** A seller of the given wares, named shopkeeper. */
+class Stall extends Seller {
+  /** The wares it was given. */
+  override wares: Record<string, Ware>
+
+  constructor(wares: Record<string, Ware>) {
+    super({ name: 'shopkeeper', description: 'Hello there.' })
+    this.wares = wares
+  }
+
+  /** It has nothing else. */
+  protected override notSoldAnswer(wareName: string): string {
+    return `No ${wareName}.`
   }
 }
 
@@ -286,11 +303,9 @@ describe('GameController', () => {
       expect(
         makeController({ characters: [character('guard')] }).getRoomWares(),
       ).toEqual([])
-      const shopkeeper = Object.assign(character('shopkeeper'), {
-        wares: {
-          rope: { item: item('rope'), price: 1 },
-          sword: { item: item('sword'), price: 5 },
-        },
+      const shopkeeper = new Stall({
+        rope: { item: item('rope'), price: 1 },
+        sword: { item: item('sword'), price: 5 },
       })
       const ctrl = makeController({
         characters: [shopkeeper, character('guard')],

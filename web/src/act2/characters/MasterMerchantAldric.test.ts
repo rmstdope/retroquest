@@ -257,3 +257,45 @@ describe('Master Merchant Aldric buy suggestions', () => {
     expect(Object.keys(buy)).not.toContain("merchant's")
   })
 })
+
+describe('Master Merchant Aldric sales', () => {
+  it('takes the price, clears the display and hands over a new ware', () => {
+    const game = createGameWithOpenShop()
+    for (let i = 0; i < 25; i++) game.state.addItemToInventory(new Coins())
+    const shown = game.state.currentRoom.items.filter(
+      (item) => item.name === 'quality rope',
+    )
+
+    const answer = game.commandParser.parse(
+      'buy quality rope from master merchant aldric',
+    )
+
+    expect(answer).toContain(
+      '[success]The [item_name]quality rope[/item_name] is yours for 20 ' +
+        '[item_name]gold coins[/item_name].[/success]',
+    )
+    expect(game.state.getItemCount('coins')).toBe(5)
+    expect(shown).toHaveLength(1)
+    expect(game.state.currentRoom.items).not.toContain(shown[0])
+    const bought = game.state.inventory.at(-1)
+    expect(bought).toBeInstanceOf(QualityRope)
+    expect(bought?.canBeCarried).toBe(true)
+    const aldric = game.state.currentRoom.getCharacterByName(
+      'master merchant aldric',
+    )
+    expect(aldric?.sells(game.state)).toContain('quality rope')
+  })
+
+  it('takes nothing from a purse that is short', () => {
+    const game = createGameWithOpenShop()
+    for (let i = 0; i < 19; i++) game.state.addItemToInventory(new Coins())
+
+    const answer = game.commandParser.parse(
+      'buy quality rope from master merchant aldric',
+    )
+
+    expect(answer).toContain("You don't have enough coins for that.")
+    expect(game.state.getItemCount('coins')).toBe(19)
+    expect(game.state.hasItem('quality rope')).toBe(false)
+  })
+})

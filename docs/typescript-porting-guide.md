@@ -105,8 +105,9 @@ booleans; `get_story_flag` → `getStoryFlag`.
 - `getattr(obj, 'method', None)` → declare the method on the base class or check
   `'method' in obj` with a type guard; avoid `any`.
 - Dialogue tables (`self.dialogue_states = {...}`) → `Record<string, string>` fields.
-- Merchants keep `wares: Record<string, { item: Item; price: number }>` under exactly
-  that name (the controller reads it).
+- Merchants extend the engine's `Seller` and declare `wares: Record<string, Ware>`
+  (item and price); `Seller` says the prices, takes the coins and hands the ware over,
+  and the subclass overrides only where its trade or its lines differ.
 - Long strings: join adjacent string literals with `+`, or template literals; never
   change wording, punctuation or markup. Keep `\n` where Python had them.
 - Module docstrings and class docstrings become `/** … */` comments (shortened is fine).

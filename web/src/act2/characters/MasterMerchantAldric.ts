@@ -1,38 +1,17 @@
 import {
-  Character,
+  Seller,
   type GameState,
   type Item,
   type Room,
+  type Ware,
   characterName,
   dialogue,
-  clue,
   speech,
-  numberInWords,
 } from '@/engine'
 import { ForestSurvivalKit } from '../items/ForestSurvivalKit'
 import { EnhancedLantern } from '../items/EnhancedLantern'
 import { QualityRope } from '../items/QualityRope'
 import { MerchantsFlyer } from '../items/MerchantsFlyer'
-
-/**
- * The prices as one spoken sentence: "A [kit]'s fifty [gold coins], the
- * [lantern]'s forty and the [rope]'s twenty." Only the first ware names the
- * coin. Returns an empty string when there is nothing for sale.
- */
-function priceSentence(
-  wares: Record<string, { item: Item; price: number }>,
-): string {
-  const spoken = Object.entries(wares).map(([name, details], index) => {
-    const ware = `[item_name]${name}[/item_name]'s `
-    return index === 0
-      ? `A ${ware}${numberInWords(details.price)} ` +
-          '[item_name]gold coins[/item_name]'
-      : `the ${ware}${numberInWords(details.price)}`
-  })
-  const last = spoken.pop()
-  if (last === undefined) return ''
-  return spoken.length === 0 ? `${last}.` : `${spoken.join(', ')} and ${last}.`
-}
 
 /** A room that can lay out display wares, like the Market District. */
 function hasAddWares(room: Room): room is Room & { addWares: () => void } {
@@ -40,8 +19,9 @@ function hasAddWares(room: Room): room is Room & { addWares: () => void } {
 }
 
 /** Merchant selling adventure gear and expedition supplies. */
-export class MasterMerchantAldric extends Character {
-  wares: Record<string, { item: Item; price: number }> = {
+export class MasterMerchantAldric extends Seller {
+  /** His stock, never running out: he refuses only a second of one carried. */
+  override wares: Record<string, Ware> = {
     'forest survival kit': { item: new ForestSurvivalKit(), price: 50 },
     'enhanced lantern': { item: new EnhancedLantern(), price: 40 },
     'quality rope': { item: new QualityRope(), price: 20 },
@@ -87,8 +67,7 @@ export class MasterMerchantAldric extends Character {
 
     // His prices, spoken in the same bubble as his opening line
     const waresInfo =
-      priceSentence(this.wares) ||
-      'My racks are bare till the next cart comes in.'
+      this.priceSentence() || 'My racks are bare till the next cart comes in.'
 
     // Cycle through dialogue options like Act 1 Shopkeeper
     const line = MasterMerchantAldric.IDLE_LINES[this.dialogueIndex]
@@ -130,94 +109,43 @@ export class MasterMerchantAldric extends Character {
   }
 
   /** Lists the wares now on offer; none until the flyer has been given. */
-  override sells(_gameState: GameState): string[] {
-    return this.gaveFlyer ? Object.keys(this.wares) : []
+  override sells(gameState: GameState): string[] {
+    return this.gaveFlyer ? super.sells(gameState) : []
   }
 
-  /** Handle buying items from Master Merchant Aldric. */
-  override buyItem(gameState: GameState, itemName: string): string {
-    // Check if shop is accessible
-    if (!this.gaveFlyer) {
-      return MasterMerchantAldric.CLOSED_DIALOGUE
-    }
+  /** Nothing is discussed, let alone sold, before the flyer. */
+  protected override refusalBeforeSale(
+    _gameState: GameState,
+    _wareName: string,
+  ): string | null {
+    return this.gaveFlyer ? null : MasterMerchantAldric.CLOSED_DIALOGUE
+  }
 
-    const itemNameToBuy = itemName.toLowerCase()
+  /** He names what was asked for and points at what is laid out. */
+  protected override notSoldAnswer(wareName: string): string {
+    return dialogue(
+      this.name,
+      `I don't stock any [item_name]${wareName}[/item_name]. ` +
+        'What I sell is laid out here.',
+    )
+  }
 
-    // Check if item is available
-    if (!(itemNameToBuy in this.wares)) {
-      return dialogue(
-        this.name,
-        `I don't stock any [item_name]${itemNameToBuy}[/item_name]. ` +
-          'What I sell is laid out here.',
-      )
-    }
-
-    const wareDetails = this.wares[itemNameToBuy]
-    const price = wareDetails.price
-
-    // Count total coins in inventory using the batching system
-    const totalCoins = gameState.getItemCount('coins')
-
-    // Check if player has enough coins
-    if (totalCoins < price) {
-      return clue("You don't have enough coins for that.")
-    }
-
-    // Check if already have the item in inventory (not counting display items in room)
-    if (
-      gameState.inventory.some(
-        (item) =>
-          item.name.toLowerCase() === itemNameToBuy && item.canBeCarried,
-      )
-    ) {
-      return dialogue(
-        this.name,
-        `You've a [item_name]${itemNameToBuy}[/item_name] already. ` +
-          "I'd sooner sell you something you'll use.",
-      )
-    }
-
-    // Purchase the item - spend coins using the batching system
-    const coinsRemoved = gameState.removeItemFromInventory('coins', price)
-    if (coinsRemoved !== price) {
-      return '[failure]Transaction failed. Unable to process payment.[/failure]'
-    }
-
-    // Remove the display item from the room (if present)
-    const roomItemToRemove =
-      gameState.currentRoom.items.find(
-        (item) => item.name.toLowerCase() === itemNameToBuy,
-      ) ?? null
-
-    if (roomItemToRemove) {
-      gameState.currentRoom.items.splice(
-        gameState.currentRoom.items.indexOf(roomItemToRemove),
-        1,
-      )
-    }
-
-    // Create new carriable instance of the item to add to inventory
-    let newItem: Item | null = null
-    if (itemNameToBuy === 'forest survival kit') {
-      newItem = new ForestSurvivalKit()
-    } else if (itemNameToBuy === 'enhanced lantern') {
-      newItem = new EnhancedLantern()
-    } else if (itemNameToBuy === 'quality rope') {
-      newItem = new QualityRope()
-    }
-
-    if (newItem) {
-      newItem.canBeCarried = true // Ensure the purchased item is carriable
-      gameState.addItemToInventory(newItem)
-      return (
-        `[success]The [item_name]${itemNameToBuy}[/item_name] is yours for ` +
-        `${price} [item_name]gold coins[/item_name].[/success]`
-      )
-    }
-    // Should not happen if item is in wares, but safety check
-    return (
-      '[failure]An unexpected error occurred trying to sell the ' +
-      `[item_name]${itemNameToBuy}[/item_name].[/failure]`
+  /**
+   * He sells no second of a ware Elior carries; the one on display in the
+   * room does not count.
+   */
+  protected override refusalAfterPayment(
+    gameState: GameState,
+    wareName: string,
+  ): string | null {
+    const carried = gameState.inventory.some(
+      (item) => item.name.toLowerCase() === wareName && item.canBeCarried,
+    )
+    if (!carried) return null
+    return dialogue(
+      this.name,
+      `You've a [item_name]${wareName}[/item_name] already. ` +
+        "I'd sooner sell you something you'll use.",
     )
   }
 }

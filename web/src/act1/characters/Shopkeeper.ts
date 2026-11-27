@@ -1,11 +1,11 @@
 import {
-  Character,
+  Seller,
   type GameState,
   type Item,
   type Room,
+  type Ware,
   characterName,
   speech,
-  clue,
   attributeSpeech,
   numberInWords,
 } from '@/engine'
@@ -70,8 +70,9 @@ const MIRA = /\bmira\b/i
  * room), so a coin is always left for Borin's whetstone. His wares are the one
  * record of it; `ropeGone` is the one question every text of the store asks.
  */
-export class Shopkeeper extends Character {
-  wares: Record<string, { item: Item; price: number }> = {
+export class Shopkeeper extends Seller {
+  /** What is for sale; the sword and armor never run out, the rope does. */
+  override wares: Record<string, Ware> = {
     rope: { item: new Rope(), price: 1 },
     sword: { item: new Sword(), price: 5 },
     armor: { item: new Armor(), price: 10 },
@@ -107,29 +108,6 @@ export class Shopkeeper extends Character {
     'He glances at the door every time it creaks.'
 
   /**
-   * His prices as one spoken sentence, in the order of the wares: the first
-   * ware names its coin ("[Rope]'s a [coin]"), the rest only their number.
-   * When the shelves are bare it is the empty-shelf line instead. The rope
-   * is left out once it is gone, as it is no longer among the wares.
-   */
-  private priceSentence(): string {
-    const entries = Object.entries(this.wares)
-    if (entries.length === 0) return "I've nothing left on the shelves."
-    const spoken = entries.map(([name, details], index) => {
-      const ware = `[item_name]${index === 0 ? capitalize(name) : name}[/item_name]`
-      const price =
-        index === 0
-          ? this.firstPrice(details.price)
-          : numberInWords(details.price)
-      return index === 0 ? `${ware}'s ${price}` : `the ${ware}'s ${price}`
-    })
-    const last = spoken.pop()
-    return spoken.length === 0
-      ? `${last}.`
-      : `${spoken.join(', ')} and ${last}.`
-  }
-
-  /**
    * Whether his one rope is gone: sold, or given to Elior when Patches stayed
    * with grandmother. His wares are the one record, so the rope is gone when
    * it is no longer among them; the price sentence, his refusal and idle lines,
@@ -148,10 +126,14 @@ export class Shopkeeper extends Character {
     Shopkeeper.clearShelfRope(room)
   }
 
-  /** The first price, with its coin word: "a [coin]" or "five [coins]". */
-  private firstPrice(price: number): string {
+  /**
+   * The opening clause of his prices, the ware capitalised and its price with
+   * its coin word: "[Rope]'s a [coin]" or "[Sword]'s five [coins]".
+   */
+  protected override firstWarePrice(wareName: string, price: number): string {
     const coin = `[item_name]${coins(price)}[/item_name]`
-    return price === 1 ? `a ${coin}` : `${numberInWords(price)} ${coin}`
+    const amount = price === 1 ? `a ${coin}` : `${numberInWords(price)} ${coin}`
+    return `[item_name]${capitalize(wareName)}[/item_name]'s ${amount}`
   }
 
   /** Hemlock's look: always the current wording, even for an older save. */
@@ -446,8 +428,9 @@ export class Shopkeeper extends Character {
     }
 
     // Standard dialogue if matches aren't being given for the priest
+    // The rope is out of the prices once it is gone from the wares
     const waresInfo =
-      this.priceSentence() +
+      (this.priceSentence() || "I've nothing left on the shelves.") +
       " And there's an [item_name]apple[/item_name] with everything. " +
       "My mother's rule."
 
@@ -618,100 +601,92 @@ export class Shopkeeper extends Character {
     const newsDue =
       stayed && !gameState.getStoryFlag(FLAG_HEMLOCK_HEARD_PATCHES_STAYED)
     if (welcomeDue || newsDue || !Shopkeeper.isStoreOpen(gameState)) return []
-    return Object.keys(this.wares)
+    return super.sells(gameState)
+  }
+
+  /** He takes the act's coins, one item each. */
+  protected override coinName(): string {
+    return 'coin'
+  }
+
+  /** Sell as any seller does, with Hemlock named as the speaker. */
+  override buyItem(gameState: GameState, itemName: string): string {
+    return attributeSpeech(this.name, super.buyItem(gameState, itemName))
   }
 
   /**
-   * Sell a ware for coins, adding the bonus apple to the inventory. Nothing
-   * is sold while the store is shut (Patches in Elior's arms is welcomed home
-   * instead), the matches are kept for the priest and never sold, his one
-   * rope is sold only once, and the apples are never sold on their own,
-   * since one comes with every sale.
+   * Nothing is sold while the store is shut (Patches in Elior's arms is
+   * welcomed home instead), the matches are kept for the priest and never
+   * sold, his one rope is sold only once, and the apples are never sold on
+   * their own, since one comes with every sale.
    */
-  override buyItem(gameState: GameState, itemName: string): string {
-    return attributeSpeech(this.name, this.buyAnswer(gameState, itemName))
-  }
-
-  /** What the shopkeeper answers to a purchase, before the speaker is labelled. */
-  private buyAnswer(gameState: GameState, itemName: string): string {
+  protected override refusalBeforeSale(
+    gameState: GameState,
+    wareName: string,
+  ): string | null {
     const shut = this.whileShut(gameState)
     if (shut) return shut
-    const itemNameToBuy = itemName.toLowerCase()
-    if (gameState.currentRoom.getItemByName(itemNameToBuy) instanceof Matches) {
+    if (gameState.currentRoom.getItemByName(wareName) instanceof Matches) {
       return speech(
         `Those [item_name]matches[/item_name] are the ${characterName('priest')}'s. ` +
           "He gets them on the house whenever he asks, so they're not for sale.",
       )
     }
-    if (itemNameToBuy === 'rope' && this.ropeGone()) {
+    if (wareName === 'rope' && this.ropeGone()) {
       return speech(
         "That was my last good rope, lad. There'll be no more till spring.",
       )
     }
-    if (gameState.currentRoom.getItemByName(itemNameToBuy) instanceof Apple) {
+    if (gameState.currentRoom.getItemByName(wareName) instanceof Apple) {
       return speech(
         "I don't sell the [item_name]apples[/item_name], lad. " +
           "There's one with everything you buy.",
       )
     }
-    if (!(itemNameToBuy in this.wares)) {
-      return speech(
-        'Not something I carry, lad. Not since the caravans stopped, anyway.',
-      )
-    }
+    return null
+  }
 
-    const wareDetails = this.wares[itemNameToBuy]
-    const price = wareDetails.price
+  /** He does not carry it, and blames the caravans. */
+  protected override notSoldAnswer(_wareName: string): string {
+    return speech(
+      'Not something I carry, lad. Not since the caravans stopped, anyway.',
+    )
+  }
 
-    // Check if player has enough coins
-    let coinCount = 0
-    for (const item of gameState.inventory) {
-      if (item instanceof Coin) {
-        coinCount += 1
-      }
-    }
+  /**
+   * Only the rope leaves the shelf, and his wares with it, since he has but
+   * one; the sword and armor stay on show.
+   */
+  protected override clearDisplay(
+    gameState: GameState,
+    wareName: string,
+  ): void {
+    if (wareName === 'rope') this.giveAwayRope(gameState.currentRoom)
+  }
 
-    if (coinCount < price) {
-      return clue("You don't have enough coins for that.")
-    }
-
-    // Remove coins from inventory
-    let removedCoins = 0
-    for (const item of [...gameState.inventory]) {
-      // Iterate over a copy for safe removal
-      if (item instanceof Coin && removedCoins < price) {
-        gameState.inventory.splice(gameState.inventory.indexOf(item), 1)
-        removedCoins += 1
-      }
-    }
-
-    // Add item to inventory
-    // Need to create a new instance of the item to add to inventory
-    const apple = new Apple() // The shopkeeper gives an apple with every purchase
+  /** An apple goes into the inventory with every sale, ahead of the ware. */
+  protected override handOver(
+    gameState: GameState,
+    wareName: string,
+    ware: Ware,
+  ): Item {
+    const apple = new Apple()
     apple.canBeCarried = true
     gameState.addItemToInventory(apple)
-    let newItem: Item
-    if (itemNameToBuy === 'rope') {
-      newItem = new Rope()
-      this.giveAwayRope(gameState.currentRoom)
-    } else if (itemNameToBuy === 'sword') {
-      newItem = new Sword()
-    } else if (itemNameToBuy === 'armor') {
-      newItem = new Armor()
-    } else {
-      // Should not happen if itemNameToBuy is in this.wares
-      return 'An unexpected error occurred trying to sell the item.'
-    }
-    newItem.canBeCarried = true
-    gameState.addItemToInventory(newItem)
+    return super.handOver(gameState, wareName, ware)
+  }
 
-    // The sword and armor have infinite stock; the rope is sold only once.
-
+  /** He counts the coins, hands over the ware and the apple with it. */
+  protected override soldAnswer(
+    _gameState: GameState,
+    item: Item,
+    price: number,
+  ): string {
     return (
       `He counts the ${coins(price)} twice and hands over the ` +
-      `[item_name]${newItem.name}[/item_name], and an ` +
+      `[item_name]${item.name}[/item_name], and an ` +
       '[item_name]apple[/item_name] with it.\n' +
-      `You receive a [item_name]${newItem.name}[/item_name] and an ` +
+      `You receive a [item_name]${item.name}[/item_name] and an ` +
       '[item_name]apple[/item_name].'
     )
   }

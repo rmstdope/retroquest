@@ -7,6 +7,7 @@ import type { CompletionTree, Game } from './Game'
 import type { SayWord, SoundFiring } from './GameState'
 import { RING_VERBS, type Item, type RingVerb } from './Item'
 import type { Quest, QuestDetails } from './Quest'
+import { Seller } from './Seller'
 
 /** A journal entry: a name (with markup) and its text. */
 export interface NamedItem {
@@ -129,19 +130,6 @@ export interface MapPlace {
   current: boolean
   /** Direction → the way out; empty for a place not visited. */
   exits: Record<string, MapExit>
-}
-
-/** A character selling wares, like the act shopkeepers. */
-interface Merchant extends Character {
-  wares: Record<string, { item: Item; price: number }>
-}
-
-function isMerchant(character: Character): character is Merchant {
-  return (
-    'wares' in character &&
-    typeof character.wares === 'object' &&
-    character.wares !== null
-  )
 }
 
 /** A quest event: the quest and the text the story shows for it. */
@@ -556,11 +544,11 @@ export class GameController {
     return this.game.state.currentRoom.characters.map((c) => c.name)
   }
 
-  /** Everything sold in the room, by the merchants' `wares`. */
+  /** Everything sold in the room, by the sellers' `wares`. */
   getRoomWares(): RoomWare[] {
     const wares: RoomWare[] = []
     for (const character of this.game.state.currentRoom.characters) {
-      if (!isMerchant(character)) continue
+      if (!(character instanceof Seller)) continue
       for (const [name, details] of Object.entries(character.wares)) {
         wares.push({ name, price: details.price, seller: character.name })
       }
