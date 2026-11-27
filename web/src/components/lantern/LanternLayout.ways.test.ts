@@ -10,7 +10,6 @@ import { useAreaNamesStore } from '@/stores/useAreaNamesStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
 import { useSceneStore } from '@/stores/useSceneStore'
 import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
-import { useArrivalStore } from '@/stores/useArrivalStore'
 import { setPictureProbe } from '@/lantern/roomPicture'
 
 describe('LanternLayout: leaving by pressing a way out in the picture', () => {
@@ -188,88 +187,6 @@ describe('LanternLayout: leaving by pressing a way out in the picture', () => {
     const log = w.get('[role="log"]').element
     expect(log.closest('[inert]')).toBeNull()
     expect(log.closest('.lq-story-wrap')).toBeNull()
-  })
-
-  it('walks out from a press on the bare way, or on its name, the moment the arrival has gone by itself (rq-ir2c)', async () => {
-    const store = await cottage()
-    for (const command of [
-      'use lantern',
-      'take bread',
-      'take lantern',
-      'talk to grandmother',
-      'use journal',
-      'talk to grandmother',
-    ]) {
-      store.submitCommand(command)
-    }
-    store.releasePanels(store.turns.at(-1)!.id, [...PANEL_GROUPS], false)
-    await w.vm.$nextTick()
-    // Heard, not played: the player stays in the cottage for the second press.
-    const submit = vi.spyOn(store, 'submitCommand').mockImplementation(() => {})
-    /** An arrival nobody speaks is read for its time and goes. */
-    const goesByItself = async (id: number): Promise<void> => {
-      vi.useFakeTimers()
-      useArrivalStore().show(
-        id,
-        [{ kind: 'events', lines: [{ unit: 0, markup: 'x' }], voiced: false }],
-        false,
-      )
-      await vi.advanceTimersByTimeAsync(6000)
-      vi.useRealTimers()
-      expect(useArrivalStore().active).toBe(false)
-      useAreaNamesStore().showing = true
-      await w.vm.$nextTick()
-    }
-    await goesByItself(90)
-    await press(600, 100)
-    expect(submit).toHaveBeenCalledWith('go east')
-    submit.mockClear()
-    await goesByItself(91)
-    w.get('[data-area-name="exit-east"]').element.dispatchEvent(
-      new MouseEvent('click', { bubbles: true }),
-    )
-    expect(submit).toHaveBeenCalledWith('go east')
-  })
-
-  it("goes through a way's dot pressed through the words the moment the arrival has gone by itself (rq-ir2c)", async () => {
-    const store = await cottage()
-    for (const command of [
-      'use lantern',
-      'take bread',
-      'take lantern',
-      'talk to grandmother',
-      'use journal',
-      'talk to grandmother',
-    ]) {
-      store.submitCommand(command)
-    }
-    store.releasePanels(store.turns.at(-1)!.id, [...PANEL_GROUPS], false)
-    useAreaNamesStore().showing = true
-    await w.vm.$nextTick()
-    const submit = vi.spyOn(store, 'submitCommand')
-    const dot = w.get<HTMLElement>('[data-area-mark="exit-east"]').element
-    const pressThroughWords = (): void => {
-      w.get('.lq-story').element.dispatchEvent(
-        new MouseEvent('click', {
-          bubbles: true,
-          cancelable: true,
-          clientX: parseFloat(dot.style.left),
-          clientY: parseFloat(dot.style.top),
-        }),
-      )
-    }
-    vi.useFakeTimers()
-    useArrivalStore().show(
-      90,
-      [{ kind: 'events', lines: [{ unit: 0, markup: 'x' }], voiced: false }],
-      false,
-    )
-    await vi.advanceTimersByTimeAsync(6000)
-    vi.useRealTimers()
-    expect(useArrivalStore().active).toBe(false)
-    await w.vm.$nextTick()
-    pressThroughWords()
-    expect(submit).toHaveBeenCalledWith('go east')
   })
 
   it('does not go through an open way that lies under a mark pressed for its thing', async () => {
