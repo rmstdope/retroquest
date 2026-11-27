@@ -14,7 +14,7 @@ STY-2  A player plays by typing commands. A command the game does not understand
 STY-3  An act's main quest can be finished only when all its side quests are done.
        The journal shows each quest's log as it moves on, and hint gives a nudge in
        the game's own voice.
-       Proven by: nothing yet
+       Proven by: web/e2e/mainQuest.spec.ts
 STY-4  A player learns spells from people and places as the story allows, and can
        cast a spell once it is learned.
        Proven by: web/e2e/spells.spec.ts
@@ -64,6 +64,10 @@ PIC-5  Quest news and a newly learned spell are told in the middle of the pictur
        Proven by: web/e2e/questNews.spec.ts
 PIC-6  A player can open a bigger map and walk from it to a place already visited.
        Proven by: web/e2e/biggerMap.spec.ts
+PIC-7  A story card told on the picture stays while the mouse rests on it, and leaves
+       once the mouse has moved off and its reading time has run. A press made after
+       it has gone acts at once on what it lands on.
+       Proven by: web/e2e/cardClick.spec.ts
 
 ## Reading (RDG)
 
