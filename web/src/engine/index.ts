@@ -14,6 +14,7 @@ export {
   type QuestChecklistItem,
 } from './Quest'
 export { Room, type RoomOptions, type Exits } from './Room'
+export { Seller, type Ware } from './Seller'
 export {
   GAME_FULL_NAME,
   GAME_NAME,

@@ -1284,3 +1284,28 @@ describe('Shopkeeper buy suggestions leave the Patches scenes alone', () => {
     expect(game.state.inventory).toEqual([])
   })
 })
+
+describe('Shopkeeper sale', () => {
+  it('takes the coins and hands over the apple, then the ware', () => {
+    const game = gameInStore()
+    for (let i = 0; i < 6; i++) game.state.addItemToInventory(new Coin())
+    const shelf = [...game.state.currentRoom.items]
+
+    const answer = game.commandParser.parse('buy sword from shopkeeper')
+
+    expect(answer).toContain(
+      'He counts the coins twice and hands over the ' +
+        '[item_name]sword[/item_name], and an [item_name]apple[/item_name] ' +
+        'with it.\nYou receive a [item_name]sword[/item_name] and an ' +
+        '[item_name]apple[/item_name].',
+    )
+    expect(game.state.inventory.map((item) => item.name).slice(-3)).toEqual([
+      'coin',
+      'apple',
+      'sword',
+    ])
+    expect(game.state.getItemCount('coin')).toBe(1)
+    expect(game.state.inventory.at(-1)?.canBeCarried).toBe(true)
+    expect(game.state.currentRoom.items).toEqual(shelf)
+  })
+})

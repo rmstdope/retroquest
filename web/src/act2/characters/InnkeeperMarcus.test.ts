@@ -619,3 +619,31 @@ describe('Innkeeper Marcus buy suggestions', () => {
     expect(marcus.wares).toHaveProperty('room key')
   })
 })
+
+describe('Innkeeper Marcus sale', () => {
+  it('takes the price, clears the display and hands over the key', () => {
+    const game = new Game([new Act2()])
+    game.state.currentRoom = game.state.allRooms.SilverStagInn
+    expect(
+      game.state.currentRoom.items.filter((item) => item instanceof RoomKey),
+    ).toHaveLength(1)
+    for (let i = 0; i < 12; i++) game.state.addItemToInventory(new Coins())
+    const marcus = new InnkeeperMarcus()
+
+    const answer = marcus.buyItem(game.state, 'Room Key')
+
+    expect(answer.split('\n\n')[0]).toBe(
+      '[success]The [item_name]room key[/item_name] is yours for 10 ' +
+        '[item_name]gold coins[/item_name]. ' +
+        '[character_name]Marcus[/character_name] hands you a brass key and ' +
+        'nods at the [item_name]door[/item_name] behind the bar.[/success]',
+    )
+    expect(game.state.getItemCount('coins')).toBe(2)
+    expect(
+      game.state.currentRoom.items.some((item) => item instanceof RoomKey),
+    ).toBe(false)
+    expect(game.state.inventory.at(-1)).toBeInstanceOf(RoomKey)
+    expect(game.state.inventory.at(-1)?.canBeCarried).toBe(true)
+    expect(marcus.wares).toEqual({})
+  })
+})

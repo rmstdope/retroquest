@@ -1,13 +1,12 @@
 import {
-  Character,
+  Seller,
   type GameState,
   type Item,
   type Room,
+  type Ware,
   characterName,
-  clue,
   remembered,
   dialogue,
-  numberInWords,
 } from '@/engine'
 import { RoomKey } from '../items/RoomKey'
 import { DruidicCharm } from '../items/DruidicCharm'
@@ -23,34 +22,15 @@ import {
 const ROOM_KEY = 'room key'
 
 /**
- * The prices as one spoken sentence: "A [kit]'s fifty [gold coins], the
- * [lantern]'s forty and the [rope]'s twenty." Only the first ware names the
- * coin. Returns an empty string when there is nothing for sale.
- */
-function priceSentence(
-  wares: Record<string, { item: Item; price: number }>,
-): string {
-  const spoken = Object.entries(wares).map(([name, details], index) => {
-    const ware = `[item_name]${name}[/item_name]'s `
-    return index === 0
-      ? `A ${ware}${numberInWords(details.price)} ` +
-          '[item_name]gold coins[/item_name]'
-      : `the ${ware}${numberInWords(details.price)}`
-  })
-  const last = spoken.pop()
-  if (last === undefined) return ''
-  return spoken.length === 0 ? `${last}.` : `${spoken.join(', ')} and ${last}.`
-}
-
-/**
  * Innkeeper NPC who sells wares and rewards the player after Elena's cure.
  * Once the room key is sold it leaves his wares and his talk. His plea for
  * Elena is said once, and after greater heal he speaks of her colour instead.
  * After the cure every talk ends with his "ill wind" line until Elior tells
  * him the truth about the silver mask: the optional truth moment.
  */
-export class InnkeeperMarcus extends Character {
-  wares: Record<string, { item: Item; price: number }> = {
+export class InnkeeperMarcus extends Seller {
+  /** His one ware, taken off once it is sold. */
+  override wares: Record<string, Ware> = {
     [ROOM_KEY]: { item: new RoomKey(), price: 10 },
   }
   /** How he sees Elena once greater heal has taken hold. */
@@ -181,7 +161,7 @@ export class InnkeeperMarcus extends Character {
 
     // His prices, spoken in the same bubble as his opening line
     this.forgetSoldKey(gameState)
-    const waresInfo = priceSentence(this.wares)
+    const waresInfo = this.priceSentence()
 
     // Cycle through dialogue options
     const option = InnkeeperMarcus.IDLE_LINES[this.dialogueIndex]
@@ -279,85 +259,60 @@ export class InnkeeperMarcus extends Character {
    * only reads the state; the suggestions are rebuilt after every command.
    */
   override sells(gameState: GameState): string[] {
-    return Object.keys(this.wares).filter(
-      (ware) => !(ware === ROOM_KEY && this.keySold(gameState)),
-    )
+    return super
+      .sells(gameState)
+      .filter((ware) => !(ware === ROOM_KEY && this.keySold(gameState)))
   }
 
   /**
-   * Handle buying items from Innkeeper Marcus. A sold room key leaves his
-   * wares, so a second one is refused whether or not the first is still held.
+   * Take a sold key off his wares first. A sold room key leaves them, so a
+   * second one is refused whether or not the first is still held.
    */
-  override buyItem(gameState: GameState, itemName: string): string {
+  protected override refusalBeforeSale(
+    gameState: GameState,
+    wareName: string,
+  ): string | null {
     this.forgetSoldKey(gameState)
-    const itemNameToBuy = itemName.toLowerCase()
-    const seller = this.name
-
-    if (itemNameToBuy === ROOM_KEY && !(ROOM_KEY in this.wares)) {
+    if (wareName === ROOM_KEY && !(ROOM_KEY in this.wares)) {
       return this.secondKeyRefusal(gameState)
     }
+    return null
+  }
 
-    // Check if item is available
-    if (!(itemNameToBuy in this.wares)) {
-      return dialogue(
-        this.name,
-        "I've rooms to let, and nothing else for sale.",
-      )
-    }
+  /** He has rooms to let and nothing else. */
+  protected override notSoldAnswer(_wareName: string): string {
+    return dialogue(this.name, "I've rooms to let, and nothing else for sale.")
+  }
 
-    const wareDetails = this.wares[itemNameToBuy]
-    const price = wareDetails.price
+  /** Hand the ware over as any seller does, then take it off his wares. */
+  protected override handOver(
+    gameState: GameState,
+    wareName: string,
+    ware: Ware,
+  ): Item {
+    const item = super.handOver(gameState, wareName, ware)
+    delete this.wares[wareName]
+    return item
+  }
 
-    // Count total coins in inventory using the batching system
-    const totalCoins = gameState.getItemCount('coins')
-
-    // Check if player has enough coins
-    if (totalCoins < price) {
-      return clue("You don't have enough coins for that.")
-    }
-
-    // Purchase the item - spend coins using the batching system
-    const coinsRemoved = gameState.removeItemFromInventory('coins', price)
-    if (coinsRemoved !== price) {
-      return '[failure]Transaction failed. Unable to process payment.[/failure]'
-    }
-
-    // Remove the display item from the room (if present)
-    const roomItems = gameState.currentRoom.items
-    const roomIndex = roomItems.findIndex(
-      (item) => item.name.toLowerCase() === itemNameToBuy,
+  /** The key changes hands, and he speaks of the room's last lodger. */
+  protected override soldAnswer(
+    _gameState: GameState,
+    item: Item,
+    price: number,
+  ): string {
+    const purchaseMsg =
+      `[success]${this.yoursFor(item.name, price)} ` +
+      characterName('Marcus') +
+      ' hands you a brass key and nods at the [item_name]door[/item_name] ' +
+      'behind the bar.[/success]'
+    const lodger = dialogue(
+      this.name,
+      'That room upstairs? Its last lodger was a man in a grey cloak. ' +
+        'Never gave a name, wrote half the night by candle, and was ' +
+        'gone one morning without paying. It was the week the king ' +
+        "went. I've aired it since. You'll find it clean.",
     )
-    if (roomIndex !== -1) {
-      roomItems.splice(roomIndex, 1)
-    }
-
-    // Create new carriable instance of the item to add to inventory
-    let newItem: Item | null = null
-    if (itemNameToBuy === 'room key') {
-      newItem = new RoomKey()
-    }
-
-    if (newItem) {
-      newItem.canBeCarried = true // Ensure the purchased item is carriable
-      gameState.addItemToInventory(newItem)
-      delete this.wares[itemNameToBuy]
-      const purchaseMsg =
-        `[success]The [item_name]${itemNameToBuy}[/item_name] is yours for ` +
-        `${price} [item_name]gold coins[/item_name]. ` +
-        characterName('Marcus') +
-        ' hands you a brass key and nods at the [item_name]door[/item_name] ' +
-        'behind the bar.[/success]'
-      const lodger = dialogue(
-        seller,
-        'That room upstairs? Its last lodger was a man in a grey cloak. ' +
-          'Never gave a name, wrote half the night by candle, and was ' +
-          'gone one morning without paying. It was the week the king ' +
-          "went. I've aired it since. You'll find it clean.",
-      )
-      return purchaseMsg + '\n\n' + lodger
-    } else {
-      // Should not happen if item is in wares, but safety check
-      return '[failure]An unexpected error occurred trying to rent the room.[/failure]'
-    }
+    return purchaseMsg + '\n\n' + lodger
   }
 }
