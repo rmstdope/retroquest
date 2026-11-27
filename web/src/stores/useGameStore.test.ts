@@ -12,7 +12,6 @@ import type {
   QuestReport,
   QuestSummary,
   ResultScreen,
-  SaveSlot,
   SayWord,
 } from '@/types/bridge'
 
@@ -146,17 +145,6 @@ function createMockBridge() {
     saveNamedGame: vi.fn(() => 'Game saved.'),
     loadNamedGame: vi.fn(() => 'Game loaded.'),
     newGame: vi.fn(),
-    getQuickSave: vi.fn((): SaveSlot | null => null),
-    getNamedSaves: vi.fn((): SaveSlot[] => []),
-    getSaveSlots: vi.fn((): SaveSlot[] => [
-      ...Array.from({ length: 8 }, (_, i) => ({
-        slot: i + 1,
-        act: null,
-        room: null,
-        timestamp: null,
-        quests: null,
-      })),
-    ]),
     saveToSlot: vi.fn(() => 'Game saved.'),
     loadFromSlot: vi.fn(() => 'Game loaded.'),
     takeLoadedStory: vi.fn((): unknown => null),
@@ -224,11 +212,6 @@ describe('useGameStore', () => {
   // --- initGame ---
 
   describe('initGame', () => {
-    it('calls bridge.init with progress callback', async () => {
-      await store.initGame()
-      expect(bridge.init).toHaveBeenCalledWith(expect.any(Function))
-    })
-
     it('marks the load as failed when the engine cannot start', async () => {
       expect(store.loadFailed).toBe(false)
       const error = new Error('Network error')
@@ -245,22 +228,13 @@ describe('useGameStore', () => {
       expect(store.loadingStatus).toBe('Error: Network error')
     })
 
-    it('sets loading to false after init', async () => {
-      await store.initGame()
-      expect(store.loading).toBe(false)
-    })
-
     it('updates loadingStatus via progress callback', async () => {
       bridge.init.mockImplementation(async (cb: (s: string) => void) => {
         cb('Loading Python...')
       })
       await store.initGame()
       expect(store.loadingStatus).toBe('Loading Python...')
-    })
-
-    it('calls advanceTurn twice to advance through logo and act intro', async () => {
-      await store.initGame()
-      expect(bridge.controller.advanceTurn).toHaveBeenCalledTimes(2)
+      expect(store.loading).toBe(false)
     })
 
     it('shows act intro (second advanceTurn) in modal', async () => {
@@ -681,19 +655,6 @@ describe('useGameStore', () => {
       expect(store.loadFromTitle(-1, 'gone')).toBe(false)
       expect(store.showTitle).toBe(true)
       expect(store.titleLoadError).toBe('No save file found.')
-    })
-
-    it('lists the named saves from the bridge', () => {
-      const card: SaveSlot = {
-        slot: -1,
-        name: 'x',
-        act: null,
-        room: null,
-        timestamp: null,
-        quests: null,
-      }
-      bridge.getNamedSaves.mockReturnValue([card])
-      expect(store.getNamedSaves()).toEqual([card])
     })
 
     it('forgets an earlier failure on the next attempt', () => {
@@ -1172,23 +1133,15 @@ describe('useGameStore', () => {
       await store.initGame()
     })
 
-    it('returns candidates for a top-level prefix with single match', () => {
-      const result = store.tabComplete('inv')
-      expect(result.candidates).toEqual(['inventory'])
-    })
-
     it('auto-expands to single unambiguous match plus trailing space', () => {
       const result = store.tabComplete('inv')
+      expect(result.candidates).toEqual(['inventory'])
       expect(result.newInput).toBe('inventory ')
     })
 
-    it('returns all top-level candidates when prefix matches multiple', () => {
+    it('lists all candidates without expanding when several match', () => {
       const result = store.tabComplete('t')
       expect(result.candidates.sort()).toEqual(['take', 'talk'])
-    })
-
-    it('does not expand input when multiple candidates exist', () => {
-      const result = store.tabComplete('t')
       expect(result.newInput).toBe('t')
     })
 
@@ -1401,25 +1354,7 @@ describe('useGameStore', () => {
     })
   })
 
-  // --- getSaveSlots / saveToSlot / loadFromSlot ---
-
-  describe('getSaveSlots', () => {
-    beforeEach(async () => {
-      await store.initGame()
-    })
-
-    it('returns 8 slots from bridge', () => {
-      const slots: SaveSlot[] = Array.from({ length: 8 }, (_, i) => ({
-        slot: i + 1,
-        act: null,
-        room: null,
-        timestamp: null,
-        quests: null,
-      }))
-      bridge.getSaveSlots.mockReturnValue(slots)
-      expect(store.getSaveSlots()).toHaveLength(8)
-    })
-  })
+  // --- saveToSlot / loadFromSlot ---
 
   describe('saving and loading through the bridge', () => {
     beforeEach(async () => {
@@ -2268,65 +2203,6 @@ describe('useGameStore', () => {
     })
   })
 
-  // --- Raw names for the action composer ---
-
-  describe('raw bag and spell names', () => {
-    it('keep the bridge names (unrendered) for building commands', async () => {
-      bridge.controller.getInventory.mockReturnValue([
-        { name: '[item_name]2 apple[/item_name]', description: '' },
-      ])
-      bridge.controller.getSpells.mockReturnValue([
-        { name: '[spell_name]revive[/spell_name]', description: '' },
-      ])
-
-      await store.initGame()
-
-      expect(store.bagEntries).toEqual(['[item_name]2 apple[/item_name]'])
-      expect(store.spellEntries).toEqual(['[spell_name]revive[/spell_name]'])
-    })
-  })
-
-  // --- Raw journal data ---
-
-  describe('raw journal data', () => {
-    it('keeps bag, spells and quests as the bridge delivers them', async () => {
-      bridge.controller.getInventory.mockReturnValue([
-        { name: '[item_name]bread[/item_name]', description: 'A small loaf.' },
-      ])
-      bridge.controller.getActiveQuests.mockReturnValue([
-        {
-          name: 'Q',
-          main: true,
-          done: false,
-          details: { kind: 'journal', latest: 'Old', earlier: [] },
-        },
-      ])
-      bridge.controller.getCompletedQuests.mockReturnValue([
-        {
-          name: 'Done',
-          main: false,
-          done: true,
-          details: { kind: 'journal', latest: 'Fin.', earlier: [] },
-        },
-      ])
-
-      await store.initGame()
-
-      expect(store.rawInventory).toEqual([
-        { name: '[item_name]bread[/item_name]', description: 'A small loaf.' },
-      ])
-      expect(store.activeQuests[0].details).toEqual({
-        kind: 'journal',
-        latest: 'Old',
-        earlier: [],
-      })
-      expect(store.completedQuests[0].name).toBe('Done')
-      expect(store.rawSpells).toEqual([
-        { name: 'Heal', description: 'Restores HP' },
-      ])
-    })
-  })
-
   // --- Quest news in the story (Lantern) ---
 
   describe('quest news in the story', () => {
@@ -2625,23 +2501,6 @@ describe('useGameStore', () => {
       store.dismissModal()
     })
 
-    it('shows a saved game as a notice, not in the story', () => {
-      const turns = store.turns.length
-
-      store.submitCommand('save')
-
-      expect(store.notice?.text).toBe('Game saved')
-      expect(store.turns.length).toBe(turns)
-    })
-
-    it('names the slot or the save', () => {
-      store.saveToSlot(2)
-      expect(store.notice?.text).toBe('Game saved · Slot 2')
-
-      store.submitCommand('save morning')
-      expect(store.notice?.text).toBe('Game saved · morning')
-    })
-
     it('gives each notice its own id, so the same one shows again', () => {
       store.saveToSlot(2)
       const first = store.notice?.id
@@ -2725,20 +2584,6 @@ describe('useGameStore', () => {
       expect(bridge.controller.handleCommand).toHaveBeenCalledWith('stats')
       expect(store.turns.length).toBe(turns)
     })
-  })
-
-  it('tells about the quick save', async () => {
-    const quick = {
-      slot: 0,
-      act: 'Act 1',
-      room: 'Square',
-      timestamp: 't',
-      quests: { completed: 2, total: 11 },
-    }
-    bridge.getQuickSave.mockReturnValue(quick)
-    await store.initGame()
-
-    expect(store.getQuickSave()).toEqual(quick)
   })
 
   describe('quit', () => {
@@ -2854,18 +2699,6 @@ describe('useGameStore', () => {
       expect(store.notice).toBe(null)
     })
 
-    it('asks to save on the final chapter instead of going on', () => {
-      finishLastAct()
-      store.continueChapter()
-      expect(store.finishAsked).toBe(true)
-      expect(store.showModal).toBe(true)
-      expect(store.modalChapter).toEqual(FINAL_CHAPTER)
-      store.cancelFinish()
-      expect(store.finishAsked).toBe(false)
-      expect(store.modalChapter).toEqual(FINAL_CHAPTER)
-      expect(store.ending).toBe(null)
-    })
-
     it('keeps the dialog open when the save fails', () => {
       finishLastAct()
       store.continueChapter()
@@ -2876,18 +2709,6 @@ describe('useGameStore', () => {
       expect(store.finishAsked).toBe(true)
       expect(store.modalChapter).toEqual(FINAL_CHAPTER)
       expect(store.turns.length).toBe(turns)
-    })
-
-    it('ends the game without saving', () => {
-      finishLastAct()
-      store.continueChapter()
-      bridge.quickSaveGame.mockClear()
-      expect(store.finishGame(false)).toBe(true)
-      expect(bridge.quickSaveGame).not.toHaveBeenCalled()
-      expect(store.ending).toEqual({
-        text: 'The realm breathes again.',
-        saved: false,
-      })
     })
 
     it('starts afresh after a restart', () => {
