@@ -1,20 +1,20 @@
 [
   {
-    "after": 30,
+    "after": "talk-to-caravan-master-thorne",
     "commands": [
       "s",
       "talk to brenn"
     ]
   },
   {
-    "after": 108,
+    "after": "talk-to-caravan-master-thorne-2",
     "commands": [
       "s",
       "talk to brenn"
     ]
   },
   {
-    "after": 108,
+    "after": "talk-to-caravan-master-thorne-2",
     "commands": [
       "say forgive to caravan master thorne",
       "s",
@@ -22,25 +22,25 @@
     ]
   },
   {
-    "after": 113,
+    "after": "talk-to-innkeeper-marcus",
     "commands": [
       "say truth to innkeeper marcus"
     ]
   },
   {
-    "after": 151,
+    "after": "cast-prophetic-vision",
     "commands": [
       "say truth to sir cedric"
     ]
   },
   {
-    "after": 55,
+    "after": "talk-to-families",
     "commands": [
       "use mountain flower with families"
     ]
   },
   {
-    "after": 102,
+    "after": "use-quality-rope-with-ravine",
     "commands": [
       "cast greater heal on caravan",
       "w",

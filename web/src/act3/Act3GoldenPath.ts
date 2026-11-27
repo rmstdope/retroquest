@@ -1,14 +1,24 @@
-/** The command that completes Act 3 at the Fortress Gates, once the golden path has been played; it reads the closing page. */
-export const ACT3_COMPLETING_COMMANDS: string[] = ['examine gates']
+import { markedPath, type MarkedPath } from '@/engine'
 
-/** The commands that play Act 3's golden path from a new game to the Fortress Gates; `ACT3_COMPLETING_COMMANDS` there complete the act. */
-export const ACT3_GOLDEN_PATH: string[] = [
+/** The completing commands with their marks, as the golden path has them. */
+export const ACT3_COMPLETING: MarkedPath = markedPath(['examine gates'])
+
+/** The command that completes Act 3 at the Fortress Gates, once the golden path has been played; it reads the closing page. */
+export const ACT3_COMPLETING_COMMANDS: string[] = ACT3_COMPLETING.commands
+
+/**
+ * The golden path with its marks: a step starting `@` is not a command but
+ * names the point of the path where it stands, which an optional scene of
+ * `tts/act3/branches.json` plays after.
+ */
+export const ACT3_GOLDEN: MarkedPath = markedPath([
   'talk to mira',
   'examine note',
   'talk to mira',
   'examine mural',
   'take letter',
   'examine letter',
+  '@examine-letter',
   'cast light',
   'take key',
   'n',
@@ -18,6 +28,7 @@ export const ACT3_GOLDEN_PATH: string[] = [
   'cast purify on pillars',
   'use moon rune shards with pillars',
   'e',
+  '@in-collapsed-pier',
   'use key with locker',
   'cast unlock on locker',
   'open locker',
@@ -37,6 +48,7 @@ export const ACT3_GOLDEN_PATH: string[] = [
   'take crystal',
   'w',
   'w',
+  '@in-tidal-causeway',
   'talk to mira',
   'talk to ash scholar',
   'examine canteen',
@@ -52,6 +64,7 @@ export const ACT3_GOLDEN_PATH: string[] = [
   'use brass mirror segment with mirror mount',
   'use binding resin with mirror mount',
   'cast mend on mirror mount',
+  '@cast-mend-on-mirror-mount',
   'rest',
   's',
   'search',
@@ -67,6 +80,7 @@ export const ACT3_GOLDEN_PATH: string[] = [
   'rest',
   'rest',
   's',
+  '@in-phoenix-crater',
   'rest',
   'talk to phoenix',
   'say patience to phoenix',
@@ -90,25 +104,34 @@ export const ACT3_GOLDEN_PATH: string[] = [
   'use wedge blocks with rock',
   'talk to miners',
   'e',
+  '@in-echo-chambers',
   'search',
   'examine old oath scrolls',
   'examine runic walls',
   'take resonant chant rubbings',
   'w',
   's',
+  '@in-stillness-vestibule',
   'cast bless on echo stones',
   'take phial',
   'use stillwater phial with pool',
   'use resonant chant rubbings with echo stones',
   'e',
   'talk to ancient dragon',
+  '@talk-to-ancient-dragon',
   'say everything to ancient dragon',
   "take dragon's scale",
+  '@take-dragons-scale',
   'w',
   'w',
   'talk to mira',
+  '@in-miras-hut',
   'talk to mira',
   'talk to mira',
   'take lifelight elixir',
   'talk to mira',
-]
+  '@in-entrance-to-malakars-fortress',
+])
+
+/** The commands that play Act 3's golden path from a new game to the Fortress Gates; `ACT3_COMPLETING_COMMANDS` there complete the act. */
+export const ACT3_GOLDEN_PATH: string[] = ACT3_GOLDEN.commands

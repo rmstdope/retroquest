@@ -7,7 +7,7 @@ import { ACT2_GOLDEN_PATH } from '@/act2/Act2GoldenPath'
 import { Act4 } from '@/act4/Act4'
 import { ACT4_GOLDEN_PATH } from '@/act4/Act4GoldenPath'
 import { ACT1_GOLDEN_PATH } from '@/act1/Act1GoldenPath'
-import { ACT_SOURCES } from '../../../tts/actScripts'
+import { ACT_NUMBERS, ACT_SOURCES, actBranches } from '../../../tts/actScripts'
 import { narrationKey } from './narrationKey'
 import {
   actScript,
@@ -471,7 +471,7 @@ describe('actScript branches of Act I', () => {
         'utf8',
       ),
     ) as T
-  const branches = act1<ScriptBranch[]>('branches.json')
+  const branches = actBranches('1')
   // The committed script, which narrationScriptFresh.test.ts pins to the extractor.
   const keys = new Set(act1<ScriptLine[]>('script.json').map((line) => line.id))
   /** Act I is played with every branch; that is slow under a loaded machine. */
@@ -584,6 +584,18 @@ describe('anchorBranches', () => {
         ),
       ),
     ).toThrow(/branch after woken \(talk to nobodyhere\).*reaches nobody/)
+  })
+})
+
+describe.each(ACT_NUMBERS)('the branches of Act %s', (number) => {
+  it('each play after a mark of the golden path', () => {
+    const { commands } = ACT_SOURCES[number]
+    const branches = actBranches(number)
+    expect(branches.length).toBeGreaterThan(0)
+    for (const branch of branches) {
+      expect(branch.anchor, branch.commands.join(', ')).toBeTruthy()
+      expect(branch.after).toBeLessThan(commands.length)
+    }
   })
 })
 

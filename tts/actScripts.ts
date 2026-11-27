@@ -7,30 +7,23 @@
  * `tts/act<N>/script.json` and `music.json`. Unsigned writing is given to its
  * writer by `act<N>/writers.json`; lines opening as in `act<N>/silent.json` stay
  * silent (instructions, not story); `act<N>/branches.json` lists optional scenes
- * to play on a copy (`ScriptBranch`).
+ * to play on a copy (`AnchoredBranch`: each after a mark of the golden path).
  */
 import { existsSync, readFileSync } from 'node:fs'
-import { Game } from '../web/src/engine'
-import type { Act } from '../web/src/engine'
+import { Game, joinPaths } from '../web/src/engine'
+import type { Act, MarkedPath } from '../web/src/engine'
 import { Act1 } from '../web/src/act1/Act1'
-import {
-  ACT1_COMPLETING_COMMANDS,
-  ACT1_GOLDEN_PATH,
-} from '../web/src/act1/Act1GoldenPath'
+import { ACT1_COMPLETING, ACT1_GOLDEN } from '../web/src/act1/Act1GoldenPath'
 import { Act2 } from '../web/src/act2/Act2'
-import {
-  ACT2_COMPLETING_COMMANDS,
-  ACT2_GOLDEN_PATH,
-} from '../web/src/act2/Act2GoldenPath'
+import { ACT2_COMPLETING, ACT2_GOLDEN } from '../web/src/act2/Act2GoldenPath'
 import { Act3 } from '../web/src/act3/Act3'
-import {
-  ACT3_COMPLETING_COMMANDS,
-  ACT3_GOLDEN_PATH,
-} from '../web/src/act3/Act3GoldenPath'
+import { ACT3_COMPLETING, ACT3_GOLDEN } from '../web/src/act3/Act3GoldenPath'
 import { Act4 } from '../web/src/act4/Act4'
-import { ACT4_GOLDEN_PATH } from '../web/src/act4/Act4GoldenPath'
+import { ACT4_GOLDEN } from '../web/src/act4/Act4GoldenPath'
 import {
   actScript,
+  anchorBranches,
+  type AnchoredBranch,
   type ScriptBranch,
   type ScriptLine,
   type WriterRule,
@@ -47,30 +40,29 @@ import {
 } from '../web/src/lantern/imageLists'
 import { actScenes, type SceneDeclaration } from '../web/src/lantern/sceneLists'
 
-/** What the extractor needs of an act: a fresh act and the commands that play it to its end. */
-export interface ActSource {
+/** What the extractor needs of an act: a fresh act and the marked commands that play it to its end. */
+export interface ActSource extends MarkedPath {
   make: () => Act
-  commands: string[]
 }
 
-/** The source of each act by number: a fresh act and the commands that play it to its end. */
+/** The source of each act by number: a fresh act and the marked commands that play it to its end. */
 export const ACT_SOURCES: Record<string, ActSource> = {
   '1': {
     make: () => new Act1(),
-    commands: [...ACT1_GOLDEN_PATH, ...ACT1_COMPLETING_COMMANDS],
+    ...joinPaths(ACT1_GOLDEN, ACT1_COMPLETING),
   },
   '2': {
     make: () => new Act2(),
     // The golden path stops with Cedric waiting; the vision and his answer
     // end the act (branches.json plays the other answer, "say truth").
-    commands: [...ACT2_GOLDEN_PATH, ...ACT2_COMPLETING_COMMANDS],
+    ...joinPaths(ACT2_GOLDEN, ACT2_COMPLETING),
   },
   '3': {
     make: () => new Act3(),
     // The completing command plays the closing page into the script.
-    commands: [...ACT3_GOLDEN_PATH, ...ACT3_COMPLETING_COMMANDS],
+    ...joinPaths(ACT3_GOLDEN, ACT3_COMPLETING),
   },
-  '4': { make: () => new Act4(), commands: ACT4_GOLDEN_PATH },
+  '4': { make: () => new Act4(), ...ACT4_GOLDEN },
 }
 
 /** The act numbers the extractor knows, as the strings `extract-act.ts` takes. */
@@ -103,6 +95,17 @@ function readJson<T>(number: string, file: string, fallback?: T): T {
 }
 
 /**
+ * Returns the optional scenes of `act<N>/branches.json`, each placed after the
+ * step its mark follows. Throws, naming every branch whose mark is gone.
+ */
+export function actBranches(number: string): ScriptBranch[] {
+  return anchorBranches(
+    readJson<AnchoredBranch[]>(number, 'branches.json', []),
+    sourceOf(number).marks,
+  )
+}
+
+/**
  * Lines the engine picks at random (the phantoms' whispers) must all be in the
  * script, and the script must not depend on a roll: an act that draws a random
  * number is played once for each of these fixed rolls and the lines are merged
@@ -115,7 +118,7 @@ export function extractActScript(number: string): ScriptLine[] {
   const source = sourceOf(number)
   const writers = readJson<WriterRule[]>(number, 'writers.json')
   const silent = readJson<string[]>(number, 'silent.json')
-  const branches = readJson<ScriptBranch[]>(number, 'branches.json', [])
+  const branches = actBranches(number)
   const lines = new Map<string, ScriptLine>()
   const random = Math.random
   let drawn = false
@@ -157,9 +160,7 @@ export function extractActImages(number: string): GameImage[] {
     sourceOf(number).make(),
     ACT_NUMBERS.map((n) => sourceOf(n).make()),
   )
-  return byId(
-    number === ACT_NUMBERS[0] ? [...images, titleImage()] : images,
-  )
+  return byId(number === ACT_NUMBERS[0] ? [...images, titleImage()] : images)
 }
 
 /** Returns a scene for each room of the act, as `scenes.json` holds them. */
