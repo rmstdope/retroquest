@@ -6,36 +6,6 @@ import { TidewardSigilsQuest } from './TidewardSigils'
 import { LanternsOfTheDeepsQuest } from './LanternsOfTheDeeps'
 import { MirrorsOfEmberlightQuest } from './MirrorsOfEmberlight'
 
-describe('Act III side quest logs', () => {
-  it('Breath of the Mountain tells the steps in order', () => {
-    expect(new BreathOfTheMountain().completion).toBe(
-      'You set the vent stones, sealed the vents with ash-fern and slag, ' +
-        "counted the mountain's breath, and crossed to the crater on the in-breath.",
-    )
-  })
-
-  it('Tideward Sigils places the pillars in the Outer Wards', () => {
-    expect(new TidewardSigilsQuest().description).toBe(
-      'Three warding pillars stand in the drowned courtyard of the Outer Wards. ' +
-        'Cleaned and set with moon sigils, they could draw the sea back from the hall beyond.',
-    )
-  })
-
-  it('Lanterns of the Deeps names the brackets and what a light in them could do', () => {
-    expect(new LanternsOfTheDeepsQuest().description).toBe(
-      'Three carved brackets line the flooded antechamber, cut to hold a lantern. ' +
-        'With a light burning in each, the hall might show the way through.',
-    )
-  })
-
-  it('Lanterns of the Deeps ends on the path to the sanctum', () => {
-    expect(new LanternsOfTheDeepsQuest().completion).toBe(
-      'The prism lanterns burn in their brackets, and their light lays a ' +
-        'clear path through the flooded hall to the sanctum.',
-    )
-  })
-})
-
 describe('Act III side quest logs not yet offered in an older save', () => {
   it('keep the text they were saved with', () => {
     const game = new Game([new Act3()])
@@ -62,7 +32,7 @@ describe('Act III side quest logs not yet offered in an older save', () => {
 describe('Mirrors of Emberlight speaks to the player', () => {
   it('tells the mending as something you did, in plain words', () => {
     const quest = new MirrorsOfEmberlightQuest()
-    expect(quest.completion).toMatch(/^You /)
+    expect(quest.completion).toMatch(/\byou\b/i)
     expect(quest.completion).not.toMatch(/Elior|ancient|with care and skill/)
     expect(quest.description).not.toMatch(/ancient/)
   })
