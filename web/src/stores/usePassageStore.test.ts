@@ -121,7 +121,10 @@ describe('usePassageStore', () => {
 
   describe('typed (a command typed during a passage)', () => {
     /** A passage whose new screen is rising, and the order things happen in. */
-    function rising() {
+    function rising(): {
+      passage: ReturnType<typeof usePassageStore>
+      order: string[]
+    } {
       const passage = usePassageStore()
       const order: string[] = []
       passage.begin(
