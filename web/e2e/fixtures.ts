@@ -141,8 +141,9 @@ export async function skipTelling(page: Page): Promise<void> {
  * Press (`press`), have the app's hold to skip come due at once instead of
  * after `HOLD_TO_SKIP_MS`, and let go (`release`): for a spec that only needs
  * a telling out of the way, never one about how long a hold takes. The events
- * and the app's own hold are real; only a `setTimeout` of exactly that length
- * is shortened, and only while the press is made.
+ * and the app's own hold are real; only the first `setTimeout` of exactly that
+ * length made during the press, the hold's own, is shortened, so a timer the
+ * skip itself starts keeps its time.
  */
 export async function holdFilledAtOnce(
   page: Page,
@@ -151,13 +152,15 @@ export async function holdFilledAtOnce(
 ): Promise<void> {
   const shortened = await page.evaluateHandle((hold) => {
     const own = window.setTimeout
-    window.setTimeout = ((handler: TimerHandler, ms?: number, ...args) =>
-      own(handler, ms === hold ? 0 : ms, ...args)) as typeof window.setTimeout
-    return {
-      restore: (): void => {
-        window.setTimeout = own
-      },
+    const restore = (): void => {
+      window.setTimeout = own
     }
+    window.setTimeout = ((handler: TimerHandler, ms?: number, ...args) => {
+      if (ms !== hold) return own(handler, ms, ...args)
+      restore()
+      return own(handler, 0, ...args)
+    }) as typeof window.setTimeout
+    return { restore }
   }, HOLD_TO_SKIP_MS)
   try {
     await press()
