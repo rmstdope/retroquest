@@ -86,3 +86,22 @@ describe('ForestSpeechSpell in the Whispering Glade', () => {
     )
   })
 })
+
+describe('ForestSpeechSpell tells the forest by what a room is, not its name', () => {
+  const FOREST = "The forest's talk sorts itself into words"
+  const ELSEWHERE = 'There are few natural beings here'
+
+  it.each([
+    ['ForestTransition', FOREST],
+    ['AncientGrove', FOREST],
+    ['HeartOfTheForest', FOREST],
+    ['WhisperingGlade', FOREST],
+    ['MainSquare', ELSEWHERE],
+  ])('answers the same in a renamed %s', (key, expected) => {
+    const game = setupForestEntrance()
+    game.state.currentRoom = game.state.allRooms[key]
+    game.state.currentRoom.name = 'Somewhere Else'
+
+    expect(game.commandParser.parse('cast forest_speech')).toContain(expected)
+  })
+})

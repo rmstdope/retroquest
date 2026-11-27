@@ -6,6 +6,7 @@ import { Deer } from '../characters/Deer'
 import { GrowSpell } from '../spells/GrowSpell'
 import { Scenery } from '../items/Scenery'
 import { OldMill } from './OldMill'
+import { FLAG_DEER_CAN_BE_OBSERVED } from '../Act1StoryFlags'
 
 /**
  * Hidden Glade room: enchanted clearing with conditional fauna and spell gain.
@@ -115,7 +116,7 @@ export class HiddenGlade extends Room {
    * still runs, the ground here feels drawn on, which points back at it.
    */
   override rest(gameState: GameState): string {
-    if (gameState.getStoryFlag('deer_can_be_observed')) {
+    if (gameState.getStoryFlag(FLAG_DEER_CAN_BE_OBSERVED)) {
       const messages = ['You take a moment to rest in the tranquil glade.']
       if (!this.getCharacterByName('Deer')) {
         const deer = new Deer()

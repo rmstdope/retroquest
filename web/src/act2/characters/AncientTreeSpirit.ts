@@ -113,12 +113,7 @@ export class AncientTreeSpirit extends Character {
     }
 
     // Items from Whispering Glade: water or moonflowers
-    const name = item.name.toLowerCase()
-    if (name === 'crystal-clear water' || name === 'moonflowers') {
-      if (!(item instanceof CrystalClearWater || item instanceof Moonflowers)) {
-        return super.giveItem(gameState, item)
-      }
-
+    if (item instanceof CrystalClearWater || item instanceof Moonflowers) {
       if (gameState.getStoryFlag(FLAG_WHISPERS_IN_WIND_COMPLETED)) {
         return this.refuseRepeatGift()
       }

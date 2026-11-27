@@ -104,3 +104,8 @@ export const FLAG_COURT_HERALD_OATH_LINE_SAID = 'court_herald_oath_line_said'
 export const FLAG_LIBRARIAN_NAMED_THE_LAND = 'librarian_named_the_land'
 /** Set once Sir Cedric has said he swore the crown's oath (said once). */
 export const FLAG_CEDRIC_OATH_LINE_SAID = 'cedric_oath_line_said'
+
+/** The flag set once the water nymphs' riddle number `riddle` (1-based) is answered. */
+export function waterNymphRiddleFlag(riddle: number): string {
+  return `water_nymph_riddle_${riddle}_completed`
+}

@@ -592,7 +592,7 @@ export class Mira extends Character {
    */
   private pendingSlips(gameState: GameState): string {
     const lines: string[] = []
-    const room = gameState.currentRoom.name
+    const room = gameState.currentRoom
     if (
       gameState.getStoryFlag(FLAG_ACT3_SEA_SEALED_LETTER_READ) &&
       !gameState.getStoryFlag(FLAG_ACT3_RUINS_LEFT) &&
@@ -601,7 +601,7 @@ export class Mira extends Character {
       lines.push(Mira.ruinsSlip(gameState))
     }
     if (
-      room === 'Lower Switchbacks' &&
+      room instanceof LowerSwitchbacks &&
       gameState.getStoryFlag(FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED) &&
       !gameState.getStoryFlag(FLAG_ACT3_MIRA_EMBER_SLIP_PLAYED)
     ) {
@@ -613,7 +613,7 @@ export class Mira extends Character {
       )
     }
     if (
-      room === 'Cavern Mouth' &&
+      room instanceof CavernMouth &&
       gameState.getStoryFlag(FLAG_ACT3_DRAGON_MESSAGE_GIVEN) &&
       !gameState.getStoryFlag(FLAG_ACT3_DRAGON_MESSAGE_RELAYED)
     ) {

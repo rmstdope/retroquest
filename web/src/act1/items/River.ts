@@ -1,6 +1,7 @@
 import { Item, type GameState, clue } from '@/engine'
 import { Fish } from './Fish'
 import { FishingRod } from './FishingRod'
+import { FLAG_LEARNED_FISHING_BASICS } from '../Act1StoryFlags'
 
 const RIVER_DESCRIPTION =
   'A gentle river, its waters flowing steadily. It looks like a good spot ' +
@@ -29,7 +30,7 @@ export class River extends Item {
   /** Use with FishingRod to catch fish if basics are learned, otherwise fail. */
   override useWith(gameState: GameState, other: Item): string {
     if (other instanceof FishingRod) {
-      if (!gameState.getStoryFlag('learned_fishing_basics')) {
+      if (!gameState.getStoryFlag(FLAG_LEARNED_FISHING_BASICS)) {
         return clue(
           "You have a [item_name]rod[/item_name], but you're not quite sure " +
             'how to fish effectively yet. Perhaps someone could teach you.',

@@ -202,3 +202,14 @@ describe('Ancient Tree Spirit voice', () => {
     expectMarkupWellFormed(answer)
   })
 })
+
+describe('Ancient Tree Spirit tells a gift by what it is, not by its name', () => {
+  it('takes renamed moonflowers as one of the two gifts', () => {
+    const { game, spirit } = gameAfterAcorn()
+    const moonflowers = new Moonflowers()
+    moonflowers.name = 'night blooms'
+    game.state.addItemToInventory(moonflowers)
+
+    expect(spirit.giveItem(game.state, moonflowers)).toContain(HALF_HARVEST)
+  })
+})

@@ -101,3 +101,23 @@ describe('NatureSenseSpell in the Whispering Glade', () => {
     expect(again).not.toMatch(/sacred|presence/)
   })
 })
+
+describe('NatureSenseSpell tells the forest by what a room is, not its name', () => {
+  const STONES = 'the living things around you thin'
+  const FOREST = 'none of it is hiding from you'
+  const ELSEWHERE = 'There is little growing here'
+
+  it.each([
+    ['ForestTransition', STONES],
+    ['AncientGrove', FOREST],
+    ['HeartOfTheForest', FOREST],
+    ['MainSquare', ELSEWHERE],
+  ])('answers the same in a renamed %s', (key, expected) => {
+    const game = new Game([new Act2()])
+    game.state.learnSpell(new NatureSenseSpell())
+    game.state.currentRoom = game.state.allRooms[key]
+    game.state.currentRoom.name = 'Somewhere Else'
+
+    expect(game.commandParser.parse('cast nature_sense')).toContain(expected)
+  })
+})
