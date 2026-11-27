@@ -44,7 +44,9 @@ jobs:
                   EVENT: ${{ github.event_name }}
               run: bash .github/scripts/ci-needed.sh "$EVENT" >> "$GITHUB_OUTPUT"
 
-    web-lint:
+    # One runner and one setup for the checks that take seconds each (rq-pjqg). The first
+    # step that fails stops the job and is the one the run names.
+    web-check:
         needs: changes
         if: ${{ !cancelled() && needs.changes.outputs.run != 'false' }}
         runs-on: ubuntu-latest
@@ -70,28 +72,11 @@ jobs:
             - name: Format check
               run: npx prettier --check "src/**/*.{ts,vue}" "*.config.*"
 
-    web-typecheck:
-        needs: changes
-        if: ${{ !cancelled() && needs.changes.outputs.run != 'false' }}
-        runs-on: ubuntu-latest
-        defaults:
-            run:
-                working-directory: web
-        steps:
-            - uses: actions/checkout@v7
-
-            - name: Set up Node.js
-              uses: actions/setup-node@v7
-              with:
-                  node-version: "26"
-                  cache: npm
-                  cache-dependency-path: web/package-lock.json
-
-            - name: Install dependencies
-              run: npm ci
-
             - name: Type check
               run: npx vue-tsc --noEmit
+
+            - name: Build
+              run: npm run build
 
     web-test:
         needs: changes
@@ -199,29 +184,6 @@ jobs:
                   path: web/test-results/
                   if-no-files-found: ignore
 
-    web-build:
-        needs: changes
-        if: ${{ !cancelled() && needs.changes.outputs.run != 'false' }}
-        runs-on: ubuntu-latest
-        defaults:
-            run:
-                working-directory: web
-        steps:
-            - uses: actions/checkout@v7
-
-            - name: Set up Node.js
-              uses: actions/setup-node@v7
-              with:
-                  node-version: "26"
-                  cache: npm
-                  cache-dependency-path: web/package-lock.json
-
-            - name: Install dependencies
-              run: npm ci
-
-            - name: Build
-              run: npm run build
-
     container-smoke:
         needs: changes
         if: ${{ !cancelled() && needs.changes.outputs.run != 'false' }}
@@ -250,7 +212,7 @@ jobs:
 
     publish-image:
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        needs: [web-lint, web-typecheck, web-test, web-e2e, web-build, container-smoke]
+        needs: [web-check, web-test, web-e2e, container-smoke]
         runs-on: ubuntu-latest
         permissions:
             contents: read
