@@ -1,14 +1,14 @@
 [
     {
-        "after": 48,
+        "after": "talk-to-malakar",
         "commands": ["use lifelight elixir on prison"]
     },
     {
-        "after": 32,
+        "after": "say-cedric-to-whispers",
         "commands": ["w", "s", "talk to mira"]
     },
     {
-        "after": 50,
+        "after": "use-ancient-amulet",
         "commands": [
             "use lifelight elixir on prison",
             "talk to king alden",
@@ -21,7 +21,7 @@
         ]
     },
     {
-        "after": 50,
+        "after": "use-ancient-amulet",
         "commands": [
             "use lifelight elixir on prison",
             "say justice to malakar",
@@ -33,7 +33,7 @@
         "virtues": ["truth", "truth"]
     },
     {
-        "after": 50,
+        "after": "use-ancient-amulet",
         "commands": [
             "use lifelight elixir on prison",
             "hint",
@@ -46,7 +46,7 @@
         ]
     },
     {
-        "after": 50,
+        "after": "use-ancient-amulet",
         "commands": [
             "use lifelight elixir on prison",
             "say sacrifice to malakar",
@@ -58,12 +58,12 @@
         "virtues": ["selfless", "selfless"]
     },
     {
-        "after": 51,
+        "after": "use-lifelight-elixir-on-malakar",
         "commands": ["say forgiveness to malakar", "cast forgiveness on wound", "n", "cast grow"],
         "virtues": ["mercy"]
     },
     {
-        "after": 48,
+        "after": "talk-to-malakar",
         "commands": [
             "use ancient amulet with malakar",
             "say refrain to malakar",
@@ -76,7 +76,7 @@
         ]
     },
     {
-        "after": 48,
+        "after": "talk-to-malakar",
         "commands": [
             "use ancient amulet with malakar",
             "say refrain to malakar",
@@ -90,7 +90,7 @@
         ]
     },
     {
-        "after": 48,
+        "after": "talk-to-malakar",
         "commands": [
             "use ancient amulet with malakar",
             "say refrain to malakar",
@@ -104,19 +104,19 @@
         ]
     },
     {
-        "after": 21,
+        "after": "in-mirror-labyrinth-2",
         "commands": ["talk to true self", "say truth to true self", "talk to true self"]
     },
     {
-        "after": 6,
+        "after": "cast-bless-on-trapped-servants",
         "commands": ["use guardian's chain with captain of the guard"]
     },
     {
-        "after": 29,
+        "after": "say-redemption-to-knight",
         "commands": ["cast redemption's light on ghostly warriors", "talk to sir cedric"]
     },
     {
-        "after": 0,
+        "after": "examine-ward-stones",
         "commands": [
             "n",
             "cast light",
@@ -128,7 +128,7 @@
         ]
     },
     {
-        "after": 1,
+        "after": "cast-light-on-right-stone",
         "commands": [
             "cast light on left stone",
             "cast light on ward stones",
@@ -136,11 +136,11 @@
         ]
     },
     {
-        "after": 2,
+        "after": "take-guardians-chain",
         "commands": ["cast light on guardian's chain"]
     },
     {
-        "after": 4,
+        "after": "in-outer-courtyard",
         "commands": [
             "cast bless",
             "cast light",
@@ -151,7 +151,7 @@
         ]
     },
     {
-        "after": 6,
+        "after": "cast-bless-on-trapped-servants",
         "commands": [
             "use guardian's chain with captain of the guard",
             "take servant's pendant",
@@ -179,47 +179,47 @@
         ]
     },
     {
-        "after": 17,
+        "after": "in-mirror-labyrinth",
         "commands": ["n"]
     },
     {
-        "after": 13,
+        "after": "examine-echoes",
         "commands": ["s", "e", "n", "w"]
     },
     {
-        "after": 24,
+        "after": "in-hall-of-echoes",
         "commands": ["say redemption to knight", "e"]
     },
     {
-        "after": 25,
+        "after": "cast-truth-sight-on-knight-of-despair",
         "commands": ["say redemption to knight"]
     },
     {
-        "after": 27,
+        "after": "cast-truth-sight-on-echo-stone",
         "commands": ["say redemption to knight"]
     },
     {
-        "after": 30,
+        "after": "in-tower-of-shadows",
         "commands": ["up"]
     },
     {
-        "after": 34,
+        "after": "in-chamber-of-whispers",
         "commands": ["say understanding to sorceress", "n"]
     },
     {
-        "after": 35,
+        "after": "use-knights-redemption",
         "commands": ["say understanding to sorceress"]
     },
     {
-        "after": 36,
+        "after": "cast-hearts-truth-on-sorceress",
         "commands": ["say understanding to sorceress"]
     },
     {
-        "after": 39,
+        "after": "say-understanding-to-sorceress",
         "commands": ["use sorceress's truth"]
     },
     {
-        "after": 40,
+        "after": "in-memory-vault",
         "commands": [
             "say patience to shadow",
             "use sorceress's truth",
@@ -229,27 +229,27 @@
         ]
     },
     {
-        "after": 41,
+        "after": "use-enhanced-echo-stone-with-memory-orbs",
         "commands": ["say patience to shadow", "examine door"]
     },
     {
-        "after": 42,
+        "after": "use-sorceresss-truth",
         "commands": ["e", "examine door", "use ancient amulet on door"]
     },
     {
-        "after": 43,
+        "after": "say-patience-to-shadow",
         "commands": ["e", "examine door", "use ancient amulet on door"]
     },
     {
-        "after": 45,
+        "after": "in-parents-vault",
         "commands": ["n"]
     },
     {
-        "after": 48,
+        "after": "talk-to-malakar",
         "commands": ["use lifelight elixir on wound"]
     },
     {
-        "after": 50,
+        "after": "use-ancient-amulet",
         "commands": [
             "say justice to malakar",
             "use ancient amulet on wound",
@@ -257,7 +257,7 @@
         ]
     },
     {
-        "after": 51,
+        "after": "use-lifelight-elixir-on-malakar",
         "commands": [
             "use lifelight elixir on prison",
             "say justice to malakar",
@@ -265,11 +265,11 @@
         ]
     },
     {
-        "after": 53,
+        "after": "cast-forgiveness-on-wound",
         "commands": ["cast forgiveness on malakar"]
     },
     {
-        "after": 55,
+        "after": "cast-grow",
         "commands": [
             "use nyx's token with nyx",
             "use servant's pendant with nyx",
@@ -279,14 +279,14 @@
         ]
     },
     {
-        "after": 29,
+        "after": "say-redemption-to-knight",
         "commands": [
             "say redemption to ghostly warriors",
             "use knight's redemption with sir cedric"
         ]
     },
     {
-        "after": 39,
+        "after": "say-understanding-to-sorceress",
         "commands": [
             "down",
             "w",
@@ -295,7 +295,7 @@
         ]
     },
     {
-        "after": 47,
+        "after": "in-throne-chamber",
         "commands": [
             "use ancient amulet with malakar",
             "say aren to malakar",
@@ -306,20 +306,20 @@
         ]
     },
     {
-        "after": 52,
+        "after": "say-forgiveness-to-malakar",
         "commands": [
             "cast forgiveness on king alden"
         ]
     },
     {
-        "after": 53,
+        "after": "cast-forgiveness-on-wound",
         "commands": [
             "cast forgiveness on king alden",
             "use ancient amulet with king alden"
         ]
     },
     {
-        "after": 54,
+        "after": "in-willowbrook-field",
         "commands": [
             "say you knew to grandmother",
             "say i love you to grandmother",
@@ -346,11 +346,11 @@
         ]
     },
     {
-        "after": 30,
+        "after": "in-tower-of-shadows",
         "commands": ["w", "talk to knight"]
     },
     {
-        "after": 53,
+        "after": "cast-forgiveness-on-wound",
         "commands": [
             "s",
             "w",
@@ -369,31 +369,31 @@
         ]
     },
     {
-        "after": 17,
+        "after": "in-mirror-labyrinth",
         "commands": [
             "cast light on mirrors"
         ]
     },
     {
-        "after": 21,
+        "after": "in-mirror-labyrinth-2",
         "commands": [
             "cast light on mirrors"
         ]
     },
     {
-        "after": 25,
+        "after": "cast-truth-sight-on-knight-of-despair",
         "commands": [
             "cast light on banners"
         ]
     },
     {
-        "after": 26,
+        "after": "cast-truth-sight-on-banners",
         "commands": [
             "cast light on banners"
         ]
     },
     {
-        "after": 30,
+        "after": "in-tower-of-shadows",
         "commands": [
             "cast light",
             "cast light on shadows",
@@ -404,20 +404,20 @@
         ]
     },
     {
-        "after": 33,
+        "after": "say-nyx-to-whispers",
         "commands": [
             "cast light",
             "cast light on shadows"
         ]
     },
     {
-        "after": 40,
+        "after": "in-memory-vault",
         "commands": [
             "cast light on memory orbs"
         ]
     },
     {
-        "after": 41,
+        "after": "use-enhanced-echo-stone-with-memory-orbs",
         "commands": [
             "cast light on memory orbs"
         ]

@@ -260,15 +260,54 @@ export function linesOfTurn(
  * reaches after its flag is set (a room's reply before it has woken).
  * `without` items are taken out of the pack and `unlearn` spells forgotten on
  * the copy, for a reply the path never hears because it has everything by then
- * (what a character says of the one thing still missing).
+ * (what a character says of the one thing still missing). `anchor` is the name
+ * of the path's mark `after` was resolved from, which failures name it by.
  */
 export interface ScriptBranch {
   after: number
+  anchor?: string
   commands: string[]
   virtues?: string[]
   unset?: string[]
   without?: string[]
   unlearn?: string[]
+}
+
+/** An optional scene as `branches.json` writes it: `after` names a mark of the path (`markedPath`). */
+export type AnchoredBranch = Omit<ScriptBranch, 'after' | 'anchor'> & {
+  after: string
+}
+
+/** A branch as its failure names it: where it plays and what it does. */
+function nameOf(branch: ScriptBranch | AnchoredBranch): string {
+  const at = ('anchor' in branch && branch.anchor) || branch.after
+  return `branch after ${at} (${branch.commands.join(', ')})`
+}
+
+/**
+ * Each branch placed at the step its mark follows. Throws, naming every branch
+ * whose mark is not one of `marks`.
+ */
+export function anchorBranches(
+  branches: AnchoredBranch[],
+  marks: Record<string, number>,
+): ScriptBranch[] {
+  const lost = branches.filter((branch) => !Object.hasOwn(marks, branch.after))
+  if (lost.length)
+    throw new Error(
+      lost
+        .map(
+          (branch) =>
+            `${nameOf(branch)} plays after no mark of the path: none is ` +
+            `named @${branch.after}.`,
+        )
+        .join('\n'),
+    )
+  return branches.map((branch) => ({
+    ...branch,
+    after: marks[branch.after],
+    anchor: branch.after,
+  }))
 }
 
 /** How the engine opens an answer that reaches nobody: no such thing or character here. */
@@ -365,9 +404,6 @@ export function actScript(
     })
   /** What is wrong with the branches, reported all at once when the act has been played. */
   const dead: string[] = []
-  /** A branch as its failure names it: where it plays and what it does. */
-  const nameOf = (branch: ScriptBranch): string =>
-    `branch after ${branch.after} (${branch.commands.join(', ')})`
   for (const branch of branches)
     if (branch.after < -1 || branch.after >= commands.length)
       dead.push(

@@ -1,16 +1,17 @@
 import { readFileSync } from 'node:fs'
 import { beforeAll, describe, expect, it } from 'vitest'
-import { Game, GameController } from '@/engine'
+import { Game, GameController, markedPath } from '@/engine'
 import { Act1 } from '@/act1/Act1'
 import { Act2 } from '@/act2/Act2'
 import { ACT2_GOLDEN_PATH } from '@/act2/Act2GoldenPath'
 import { Act4 } from '@/act4/Act4'
 import { ACT4_GOLDEN_PATH } from '@/act4/Act4GoldenPath'
 import { ACT1_GOLDEN_PATH } from '@/act1/Act1GoldenPath'
-import { ACT_SOURCES } from '../../../tts/actScripts'
+import { ACT_NUMBERS, ACT_SOURCES, actBranches } from '../../../tts/actScripts'
 import { narrationKey } from './narrationKey'
 import {
   actScript,
+  anchorBranches,
   blockVoice,
   chapterHeading,
   introBlocks,
@@ -470,7 +471,7 @@ describe('actScript branches of Act I', () => {
         'utf8',
       ),
     ) as T
-  const branches = act1<ScriptBranch[]>('branches.json')
+  const branches = actBranches('1')
   // The committed script, which narrationScriptFresh.test.ts pins to the extractor.
   const keys = new Set(act1<ScriptLine[]>('script.json').map((line) => line.id))
   /** Act I is played with every branch; that is slow under a loaded machine. */
@@ -526,6 +527,70 @@ describe('actScript branches before the first command', () => {
     expect(
       lines.some((line) => line.text.includes('There is no way out of this')),
     ).toBe(true)
+  })
+})
+
+describe('anchorBranches', () => {
+  const marks = markedPath(['look', '@looked', 'rest', '@rested']).marks
+
+  it('plays a branch after the command its mark follows, keeping its name', () => {
+    expect(
+      anchorBranches(
+        [{ after: 'rested', commands: ['search'], unset: ['a_flag'] }],
+        marks,
+      ),
+    ).toEqual([
+      { after: 1, anchor: 'rested', commands: ['search'], unset: ['a_flag'] },
+    ])
+  })
+
+  it('stays after the same command when one is inserted early in the path', () => {
+    const longer = markedPath(['wait', 'look', '@looked'])
+    const [branch] = anchorBranches(
+      [{ after: 'looked', commands: ['search'] }],
+      longer.marks,
+    )
+    expect(longer.commands[branch.after]).toBe('look')
+  })
+
+  it('fails naming every branch whose mark the path does not have', () => {
+    expect(() =>
+      anchorBranches(
+        [
+          { after: 'gone', commands: ['search'] },
+          { after: 'looked', commands: ['hint'] },
+          // A step number, as branches were once written.
+          { after: 1 as unknown as string, commands: ['rest'] },
+          { after: 'constructor', commands: ['look'] },
+        ],
+        marks,
+      ),
+    ).toThrow(
+      /branch after gone \(search\).*no mark[^]*branch after 1 \(rest\)[^]*branch after constructor \(look\)/,
+    )
+  })
+
+  it('names a branch that reaches nobody by its mark', () => {
+    const path = markedPath([ACT1_GOLDEN_PATH[0], '@woken'])
+    expect(() =>
+      actScript(
+        () => new Game([new Act1()]),
+        path.commands,
+        [],
+        [],
+        anchorBranches(
+          [{ after: 'woken', commands: ['talk to nobodyhere'] }],
+          path.marks,
+        ),
+      ),
+    ).toThrow(/branch after woken \(talk to nobodyhere\).*reaches nobody/)
+  })
+})
+
+describe.each(ACT_NUMBERS)('the branches of Act %s', (number) => {
+  it('each name a mark the path has', () => {
+    // actBranches throws, naming them, on branches whose mark is gone.
+    expect(actBranches(number).length).toBeGreaterThan(0)
   })
 })
 

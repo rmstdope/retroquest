@@ -46,9 +46,14 @@ and git merges them without a regeneration.
   files by hand. The act's key-scene directions (`content-studio/narration/act<N>.edits.json`) are
   the studio's: move or drop one whose line changed there.
 - **`act<N>/branches.json`** (all four acts, Act I included) lists optional scenes the golden path skips, each
-  `{ after: <index of a path command>, commands: [...] }`, played on a copy so their lines are
+  `{ after: "<mark>", commands: [...] }`, played on a copy so their lines are
   recorded too (Marcus told the truth, Brenn forgiven, Tobin and the Quiet Charm).
-  Extraction fails, naming the branch, when `after` is not a step of the path or a command reaches
+  `after` names a mark of the golden path: a step of `web/src/act<N>/Act<N>GoldenPath.ts` written
+  `'@name'`, which is not a command and stands for the point of the path where it is
+  (`'@take-bucket'` straight after `'take bucket'`). Steps added or removed elsewhere leave it
+  there. To play a scene at a new point, write a mark there under a name the act does not use yet;
+  when you remove the step a mark follows, move the mark or delete it with its branches.
+  Extraction fails, naming the branch, when its mark is not in the path or a command reaches
   nobody here (a "You don't see" answer, a say command with no one to hear it).
 - **`act<N>/unreached.json`** acknowledges the lines the act's content can speak that the script
   lacks (`web/src/lantern/unreachedLines.test.ts` finds them by the string literals of every

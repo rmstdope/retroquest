@@ -1,11 +1,21 @@
-/** The commands that complete Act 2 once the golden path has been played: the vision, and Sir Cedric's answer (the other answer is a branch, not the path). */
-export const ACT2_COMPLETING_COMMANDS: string[] = [
-  'cast prophetic vision',
-  'talk to sir cedric',
-]
+import { markedPath, type MarkedPath } from '@/engine'
 
-/** The commands that play Act 2's golden path from a new game to Sir Cedric waiting; `ACT2_COMPLETING_COMMANDS` there complete the act. */
-export const ACT2_GOLDEN_PATH: string[] = [
+/** The completing commands with their marks, as the golden path has them. */
+export const ACT2_COMPLETING: MarkedPath = markedPath([
+  'cast prophetic vision',
+  '@cast-prophetic-vision',
+  'talk to sir cedric',
+])
+
+/** The commands that complete Act 2 once the golden path has been played: the vision, and Sir Cedric's answer (the other answer is a branch, not the path). */
+export const ACT2_COMPLETING_COMMANDS: string[] = ACT2_COMPLETING.commands
+
+/**
+ * The golden path with its marks: a step starting `@` is not a command but
+ * names the point of the path where it stands, which an optional scene of
+ * `tts/act2/branches.json` plays after.
+ */
+export const ACT2_GOLDEN: MarkedPath = markedPath([
   'take flower',
   'take stick',
   'talk to mountain hermit',
@@ -37,6 +47,7 @@ export const ACT2_GOLDEN_PATH: string[] = [
   'buy forest survival kit from master merchant aldric',
   'buy enhanced lantern from master merchant aldric',
   'talk to caravan master thorne',
+  '@talk-to-caravan-master-thorne',
   'n',
   'talk to innkeeper marcus',
   'talk to barmaid elena',
@@ -62,6 +73,7 @@ export const ACT2_GOLDEN_PATH: string[] = [
   'use walking stick with families',
   'talk to local craftsmen',
   'talk to families',
+  '@talk-to-families',
   'n',
   'talk to master healer lyria',
   'use healing herbs with master healer lyria',
@@ -109,17 +121,20 @@ export const ACT2_GOLDEN_PATH: string[] = [
   'n',
   'cast forest_speech',
   'use quality rope with ravine',
+  '@use-quality-rope-with-ravine',
   'w',
   'w',
   'n',
   'n',
   'e',
   'talk to caravan master thorne',
+  '@talk-to-caravan-master-thorne-2',
   'n',
   'cast greater_heal on barmaid elena',
   'use crystal-clear water with barmaid elena',
   'cast dispel on barmaid elena',
   'talk to innkeeper marcus',
+  '@talk-to-innkeeper-marcus',
   's',
   'w',
   'n',
@@ -157,4 +172,7 @@ export const ACT2_GOLDEN_PATH: string[] = [
   'n',
   'n',
   'w',
-]
+])
+
+/** The commands that play Act 2's golden path from a new game to Sir Cedric waiting; `ACT2_COMPLETING_COMMANDS` there complete the act. */
+export const ACT2_GOLDEN_PATH: string[] = ACT2_GOLDEN.commands

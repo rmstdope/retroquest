@@ -1,6 +1,6 @@
 [
   {
-    "after": 92,
+    "after": "in-stillness-vestibule",
     "commands": [
       "take quiet charm",
       "n",
@@ -10,7 +10,7 @@
     ]
   },
   {
-    "after": 14,
+    "after": "in-collapsed-pier",
     "commands": [
       "talk to pier warden",
       "say truth to pier warden",
@@ -18,21 +18,21 @@
     ]
   },
   {
-    "after": 48,
+    "after": "cast-mend-on-mirror-mount",
     "commands": [
       "cast mend on charred inscription",
       "cast mend on charred inscription"
     ]
   },
   {
-    "after": 92,
+    "after": "in-stillness-vestibule",
     "commands": [
       "talk to wandering phantoms",
       "say rest to wandering phantoms"
     ]
   },
   {
-    "after": 100,
+    "after": "take-dragons-scale",
     "commands": [
       "cast bless on sigils",
       "examine sigils",
@@ -40,7 +40,7 @@
     ]
   },
   {
-    "after": 48,
+    "after": "cast-mend-on-mirror-mount",
     "commands": [
       "cast mend on charred inscription",
       "rest",
@@ -65,7 +65,7 @@
     ]
   },
   {
-    "after": 14,
+    "after": "in-collapsed-pier",
     "commands": [
       "talk to pier warden",
       "say truth to pier warden",
@@ -75,56 +75,56 @@
     ]
   },
   {
-    "after": 103,
+    "after": "in-miras-hut",
     "commands": [
       "talk to mira",
       "say forgive to mira"
     ]
   },
   {
-    "after": 103,
+    "after": "in-miras-hut",
     "commands": [
       "talk to mira",
       "say you should have told me to mira"
     ]
   },
   {
-    "after": 98,
+    "after": "talk-to-ancient-dragon",
     "commands": [
       "say it to ancient dragon"
     ]
   },
   {
-    "after": 98,
+    "after": "talk-to-ancient-dragon",
     "commands": [
       "say myself to ancient dragon"
     ]
   },
   {
-    "after": 98,
+    "after": "talk-to-ancient-dragon",
     "commands": [
       "say what I take to ancient dragon"
     ]
   },
   {
-    "after": 107,
+    "after": "in-entrance-to-malakars-fortress",
     "commands": [
       "say refrain to cedric"
     ]
   },
   {
-    "after": 33,
+    "after": "in-tidal-causeway",
     "unset": ["act3_sea_sealed_letter_read"],
     "commands": ["talk to mira"]
   },
   {
-    "after": 33,
+    "after": "in-tidal-causeway",
     "unset": ["act3_sea_sealed_letter_read"],
     "without": ["sea-sealed letter"],
     "commands": ["talk to mira"]
   },
   {
-    "after": 5,
+    "after": "examine-letter",
     "commands": [
       "n",
       "search",
@@ -137,7 +137,7 @@
     ]
   },
   {
-    "after": 14,
+    "after": "in-collapsed-pier",
     "commands": [
       "talk to pier warden",
       "say yes to pier warden",
@@ -147,7 +147,7 @@
     ]
   },
   {
-    "after": 48,
+    "after": "cast-mend-on-mirror-mount",
     "commands": [
       "w",
       "s",
@@ -156,14 +156,14 @@
     ]
   },
   {
-    "after": 63,
+    "after": "in-phoenix-crater",
     "commands": [
       "n",
       "talk to phoenix guardian"
     ]
   },
   {
-    "after": 86,
+    "after": "in-echo-chambers",
     "commands": [
       "examine runic walls",
       "take resonant chant rubbings",
