@@ -224,7 +224,11 @@ jobs:
                   tags: retroquest:smoke
                   build-args: VCS_REF=${{ github.sha }}
                   cache-from: type=gha
-                  cache-to: type=gha,mode=max
+                  # Exporting takes minutes, since the layers a commit invalidates are
+                  # about 600 MB each, and only publish-image reads what this run writes.
+                  # So it exports under that job's condition and nowhere else; every run
+                  # still reads main's cache (rq-rm00).
+                  cache-to: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && 'type=gha,mode=max' || '' }}
             - name: Verify production HTTP behavior
               env:
                   REVISION: ${{ github.sha }}
