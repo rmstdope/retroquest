@@ -2,7 +2,8 @@
  * The sound requirements, heard in a real browser: the spec listens to every
  * media element the game plays and to every source it starts on Web Audio.
  */
-import { test, expect, enterCommand, type Page } from './fixtures'
+import { readFileSync } from 'node:fs'
+import { test, expect, enterCommand, toTheCottage, type Page } from './fixtures'
 
 // A new player's settings (the config saves narration at 0 for the other specs).
 test.use({
@@ -20,6 +21,8 @@ interface Heard {
 /** The window of a page that is being listened to. */
 interface ListeningWindow extends Window {
   heard(): Heard
+  /** The files of the loops that can be heard now, on a running context. */
+  loopsHeard(): string[]
 }
 
 /**
@@ -111,6 +114,18 @@ async function listen(page: Page): Promise<void> {
         .map(loudness)
       return levels.length ? Math.max(...levels) : null
     }
+    ;(window as unknown as ListeningWindow).loopsHeard = (): string[] =>
+      [...sources]
+        .filter(
+          (source) =>
+            source.loop &&
+            source.context.state === 'running' &&
+            loudness(source) > 0,
+        )
+        .flatMap((source) => {
+          const url = source.buffer && urls.get(source.buffer)
+          return url ? [new URL(url).pathname] : []
+        })
     ;(window as unknown as ListeningWindow).heard = (): Heard => {
       const heard: Heard = {
         music: loudest('music'),
@@ -144,6 +159,55 @@ async function expectHeard(
       )
     })
     .toEqual(audible)
+}
+
+/** The parts of a scene's mix this spec reads. */
+interface Scene {
+  music?: { track: string | null }
+  effects: { id: string; play: { mode: string }; state?: string }[]
+}
+
+/** Read a committed JSON file, by its path below `web/`. */
+function committed<T>(path: string): T {
+  return JSON.parse(
+    readFileSync(new URL(`../${path}`, import.meta.url), 'utf8'),
+  ) as T
+}
+
+/**
+ * The files an Act I room should loop on being entered, whatever the navigator
+ * has chosen: its mix's music and the looping effects that play in every state.
+ */
+function loopsOf(room: string): string[] {
+  const scene = committed<{ scenes: Record<string, Scene> }>(
+    'src/lantern/scenes/act1.mix.json',
+  ).scenes[room]
+  const take = (kind: string, id: string): string => {
+    const folder = `/audio/${kind}/generated/`
+    const manifest = committed<Record<string, { file: string }>>(
+      `public${folder}manifest.json`,
+    )
+    expect(manifest[id], `a chosen take of ${id}`).toBeDefined()
+    return folder + manifest[id].file
+  }
+  const track = scene.music?.track
+  const effects = scene.effects.filter(
+    (effect) => effect.play.mode === 'loop' && effect.state === undefined,
+  )
+  expect(track, `music in the mix of ${room}`).toBeTruthy()
+  expect(effects, `a looping effect in the mix of ${room}`).not.toHaveLength(0)
+  return [
+    take('music', track!),
+    ...effects.map((effect) => take('soundeffects', effect.id)),
+  ]
+}
+
+/** Which of the files in `among` can be heard looping now. */
+async function looping(page: Page, among: string[]): Promise<string[]> {
+  const heardNow = await page.evaluate(() =>
+    (window as unknown as ListeningWindow).loopsHeard(),
+  )
+  return among.filter((path) => heardNow.includes(path))
 }
 
 /**
@@ -200,4 +264,26 @@ test('SND-3: each volume at 0 silences its sound, and the volumes are kept betwe
     'Narration volume',
   ])
     await expect(page.getByLabel(name)).toHaveValue('0')
+})
+
+test.describe('in the rooms', () => {
+  // The rooms are heard whether or not their lines are read aloud.
+  test.use({ narrationRecordings: false })
+
+  test('SND-2: each room plays its music and its sound effects', async ({
+    page,
+  }): Promise<void> => {
+    const dream = loopsOf('act1-the-dream')
+    const cottage = loopsOf('act1-eliors-cottage')
+    await listen(page)
+
+    // The game opens in the dream, and the cottage is not heard there.
+    await toTheCottage(page, {}, async () => {
+      await expect.poll(() => looping(page, dream)).toEqual(dream)
+      expect(await looping(page, cottage)).toEqual([])
+    })
+
+    // The voice has woken Elior in his cottage.
+    await expect.poll(() => looping(page, cottage)).toEqual(cottage)
+  })
 })
