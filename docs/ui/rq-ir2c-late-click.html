@@ -1,0 +1,142 @@
+<!doctype html>
+<!--
+  The house frame of a detailed drawing (cb-buko; the agreed look is docs/ui/cb-buko-tabs.html and
+  cb-buko-states.html). scripts/ux-sheet fills the two marker lines below; nothing else writes here.
+  Every class starts with `ux-' and only `body' is styled by element, so what is drawn inside a tab
+  keeps the product's own look.
+-->
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>When a story card goes by itself just as you click it, what does the click do? · A click meant for a story card that leaves by itself</title>
+<style>
+  body{margin:0;padding:1px 8px;background:#f4f4f5}
+  .ux-page{max-width:980px;margin:14px auto 30px;background:#fff;border:1px solid #e4e4e7;border-radius:10px}
+  .ux-head,.ux-tabs,.ux-intro{font-family:system-ui,-apple-system,sans-serif;line-height:normal;text-align:left;color:#18181b}
+  .ux-head{padding:14px 16px 0}
+  .ux-work{font-size:12px;color:#71717a;text-transform:uppercase;letter-spacing:.04em}
+  .ux-heading{margin:2px 0 10px;font-size:19px}
+  .ux-tabrow{position:relative}
+  .ux-tabrow::before,.ux-tabrow::after{content:"";position:absolute;top:0;bottom:1px;width:44px;pointer-events:none;opacity:0}
+  .ux-tabrow::before{left:0;background:linear-gradient(to left,rgba(255,255,255,0),#fff)}
+  .ux-tabrow::after{right:0;background:linear-gradient(to right,rgba(255,255,255,0),#fff)}
+  .ux-tabrow.ux-more-left::before,.ux-tabrow.ux-more-right::after{opacity:1}
+  .ux-tabs{display:flex;gap:4px;border-bottom:1px solid #e4e4e7;padding:0 16px;overflow-x:auto}
+  .ux-tab{flex:none;border:0;border-radius:0;background:none;margin:0;font:inherit;font-size:14px;padding:8px 12px;color:#52525b;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap}
+  .ux-tab[aria-selected="true"]{color:#18181b;border-bottom-color:#7c3aed;font-weight:600}
+  .ux-tag{display:inline-block;font-size:11px;border-radius:999px;padding:1px 7px;margin-left:6px;font-weight:600}
+  .ux-rec{background:#ede9fe;color:#5b21b6}
+  .ux-agreed{background:#dcfce7;color:#166534}
+  .ux-panel[hidden]{display:none!important}
+  .ux-intro{padding:12px 16px 4px}
+  .ux-name{margin:0;font-size:16px}
+  .ux-cost{margin:3px 0 0;font-size:13px;color:#52525b}
+  .ux-why{margin:3px 0 0;font-size:13px;color:#5b21b6}
+  .ux-draw{padding:12px 16px 16px}
+</style></head><body>
+
+<style>
+.x-strip{display:flex;gap:10px;flex-wrap:wrap}
+.x-f{margin:0;flex:1 1 200px;min-width:0}
+.x-pic{position:relative;height:150px;border-radius:8px;background:linear-gradient(#2b3a4a,#5a4a32);overflow:hidden}
+.x-mark{position:absolute;left:58%;top:62%;color:#f3d27a;font:12px sans-serif}
+.x-card{position:absolute;left:10%;right:10%;top:14%;background:#f4ead2;color:#3a2c18;border-radius:6px;padding:8px 10px;font:12px Georgia,serif;box-shadow:0 2px 8px #0008}
+.x-faded{opacity:.25}
+.x-ptr{position:absolute;color:#fff;font-size:18px;text-shadow:0 0 3px #000}
+.x-ring{position:absolute;left:50%;top:50%;border:2px solid #f3d27a;border-radius:50%;padding:12px 8px;color:#f3d27a;font:11px sans-serif;background:#0006}
+.x-note{position:absolute;left:6px;bottom:6px;right:6px;color:#fff;font:11px sans-serif;background:#000a;border-radius:4px;padding:3px 6px}
+figcaption{font:12px sans-serif;margin-top:4px}
+.x-after{font:13px sans-serif;margin:10px 0 0}
+</style>
+<div class="ux-page">
+<header class="ux-head">
+<div class="ux-work">A click meant for a story card that leaves by itself</div>
+<h1 class="ux-heading">When a story card goes by itself just as you click it, what does the click do?</h1>
+</header>
+<div class="ux-tabrow"><div class="ux-tabs" role="tablist">
+<button type="button" class="ux-tab" role="tab" data-ux-tab="A" id="ux-tab-A" aria-controls="ux-panel-A" aria-selected="true" tabindex="0">A — Card waits while the pointer is on it<span class="ux-tag ux-rec">Recommended</span><span class="ux-tag ux-agreed">Agreed</span></button>
+<button type="button" class="ux-tab" role="tab" data-ux-tab="B" id="ux-tab-B" aria-controls="ux-panel-B" aria-selected="false" tabindex="-1">B — Card takes clicks only while it can be seen</button>
+<button type="button" class="ux-tab" role="tab" data-ux-tab="C" id="ux-tab-C" aria-controls="ux-panel-C" aria-selected="false" tabindex="-1">C — First click where the card stood does nothing</button>
+<button type="button" class="ux-tab" role="tab" data-ux-tab="D" id="ux-tab-D" aria-controls="ux-panel-D" aria-selected="false" tabindex="-1">D — Keep today’s 1.5 seconds</button>
+</div></div>
+<section class="ux-panel" role="tabpanel" id="ux-panel-A" aria-labelledby="ux-tab-A">
+<div class="ux-intro">
+<h2 class="ux-name">A — Card waits while the pointer is on it<span class="ux-tag ux-rec">Recommended</span><span class="ux-tag ux-agreed">Agreed</span></h2>
+<p class="ux-cost">A mouse resting on the card keeps it up until moved off; touch gets only the fade.</p>
+<p class="ux-why">Recommended: The usual rule for things that leave by themselves (pause while pointed at); no hidden dead time on the picture.</p>
+</div>
+<div class="ux-draw">
+<div class="x-strip"><figure class="x-f"><div class="x-pic"><div class="x-mark">● well</div><div class="x-card"><b>The Village Square</b><br>Smoke curls from the smithy…</div><div class="x-ptr" style="left:56%;top:30%">➤</div></div><figcaption>1. Card showing; you move the pointer onto it</figcaption></figure><figure class="x-f"><div class="x-pic"><div class="x-mark">● well</div><div class="x-card"><b>The Village Square</b><br>Smoke curls from the smithy…</div><div class="x-ptr" style="left:56%;top:30%">➤</div><div class="x-note">card holds while pointed at</div></div><figcaption>2. Its time is up, but the pointer is on it: it stays</figcaption></figure><figure class="x-f"><div class="x-pic"><div class="x-mark">● well</div><div class="x-ptr" style="left:56%;top:30%">➤</div><div class="x-note">nothing else happens</div></div><figcaption>3. You click: the card goes on, as any click on it does</figcaption></figure></div><p class="x-after">Pointer elsewhere: the card fades as today (0.15 s); a click during the fade is the card’s, and after that the picture acts at once. Reduced motion: the same, with no fade. Touch: a tap during the fade is the card’s; a tap after it acts on the picture.</p>
+</div>
+</section>
+<section class="ux-panel" role="tabpanel" id="ux-panel-B" aria-labelledby="ux-tab-B" hidden>
+<div class="ux-intro">
+<h2 class="ux-name">B — Card takes clicks only while it can be seen</h2>
+<p class="ux-cost">Late clicks act on the picture again, as in the three earlier reports.</p>
+</div>
+<div class="ux-draw">
+<div class="x-strip"><figure class="x-f"><div class="x-pic"><div class="x-mark">● well</div><div class="x-card"><b>The Village Square</b><br>Smoke curls from the smithy…</div><div class="x-ptr" style="left:66%;top:66%">➤</div></div><figcaption>1. Card showing; pointer on its way</figcaption></figure><figure class="x-f"><div class="x-pic"><div class="x-mark">● well</div><div class="x-card x-faded"><b>The Village Square</b><br>Smoke curls from the smithy…</div><div class="x-ptr" style="left:56%;top:30%">➤</div><div class="x-note">a click now is the card’s</div></div><figcaption>2. Card fades (0.15 s)</figcaption></figure><figure class="x-f"><div class="x-pic"><div class="x-mark">● well</div><div class="x-ptr" style="left:56%;top:30%">➤</div><div class="x-ring">ring opens</div></div><figcaption>3. Click after it has gone: a thing’s ring opens</figcaption></figure></div><p class="x-after">Reduced motion: no fade, so no grace at all. Touch: the same.</p>
+</div>
+</section>
+<section class="ux-panel" role="tabpanel" id="ux-panel-C" aria-labelledby="ux-tab-C" hidden>
+<div class="ux-intro">
+<h2 class="ux-name">C — First click where the card stood does nothing</h2>
+<p class="ux-cost">On touch, the first tap there after a card goes is always lost, however late.</p>
+</div>
+<div class="ux-draw">
+<div class="x-strip"><figure class="x-f"><div class="x-pic"><div class="x-mark">● well</div><div class="x-card"><b>The Village Square</b><br>Smoke curls from the smithy…</div><div class="x-ptr" style="left:66%;top:66%">➤</div></div><figcaption>1. Card showing</figcaption></figure><figure class="x-f"><div class="x-pic"><div class="x-mark">● well</div><div class="x-ptr" style="left:56%;top:30%">➤</div></div><figcaption>2. Card goes</figcaption></figure><figure class="x-f"><div class="x-pic"><div class="x-mark">● well</div><div class="x-ptr" style="left:56%;top:30%">➤</div><div class="x-note">ignored unless the pointer moved since</div></div><figcaption>3. First click on that spot, even a minute later: nothing</figcaption></figure></div><p class="x-after">Reduced motion: the same. A click elsewhere on the picture acts at once.</p>
+</div>
+</section>
+<section class="ux-panel" role="tabpanel" id="ux-panel-D" aria-labelledby="ux-tab-D" hidden>
+<div class="ux-intro">
+<h2 class="ux-name">D — Keep today’s 1.5 seconds</h2>
+<p class="ux-cost">Nothing changes for the player; the time window stays, and the next report is answered by tuning it again.</p>
+</div>
+<div class="ux-draw">
+<div class="x-strip"><figure class="x-f"><div class="x-pic"><div class="x-mark">● well</div><div class="x-card"><b>The Village Square</b><br>Smoke curls from the smithy…</div><div class="x-ptr" style="left:66%;top:66%">➤</div></div><figcaption>1. Card showing</figcaption></figure><figure class="x-f"><div class="x-pic"><div class="x-mark">● well</div><div class="x-ptr" style="left:56%;top:30%">➤</div></div><figcaption>2. Card goes</figcaption></figure><figure class="x-f"><div class="x-pic"><div class="x-mark">● well</div><div class="x-ptr" style="left:56%;top:30%">➤</div><div class="x-note">picture ignores clicks for 1.5 s</div></div><figcaption>3. Any click on the picture for 1.5 s: nothing</figcaption></figure></div><p class="x-after">Reduced motion and touch: the same 1.5 s.</p>
+</div>
+</section>
+</div>
+<script>
+// Tabs: one panel on screen, the left and right arrow keys move between them, nothing persists.
+(function(){
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.ux-tabs > .ux-tab'));
+  if (!tabs.length) return;
+  var row = tabs[0].parentNode, wrap = row.parentNode;
+  function selected(){ return tabs.findIndex(function(t){ return t.getAttribute('aria-selected') === 'true'; }); }
+  // A faded edge on whichever side has tabs out of view.
+  function fade(){
+    wrap.classList.toggle('ux-more-left', row.scrollLeft > 1);
+    wrap.classList.toggle('ux-more-right', row.scrollLeft + row.clientWidth < row.scrollWidth - 1);
+  }
+  // Scrolls the row alone: scrollIntoView would move the page too.
+  function reveal(tab){
+    var t = tab.getBoundingClientRect(), r = row.getBoundingClientRect();
+    if (t.left < r.left) row.scrollLeft -= r.left - t.left + 16;
+    else if (t.right > r.right) row.scrollLeft += t.right - r.right + 16;
+    fade();
+  }
+  function select(i){
+    tabs.forEach(function(t, n){
+      t.setAttribute('aria-selected', n === i ? 'true' : 'false');
+      t.tabIndex = n === i ? 0 : -1;
+      document.getElementById(t.getAttribute('aria-controls')).hidden = n !== i;
+    });
+    reveal(tabs[i]);
+  }
+  tabs.forEach(function(t, i){ t.addEventListener('click', function(){ select(i); }); });
+  document.addEventListener('keydown', function(e){
+    var step = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+    if (!step || e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+    // A control a drawing carries (a field, a button, a slider) keeps its own arrows.
+    if (e.target.closest && e.target.closest('.ux-draw')) return;
+    e.preventDefault();
+    var focused = tabs.indexOf(document.activeElement) >= 0;
+    var i = (selected() + step + tabs.length) % tabs.length;
+    select(i);
+    if (focused) tabs[i].focus({preventScroll: true});
+  });
+  row.addEventListener('scroll', fade);
+  window.addEventListener('resize', fade);
+  window.addEventListener('load', function(){ reveal(tabs[selected()]); });
+  reveal(tabs[selected()]);
+})();
+</script></body></html>
