@@ -116,6 +116,12 @@ jobs:
             - name: Run unit tests
               run: npm run test
 
+    # The e2e jobs run in the Playwright image, which holds the browser and its system
+    # packages, so neither installs anything from a mirror (rq-2ram). The image tag must be the
+    # `@playwright/test` version in web/package-lock.json: web/ciFlakes.config.test.ts fails
+    # web-test when they differ, so a Dependabot bump of that package changes both tags here in
+    # the same pull request. Nothing downloads a browser to cover a mismatch; the e2e tests
+    # fail too. `--user 1001` is the runner's own user, which owns the checkout.
     web-e2e:
         name: web-e2e (${{ matrix.shard }})
         needs: changes
@@ -123,6 +129,10 @@ jobs:
         # name, and the three shard checks would never arrive.
         if: ${{ !cancelled() }}
         runs-on: ubuntu-latest
+        # An empty image is no container: a run that skips the checks pulls nothing.
+        container:
+            image: ${{ needs.changes.outputs.run != 'false' && 'mcr.microsoft.com/playwright:v1.65.1-noble' || '' }}
+            options: --user 1001 --init --ipc=host
         strategy:
             fail-fast: false
             matrix:
@@ -146,10 +156,6 @@ jobs:
               if: needs.changes.outputs.run != 'false'
               run: npm ci
 
-            - name: Install Playwright browsers
-              if: needs.changes.outputs.run != 'false'
-              run: bash ../.github/scripts/install-playwright.sh
-
             - name: Run E2E tests (shard ${{ matrix.shard }})
               if: needs.changes.outputs.run != 'false'
               run: npx playwright test --shard=${{ matrix.shard }} --grep-invert @quarantine
@@ -162,6 +168,9 @@ jobs:
         needs: changes
         if: ${{ !cancelled() && needs.changes.outputs.run != 'false' }}
         runs-on: ubuntu-latest
+        container:
+            image: mcr.microsoft.com/playwright:v1.65.1-noble
+            options: --user 1001 --init --ipc=host
         defaults:
             run:
                 working-directory: web
@@ -177,10 +186,6 @@ jobs:
 
             - name: Install dependencies
               run: npm ci
-
-            - name: Install Playwright browsers
-              continue-on-error: true
-              run: bash ../.github/scripts/install-playwright.sh
 
             - name: Run quarantined E2E tests
               continue-on-error: true

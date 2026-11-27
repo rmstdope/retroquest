@@ -1,83 +1,12 @@
 /**
- * Tests for what keeps a CI check from going red without a real failure
- * (rq-vjbs): the retried browser install, and the quarantine lane, where a
- * test tagged `@quarantine` runs in a job that cannot go red and names the
- * bead that will bring it back.
+ * Tests for what keeps a CI check from going red without a real failure: the
+ * e2e jobs run in the Playwright image, which already holds the browser and its
+ * system packages, so nothing is downloaded from a mirror (rq-2ram), and a test
+ * tagged `@quarantine` runs in a job that cannot go red and names the bead that
+ * will bring it back (rq-vjbs).
  */
-import { afterEach, beforeEach, describe, expect, it } from 'vitest'
-import { spawnSync } from 'node:child_process'
-import {
-  chmodSync,
-  mkdtempSync,
-  readdirSync,
-  readFileSync,
-  rmSync,
-  writeFileSync,
-} from 'node:fs'
-import { tmpdir } from 'node:os'
-import { delimiter, join } from 'node:path'
-import { fileURLToPath } from 'node:url'
-
-const SCRIPT = fileURLToPath(
-  new URL('../.github/scripts/install-playwright.sh', import.meta.url),
-)
-
-describe('install-playwright.sh', () => {
-  let dir: string
-
-  /** Runs the script with a stand-in `npx` that fails its first `failures` calls with status 100. */
-  function install(failures: number): {
-    status: number | null
-    calls: string[]
-  } {
-    const log = join(dir, 'calls')
-    writeFileSync(log, '')
-    const npx = join(dir, 'npx')
-    writeFileSync(
-      npx,
-      '#!/usr/bin/env bash\n' +
-        `echo "$*" >> "${log}"\n` +
-        `[[ $(wc -l < "${log}") -gt ${failures} ]] || exit 100\n`,
-    )
-    chmodSync(npx, 0o755)
-    const { status } = spawnSync('bash', [SCRIPT], {
-      env: {
-        ...process.env,
-        PATH: `${dir}${delimiter}${process.env.PATH}`,
-        RETRY_DELAY_S: '0',
-      },
-    })
-    return { status, calls: readFileSync(log, 'utf8').split('\n').slice(0, -1) }
-  }
-
-  beforeEach(() => {
-    dir = mkdtempSync(join(tmpdir(), 'install-playwright-'))
-  })
-
-  afterEach(() => {
-    rmSync(dir, { recursive: true, force: true })
-  })
-
-  const COMMAND = 'playwright install --with-deps chromium'
-
-  it('installs once when the first attempt works', () => {
-    expect(install(0)).toEqual({ status: 0, calls: [COMMAND] })
-  })
-
-  it('tries again after a failed attempt', () => {
-    expect(install(2)).toEqual({
-      status: 0,
-      calls: [COMMAND, COMMAND, COMMAND],
-    })
-  })
-
-  it('gives up after three attempts with the last status', () => {
-    expect(install(3)).toEqual({
-      status: 100,
-      calls: [COMMAND, COMMAND, COMMAND],
-    })
-  })
-})
+import { describe, expect, it } from 'vitest'
+import { readdirSync, readFileSync } from 'node:fs'
 
 const WORKFLOW = readFileSync(
   new URL('../.github/workflows/ci.yml', import.meta.url),
@@ -106,17 +35,49 @@ function step(name: string, text: string): string {
   return found
 }
 
-const INSTALL = 'run: bash ../.github/scripts/install-playwright.sh'
+const LOCK = JSON.parse(
+  readFileSync(new URL('./package-lock.json', import.meta.url), 'utf8'),
+) as { packages: Record<string, { version: string }> }
 
-describe('ci.yml and the flakes', () => {
+const VERSION = LOCK.packages['node_modules/@playwright/test']?.version
+
+/** The image holding the browser of the `@playwright/test` version the lock file pins. */
+const IMAGE = `mcr.microsoft.com/playwright:v${VERSION}-noble`
+
+/** What to do when the workflow and the lock file disagree. */
+const OUT_OF_STEP = `set every Playwright image in .github/workflows/ci.yml to ${IMAGE}`
+
+describe('ci.yml and the Playwright image', () => {
+  it('runs the e2e shards in it, and in no container when the checks are skipped', () => {
+    expect(job('web-e2e'), OUT_OF_STEP).toContain(
+      '        container:\n' +
+        `            image: \${{ needs.changes.outputs.run != 'false' && '${IMAGE}' || '' }}\n` +
+        '            options: --user 1001 --init --ipc=host\n',
+    )
+  })
+
+  it('runs the quarantined tests in it', () => {
+    expect(job('web-e2e-quarantine'), OUT_OF_STEP).toContain(
+      '        container:\n' +
+        `            image: ${IMAGE}\n` +
+        '            options: --user 1001 --init --ipc=host\n',
+    )
+  })
+
+  it('names no other version of it', () => {
+    const named = WORKFLOW.match(/mcr\.microsoft\.com\/playwright:[\w.-]+/g)
+    expect(new Set(named), OUT_OF_STEP).toEqual(new Set([IMAGE]))
+  })
+
   it.each(['web-e2e', 'web-e2e-quarantine'])(
-    'installs the browser with retries in %s',
+    'installs no browser in %s',
     (name) => {
-      expect(job(name)).toContain(INSTALL)
-      expect(job(name)).not.toContain('run: npx playwright install')
+      expect(job(name)).not.toMatch(/playwright[ -]install|install-playwright/)
     },
   )
+})
 
+describe('ci.yml and the flakes', () => {
   it('leaves quarantined tests out of the e2e shards', () => {
     expect(job('web-e2e')).toContain(
       'run: npx playwright test --shard=${{ matrix.shard }} --grep-invert @quarantine\n',
@@ -135,14 +96,11 @@ describe('ci.yml and the flakes', () => {
     expect(upload).toContain('path: web/test-results/\n')
   })
 
-  it.each([INSTALL, '--grep @quarantine'])(
-    'never turns the quarantine check red on the step with %s',
-    (text) => {
-      expect(step('web-e2e-quarantine', text)).toContain(
-        'continue-on-error: true\n',
-      )
-    },
-  )
+  it('never turns the quarantine check red on a failed quarantined test', () => {
+    expect(step('web-e2e-quarantine', '--grep @quarantine')).toContain(
+      'continue-on-error: true\n',
+    )
+  })
 
   it('does not hold the image back for a quarantined test', () => {
     expect(job('publish-image')).not.toContain('web-e2e-quarantine')

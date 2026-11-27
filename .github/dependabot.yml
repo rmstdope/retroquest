@@ -18,7 +18,9 @@
 # through the same checks as any other change.
 version: 2
 updates:
-  # The web application: its npm dependencies and dev tools.
+  # The web application: its npm dependencies and dev tools. A pull request
+  # that bumps @playwright/test is red until the Playwright image tags in
+  # .github/workflows/ci.yml name the new version too (rq-2ram).
   - package-ecosystem: npm
     directory: /web
     schedule:
