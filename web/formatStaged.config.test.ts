@@ -1,9 +1,9 @@
 /**
  * Tests for the pre-commit formatting of staged files (`formatStaged.config.ts`),
  * on real git repositories that use this project's ESLint and Prettier
- * configuration.
+ * configuration. Each `describe` builds its repository once.
  */
-import { afterEach, beforeEach, describe, expect, it } from 'vitest'
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 import { execFileSync, spawnSync } from 'node:child_process'
 import {
   copyFileSync,
@@ -69,7 +69,13 @@ function createRepository(): string {
 }
 
 describe('formatStaged', { timeout: 120_000 }, () => {
+  const outOfScope = [
+    'web/other.ts',
+    'web/src/data.json',
+    'web/src/unstaged.ts',
+  ]
   let repo: string
+  let run: { status: number | null; stderr: string }
 
   /** Runs git in the temporary repository and answers what it prints. */
   function git(...args: string[]): string {
@@ -87,17 +93,6 @@ describe('formatStaged', { timeout: 120_000 }, () => {
     writeFileSync(join(repo, file), content)
   }
 
-  /** Runs the script in the temporary repository; answers what it reports. */
-  function formatStaged(): string {
-    const { status, stderr } = spawnSync(process.execPath, [SCRIPT], {
-      cwd: repo,
-      env: ENV,
-      encoding: 'utf8',
-    })
-    expect(status, stderr).toBe(0)
-    return stderr
-  }
-
   /** The working tree's copy of a file. */
   function working(file: string): string {
     return readFileSync(join(repo, file), 'utf8')
@@ -108,21 +103,38 @@ describe('formatStaged', { timeout: 120_000 }, () => {
     return git('show', `:${file}`)
   }
 
-  beforeEach(() => {
+  // One run of the script serves every case: each stages files of its own.
+  beforeAll(() => {
     repo = createRepository()
-  })
+    write('web/src/answer.ts', UNTIDY)
+    write('web/src/components/Answer.vue', UNTIDY_VUE)
+    write('web/src/partial.ts', UNTIDY)
+    write('web/src/broken.ts', 'export const = (\n')
+    for (const file of outOfScope) write(file, UNTIDY)
+    git(
+      'add',
+      'web/src/answer.ts',
+      'web/src/components/Answer.vue',
+      'web/src/partial.ts',
+      'web/src/broken.ts',
+      'web/other.ts',
+      'web/src/data.json',
+    )
+    write('web/src/partial.ts', `${UNTIDY}// not staged\n`)
 
-  afterEach(() => {
+    run = spawnSync(process.execPath, [SCRIPT], {
+      cwd: repo,
+      env: ENV,
+      encoding: 'utf8',
+    })
+  }, 120_000)
+
+  afterAll(() => {
     rmSync(repo, { recursive: true, force: true })
   })
 
   it('formats and lint-fixes staged files, in the index and the tree', () => {
-    write('web/src/answer.ts', UNTIDY)
-    write('web/src/components/Answer.vue', UNTIDY_VUE)
-    git('add', 'web/src')
-
-    formatStaged()
-
+    expect(run.status, run.stderr).toBe(0)
     expect(staged('web/src/answer.ts')).toBe(TIDY)
     expect(working('web/src/answer.ts')).toBe(TIDY)
     expect(staged('web/src/components/Answer.vue')).toBe(TIDY_VUE)
@@ -130,41 +142,35 @@ describe('formatStaged', { timeout: 120_000 }, () => {
   })
 
   it('never stages or overwrites the unstaged part of a file', () => {
-    write('web/src/answer.ts', UNTIDY)
-    git('add', 'web/src')
-    write('web/src/answer.ts', `${UNTIDY}// not staged\n`)
-
-    formatStaged()
-
-    expect(staged('web/src/answer.ts')).toBe(TIDY)
-    expect(working('web/src/answer.ts')).toBe(`${UNTIDY}// not staged\n`)
+    expect(staged('web/src/partial.ts')).toBe(TIDY)
+    expect(working('web/src/partial.ts')).toBe(`${UNTIDY}// not staged\n`)
   })
 
   it('leaves unstaged files and files outside its scope alone', () => {
-    const files = ['web/other.ts', 'web/src/data.json', 'web/src/unstaged.ts']
-    for (const file of files) write(file, UNTIDY)
-    git('add', 'web/other.ts', 'web/src/data.json')
-
-    expect(formatStaged()).toBe('')
-    for (const file of files) expect(working(file)).toBe(UNTIDY)
+    // The whole report: it names no file but the staged ones in scope.
+    expect(run.stderr.trimEnd().split('\n')).toEqual([
+      expect.stringContaining('format-staged: web/src/broken.ts:'),
+      'format-staged: formatted web/src/answer.ts',
+      'format-staged: formatted web/src/components/Answer.vue',
+      'format-staged: formatted web/src/partial.ts',
+    ])
+    for (const file of outOfScope) expect(working(file)).toBe(UNTIDY)
+    expect(staged('web/other.ts')).toBe(UNTIDY)
+    expect(staged('web/src/data.json')).toBe(UNTIDY)
   })
 
   it('reports a file it cannot parse and still formats the others', () => {
-    write('web/src/broken.ts', 'export const = (\n')
-    write('web/src/fine.ts', UNTIDY)
-    git('add', 'web/src')
-
-    const reported = formatStaged()
-
-    expect(reported).toContain('format-staged: web/src/broken.ts:')
-    expect(reported).toContain('formatted web/src/fine.ts')
+    expect(run.stderr).toContain('format-staged: web/src/broken.ts:')
+    // `partial.ts` comes after the broken file.
+    expect(run.stderr).toContain('formatted web/src/partial.ts')
     expect(staged('web/src/broken.ts')).toBe('export const = (\n')
-    expect(staged('web/src/fine.ts')).toBe(TIDY)
+    expect(staged('web/src/partial.ts')).toBe(TIDY)
   })
 })
 
 describe('the pre-commit hook', { timeout: 120_000 }, () => {
   let repo: string
+  let base: string
   let beadsLog: string
   let env: Record<string, string | undefined>
 
@@ -178,7 +184,7 @@ describe('the pre-commit hook', { timeout: 120_000 }, () => {
     })
   }
 
-  beforeEach(() => {
+  beforeAll(() => {
     repo = createRepository()
     beadsLog = join(repo, '.tmp', 'bd.log')
     const bin = join(repo, '.tmp', 'bin')
@@ -194,10 +200,20 @@ describe('the pre-commit hook', { timeout: 120_000 }, () => {
     mkdirSync(join(repo, '.beads', 'hooks'), { recursive: true })
     copyFileSync(HOOK, join(repo, '.beads', 'hooks', 'pre-commit'))
     copyFileSync(SCRIPT, join(repo, 'web', 'formatStaged.config.ts'))
+    git('add', '.beads', 'web/formatStaged.config.ts')
+    git('commit', '--message', 'add the hook')
+    base = git('rev-parse', 'HEAD').trim()
     git('config', 'core.hooksPath', '.beads/hooks')
+  }, 120_000)
+
+  // Back to the commit that added the hook; ignored files (`.tmp`) stay.
+  beforeEach(() => {
+    git('reset', '--hard', base)
+    git('clean', '--force', '-d')
+    rmSync(beadsLog, { force: true })
   })
 
-  afterEach(() => {
+  afterAll(() => {
     rmSync(repo, { recursive: true, force: true })
   })
 
