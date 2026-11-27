@@ -45,6 +45,12 @@ The game loads at `http://localhost:5173` and starts at once.
 | `npm run lint` | Run ESLint |
 | `npm run format` | Format code with Prettier |
 
+CI runs the E2E tests in the Playwright container image
+(`mcr.microsoft.com/playwright:v<version>-noble`), which already holds the browser, so no
+job installs one. The `<version>` in `.github/workflows/ci.yml` must be the `@playwright/test`
+version in `package-lock.json`: when you bump the package, change both image tags there too.
+`npm run test` fails until they match.
+
 ## Project Structure
 
 ```

@@ -29,9 +29,15 @@ async function toThePlacedCottage(
   })
 }
 
-/** Press a thing where it is, whether or not the browser holds it "stable". */
+/**
+ * Press a thing where it is, whether or not the browser holds it "stable". A
+ * forced click does not wait for the thing to be visible either, so that wait
+ * is made here (rq-2ram: it failed once in CI with "Element is not visible").
+ */
 async function pressThing(page: Page, id: string): Promise<void> {
-  await page.locator(`[data-area-press="${id}"]`).click({ force: true })
+  const thing = page.locator(`[data-area-press="${id}"]`)
+  await expect(thing).toBeVisible()
+  await thing.click({ force: true })
 }
 
 test('pressing Grandmother opens a ring, and Examine sends what was typed', async ({
