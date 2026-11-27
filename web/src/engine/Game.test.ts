@@ -987,6 +987,61 @@ describe('Game', () => {
     })
   })
 
+  describe('"a", "an" and "the" in front of a name', () => {
+    it('reaches the same thing as the bare name', () => {
+      const merchant = character('Merchant')
+      merchant.talkTo = () => 'Fresh goods.'
+      merchant.sayTo = (_state, words) => `Heard: ${words}`
+      merchant.buyItem = (_state, name) => `Sold: ${name}`
+      merchant.giveItem = (_state, given) => `Given: ${given.name}`
+      merchant.giveUnheld = (_state, name) =>
+        name === 'patches' ? 'Took: patches' : null
+      rooms.EliorsCottage.addCharacter(merchant)
+      const apple = item('apple')
+      apple.examine = () => 'Examined: apple'
+      apple.open = () => 'Opened: apple'
+      rooms.EliorsCottage.addItem(apple)
+      const light = new EchoSpell('light')
+      light.castOnName = (_state, name) =>
+        name === 'field' ? 'Lit: field' : null
+      game.state.knownSpells.push(light)
+
+      expect(game.talk('a merchant')).toBe('Fresh goods.')
+      expect(game.say('hello', 'a merchant')).toBe('Heard: hello')
+      expect(game.buy('a candle from a merchant')).toBe('Sold: candle')
+      expect(game.buy('an egg from merchant')).toBe('Sold: egg')
+      expect(game.examine('an apple')).toBe('Examined: apple')
+      expect(game.itemNamed('an apple', () => true)).toBe('apple')
+      expect(game.open('an apple')).toBe('Opened: apple')
+      game.take('an apple')
+      expect(game.state.inventory).toContain(apple)
+      expect(game.use('an apple', 'a merchant')).toBe('Given: apple')
+      expect(game.use('a patches', 'merchant')).toBe('Took: patches')
+      expect(game.cast('light on an apple')).toBe(game.cast('light on apple'))
+      expect(game.cast('light on a field')).toBe('Lit: field')
+      expect(game.cast('the light on a field')).toBe('Lit: field')
+    })
+
+    it('keeps an article typed on its own as a name', () => {
+      rooms.EliorsCottage.addItem(item('apple'))
+      expect(game.take('a')).toBe(
+        "[failure]There is no 'a' here to take.[/failure]",
+      )
+      expect(game.examine('the')).toBe(
+        "[failure]You don't see a 'the' to examine here or in your inventory.[/failure]",
+      )
+      expect(game.buy('a')).toBe('[failure]What do you want to buy?[/failure]')
+    })
+
+    it('leaves one word of an item name unmatched', () => {
+      rooms.EliorsCottage.addItem(item('fishing rod'))
+      expect(game.take('a rod')).toContain('here to take.')
+      expect(game.take('rod')).toBe(
+        "[failure]There is no 'rod' here to take.[/failure]",
+      )
+    })
+  })
+
   describe('the article of a "not here" reply', () => {
     it('goes by sound in every such reply', () => {
       game.state.inventory.push(item('rope'))
