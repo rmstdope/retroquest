@@ -1,4 +1,5 @@
 import {
+  beginActOnceRecorded,
   test,
   expect,
   type Page,
@@ -52,7 +53,7 @@ test('the dream card is whole while Grandmother answers, and nothing loops', asy
   await page.setViewportSize({ width: 1400, height: 757 })
   await page.goto('/')
   await page.getByRole('button', { name: 'Start', exact: true }).click()
-  await page.locator('.lq-chapter-button').click()
+  await beginActOnceRecorded(page)
   await enter(page, 'talk to voice')
   await skipTelling(page)
   for (const command of [

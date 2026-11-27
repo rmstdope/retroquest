@@ -1,4 +1,5 @@
 import {
+  beginActOnceRecorded,
   test,
   expect,
   enterCommand,
@@ -15,7 +16,7 @@ async function startAct1(page: Page): Promise<void> {
   await page.getByRole('button', { name: 'Start', exact: true }).click()
   // The title's opening is skipped by the suite's reduced motion; this spec needs the motion back.
   await page.emulateMedia({ reducedMotion: 'no-preference' })
-  await page.locator('.lq-chapter-button').click()
+  await beginActOnceRecorded(page)
 }
 
 /** Push a further first-visit arrival into the turns, as a new room would. */
