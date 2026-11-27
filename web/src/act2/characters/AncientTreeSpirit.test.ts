@@ -202,3 +202,21 @@ describe('Ancient Tree Spirit voice', () => {
     expectMarkupWellFormed(answer)
   })
 })
+
+describe('Ancient Tree Spirit tells a gift by what it is, not by its name', () => {
+  it('counts renamed water and moonflowers as both gifts, keeping the water', () => {
+    const { game, spirit } = gameAfterAcorn()
+    const water = new CrystalClearWater()
+    const moonflowers = new Moonflowers()
+    water.name = 'clear draught'
+    moonflowers.name = 'night blooms'
+    game.state.addItemToInventory(water)
+    game.state.addItemToInventory(moonflowers)
+
+    spirit.giveItem(game.state, moonflowers)
+
+    expect(game.state.getStoryFlag(FLAG_WHISPERS_IN_WIND_COMPLETED)).toBe(true)
+    expect(game.state.inventory).toContain(water)
+    expect(game.state.inventory).not.toContain(moonflowers)
+  })
+})

@@ -113,23 +113,22 @@ export class AncientTreeSpirit extends Character {
     }
 
     // Items from Whispering Glade: water or moonflowers
-    const name = item.name.toLowerCase()
-    if (name === 'crystal-clear water' || name === 'moonflowers') {
-      if (!(item instanceof CrystalClearWater || item instanceof Moonflowers)) {
-        return super.giveItem(gameState, item)
-      }
-
+    if (item instanceof CrystalClearWater || item instanceof Moonflowers) {
       if (gameState.getStoryFlag(FLAG_WHISPERS_IN_WIND_COMPLETED)) {
         return this.refuseRepeatGift()
       }
 
-      const hasWater = gameState.hasItem('crystal-clear water')
-      const hasMoonflowers = gameState.hasItem('moonflowers')
+      const hasWater = gameState.inventory.some(
+        (carried) => carried instanceof CrystalClearWater,
+      )
+      const moonflowers = gameState.inventory.find(
+        (carried) => carried instanceof Moonflowers,
+      )
 
-      if (hasWater && hasMoonflowers) {
+      if (hasWater && moonflowers) {
         gameState.getQuest(QUEST_WHISPERS_IN_THE_WIND)?.complete(gameState)
         this.whispersQuestCompleted = true
-        gameState.removeItemFromInventory('moonflowers')
+        gameState.removeItemFromInventory(moonflowers.name)
 
         return (
           'You pour some of the crystal-clear water at the foot of the ' +

@@ -21,3 +21,24 @@ describe("Moonflowers in the Healer's House", () => {
     expect(answer).not.toContain('perfect for')
   })
 })
+
+describe('Moonflowers tell the room by what it is, not by its name', () => {
+  const GLOW = 'glow more brightly'
+  const DORMANT = 'remain dormant here'
+
+  it.each([
+    ['HealersHouse', 'glances at the silver blooms'],
+    ['ForestEntrance', GLOW],
+    ['ForestTransition', GLOW],
+    ['HeartOfTheForest', GLOW],
+    ['AncientGrove', DORMANT],
+    ['WhisperingGlade', DORMANT],
+    ['MainSquare', DORMANT],
+  ])('answers the same in a renamed %s', (key, expected) => {
+    const game = new Game([new Act2()])
+    game.state.currentRoom = game.state.allRooms[key]
+    game.state.currentRoom.name = 'Somewhere Else'
+
+    expect(new Moonflowers().use(game.state)).toContain(expected)
+  })
+})

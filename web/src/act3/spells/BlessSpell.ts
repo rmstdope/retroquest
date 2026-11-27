@@ -24,8 +24,7 @@ export class BlessSpell extends Spell {
   }
 
   /** Cast bless on self. */
-  override castSpell(gameState: GameState): string {
-    gameState.setStoryFlag('journey_bless_completed', true)
+  override castSpell(_gameState: GameState): string {
     return (
       'A quiet warmth settles on your shoulders and stays, the way the ' +
       "priest's hand did."

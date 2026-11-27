@@ -8,6 +8,10 @@ import {
 import { FLAG_FOUND_RAVINE, FLAG_RAVINE_STORY_PENDING } from '../Act2StoryFlags'
 import { Ravine } from '../items/Ravine'
 import { ForestEntrance } from '../rooms/ForestEntrance'
+import { ForestTransition } from '../rooms/ForestTransition'
+import { AncientGrove } from '../rooms/AncientGrove'
+import { HeartOfTheForest } from '../rooms/HeartOfTheForest'
+import { WhisperingGlade } from '../rooms/WhisperingGlade'
 import { AncientTreeSpirit } from '../characters/AncientTreeSpirit'
 import { ForestSprites } from '../characters/ForestSprites'
 import { WaterNymphs } from '../characters/WaterNymphs'
@@ -83,20 +87,15 @@ export class ForestSpeechSpell extends Spell {
       )
     }
     // Normal forest speech behavior for other locations
-    const roomName = currentRoom.name.toLowerCase()
-    if (['forest', 'grove', 'glade'].some((word) => roomName.includes(word))) {
+    if (
+      currentRoom instanceof ForestTransition ||
+      currentRoom instanceof AncientGrove ||
+      currentRoom instanceof HeartOfTheForest ||
+      currentRoom instanceof WhisperingGlade
+    ) {
       return (
         "[success]The forest's talk sorts itself into words: roots " +
         'complaining of dry ground, a jay telling everyone you are here.' +
-        '[/success]'
-      )
-    } else if (roomName.includes('enchanted')) {
-      return (
-        '[success]In this magical ' +
-        'realm the response is overwhelming. Every plant, from the mightiest ' +
-        'tree to the smallest moss, has something to say. The magical nature of ' +
-        'this place amplifies your connection, allowing you to understand even ' +
-        'the most subtle communications from the natural world.' +
         '[/success]'
       )
     }

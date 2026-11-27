@@ -15,6 +15,8 @@ export const FLAG_JOURNEY_BLESS_COMPLETED = 'journey_bless_completed'
 export const FLAG_PRIEST_TALKED_TO = 'priest_talked_to'
 export const FLAG_PRIEST_BLESSED = 'priest_blessed'
 export const FLAG_TALKED_TO_FISHERMAN = 'talked_to_fisherman'
+/** Set when the fisherman has taught Elior how to fish the river. */
+export const FLAG_LEARNED_FISHING_BASICS = 'learned_fishing_basics'
 export const FLAG_DEER_CAN_BE_OBSERVED = 'deer_can_be_observed'
 export const FLAG_BLACKSMITH_MET = 'blacksmith_met'
 export const FLAG_RUSTY_HOE_FIRST_COIN_FOUND = 'rusty_hoe_first_coin_found'

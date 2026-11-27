@@ -2,14 +2,17 @@ import { Spell, type GameState, characterName, clue } from '@/engine'
 import { FLAG_FOUND_RAVINE, FLAG_RAVINE_STORY_PENDING } from '../Act2StoryFlags'
 import { Ravine } from '../items/Ravine'
 import { ForestEntrance } from '../rooms/ForestEntrance'
+import { ForestTransition } from '../rooms/ForestTransition'
+import { AncientGrove } from '../rooms/AncientGrove'
+import { HeartOfTheForest } from '../rooms/HeartOfTheForest'
 import { WaterNymphs } from '../characters/WaterNymphs'
 import { WhisperingGlade } from '../rooms/WhisperingGlade'
 
 /**
  * Reveals hidden natural presences and spawns water nymphs in Whispering Glade
  * on the first cast there. At the Forest Entrance it also finds the Ravine
- * (the drop only, not what lies in it). Keyword-based room classification (forest /
- * enchanted / transition) shapes the flavor output elsewhere.
+ * (the drop only, not what lies in it). Elsewhere the flavor output depends on
+ * which room it is cast in: the standing stones, the forest, or neither.
  */
 export class NatureSenseSpell extends Spell {
   natureSenseUsed = false
@@ -70,8 +73,7 @@ export class NatureSenseSpell extends Spell {
         'the forest belongs.[/success]'
       )
     }
-    const roomName = gameState.currentRoom.name.toLowerCase()
-    if (roomName.includes('transition')) {
+    if (gameState.currentRoom instanceof ForestTransition) {
       // The standing stones: the edge of the forest
       return (
         '[success]At the stones the living things around you thin to a ' +
@@ -79,9 +81,8 @@ export class NatureSenseSpell extends Spell {
         'watchful.[/success]'
       )
     } else if (
-      ['forest', 'enchanted', 'grove', 'glade'].some((word) =>
-        roomName.includes(word),
-      )
+      gameState.currentRoom instanceof AncientGrove ||
+      gameState.currentRoom instanceof HeartOfTheForest
     ) {
       return (
         '[success]You let your awareness spread through the roots and the ' +

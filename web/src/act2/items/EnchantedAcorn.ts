@@ -1,4 +1,5 @@
 import { Item, type GameState } from '@/engine'
+import { AncientGrove } from '../rooms/AncientGrove'
 import { ForestEntrance } from '../rooms/ForestEntrance'
 
 /** The acorn's description; `descriptionFor` returns it in older saves. */
@@ -24,8 +25,7 @@ export class EnchantedAcorn extends Item {
 
   /** The acorn turns toward the silver-barked tree in the grove, and lies still elsewhere. */
   override use(gameState: GameState): string {
-    const currentRoom = gameState.currentRoom.name
-    if (currentRoom.toLowerCase().includes('ancient grove')) {
+    if (gameState.currentRoom instanceof AncientGrove) {
       // This should be handled by the room or character interaction
       return (
         `${this.nameInSentence({ atStart: true })} pulses with magical energy in ` +

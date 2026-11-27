@@ -1,5 +1,9 @@
 import { Item, type GameState, characterName, dialogue } from '@/engine'
 import { WhisperingGlade } from '../rooms/WhisperingGlade'
+import { HealersHouse } from '../rooms/HealersHouse'
+import { ForestEntrance } from '../rooms/ForestEntrance'
+import { ForestTransition } from '../rooms/ForestTransition'
+import { HeartOfTheForest } from '../rooms/HeartOfTheForest'
 
 /** The item's description; `descriptionFor` returns it in older saves. */
 export const MOONFLOWERS_DESCRIPTION =
@@ -24,8 +28,8 @@ export class Moonflowers extends Item {
 
   /** In the Healer's House Lyria waves the blooms away; elsewhere they glow or lie dormant. */
   override use(gameState: GameState): string {
-    const currentRoom = gameState.currentRoom.name
-    if (currentRoom.toLowerCase().includes('healer')) {
+    const currentRoom = gameState.currentRoom
+    if (currentRoom instanceof HealersHouse) {
       return (
         characterName('Lyria') +
         ' glances at the silver blooms and shakes her head.' +
@@ -36,7 +40,11 @@ export class Moonflowers extends Item {
             'them back to the forest.',
         )
       )
-    } else if (currentRoom.toLowerCase().includes('forest')) {
+    } else if (
+      currentRoom instanceof ForestEntrance ||
+      currentRoom instanceof ForestTransition ||
+      currentRoom instanceof HeartOfTheForest
+    ) {
       return (
         'The [item_name]moonflowers[/item_name] glow more brightly in the ' +
         'magical atmosphere of the forest, their protective properties enhanced.'

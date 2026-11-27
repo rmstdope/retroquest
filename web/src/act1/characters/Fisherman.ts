@@ -17,7 +17,9 @@ import {
   FLAG_FISHERMAN_TOLD_OF_TIN,
   FLAG_FOUND_MOTHERS_LETTER,
   FLAG_HEALED_FISHERMAN_ARM,
+  FLAG_LEARNED_FISHING_BASICS,
   FLAG_READ_PHOTO_MESSAGE,
+  FLAG_TALKED_TO_FISHERMAN,
 } from '../Act1StoryFlags'
 
 /**
@@ -111,13 +113,16 @@ export class Fisherman extends Character {
   /** What the fisherman answers when spoken to, before the speaker is labelled. */
   private talkAnswer(gameState: GameState): string {
     // Set the story flag that the player has talked to the fisherman
-    gameState.setStoryFlag('talked_to_fisherman', true)
+    gameState.setStoryFlag(FLAG_TALKED_TO_FISHERMAN, true)
     // Check if player has a fishing rod in the inventory
     const playerHasRod = gameState.hasItem('fishing rod')
 
     if (this.currentDialogueKey === 'initial') {
-      if (playerHasRod && !gameState.getStoryFlag('learned_fishing_basics')) {
-        gameState.setStoryFlag('learned_fishing_basics', true)
+      if (
+        playerHasRod &&
+        !gameState.getStoryFlag(FLAG_LEARNED_FISHING_BASICS)
+      ) {
+        gameState.setStoryFlag(FLAG_LEARNED_FISHING_BASICS, true)
         this.knowsFishingBasics = true
         this.currentDialogueKey = 'taught_fishing'
         return (
@@ -132,7 +137,7 @@ export class Fisherman extends Character {
           '\n' +
           'He teaches you the basics of fishing.'
         )
-      } else if (gameState.getStoryFlag('learned_fishing_basics')) {
+      } else if (gameState.getStoryFlag(FLAG_LEARNED_FISHING_BASICS)) {
         // If already taught, but currentDialogueKey is still initial, switch
         // to taught_fishing so the dialogue falls through below.
         this.currentDialogueKey = 'taught_fishing'

@@ -21,6 +21,7 @@ import {
   FLAG_ACT3_MIRA_REPROACHED,
   FLAG_ACT3_MIRRORS_MENDED,
   FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED,
+  FLAG_ACT3_DRAGON_MESSAGE_GIVEN,
   FLAG_ACT3_SEA_SEALED_LETTER_READ,
 } from '../Act3StoryFlags'
 import { Mira } from './Mira'
@@ -1051,5 +1052,30 @@ describe('Mira tells the room by what it is, not by what it is called', () => {
 
     expect(renamed).toBe(named)
     expect(renamed).toContain('scholar')
+  })
+})
+
+describe('Mira plays her room slips by what the room is, not its name', () => {
+  it.each([
+    [
+      'LowerSwitchbacks',
+      FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED,
+      'looks at the feather a long time',
+    ],
+    [
+      'CavernMouth',
+      FLAG_ACT3_DRAGON_MESSAGE_GIVEN,
+      "You give her the dragon's words.",
+    ],
+  ])('plays it in a renamed %s', (key, flag, line) => {
+    const game = new Game([new Act3()])
+    game.state.setStoryFlag(FLAG_ACT3_MAIN_STARTED, true)
+    game.state.setStoryFlag(flag, true)
+    game.state.currentRoom = game.state.allRooms[key]
+    game.state.currentRoom.name = 'The Black Glass Path'
+    const mira = new Mira()
+    game.state.currentRoom.characters.push(mira)
+
+    expect(mira.talkTo(game.state)).toContain(line)
   })
 })
