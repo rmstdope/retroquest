@@ -92,6 +92,9 @@ describe('the content name-alias rule', () => {
     "const n = r.name; return n.endsWith('n') || o",
     "const n = r.name; switch (n) { case 'Cavern': return o } return null",
     "return r.name.includes('Cave') || o",
+    "switch (r.name) { case 'Cavern': return o } return null",
+    "const { name } = r; return name === 'Cavern'",
+    "const { name: n } = r; return n.includes('Cave')",
     "return r.name.toLowerCase().includes('cave') || o",
   ])('flags %s in act and lantern content', async (body) => {
     expect(await lint(probe(body), CONTENT)).toContain('content/no-name-alias')
@@ -103,6 +106,8 @@ describe('the content name-alias rule', () => {
   it.each([
     'const n = r.name; return `You see ${n}.` + o',
     'const n = r.name; return n === o',
+    "const v = (r as unknown as Record<string, string>)[o]; return v === 'x'",
+    'const { length: name } = o; return String(name) + r.name',
     "const n = o; return n === 'Cavern' || n.includes('C')",
     "const n = r.name; return [o].map((n) => n === 'x').concat(n === o)",
   ])('lets %s through', async (body) => {

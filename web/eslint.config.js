@@ -39,7 +39,9 @@ function storyFlagLiteralSelectors() {
 /** Whether `node` reads `.name`, optionally chained or lower-cased. */
 function isNameRead(node) {
   if (node.type === 'ChainExpression') return isNameRead(node.expression)
-  if (node.type === 'MemberExpression') return node.property.name === 'name'
+  if (node.type === 'MemberExpression') {
+    return !node.computed && node.property.name === 'name'
+  }
   return isLowerCasing(node) && isNameRead(node.callee.object)
 }
 
@@ -77,11 +79,14 @@ const noNameAlias = {
       let scope = context.sourceCode.getScope(target)
       while (scope && !scope.set.has(target.name)) scope = scope.upper
       const def = scope?.set.get(target.name).defs[0]
+      if (def?.type !== 'Variable') return false
+      const { id, init } = def.node
+      if (id === def.name) return init !== null && isNameRead(init)
       return (
-        def?.type === 'Variable' &&
-        def.node.id === def.name &&
-        def.node.init !== null &&
-        isNameRead(def.node.init)
+        id.type === 'ObjectPattern' &&
+        id.properties.some(
+          (p) => p.key?.name === 'name' && p.value === def.name,
+        )
       )
     }
     const isText = (node) =>
@@ -105,7 +110,9 @@ const noNameAlias = {
       },
       SwitchStatement(node) {
         const cases = node.cases.some((c) => c.test && isText(c.test))
-        if (cases && isAlias(node.discriminant)) report(node)
+        const { discriminant } = node
+        if (cases && (isNameRead(discriminant) || isAlias(discriminant)))
+          report(node)
       },
     }
   },

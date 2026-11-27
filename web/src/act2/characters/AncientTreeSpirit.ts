@@ -118,13 +118,17 @@ export class AncientTreeSpirit extends Character {
         return this.refuseRepeatGift()
       }
 
-      const hasWater = gameState.hasItem('crystal-clear water')
-      const hasMoonflowers = gameState.hasItem('moonflowers')
+      const hasWater = gameState.inventory.some(
+        (carried) => carried instanceof CrystalClearWater,
+      )
+      const moonflowers = gameState.inventory.find(
+        (carried) => carried instanceof Moonflowers,
+      )
 
-      if (hasWater && hasMoonflowers) {
+      if (hasWater && moonflowers) {
         gameState.getQuest(QUEST_WHISPERS_IN_THE_WIND)?.complete(gameState)
         this.whispersQuestCompleted = true
-        gameState.removeItemFromInventory('moonflowers')
+        gameState.removeItemFromInventory(moonflowers.name)
 
         return (
           'You pour some of the crystal-clear water at the foot of the ' +
