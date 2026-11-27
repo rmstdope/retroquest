@@ -64,6 +64,10 @@ PIC-5  Quest news and a newly learned spell are told in the middle of the pictur
        Proven by: web/e2e/questNews.spec.ts
 PIC-6  A player can open a bigger map and walk from it to a place already visited.
        Proven by: web/e2e/biggerMap.spec.ts
+PIC-7  A story card told on the picture stays while the mouse rests on it, and leaves
+       once the mouse has moved off and its reading time has run. A press made after
+       it has gone acts at once on what it lands on.
+       Proven by: web/e2e/cardClick.spec.ts
 
 ## Reading (RDG)
 
