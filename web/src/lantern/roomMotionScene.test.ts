@@ -78,6 +78,8 @@ describe('boxRect', () => {
 })
 
 describe('a scene', () => {
+  afterEach(() => vi.restoreAllMocks())
+
   it('has nothing to run until it is given movement', () => {
     expect(sceneOf(1280, 720).isEmpty()).toBe(true)
   })
@@ -184,7 +186,6 @@ describe('a scene', () => {
           scene.step(16.7)
           sum += scene.count(kind)
         }
-        vi.restoreAllMocks()
         return sum / ticks / ((w * h) / (1280 * 720))
       }
       const small = density(390, 219)
