@@ -74,7 +74,7 @@ PIC-7  A story card told on the picture stays while the mouse rests on it, and l
 RDG-1  What people say appears in a speech column with the speaker's name and
        portrait. A line fades once it has been read, without moving the lines still
        showing.
-       Proven by: web/e2e/speechColumn.spec.ts
+       Proven by: web/e2e/speechColumn.spec.ts, web/e2e/fadeOrder.spec.ts
 RDG-2  The journal and the quest log open as drawers that nothing from the stage
        covers. A checklist shows what is done fainter than what is left.
        Proven by: web/e2e/storyDrawerCover.spec.ts, web/e2e/checklistFade.spec.ts
