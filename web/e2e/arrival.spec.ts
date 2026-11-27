@@ -1,4 +1,12 @@
-import { test, expect, enterCommand, type Page, skipTelling } from './fixtures'
+import {
+  test,
+  expect,
+  enterCommand,
+  skipTelling,
+  type Locator,
+  type Page,
+} from './fixtures'
+import { contrastRatio } from '../src/lantern/tokens'
 
 /** Open the game on a laptop and close the opening chapter page: the first room arrives. */
 async function startAct1(page: Page): Promise<void> {
@@ -72,6 +80,50 @@ async function turnCount(page: Page): Promise<number> {
 /** Long enough for a press, had there been one, to reach the game (stepped on the page's clock). */
 const PRESS_SETTLES_MS = 300
 
+/** `[r, g, b]` in 0–255 as `#rrggbb`. */
+const hex = (rgb: number[]): string =>
+  `#${rgb
+    .slice(0, 3)
+    .map((c) => Math.round(c).toString(16).padStart(2, '0'))
+    .join('')}`
+
+/**
+ * The colour each inline tag takes inside `line`: one bare word is added for
+ * every class a loaded stylesheet gives its own colour to (`.theme-*`), so a new
+ * tag is covered too. Only top-level rules are searched (none in `@media` or
+ * `@layer`), and a colour given to a tag only in some other context does not
+ * reach the word.
+ */
+async function tagColours(line: Locator): Promise<Record<string, number[]>> {
+  return line.evaluate((el) => {
+    const tags = new Set<string>()
+    for (const sheet of document.styleSheets)
+      for (const rule of sheet.cssRules) {
+        if (!(rule instanceof CSSStyleRule)) continue
+        if (!rule.style.color.startsWith('var(')) continue
+        for (const m of rule.selectorText.matchAll(/\.(theme-\w+)/g))
+          tags.add(m[1])
+      }
+    return Object.fromEntries(
+      [...tags].sort().map((tag) => {
+        const word = el.appendChild(document.createElement('span'))
+        word.className = tag
+        const colour = getComputedStyle(word).color
+        word.remove()
+        return [tag, (colour.match(/[\d.]+/g) ?? []).map(Number)]
+      }),
+    )
+  })
+}
+
+/** The page's own character-name colour, which differs between the themes. */
+const pageCharacterColour = (page: Page): Promise<string> =>
+  page.evaluate(() =>
+    getComputedStyle(document.documentElement).getPropertyValue(
+      '--lq-character',
+    ),
+  )
+
 const arrival = (page: Page) => page.getByTestId('arrival-on-picture')
 const story = (page: Page) => page.getByRole('region', { name: 'Story' })
 
@@ -98,6 +150,45 @@ test.describe('the arrival told on the picture', () => {
     await expect(line).toHaveCount(0)
     await expect(tab).toHaveCount(0)
     await expect(story(page)).toBeHidden()
+  })
+
+  test('keeps the pill and the tagged words readable on the picture in either theme', async ({
+    page,
+  }) => {
+    await page.emulateMedia({ colorScheme: 'light' })
+    await startAct1(page)
+    const pill = arrival(page).locator('.lq-arrival-pill')
+    await expect(pill).toHaveCSS('text-shadow', 'none')
+    await expect(pill.locator('.lq-arrival-hint')).toHaveCSS('opacity', '1')
+    // The pill is see-through: its words must meet 4.5:1 even over white.
+    const [ground, ink] = await pill.evaluate((el) => {
+      const style = getComputedStyle(el)
+      return [style.backgroundColor, style.color].map((css) =>
+        (css.match(/[\d.]+/g) ?? []).map(Number),
+      )
+    })
+    const alpha = ground[3]
+    expect(alpha).toBeGreaterThan(0)
+    expect(alpha).toBeLessThan(1)
+    const overWhite = ground
+      .slice(0, 3)
+      .map((c) => c * alpha + 255 * (1 - alpha))
+    expect(contrastRatio(hex(ink), hex(overWhite))).toBeGreaterThanOrEqual(4.5)
+
+    const line = arrival(page).locator('.lq-arrival-line').first()
+    await expect(line).toBeVisible()
+    const light = await tagColours(line)
+    const lightPage = await pageCharacterColour(page)
+    expect(Object.keys(light)).toContain('theme-character_name')
+    await page.emulateMedia({ colorScheme: 'dark' })
+    // The theme really switched, so the comparison below says something.
+    await expect.poll(() => pageCharacterColour(page)).not.toBe(lightPage)
+    // On the picture the glow is dark in both themes, so the tags keep one colour.
+    expect(await tagColours(line)).toEqual(light)
+    for (const [tag, colour] of Object.entries(light))
+      expect(contrastRatio(hex(colour), '#000000'), tag).toBeGreaterThanOrEqual(
+        4.5,
+      )
   })
 
   test('goes on with Enter', async ({ page }) => {

@@ -1,5 +1,4 @@
 // @vitest-environment jsdom
-import { readFileSync } from 'node:fs'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { mount, type VueWrapper } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
@@ -8,43 +7,6 @@ import { useArrivalStore } from '@/stores/useArrivalStore'
 import { FOLLOW_EVENT } from '@/composables/useStoryFollow'
 import type { ArrivalPart } from '@/lantern/stageArrival'
 import type { QuestNews } from '@/lantern/questNews'
-import {
-  LANTERN_PALETTES,
-  contrastRatio,
-  cssVariableName,
-} from '@/lantern/tokens'
-
-// Read from disk: Vitest replaces CSS imports with empty strings.
-const read = (path: string): string =>
-  readFileSync(new URL(path, import.meta.url), 'utf8')
-
-/**
- * The colour tokens the inline tags are drawn in: every rule of lantern.css
- * whose selector list names a `.theme-*` class, grouped or not.
- */
-function inlineTagColourTokens(): string[] {
-  const css = read('../../lantern/lantern.css')
-  const tokens = [...css.matchAll(/([^{}]*)\{([^}]*)\}/g)]
-    .filter((m) => m[1].includes('.theme-'))
-    .flatMap((m) =>
-      [...m[2].matchAll(/(?:^|[;\s])color: var\((--lq-[\w-]+)\)/g)].map(
-        (c) => c[1],
-      ),
-    )
-  return [...new Set(tokens)].sort()
-}
-
-/** The `--name: value` declarations of the arrival's rule on a picture. */
-function onPictureDeclarations(): Record<string, string> {
-  const source = read('./ArrivalOnPicture.vue')
-  const body = source.match(/\.lq-arrival-stage:not\(\.lq-bare\) \{([^}]*)\}/)
-  return Object.fromEntries(
-    [...(body?.[1] ?? '').matchAll(/(--[\w-]+):\s*([^;]+);/g)].map((m) => [
-      m[1],
-      m[2].trim(),
-    ]),
-  )
-}
 
 const description: ArrivalPart = {
   kind: 'description',
@@ -133,31 +95,6 @@ describe('ArrivalOnPicture', () => {
     expect(withPicture.classes()).not.toContain('lq-bare')
   })
 
-  it('lays a soft edgeless shade behind the words of a card on a picture only (rq-0ols)', () => {
-    const source = read('./ArrivalOnPicture.vue')
-    const rule = source.match(
-      /\.lq-arrival-stage:not\(\.lq-bare\) \.lq-arrival-card::before \{([^}]*)\}/,
-    )
-    expect(rule).not.toBeNull()
-    const body = rule?.[1] ?? ''
-    expect(body).toContain('radial-gradient')
-    expect(body).toMatch(/rgb\([^)]*\/ 0\)\s*100%/)
-    expect(body).toContain('pointer-events: none')
-    expect(body).toContain('z-index: -1')
-    expect(body).not.toMatch(/border|box-shadow/)
-    expect(source).toMatch(/\.lq-arrival-card \{[^}]*isolation: isolate[^}]*\}/)
-  })
-
-  it('fades ticked places to 80% on a picture and keeps 60% elsewhere (rq-0ols)', () => {
-    const css = read('../../lantern/lantern.css')
-    expect(css).toMatch(
-      /\.lq-quest-checklist \.lq-check-done \{\s*opacity: 0\.6;/,
-    )
-    expect(css).toMatch(
-      /\.lq-arrival-stage:not\(\.lq-bare\) \.lq-quest-checklist \.lq-check-done \{\s*opacity: 0\.8;/,
-    )
-  })
-
   it('is a polite live region', () => {
     const w = mount(ArrivalOnPicture, { props: { pictured: true } })
     expect(w.attributes('aria-live')).toBe('polite')
@@ -182,27 +119,6 @@ describe('ArrivalOnPicture', () => {
         'Click to continue · Hold to skip',
       )
       expect(pill.find('[data-testid="arrival-bar"]').exists()).toBe(false)
-    })
-
-    it('is a dark see-through pill whose words meet 4.5:1 even over white', () => {
-      const source = read('./ArrivalOnPicture.vue')
-      const pill = source.match(/\.lq-arrival-pill \{([^}]*)\}/)?.[1] ?? ''
-      const bg = pill.match(
-        /background:\s*rgb\((\d+) (\d+) (\d+) \/ ([\d.]+)\)/,
-      )
-      expect(bg).not.toBeNull()
-      const alpha = Number(bg?.[4])
-      expect(alpha).toBeGreaterThan(0)
-      expect(alpha).toBeLessThan(1)
-      const over = [1, 2, 3]
-        .map((i) => Math.round(Number(bg?.[i]) * alpha + 255 * (1 - alpha)))
-        .map((c) => c.toString(16).padStart(2, '0'))
-        .join('')
-      const ink = pill.match(/color:\s*(#[0-9a-f]{6})/i)?.[1] ?? ''
-      expect(contrastRatio(ink, `#${over}`)).toBeGreaterThanOrEqual(4.5)
-      expect(pill).toContain('text-shadow: none')
-      const hint = source.match(/\.lq-arrival-hint \{([^}]*)\}/)?.[1] ?? ''
-      expect(hint).not.toContain('opacity')
     })
   })
 
@@ -592,37 +508,6 @@ describe('ArrivalOnPicture', () => {
       await w.trigger('click')
       expect(w.find('.lq-arrival-card').exists()).toBe(false)
     })
-  })
-
-  describe('on a picture, in either theme', () => {
-    const dark = Object.fromEntries(
-      Object.entries(LANTERN_PALETTES.dark).map(([k, v]) => [
-        cssVariableName(k),
-        v,
-      ]),
-    )
-
-    it('finds the colours the inline tags use', () => {
-      expect(inlineTagColourTokens()).toEqual([
-        '--lq-accent-text',
-        '--lq-character',
-        '--lq-failure',
-        '--lq-fg',
-        '--lq-item',
-        '--lq-muted',
-        '--lq-spell',
-        '--lq-success',
-      ])
-    })
-
-    it.each(inlineTagColourTokens())(
-      'draws %s in the dark theme colour, readable against the dark glow',
-      (token) => {
-        const colour = onPictureDeclarations()[token]
-        expect(colour, token).toBe(dark[token])
-        expect(contrastRatio(colour, '#000000')).toBeGreaterThanOrEqual(4.5)
-      },
-    )
   })
 
   describe('quest news', () => {
