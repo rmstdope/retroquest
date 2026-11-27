@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { boxRect, createMotionScene, pointPosition } from './roomMotionScene'
 import type { AreaBox, MotionKind } from './roomMotion'
+import { seedRandom } from '@/testing/seededRandom'
 
 const PICTURE = { width: 1920, height: 1080 }
 const BOX: AreaBox = { x: 0.25, y: 0.25, width: 0.5, height: 0.5 }
@@ -168,19 +169,23 @@ describe('a scene', () => {
 
   it('is no more crowded with embers or leaves on a small picture than on a large one', () => {
     for (const kind of ['embers', 'leaves'] as const) {
-      /** Specks live at a time for each full 1280 × 720 of picture. */
+      /** Specks live at a time for each full 1280 × 720 of picture, on the same rolls every run. */
       const density = (w: number, h: number): number => {
+        seedRandom()
         const scene = sceneOf(w, h)
         scene.setEffects([{ kind }], true)
-        const ticks = 40000
+        const ticks = 20000
         let sum = 0
         for (let i = 0; i < ticks; i++) {
           scene.step(16.7)
           sum += scene.count(kind)
         }
+        vi.restoreAllMocks()
         return sum / ticks / ((w * h) / (1280 * 720))
       }
-      expect(density(390, 219), kind).toBeLessThan(density(1280, 720) * 1.5)
+      const small = density(390, 219)
+      expect(small, kind).toBeGreaterThan(0)
+      expect(small, kind).toBeLessThan(density(1280, 720) * 1.1)
     }
   })
 
