@@ -5,6 +5,7 @@ import { createPinia, setActivePinia } from 'pinia'
 import LanternLayout from './LanternLayout.vue'
 import { useGameStore, type Turn } from '@/stores/useGameStore'
 import { GEM, startedHoldStore } from '@/testing/holdGame'
+import { SHORT_QUERY } from '@/composables/useMediaQuery'
 
 /**
  * Names in the story are Tab stops over the real engine: in the wide band only
@@ -41,7 +42,7 @@ describe('LanternLayout: names reached with Tab', () => {
       'matchMedia',
       vi.fn((query: string) => ({
         // Narrow here is the text page (a short screen), where every turn has stops.
-        matches: query.includes(wide ? 'min-width' : '519px'),
+        matches: wide ? query.includes('min-width') : query === SHORT_QUERY,
         addEventListener: vi.fn(),
         removeEventListener: vi.fn(),
       })),

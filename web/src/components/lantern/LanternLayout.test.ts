@@ -15,6 +15,7 @@ import { narrationWords } from '@/lantern/narrationManifest'
 import type { Turn } from '@/stores/useGameStore'
 import type * as SceneMixModule from '@/lantern/sceneMix'
 import type { SceneEntry } from '@/lantern/sceneMix'
+import { SHORT_QUERY } from '@/composables/useMediaQuery'
 
 /** Scenes whose mix a test gives in place of the committed one. */
 const mixOf = vi.hoisted(() => ({}) as Record<string, SceneEntry>)
@@ -55,7 +56,7 @@ describe('LanternLayout', () => {
     vi.stubGlobal(
       'matchMedia',
       vi.fn((query: string) => ({
-        matches: query.includes('519px'),
+        matches: query === SHORT_QUERY,
         addEventListener: vi.fn(),
         removeEventListener: vi.fn(),
       })),
@@ -1159,7 +1160,7 @@ describe('LanternLayout', () => {
       vi.stubGlobal(
         'matchMedia',
         vi.fn((query: string) => ({
-          matches: query.includes('519px') ? short : false,
+          matches: query === SHORT_QUERY ? short : false,
           addEventListener: vi.fn(),
           removeEventListener: vi.fn(),
         })),
