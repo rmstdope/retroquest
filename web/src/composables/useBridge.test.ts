@@ -1,3 +1,4 @@
+import { emptyPicture } from '@/lantern/pictureState'
 import { setAppStorage } from '@/storage/appStorage'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { useBridge, type ActClass } from '@/composables/useBridge'
@@ -84,7 +85,6 @@ const ORCHARD_PATCHES: ImagePatch[] = [
     text: 'The warden waits.',
     area: 'warden',
     when: 'present',
-    standsFor: 'pear-taken',
   },
 ]
 
@@ -567,6 +567,20 @@ describe('useBridge', () => {
       expect(card.picture).toBeUndefined()
     })
 
+    it('reads a picture stored without one of its fields as that field empty', async () => {
+      const bridge = await runningBridge()
+      bridge.saveToSlot(1)
+      const stored = JSON.parse(
+        localStorageMock.getItem('retroquest_save_slots')!,
+      ) as { picture: Record<string, unknown> }[]
+      delete stored[0].picture.patchIds
+      localStorageMock._setRaw('retroquest_save_slots', JSON.stringify(stored))
+      expect(bridge.getSaveSlots()[0].picture).toMatchObject({
+        roomKey: 'Orchard',
+        patchIds: [],
+      })
+    })
+
     it('overwrites existing data in the same slot and keeps the others', async () => {
       const bridge = await runningBridge()
       const existing = Array.from({ length: 8 }, (_, i) =>
@@ -769,14 +783,11 @@ describe('useBridge', () => {
   })
 
   describe('pictureState', () => {
-    it('names the area and the stand-in of each patch that has one', async () => {
+    it('names the area of each patch that is about one', async () => {
       const bridge = await runningBridge()
       expect(bridge.pictureState().patchAreas).toEqual({
         'pear-taken': 'pear',
         'warden-waiting': 'warden',
-      })
-      expect(bridge.pictureState().patchStandIns).toEqual({
-        'warden-waiting': 'pear-taken',
       })
     })
 
@@ -801,14 +812,7 @@ describe('useBridge', () => {
     it('is empty before any room is known', async () => {
       const bridge = fixtureBridge()
       await bridge.init()
-      expect(bridge.pictureState()).toEqual({
-        roomKey: '',
-        variant: '',
-        patchIds: [],
-        patchAreas: {},
-        patchStandIns: {},
-        things: [],
-      })
+      expect(bridge.pictureState()).toEqual(emptyPicture())
     })
 
     it('lists what is in the room that its picture can mark, and follows a pick-up', async () => {

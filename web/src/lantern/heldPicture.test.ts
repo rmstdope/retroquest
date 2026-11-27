@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import type { PictureState } from '@/composables/useBridge'
 import { withHeldAreas } from './heldPicture'
+import { emptyPicture, type PictureState } from './pictureState'
 
 /** A picture state of one room with the given things (all items) and patches. */
 function picture(
@@ -9,11 +9,10 @@ function picture(
   room = 'Cottage',
 ): PictureState {
   return {
+    ...emptyPicture(),
     roomKey: room,
-    variant: '',
     patchIds: Object.keys(patchAreas),
     patchAreas,
-    patchStandIns: {},
     things: things.map((id) => ({
       areaId: id,
       label: id,

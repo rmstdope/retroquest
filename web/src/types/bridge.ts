@@ -1,4 +1,6 @@
 /** Types the bridge hands the UI (the engine's read-model types, re-exported). */
+import type { SavePicture } from '@/lantern/pictureState'
+
 export type {
   ActStats,
   CompletionTree,
@@ -16,18 +18,7 @@ export type {
   SayWord,
 } from '@/engine'
 
-/** The picture a save was made looking at: the room's painting, its other picture and the patches drawn over it. */
-export interface SavePicture {
-  /** The act's name as pictures are filed under it (`Act1`). */
-  actName: string
-  roomKey: string
-  /** The room's other picture the story had changed to; '' for its plain one. */
-  variant: string
-  /** The ids of the patches that applied to the story when it was saved. */
-  patchIds: string[]
-  /** The patch whose picture stands in for each patch that has one until it is made, by patch id; absent in older saves. */
-  patchStandIns?: Record<string, string>
-}
+export type { SavePicture }
 
 /** One entry in the 8-slot save system. */
 export interface SaveSlot {

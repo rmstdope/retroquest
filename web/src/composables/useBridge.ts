@@ -4,7 +4,13 @@
  */
 import { Game, GameController, isOutdatedSave, type Act } from '@/engine'
 import type { SaveSlot } from '@/types/bridge'
-import { areaThingsOf, type AreaThing } from '@/lantern/areaThings'
+import { areaThingsOf } from '@/lantern/areaThings'
+import {
+  emptyPicture,
+  readSavedPicture,
+  savedPictureOf,
+  type PictureState,
+} from '@/lantern/pictureState'
 import { appliedPatchIds } from '@/lantern/roomPatchState'
 import { appStorage } from '@/storage/appStorage'
 
@@ -131,25 +137,15 @@ function cardOf(stored: StoredSave, slot: number, name?: string): SaveSlot {
     room: stored.room ?? null,
     timestamp: stored.timestamp ?? null,
     quests: stored.quests ?? null,
-    ...(stored.picture === undefined ? {} : { picture: stored.picture }),
+    ...(stored.picture === undefined
+      ? {}
+      : { picture: readSavedPicture(stored.picture) }),
     outdated: isOutdatedSave(stored.data),
   }
 }
 
 /** An act the bridge can play. */
 export type ActClass = new () => Act
-
-/** The room the picture is of, the ids of its patches that apply, and what is in the room that its areas can mark. */
-export interface PictureState {
-  roomKey: string
-  variant: string
-  patchIds: string[]
-  /** The area each of the room's patches is about, by patch id (a patch of the whole picture has none). */
-  patchAreas: Record<string, string>
-  /** The patch whose picture stands in for each patch that has one until it is made, by patch id. */
-  patchStandIns: Record<string, string>
-  things: AreaThing[]
-}
 
 /** The acts, loaded on demand so each is its own chunk of the build. */
 async function loadActs(): Promise<ActClass[]> {
@@ -216,15 +212,13 @@ export function useBridge(loader: () => Promise<ActClass[]> = loadActs) {
   function saveDetails(): Omit<StoredSave, 'data' | 'story'> {
     const { controller, game } = requireGame()
     const { actName } = game.currentMusicPlace()
-    const { roomKey, variant, patchIds, patchStandIns } = pictureState()
+    const picture = pictureState()
     return {
       act: controller.getActName(),
       room: controller.getRoomName(),
       timestamp: new Date().toISOString(),
       quests: readQuests(),
-      ...(roomKey
-        ? { picture: { actName, roomKey, variant, patchIds, patchStandIns } }
-        : {}),
+      ...(picture.roomKey ? { picture: savedPictureOf(actName, picture) } : {}),
     }
   }
 
@@ -255,15 +249,7 @@ export function useBridge(loader: () => Promise<ActClass[]> = loadActs) {
   function pictureState(): PictureState {
     const { game } = requireGame()
     const { roomKey, pictureVariant } = game.currentMusicPlace()
-    if (!roomKey)
-      return {
-        roomKey: '',
-        variant: '',
-        patchIds: [],
-        patchAreas: {},
-        patchStandIns: {},
-        things: [],
-      }
+    if (!roomKey) return emptyPicture()
     return {
       roomKey,
       variant: pictureVariant,
@@ -284,13 +270,6 @@ export function useBridge(loader: () => Promise<ActClass[]> = loadActs) {
           .roomPatches(roomKey, pictureVariant)
           .flatMap((patch) =>
             patch.area === undefined ? [] : [[patch.id, patch.area]],
-          ),
-      ),
-      patchStandIns: Object.fromEntries(
-        game.acts[game.currentAct]
-          .roomPatches(roomKey, pictureVariant)
-          .flatMap((patch) =>
-            patch.standsFor === undefined ? [] : [[patch.id, patch.standsFor]],
           ),
       ),
     }

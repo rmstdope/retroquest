@@ -1,4 +1,5 @@
 // @vitest-environment jsdom
+import { emptyPicture, savedPictureOf } from '@/lantern/pictureState'
 import { describe, it, expect, afterEach, beforeEach } from 'vitest'
 import { flushPromises, mount, type VueWrapper } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
@@ -6,12 +7,10 @@ import SaveThumb from './SaveThumb.vue'
 import type { SavePicture, SaveSlot } from '@/types/bridge'
 import { setPictureProbe } from '@/lantern/roomPicture'
 
-const PICTURE: SavePicture = {
-  actName: 'Act1',
+const PICTURE: SavePicture = savedPictureOf('Act1', {
+  ...emptyPicture(),
   roomKey: 'Forge',
-  variant: '',
-  patchIds: [],
-}
+})
 
 function save(picture?: SavePicture): SaveSlot {
   return {
@@ -118,20 +117,6 @@ describe('SaveThumb', () => {
     const sources = w.findAll('img').map((img) => img.attributes('src'))
     expect(sources).toHaveLength(2)
     for (const src of sources) expect(src).toMatch(/thumbs\/.*\.webp$/)
-  })
-
-  it('shows the stand-in of a patch that is not made yet', async () => {
-    setPictureProbe((url) => Promise.resolve(!url.includes('lamp-carried')))
-    const w = await mountThumb(
-      save({
-        ...PICTURE,
-        patchIds: ['lamp-carried'],
-        patchStandIns: { 'lamp-carried': 'lamp-lit' },
-      }),
-    )
-    const sources = w.findAll('img').map((img) => img.attributes('src'))
-    expect(sources).toHaveLength(2)
-    expect(sources[1]).toContain('lamp-lit')
   })
 
   it('falls back to the full picture where there is no small copy', async () => {
