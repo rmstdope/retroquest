@@ -12,7 +12,8 @@
  * - the last window going gives the typing box the cursor, also from what
  *   opened it;
  * - a passing thing going does so only when focus was left on the page itself
- *   and no window is up, so it takes focus from nothing;
+ *   and no window is up, so it takes focus from nothing (another passing thing
+ *   still up does not hold it back: none of them keeps the cursor from the box);
  * - the end of the fade into a game does so when no window is up.
  * With no typing box up, focus stays with what opened the thing.
  */

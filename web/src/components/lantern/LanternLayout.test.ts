@@ -510,6 +510,28 @@ describe('LanternLayout', () => {
       expect(document.activeElement).toBe(w.get('.lq-type-input').element)
     })
 
+    it.each([
+      ['a scroll', 'scroll'],
+      ['a press outside it', 'pointerdown'],
+    ])(
+      'gives the typing box a cursor left on the page when %s closes the menu',
+      async (_how, type) => {
+        const w = await storyWith('You see a [item_name]bucket[/item_name].')
+        window.dispatchEvent(new KeyboardEvent('keydown', { key: 'F1' }))
+        await flushPromises()
+        ;(document.activeElement as HTMLElement).blur()
+        await w.get('.lq-story .theme-item_name').trigger('click')
+        await flushPromises()
+        await nextFrame()
+
+        document.body.dispatchEvent(new Event(type, { bubbles: true }))
+        await flushPromises()
+
+        expect(w.find('[role="menu"]').exists()).toBe(false)
+        expect(document.activeElement).toBe(w.get('.lq-type-input').element)
+      },
+    )
+
     it('leaves focus be when a scroll closes the menu', async () => {
       const w = await storyWith('You see a [item_name]bucket[/item_name].')
       ;(document.activeElement as HTMLElement | null)?.blur()

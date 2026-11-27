@@ -17,21 +17,21 @@ import KeyLine, { type KeyHint } from './KeyLine.vue'
  * working). On close it gives focus back to what had it when it opened,
  * unless `restoreFocus` is off; the typing box takes over when it is up and
  * this was the last window over the game (`useFocusReturn`). `wide` gives a
- * body that needs room, like the map, a panel at least 680px wide that grows to fit its body, up to the window
- * (on a phone it is the full-width sheet like any other). `centered` keeps
- * the panel in the middle of the screen on a phone too, as the pause menu
- * and the quit question are. `keyLine` is the quiet line of keys at the foot
- * (a keyboard player only). `startOnPanel` starts focus on the dialog itself,
- * so no ring shows (a screen with nothing to select). `scrollKeys` lets ↑ ↓
- * (a line), Page Up and Page Down (a page), Home and End scroll the body.
- * `glass` makes the panel a pane of frosted glass, as the title page's dock
- * is: the game shows blurred through it, the panel is rounder, and it rises
- * in as it opens (at once under Reduce motion). It follows the theme like any
- * other panel, and is solid where the device asks for less transparency or
- * the browser cannot blur. `narrow` keeps the panel to 420px, for a short
- * question or list of choices (the pause menu, the quit and finish
- * questions); on a phone a narrow sheet that is not `centered` still spans
- * the whole width.
+ * body that needs room, like the map, a panel at least 680px wide that grows
+ * to fit its body, up to the window (on a phone it is the full-width sheet
+ * like any other). `centered` keeps the panel in the middle of the screen on
+ * a phone too, as the pause menu and the quit question are. `keyLine` is the
+ * quiet line of keys at the foot (a keyboard player only). `startOnPanel`
+ * starts focus on the dialog itself, so no ring shows (a screen with nothing
+ * to select). `scrollKeys` lets ↑ ↓ (a line), Page Up and Page Down (a page),
+ * Home and End scroll the body. `glass` makes the panel a pane of frosted
+ * glass, as the title page's dock is: the game shows blurred through it, the
+ * panel is rounder, and it rises in as it opens (at once under Reduce
+ * motion). It follows the theme like any other panel, and is solid where the
+ * device asks for less transparency or the browser cannot blur. `narrow`
+ * keeps the panel to 420px, for a short question or list of choices (the
+ * pause menu, the quit and finish questions); on a phone a narrow sheet that
+ * is not `centered` still spans the whole width.
  */
 const props = withDefaults(
   defineProps<{

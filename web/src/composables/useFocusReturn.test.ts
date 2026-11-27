@@ -4,6 +4,24 @@ import { flushPromises, mount, type VueWrapper } from '@vue/test-utils'
 import { defineComponent, h, reactive, ref } from 'vue'
 import { provideFocusReturn, useFocusReturn } from './useFocusReturn'
 
+/** What the made-up game can be told to show. */
+interface Up {
+  box: boolean
+  first: boolean
+  second: boolean
+  menu: boolean
+  card: boolean
+  busy: boolean
+}
+
+/** The made-up game as a test sees it. */
+interface Game {
+  box: () => HTMLElement
+  opener: () => HTMLElement
+  window: (name: string) => HTMLElement
+  set: (changes: Partial<Up>) => Promise<void>
+}
+
 /** The one rule for where focus goes when something over the game goes away. */
 describe('useFocusReturn', () => {
   let w: VueWrapper | undefined
@@ -16,8 +34,8 @@ describe('useFocusReturn', () => {
    * A made-up game: a typing box, a button, and things over it that nobody
    * else knows about (two windows and a card), shown by `up`.
    */
-  async function game() {
-    const up = reactive({
+  async function game(): Promise<Game> {
+    const up = reactive<Up>({
       box: true,
       first: false,
       second: false,
@@ -75,11 +93,10 @@ describe('useFocusReturn', () => {
     const find = (selector: string): HTMLElement =>
       document.querySelector<HTMLElement>(selector)!
     return {
-      up,
       box: () => find('input'),
       opener: () => find('[data-opener]'),
       window: (name: string) => find(`[data-window="${name}"]`),
-      async set(changes: Partial<typeof up>): Promise<void> {
+      async set(changes: Partial<Up>): Promise<void> {
         Object.assign(up, changes)
         await flushPromises()
       },
