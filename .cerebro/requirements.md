@@ -103,7 +103,7 @@ PHN-3  On a phone, a laptop and a wide desktop alike, no control or name covers
 ## Help and feedback (HLP)
 
 HLP-1  Help, from the menu or by typing help, lists every command the game accepts.
-       Proven by: nothing yet
+       Proven by: web/e2e/help.spec.ts
 HLP-2  During play, F2 or the ✎ button opens a feedback window. A report goes out
        with the save and a picture of the screen, and a send that is refused keeps
        the player's words.
