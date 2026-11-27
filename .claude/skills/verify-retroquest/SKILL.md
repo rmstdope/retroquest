@@ -13,6 +13,12 @@ file is more specific, this file wins. It adds six things: batching, reaching a 
 protecting the navigator's saves, human checks, exploratory testing, and two environmental
 workarounds (a file Chrome cannot open, a taken port) that replace verify-bead's port refusal.
 
+**Under Copilot**, the browser integration is Copilot's `use-browser`, as verify-bead's *Prepare*
+says: read every "Chrome" and "the Chrome integration" below as `use-browser`, its JavaScript tool
+as `use-browser`'s way to run a script in the page, and its new-window facility as `use-browser`
+opening a window of its own. The rules keep what they protect whichever tool drives the browser, and
+a step `use-browser` cannot do is a blocker, never a skipped check.
+
 Every question below is the verifier's three-action sandwich: `asking --bead <id> --phase verify`,
 the question, then `working --bead <id> --phase verify` before anything else. In a batch, `--bead`
 is the first bead of the batch.
