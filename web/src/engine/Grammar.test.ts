@@ -4,8 +4,10 @@ import {
   DIRECTIONS,
   SHORT_DIRECTIONS,
   VERB_FORMS,
+  debugScriptName,
   helpText,
   prefixesOf,
+  typedAs,
 } from './Grammar'
 
 /** A target that answers every call with the name of the method called. */
@@ -123,5 +125,41 @@ describe('Grammar', () => {
         '  map\n' +
         '  stats\n',
     )
+  })
+})
+
+describe('typedAs', () => {
+  it.each<[string, string, string | null]>([
+    ['load', 'load', ''],
+    ['  LOAD  ', 'load', ''],
+    ['load My-Save', 'load', 'My-Save'],
+    ['Load\t  two words ', 'load', 'two words'],
+    ['loader', 'load', null],
+    ['reload', 'load', null],
+    ['save', 'load', null],
+    ['', 'load', null],
+    ['save slot', 'save', 'slot'],
+    ['quit', 'quit', ''],
+    ['Exit', 'quit', ''],
+    ['quit now', 'quit', null],
+    ['pick up rope', 'take', 'rope'],
+  ])('reads "%s" as a "%s" command: %j', (line, verb, rest) => {
+    expect(typedAs(line, verb)).toBe(rest)
+  })
+})
+
+describe('debugScriptName', () => {
+  it.each<[string, string | null]>([
+    ['debug act1', 'act1'],
+    [' DEBUG  Act1 ', 'act1'],
+    ['debug', null],
+    ['debug two words', null],
+    ['debugger act1', null],
+  ])('reads "%s" as %j', (line, name) => {
+    expect(debugScriptName(line)).toBe(name)
+  })
+
+  it('is no command of the grammar', () => {
+    expect(VERB_FORMS.flatMap((form) => form.verbs)).not.toContain('debug')
   })
 })

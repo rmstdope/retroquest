@@ -1,9 +1,12 @@
 import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest'
 import { createPinia, setActivePinia } from 'pinia'
 import {
+  passageAnswer,
   usePassageStore,
   PASSAGE_HALF_MS,
   PASSAGE_WAIT_MS,
+  type PassageAnswer,
+  type PassagePhase,
 } from './usePassageStore'
 
 describe('usePassageStore', () => {
@@ -100,8 +103,25 @@ describe('usePassageStore', () => {
     expect(passage.phase).toBe('idle')
   })
 
-  describe('skipThen (a typed command as the new screen rises)', () => {
-    it('brings the screen up, runs the command, then the passage up', () => {
+  it.each<[PassagePhase, string, PassageAnswer]>([
+    ['idle', 'look', 'run'],
+    ['idle', 'load', 'run'],
+    ['out', 'look', 'drop'],
+    ['out', '', 'drop'],
+    ['out', 'load', 'runThenRise'],
+    ['out', ' LOAD slot ', 'runThenRise'],
+    ['out', 'loader', 'drop'],
+    ['dark', 'look', 'raiseThenRun'],
+    ['dark', 'load', 'runThenRise'],
+    ['in', 'look', 'raiseThenRun'],
+    ['in', 'load slot', 'runThenRise'],
+  ])('in phase %s answers a typed "%s" with %s', (phase, line, answer) => {
+    expect(passageAnswer(phase, line)).toBe(answer)
+  })
+
+  describe('typed (a command typed during a passage)', () => {
+    /** A passage whose new screen is rising, and the order things happen in. */
+    function rising() {
       const passage = usePassageStore()
       const order: string[] = []
       passage.begin(
@@ -109,27 +129,47 @@ describe('usePassageStore', () => {
         () => order.push('up'),
       )
       vi.advanceTimersByTime(PASSAGE_HALF_MS + 200)
-      passage.skipThen(() => order.push(`run in ${passage.phase}`))
+      return { passage, order }
+    }
+
+    it('brings the screen up before a command', () => {
+      const { passage, order } = rising()
+      passage.typed('look', () => order.push(`run in ${passage.phase}`))
+      expect(order).toEqual(['apply', 'up', 'run in idle'])
+    })
+
+    it('brings the screen up and runs a load before the passage up', () => {
+      const { passage, order } = rising()
+      passage.typed('load', () => order.push(`run in ${passage.phase}`))
       expect(order).toEqual(['apply', 'run in idle', 'up'])
     })
 
-    it('drops the passage up when the command begins a passage of its own (rq-r9ax)', () => {
+    it('drops the passage up when a load begins a passage of its own (rq-r9ax)', () => {
       const passage = usePassageStore()
       const firstUp = vi.fn()
       const secondUp = vi.fn()
       passage.begin(vi.fn(), firstUp)
       vi.advanceTimersByTime(PASSAGE_HALF_MS + 200)
-      passage.skipThen(() => passage.begin(vi.fn(), secondUp))
+      passage.typed('load', () => passage.begin(vi.fn(), secondUp))
       expect(passage.phase).toBe('out')
       vi.advanceTimersByTime(PASSAGE_HALF_MS * 2)
       expect(firstUp).not.toHaveBeenCalled()
       expect(secondUp).toHaveBeenCalledTimes(1)
     })
 
+    it('neither runs nor skips for a command typed while the old screen fades out', () => {
+      const passage = usePassageStore()
+      const run = vi.fn()
+      passage.begin(vi.fn(), vi.fn())
+      passage.typed('look', run)
+      expect(run).not.toHaveBeenCalled()
+      expect(passage.phase).toBe('out')
+    })
+
     it('just runs the command when no passage is under way', () => {
       const passage = usePassageStore()
       const run = vi.fn()
-      passage.skipThen(run)
+      passage.typed('load', run)
       expect(run).toHaveBeenCalledTimes(1)
       expect(passage.phase).toBe('idle')
     })

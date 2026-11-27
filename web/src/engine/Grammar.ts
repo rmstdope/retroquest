@@ -1,8 +1,9 @@
 /**
  * The grammar of the game's commands, declared once. `CommandParser` reads the
- * verbs from it, `Game.getCommandCompletions` builds the suggestion tree from
- * it and `Game.help` prints its help lines, so adding or removing a word the
- * game understands is one edit here (and the parser branch that runs it).
+ * verbs from it, the UI asks `typedAs` what a typed line is,
+ * `Game.getCommandCompletions` builds the suggestion tree from it and
+ * `Game.help` prints its help lines, so adding or removing a word the game
+ * understands is one edit here (and the parser branch that runs it).
  */
 
 /** What a verb is followed by, which decides the suggestions after it. */
@@ -232,6 +233,34 @@ export function formOf(verb: string): VerbForm {
   const form = VERB_FORMS.find((candidate) => candidate.verbs.includes(verb))
   if (form === undefined) throw new Error(`No grammar for "${verb}"`)
   return form
+}
+
+/**
+ * Whether the typed `line` (trimmed, in any case) is a command of the form
+ * `verb` belongs to: the text after its verb, as typed ('' when bare), or null
+ * for any other line. A verb ends at the line's end or at a space, and a form
+ * that takes nothing is only its bare verb.
+ */
+export function typedAs(line: string, verb: string): string | null {
+  const form = formOf(verb)
+  const typed = line.trim()
+  for (const word of form.verbs) {
+    if (typed.slice(0, word.length).toLowerCase() !== word) continue
+    const after = typed.slice(word.length)
+    if (after === '') return ''
+    if (form.argument !== 'none' && /^\s/.test(after)) return after.trim()
+  }
+  return null
+}
+
+/**
+ * The script a dev build's `debug <name>` line asks for, lowercased, or null
+ * for any other line. Not a command of the game, so it is no form of the
+ * grammar: help, suggestions and the parser never see it.
+ */
+export function debugScriptName(line: string): string | null {
+  const match = /^debug\s+(\S+)$/i.exec(line.trim())
+  return match ? match[1].toLowerCase() : null
 }
 
 /** The verbs of the form `verb` belongs to, each followed by a space, for prefix matching. */
