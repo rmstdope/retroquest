@@ -119,8 +119,8 @@ jobs:
     # The e2e jobs run in the Playwright image, which holds the browser and its system
     # packages, so neither installs anything from a mirror (rq-2ram). The image tag must be the
     # `@playwright/test` version in web/package-lock.json: web/ciFlakes.config.test.ts fails
-    # web-test when they differ, so a Dependabot bump of that package changes both tags here in
-    # the same pull request. Nothing downloads a browser to cover a mismatch; the e2e tests
+    # web-test when they differ, so a Dependabot bump of that package stays red until both tags
+    # here are changed in the same pull request. Nothing downloads a browser to cover a mismatch; the e2e tests
     # fail too. `--user 1001` is the runner's own user, which owns the checkout.
     web-e2e:
         name: web-e2e (${{ matrix.shard }})
