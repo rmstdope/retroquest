@@ -101,7 +101,8 @@ export class Act {
   /**
    * The failure for a spell the player does not know, or null for the
    * engine's plain "You don't know any spell called ...". Override when the
-   * story has taken spells away.
+   * story has taken spells away. The name is as typed (lower case), then
+   * again without its article when the first answer is null.
    */
   unknownSpell(_gameState: GameState, _spellName: string): string | null {
     return null

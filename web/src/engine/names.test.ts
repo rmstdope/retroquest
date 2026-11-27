@@ -87,4 +87,12 @@ describe('indefiniteArticle', () => {
     expect(indefiniteArticle('Iron key')).toBe('an')
     expect(indefiniteArticle('lantern')).toBe('a')
   })
+
+  it('goes by sound where a leading vowel is said as a consonant', () => {
+    for (const name of ['unicorn', 'useful stone', 'usual coin', 'euphorbia']) {
+      expect(indefiniteArticle(name)).toBe('a')
+    }
+    expect(indefiniteArticle('One coin')).toBe('a')
+    expect(indefiniteArticle(' umbrella')).toBe('an')
+  })
 })

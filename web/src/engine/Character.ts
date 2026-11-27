@@ -138,9 +138,10 @@ export class Character {
 
   /**
    * The player uses something by name with this character that is not an
-   * item in the inventory, such as an animal carried in the story. Return the story text
-   * when the character takes it, or null (the default) for the engine's plain
-   * "You don't have ..." failure.
+   * item in the inventory, such as an animal carried in the story. The name
+   * is as typed, then again without its article when the first answer is
+   * null. Return the story text when the character takes it, or null (the
+   * default) for the engine's plain "You don't have ..." failure.
    */
   giveUnheld(_gameState: GameState, _name: string): string | null {
     return null
