@@ -1,0 +1,142 @@
+<!doctype html>
+<!--
+  The house frame of a detailed drawing (cb-buko; the agreed look is docs/ui/cb-buko-tabs.html and
+  cb-buko-states.html). scripts/ux-sheet fills the two marker lines below; nothing else writes here.
+  Every class starts with `ux-' and only `body' is styled by element, so what is drawn inside a tab
+  keeps the product's own look.
+-->
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A long part shown in pages: do its pages wait under the pointer too? · A click meant for a story card that leaves by itself</title>
+<style>
+  body{margin:0;padding:1px 8px;background:#f4f4f5}
+  .ux-page{max-width:980px;margin:14px auto 30px;background:#fff;border:1px solid #e4e4e7;border-radius:10px}
+  .ux-head,.ux-tabs,.ux-intro{font-family:system-ui,-apple-system,sans-serif;line-height:normal;text-align:left;color:#18181b}
+  .ux-head{padding:14px 16px 0}
+  .ux-work{font-size:12px;color:#71717a;text-transform:uppercase;letter-spacing:.04em}
+  .ux-heading{margin:2px 0 10px;font-size:19px}
+  .ux-tabrow{position:relative}
+  .ux-tabrow::before,.ux-tabrow::after{content:"";position:absolute;top:0;bottom:1px;width:44px;pointer-events:none;opacity:0}
+  .ux-tabrow::before{left:0;background:linear-gradient(to left,rgba(255,255,255,0),#fff)}
+  .ux-tabrow::after{right:0;background:linear-gradient(to right,rgba(255,255,255,0),#fff)}
+  .ux-tabrow.ux-more-left::before,.ux-tabrow.ux-more-right::after{opacity:1}
+  .ux-tabs{display:flex;gap:4px;border-bottom:1px solid #e4e4e7;padding:0 16px;overflow-x:auto}
+  .ux-tab{flex:none;border:0;border-radius:0;background:none;margin:0;font:inherit;font-size:14px;padding:8px 12px;color:#52525b;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap}
+  .ux-tab[aria-selected="true"]{color:#18181b;border-bottom-color:#7c3aed;font-weight:600}
+  .ux-tag{display:inline-block;font-size:11px;border-radius:999px;padding:1px 7px;margin-left:6px;font-weight:600}
+  .ux-rec{background:#ede9fe;color:#5b21b6}
+  .ux-agreed{background:#dcfce7;color:#166534}
+  .ux-panel[hidden]{display:none!important}
+  .ux-intro{padding:12px 16px 4px}
+  .ux-name{margin:0;font-size:16px}
+  .ux-cost{margin:3px 0 0;font-size:13px;color:#52525b}
+  .ux-why{margin:3px 0 0;font-size:13px;color:#5b21b6}
+  .ux-draw{padding:12px 16px 16px}
+</style></head><body>
+<style>
+.fr{display:flex;gap:12px;flex-wrap:wrap}
+.f{flex:1 1 220px;min-width:0}
+.pic{position:relative;height:170px;border-radius:8px;background:linear-gradient(#3b4a5e,#6b5a3e 70%,#3a2e20);overflow:hidden}
+.card{position:absolute;left:10px;right:10px;bottom:10px;background:rgba(20,16,10,.86);color:#f1e6cf;border-radius:6px;padding:8px 10px 10px;font:13px/1.35 Georgia,serif}
+.bar{height:3px;background:#5a4a30;margin-top:7px;border-radius:2px}.bar i{display:block;height:3px;background:#e9c27a;border-radius:2px}
+.ptr{position:absolute;font-size:20px;color:#fff;text-shadow:0 0 3px #000}
+.voice{position:absolute;top:8px;left:10px;background:#e9c27a;color:#2a1f10;font:11px sans-serif;border-radius:10px;padding:2px 8px}
+.cap{font:13px/1.4 system-ui,sans-serif;margin-top:6px}
+.cap b{display:block}
+.pg{font:11px sans-serif;color:#c9b58f;float:right}
+</style>
+<div class="ux-page">
+<header class="ux-head">
+<div class="ux-work">A click meant for a story card that leaves by itself</div>
+<h1 class="ux-heading">A long part shown in pages: do its pages wait under the pointer too?</h1>
+</header>
+<div class="ux-tabrow"><div class="ux-tabs" role="tablist">
+<button type="button" class="ux-tab" role="tab" data-ux-tab="A" id="ux-tab-A" aria-controls="ux-panel-A" aria-selected="true" tabindex="0">A — Unnarrated wait, narrated follow the voice<span class="ux-tag ux-rec">Recommended</span><span class="ux-tag ux-agreed">Agreed</span></button>
+<button type="button" class="ux-tab" role="tab" data-ux-tab="B" id="ux-tab-B" aria-controls="ux-panel-B" aria-selected="false" tabindex="-1">B — Every page waits</button>
+<button type="button" class="ux-tab" role="tab" data-ux-tab="C" id="ux-tab-C" aria-controls="ux-panel-C" aria-selected="false" tabindex="-1">C — Pages always turn</button>
+</div></div>
+<section class="ux-panel" role="tabpanel" id="ux-panel-A" aria-labelledby="ux-tab-A">
+<div class="ux-intro">
+<h2 class="ux-name">A — Unnarrated wait, narrated follow the voice<span class="ux-tag ux-rec">Recommended</span><span class="ux-tag ux-agreed">Agreed</span></h2>
+<p class="ux-cost">Under the pointer, a narrated card can still turn its page, the way it does today.</p>
+<p class="ux-why">Recommended: Text without a voice waits like a part; with a voice, the words on screen always match what is being said.</p>
+</div>
+<div class="ux-draw">
+<div class=fr>
+<div class=f><div class=pic><div class=card><span class=pg>1/2</span>Grandfather's journal falls open in your hands. The ink is faded, and the first lines speak of a storm<div class=bar><i style="width:15%"></i></div></div><div class=ptr style="left:55%;bottom:40px">&#x2196;</div></div><div class=cap><b>No voice, pointer on page 1</b>Page 1 does not turn while the pointer is on it, as a part does not.</div></div>
+<div class=f><div class=pic><div class=voice>&#x1F50A; reading page 2</div><div class=card><span class=pg>2/2</span>…that broke the mill wheel and drowned the lower field. He writes that the well knew it was coming.</div><div class=ptr style="left:55%;bottom:40px">&#x2196;</div></div><div class=cap><b>Voice: it reaches page 2</b>The page turns with the voice, even under the pointer.</div></div>
+<div class=f><div class=pic><div class=card><span class=pg>2/2</span>…that broke the mill wheel and drowned the lower field. He writes that the well knew it was coming.</div><div class=ptr style="left:55%;bottom:40px">&#x2196;</div></div><div class=cap><b>Voice ends on the last page</b>The card waits until the pointer leaves, then 1.5 s.</div></div>
+</div>
+</div>
+</section>
+<section class="ux-panel" role="tabpanel" id="ux-panel-B" aria-labelledby="ux-tab-B" hidden>
+<div class="ux-intro">
+<h2 class="ux-name">B — Every page waits</h2>
+<p class="ux-cost">With a voice, it can be reading words that are not on the screen.</p>
+</div>
+<div class="ux-draw">
+<div class=fr>
+<div class=f><div class=pic><div class=card><span class=pg>1/2</span>Grandfather's journal falls open in your hands. The ink is faded, and the first lines speak of a storm<div class=bar><i style="width:15%"></i></div></div><div class=ptr style="left:55%;bottom:40px">&#x2196;</div></div><div class=cap><b>No voice, pointer on page 1</b>Page 1 does not turn while the pointer is on it.</div></div>
+<div class=f><div class=pic><div class=voice>&#x1F50A; reading page 2</div><div class=card><span class=pg>1/2</span>Grandfather's journal falls open in your hands. The ink is faded, and the first lines speak of a storm</div><div class=ptr style="left:55%;bottom:40px">&#x2196;</div></div><div class=cap><b>Voice: it reaches page 2</b>Page 1 stays; the voice reads on into page 2, unseen.</div></div>
+<div class=f><div class=pic><div class=card><span class=pg>2/2</span>…that broke the mill wheel and drowned the lower field. He writes that the well knew it was coming.</div></div><div class=cap><b>Pointer leaves</b>The page jumps to where the voice is (page 2).</div></div>
+</div>
+</div>
+</section>
+<section class="ux-panel" role="tabpanel" id="ux-panel-C" aria-labelledby="ux-tab-C" hidden>
+<div class="ux-intro">
+<h2 class="ux-name">C — Pages always turn</h2>
+<p class="ux-cost">Only the step to the next part waits; a long passage can still turn under the pointer.</p>
+</div>
+<div class="ux-draw">
+<div class=fr>
+<div class=f><div class=pic><div class=card><span class=pg>2/2</span>…that broke the mill wheel and drowned the lower field. He writes that the well knew it was coming.<div class=bar><i style="width:90%"></i></div></div><div class=ptr style="left:55%;bottom:40px">&#x2196;</div></div><div class=cap><b>No voice, pointer on page 1</b>Page 1 reads its time, then page 2 comes up under the pointer.</div></div>
+<div class=f><div class=pic><div class=voice>&#x1F50A; reading page 2</div><div class=card><span class=pg>2/2</span>…that broke the mill wheel and drowned the lower field. He writes that the well knew it was coming.</div><div class=ptr style="left:55%;bottom:40px">&#x2196;</div></div><div class=cap><b>Voice: it reaches page 2</b>The page turns with the voice.</div></div>
+<div class=f><div class=pic><div class=card><span class=pg>2/2</span>…that broke the mill wheel and drowned the lower field. He writes that the well knew it was coming.</div><div class=ptr style="left:55%;bottom:40px">&#x2196;</div></div><div class=cap><b>Last page, time up</b>Here the card waits until the pointer leaves.</div></div>
+</div>
+</div>
+</section>
+</div>
+<script>
+// Tabs: one panel on screen, the left and right arrow keys move between them, nothing persists.
+(function(){
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.ux-tabs > .ux-tab'));
+  if (!tabs.length) return;
+  var row = tabs[0].parentNode, wrap = row.parentNode;
+  function selected(){ return tabs.findIndex(function(t){ return t.getAttribute('aria-selected') === 'true'; }); }
+  // A faded edge on whichever side has tabs out of view.
+  function fade(){
+    wrap.classList.toggle('ux-more-left', row.scrollLeft > 1);
+    wrap.classList.toggle('ux-more-right', row.scrollLeft + row.clientWidth < row.scrollWidth - 1);
+  }
+  // Scrolls the row alone: scrollIntoView would move the page too.
+  function reveal(tab){
+    var t = tab.getBoundingClientRect(), r = row.getBoundingClientRect();
+    if (t.left < r.left) row.scrollLeft -= r.left - t.left + 16;
+    else if (t.right > r.right) row.scrollLeft += t.right - r.right + 16;
+    fade();
+  }
+  function select(i){
+    tabs.forEach(function(t, n){
+      t.setAttribute('aria-selected', n === i ? 'true' : 'false');
+      t.tabIndex = n === i ? 0 : -1;
+      document.getElementById(t.getAttribute('aria-controls')).hidden = n !== i;
+    });
+    reveal(tabs[i]);
+  }
+  tabs.forEach(function(t, i){ t.addEventListener('click', function(){ select(i); }); });
+  document.addEventListener('keydown', function(e){
+    var step = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+    if (!step || e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+    // A control a drawing carries (a field, a button, a slider) keeps its own arrows.
+    if (e.target.closest && e.target.closest('.ux-draw')) return;
+    e.preventDefault();
+    var focused = tabs.indexOf(document.activeElement) >= 0;
+    var i = (selected() + step + tabs.length) % tabs.length;
+    select(i);
+    if (focused) tabs[i].focus({preventScroll: true});
+  });
+  row.addEventListener('scroll', fade);
+  window.addEventListener('resize', fade);
+  window.addEventListener('load', function(){ reveal(tabs[selected()]); });
+  reveal(tabs[selected()]);
+})();
+</script></body></html>

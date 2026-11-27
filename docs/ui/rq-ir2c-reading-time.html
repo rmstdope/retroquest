@@ -1,0 +1,128 @@
+<!doctype html>
+<!--
+  The house frame of a detailed drawing (cb-buko; the agreed look is docs/ui/cb-buko-tabs.html and
+  cb-buko-states.html). scripts/ux-sheet fills the two marker lines below; nothing else writes here.
+  Every class starts with `ux-' and only `body' is styled by element, so what is drawn inside a tab
+  keeps the product's own look.
+-->
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>While the pointer rests on a card, does its reading time keep counting? · A click meant for a story card that leaves by itself</title>
+<style>
+  body{margin:0;padding:1px 8px;background:#f4f4f5}
+  .ux-page{max-width:980px;margin:14px auto 30px;background:#fff;border:1px solid #e4e4e7;border-radius:10px}
+  .ux-head,.ux-tabs,.ux-intro{font-family:system-ui,-apple-system,sans-serif;line-height:normal;text-align:left;color:#18181b}
+  .ux-head{padding:14px 16px 0}
+  .ux-work{font-size:12px;color:#71717a;text-transform:uppercase;letter-spacing:.04em}
+  .ux-heading{margin:2px 0 10px;font-size:19px}
+  .ux-tabrow{position:relative}
+  .ux-tabrow::before,.ux-tabrow::after{content:"";position:absolute;top:0;bottom:1px;width:44px;pointer-events:none;opacity:0}
+  .ux-tabrow::before{left:0;background:linear-gradient(to left,rgba(255,255,255,0),#fff)}
+  .ux-tabrow::after{right:0;background:linear-gradient(to right,rgba(255,255,255,0),#fff)}
+  .ux-tabrow.ux-more-left::before,.ux-tabrow.ux-more-right::after{opacity:1}
+  .ux-tabs{display:flex;gap:4px;border-bottom:1px solid #e4e4e7;padding:0 16px;overflow-x:auto}
+  .ux-tab{flex:none;border:0;border-radius:0;background:none;margin:0;font:inherit;font-size:14px;padding:8px 12px;color:#52525b;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap}
+  .ux-tab[aria-selected="true"]{color:#18181b;border-bottom-color:#7c3aed;font-weight:600}
+  .ux-tag{display:inline-block;font-size:11px;border-radius:999px;padding:1px 7px;margin-left:6px;font-weight:600}
+  .ux-rec{background:#ede9fe;color:#5b21b6}
+  .ux-agreed{background:#dcfce7;color:#166534}
+  .ux-panel[hidden]{display:none!important}
+  .ux-intro{padding:12px 16px 4px}
+  .ux-name{margin:0;font-size:16px}
+  .ux-cost{margin:3px 0 0;font-size:13px;color:#52525b}
+  .ux-why{margin:3px 0 0;font-size:13px;color:#5b21b6}
+  .ux-draw{padding:12px 16px 16px}
+</style></head><body>
+<style>
+.fr{display:flex;gap:12px;flex-wrap:wrap}
+.f{flex:1 1 220px;min-width:0}
+.pic{position:relative;height:170px;border-radius:8px;background:linear-gradient(#3b4a5e,#6b5a3e 70%,#3a2e20);overflow:hidden}
+.card{position:absolute;left:10px;right:10px;bottom:10px;background:rgba(20,16,10,.86);color:#f1e6cf;border-radius:6px;padding:8px 10px 10px;font:13px/1.35 Georgia,serif}
+.bar{height:3px;background:#5a4a30;margin-top:7px;border-radius:2px}.bar i{display:block;height:3px;background:#e9c27a;border-radius:2px}
+.ptr{position:absolute;font-size:20px;color:#fff;text-shadow:0 0 3px #000}
+.voice{position:absolute;top:8px;left:10px;background:#e9c27a;color:#2a1f10;font:11px sans-serif;border-radius:10px;padding:2px 8px}
+.cap{font:13px/1.4 system-ui,sans-serif;margin-top:6px}
+.cap b{display:block}
+.pg{font:11px sans-serif;color:#c9b58f;float:right}
+</style>
+<div class="ux-page">
+<header class="ux-head">
+<div class="ux-work">A click meant for a story card that leaves by itself</div>
+<h1 class="ux-heading">While the pointer rests on a card, does its reading time keep counting?</h1>
+</header>
+<div class="ux-tabrow"><div class="ux-tabs" role="tablist">
+<button type="button" class="ux-tab" role="tab" data-ux-tab="A" id="ux-tab-A" aria-controls="ux-panel-A" aria-selected="true" tabindex="0">A — Paused<span class="ux-tag ux-rec">Recommended</span><span class="ux-tag ux-agreed">Agreed</span></button>
+<button type="button" class="ux-tab" role="tab" data-ux-tab="B" id="ux-tab-B" aria-controls="ux-panel-B" aria-selected="false" tabindex="-1">B — Counts on</button>
+</div></div>
+<section class="ux-panel" role="tabpanel" id="ux-panel-A" aria-labelledby="ux-tab-A">
+<div class="ux-intro">
+<h2 class="ux-name">A — Paused<span class="ux-tag ux-rec">Recommended</span><span class="ux-tag ux-agreed">Agreed</span></h2>
+<p class="ux-cost">A card someone reads slowly stays its full time after they look away.</p>
+<p class="ux-why">Recommended: The usual rule for things that leave by themselves (notifications): the timer stops under the pointer and the time left runs on after.</p>
+</div>
+<div class="ux-draw">
+<div class=fr>
+<div class=f><div class=pic><div class=card>The gate creaks open. Beyond it, the orchard lies grey under frost.<div class=bar><i style="width:60%"></i></div></div><div class=ptr style="left:55%;bottom:40px">&#x2196;</div></div><div class=cap><b>1. Pointer arrives, 8 s left</b>The thin bar stops where it is.</div></div>
+<div class=f><div class=pic><div class=card>The gate creaks open. Beyond it, the orchard lies grey under frost.<div class=bar><i style="width:60%"></i></div></div><div class=ptr style="left:55%;bottom:40px">&#x2196;</div></div><div class=cap><b>2. Five seconds later</b>Bar still stands still; still 8 s left.</div></div>
+<div class=f><div class=pic><div class=card>The gate creaks open. Beyond it, the orchard lies grey under frost.<div class=bar><i style="width:60%"></i></div></div></div><div class=cap><b>3. Pointer leaves</b>The bar moves on from where it stopped; the card goes on 8 s later.</div></div>
+</div><p class=cap>A narrated part has no bar and its voice is not paused: if the line ends under the pointer, the card waits, and goes on 1.5 s after the pointer leaves.</p>
+</div>
+</section>
+<section class="ux-panel" role="tabpanel" id="ux-panel-B" aria-labelledby="ux-tab-B" hidden>
+<div class="ux-intro">
+<h2 class="ux-name">B — Counts on</h2>
+<p class="ux-cost">The card only waits once its time is up; a short look still loses reading time.</p>
+</div>
+<div class="ux-draw">
+<div class=fr>
+<div class=f><div class=pic><div class=card>The gate creaks open. Beyond it, the orchard lies grey under frost.<div class=bar><i style="width:60%"></i></div></div><div class=ptr style="left:55%;bottom:40px">&#x2196;</div></div><div class=cap><b>1. Pointer arrives, 8 s left</b>The bar keeps shrinking.</div></div>
+<div class=f><div class=pic><div class=card>The gate creaks open. Beyond it, the orchard lies grey under frost.<div class=bar><i style="width:22%"></i></div></div><div class=ptr style="left:55%;bottom:40px">&#x2196;</div></div><div class=cap><b>2. Five seconds later</b>3 s left. If it runs out, the card stays, bar empty.</div></div>
+<div class=f><div class=pic><div class=card>The gate creaks open. Beyond it, the orchard lies grey under frost.<div class=bar><i style="width:22%"></i></div></div></div><div class=cap><b>3. Pointer leaves</b>The card goes on 3 s later (or 1.5 s later if its time ran out under the pointer).</div></div>
+</div>
+</div>
+</section>
+</div>
+<script>
+// Tabs: one panel on screen, the left and right arrow keys move between them, nothing persists.
+(function(){
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.ux-tabs > .ux-tab'));
+  if (!tabs.length) return;
+  var row = tabs[0].parentNode, wrap = row.parentNode;
+  function selected(){ return tabs.findIndex(function(t){ return t.getAttribute('aria-selected') === 'true'; }); }
+  // A faded edge on whichever side has tabs out of view.
+  function fade(){
+    wrap.classList.toggle('ux-more-left', row.scrollLeft > 1);
+    wrap.classList.toggle('ux-more-right', row.scrollLeft + row.clientWidth < row.scrollWidth - 1);
+  }
+  // Scrolls the row alone: scrollIntoView would move the page too.
+  function reveal(tab){
+    var t = tab.getBoundingClientRect(), r = row.getBoundingClientRect();
+    if (t.left < r.left) row.scrollLeft -= r.left - t.left + 16;
+    else if (t.right > r.right) row.scrollLeft += t.right - r.right + 16;
+    fade();
+  }
+  function select(i){
+    tabs.forEach(function(t, n){
+      t.setAttribute('aria-selected', n === i ? 'true' : 'false');
+      t.tabIndex = n === i ? 0 : -1;
+      document.getElementById(t.getAttribute('aria-controls')).hidden = n !== i;
+    });
+    reveal(tabs[i]);
+  }
+  tabs.forEach(function(t, i){ t.addEventListener('click', function(){ select(i); }); });
+  document.addEventListener('keydown', function(e){
+    var step = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+    if (!step || e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+    // A control a drawing carries (a field, a button, a slider) keeps its own arrows.
+    if (e.target.closest && e.target.closest('.ux-draw')) return;
+    e.preventDefault();
+    var focused = tabs.indexOf(document.activeElement) >= 0;
+    var i = (selected() + step + tabs.length) % tabs.length;
+    select(i);
+    if (focused) tabs[i].focus({preventScroll: true});
+  });
+  row.addEventListener('scroll', fade);
+  window.addEventListener('resize', fade);
+  window.addEventListener('load', function(){ reveal(tabs[selected()]); });
+  reveal(tabs[selected()]);
+})();
+</script></body></html>
