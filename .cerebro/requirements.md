@@ -10,7 +10,7 @@ STY-1  A player can play all four acts from start to finish along the golden pat
        Proven by: web/e2e/redLine.spec.ts
 STY-2  A player plays by typing commands. A command the game does not understand is
        answered in words and changes nothing.
-       Proven by: nothing yet
+       Proven by: web/e2e/unknownCommand.spec.ts
 STY-3  An act's main quest can be finished only when all its side quests are done.
        The journal shows each quest's log as it moves on, and hint gives a nudge in
        the game's own voice.
