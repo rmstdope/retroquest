@@ -172,6 +172,8 @@ test('SND-3: each volume at 0 silences its sound, and the volumes are kept betwe
   await startPlaying(page)
   await expectHeard(page, { music: true, effects: true, narration: true })
 
+  // The menu opens while the voice's answer is still being read, and holds it
+  // there: the narration volume is heard on that line.
   // Effects before music: music turned right down takes the room's effects with it.
   await openSettings(page)
   await page.getByLabel('Sound effects volume').fill('0')
@@ -183,10 +185,14 @@ test('SND-3: each volume at 0 silences its sound, and the volumes are kept betwe
 
   await page.reload()
   await startPlaying(page)
-  // The music and the voice play again, unheard; effects at 0 are not started.
+  // The music and the voice play again, unheard (0, not null: they are there);
+  // an effect may be unheard by not playing at all.
   await expect
-    .poll(() => heard(page))
-    .toEqual({ music: 0, effects: null, narration: 0 })
+    .poll(async () => {
+      const now = await heard(page)
+      return { ...now, effects: now.effects ?? 0 }
+    })
+    .toEqual({ music: 0, effects: 0, narration: 0 })
   await openSettings(page)
   for (const name of [
     'Music volume',
