@@ -119,6 +119,18 @@ describe('SaveThumb', () => {
     for (const src of sources) expect(src).toMatch(/thumbs\/.*\.webp$/)
   })
 
+  it('draws the patches of a save that also kept the old stand-ins', async () => {
+    const picture = {
+      ...PICTURE,
+      patchIds: ['lamp-carried'],
+      patchStandIns: { 'lamp-carried': 'lamp-lit' },
+    }
+    const w = await mountThumb(save(picture))
+    const sources = w.findAll('img').map((img) => img.attributes('src'))
+    expect(sources).toHaveLength(2)
+    expect(sources[1]).toContain('lamp-carried')
+  })
+
   it('falls back to the full picture where there is no small copy', async () => {
     setPictureProbe((url) => Promise.resolve(!url.includes('/thumbs/')))
     const w = await mountThumb(save({ ...PICTURE, patchIds: ['lamp'] }))

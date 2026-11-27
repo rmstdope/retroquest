@@ -581,6 +581,19 @@ describe('useBridge', () => {
       })
     })
 
+    it('lists a save whose stored picture is null, without a picture', async () => {
+      const bridge = await runningBridge()
+      bridge.saveToSlot(1)
+      const stored = JSON.parse(
+        localStorageMock.getItem('retroquest_save_slots')!,
+      ) as { picture: unknown }[]
+      stored[0].picture = null
+      localStorageMock._setRaw('retroquest_save_slots', JSON.stringify(stored))
+      const card = bridge.getSaveSlots()[0]
+      expect(card.room).toBe("Elior's Cottage")
+      expect(card.picture).toBeUndefined()
+    })
+
     it('overwrites existing data in the same slot and keeps the others', async () => {
       const bridge = await runningBridge()
       const existing = Array.from({ length: 8 }, (_, i) =>

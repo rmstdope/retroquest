@@ -137,9 +137,7 @@ function cardOf(stored: StoredSave, slot: number, name?: string): SaveSlot {
     room: stored.room ?? null,
     timestamp: stored.timestamp ?? null,
     quests: stored.quests ?? null,
-    ...(stored.picture === undefined
-      ? {}
-      : { picture: readSavedPicture(stored.picture) }),
+    ...(stored.picture ? { picture: readSavedPicture(stored.picture) } : {}),
     outdated: isOutdatedSave(stored.data),
   }
 }
