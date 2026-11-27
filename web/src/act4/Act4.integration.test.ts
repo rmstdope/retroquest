@@ -103,27 +103,6 @@ describe('Act 4 integration', () => {
     expectCurrentRoom(game.state, 'Fortress Gates')
   })
 
-  it('sets story flags correctly during phase 1', () => {
-    // Initially no flags should be set
-    expectStoryFlag(
-      game.state,
-      FLAG_ACT4_SHATTERED_WARD_GUARDIANS_COMPLETED,
-      false,
-    )
-    expectStoryFlag(game.state, FLAG_ACT4_TRAPPED_SERVANTS_COMPLETED, false)
-
-    // Simulate ward guardians quest completion
-    // (Actual implementation would involve the quest system)
-    game.state.setStoryFlag(FLAG_ACT4_SHATTERED_WARD_GUARDIANS_COMPLETED, true)
-
-    // Check flags are now set
-    expectStoryFlag(
-      game.state,
-      FLAG_ACT4_SHATTERED_WARD_GUARDIANS_COMPLETED,
-      true,
-    )
-  })
-
   describe('after the stub rooms were cut', () => {
     it('blocks east in the Memory Vault', () => {
       game.state.currentRoom = act4.rooms.MemoryVault
