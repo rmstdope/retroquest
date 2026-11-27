@@ -76,8 +76,7 @@ test("STY-3: the main quest waits for an open side quest, the quest's log moves 
   expect(late).toBeGreaterThan(early)
   /** Send part of the walk as a player's commands, without the typing box. */
   const walk = async (from: number, to?: number): Promise<void> => {
-    for (const command of steps.slice(from, to))
-      await sendToGame(page, command)
+    for (const command of steps.slice(from, to)) await sendToGame(page, command)
   }
   const newest = page.getByTestId('turn').last()
 
