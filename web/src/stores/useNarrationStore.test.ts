@@ -826,6 +826,80 @@ describe('a narrated move whose picture is still changing', () => {
     expect(FakeAudio.all).toHaveLength(3)
   })
 
+  it('stops before a held unit until the hold is released (a hurry does not pass it)', async () => {
+    const narration = useNarrationStore()
+    narration.begin(1, [voiced(), voiced()], 'act1')
+    narration.holdBefore(1, 1)
+    // The voice in hand plays on to its end.
+    expect(narration.speaking(1)?.unit).toBe(0)
+    expect(narration.atHold(1)).toBe(false)
+    last().onended?.()
+    await vi.advanceTimersByTimeAsync(400)
+    expect(narration.atHold(1)).toBe(true)
+    expect(narration.revealed(1, 1)).toBe(false)
+    narration.hurry()
+    expect(narration.revealed(1, 1)).toBe(false)
+    narration.releaseHold(1)
+    expect(narration.atHold(1)).toBe(false)
+    expect(narration.speaking(1)?.unit).toBe(1)
+  })
+
+  it('stops a wait already under way for a held unit, and goes on at once when released', async () => {
+    const narration = useNarrationStore()
+    narration.begin(1, [voiced(), voiced()], 'act1')
+    last().onended?.()
+    narration.holdBefore(1, 1)
+    expect(narration.atHold(1)).toBe(true)
+    await vi.advanceTimersByTimeAsync(60000)
+    expect(narration.revealed(1, 1)).toBe(false)
+    narration.releaseHold(1)
+    expect(narration.speaking(1)?.unit).toBe(1)
+  })
+
+  it('does not end while held before a unit nothing speaks, and ends once released', async () => {
+    const narration = useNarrationStore()
+    narration.begin(1, [voiced(), silent], 'act1')
+    narration.holdBefore(1, 1)
+    last().onended?.()
+    await vi.advanceTimersByTimeAsync(400)
+    expect(narration.narrates(1)).toBe(true)
+    expect(narration.revealed(1, 1)).toBe(false)
+    narration.releaseHold(1)
+    expect(narration.narrates(1)).toBe(false)
+  })
+
+  it('a hold released before the narrator gets there changes nothing', async () => {
+    const narration = useNarrationStore()
+    narration.begin(1, [voiced(), voiced()], 'act1')
+    narration.holdBefore(1, 1)
+    narration.releaseHold(1)
+    expect(narration.speaking(1)?.unit).toBe(0)
+    last().onended?.()
+    await vi.advanceTimersByTimeAsync(400)
+    expect(narration.speaking(1)?.unit).toBe(1)
+  })
+
+  it('going on to a unit lifts the hold', () => {
+    const narration = useNarrationStore()
+    narration.begin(1, [voiced(), voiced()], 'act1')
+    narration.holdBefore(1, 1)
+    narration.skipTo(1)
+    expect(narration.speaking(1)?.unit).toBe(1)
+  })
+
+  it('speaks nothing when a hold is released while it is paused, until it is resumed', async () => {
+    const narration = useNarrationStore()
+    narration.begin(1, [voiced(), voiced()], 'act1')
+    last().onended?.()
+    narration.holdBefore(1, 1)
+    narration.pause()
+    narration.releaseHold(1)
+    await vi.advanceTimersByTimeAsync(1000)
+    expect(FakeAudio.all).toHaveLength(1)
+    narration.resume()
+    expect(narration.speaking(1)?.unit).toBe(1)
+  })
+
   it('does not stop at a gate when nothing after it has a recording', async () => {
     const narration = useNarrationStore()
     narration.begin(1, [voiced(), silent], 'act1', false, -1, null, 1)

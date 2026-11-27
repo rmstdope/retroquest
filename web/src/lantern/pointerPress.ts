@@ -8,6 +8,10 @@
  * the press landed on and what is going on; the layout only describes the
  * press and carries out the answer, as it does for keys with `hurryKeys.ts`.
  *
+ * A story card on the picture is not an input here: while one is on the
+ * screen, fading out too, its own layer takes the press (`ArrivalOnPicture`),
+ * and a press made after it has gone is decided like any other, however soon.
+ *
  * Three different questions sit behind "the story is told", and they are
  * inputs here, named for what they differ in: `scene` (a change of scene is
  * under way), `sceneChange` (a talk still to change the scene) and `telling`

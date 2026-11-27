@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useFocusReturn } from '@/composables/useFocusReturn'
 import { useSizeWatch } from '@/composables/useSizeWatch'
 import { useArrivalStore } from '@/stores/useArrivalStore'
@@ -27,6 +27,17 @@ import { useSettingsStore } from '@/stores/useSettingsStore'
  * small dark pill holds the hint and, while nobody speaks the part, a thin bar
  * that empties over its reading time. A click anywhere on the picture goes on
  * (`useArrivalStore`).
+ *
+ * Whose press is it? The card's, for as long as a card is on the screen: the
+ * layer takes every press while the arrival is up and while its last card
+ * fades out (`takesPresses`; with less motion there is no fade), and one made
+ * then goes on, or, during the fade, does nothing. Once the card has gone the
+ * layer takes none, and a press does what it lands on at once. No time is
+ * counted for it.
+ *
+ * A mouse pointer on the card (its own box, not the shade or the picture
+ * around it) holds it (`useArrivalStore.hold`): it waits, and its bar stands
+ * still. Touch and pen hold nothing.
  * Names and other inline tags keep the dark theme's light colours on the
  * picture. With no picture (`pictured` false) the text is dark ink on the
  * paper in the light theme. The text is also in the story, which waits aside:
@@ -226,6 +237,47 @@ watch(
   },
 )
 
+/** How many cards are fading out. */
+const leaving = ref(0)
+/** Whether a press on the picture is the card's: see the component's comment. */
+const takesPresses = computed(() => arrival.active || leaving.value > 0)
+
+/** A card has started to fade out. */
+function cardLeaves(): void {
+  leaving.value++
+}
+
+/** A fading card has gone, or its fade was given up. */
+function cardGone(): void {
+  leaving.value--
+}
+
+/** A press the layer takes goes on, unless the arrival is over and only its card is still fading. */
+function press(): void {
+  if (arrival.active) arrival.next()
+}
+
+/** The mouse is on, or comes onto, what `event` is aimed at: the card is held while that is a card of an arrival that is up. */
+function point(event: PointerEvent): void {
+  if (event.pointerType !== 'mouse') return
+  const target = event.target instanceof Element ? event.target : null
+  arrival.hold(arrival.active && !!target?.closest('.lq-arrival-card'))
+}
+
+/** The mouse has left the picture. */
+function pointerGone(event: PointerEvent): void {
+  if (event.pointerType === 'mouse') arrival.hold(false)
+}
+
+// A card that is gone is under no pointer, whether or not the pointer moved.
+watch(
+  () => arrival.active,
+  (active) => {
+    if (!active) arrival.hold(false)
+  },
+)
+onUnmounted(() => arrival.hold(false))
+
 /** The text box of the part up; it is a new element for every part. */
 const text = ref<HTMLElement | null>(null)
 const fadeTop = ref(false)
@@ -295,18 +347,26 @@ watch(
     :style="{ '--lq-checklist-width': `${checklistWidth}px` }"
     :class="{
       'lq-bare': !pictured,
-      'lq-on': arrival.active,
+      'lq-on': takesPresses,
       'lq-phone-arrival': phone,
       'lq-sideways-arrival': sideways,
     }"
     aria-live="polite"
     data-testid="arrival-on-picture"
-    @click="arrival.next()"
+    @click="press"
+    @pointerover="point"
+    @pointermove="point"
+    @pointerleave="pointerGone"
   >
     <div class="lq-arrival-measure" aria-hidden="true">
       <div ref="twin" class="lq-arrival-twin"></div>
     </div>
-    <Transition name="lq-arrival-fade">
+    <Transition
+      name="lq-arrival-fade"
+      @before-leave="cardLeaves"
+      @after-leave="cardGone"
+      @leave-cancelled="cardGone"
+    >
       <div
         v-if="arrival.part"
         :key="`${arrival.part.kind}-${arrival.part.lines[0]?.unit}`"
@@ -435,6 +495,7 @@ watch(
             v-if="arrival.barMs"
             :key="arrival.barKey"
             class="lq-arrival-bar"
+            :class="{ 'lq-held': arrival.held }"
             data-testid="arrival-bar"
           >
             <i :style="{ animationDuration: `${arrival.barMs}ms` }"></i>
@@ -801,6 +862,10 @@ watch(
   animation-name: lq-arrival-empty;
   animation-timing-function: linear;
   animation-fill-mode: forwards;
+}
+/* Under the mouse pointer the time stands still, and so does the bar. */
+.lq-arrival-bar.lq-held i {
+  animation-play-state: paused;
 }
 @keyframes lq-arrival-empty {
   to {
