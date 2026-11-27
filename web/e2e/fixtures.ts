@@ -334,9 +334,11 @@ export async function gameKey(page: Page, key: string): Promise<void> {
 }
 
 /**
- * Do what brings the marks and names in: a tap near the picture's top-left
- * corner where the input is touch, else the mouse moved over the picture (the
- * marks leave 4 seconds after the last such input).
+ * Do what brings the marks and names in: a tap at the picture's left edge,
+ * halfway down, where the input is touch (on a small sideways phone a tap in
+ * the top corner reaches the room's name, which opens its actions), else the
+ * mouse moved over the picture (the marks leave 4 seconds after the last such
+ * input).
  */
 export async function showNames(page: Page): Promise<void> {
   const box = await page.locator('.lq-stage').boundingBox()
@@ -345,7 +347,7 @@ export async function showNames(page: Page): Promise<void> {
     () => window.matchMedia('(pointer: coarse)').matches,
   )
   if (touch) {
-    await page.touchscreen.tap(box.x + 6, box.y + 6)
+    await page.touchscreen.tap(box.x + 6, box.y + box.height / 2)
     return
   }
   await page.mouse.move(box.x + 6, box.y + 6)

@@ -242,10 +242,7 @@ test.describe('on the smallest sideways phone', () => {
   }): Promise<void> => {
     await page.setViewportSize({ width: 568, height: 320 })
     await toTheCottage(page, { areas: COTTAGE_AREAS })
-    // A tap on the bare painting at the left edge, halfway down: on this phone
-    // a tap in the top corner reaches the room's name, which opens its actions.
-    const painting = (await page.locator('.lq-stage').boundingBox())!
-    await page.touchscreen.tap(painting.x + 6, painting.y + painting.height / 2)
+    await showNames(page)
     await expect(page.locator('[data-area-name]')).toHaveCount(3)
     const stage = await page.locator('.lq-stage').boundingBox()
     for (const name of await page.locator('[data-area-name]').all()) {
