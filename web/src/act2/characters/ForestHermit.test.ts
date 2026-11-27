@@ -38,6 +38,7 @@ describe('Forest hermit', () => {
       expect(at, line).toBeGreaterThanOrEqual(from)
       from = at + line.length
     }
+    expect(game.state.hasItem('protective charm')).toBe(true)
     expectMarkupWellFormed(answer)
     expect(answer).not.toMatch(/ancient|wisdom|destiny|spirits/i)
   })

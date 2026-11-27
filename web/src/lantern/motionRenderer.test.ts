@@ -8,6 +8,7 @@ import {
 } from './motionRenderer'
 import { createMotionScene as gameScene } from './roomMotionScene'
 import { appliedMotion, madeEffects } from './roomMotion'
+import { seedRandom } from '@/testing/seededRandom'
 
 describe('the motion renderer the studio loads', () => {
   it('ranges Amount and Speed to 5 and Glow and Strength to 4', () => {
@@ -121,21 +122,13 @@ function recordingContext(): {
   return { ctx, calls }
 }
 
-/** Replace `Math.random` with the same seeded sequence each time it is called. */
-function seeded(): void {
-  let seed = 7
-  vi.spyOn(Math, 'random').mockImplementation(
-    () => (seed = (seed * 16807) % 2147483647) / 2147483647,
-  )
-}
-
 /** Every draw call a scene makes over a few seconds, with `Math.random` replaced by the same sequence each time. */
 function drawnBy(scene: {
   resize(w: number, h: number, p: { width: number; height: number }): void
   step(ms: number): void
   draw(ctx: CanvasRenderingContext2D): void
 }): string[] {
-  seeded()
+  seedRandom()
   const { ctx, calls } = recordingContext()
   for (let i = 0; i < 40; i++) {
     scene.step(100)
@@ -181,7 +174,7 @@ describe('the scene the studio drives', () => {
   it('plays the effects the studio hands it exactly as the game plays the same manifest entries', () => {
     const game = gameScene()
     game.resize(960, 540, { width: 1920, height: 1080 })
-    seeded()
+    seedRandom()
     game.setEffects(
       appliedMotion(madeEffects({ a: { effects: STUDIO } }, 'a'), []),
       true,
@@ -190,7 +183,7 @@ describe('the scene the studio drives', () => {
 
     const studio = createMotionScene()
     studio.resize(960, 540, { width: 1920, height: 1080 })
-    seeded()
+    seedRandom()
     studio.setEffects(STUDIO, true)
     vi.restoreAllMocks()
 

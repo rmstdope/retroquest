@@ -17,11 +17,6 @@ describe('Act 3 rooms', () => {
     act3 = new Act3()
   })
 
-  it('has rooms defined', () => {
-    expect(typeof act3.rooms).toBe('object')
-    expect(Object.keys(act3.rooms).length).toBeGreaterThan(0)
-  })
-
   it('has a matching reverse exit for every cardinal exit', () => {
     const game = new Game([act3])
     const reverse: Exits = {

@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { boxRect, createMotionScene, pointPosition } from './roomMotionScene'
 import type { AreaBox, MotionKind } from './roomMotion'
+import { seedRandom } from '@/testing/seededRandom'
 
 const PICTURE = { width: 1920, height: 1080 }
 const BOX: AreaBox = { x: 0.25, y: 0.25, width: 0.5, height: 0.5 }
@@ -12,17 +13,21 @@ function sceneOf(w: number, h: number) {
   return scene
 }
 
+/** A canvas call nobody looks at. A plain function, since a `vi.fn()` for each of the thousands of calls a scene draws costs seconds. */
+const noop = (): void => {}
+/** A gradient that accepts its colour stops. */
+const GRADIENT = { addColorStop: noop }
+
 /** A 2D context that records nothing and accepts everything. */
 function fakeContext(
   extra: Record<string, unknown> = {},
 ): CanvasRenderingContext2D {
-  const gradient = { addColorStop: vi.fn() }
   const target = {
-    createRadialGradient: () => gradient,
+    createRadialGradient: () => GRADIENT,
     ...extra,
   } as Record<string, unknown>
   return new Proxy(target, {
-    get: (t, key: string) => t[key] ?? vi.fn(),
+    get: (t, key: string) => t[key] ?? noop,
     set: () => true,
   }) as unknown as CanvasRenderingContext2D
 }
@@ -73,6 +78,8 @@ describe('boxRect', () => {
 })
 
 describe('a scene', () => {
+  afterEach(() => vi.restoreAllMocks())
+
   it('has nothing to run until it is given movement', () => {
     expect(sceneOf(1280, 720).isEmpty()).toBe(true)
   })
@@ -168,11 +175,12 @@ describe('a scene', () => {
 
   it('is no more crowded with embers or leaves on a small picture than on a large one', () => {
     for (const kind of ['embers', 'leaves'] as const) {
-      /** Specks live at a time for each full 1280 × 720 of picture. */
+      /** Specks live at a time for each full 1280 × 720 of picture, on the same rolls every run. */
       const density = (w: number, h: number): number => {
+        seedRandom()
         const scene = sceneOf(w, h)
         scene.setEffects([{ kind }], true)
-        const ticks = 40000
+        const ticks = 20000
         let sum = 0
         for (let i = 0; i < ticks; i++) {
           scene.step(16.7)
@@ -180,7 +188,9 @@ describe('a scene', () => {
         }
         return sum / ticks / ((w * h) / (1280 * 720))
       }
-      expect(density(390, 219), kind).toBeLessThan(density(1280, 720) * 1.5)
+      const small = density(390, 219)
+      expect(small, kind).toBeGreaterThan(0)
+      expect(small, kind).toBeLessThan(density(1280, 720) * 1.1)
     }
   })
 
@@ -715,9 +725,8 @@ describe('a floating kind drawn inside a shape', () => {
           return (x: number, y: number, w: number, h: number) => {
             if (kind === 'fireflies') at(x + w / 2, y + h / 2)
           }
-        if (key === 'createRadialGradient')
-          return () => ({ addColorStop: vi.fn() })
-        return t[key] ?? vi.fn()
+        if (key === 'createRadialGradient') return () => GRADIENT
+        return t[key] ?? noop
       },
       set: (t, key: string, value: unknown) => {
         if (key === 'globalAlpha') alpha = Number(value)
@@ -742,7 +751,7 @@ describe('a floating kind drawn inside a shape', () => {
     const strip = sceneOf(W, H)
     strip.setEffects([drawnIn('fireflies', QUARTER, { amount: 3 })], true)
     expect(strip.count('fireflies')).toBe(7)
-  }, 30_000)
+  })
 
   it('counts the area a shape encloses, not the box around it', () => {
     const triangle = [
@@ -753,7 +762,7 @@ describe('a floating kind drawn inside a shape', () => {
     const scene = sceneOf(W, H)
     scene.setEffects([drawnIn('dust', triangle)], true)
     expect(scene.count('dust')).toBe(2)
-  }, 30_000)
+  })
 
   it('keeps a speck in a small shape, and none at amount 0', () => {
     const small = rectangle(0.5, 0.5, 0.52, 0.52)
@@ -765,7 +774,7 @@ describe('a floating kind drawn inside a shape', () => {
       none.setEffects([drawnIn(kind, QUARTER, { amount: 0 })], true)
       expect(none.count(kind)).toBe(0)
     }
-  }, 30_000)
+  })
 
   it('shares the amount between several shapes by their size', () => {
     const one = sceneOf(W, H)
@@ -779,7 +788,7 @@ describe('a floating kind drawn inside a shape', () => {
       true,
     )
     expect(two.count('dust')).toBe(one.count('dust'))
-  }, 30_000)
+  })
 
   it('keeps every speck inside the shape for as long as it plays', () => {
     const shape = rectangle(0.55, 0.2, 0.95, 0.8)
@@ -805,7 +814,7 @@ describe('a floating kind drawn inside a shape', () => {
         expect(p.y, kind).toBeLessThanOrEqual(y1 + 1)
       }
     }
-  }, 30_000)
+  })
 
   it('lets leaves come loose along the top of the shape and be gone by its bottom', () => {
     // A leaf comes loose on the first of every five draws, so one does in a short time.
@@ -827,7 +836,7 @@ describe('a floating kind drawn inside a shape', () => {
     const top = 0.2 * H
     expect(Math.min(...seen.map((p) => p.y))).toBeLessThan(top + 10)
     expect(Math.max(...seen.map((p) => p.y))).toBeLessThanOrEqual(0.5 * H + 1)
-  }, 30_000)
+  })
 
   it('lets embers rise from the bottom of the shape and burn out before its top', () => {
     const scene = sceneOf(W, H)
@@ -843,7 +852,7 @@ describe('a floating kind drawn inside a shape', () => {
     const seen = watch(scene, 'embers', 60)
     expect(Math.max(...seen.map((p) => p.y))).toBeGreaterThan(0.3 * H)
     expect(Math.min(...seen.map((p) => p.y))).toBeGreaterThanOrEqual(0.2 * H)
-  }, 30_000)
+  })
 
   it('holds still inside its shape at speed 0', () => {
     const shape = rectangle(0.55, 0.2, 0.95, 0.8)
@@ -857,7 +866,7 @@ describe('a floating kind drawn inside a shape', () => {
         kind,
       ).toEqual(first.map((p) => [p.x, p.y]))
     }
-  }, 30_000)
+  })
 
   it('fades a speck out as it nears the line, and is whole well inside', () => {
     const shape = rectangle(0.55, 0.2, 0.95, 0.8)
@@ -871,7 +880,8 @@ describe('a floating kind drawn inside a shape', () => {
       expect(sorted[i].alpha).toBeGreaterThanOrEqual(sorted[i - 1].alpha - 1e-9)
     expect(sorted[0].alpha).toBeLessThan(0.5)
     expect(sorted[sorted.length - 1].alpha).toBe(1)
-  }, 30_000)
+  })
+
   it('spreads mist across the whole shape, and thins it before the line, most at the bottom', () => {
     const shape = rectangle(0, 0, 1, 2 / 3)
     const scene = sceneOf(W, H)
@@ -883,7 +893,7 @@ describe('a floating kind drawn inside a shape', () => {
       // A puff reaching the line is gone, so the line never cuts one.
       if (p.y > bottom - 20) expect(p.alpha).toBeLessThan(0.1)
     }
-  }, 30_000)
+  })
 
   it('brings a leaf or an ember now and then to a small shape, as it does to a small picture', () => {
     const small = rectangle(0.5, 0.5, 0.6, 0.6)
@@ -892,5 +902,5 @@ describe('a floating kind drawn inside a shape', () => {
       scene.setEffects([drawnIn(kind, small)], true)
       expect(watch(scene, kind, 240).length, kind).toBeGreaterThan(0)
     }
-  }, 30_000)
+  })
 })

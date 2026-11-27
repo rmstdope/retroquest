@@ -10,14 +10,14 @@ STY-1  A player can play all four acts from start to finish along the golden pat
        Proven by: web/e2e/redLine.spec.ts
 STY-2  A player plays by typing commands. A command the game does not understand is
        answered in words and changes nothing.
-       Proven by: nothing yet
+       Proven by: web/e2e/unknownCommand.spec.ts
 STY-3  An act's main quest can be finished only when all its side quests are done.
        The journal shows each quest's log as it moves on, and hint gives a nudge in
        the game's own voice.
-       Proven by: nothing yet
+       Proven by: web/e2e/mainQuest.spec.ts
 STY-4  A player learns spells from people and places as the story allows, and can
        cast a spell once it is learned.
-       Proven by: nothing yet
+       Proven by: web/e2e/spells.spec.ts
 
 ## Saving (SAV)
 
@@ -64,19 +64,23 @@ PIC-5  Quest news and a newly learned spell are told in the middle of the pictur
        Proven by: web/e2e/questNews.spec.ts
 PIC-6  A player can open a bigger map and walk from it to a place already visited.
        Proven by: web/e2e/biggerMap.spec.ts
+PIC-7  A story card told on the picture stays while the mouse rests on it, and leaves
+       once the mouse has moved off and its reading time has run. A press made after
+       it has gone acts at once on what it lands on.
+       Proven by: web/e2e/cardClick.spec.ts
 
 ## Reading (RDG)
 
 RDG-1  What people say appears in a speech column with the speaker's name and
        portrait. A line fades once it has been read, without moving the lines still
        showing.
-       Proven by: web/e2e/speechColumn.spec.ts
+       Proven by: web/e2e/speechColumn.spec.ts, web/e2e/fadeOrder.spec.ts
 RDG-2  The journal and the quest log open as drawers that nothing from the stage
        covers. A checklist shows what is done fainter than what is left.
        Proven by: web/e2e/storyDrawerCover.spec.ts, web/e2e/checklistFade.spec.ts
 RDG-3  A player can choose the text size, a light or dark look (or the device's), and
        less motion. The choices are kept between visits.
-       Proven by: nothing yet
+       Proven by: web/e2e/settingsKept.spec.ts
 
 ## Sound (SND)
 

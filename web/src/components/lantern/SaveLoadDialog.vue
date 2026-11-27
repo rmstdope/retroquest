@@ -584,12 +584,11 @@ function cardLabel(card: SaveSlot): string {
   text-transform: uppercase;
   color: var(--lq-accent-text);
 }
+/* The whole room name, on a second line when the card's words leave too little width (a room picture). */
 .lq-slot-room {
   font-family: var(--lq-font-display);
   font-size: 16px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  overflow-wrap: break-word;
 }
 .lq-slot-meta {
   margin-top: 4px;
