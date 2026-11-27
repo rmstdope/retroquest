@@ -373,12 +373,12 @@ function cardLabel(card: SaveSlot): string {
                 <span v-else class="lq-slot-empty">{{
                   saving ? 'Empty slot · tap to save here' : 'Empty slot'
                 }}</span>
+                <span v-if="justSaved === cardKey(card)" class="lq-new"
+                  >Just saved</span
+                >
               </span>
               <span v-if="card.outdated" class="lq-slot-lock" aria-hidden="true"
                 >⊘</span
-              >
-              <span v-if="justSaved === cardKey(card)" class="lq-new"
-                >Just saved</span
               >
             </button>
             <div
@@ -626,8 +626,9 @@ function cardLabel(card: SaveSlot): string {
   font-size: 13px;
   color: var(--lq-muted);
 }
+/* Under the card's words, so the tag takes no width from the room name. */
 .lq-new {
-  flex: 0 0 auto;
+  margin-top: 4px;
   font-size: 11px;
   font-weight: 600;
   color: var(--lq-accent-text);
