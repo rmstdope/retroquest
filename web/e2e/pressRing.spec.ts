@@ -216,6 +216,8 @@ test('a ring at the top edge shows its long name in full, on screen and clear of
   )
   for (let turn = 0; turn < 8 && (await goOn.count()) > 0; turn++)
     await page.keyboard.press('Enter')
+  // A press while the last card fades is the card's (rq-ir2c): wait until it has gone.
+  await expect(page.locator('.lq-arrival-card')).toHaveCount(0)
   await pressThing(page, 'faded-photograph')
   await expect(
     page.getByRole('menu', { name: 'Faded Photograph' }),

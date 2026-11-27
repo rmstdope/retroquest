@@ -185,6 +185,8 @@ test.describe('the arrival told on the picture', () => {
       })
       await startAct1(page)
       await arrival(page).click({ position: { x: 600, y: 300 } })
+      // A card under the mouse waits (rq-ir2c): take it off the picture's middle.
+      await page.mouse.move(0, 0)
       await expect(arrival(page).locator('.lq-arrival-line')).toHaveCount(0)
       // The command that plays the turn must not also clear the arrival it starts.
       await enterCommand(page, 'talk to voice')

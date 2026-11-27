@@ -49,6 +49,8 @@ test('Continue opens the newest save with no chapter page', async ({
   await expect(told.locator('.lq-arrival-line')).not.toHaveText('')
   await expect(page.locator('.lq-room-title')).toHaveCount(0)
   await told.click()
+  // A card under the mouse waits (rq-ir2c): off it, any page left is read and goes.
+  await page.mouse.move(0, 0)
   await expect(told).toHaveCount(0)
   await expect(page.locator('.lq-room-name')).toBeVisible()
 })
