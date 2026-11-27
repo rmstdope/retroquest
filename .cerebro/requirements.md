@@ -64,6 +64,10 @@ PIC-5  Quest news and a newly learned spell are told in the middle of the pictur
        Proven by: web/e2e/questNews.spec.ts
 PIC-6  A player can open a bigger map and walk from it to a place already visited.
        Proven by: web/e2e/biggerMap.spec.ts
+PIC-7  A story card told on the picture stays while the mouse rests on it, and leaves
+       once the mouse has moved off and its reading time has run. A press made after
+       it has gone acts at once on what it lands on.
+       Proven by: web/e2e/cardClick.spec.ts
 
 ## Reading (RDG)
 
@@ -76,7 +80,7 @@ RDG-2  The journal and the quest log open as drawers that nothing from the stage
        Proven by: web/e2e/storyDrawerCover.spec.ts, web/e2e/checklistFade.spec.ts
 RDG-3  A player can choose the text size, a light or dark look (or the device's), and
        less motion. The choices are kept between visits.
-       Proven by: nothing yet
+       Proven by: web/e2e/settingsKept.spec.ts
 
 ## Sound (SND)
 
