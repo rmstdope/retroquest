@@ -51,6 +51,7 @@ class FlagAct extends Act {
 
 /** A seller of the given wares, named shopkeeper. */
 class Stall extends Seller {
+  /** The wares it was given. */
   override wares: Record<string, Ware>
 
   constructor(wares: Record<string, Ware>) {
