@@ -1,59 +1,23 @@
-import { test, expect, type Page } from './fixtures'
+import { test, expect, type Page, toTheCottage, withMotion } from './fixtures'
 
-/** A one-pixel transparent PNG, standing for a picture the studio made. */
-const PIXEL = Buffer.from(
-  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==',
-  'base64',
-)
-
-/** Walk to the cottage with its picture up (the studio's files stood in for), and the hearth's spot marked. */
-async function toTheCottage(
-  page: Page,
-  motion: 'reduce' | 'no-preference' = 'no-preference',
-): Promise<void> {
-  await page.route('**/images/generated/manifest.json', (route) =>
-    route.fulfill({
-      json: {
-        // The story opens in the dream, whose low mist is what moves while the cottage waits.
-        'act1-the-dream': {
-          file: 'act1-the-dream.png',
-          width: 1,
-          height: 1,
-          effects: [{ kind: 'mist' }],
-        },
-        'act1-eliors-cottage': {
-          file: 'act1-eliors-cottage.png',
-          width: 1,
-          height: 1,
-          effects: [
-            {
-              kind: 'fire',
-              spot: [
-                [
-                  [0.1, 0.4],
-                  [0.3, 0.4],
-                  [0.3, 0.7],
-                  [0.1, 0.7],
-                ],
-              ],
-            },
-          ],
-        },
-      },
-    }),
-  )
-  await page.route('**/images/generated/*.png', (route) =>
-    route.fulfill({ contentType: 'image/png', body: PIXEL }),
-  )
+/** Stand in the cottage with the hearth's spot marked on its picture. */
+async function toTheHearth(page: Page): Promise<void> {
   await page.setViewportSize({ width: 1280, height: 800 })
-  await page.goto('/')
-  await page.getByRole('button', { name: 'Start', exact: true }).click()
-  // The title's opening is skipped by the suite's reduced motion; this spec needs the motion back.
-  await page.emulateMedia({ reducedMotion: motion })
-  await page.locator('.lq-chapter-button').click()
-  await page
-    .getByTestId('arrival-on-picture')
-    .click({ position: { x: 200, y: 300 } })
+  await toTheCottage(page, {
+    effects: [
+      {
+        kind: 'fire',
+        spot: [
+          [
+            [0.1, 0.4],
+            [0.3, 0.4],
+            [0.3, 0.7],
+            [0.1, 0.7],
+          ],
+        ],
+      },
+    ],
+  })
 }
 
 /**
@@ -63,7 +27,8 @@ async function toTheCottage(
 test('the cottage picture drifts with movement over it, never catching a click', async ({
   page,
 }): Promise<void> => {
-  await toTheCottage(page)
+  await toTheHearth(page)
+  await withMotion(page)
   await expect(page.locator('.lq-drift.lq-drift-on')).toHaveCount(1)
   const canvas = page.locator('canvas.lq-motion')
   await expect(canvas).toHaveCount(1)
@@ -81,7 +46,7 @@ test('the cottage picture drifts with movement over it, never catching a click',
 test('with the device asking for less motion the cottage is just the painting', async ({
   page,
 }): Promise<void> => {
-  await toTheCottage(page, 'reduce')
+  await toTheHearth(page)
   await expect(page.locator('.lq-stage-picture img.lq-pic-in')).toHaveCount(1)
   await expect(page.locator('.lq-drift-on')).toHaveCount(0)
   await expect(page.locator('canvas.lq-motion')).toHaveCount(0)

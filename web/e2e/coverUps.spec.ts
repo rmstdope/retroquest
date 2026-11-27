@@ -11,9 +11,9 @@ import {
   type Page,
   skipTelling,
   showNames,
-  closeTypingBox,
-  enterCommand,
   sendToGame as send,
+  toTheCottage,
+  withMotion,
 } from './fixtures'
 
 /** A placed area, in fractions of the picture. */
@@ -23,12 +23,6 @@ interface AreaFractions {
   width: number
   height: number
 }
-
-/** A one-pixel transparent PNG, standing for a picture the studio made. */
-const PIXEL = Buffer.from(
-  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==',
-  'base64',
-)
 
 /**
  * The cottage's things on a 1280×800 window (the 16:9 picture trimmed to the
@@ -43,41 +37,10 @@ const COVERED: Record<string, AreaFractions> = {
   grandmother: { x: 0.41, y: 0.835, width: 0.06, height: 0.05 },
 }
 
-/** Open the game in the cottage with its picture up and the things of `COVERED` placed on it. */
-async function toTheCottage(page: Page): Promise<void> {
+/** Stand in the cottage on a 1512×806 laptop with the things of `COVERED` placed on its picture. */
+async function toTheCoveredCottage(page: Page): Promise<void> {
   await page.setViewportSize({ width: 1512, height: 806 })
-  await page.route('**/images/generated/manifest.json', (route) =>
-    route.fulfill({
-      json: {
-        'act1-eliors-cottage': {
-          file: 'act1-eliors-cottage.png',
-          width: 1920,
-          height: 1080,
-          areas: COVERED,
-        },
-      },
-    }),
-  )
-  await page.route('**/images/generated/*.png', (route) =>
-    route.fulfill({ contentType: 'image/png', body: PIXEL }),
-  )
-  await page.goto('/')
-  await page.getByRole('button', { name: 'Start', exact: true }).click()
-  // The title's opening is skipped by the suite's reduced motion; the change of scene needs the motion back.
-  await page.emulateMedia({ reducedMotion: 'no-preference' })
-  await page.locator('.lq-chapter-button').click()
-  const arrival = page.getByTestId('arrival-on-picture')
-  for (let turn = 0; turn < 8 && (await arrival.isVisible()); turn++)
-    await page.keyboard.press('Enter')
-  await enterCommand(page, 'say hello to voice')
-  await closeTypingBox(page)
-  await page.getByTestId('scene-interlude').waitFor()
-  await page.keyboard.press('Enter')
-  await expect(page.locator('.lq-stage-picture.lq-scene-idle')).toHaveCount(1)
-  const told = page.locator('[data-testid="arrival-on-picture"].lq-on')
-  await told.waitFor()
-  await skipTelling(page)
-  await expect(told).toHaveCount(0)
+  await toTheCottage(page, { areas: COVERED })
 }
 
 /** A box on the screen. */
@@ -134,7 +97,9 @@ async function namesOver(page: Page, selector: string): Promise<string[]> {
 test('a name already up moves clear of the Hide that new words bring', async ({
   page,
 }): Promise<void> => {
-  await toTheCottage(page)
+  await toTheCoveredCottage(page)
+  // The names move out of the way, and the words fade: motion.
+  await withMotion(page)
   // Words have been told and have faded, and their Hide with them.
   await send(page, 'look')
   await expect(page.locator('.lq-words-hide')).toBeVisible()
@@ -154,7 +119,7 @@ test('a name already up moves clear of the Hide that new words bring', async ({
 test('no name lies under the "Use … with" strip', async ({
   page,
 }): Promise<void> => {
-  await toTheCottage(page)
+  await toTheCoveredCottage(page)
   await send(page, 'use lantern')
   await send(page, 'take bread')
   await expect(page.locator('[data-belt-pic="item:bread"]')).toBeVisible()
@@ -178,7 +143,7 @@ test('no name lies under the "Use … with" strip', async ({
 test("no name lies over a bag picture's caption", async ({
   page,
 }): Promise<void> => {
-  await toTheCottage(page)
+  await toTheCoveredCottage(page)
   await send(page, 'use lantern')
   await send(page, 'take bread')
   await expect(page.locator('[data-belt-pic="item:bread"]')).toBeVisible()
@@ -200,7 +165,7 @@ for (const [key, drawer] of [
   test(`the bag tray stops short of the open drawer (${key})`, async ({
     page,
   }): Promise<void> => {
-    await toTheCottage(page)
+    await toTheCoveredCottage(page)
     await page.keyboard.press(key)
     const open = await page.locator(drawer).boundingBox()
     const tray = await page.locator('.lq-belt').boundingBox()
@@ -210,7 +175,9 @@ for (const [key, drawer] of [
 test("a bag picture's caption moves beside a journal opened under it", async ({
   page,
 }): Promise<void> => {
-  await toTheCottage(page)
+  await toTheCoveredCottage(page)
+  // The journal slides in under the caption: motion.
+  await withMotion(page)
   await send(page, 'use lantern')
   // The lantern's caption is a long one.
   await send(page, 'take lantern')

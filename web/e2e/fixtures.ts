@@ -19,7 +19,7 @@
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { test as base, type Page } from '@playwright/test'
+import { expect, test as base, type Page } from '@playwright/test'
 import { HOLD_TO_SKIP_MS } from '../src/composables/useHoldToSkip'
 
 export * from '@playwright/test'
@@ -188,6 +188,68 @@ export async function keepWords(page: Page): Promise<void> {
   })
 }
 
+/** A one-pixel transparent PNG, standing for a picture the studio made. */
+const PIXEL = Buffer.from(
+  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==',
+  'base64',
+)
+
+/** What the stood-in image manifest says of the cottage's picture, beyond its file and size. */
+export interface CottagePicture {
+  areas?: Record<string, object>
+  effects?: object[]
+  patches?: Record<string, object>
+}
+
+/**
+ * Open the game and walk the opening to Elior's cottage: its picture up (the
+ * studio's files stood in for, with what `picture` says of it) and every word
+ * told. Set the viewport first. The walk is made with the motion the spec
+ * runs with, the suite's reduced motion unless it says otherwise, so a spec
+ * whose own assertion needs motion switches it on once it has arrived.
+ */
+export async function toTheCottage(
+  page: Page,
+  picture: CottagePicture = {},
+): Promise<void> {
+  await page.route('**/images/generated/manifest.json', (route) =>
+    route.fulfill({
+      json: {
+        'act1-eliors-cottage': {
+          file: 'act1-eliors-cottage.png',
+          width: 1920,
+          height: 1080,
+          ...picture,
+        },
+      },
+    }),
+  )
+  await page.route('**/images/generated/*.png', (route) =>
+    route.fulfill({ contentType: 'image/png', body: PIXEL }),
+  )
+  await page.goto('/')
+  await page.getByRole('button', { name: 'Start', exact: true }).click()
+  await page.locator('.lq-chapter-button').click()
+  // The dream is told over its picture first, a few lines at a time on a small screen.
+  const arrival = page.getByTestId('arrival-on-picture')
+  for (let turn = 0; turn < 8 && (await arrival.isVisible()); turn++)
+    await page.keyboard.press('Enter')
+  // The voice wakes Elior in his cottage.
+  await enterCommand(page, 'say hello to voice')
+  await closeTypingBox(page)
+  await skipTelling(page)
+  await expect(page.locator('.lq-stage-picture.lq-scene-idle')).toHaveCount(1)
+  await expect(page.locator('.lq-name-text')).toHaveText("Elior's Cottage")
+  await expect(
+    page.locator('[data-testid="arrival-on-picture"].lq-on'),
+  ).toHaveCount(0)
+}
+
+/** Give the page motion back (the suite runs with it reduced), for an assertion that needs it. */
+export async function withMotion(page: Page): Promise<void> {
+  await page.emulateMedia({ reducedMotion: 'no-preference' })
+}
+
 /** The part of the game store the helpers below drive. */
 interface GameStoreHandle {
   acceptInput: boolean
@@ -272,9 +334,11 @@ export async function gameKey(page: Page, key: string): Promise<void> {
 }
 
 /**
- * Do what brings the marks and names in: a tap near the picture's top-left
- * corner where the input is touch, else the mouse moved over the picture (the
- * marks leave 4 seconds after the last such input).
+ * Do what brings the marks and names in: a tap at the picture's left edge,
+ * halfway down, where the input is touch (on a small sideways phone a tap in
+ * the top corner reaches the room's name, which opens its actions), else the
+ * mouse moved over the picture (the marks leave 4 seconds after the last such
+ * input).
  */
 export async function showNames(page: Page): Promise<void> {
   const box = await page.locator('.lq-stage').boundingBox()
@@ -283,7 +347,7 @@ export async function showNames(page: Page): Promise<void> {
     () => window.matchMedia('(pointer: coarse)').matches,
   )
   if (touch) {
-    await page.touchscreen.tap(box.x + 6, box.y + 6)
+    await page.touchscreen.tap(box.x + 6, box.y + box.height / 2)
     return
   }
   await page.mouse.move(box.x + 6, box.y + 6)

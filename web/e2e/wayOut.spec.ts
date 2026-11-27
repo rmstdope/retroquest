@@ -3,54 +3,7 @@
  * now is plain painting, but pressing where the studio placed it gets the
  * game's own answer, as the typed direction does, and Elior stays.
  */
-import {
-  test,
-  expect,
-  type Page,
-  skipTelling,
-  enterCommand,
-  closeTypingBox,
-} from './fixtures'
-
-/** A one-pixel transparent PNG, standing for a picture the studio made. */
-const PIXEL = Buffer.from(
-  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==',
-  'base64',
-)
-
-/** Open the game in the cottage with its picture up and a few things placed on it. */
-async function toTheCottage(page: Page): Promise<void> {
-  await page.route('**/images/generated/manifest.json', (route) =>
-    route.fulfill({
-      json: {
-        'act1-eliors-cottage': {
-          file: 'act1-eliors-cottage.png',
-          width: 1920,
-          height: 1080,
-          areas: {
-            'exit-south': { x: 0.8, y: 0.05, width: 0.15, height: 0.2 },
-          },
-        },
-      },
-    }),
-  )
-  await page.route('**/images/generated/*.png', (route) =>
-    route.fulfill({ contentType: 'image/png', body: PIXEL }),
-  )
-  await page.goto('/')
-  await page.getByRole('button', { name: 'Start', exact: true }).click()
-  await page.locator('.lq-chapter-button').click()
-  // The dream is told a few lines at a time on a small screen.
-  const arrival = page.getByTestId('arrival-on-picture')
-  for (let turn = 0; turn < 8 && (await arrival.isVisible()); turn++)
-    await page.keyboard.press('Enter')
-  // The voice wakes Elior in his cottage.
-  await enterCommand(page, 'say hello to voice')
-  await closeTypingBox(page)
-  await skipTelling(page)
-  await expect(page.locator('.lq-stage-picture.lq-scene-idle')).toHaveCount(1)
-  await expect(page.locator('.lq-name-text')).toHaveText("Elior's Cottage")
-}
+import { test, expect, toTheCottage } from './fixtures'
 
 test('pressing a closed way in the picture answers as the typed direction does', async ({
   page,
@@ -58,7 +11,9 @@ test('pressing a closed way in the picture answers as the typed direction does',
   await page.setViewportSize({ width: 1280, height: 800 })
   // The room is brought up on the page's clock, stepped rather than slept.
   await page.clock.install()
-  await toTheCottage(page)
+  await toTheCottage(page, {
+    areas: { 'exit-south': { x: 0.8, y: 0.05, width: 0.15, height: 0.2 } },
+  })
   const stage = await page.locator('.lq-stage').boundingBox()
   if (!stage) throw new Error('no stage')
   // The way sits at 87% across and 15% down of the 16:9 picture trimmed to the stage.

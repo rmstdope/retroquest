@@ -7,65 +7,25 @@
 import {
   test,
   expect,
-  enterCommand,
   type Page,
-  closeTypingBox,
+  toTheCottage,
+  skipTelling,
+  withMotion,
 } from './fixtures'
 
-/** A one-pixel transparent PNG, standing for a picture the studio made. */
-const PIXEL = Buffer.from(
-  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==',
-  'base64',
-)
-
-/** Open the game in the cottage with its picture up and a few things placed on it (and `more`), the bread taken. */
-async function toTheCottage(
+/** Stand in the cottage with a few things placed on its picture (and `more`), the bread taken. */
+async function toTheCottageWithBread(
   page: Page,
   more: Record<string, object> = {},
 ): Promise<void> {
-  await page.route('**/images/generated/manifest.json', (route) =>
-    route.fulfill({
-      json: {
-        'act1-eliors-cottage': {
-          file: 'act1-eliors-cottage.png',
-          width: 1920,
-          height: 1080,
-          areas: {
-            hearth: { x: 0.1, y: 0.2, width: 0.15, height: 0.3 },
-            bread: { x: 0.5, y: 0.3, width: 0.1, height: 0.1 },
-            grandmother: { x: 0.8, y: 0.2, width: 0.1, height: 0.3 },
-            ...more,
-          },
-        },
-      },
-    }),
-  )
-  await page.route('**/images/generated/*.png', (route) =>
-    route.fulfill({ contentType: 'image/png', body: PIXEL }),
-  )
-  await page.goto('/')
-  await page.getByRole('button', { name: 'Start', exact: true }).click()
-  // The title's opening is skipped by the suite's reduced motion; this spec needs the motion back.
-  await page.emulateMedia({ reducedMotion: 'no-preference' })
-  await page.locator('.lq-chapter-button').click()
-  const arrival = page.getByTestId('arrival-on-picture')
-  for (let turn = 0; turn < 8 && (await arrival.isVisible()); turn++)
-    await page.keyboard.press('Enter')
-  await enterCommand(page, 'say hello to voice')
-  await closeTypingBox(page)
-  // The waking is told in the middle of the dark first; Enter brings the cottage up.
-  await page.getByTestId('scene-interlude').waitFor()
-  await page.keyboard.press('Enter')
-  await expect(page.locator('.lq-name-text')).toHaveText("Elior's Cottage")
-  await expect(page.locator('.lq-stage-picture.lq-scene-idle')).toHaveCount(1)
-  // Only while a card is really up: one fading out takes no key, and a press
-  // too many would open the folded actions.
-  const goOn = page.locator(
-    '.lq-arrival-card:not(.lq-arrival-fade-leave-active) .lq-arrival-hint:visible',
-  )
-  for (let turn = 0; turn < 8 && (await goOn.count()) > 0; turn++)
-    await page.keyboard.press('Enter')
-  await expect(goOn).toHaveCount(0)
+  await toTheCottage(page, {
+    areas: {
+      hearth: { x: 0.1, y: 0.2, width: 0.15, height: 0.3 },
+      bread: { x: 0.5, y: 0.3, width: 0.1, height: 0.1 },
+      grandmother: { x: 0.8, y: 0.2, width: 0.1, height: 0.3 },
+      ...more,
+    },
+  })
   // Take the bread by its ring, then let the answer be told.
   await page.locator('[data-area-press="bread"]').focus()
   await page.keyboard.press('Enter')
@@ -74,15 +34,14 @@ async function toTheCottage(
     .getByRole('menuitem', { name: /Take/ })
     .click()
   await expect(page.locator('[data-belt-pic="item:bread"]')).toBeVisible()
-  for (let turn = 0; turn < 8 && (await goOn.count()) > 0; turn++)
-    await page.keyboard.press('Enter')
+  await skipTelling(page)
 }
 
 test('a carried thing is used on a person from the belt: ring, hand, press', async ({
   page,
 }): Promise<void> => {
   await page.setViewportSize({ width: 1280, height: 800 })
-  await toTheCottage(page)
+  await toTheCottageWithBread(page)
   const story = page.locator('.lq-story')
   await page.locator('[data-belt-pic="item:bread"]').click()
   const ring = page.getByRole('menu', { name: 'Bread' })
@@ -107,7 +66,9 @@ test('a thing dragged from the bag onto a person is used on her; a drop on nothi
   page,
 }): Promise<void> => {
   await page.setViewportSize({ width: 1280, height: 800 })
-  await toTheCottage(page)
+  await toTheCottageWithBread(page)
+  // The copy dragged flies home: motion.
+  await withMotion(page)
   const story = page.locator('.lq-story')
   const bread = page.locator('[data-belt-pic="item:bread"]')
   const pocket = await bread.boundingBox()
@@ -148,7 +109,7 @@ test('a press on the belt opens no ring of a thing lying under it, and a press o
 }): Promise<void> => {
   await page.setViewportSize({ width: 1512, height: 806 })
   // As the Riverbank's reeds: a thing across the picture's foot-left corner, its mark low on it.
-  await toTheCottage(page, {
+  await toTheCottageWithBread(page, {
     hearth: {
       x: 0,
       y: 0.575926,
@@ -182,7 +143,7 @@ test('the No match line of the typing box lies over the belt, not under its labe
   page,
 }): Promise<void> => {
   await page.setViewportSize({ width: 1280, height: 800 })
-  await toTheCottage(page)
+  await toTheCottageWithBread(page)
   // A full bag, so the belt's pictures and their names run under the typing box.
   await page.evaluate(() => {
     type Root = {
@@ -248,7 +209,7 @@ for (const width of [390, 500]) {
     page,
   }): Promise<void> => {
     await page.setViewportSize({ width, height: 757 })
-    await toTheCottage(page)
+    await toTheCottageWithBread(page)
     await page.keyboard.press('F1')
     const input = page.getByLabel('Command', { exact: true })
     await input.fill('quests')
@@ -277,7 +238,7 @@ test('at 390px the word list spans the typing box and No match takes at most two
   page,
 }): Promise<void> => {
   await page.setViewportSize({ width: 390, height: 757 })
-  await toTheCottage(page)
+  await toTheCottageWithBread(page)
   await page.keyboard.press('F1')
   await page.getByLabel('Command', { exact: true }).fill('quests')
   const none = page.getByRole('option', { name: 'No match for “quests”' })
@@ -298,7 +259,7 @@ test('at 1280px the word list stays as wide as the text field, narrower than the
   page,
 }): Promise<void> => {
   await page.setViewportSize({ width: 1280, height: 757 })
-  await toTheCottage(page)
+  await toTheCottageWithBread(page)
   await page.keyboard.press('F1')
   await page.getByLabel('Command', { exact: true }).fill('quests')
   const list = page.getByRole('listbox', { name: 'Matching words' })
@@ -315,7 +276,7 @@ test('Cancel and Escape put the thing down and send nothing', async ({
   page,
 }): Promise<void> => {
   await page.setViewportSize({ width: 1280, height: 800 })
-  await toTheCottage(page)
+  await toTheCottageWithBread(page)
   const story = page.locator('.lq-story')
   const before = (await story.innerText()).length
   for (const putDown of ['cancel', 'escape']) {
@@ -368,7 +329,7 @@ for (const size of [
     page,
   }): Promise<void> => {
     await page.setViewportSize(size)
-    await toTheCottage(page)
+    await toTheCottageWithBread(page)
     await page.keyboard.press('b')
     await expectCaptionClear(page)
     await page.keyboard.press('Escape')
@@ -382,7 +343,7 @@ test('the caption does not lie over the buttons of a ring opened from the belt',
   page,
 }): Promise<void> => {
   await page.setViewportSize({ width: 500, height: 757 })
-  await toTheCottage(page)
+  await toTheCottageWithBread(page)
   await page.locator('[data-belt-pic="item:bread"]').click()
   await expect(page.getByRole('menu', { name: 'Bread' })).toBeVisible()
   const covered = await page.evaluate(() => {
@@ -409,7 +370,7 @@ test('B goes to the belt, the belt can be put away and is remembered across a re
   page,
 }): Promise<void> => {
   await page.setViewportSize({ width: 1280, height: 800 })
-  await toTheCottage(page)
+  await toTheCottageWithBread(page)
   await page.keyboard.press('b')
   await expect(page.locator('[data-belt-pic="item:bread"]')).toBeFocused()
   await expect(page.locator('.lq-belt-caption')).toContainText('Bread')
@@ -433,7 +394,7 @@ test.describe('on a phone held sideways', () => {
     page,
   }): Promise<void> => {
     await page.setViewportSize({ width: 568, height: 320 })
-    await toTheCottage(page)
+    await toTheCottageWithBread(page)
     const pic = page.locator('[data-belt-pic="item:bread"]')
     await expect(pic).toBeVisible()
     await expect(page.locator('.lq-belt-name')).toHaveCount(0)
@@ -450,7 +411,7 @@ test('a thing whose picture has been made shows it in place of its letter', asyn
   page,
 }): Promise<void> => {
   await page.setViewportSize({ width: 1280, height: 800 })
-  await toTheCottage(page)
+  await toTheCottageWithBread(page)
   const bread = page.locator('[data-belt-pic="item:bread"]')
   // The suite answers every picture file with a picture, as if the studio had made them all.
   await expect(bread.locator('img')).toHaveAttribute(
@@ -466,7 +427,7 @@ for (const colorScheme of ['light', 'dark'] as const) {
   }): Promise<void> => {
     await page.emulateMedia({ colorScheme })
     await page.setViewportSize({ width: 1280, height: 800 })
-    await toTheCottage(page)
+    await toTheCottageWithBread(page)
     await page.getByRole('button', { name: 'Spells' }).click()
     await expect(page.locator('.lq-belt-pic')).toHaveCount(0)
     const empty = page.locator('.lq-belt-empty')
@@ -491,7 +452,7 @@ test('a ring opened on the belt lies beside its picture, clear of its caption, w
   page,
 }): Promise<void> => {
   await page.setViewportSize({ width: 1512, height: 806 })
-  await toTheCottage(page)
+  await toTheCottageWithBread(page)
   // A laptop, then a narrow window where the caption spans the belt.
   for (const size of [
     { width: 1512, height: 806 },

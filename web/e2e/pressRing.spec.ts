@@ -10,69 +10,26 @@ import {
   type Page,
   closeTypingBox,
   showNames,
+  toTheCottage,
 } from './fixtures'
 
-/** A one-pixel transparent PNG, standing for a picture the studio made. */
-const PIXEL = Buffer.from(
-  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==',
-  'base64',
-)
-
-/** Open the game in the cottage with its picture up and a few things placed on it (and `more`). */
-async function toTheCottage(
+/** Stand in the cottage with a few things placed on its picture (and `more`). */
+async function toThePlacedCottage(
   page: Page,
   breadY = 0.6,
   more: Record<string, object> = {},
 ): Promise<void> {
-  await page.route('**/images/generated/manifest.json', (route) =>
-    route.fulfill({
-      json: {
-        'act1-eliors-cottage': {
-          file: 'act1-eliors-cottage.png',
-          width: 1920,
-          height: 1080,
-          areas: {
-            hearth: { x: 0.1, y: 0.4, width: 0.15, height: 0.3 },
-            bread: { x: 0.5, y: breadY, width: 0.1, height: 0.1 },
-            grandmother: { x: 0.8, y: 0.3, width: 0.1, height: 0.3 },
-            ...more,
-          },
-        },
-      },
-    }),
-  )
-  await page.route('**/images/generated/*.png', (route) =>
-    route.fulfill({ contentType: 'image/png', body: PIXEL }),
-  )
-  await page.goto('/')
-  await page.getByRole('button', { name: 'Start', exact: true }).click()
-  // The title's opening is skipped by the suite's reduced motion; this spec needs the motion back.
-  await page.emulateMedia({ reducedMotion: 'no-preference' })
-  await page.locator('.lq-chapter-button').click()
-  // The dream is told a few lines at a time on a small screen.
-  const arrival = page.getByTestId('arrival-on-picture')
-  for (let turn = 0; turn < 8 && (await arrival.isVisible()); turn++)
-    await page.keyboard.press('Enter')
-  // The voice wakes Elior in his cottage.
-  await enterCommand(page, 'say hello to voice')
-  await closeTypingBox(page)
-  // The waking is told in the middle of the dark first; Enter brings the cottage up.
-  await page.getByTestId('scene-interlude').waitFor()
-  await page.keyboard.press('Enter')
-  await expect(page.locator('.lq-name-text')).toHaveText("Elior's Cottage")
-  await expect(page.locator('.lq-stage-picture.lq-scene-idle')).toHaveCount(1)
-  // The words are told first; a press while they are told only hurries them.
-  // Only while a card is really up: one fading out takes no key, and a press
-  // too many would open the folded actions.
-  const goOn = page.locator(
-    '.lq-arrival-card:not(.lq-arrival-fade-leave-active) .lq-arrival-hint:visible',
-  )
-  for (let turn = 0; turn < 8 && (await goOn.count()) > 0; turn++)
-    await page.keyboard.press('Enter')
-  await expect(goOn).toHaveCount(0)
+  await toTheCottage(page, {
+    areas: {
+      hearth: { x: 0.1, y: 0.4, width: 0.15, height: 0.3 },
+      bread: { x: 0.5, y: breadY, width: 0.1, height: 0.1 },
+      grandmother: { x: 0.8, y: 0.3, width: 0.1, height: 0.3 },
+      ...more,
+    },
+  })
 }
 
-/** The picture drifts, so a thing is never "stable" to the browser: press it where it is. */
+/** Press a thing where it is, whether or not the browser holds it "stable". */
 async function pressThing(page: Page, id: string): Promise<void> {
   await page.locator(`[data-area-press="${id}"]`).click({ force: true })
 }
@@ -81,7 +38,7 @@ test('pressing Grandmother opens a ring, and Examine sends what was typed', asyn
   page,
 }): Promise<void> => {
   await page.setViewportSize({ width: 1280, height: 800 })
-  await toTheCottage(page)
+  await toThePlacedCottage(page)
   await pressThing(page, 'grandmother')
   const ring = page.getByRole('menu', { name: 'Grandmother' })
   await expect(ring).toBeVisible()
@@ -98,7 +55,7 @@ test('every button of the ring can be pressed: none lies under the command bar o
 }): Promise<void> => {
   await page.setViewportSize({ width: 1280, height: 800 })
   // The bread lies near the foot of the picture: its ring reaches the command bar.
-  await toTheCottage(page, 0.84)
+  await toThePlacedCottage(page, 0.84)
   await pressThing(page, 'bread')
   await expect(page.getByRole('menu', { name: 'Bread' })).toBeVisible()
   const covered = await page.evaluate(
@@ -121,7 +78,7 @@ test('Tab never reaches the things on the picture, and draws no box over it', as
   page,
 }): Promise<void> => {
   await page.setViewportSize({ width: 1280, height: 800 })
-  await toTheCottage(page)
+  await toThePlacedCottage(page)
   await page.mouse.move(1, 1)
   for (let i = 0; i < 40; i++) {
     await page.keyboard.press('Tab')
@@ -145,7 +102,7 @@ test('Escape closes the ring and focus goes back to the thing', async ({
   page,
 }): Promise<void> => {
   await page.setViewportSize({ width: 1280, height: 800 })
-  await toTheCottage(page)
+  await toThePlacedCottage(page)
   await page.locator('[data-area-press="bread"]').focus()
   await page.keyboard.press('Enter')
   const ring = page.getByRole('menu', { name: 'Bread' })
@@ -159,7 +116,7 @@ test('a thing pressed and stepped back from, the mouse still on it, is named onc
   page,
 }): Promise<void> => {
   await page.setViewportSize({ width: 1280, height: 800 })
-  await toTheCottage(page)
+  await toThePlacedCottage(page)
   await pressThing(page, 'bread')
   const ring = page.getByRole('menu', { name: 'Bread' })
   await expect(ring).toBeVisible()
@@ -176,7 +133,7 @@ test('Take on scenery is answered as typing it would, and a person fans out the 
   page,
 }): Promise<void> => {
   await page.setViewportSize({ width: 1280, height: 800 })
-  await toTheCottage(page)
+  await toThePlacedCottage(page)
   const story = page.locator('.lq-story')
   const before = (await story.innerText()).length
   await pressThing(page, 'hearth')
@@ -211,7 +168,7 @@ test('a press on a name or mark while names are showing is a press on its thing'
   page,
 }): Promise<void> => {
   await page.setViewportSize({ width: 1280, height: 800 })
-  await toTheCottage(page)
+  await toThePlacedCottage(page)
   await showNames(page)
   const name = page.locator('[data-area-name="grandmother"]')
   await expect(name).toBeVisible()
@@ -226,7 +183,7 @@ test.describe('on the smallest sideways phone', () => {
     page,
   }): Promise<void> => {
     await page.setViewportSize({ width: 568, height: 320 })
-    await toTheCottage(page)
+    await toThePlacedCottage(page)
     await pressThing(page, 'grandmother')
     const buttons = page.locator('.lq-press-ring .lq-ring-coin')
     await expect(buttons.first()).toBeVisible()
@@ -247,7 +204,7 @@ test('a ring at the top edge shows its long name in full, on screen and clear of
 }): Promise<void> => {
   await page.setViewportSize({ width: 1512, height: 806 })
   // The Faded Photograph hangs high on the wall, near the picture's top.
-  await toTheCottage(page, 0.6, {
+  await toThePlacedCottage(page, 0.6, {
     'faded-photograph': { x: 0.24, y: 0.0, width: 0.06, height: 0.08 },
   })
   await enterCommand(page, 'search')
