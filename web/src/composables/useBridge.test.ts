@@ -1,7 +1,15 @@
 import { setAppStorage } from '@/storage/appStorage'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { useBridge } from '@/composables/useBridge'
-import { GAME_NAME } from '@/engine'
+import { useBridge, type ActClass } from '@/composables/useBridge'
+import {
+  Act,
+  Character,
+  GAME_NAME,
+  Item,
+  Quest,
+  Room,
+  type ImagePatch,
+} from '@/engine'
 import type { SaveSlot } from '@/types/bridge'
 
 /** Minimal localStorage mock shared across all tests in this file. */
@@ -30,15 +38,95 @@ function storageFull() {
   })
 }
 
+/** The one thing of the fixture act that can be carried. */
+class Pear extends Item {
+  constructor() {
+    super({ name: 'pear', description: 'A pear.', canBeCarried: true })
+  }
+}
+
+/** The fixture act's one person. */
+class Warden extends Character {
+  constructor() {
+    super({ name: 'warden', description: 'The warden.' })
+  }
+}
+
+/** A quest of the fixture act, never started: the save cards only count it. */
+class OrchardQuest extends Quest {
+  constructor(name = 'Orchard Quest') {
+    super({ name, description: 'Look after the orchard.' })
+  }
+
+  /** Never started. */
+  override checkTrigger(): boolean {
+    return false
+  }
+
+  /** Never done. */
+  override checkCompletion(): boolean {
+    return false
+  }
+}
+
+/** The patches of the orchard's picture. */
+const ORCHARD_PATCHES: ImagePatch[] = [
+  {
+    id: 'pear-taken',
+    title: 'Pear taken',
+    text: 'The pear is gone.',
+    area: 'pear',
+    when: 'absent',
+  },
+  {
+    id: 'warden-waiting',
+    title: 'Warden waiting',
+    text: 'The warden waits.',
+    area: 'warden',
+    when: 'present',
+    standsFor: 'pear-taken',
+  },
+]
+
+/** The act the bridge is tested on, so that no real act's content is. */
+class OrchardAct extends Act {
+  constructor() {
+    super({
+      name: 'Orchard Act',
+      rooms: {
+        Orchard: new Room({
+          name: 'Orchard',
+          description: 'An orchard.',
+          items: [new Pear()],
+          characters: [new Warden()],
+        }),
+      },
+      quests: [new OrchardQuest('First'), new OrchardQuest('Second')],
+      classes: { Pear, Warden, OrchardQuest },
+      musicFile: '',
+      musicInfo: '',
+    })
+  }
+
+  /** The orchard's patches. */
+  override roomPatches(): readonly ImagePatch[] {
+    return ORCHARD_PATCHES
+  }
+}
+
 /** The bridge under test. */
 type Bridge = ReturnType<typeof useBridge>
 
-/** A bridge with the game running in Act I, woken out of the dream it opens with. */
+/** A bridge that loads the fixture act only. */
+function fixtureBridge(): Bridge {
+  return useBridge(async (): Promise<ActClass[]> => [OrchardAct])
+}
+
+/** A bridge with the game running in the fixture act. */
 async function runningBridge() {
-  const bridge = useBridge()
+  const bridge = fixtureBridge()
   await bridge.init()
   bridge.controller.advanceToRunning()
-  bridge.controller.takeTurn('talk to voice')
   return bridge
 }
 
@@ -51,7 +139,7 @@ describe('useBridge', () => {
 
   describe('init', () => {
     it('reports progress and becomes ready', async () => {
-      const bridge = useBridge()
+      const bridge = fixtureBridge()
       const progress = vi.fn()
       expect(bridge.isReady()).toBe(false)
       await bridge.init(progress)
@@ -75,159 +163,15 @@ describe('useBridge', () => {
     })
   })
 
-  describe('game flow', () => {
-    it('starts with the logo, then the act intro, then accepts input', async () => {
-      const bridge = useBridge()
-      await bridge.init()
-      expect(bridge.controller.start()).toContain('Welcome to')
-      expect(bridge.controller.isAcceptingInput()).toBe(false)
-      expect(bridge.controller.isActRunning()).toBe(false)
-      expect(bridge.controller.getCurrentMusic()).toEqual({
-        musicFile: '',
-        musicInfo: '',
-      })
-      const texts = bridge.controller.advanceToRunning()
-      expect(texts).toHaveLength(3)
-      expect(texts[0].text).toContain('Welcome to')
-      expect(texts[0].actComplete).toBeNull()
-      expect(texts[1].text).toContain('ACT 1: THE CALL TO ADVENTURE')
-      expect(bridge.controller.isActRunning()).toBe(true)
-      expect(bridge.controller.isAcceptingInput()).toBe(true)
-      expect(bridge.controller.isGameRunning()).toBe(true)
-      expect(bridge.controller.getActName()).toBe('Act 1')
-      expect(bridge.controller.getActIntro()).toContain('ACT 1')
-      expect(bridge.controller.getCurrentMusic().musicFile).toContain('.mp3')
-    })
-
-    it('opens in the dream and wakes into the cottage', async () => {
-      const bridge = useBridge()
-      await bridge.init()
-      bridge.controller.advanceToRunning()
-      expect(bridge.controller.getRoomName()).toBe('The Dream')
-      expect(bridge.controller.getRoomCharacters()).toEqual(['voice'])
-      expect(bridge.controller.takeTurn('talk to voice')).toContain(
-        'let them rest',
-      )
-      expect(bridge.controller.getRoomName()).toBe("Elior's Cottage")
-    })
-
-    it('runs commands and advances the turn', async () => {
+  describe('newGame', () => {
+    it('starts a fresh game from the first act', async () => {
       const bridge = await runningBridge()
-      expect(bridge.controller.getRoomItems()).toContain('bread')
-      expect(bridge.controller.getRoomItems()).not.toContain("elior's journal")
-      const result = bridge.controller.takeTurn('use lantern')
-      expect(result).toContain('The flickering light')
-      expect(bridge.controller.getRoomItems()).toContain("elior's journal")
-      expect(bridge.controller.takeTurn('xyzzy')).toContain(
-        "I don't understand",
-      )
-    })
-
-    it('reads the current text without a new turn, and is not over yet', async () => {
-      const bridge = useBridge()
-      await bridge.init()
-      expect(bridge.controller.getResultText()).toContain('Welcome to')
-      expect(bridge.controller.getResultText()).toContain('Welcome to')
-      expect(bridge.controller.isGameOver()).toBe(false)
-      bridge.controller.advanceToRunning()
-      expect(bridge.controller.isGameOver()).toBe(false)
-    })
-
-    it('advances one screen at a time', async () => {
-      const bridge = useBridge()
-      await bridge.init()
-      expect(bridge.controller.advanceTurn()).toContain('Welcome to')
-      expect(bridge.controller.advanceTurn()).toContain('ACT 1')
-      expect(bridge.controller.isActRunning()).toBe(true)
-    })
-
-    it('answers read-only commands without a new turn', async () => {
-      const bridge = await runningBridge()
-      expect(bridge.controller.handleCommand('help')).toContain(
-        'Available Commands',
-      )
-      expect(bridge.controller.handleCommand('stats')).toContain(
-        "[room_name]Elior's Cottage[/room_name]",
-      )
-    })
-
-    it('starts a fresh game from Act I', async () => {
-      const bridge = await runningBridge()
-      bridge.controller.takeTurn('use lantern')
+      bridge.controller.takeTurn('take pear')
       bridge.newGame()
       bridge.controller.advanceToRunning()
-      expect(bridge.controller.getRoomItems()).not.toContain('bread')
-    })
-  })
-
-  describe('room and journal data', () => {
-    it('describes the current room', async () => {
-      const bridge = await runningBridge()
-      expect(bridge.controller.getRoomName()).toBe("Elior's Cottage")
-      expect(bridge.controller.getRoomDescription()).toContain('cottage')
-      expect(bridge.controller.getRoomCharacters()).toEqual(['grandmother'])
-      expect(bridge.controller.getRoomItems()).toEqual([
-        'hearth',
-        'lantern',
-        'bread',
-        'table',
-        'shelves',
-        'books',
-      ])
-      expect(bridge.controller.getRoomExits()).toEqual({})
-      expect(bridge.controller.getRoomWares()).toEqual([])
-      expect(bridge.controller.look()).toBe('')
-    })
-
-    it('lists the inventory, spells and quests as named items', async () => {
-      const bridge = await runningBridge()
+      expect(bridge.controller.getActName()).toBe('Act 1')
       expect(bridge.controller.getInventory()).toEqual([])
-      expect(bridge.controller.getSpells()).toEqual([])
-      bridge.controller.takeTurn('use lantern')
-      bridge.controller.takeTurn('take bread')
-      expect(bridge.controller.getInventory()).toEqual([
-        {
-          name: '[item_name]bread[/item_name]',
-          description: expect.any(String),
-        },
-      ])
-      expect(bridge.controller.getCompletedQuests()).toEqual([])
-      const settled = bridge.controller.settleQuests()
-      expect(settled.activated[0].name).toBeTruthy()
-      // The lit lantern has already moved the opening quest's log on a step.
-      expect(settled.updated.map((quest) => quest.name)).toEqual([
-        'Hint of magic',
-      ])
-      expect(settled.completed).toEqual([])
-      expect(bridge.controller.getActiveQuests().length).toBeGreaterThan(0)
-    })
-
-    it('reports quest progress, act stats and short names', async () => {
-      const bridge = await runningBridge()
-      expect(bridge.controller.getQuestProgress()).toEqual({
-        completed: 0,
-        total: 11,
-        actNumber: 1,
-        mainQuest: 'Shadows over Willowbrook',
-      })
-      expect(bridge.controller.getActStats()).toEqual({
-        questsCompleted: 0,
-        questsTotal: 11,
-        spells: 0,
-        places: 1,
-      })
-      bridge.controller.takeTurn('use lantern')
-      expect(bridge.controller.getShortNames()).toEqual({
-        lantern: 'lantern (lit)',
-        journal: "elior's journal",
-      })
-    })
-
-    it('offers command completions for the current room', async () => {
-      const bridge = await runningBridge()
-      const tree = bridge.controller.getCommandCompletions()
-      expect(tree.talk).toEqual({ to: { grandmother: null } })
-      expect(tree.help).toBeNull()
+      expect(bridge.controller.getRoomItems()).toContain('pear')
     })
   })
 
@@ -244,16 +188,16 @@ describe('useBridge', () => {
   describe('quick save', () => {
     it('stores the save data and its details', async () => {
       const bridge = await runningBridge()
-      bridge.controller.takeTurn('use lantern')
+      bridge.controller.takeTurn('take pear')
       expect(bridge.quickSaveGame()).toBe('Game saved.')
       const data = localStorageMock.getItem('retroquest_save')
       expect(JSON.parse(data!)).toMatchObject({ version: 4, actIndex: 0 })
       const quick = bridge.getQuickSave()!
       expect(quick.slot).toBe(0)
       expect(quick.act).toBe('Act 1')
-      expect(quick.room).toBe("Elior's Cottage")
+      expect(quick.room).toBe('Orchard')
       expect(typeof quick.timestamp).toBe('string')
-      expect(quick.quests).toEqual({ completed: 0, total: 11 })
+      expect(quick.quests).toEqual({ completed: 0, total: 2 })
     })
 
     it('quick save and load restore the game', async () => {
@@ -261,14 +205,13 @@ describe('useBridge', () => {
       expect(bridge.quickLoadGame()).toBe(
         '[failure]No save file found.[/failure]',
       )
-      bridge.controller.takeTurn('use lantern')
-      bridge.controller.takeTurn('take bread')
+      bridge.controller.takeTurn('take pear')
       expect(bridge.quickSaveGame()).toBe('Game saved.')
       bridge.newGame()
       bridge.controller.advanceToRunning()
       expect(bridge.controller.getInventory()).toEqual([])
       expect(bridge.quickLoadGame()).toContain('loaded')
-      expect(bridge.controller.getInventory()[0].name).toContain('bread')
+      expect(bridge.controller.getInventory()[0].name).toContain('pear')
     })
 
     it('is a failure when storage is full', async () => {
@@ -334,7 +277,7 @@ describe('useBridge', () => {
 
     it('reports progress while the acts load', async () => {
       const progress = vi.fn()
-      await useBridge().init(progress)
+      await fixtureBridge().init(progress)
       expect(progress.mock.calls.map((c) => c[0])).toEqual([
         'Loading the acts...',
         'Starting game...',
@@ -442,7 +385,7 @@ describe('useBridge', () => {
         '[failure]No save file found.[/failure]',
       )
       expect(bridge.saveNamedGame('morning')).toBe('Game saved.')
-      bridge.controller.takeTurn('use lantern')
+      bridge.controller.takeTurn('take pear')
       expect(bridge.saveNamedGame('evening')).toBe('Game saved.')
       expect(bridge.saveNamedGame('morning')).toBe('Game saved.')
       const saves = JSON.parse(
@@ -454,7 +397,7 @@ describe('useBridge', () => {
       bridge.newGame()
       bridge.controller.advanceToRunning()
       expect(bridge.loadNamedGame('evening')).toContain('loaded')
-      expect(bridge.controller.getRoomItems()).toContain('bread')
+      expect(bridge.controller.getInventory()[0].name).toContain('pear')
       expect(bridge.loadNamedGame('missing')).toBe(
         '[failure]No save file found.[/failure]',
       )
@@ -586,13 +529,13 @@ describe('useBridge', () => {
       expect(slots[2]).toMatchObject({
         slot: 3,
         act: 'Act 1',
-        room: "Elior's Cottage",
+        room: 'Orchard',
       })
       expect(typeof slots[2]!.timestamp).toBe('string')
       expect(JSON.parse(slots[2]!.data)).toMatchObject({ version: 4 })
       expect(bridge.getSaveSlots()[2].quests).toEqual({
         completed: 0,
-        total: 11,
+        total: 2,
       })
     })
 
@@ -601,7 +544,7 @@ describe('useBridge', () => {
       bridge.saveToSlot(3)
       const saved = bridge.getSaveSlots()[2].picture
       expect(saved).toMatchObject({
-        actName: 'Act1',
+        actName: 'Orchard Act',
         roomKey: expect.any(String) as string,
         variant: expect.any(String) as string,
         patchIds: expect.any(Array) as string[],
@@ -651,7 +594,7 @@ describe('useBridge', () => {
       )
       bridge.saveToSlot(2)
       const slots = bridge.getSaveSlots()
-      expect(slots[1].room).toBe("Elior's Cottage")
+      expect(slots[1].room).toBe('Orchard')
       expect(slots[0]).toMatchObject({
         act: 'Act 1',
         room: 'Square',
@@ -661,12 +604,12 @@ describe('useBridge', () => {
 
     it('loads a slot and reports empty or missing slots', async () => {
       const bridge = await runningBridge()
-      bridge.controller.takeTurn('use lantern')
+      bridge.controller.takeTurn('take pear')
       bridge.saveToSlot(5)
       bridge.newGame()
       bridge.controller.advanceToRunning()
       expect(bridge.loadFromSlot(5)).toContain('loaded')
-      expect(bridge.controller.getRoomItems()).toContain('bread')
+      expect(bridge.controller.getInventory()[0].name).toContain('pear')
       expect(bridge.loadFromSlot(6)).toBe(
         '[failure]No save file found.[/failure]',
       )
@@ -735,7 +678,7 @@ describe('useBridge', () => {
         false,
         false,
       ])
-      expect(slots[1].room).toBe("Elior's Cottage")
+      expect(slots[1].room).toBe('Orchard')
       expect(bridge.loadFromSlot(2)).toMatch(
         new RegExp(`older version of ${GAME_NAME}`),
       )
@@ -784,19 +727,19 @@ describe('useBridge', () => {
       'a %s save keeps the same details and story from one fixture',
       async (_kind, save, card, load) => {
         const bridge = await runningBridge()
-        bridge.controller.takeTurn('take bread')
+        bridge.controller.takeTurn('take pear')
         expect(save(bridge)).toBe('Game saved.')
         expect(card(bridge)).toMatchObject({
           act: 'Act 1',
-          room: "Elior's Cottage",
-          quests: { completed: 0, total: 11 },
+          room: 'Orchard',
+          quests: { completed: 0, total: 2 },
           outdated: false,
         })
         expect(typeof card(bridge)!.timestamp).toBe('string')
         const reloaded = await runningBridge()
         expect(load(reloaded)).not.toContain('[failure]')
         expect(reloaded.takeLoadedStory()).toEqual(STORY)
-        expect(reloaded.controller.getInventory()[0].name).toContain('bread')
+        expect(reloaded.controller.getInventory()[0].name).toContain('pear')
       },
     )
   })
@@ -826,22 +769,28 @@ describe('useBridge', () => {
   })
 
   describe('pictureState', () => {
-    it('names no stand-in in the cottage, whose carried patch lies over the lit one', async () => {
+    it('names the area and the stand-in of each patch that has one', async () => {
       const bridge = await runningBridge()
-      expect(bridge.pictureState().patchStandIns).toEqual({})
+      expect(bridge.pictureState().patchAreas).toEqual({
+        'pear-taken': 'pear',
+        'warden-waiting': 'warden',
+      })
+      expect(bridge.pictureState().patchStandIns).toEqual({
+        'warden-waiting': 'pear-taken',
+      })
     })
 
     it('names the room and the patches of its picture that apply', async () => {
       const bridge = await runningBridge()
-      expect(bridge.pictureState().roomKey).toBe('EliorsCottage')
-      expect(bridge.pictureState().patchIds).not.toContain('bread-taken')
-      bridge.controller.takeTurn('take bread')
-      expect(bridge.pictureState().patchIds).toContain('bread-taken')
+      expect(bridge.pictureState().roomKey).toBe('Orchard')
+      expect(bridge.pictureState().patchIds).not.toContain('pear-taken')
+      bridge.controller.takeTurn('take pear')
+      expect(bridge.pictureState().patchIds).toContain('pear-taken')
     })
 
     it('is the same after a save is loaded', async () => {
       const bridge = await runningBridge()
-      bridge.controller.takeTurn('take bread')
+      bridge.controller.takeTurn('take pear')
       const before = bridge.pictureState()
       bridge.quickSaveGame()
       bridge.newGame()
@@ -850,7 +799,7 @@ describe('useBridge', () => {
     })
 
     it('is empty before any room is known', async () => {
-      const bridge = useBridge()
+      const bridge = fixtureBridge()
       await bridge.init()
       expect(bridge.pictureState()).toEqual({
         roomKey: '',
@@ -866,10 +815,10 @@ describe('useBridge', () => {
       const bridge = await runningBridge()
       const ids = (): string[] =>
         bridge.pictureState().things.map((thing) => thing.areaId)
-      expect(ids()).toContain('bread')
-      expect(ids()).toContain('grandmother')
-      bridge.controller.takeTurn('take bread')
-      expect(ids()).not.toContain('bread')
+      expect(ids()).toContain('pear')
+      expect(ids()).toContain('warden')
+      bridge.controller.takeTurn('take pear')
+      expect(ids()).not.toContain('pear')
     })
   })
 })

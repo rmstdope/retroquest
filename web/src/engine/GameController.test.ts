@@ -836,6 +836,17 @@ describe('GameController', () => {
       })
     })
 
+    it('answers help and stats without starting a new turn', () => {
+      const ctrl = makeController()
+      startAct(ctrl)
+      const newTurn = vi.spyOn(ctrl.game, 'newTurn')
+      expect(ctrl.handleCommand('help')).toContain('Available Commands')
+      expect(ctrl.handleCommand('stats')).toContain(
+        '[room_name]Test Room[/room_name]',
+      )
+      expect(newTurn).not.toHaveBeenCalled()
+    })
+
     it('takes a turn per command and advances through the intro screens', () => {
       const ctrl = makeController()
       expect(ctrl.isAcceptingInput()).toBe(false)
