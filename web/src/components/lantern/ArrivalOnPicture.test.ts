@@ -869,4 +869,130 @@ describe('ArrivalOnPicture', () => {
       expect(w.get('.lq-news-top').find('.lq-news-seal').exists()).toBe(false)
     })
   })
+
+  describe('under the mouse pointer', () => {
+    /** Mount the arrival, real transitions on, with the events then the description told on it. */
+    async function shown(): Promise<VueWrapper> {
+      const w = mount(ArrivalOnPicture, {
+        props: { pictured: true },
+        global: { stubs: { transition: false } },
+        attachTo: document.body,
+      })
+      useArrivalStore().show(1, [events, description], false)
+      await w.vm.$nextTick()
+      await w.vm.$nextTick()
+      return w
+    }
+
+    /** The pointer of `pointerType` comes onto the element `at`. */
+    async function over(
+      w: VueWrapper,
+      at: string,
+      pointerType = 'mouse',
+      type = 'pointerover',
+    ): Promise<void> {
+      w.get(at).element.dispatchEvent(
+        new PointerEvent(type, { bubbles: true, pointerType }),
+      )
+      await w.vm.$nextTick()
+    }
+
+    afterEach(() => {
+      document.body.innerHTML = ''
+    })
+
+    it.each(['.lq-arrival-card', '.lq-arrival-line', '.lq-arrival-pill'])(
+      'holds the card while the mouse is on %s, the bar standing still',
+      async (at) => {
+        const w = await shown()
+        await over(w, at)
+        expect(useArrivalStore().held).toBe(true)
+        expect(w.get('.lq-arrival-bar').classes()).toContain('lq-held')
+        vi.advanceTimersByTime(60000)
+        await w.vm.$nextTick()
+        expect(useArrivalStore().part?.kind).toBe('events')
+      },
+    )
+
+    it('takes a move of the mouse on the card as one onto it', async () => {
+      const w = await shown()
+      await over(w, '.lq-arrival-line', 'mouse', 'pointermove')
+      expect(useArrivalStore().held).toBe(true)
+    })
+
+    it('lets the card go when the mouse is on the picture around it, or leaves', async () => {
+      const w = await shown()
+      await over(w, '.lq-arrival-card')
+      await over(w, '.lq-arrival-stage')
+      expect(useArrivalStore().held).toBe(false)
+      expect(w.get('.lq-arrival-bar').classes()).not.toContain('lq-held')
+      await over(w, '.lq-arrival-card')
+      await over(w, '.lq-arrival-stage', 'mouse', 'pointerleave')
+      expect(useArrivalStore().held).toBe(false)
+    })
+
+    it.each(['touch', 'pen'])('is not held by a %s pointer', async (type) => {
+      const w = await shown()
+      await over(w, '.lq-arrival-card', type)
+      expect(useArrivalStore().held).toBe(false)
+    })
+
+    it('stays held by the mouse when a finger leaves the picture', async () => {
+      const w = await shown()
+      await over(w, '.lq-arrival-card')
+      await over(w, '.lq-arrival-stage', 'touch', 'pointerleave')
+      expect(useArrivalStore().held).toBe(true)
+    })
+
+    it('lets go once the arrival is over, and when it is taken down', async () => {
+      const w = await shown()
+      await over(w, '.lq-arrival-card')
+      useArrivalStore().clear()
+      await w.vm.$nextTick()
+      expect(useArrivalStore().held).toBe(false)
+      // The leaving card holds nothing.
+      await over(w, '.lq-arrival-card')
+      expect(useArrivalStore().held).toBe(false)
+      useArrivalStore().show(2, [events], false)
+      await w.vm.$nextTick()
+      await over(w, '.lq-arrival-card:not(.lq-arrival-fade-leave-active)')
+      expect(useArrivalStore().held).toBe(true)
+      w.unmount()
+      expect(useArrivalStore().held).toBe(false)
+    })
+
+    it('is not held by the mouse on a card that is fading as the next comes up', async () => {
+      const w = await shown()
+      useArrivalStore().next()
+      await w.vm.$nextTick()
+      expect(useArrivalStore().active).toBe(true)
+      await over(w, '.lq-arrival-card.lq-arrival-fade-leave-active')
+      expect(useArrivalStore().held).toBe(false)
+    })
+
+    it('says a card is leaving while it fades, and no longer once it is taken down', async () => {
+      const w = await shown()
+      useArrivalStore().clear()
+      await w.vm.$nextTick()
+      expect(useArrivalStore().leaving).toBe(true)
+      w.unmount()
+      expect(useArrivalStore().leaving).toBe(false)
+    })
+
+    it('takes presses while its card leaves, doing nothing with them, and none once it has gone', async () => {
+      const w = await shown()
+      const store = useArrivalStore()
+      const next = vi.spyOn(store, 'next')
+      store.clear()
+      await w.vm.$nextTick()
+      // Still on the screen: no time has passed.
+      expect(w.find('.lq-arrival-card').exists()).toBe(true)
+      expect(w.classes()).toContain('lq-on')
+      await w.trigger('click')
+      expect(next).not.toHaveBeenCalled()
+      await vi.advanceTimersByTimeAsync(1000)
+      expect(w.find('.lq-arrival-card').exists()).toBe(false)
+      expect(w.classes()).not.toContain('lq-on')
+    })
+  })
 })
