@@ -1,4 +1,8 @@
-# rq-aq22
+# rq-aq22 — retrospective
+
+- **Implementer:** Storm
+- **Date:** 2026-11-27
+- **PR:** #1402
 
 ## Auto mode gave no verdict for a command that began with `cd`
 
@@ -11,7 +15,7 @@ leading `cd`, and the refused call was sent right after one that moved it.
 
 **Cost.** Two re-sent calls.
 
-**Prevent by:** A line in `produce-bead`, *Workspace*: start each command with `cd` to the same
+**Prevent by.** A line in `produce-bead`, *Workspace*: start each command with `cd` to the same
 directory (the tree's root) or use `git -C` and `npm --prefix`, so the shell does not move between
 a call's review and its run.
 
