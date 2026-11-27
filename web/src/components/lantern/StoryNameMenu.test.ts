@@ -45,7 +45,7 @@ describe('StoryNameMenu', () => {
 
     document.body.dispatchEvent(new Event('scroll'))
 
-    expect(wrapper!.emitted('close')).toEqual([[false]])
+    expect(wrapper!.emitted('close')).toEqual([[]])
   })
 
   it('stays open for a scroll reported only after it opened (focus scrolling the name into view)', async () => {
@@ -167,6 +167,6 @@ describe('StoryNameMenu', () => {
     expect(document.activeElement?.textContent?.trim()).toBe('Cast…')
 
     await wrapper.get('[role="menu"]').trigger('keydown', { key: 'Escape' })
-    expect(wrapper.emitted('close')).toEqual([[true]])
+    expect(wrapper.emitted('close')).toEqual([[]])
   })
 })

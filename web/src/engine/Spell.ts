@@ -54,7 +54,8 @@ export class Spell {
 
   /**
    * Cast on a target that is neither an item nor a character in reach, named
-   * as typed (lower case). Return the story text, or null when the spell has
+   * as typed (lower case), then again without its article when the first
+   * answer is null. Return the story text, or null when the spell has
    * nothing there, which leaves the usual "You don't see ..." failure.
    */
   castOnName(_gameState: GameState, _target: string): string | null {

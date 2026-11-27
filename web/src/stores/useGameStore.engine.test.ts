@@ -381,6 +381,17 @@ describe('useGameStore over the real engine: the no-match line and a name that w
     expect(saysNoMatch(store, 'use ancient amulet on bob')).toBe(true)
   })
 
+  it('does not say no match for a name typed with "a" or "an"', async () => {
+    const store = await storeIn(Act3, 'DragonsHall', (state) => {
+      state.currentRoom.addCharacter(new SirCedric())
+      state.inventory.push(new AncientAmulet())
+    })
+
+    expect(saysNoMatch(store, 'examine an ancient amulet')).toBe(false)
+    expect(saysNoMatch(store, 'talk to a cedric')).toBe(false)
+    expect(saysNoMatch(store, 'examine an anvil')).toBe(true)
+  })
+
   it('does not say no match for the Unmasked Sorceress by the one word', async () => {
     const store = await storeIn(Act4, 'ChamberOfWhispers', (state) => {
       state.currentRoom.characters[0].name = 'Unmasked Sorceress'

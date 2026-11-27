@@ -87,8 +87,10 @@ export function nameInSentence(
 
 /**
  * The indefinite article a name takes, by its first sound as its spelling
- * shows it: "an" before a vowel ("an enhanced echo stone"), "a" otherwise.
+ * shows it: "an" before a vowel ("an enhanced echo stone"), "a" otherwise,
+ * and "a" before a vowel said as a consonant (a name starting "uni", "use",
+ * "usu", "eu" or "one").
  */
 export function indefiniteArticle(name: string): 'a' | 'an' {
-  return /^[aeiou]/i.test(name.trim()) ? 'an' : 'a'
+  return /^(?!uni|use|usu|eu|one)[aeiou]/i.test(name.trim()) ? 'an' : 'a'
 }

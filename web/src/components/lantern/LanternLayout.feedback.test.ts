@@ -89,6 +89,17 @@ describe('LanternLayout: feedback', () => {
     expect(feedbackOpen()).toBe(true)
   })
 
+  it('gives the typing box the cursor when it closes, opened from the ✎ button', async () => {
+    await press('F1')
+    const button = w.get<HTMLElement>('[data-button="feedback"]').element
+    button.focus()
+    button.click()
+    await flushPromises()
+    await press('Escape', document.activeElement!)
+    expect(feedbackOpen()).toBe(false)
+    expect(document.activeElement).toBe(w.get('.lq-type-input').element)
+  })
+
   it('opens from the menu, and Escape comes back to the menu with focus on its entry', async () => {
     await press('Escape')
     const entry = [

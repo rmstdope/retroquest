@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { nextTick, onMounted, ref } from 'vue'
+import { useFocusReturn } from '@/composables/useFocusReturn'
 import JournalPanel from './JournalPanel.vue'
 
 /**
@@ -11,6 +12,7 @@ import JournalPanel from './JournalPanel.vue'
  */
 const emit = defineEmits<{ close: [] }>()
 const root = ref<HTMLElement | null>(null)
+useFocusReturn()
 
 onMounted(async () => {
   await nextTick()

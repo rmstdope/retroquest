@@ -52,6 +52,7 @@ import { useUiSounds } from '@/composables/useUiSounds'
 import { useSizeWatch } from '@/composables/useSizeWatch'
 import { useActMusic } from '@/composables/useActMusic'
 import { useFocusTrap } from '@/composables/useFocusTrap'
+import { provideFocusReturn } from '@/composables/useFocusReturn'
 import { useFullscreen } from '@/composables/useFullscreen'
 import { nameActions, type NameAction } from '@/lantern/nameActions'
 import { parseCountedName } from '@/lantern/inventoryChanges'
@@ -427,8 +428,9 @@ function toggleDrawer(tab: 'quests' | 'story'): void {
 
 /**
  * Close the drawer. One opened from the menu brings the menu back, focus on
- * its tile; otherwise focus goes back to the typing box when it is up, else to
- * what had it when the drawer opened (on a phone, the plate's story button).
+ * its tile; otherwise focus goes back to what had it when the drawer opened
+ * (on a phone, the plate's story button), which the typing box takes over when
+ * it is up (see `useFocusReturn`).
  */
 function closeDrawer(): void {
   const tab = drawerTab.value
@@ -441,10 +443,8 @@ function closeDrawer(): void {
   }
   drawerTab.value = null
   if (!tab) return
-  if (typingOpen.value) void nextTick(focusActions)
   // On a phone the story so far was opened from the plate.
-  else if (phoneStage.value)
-    void nextTick(() => plate.value?.focusStoryButton())
+  if (phoneStage.value) void nextTick(() => plate.value?.focusStoryButton())
   else if (drawerOpener?.isConnected) {
     const back = drawerOpener
     void nextTick(() => back.focus({ preventScroll: true }))
@@ -872,7 +872,7 @@ const PILL_ROOM = 96
  * Show the pill while story text continues below the visible part (the blank
  * room the story keeps at its end for the narration hint does not count).
  * When it goes while focused (pressed to the end), focus moves on to the
- * actions.
+ * typing box.
  */
 function updateMoreBelow(): void {
   const story = storyEl.value
@@ -886,7 +886,7 @@ function updateMoreBelow(): void {
     story.clientHeight >= PILL_ROOM &&
     story.scrollTop + story.clientHeight <
       story.scrollHeight - trailing - END_SLACK
-  if (hadFocus && !moreBelow.value) focusActions()
+  if (hadFocus && !moreBelow.value) focusTypingBox()
   resizeLanding.note()
 }
 
@@ -905,20 +905,15 @@ function readOn(): void {
   })
 }
 const commandBoxEl = ref<InstanceType<typeof CommandBox> | null>(null)
-/** Put the cursor back in the typing box, when it is up. */
-function focusActions(): void {
-  if (passage.phase !== 'idle') return
-  if (typingOpen.value) commandBoxEl.value?.focus()
-}
-
-// A story card (an arrival or a scene) clicked away took the cursor from the typing box to the page: it goes back (rq-9g4n), unless a window or the menu is up.
-watch(
-  () => arrival.active || scene.turn !== null,
-  (shown) => {
-    if (!shown && document.activeElement === document.body && !dialogOpen())
-      void nextTick(focusActions)
-  },
-)
+/**
+ * Where focus goes when something over the game goes away is one rule
+ * (`useFocusReturn`), told here what the typing box is. `focusTypingBox` is for
+ * focus lost without anything closing.
+ */
+const focusTypingBox = provideFocusReturn({
+  typingBox: () => (typingOpen.value ? commandBoxEl.value : null),
+  busy: () => passage.phase !== 'idle',
+})
 
 /** The typing box asked to be hidden (Escape in it, or a click on its "F1 hides" pill). */
 function hideBox(): void {
@@ -1623,7 +1618,7 @@ watch(
     updateMoreBelow()
     // The cursor goes back to the typing box when the new turn took it away.
     const lost = document.activeElement === document.body
-    if ((away || lost) && !game.showModal) focusActions()
+    if ((away || lost) && !game.showModal) focusTypingBox()
   },
   { flush: 'post' },
 )
@@ -2491,7 +2486,7 @@ watch(
   },
 )
 
-/** Closing the menu gives focus back to what opened it, or to the typing box when it is up. */
+/** Close the window that is up: one opened from the menu brings the menu back, else the game goes on. */
 async function closeGameDialog(): Promise<void> {
   // A window opened from the menu goes back to the menu, focus on its entry.
   if (gameDialog.value !== 'menu' && menuEntry.value) {
@@ -2502,17 +2497,13 @@ async function closeGameDialog(): Promise<void> {
   await closeAllGameDialogs()
 }
 
-/** Everything the menu opened is closed and the game goes on (a slot saved or loaded, the menu closed): focus goes to the typing box when it is up, else back to what opened the menu. */
+/** Everything the menu opened is closed and the game goes on (a slot saved or loaded, the menu closed): focus left on the page goes back to what opened the menu (the typing box takes over when it is up, see `useFocusReturn`). */
 async function closeAllGameDialogs(): Promise<void> {
   gameDialog.value = null
   menuEntry.value = null
   focusMenuEntry.value = null
   await nextTick()
-  if (typingOpen.value) focusActions()
-  else if (
-    document.activeElement === document.body &&
-    dialogOpener?.isConnected
-  )
+  if (document.activeElement === document.body && dialogOpener?.isConnected)
     dialogOpener.focus()
 }
 
@@ -2727,7 +2718,7 @@ function actionsOf(name: HTMLElement): NameAction[] {
 /**
  * Open the menu of `name`, if the game takes input and the name has one.
  * A pointer open leaves no focus on the name (a Tab stop takes focus on a
- * click): as before, closing by key then goes to the actions.
+ * click).
  */
 function openNameMenu(name: HTMLElement, pointer = false): void {
   if (!game.acceptInput) return
@@ -2794,23 +2785,20 @@ watch(
 )
 
 /**
- * Focus goes back without scrolling (a scroll away also closes the menu).
- * When nothing had it (a mouse click on text) and a key closed the menu,
- * it goes to the typing box (when it is up); a click or scroll leaves it be (on a phone,
- * focusing the typing box could open the keyboard).
+ * Focus goes back to what had it, without scrolling (a scroll away also closes
+ * the menu). When nothing had it (a mouse click on text), the typing box takes
+ * it when it is up (see `useFocusReturn`).
  */
-function closeNameMenu(byKey: boolean): void {
+function closeNameMenu(): void {
   nameMenu.value = null
   if (focusBeforeMenu?.isConnected && focusBeforeMenu !== document.body)
     focusBeforeMenu.focus({ preventScroll: true })
-  else if (byKey) void nextTick(focusActions)
 }
 
-/** Run the picked action; focus goes on to the actions, as after a command. */
+/** Run the picked action; the typing box takes the cursor the menu leaves, when it is up. */
 function runNameAction(command: string): void {
   nameMenu.value = null
   game.submitCommand(command)
-  void nextTick(focusActions)
 }
 
 /** A click on the story: a tap for the narration (names keep their menu), then the name menu. */
@@ -2910,12 +2898,12 @@ watch(
   },
 )
 
-// Once the screen is fully up, focus lands where it does today (nothing takes it during the fade).
+// Once the screen is fully up, a chapter page takes focus (nothing takes it during the fade).
 watch(
   () => passage.phase,
   (phase, was) => {
-    if (phase !== 'idle' || was === 'idle' || game.showTitle) return
-    void nextTick(() => (game.showModal ? focusPopUp() : focusActions()))
+    if (phase !== 'idle' || was === 'idle') return
+    void nextTick(focusPopUp)
   },
 )
 const titlePage = ref<InstanceType<typeof TitlePage> | null>(null)
@@ -2990,13 +2978,11 @@ function focusPopUp(): void {
 }
 
 // Move keyboard focus into each pop-up as it opens or one follows another
-// (one chapter page, then the next), and back to the actions when the last
-// one closes.
+// (one chapter page, then the next).
 watch(
   () => [game.showModal, game.modalChapter] as const,
-  ([open], [wasOpen]) => {
+  ([open]) => {
     if (open) focusPopUp()
-    else if (wasOpen) focusActions()
   },
   { flush: 'post' },
 )
