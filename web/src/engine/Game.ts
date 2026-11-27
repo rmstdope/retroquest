@@ -612,12 +612,7 @@ Welcome to
     if (item) return item.examine(this.state)
     const character = this.findCharacter(target)
     if (character) return character.examine(this.state)
-    const vowelSound = /^(?!uni|use|usu|eu|one)[aeiou]/i.test(target.trim())
-    const article = vowelSound ? 'an' : 'a'
-    return (
-      `[failure]You don't see ${article} '${target}' to examine ` +
-      'here or in your inventory.[/failure]'
-    )
+    return notFound('see', target, 'to examine here or in your inventory')
   }
 
   /** The visited rooms and their exits. */
@@ -832,10 +827,7 @@ Welcome to
         ? this.byName(itemName, (name) => unheld.giveUnheld(this.state, name))
         : null
       if (carried !== null) return carried
-      return (
-        `[failure]You don't have ${indefiniteArticle(itemName)} '${itemName}' ` +
-        `to use, and there isn't one here.[/failure]`
-      )
+      return notFound('have', itemName, "to use, and there isn't one here")
     }
     if (!targetName) return item.use(this.state)
     const other = this.findItem(targetName)
@@ -846,10 +838,7 @@ Welcome to
           item.useOnCharacter(this.state, character),
         )
       }
-      return (
-        `[failure]You don't see a '${targetName}' to use with ` +
-        `${item.nameInSentence()}.[/failure]`
-      )
+      return notFound('see', targetName, `to use with ${item.nameInSentence()}`)
     }
     if (item === other) {
       return `[failure]You can't use ${item.nameInSentence()} with itself.[/failure]`
@@ -887,9 +876,10 @@ Welcome to
       spell.castOnName(this.state, name),
     )
     if (named !== null) return named
-    return (
-      `[failure]You don't see a '${targetName}' to cast ` +
-      `[spell_name]${spell.name}[/spell_name] on.[/failure]`
+    return notFound(
+      'see',
+      targetName,
+      `to cast [spell_name]${spell.name}[/spell_name] on`,
     )
   }
 
@@ -976,7 +966,7 @@ Welcome to
     if (!target) return `[failure]${capitalize(verb)} what?[/failure]`
     const item = this.findItem(target)
     if (item) return action(item)
-    return `[failure]You don't see a '${target}' to ${verb} here or in your inventory.[/failure]`
+    return notFound('see', target, `to ${verb} here or in your inventory`)
   }
 
   stats(): string {
@@ -1098,6 +1088,18 @@ export function normalizeSaveName(name: string): string | null {
 
 function message(error: unknown): string {
   return error instanceof Error ? error.message : String(error)
+}
+
+/**
+ * The one reply for a named thing that is not there: "You don't see an
+ * 'apple' …" or "You don't have …", the article chosen by `indefiniteArticle`
+ * and `purpose` ending the sentence.
+ */
+function notFound(has: 'see' | 'have', name: string, purpose: string): string {
+  return (
+    `[failure]You don't ${has} ${indefiniteArticle(name)} '${name}' ` +
+    `${purpose}.[/failure]`
+  )
 }
 
 /** The name without a leading "the", or null when it has none ("the" alone stays a name). */

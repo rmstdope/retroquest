@@ -987,6 +987,34 @@ describe('Game', () => {
     })
   })
 
+  describe('the article of a "not here" reply', () => {
+    it('goes by sound in every such reply', () => {
+      game.state.inventory.push(item('rope'))
+      game.state.knownSpells.push(new EchoSpell('light'))
+      for (const verb of [
+        'open',
+        'close',
+        'eat',
+        'drink',
+        'equip',
+        'unequip',
+      ] as const) {
+        expect(game[verb]('apple')).toBe(
+          `[failure]You don't see an 'apple' to ${verb} here or in your inventory.[/failure]`,
+        )
+      }
+      expect(game.use('rope', 'oak')).toBe(
+        "[failure]You don't see an 'oak' to use with the [item_name]rope[/item_name].[/failure]",
+      )
+      expect(game.use('useful stone')).toBe(
+        "[failure]You don't have a 'useful stone' to use, and there isn't one here.[/failure]",
+      )
+      expect(game.cast('light on egg')).toBe(
+        "[failure]You don't see an 'egg' to cast [spell_name]light[/spell_name] on.[/failure]",
+      )
+    })
+  })
+
   describe('look, search, rest', () => {
     it('looks around and flags the room for re-description', () => {
       game.hasChangedRoom = false
