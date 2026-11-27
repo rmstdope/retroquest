@@ -207,10 +207,13 @@ export interface CottagePicture {
  * told. Set the viewport first. The walk is made with the motion the spec
  * runs with, the suite's reduced motion unless it says otherwise, so a spec
  * whose own assertion needs motion switches it on once it has arrived.
+ * `inTheDream` runs once the game stands in the dream, before the voice wakes
+ * Elior, for a spec that has something to see there too.
  */
 export async function toTheCottage(
   page: Page,
   picture: CottagePicture = {},
+  inTheDream?: () => Promise<void>,
 ): Promise<void> {
   await page.route('**/images/generated/manifest.json', (route) =>
     route.fulfill({
@@ -230,6 +233,7 @@ export async function toTheCottage(
   await page.goto('/')
   await page.getByRole('button', { name: 'Start', exact: true }).click()
   await page.locator('.lq-chapter-button').click()
+  await inTheDream?.()
   // The dream is told over its picture first, a few lines at a time on a small screen.
   const arrival = page.getByTestId('arrival-on-picture')
   for (let turn = 0; turn < 8 && (await arrival.isVisible()); turn++)

@@ -1,5 +1,5 @@
 import { readFileSync } from 'node:fs'
-import { test, expect, enterCommand, type Page } from './fixtures'
+import { test, expect, toTheCottage, type Page } from './fixtures'
 
 /** The parts of a scene's mix this spec reads. */
 interface Scene {
@@ -102,15 +102,13 @@ test('SND-2: each room plays its music and its sound effects', async ({
   const dream = loopsOf('act1-the-dream')
   const cottage = loopsOf('act1-eliors-cottage')
   await recordLoops(page)
-  await page.goto('/')
-  await page.getByRole('button', { name: 'Start', exact: true }).click()
-  await page.locator('.lq-chapter-button').click()
 
   // The game opens in the dream, and the cottage is not heard there.
-  await expect.poll(() => sounding(page, dream)).toEqual(dream)
-  expect(await sounding(page, cottage)).toEqual([])
+  await toTheCottage(page, {}, async () => {
+    await expect.poll(() => sounding(page, dream)).toEqual(dream)
+    expect(await sounding(page, cottage)).toEqual([])
+  })
 
-  // The voice wakes Elior in his cottage.
-  await enterCommand(page, 'say hello to voice')
+  // The voice has woken Elior in his cottage.
   await expect.poll(() => sounding(page, cottage)).toEqual(cottage)
 })
