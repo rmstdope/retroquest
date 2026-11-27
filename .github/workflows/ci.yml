@@ -120,13 +120,13 @@ jobs:
         name: web-e2e (${{ matrix.shard }})
         needs: changes
         # The skip is on the steps: a skipped matrix job reports one check under the unexpanded
-        # name, and the shard checks would never arrive.
+        # name, and the three shard checks would never arrive.
         if: ${{ !cancelled() }}
         runs-on: ubuntu-latest
         strategy:
             fail-fast: false
             matrix:
-                shard: ["1/2", "2/2"]
+                shard: ["1/3", "2/3", "3/3"]
         defaults:
             run:
                 working-directory: web
