@@ -645,7 +645,8 @@ Welcome to
   take(itemName: string): string {
     const candidates = this.findAllItems(itemName, { inventory: false })
     if (candidates.length === 0) {
-      return `[failure]There is no '${itemName}' here to take.[/failure]`
+      const name = withoutArticle(itemName)
+      return `[failure]There is no '${name}' here to take.[/failure]`
     }
     const taken: [Item, string][] = []
     const prevented: string[] = []
@@ -690,7 +691,7 @@ Welcome to
     if (answer !== null) return answer
     return (
       `[failure]There is no character named ` +
-      `'[character_name]${target}[/character_name]' here to talk to.[/failure]`
+      `'[character_name]${withoutArticle(target)}[/character_name]' here to talk to.[/failure]`
     )
   }
 
@@ -714,7 +715,7 @@ Welcome to
     }
     return (
       `[failure]There is no character named ` +
-      `'[character_name]${characterName}[/character_name]' here to speak to.[/failure]`
+      `'[character_name]${withoutArticle(characterName)}[/character_name]' here to speak to.[/failure]`
     )
   }
 
@@ -771,7 +772,8 @@ Welcome to
     const [itemName, characterName] = split
     const character = this.findCharacter(characterName)
     if (!character) {
-      return `[failure]There is no character named '${capitalize(characterName)}' here.[/failure]`
+      const name = capitalize(withoutArticle(characterName))
+      return `[failure]There is no character named '${name}' here.[/failure]`
     }
     return character.buyItem(this.state, withoutArticle(itemName))
   }
@@ -1059,10 +1061,12 @@ function message(error: unknown): string {
 
 /**
  * The one reply for a named thing that is not there: "You don't see an
- * 'apple' …" or "You don't have …", the article chosen by `indefiniteArticle`
- * and `purpose` ending the sentence.
+ * 'apple' …" or "You don't have …". It quotes the typed name without its
+ * article, `indefiniteArticle` chooses the reply's own, and `purpose` ends
+ * the sentence.
  */
-function notFound(has: 'see' | 'have', name: string, purpose: string): string {
+function notFound(has: 'see' | 'have', typed: string, purpose: string): string {
+  const name = withoutArticle(typed)
   return (
     `[failure]You don't ${has} ${indefiniteArticle(name)} '${name}' ` +
     `${purpose}.[/failure]`

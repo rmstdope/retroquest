@@ -1042,6 +1042,40 @@ describe('Game', () => {
     })
   })
 
+  describe('a "not here" reply to a name typed with an article', () => {
+    it('quotes the name without it', () => {
+      game.state.inventory.push(item('rope'))
+      game.state.knownSpells.push(new EchoSpell('light'))
+      expect(game.examine('the unicorn')).toBe(
+        "[failure]You don't see a 'unicorn' to examine here or in your inventory.[/failure]",
+      )
+      expect(game.open('the dragon')).toBe(
+        "[failure]You don't see a 'dragon' to open here or in your inventory.[/failure]",
+      )
+      expect(game.use('a useful stone')).toBe(
+        "[failure]You don't have a 'useful stone' to use, and there isn't one here.[/failure]",
+      )
+      expect(game.use('rope', 'the oak')).toBe(
+        "[failure]You don't see an 'oak' to use with the [item_name]rope[/item_name].[/failure]",
+      )
+      expect(game.cast('light on an egg')).toBe(
+        "[failure]You don't see an 'egg' to cast [spell_name]light[/spell_name] on.[/failure]",
+      )
+      expect(game.take('an owl')).toBe(
+        "[failure]There is no 'owl' here to take.[/failure]",
+      )
+      expect(game.talk('the wizard')).toBe(
+        "[failure]There is no character named '[character_name]wizard[/character_name]' here to talk to.[/failure]",
+      )
+      expect(game.say('hello', 'a ghost')).toBe(
+        "[failure]There is no character named '[character_name]ghost[/character_name]' here to speak to.[/failure]",
+      )
+      expect(game.buy('rope from the wizard')).toBe(
+        "[failure]There is no character named 'Wizard' here.[/failure]",
+      )
+    })
+  })
+
   describe('the article of a "not here" reply', () => {
     it('goes by sound in every such reply', () => {
       game.state.inventory.push(item('rope'))
