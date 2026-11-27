@@ -12,6 +12,15 @@ on:
 permissions:
     contents: read
 
+# A pull request pushed again cancels the run of the head it replaced: nobody reads that
+# result, and it holds runners the new head and main are waiting for. Every other run gets a
+# group of its own, so a run on main, the regression run of its own merge, is never cancelled
+# or kept pending. A called run sees its caller's `github` context, so it fails the
+# `workflow_ref` test and the caller's run is left alone (rq-9h6a).
+concurrency:
+    group: ci-${{ github.event_name == 'pull_request' && startsWith(github.workflow_ref, 'rmstdope/retroquest/.github/workflows/ci.yml@') && format('pr-{0}', github.event.pull_request.number) || format('run-{0}', github.run_id) }}
+    cancel-in-progress: ${{ github.event_name == 'pull_request' && startsWith(github.workflow_ref, 'rmstdope/retroquest/.github/workflows/ci.yml@') }}
+
 jobs:
     # Decides whether this run has anything to check. A pull request that only touches docs/
     # skips the checks below, and they still report success. Not `paths-ignore`, which would
