@@ -86,6 +86,26 @@ export const useArrivalStore = defineStore('arrival', () => {
   const newsTurns = ref<number[]>([])
   /** Waiting news whose turn's words are told, held while the lines a skip showed unspoken are read. */
   const holding = ref(false)
+  /** How many cards are fading from the picture (the view counts them). */
+  const fading = ref(0)
+  /** Whether a card that has gone on, or gone, is still fading from the picture. */
+  const leaving = computed(() => fading.value > 0)
+
+  /** A card has started to fade from the picture. */
+  function cardLeaves(): void {
+    fading.value++
+  }
+
+  /** A fading card has gone, or its fade was given up. */
+  function cardGone(): void {
+    fading.value = Math.max(0, fading.value - 1)
+  }
+
+  /** The view is taken down, and any fading card with it. */
+  function cardsGone(): void {
+    fading.value = 0
+  }
+
   /** Whether the mouse pointer is on the card (`hold`). */
   const held = ref(false)
   /** The move on that is counting down, or standing still under the pointer; null when none is. */
@@ -573,6 +593,10 @@ export const useArrivalStore = defineStore('arrival', () => {
     holding,
     held,
     hold,
+    leaving,
+    cardLeaves,
+    cardGone,
+    cardsGone,
     told: newsTurns,
     newsPending,
     reset,

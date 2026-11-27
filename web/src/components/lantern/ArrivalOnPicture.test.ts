@@ -961,6 +961,24 @@ describe('ArrivalOnPicture', () => {
       expect(useArrivalStore().held).toBe(false)
     })
 
+    it('is not held by the mouse on a card that is fading as the next comes up', async () => {
+      const w = await shown()
+      useArrivalStore().next()
+      await w.vm.$nextTick()
+      expect(useArrivalStore().active).toBe(true)
+      await over(w, '.lq-arrival-card.lq-arrival-fade-leave-active')
+      expect(useArrivalStore().held).toBe(false)
+    })
+
+    it('says a card is leaving while it fades, and no longer once it is taken down', async () => {
+      const w = await shown()
+      useArrivalStore().clear()
+      await w.vm.$nextTick()
+      expect(useArrivalStore().leaving).toBe(true)
+      w.unmount()
+      expect(useArrivalStore().leaving).toBe(false)
+    })
+
     it('takes presses while its card leaves, doing nothing with them, and none once it has gone', async () => {
       const w = await shown()
       const store = useArrivalStore()

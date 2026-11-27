@@ -900,6 +900,23 @@ describe('a narrated move whose picture is still changing', () => {
     expect(narration.speaking(1)?.unit).toBe(1)
   })
 
+  it('speaks a unit it is already in to its end, and holds before the one after', async () => {
+    const narration = useNarrationStore()
+    const two: NarrationUnit = {
+      kind: 'block',
+      parts: [...voiced().parts, ...voiced().parts],
+    }
+    narration.begin(1, [two, voiced()], 'act1')
+    narration.holdBefore(1, 0)
+    last().onended?.()
+    await vi.advanceTimersByTimeAsync(400)
+    expect(FakeAudio.all).toHaveLength(2)
+    last().onended?.()
+    await vi.advanceTimersByTimeAsync(60000)
+    expect(narration.atHold(1)).toBe(true)
+    expect(narration.revealed(1, 1)).toBe(false)
+  })
+
   it('does not stop at a gate when nothing after it has a recording', async () => {
     const narration = useNarrationStore()
     narration.begin(1, [voiced(), silent], 'act1', false, -1, null, 1)

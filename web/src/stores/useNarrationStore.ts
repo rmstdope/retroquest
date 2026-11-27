@@ -701,13 +701,15 @@ export const useNarrationStore = defineStore('narration', () => {
   /**
    * Keep the narrator of turn `turnId` from going into unit `unit` until
    * `releaseHold`. A line being spoken plays on; a wait before that unit stops
-   * where it is, and its length is not waited again.
+   * where it is, and its length is not waited again. A narrator already in
+   * that unit, or past it, is held before the first unit he has not shown, so
+   * the one in hand is spoken to its end.
    */
   function holdBefore(turnId: number, unit: number): void {
     const now = active.value
     if (now?.turnId !== turnId) return
-    now.holdAt = unit
-    if (now.speaking || !doneBefore(now, unit)) return
+    now.holdAt = Math.max(unit, now.revealed)
+    if (now.speaking || !doneBefore(now, now.holdAt)) return
     timers.forEach(clearTimeout)
     timers = []
     now.atHold = true

@@ -529,6 +529,17 @@ describe('the narration paper', () => {
     })
   })
 
+  it('keeps the paper out of reach while a card on the picture is still fading', async () => {
+    await mountWith([turn(1, 'First.')])
+    expect(paper().hasAttribute('inert')).toBe(false)
+    useArrivalStore().cardLeaves()
+    await nextTick()
+    expect(paper().hasAttribute('inert')).toBe(true)
+    useArrivalStore().cardGone()
+    await nextTick()
+    expect(paper().hasAttribute('inert')).toBe(false)
+  })
+
   it('does not scroll back to an older turn when the newest tells nothing on the left', async () => {
     await mountWith([turn(1, 'Long look one.\n\nLong look two.')])
     const scrolled = vi.fn()

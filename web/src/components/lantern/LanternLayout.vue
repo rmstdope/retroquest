@@ -3271,7 +3271,7 @@ watch(namesBlocked, (blocked) => {
                 : {}),
               ...wordsCursor,
             }"
-            :inert="paperAway || undefined"
+            :inert="paperAway || arrival.leaving || undefined"
             @click.capture="onWordsPress"
             @pointermove="onWordsPointer"
             @pointerleave="onStageLeave"

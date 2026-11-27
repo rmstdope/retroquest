@@ -237,31 +237,22 @@ watch(
   },
 )
 
-/** How many cards are fading out. */
-const leaving = ref(0)
 /** Whether a press on the picture is the card's: see the component's comment. */
-const takesPresses = computed(() => arrival.active || leaving.value > 0)
-
-/** A card has started to fade out. */
-function cardLeaves(): void {
-  leaving.value++
-}
-
-/** A fading card has gone, or its fade was given up. */
-function cardGone(): void {
-  leaving.value--
-}
+const takesPresses = computed(() => arrival.active || arrival.leaving)
 
 /** A press the layer takes goes on, unless the arrival is over and only its card is still fading. */
 function press(): void {
   if (arrival.active) arrival.next()
 }
 
-/** The mouse is on, or comes onto, what `event` is aimed at: the card is held while that is a card of an arrival that is up. */
+/** The mouse is on, or comes onto, what `event` is aimed at: the card is held while that is the card of an arrival that is up, not one fading away. */
 function point(event: PointerEvent): void {
   if (event.pointerType !== 'mouse') return
   const target = event.target instanceof Element ? event.target : null
-  arrival.hold(arrival.active && !!target?.closest('.lq-arrival-card'))
+  const card = target?.closest(
+    '.lq-arrival-card:not(.lq-arrival-fade-leave-active)',
+  )
+  arrival.hold(arrival.active && !!card)
 }
 
 /** The mouse has left the picture. */
@@ -276,7 +267,10 @@ watch(
     if (!active) arrival.hold(false)
   },
 )
-onUnmounted(() => arrival.hold(false))
+onUnmounted(() => {
+  arrival.hold(false)
+  arrival.cardsGone()
+})
 
 /** The text box of the part up; it is a new element for every part. */
 const text = ref<HTMLElement | null>(null)
@@ -363,9 +357,9 @@ watch(
     </div>
     <Transition
       name="lq-arrival-fade"
-      @before-leave="cardLeaves"
-      @after-leave="cardGone"
-      @leave-cancelled="cardGone"
+      @before-leave="arrival.cardLeaves"
+      @after-leave="arrival.cardGone"
+      @leave-cancelled="arrival.cardGone"
     >
       <div
         v-if="arrival.part"
@@ -877,6 +871,8 @@ watch(
    together so the cut into pages still measures the new card's pill and head. */
 .lq-arrival-fade-leave-active {
   position: absolute;
+  /* The mouse sees the card that follows; the layer still takes the press. */
+  pointer-events: none;
 }
 .lq-arrival-fade-enter-active,
 .lq-arrival-fade-leave-active {
