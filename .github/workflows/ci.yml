@@ -270,8 +270,9 @@ jobs:
                   labels: |
                       org.opencontainers.image.source=https://github.com/rmstdope/retroquest
                       org.opencontainers.image.revision=${{ github.sha }}
+                  # Read only: container-smoke, which this job needs, has already exported
+                  # this commit's cache, and a second export costs minutes (rq-a82d).
                   cache-from: type=gha
-                  cache-to: type=gha,mode=max
             - name: Write deployment manifest
               env:
                   IMAGE_DIGEST: ${{ steps.image.outputs.digest }}
