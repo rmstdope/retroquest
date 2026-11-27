@@ -56,6 +56,8 @@ test('pressing a closed way in the picture answers as the typed direction does',
   page,
 }): Promise<void> => {
   await page.setViewportSize({ width: 1280, height: 800 })
+  // The room is brought up on the page's clock, stepped rather than slept.
+  await page.clock.install()
   await toTheCottage(page)
   const stage = await page.locator('.lq-stage').boundingBox()
   if (!stage) throw new Error('no stage')
@@ -65,11 +67,11 @@ test('pressing a closed way in the picture answers as the typed direction does',
   const py = stage.y + stage.height / 2 + (0.15 - 0.5) * 1080 * scale
   // A press while the room is still being brought up only brings it up; the next one goes.
   await page.mouse.click(px, py)
-  await page.waitForTimeout(2500)
+  await page.clock.runFor(2500)
   const arrival = page.getByTestId('arrival-on-picture')
   for (let turn = 0; turn < 8 && (await arrival.isVisible()); turn++) {
     await page.keyboard.press('Enter')
-    await page.waitForTimeout(400)
+    await page.clock.runFor(400)
   }
   await page.mouse.click(px, py)
   await expect(

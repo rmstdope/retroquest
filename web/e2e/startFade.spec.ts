@@ -43,6 +43,8 @@ test.describe('loading again during the fade into a loaded game', () => {
   test.beforeEach(async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 800 })
     await page.emulateMedia({ reducedMotion: 'no-preference' })
+    // The moments within a fade are stepped on the page's clock, not slept.
+    await page.clock.install()
     await page.goto('/')
     await page.getByRole('button', { name: 'Start', exact: true }).click()
     await expect(page.locator('.lq-chapter-button')).toBeFocused({
@@ -81,10 +83,10 @@ test.describe('loading again during the fade into a loaded game', () => {
     await enterCommand(page, 'load')
     await expect(page.locator('.lq-passage-out')).toBeAttached()
     // Late in the first fade-out, so a fade still going after it is the second load's.
-    await page.waitForTimeout(1000)
+    await page.clock.runFor(1000)
     await enterCommand(page, 'load')
     await expect(page.getByLabel('Command', { exact: true })).toHaveValue('')
-    await page.waitForTimeout(800)
+    await page.clock.runFor(800)
     expect(await page.locator('.lq-passage').getAttribute('class')).toContain(
       'lq-passage-out',
     )

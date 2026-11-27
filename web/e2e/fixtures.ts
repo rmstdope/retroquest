@@ -20,6 +20,7 @@ import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { test as base, type Page } from '@playwright/test'
+import { HOLD_TO_SKIP_MS } from '../src/composables/useHoldToSkip'
 
 export * from '@playwright/test'
 
@@ -124,17 +125,55 @@ async function voiceUnrecordedLines(page: Page): Promise<void> {
 /**
  * Show the rest of what is being told at once, as a player does: let go of the
  * command box (a space typed there is a letter), then hold Space until the
- * hold to skip is full. Escape no longer skips: it opens the menu.
+ * hold to skip is full, which here it is at once (`holdFilledAtOnce`). Escape
+ * no longer skips: it opens the menu.
  */
 export async function skipTelling(page: Page): Promise<void> {
   await page.evaluate(() => (document.activeElement as HTMLElement)?.blur())
-  await page.keyboard.down(' ')
-  await page.waitForTimeout(HOLD_TO_SKIP_MS + 150)
-  await page.keyboard.up(' ')
+  await holdFilledAtOnce(
+    page,
+    () => page.keyboard.down(' '),
+    () => page.keyboard.up(' '),
+  )
 }
 
-/** How long Space is held to skip a telling (the app's `HOLD_TO_SKIP_MS`, with a margin kept by the helper). */
-const HOLD_TO_SKIP_MS = 700
+/**
+ * Press (`press`), have the app's hold to skip come due at once instead of
+ * after `HOLD_TO_SKIP_MS`, and let go (`release`): for a spec that only needs
+ * a telling out of the way, never one about how long a hold takes. The events
+ * and the app's own hold are real; only the first `setTimeout` of exactly that
+ * length made during the press, the hold's own, is shortened, so a timer the
+ * skip itself starts keeps its time.
+ */
+export async function holdFilledAtOnce(
+  page: Page,
+  press: () => Promise<void>,
+  release: () => Promise<void>,
+): Promise<void> {
+  const shortened = await page.evaluateHandle((hold) => {
+    const own = window.setTimeout
+    const restore = (): void => {
+      window.setTimeout = own
+    }
+    window.setTimeout = ((handler: TimerHandler, ms?: number, ...args) => {
+      if (ms !== hold) return own(handler, ms, ...args)
+      restore()
+      return own(handler, 0, ...args)
+    }) as typeof window.setTimeout
+    return { restore }
+  }, HOLD_TO_SKIP_MS)
+  try {
+    await press()
+    // Queued after the hold's timer and due no sooner, so that one has fired.
+    await page.evaluate(
+      () => new Promise<void>((resolve) => void setTimeout(resolve, 0)),
+    )
+  } finally {
+    await shortened.evaluate((timers) => timers.restore())
+    await shortened.dispose()
+    await release()
+  }
+}
 
 /**
  * Keep the lines on the picture where they are: a line fades away once it has

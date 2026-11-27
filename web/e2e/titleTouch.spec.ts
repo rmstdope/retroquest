@@ -26,7 +26,7 @@ test.describe('the title opening on a touch screen', () => {
     await expect(page.locator('.lq-title-hint')).toHaveText('Tap to begin')
     await page.touchscreen.tap(box.x + box.width / 2, box.y + 20)
     await expect(page.locator('.lq-title-page')).toHaveClass(/is-open/)
-    await page.waitForTimeout(800)
+    await page.clock.runFor(800)
     await expect(page.locator('.lq-title-page')).toBeVisible()
     await page.getByRole('button', { name: 'Start', exact: true }).tap()
     await expect(page.locator('.lq-title-page')).toHaveCount(0)
