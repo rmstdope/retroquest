@@ -6,6 +6,7 @@ import { createPinia, setActivePinia } from 'pinia'
 import LanternLayout from './LanternLayout.vue'
 import { useGameStore, type Turn } from '@/stores/useGameStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
+import { SHORT_QUERY, SIDES_QUERY } from '@/composables/useMediaQuery'
 
 /** A turn that tells `text`. */
 function turn(id: number, text: string): Turn {
@@ -68,9 +69,9 @@ describe('where the story lands after the window crosses 1100 px', () => {
       vi.fn((query: string) => ({
         matches: query.includes('hover: none')
           ? false
-          : query.includes('1100px')
+          : query === SIDES_QUERY
             ? sides
-            : query.includes('519px')
+            : query === SHORT_QUERY
               ? short
               : query.includes('min-height')
                 ? wide
@@ -155,7 +156,7 @@ describe('where the story lands after the window crosses 1100 px', () => {
   async function cross(toSides: boolean): Promise<void> {
     sides = toSides
     for (const [query, fn] of Object.entries(listeners))
-      if (query.includes('1100px')) fn({ matches: toSides })
+      if (query === SIDES_QUERY) fn({ matches: toSides })
     await nextTick()
     await nextTick()
   }
@@ -459,7 +460,7 @@ describe('where the story lands after the window crosses 1100 px', () => {
     wide = width >= 1024 && height >= 560
     short = height < 520
     for (const [query, fn] of Object.entries(listeners)) {
-      if (query.includes('519px')) fn({ matches: short })
+      if (query === SHORT_QUERY) fn({ matches: short })
       else if (query.includes('min-height')) fn({ matches: wide })
     }
     await nextTick()
