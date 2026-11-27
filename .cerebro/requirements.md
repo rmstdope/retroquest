@@ -17,7 +17,7 @@ STY-3  An act's main quest can be finished only when all its side quests are don
        Proven by: nothing yet
 STY-4  A player learns spells from people and places as the story allows, and can
        cast a spell once it is learned.
-       Proven by: nothing yet
+       Proven by: web/e2e/spells.spec.ts
 
 ## Saving (SAV)
 
