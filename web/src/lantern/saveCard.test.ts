@@ -1,3 +1,9 @@
+import {
+  emptyPicture,
+  savedPictureOf,
+  type PictureState,
+  type SavePicture,
+} from './pictureState'
 import { describe, it, expect } from 'vitest'
 import type { SaveSlot } from '@/types/bridge'
 import {
@@ -176,6 +182,15 @@ describe('oldestFilled', () => {
   })
 })
 
+/** The picture a save at the Forge kept, with `changes` laid over it. */
+function forge(changes: Partial<PictureState> = {}): SavePicture {
+  return savedPictureOf('Act1', {
+    ...emptyPicture(),
+    roomKey: 'Forge',
+    ...changes,
+  })
+}
+
 describe('continuePictureUrls', () => {
   const base: SaveSlot = {
     slot: 1,
@@ -192,39 +207,30 @@ describe('continuePictureUrls', () => {
   it("lists the room's other picture before its plain one, and the patches over it", () => {
     const urls = continuePictureUrls({
       ...base,
-      picture: {
-        actName: 'Act1',
-        roomKey: 'Forge',
-        variant: 'night',
-        patchIds: ['lamp'],
-      },
+      picture: forge({ variant: 'night', patchIds: ['lamp'] }),
     })
     expect(urls?.base).toHaveLength(2)
     expect(urls?.base[0]).toMatch(/-night\.png$/)
     expect(urls?.base[1]).not.toMatch(/-night/)
     expect(urls?.patches).toHaveLength(1)
     expect(urls?.patches[0]).toMatch(/\.lamp\.png$/)
-    expect(urls?.standIns).toEqual([''])
   })
 
-  it('lists the patch that stands in for a patch not made yet', () => {
-    const urls = continuePictureUrls({
-      ...base,
-      picture: {
-        actName: 'Act1',
-        roomKey: 'Forge',
-        variant: '',
-        patchIds: ['lamp-carried'],
-        patchStandIns: { 'lamp-carried': 'lamp-lit' },
-      },
-    })
-    expect(urls?.standIns[0]).toMatch(/\.lamp-lit\.png$/)
+  it('lists the patches of a save that also kept the old stand-ins', () => {
+    const picture = {
+      ...forge({ patchIds: ['lamp-carried'] }),
+      patchStandIns: { 'lamp-carried': 'lamp-lit' },
+    }
+    const urls = continuePictureUrls({ ...base, picture })
+    expect(urls?.patches).toEqual([
+      expect.stringMatching(/\.lamp-carried\.png$/),
+    ])
   })
 
   it("lists only the room's plain picture when it has no other", () => {
     const urls = continuePictureUrls({
       ...base,
-      picture: { actName: 'Act1', roomKey: 'Forge', variant: '', patchIds: [] },
+      picture: forge(),
     })
     expect(urls?.base).toHaveLength(1)
     expect(urls?.patches).toEqual([])

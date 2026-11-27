@@ -4,7 +4,7 @@ import { useGameStore, MAX_TURNS } from './useGameStore'
 import { usePassageStore, PASSAGE_HALF_MS } from './usePassageStore'
 import { useSettingsStore } from './useSettingsStore'
 import { GAME_NAME } from '@/engine'
-import type { AreaThing } from '@/lantern/areaThings'
+import { emptyPicture } from '@/lantern/pictureState'
 import type { RoomDescription, SoundFiring } from '@/engine'
 import type {
   CompletionTree,
@@ -148,12 +148,7 @@ function createMockBridge() {
     saveToSlot: vi.fn(() => 'Game saved.'),
     loadFromSlot: vi.fn(() => 'Game loaded.'),
     takeLoadedStory: vi.fn((): unknown => null),
-    pictureState: vi.fn(() => ({
-      roomKey: '',
-      variant: '',
-      patchIds: [] as string[],
-      things: [] as AreaThing[],
-    })),
+    pictureState: vi.fn(emptyPicture),
     controller: {
       ...controller,
       settleQuests: vi.fn(() => ({

@@ -14,7 +14,7 @@ import type {
 import { closedWayThings } from '@/lantern/areaNames'
 import type { AreaThing } from '@/lantern/areaThings'
 import { declaredAreas } from '@/lantern/roomAreas'
-import type { PictureState, useBridge } from '@/composables/useBridge'
+import type { useBridge } from '@/composables/useBridge'
 import {
   formOf,
   debugScriptName,
@@ -25,6 +25,7 @@ import {
   type SoundFiring,
 } from '@/engine'
 import { withHeldAreas } from '@/lantern/heldPicture'
+import { emptyPicture, type PictureState } from '@/lantern/pictureState'
 import {
   inventoryChanges,
   renamedItems,
@@ -345,23 +346,9 @@ export const useGameStore = defineStore('game', () => {
     picture: 0,
   })
   /** The room the picture shows and the patches that apply there, as the held `picture` group lets them be seen. */
-  const shownPicture = ref<PictureState>({
-    roomKey: '',
-    variant: '',
-    patchIds: [],
-    patchAreas: {},
-    patchStandIns: {},
-    things: [],
-  })
+  const shownPicture = ref<PictureState>(emptyPicture())
   /** The same as the engine says now, which `shownPicture` takes on release. */
-  const latestPicture = ref<PictureState>({
-    roomKey: '',
-    variant: '',
-    patchIds: [],
-    patchAreas: {},
-    patchStandIns: {},
-    things: [],
-  })
+  const latestPicture = ref<PictureState>(emptyPicture())
   /**
    * The areas of the room picture whose things the player has gained this turn
    * and whose names have not come up yet: they stay painted, with their own
@@ -678,8 +665,7 @@ export const useGameStore = defineStore('game', () => {
   /**
    * The URLs of the patches laid over the room's picture: the ones that apply
    * to the story (what the held `picture` group shows; after a move to
-   * another room, that room's at once) and that the manifest lists as made;
-   * a patch not made yet shows the picture of the patch it stands in for.
+   * another room, that room's at once) and that the manifest lists as made.
    */
   const roomPatchUrls = computed<string[]>(() => {
     const room = musicRoomKey.value
@@ -690,11 +676,7 @@ export const useGameStore = defineStore('game', () => {
     // Patches belong to their own picture: none lie over the room's own while it stands in for a variant not made yet.
     if (variant && id === roomTrackId(musicActName.value, room)) return []
     const made = madePatches(imageManifest.value, id)
-    // A patch not made yet shows the picture of the patch it stands in for.
-    const pictured = shown.patchIds.map((patch) =>
-      made.includes(patch) ? patch : (shown.patchStandIns[patch] ?? patch),
-    )
-    return [...new Set(pictured)]
+    return shown.patchIds
       .filter((patch) => made.includes(patch))
       .map((patch) => roomPatchUrl(musicActName.value, room, patch, variant))
   })

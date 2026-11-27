@@ -122,8 +122,6 @@ export function continueCard(card: SaveSlot, now = new Date()): ContinueCard {
 export interface ContinuePictureUrls {
   base: string[]
   patches: string[]
-  /** For each of `patches`, the url of the patch that stands in for it until it is made, or '' when none does. */
-  standIns: string[]
 }
 
 /**
@@ -136,7 +134,7 @@ export function continuePictureUrls(
 ): ContinuePictureUrls | null {
   const { picture } = card
   if (!picture) return null
-  const { actName, roomKey, variant, patchIds, patchStandIns = {} } = picture
+  const { actName, roomKey, variant, patchIds } = picture
   const plain = roomPictureUrl(actName, roomKey)
   if (!plain) return null
   return {
@@ -144,10 +142,5 @@ export function continuePictureUrls(
       ? [roomPictureUrl(actName, roomKey, variant), plain]
       : [plain],
     patches: patchIds.map((id) => roomPatchUrl(actName, roomKey, id, variant)),
-    standIns: patchIds.map((id) =>
-      id in patchStandIns
-        ? roomPatchUrl(actName, roomKey, patchStandIns[id], variant)
-        : '',
-    ),
   }
 }

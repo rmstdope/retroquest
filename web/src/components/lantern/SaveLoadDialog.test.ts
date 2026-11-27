@@ -1,4 +1,5 @@
 // @vitest-environment jsdom
+import { emptyPicture, savedPictureOf } from '@/lantern/pictureState'
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { flushPromises, mount, type VueWrapper } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
@@ -87,12 +88,10 @@ describe('SaveLoadDialog', () => {
   })
 
   describe('the snapshot', () => {
-    const picture = {
-      actName: 'Act2',
+    const picture = savedPictureOf('Act2', {
+      ...emptyPicture(),
       roomKey: 'ForestPath',
-      variant: '',
-      patchIds: [],
-    }
+    })
 
     beforeEach(() => setPictureProbe(() => Promise.resolve(true)))
     afterEach(() => setPictureProbe(null))

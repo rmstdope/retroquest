@@ -5,7 +5,7 @@
  * lays the engine's latest picture over the one shown before the turn, leaving
  * the held areas as they were. Nothing here is saved.
  */
-import type { PictureState } from '@/composables/useBridge'
+import type { PictureState } from './pictureState'
 
 /**
  * The picture to show: `latest`, except that the things in `held` areas (and

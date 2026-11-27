@@ -1,4 +1,5 @@
 // @vitest-environment jsdom
+import { emptyPicture, savedPictureOf } from '@/lantern/pictureState'
 import { describe, it, expect, afterEach, beforeEach, vi } from 'vitest'
 import { mount, flushPromises, type VueWrapper } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
@@ -627,12 +628,10 @@ describe('TitlePage', () => {
   })
 
   describe('the Continue picture', () => {
-    const picture = {
-      actName: 'Act1',
+    const picture = savedPictureOf('Act1', {
+      ...emptyPicture(),
       roomKey: 'Forge',
-      variant: '',
-      patchIds: [],
-    }
+    })
 
     it('shows the room picture first on the card, hidden from a screen reader, and keeps the card name', async () => {
       const w = mountTitle([save(1, { picture })])
