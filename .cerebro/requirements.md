@@ -87,7 +87,7 @@ SND-2  Each room plays its music and its sound effects.
        Proven by: nothing yet
 SND-3  Music, effects and narration each have a volume in Settings. Volume 0 silences
        that sound, and the volumes are kept between visits.
-       Proven by: nothing yet
+       Proven by: web/e2e/sound.spec.ts
 
 ## Phone and screen sizes (PHN)
 
