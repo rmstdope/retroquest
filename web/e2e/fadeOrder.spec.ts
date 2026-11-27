@@ -5,57 +5,81 @@ import { test, expect, type Page, enterCommand as enter } from './fixtures'
  * going never moves the lines still showing, in the speech column or the
  * narrator's cards of the laptop stage, or the one column of a phone
  * (rq-r7ct), also when a short line below would be read before a long one
- * above it.
+ * above it. The newest line of the speech column rests at its foot meanwhile
+ * (RDG-1).
  */
+
+/** What `watchFades` saw. */
+interface Fades {
+  watched: number
+  moved: number
+  left: number
+  lift: number | null
+}
 
 /**
  * Watch every fading line on the picture, frame by frame as painted, until
  * all are gone (or `ms` has passed): how many it watched, the furthest any
  * line's words moved while it still showed, in px, and how many are left.
+ * `lift` is the furthest, in px, the speech thread's newest line stood from
+ * the foot of the thread's room while it showed and a line of the thread had
+ * gone; null if no frame was like that.
  */
-function watchFades(
-  page: Page,
-  ms: number,
-): Promise<{ watched: number; moved: number; left: number }> {
+function watchFades(page: Page, ms: number): Promise<Fades> {
   return page.evaluate(
     (limit) =>
-      new Promise<{ watched: number; moved: number; left: number }>(
-        (resolve) => {
-          const lines = (): HTMLElement[] =>
-            Array.from(
-              document.querySelectorAll<HTMLElement>(
-                '.lq-paper-content :is(.lq-bubble, .lq-cl), .lq-thread .lq-ln',
-              ),
-            )
-          const first = new Map<HTMLElement, number>()
-          let furthest = 0
-          const started = performance.now()
-          const look = (): void => {
-            const showing = lines().filter(
-              (el) => el.dataset.fade && el.dataset.fade !== 'gone',
-            )
-            for (const el of showing) {
-              // The words: a speaker's name drawn above them as a run's head steps down is not a move.
-              const top = (
-                el.querySelector('.lq-line') ?? el
-              ).getBoundingClientRect().top
-              const was = first.get(el)
-              if (was === undefined) first.set(el, top)
-              else furthest = Math.max(furthest, Math.abs(top - was))
-            }
-            if (showing.length === 0 || performance.now() - started > limit)
-              resolve({
-                watched: first.size,
-                moved: Math.round(furthest),
-                left: showing.length,
-              })
-            // Once the frame is painted: what a frame's resize observers put
-            // right before it is drawn never reaches the screen.
-            else requestAnimationFrame(() => setTimeout(look, 0))
+      new Promise<Fades>((resolve) => {
+        const lines = (): HTMLElement[] =>
+          Array.from(
+            document.querySelectorAll<HTMLElement>(
+              '.lq-paper-content :is(.lq-bubble, .lq-cl), .lq-thread .lq-ln',
+            ),
+          )
+        const first = new Map<HTMLElement, number>()
+        let furthest = 0
+        let lift: number | null = null
+        /** Measure `lift` on this frame, if it is one to measure. */
+        const rest = (): void => {
+          const thread = document.querySelector<HTMLElement>('.lq-thread')
+          if (!thread?.querySelector('.lq-ln[data-fade="gone"]')) return
+          const said = thread.querySelectorAll<HTMLElement>('.lq-ln')
+          const state = said[said.length - 1].dataset.fade
+          if (state !== 'live' && state !== 'away') return
+          const foot =
+            thread.getBoundingClientRect().bottom -
+            parseFloat(getComputedStyle(thread).paddingBottom)
+          const off =
+            foot - thread.lastElementChild!.getBoundingClientRect().bottom
+          lift = Math.max(lift ?? 0, Math.abs(off))
+        }
+        const started = performance.now()
+        const look = (): void => {
+          const showing = lines().filter(
+            (el) => el.dataset.fade && el.dataset.fade !== 'gone',
+          )
+          for (const el of showing) {
+            // The words: a speaker's name drawn above them as a run's head steps down is not a move.
+            const top = (
+              el.querySelector('.lq-line') ?? el
+            ).getBoundingClientRect().top
+            const was = first.get(el)
+            if (was === undefined) first.set(el, top)
+            else furthest = Math.max(furthest, Math.abs(top - was))
           }
-          look()
-        },
-      ),
+          rest()
+          if (showing.length === 0 || performance.now() - started > limit)
+            resolve({
+              watched: first.size,
+              moved: Math.round(furthest),
+              left: showing.length,
+              lift: lift === null ? null : Math.round(lift),
+            })
+          // Once the frame is painted: what a frame's resize observers put
+          // right before it is drawn never reaches the screen.
+          else requestAnimationFrame(() => setTimeout(look, 0))
+        }
+        look()
+      }),
     ms,
   )
 }
@@ -106,9 +130,12 @@ for (const [name, width, height] of [
     await page.mouse.move(1, 1)
     // The lines just shown push the older ones up and settle: that is not a fade.
     await settled(page)
-    const { watched, moved, left } = await watchFades(page, 60_000)
+    const { watched, moved, left, lift } = await watchFades(page, 60_000)
     expect(watched).toBeGreaterThan(1)
     expect(left).toBe(0)
     // Within a pixel: a line's top may round differently as the page settles.
     expect(moved).toBeLessThanOrEqual(1)
+    // With older lines gone, the newest still rests at the foot of the speech
+    // thread; the phone has no thread.
+    expect(lift).toBe(width === 1440 ? 0 : null)
   })
