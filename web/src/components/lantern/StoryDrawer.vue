@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { nextTick, onMounted, ref } from 'vue'
+import { useFocusReturn } from '@/composables/useFocusReturn'
 import { useSizeWatch } from '@/composables/useSizeWatch'
 import { useGameStore } from '@/stores/useGameStore'
 import StoryTurn from './StoryTurn.vue'
@@ -21,6 +22,7 @@ import StoryTurn from './StoryTurn.vue'
 defineProps<{ phone?: boolean }>()
 const emit = defineEmits<{ close: [] }>()
 const game = useGameStore()
+useFocusReturn()
 const body = ref<HTMLElement | null>(null)
 const pill = ref(false)
 /** Update the pill when the body's size is reported. */

@@ -9,6 +9,7 @@ import {
   chapterUnits,
   hasRecording,
 } from '@/lantern/narrationUnits'
+import { useFocusReturn } from '@/composables/useFocusReturn'
 import { useSizeWatch } from '@/composables/useSizeWatch'
 import { useReadAlong } from '@/composables/useReadAlong'
 import { useNarrationStore } from '@/stores/useNarrationStore'
@@ -38,6 +39,7 @@ const emit = defineEmits<{ continue: [] }>()
 const button = ref<HTMLButtonElement | null>(null)
 
 const narration = useNarrationStore()
+useFocusReturn()
 const root = ref<HTMLElement | null>(null)
 const { shown, isSpeaking, html } = useReadAlong(() => POPUP_NARRATION_ID, root)
 const folder = computed(() => actFolder(props.chapter.act))
