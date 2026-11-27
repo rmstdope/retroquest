@@ -166,12 +166,14 @@ describe('useGameStore over the real engine: game over', () => {
     expect(store.finishAsked).toBe(true)
     store.cancelFinish()
     expect(store.finishAsked).toBe(false)
+    expect(store.modalChapter).toMatchObject({ kind: 'complete', final: true })
     store.continueChapter()
     expect(store.finishGame(false)).toBe(true)
     expect(store.ending).toEqual({
       text: 'This might come in handy, so you decide to pick it up.',
       saved: false,
     })
+    expect(store.getQuickSave()).toBe(null)
   })
 
   it('records the last quest in the story and shows the final page', async () => {
