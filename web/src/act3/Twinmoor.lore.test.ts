@@ -10,7 +10,7 @@ import {
 } from './Act3StoryFlags'
 import { AncientDragon } from './characters/AncientDragon'
 import { CharredNotebook } from './items/CharredNotebook'
-import { Steles } from './items/Steles'
+import { executeCommands } from '@/testing/gameHelpers'
 
 const DRAGON_LINE =
   'I saw the first of them come down off the moor, with wet feet and one ' +
@@ -34,7 +34,9 @@ describe('Twinmoor lore in Act III', () => {
   })
 
   it('shows two moons on the steles, like the mark at home', () => {
-    const text = new Steles().examine(new Game([new Act3()]).state)
+    const game = new Game([new Act3()])
+    game.state.currentRoom = game.state.allRooms.ShorelineMarkers
+    const text = executeCommands(game, ['examine steles'])
     expect(text).toContain(
       'Each sigil is two moons, one cut fainter beneath the other, like ' +
         'the mark over the chapel door at home.',
