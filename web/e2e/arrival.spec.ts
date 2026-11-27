@@ -88,9 +88,11 @@ const hex = (rgb: number[]): string =>
     .join('')}`
 
 /**
- * The colour each inline tag takes inside `line`: one word is added for every
- * class a loaded stylesheet gives its own colour to (`.theme-*`), so a new tag
- * is covered too.
+ * The colour each inline tag takes inside `line`: one bare word is added for
+ * every class a loaded stylesheet gives its own colour to (`.theme-*`), so a new
+ * tag is covered too. Only top-level rules are searched (none in `@media` or
+ * `@layer`), and a colour given to a tag only in some other context does not
+ * reach the word.
  */
 async function tagColours(line: Locator): Promise<Record<string, number[]>> {
   return line.evaluate((el) => {
@@ -113,6 +115,14 @@ async function tagColours(line: Locator): Promise<Record<string, number[]>> {
     )
   })
 }
+
+/** The page's own character-name colour, which differs between the themes. */
+const pageCharacterColour = (page: Page): Promise<string> =>
+  page.evaluate(() =>
+    getComputedStyle(document.documentElement).getPropertyValue(
+      '--lq-character',
+    ),
+  )
 
 const arrival = (page: Page) => page.getByTestId('arrival-on-picture')
 const story = (page: Page) => page.getByRole('region', { name: 'Story' })
@@ -168,8 +178,11 @@ test.describe('the arrival told on the picture', () => {
     const line = arrival(page).locator('.lq-arrival-line').first()
     await expect(line).toBeVisible()
     const light = await tagColours(line)
+    const lightPage = await pageCharacterColour(page)
     expect(Object.keys(light)).toContain('theme-character_name')
     await page.emulateMedia({ colorScheme: 'dark' })
+    // The theme really switched, so the comparison below says something.
+    await expect.poll(() => pageCharacterColour(page)).not.toBe(lightPage)
     // On the picture the glow is dark in both themes, so the tags keep one colour.
     expect(await tagColours(line)).toEqual(light)
     for (const [tag, colour] of Object.entries(light))
