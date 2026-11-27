@@ -5603,6 +5603,30 @@
         }
       }
     },
+    "act3-portrait-ash-scholar": {
+      "text": "A face portrait of a scholar with soot-streaked cheeks, tired intelligent eyes and wind-tousled hair.",
+      "gameWas": "A face portrait of a scholar with soot-streaked cheeks, singed eyebrows, tired intelligent eyes and wind-tousled hair."
+    },
+    "act3-portrait-mine-overseer": {
+      "text": "A face portrait of a mine overseer with a face grey with rock dust, a heavy brow and uneasy eyes looking past you. He is wearing a helmet.",
+      "gameWas": "A face portrait of a mine overseer with a face grey with rock dust, a heavy brow and uneasy eyes looking past you."
+    },
+    "act3-portrait-miners": {
+      "text": "A face portrait of a grizzled miner, his face grey with rock dust, with a deep frown and a lamp-lit stare. He is wearing a helmet.",
+      "gameWas": "A face portrait of a grizzled old miner, his face grey with rock dust, with a deep frown and a lamp-lit stare."
+    },
+    "act3-portrait-silence-keeper": {
+      "text": "A face portrait of a figure in a deep hood, the face in shadow so it is almost black, with a pale chin and calm, still features. The background are dark mountains.",
+      "gameWas": "A face portrait of a figure in a deep hood, the face in shadow, with a pale chin and calm, still features."
+    },
+    "act3-portrait-tide-born-guardian": {
+      "text": "A face portrait of a guardian made of water, a face of clear liquid with ward-sigils drifting in it like weed. The background is an ocean.",
+      "gameWas": "A face portrait of a guardian shaped of standing water, a face of clear liquid with ward-sigils drifting in it like weed."
+    },
+    "act3-portrait-wandering-phantoms": {
+      "text": "A face portrait of a grey phantom, thin as breath on glass, a faint hollow face with open, whispering lips. The background is a misty forest.",
+      "gameWas": "A face portrait of a grey phantom, thin as breath on glass, a faint hollow face with open, whispering lips."
+    },
     "act3-sanctum-of-the-tide": {
       "patches": {
         "crystal-of-light-appears": {
@@ -6345,6 +6369,10 @@
       "text": "A rusty spade with the wooden handle broken in half and a completely broken blade. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border.",
       "gameWas": "A rusty shovel with a snapped wooden handle and a dented blade. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
     },
+    "item-dragons-scale": {
+      "text": "A single large dragon scale, red at its centre and fading to black at its rim. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border.",
+      "gameWas": "A single large scale, red at its centre and fading to black at its rim. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+    },
     "item-entry-pass": {
       "text": "A flat sheet of official parchment, folded once, lying flat, with lines of handwriting, a large red wax seal at the bottom and a short red ribbon under the seal. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border.",
       "gameWas": "A stiff card of cream paper with a red wax seal and a ribbon through one corner. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
@@ -6356,6 +6384,10 @@
     "item-fishing-rod": {
       "text": "A short, bending wooden fishing rod with a line and a small hook. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border.",
       "gameWas": "A long, bending wooden fishing rod with a reel of line and a small hook. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+    },
+    "item-knights-redemption": {
+      "text": "A very long plain steel sword with a worn leather grip, laid blade down. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border.",
+      "gameWas": "A plain steel sword with a worn leather grip, laid blade down. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
     },
     "item-magnet": {
       "text": "A u shaped red and white magnet. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border.",
@@ -6369,9 +6401,21 @@
       "text": "A single sheet of yellowed paper lying flat, folded once, with a bold border drawn round its edge, a small inked drawing of a lantern and a coil of rope in the middle, and above and below it only a few thick wavy ink lines standing for text, no readable letters. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border.",
       "gameWas": "A single printed sheet of yellowed paper, folded once, with a bold border. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
     },
+    "item-moon-rune-shards": {
+      "text": "Three stone pieces that fits together as one large stone depicting a half-moon. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border.",
+      "gameWas": "Three flat pale stone shards laid together, each carved with a half-moon. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+    },
     "item-patches": {
       "text": "A curled up black cat with green eyes. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border.",
       "gameWas": "A small cat with a patchwork coat of ginger, black and white, and wide green eyes. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+    },
+    "item-phoenix-feather": {
+      "text": "A vert long feather shading from deep red to gold, glowing faintly at its tip. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border.",
+      "gameWas": "A long feather shading from deep red to gold, glowing faintly at its tip. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+    },
+    "item-quiet-charm": {
+      "text": "A small upside down wooden bell with a plug of wool stuffed in its opening. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border.",
+      "gameWas": "A small wooden bell with a plug of wool stuffed in its mouth. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
     },
     "item-rusty-hoe": {
       "text": "A farm hoe with a rusty blade and a long wooden handle. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border.",
@@ -6390,7 +6434,7 @@
       "gameWas": "A face portrait of a village healer in middle age, with a calm, steady gaze that rests on you a moment longer than is comfortable, and a sprig of dried sage tucked behind one ear."
     },
     "portrait-nyx": {
-      "text": "A face portrait of a young woman with wild hair and green leaves caught in it, a pale, watchful face and bright, curious eyes. She is dressed in a thin white gown that you can see through and that is torn, so that it shows lots of skijn. The background is a forest.",
+      "text": "A face portrait of a young woman with wild hair and green leaves caught in it, a pale, watchful face and bright, curious eyes. She is dressed in a thin white gown that you can see through and that is torn, so that it shows lots of skin. The background is a forest.",
       "gameWas": "A face portrait of a young woman with wild hair and green leaves caught in it, a pale, watchful face and bright, curious eyes."
     },
     "portrait-sir-cedric": {

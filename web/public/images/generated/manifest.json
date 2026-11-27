@@ -5120,6 +5120,56 @@
     "width": 480,
     "height": 640
   },
+  "act3-portrait-ash-scholar": {
+    "file": "act3-portrait-ash-scholar.png",
+    "width": 480,
+    "height": 640
+  },
+  "act3-portrait-mine-overseer": {
+    "file": "act3-portrait-mine-overseer.png",
+    "width": 480,
+    "height": 640
+  },
+  "act3-portrait-miners": {
+    "file": "act3-portrait-miners.png",
+    "width": 480,
+    "height": 640
+  },
+  "act3-portrait-phoenix": {
+    "file": "act3-portrait-phoenix.png",
+    "width": 480,
+    "height": 640
+  },
+  "act3-portrait-phoenix-guardian": {
+    "file": "act3-portrait-phoenix-guardian.png",
+    "width": 480,
+    "height": 640
+  },
+  "act3-portrait-pier-warden": {
+    "file": "act3-portrait-pier-warden.png",
+    "width": 480,
+    "height": 640
+  },
+  "act3-portrait-silence-keeper": {
+    "file": "act3-portrait-silence-keeper.png",
+    "width": 480,
+    "height": 640
+  },
+  "act3-portrait-tide-born-guardian": {
+    "file": "act3-portrait-tide-born-guardian.png",
+    "width": 480,
+    "height": 640
+  },
+  "act3-portrait-tobin": {
+    "file": "act3-portrait-tobin.png",
+    "width": 480,
+    "height": 640
+  },
+  "act3-portrait-wandering-phantoms": {
+    "file": "act3-portrait-wandering-phantoms.png",
+    "width": 480,
+    "height": 640
+  },
   "act3-sanctum-of-the-tide": {
     "file": "act3-sanctum-of-the-tide.png",
     "width": 1920,
@@ -5874,6 +5924,16 @@
       "percent": 10
     }
   },
+  "act4-portrait-true-self": {
+    "file": "act4-portrait-true-self.png",
+    "width": 480,
+    "height": 640
+  },
+  "act4-portrait-whispers": {
+    "file": "act4-portrait-whispers.png",
+    "width": 480,
+    "height": 640
+  },
   "item-ancient-amulet": {
     "file": "item-ancient-amulet.png",
     "width": 256,
@@ -5886,6 +5946,21 @@
   },
   "item-armor": {
     "file": "item-armor.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-ash-fern": {
+    "file": "item-ash-fern.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-binding-resin": {
+    "file": "item-binding-resin.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-brass-mirror-segment": {
+    "file": "item-brass-mirror-segment.png",
     "width": 256,
     "height": 256
   },
@@ -5909,6 +5984,11 @@
     "width": 256,
     "height": 256
   },
+  "item-charred-notebook": {
+    "file": "item-charred-notebook.png",
+    "width": 256,
+    "height": 256
+  },
   "item-city-map": {
     "file": "item-city-map.png",
     "width": 256,
@@ -5924,6 +6004,11 @@
     "width": 256,
     "height": 256
   },
+  "item-cooled-slag": {
+    "file": "item-cooled-slag.png",
+    "width": 256,
+    "height": 256
+  },
   "item-crystal-clear-water": {
     "file": "item-crystal-clear-water.png",
     "width": 256,
@@ -5931,6 +6016,16 @@
   },
   "item-crystal-focus": {
     "file": "item-crystal-focus.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-crystal-of-light": {
+    "file": "item-crystal-of-light.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-dragons-scale": {
+    "file": "item-dragons-scale.png",
     "width": 256,
     "height": 256
   },
@@ -5949,8 +6044,18 @@
     "width": 256,
     "height": 256
   },
+  "item-emberwater-canteen": {
+    "file": "item-emberwater-canteen.png",
+    "width": 256,
+    "height": 256
+  },
   "item-enchanted-acorn": {
     "file": "item-enchanted-acorn.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-enhanced-echo-stone": {
+    "file": "item-enhanced-echo-stone.png",
     "width": 256,
     "height": 256
   },
@@ -6009,8 +6114,23 @@
     "width": 256,
     "height": 256
   },
+  "item-guardians-chain": {
+    "file": "item-guardians-chain.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-guardians-essence": {
+    "file": "item-guardians-essence.png",
+    "width": 256,
+    "height": 256
+  },
   "item-healing-herbs": {
     "file": "item-healing-herbs.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-heat-ward-mix": {
+    "file": "item-heat-ward-mix.png",
     "width": 256,
     "height": 256
   },
@@ -6019,8 +6139,18 @@
     "width": 256,
     "height": 256
   },
+  "item-keepsake-note": {
+    "file": "item-keepsake-note.png",
+    "width": 256,
+    "height": 256
+  },
   "item-key": {
     "file": "item-key.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-knights-redemption": {
+    "file": "item-knights-redemption.png",
     "width": 256,
     "height": 256
   },
@@ -6034,8 +6164,18 @@
     "width": 256,
     "height": 256
   },
+  "item-lifelight-elixir": {
+    "file": "item-lifelight-elixir.png",
+    "width": 256,
+    "height": 256
+  },
   "item-locket": {
     "file": "item-locket.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-loyalty-token": {
+    "file": "item-loyalty-token.png",
     "width": 256,
     "height": 256
   },
@@ -6069,6 +6209,16 @@
     "width": 256,
     "height": 256
   },
+  "item-miners-key": {
+    "file": "item-miners-key.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-moon-rune-shards": {
+    "file": "item-moon-rune-shards.png",
+    "width": 256,
+    "height": 256
+  },
   "item-moonflowers": {
     "file": "item-moonflowers.png",
     "width": 256,
@@ -6094,8 +6244,28 @@
     "width": 256,
     "height": 256
   },
+  "item-old-oath-scrolls": {
+    "file": "item-old-oath-scrolls.png",
+    "width": 256,
+    "height": 256
+  },
   "item-patches": {
     "file": "item-patches.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-phoenix-feather": {
+    "file": "item-phoenix-feather.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-polished-shell": {
+    "file": "item-polished-shell.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-prism-lantern": {
+    "file": "item-prism-lantern.png",
     "width": 256,
     "height": 256
   },
@@ -6109,8 +6279,23 @@
     "width": 256,
     "height": 256
   },
+  "item-quiet-charm": {
+    "file": "item-quiet-charm.png",
+    "width": 256,
+    "height": 256
+  },
   "item-rare-flower": {
     "file": "item-rare-flower.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-reinforced-braces": {
+    "file": "item-reinforced-braces.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-resonant-chant-rubbings": {
+    "file": "item-resonant-chant-rubbings.png",
     "width": 256,
     "height": 256
   },
@@ -6129,6 +6314,11 @@
     "width": 256,
     "height": 256
   },
+  "item-rusted-locker-key": {
+    "file": "item-rusted-locker-key.png",
+    "width": 256,
+    "height": 256
+  },
   "item-rusty-hoe": {
     "file": "item-rusty-hoe.png",
     "width": 256,
@@ -6144,8 +6334,18 @@
     "width": 256,
     "height": 256
   },
+  "item-sea-sealed-letter": {
+    "file": "item-sea-sealed-letter.png",
+    "width": 256,
+    "height": 256
+  },
   "item-secret-documents": {
     "file": "item-secret-documents.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-servants-pendant": {
+    "file": "item-servants-pendant.png",
     "width": 256,
     "height": 256
   },
@@ -6169,6 +6369,11 @@
     "width": 256,
     "height": 256
   },
+  "item-sorceresss-truth": {
+    "file": "item-sorceresss-truth.png",
+    "width": 256,
+    "height": 256
+  },
   "item-squires-diary": {
     "file": "item-squires-diary.png",
     "width": 256,
@@ -6176,6 +6381,16 @@
   },
   "item-stick": {
     "file": "item-stick.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-stillwater-phial": {
+    "file": "item-stillwater-phial.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-support-straps": {
+    "file": "item-support-straps.png",
     "width": 256,
     "height": 256
   },
@@ -6199,6 +6414,11 @@
     "width": 256,
     "height": 256
   },
+  "item-vent-stone": {
+    "file": "item-vent-stone.png",
+    "width": 256,
+    "height": 256
+  },
   "item-walking-stick": {
     "file": "item-walking-stick.png",
     "width": 256,
@@ -6206,6 +6426,16 @@
   },
   "item-wandering-boots": {
     "file": "item-wandering-boots.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-weathered-coin": {
+    "file": "item-weathered-coin.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-wedge-blocks": {
+    "file": "item-wedge-blocks.png",
     "width": 256,
     "height": 256
   },
@@ -6259,6 +6489,11 @@
     "width": 256,
     "height": 256
   },
+  "spell-forgiveness": {
+    "file": "spell-forgiveness.png",
+    "width": 256,
+    "height": 256
+  },
   "spell-greater-heal": {
     "file": "spell-greater-heal.png",
     "width": 256,
@@ -6271,6 +6506,11 @@
   },
   "spell-heal": {
     "file": "spell-heal.png",
+    "width": 256,
+    "height": 256
+  },
+  "spell-hearts-truth": {
+    "file": "spell-hearts-truth.png",
     "width": 256,
     "height": 256
   },
@@ -6299,8 +6539,18 @@
     "width": 256,
     "height": 256
   },
+  "spell-redemptions-light": {
+    "file": "spell-redemptions-light.png",
+    "width": 256,
+    "height": 256
+  },
   "spell-revive": {
     "file": "spell-revive.png",
+    "width": 256,
+    "height": 256
+  },
+  "spell-truth-sight": {
+    "file": "spell-truth-sight.png",
     "width": 256,
     "height": 256
   },
