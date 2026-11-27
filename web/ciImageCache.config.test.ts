@@ -1,7 +1,8 @@
 /**
  * Tests for the image build cache in the CI workflow (rq-rm00): exporting it
  * costs minutes, and its only reader is `publish-image`, so the smoke build
- * exports it only on the runs that publish.
+ * exports it only on the runs that publish, and `publish-image` only reads it
+ * (rq-a82d).
  */
 import { describe, expect, it } from 'vitest'
 import { readFileSync } from 'node:fs'
@@ -34,6 +35,10 @@ describe('ci.yml and the image cache', () => {
     expect(value('container-smoke', 'cache-to')).toBe(
       `\${{ ${publishes} && 'type=gha,mode=max' || '' }}`,
     )
+  })
+
+  it('does not export the cache a second time from publish-image', () => {
+    expect(value('publish-image', 'cache-to')).toBeUndefined()
   })
 
   it.each(['container-smoke', 'publish-image'])(
