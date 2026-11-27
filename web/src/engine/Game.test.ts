@@ -1035,7 +1035,9 @@ describe('Game', () => {
 
     it('leaves one word of an item name unmatched', () => {
       rooms.EliorsCottage.addItem(item('fishing rod'))
-      expect(game.take('a rod')).toContain('here to take.')
+      expect(game.take('a rod')).toBe(
+        "[failure]There is no 'rod' here to take.[/failure]",
+      )
       expect(game.take('rod')).toBe(
         "[failure]There is no 'rod' here to take.[/failure]",
       )
