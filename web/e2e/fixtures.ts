@@ -249,6 +249,16 @@ export async function toTheCottage(
   ).toHaveCount(0)
 }
 
+/**
+ * Close the opening chapter page once the act's recordings have arrived (the
+ * page is held until then): an answer given before they have is told without
+ * the voice (rq-c09g).
+ */
+export async function beginActOnceRecorded(page: Page): Promise<void> {
+  await expect(page.locator('.lq-chapter-inner:not(.lq-held)')).toHaveCount(1)
+  await page.locator('.lq-chapter-button').click()
+}
+
 /** Give the page motion back (the suite runs with it reduced), for an assertion that needs it. */
 export async function withMotion(page: Page): Promise<void> {
   await page.emulateMedia({ reducedMotion: 'no-preference' })

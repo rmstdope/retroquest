@@ -1,4 +1,5 @@
 import {
+  beginActOnceRecorded,
   test,
   expect,
   enterCommand,
@@ -29,16 +30,11 @@ async function slowNarrationClips(page: Page): Promise<void> {
   })
 }
 
-/**
- * Open the game and close the opening chapter page once it is being read, so
- * the act's recordings have arrived: an answer given before they have is told
- * without the voice (rq-c09g).
- */
+/** Open the game, close the opening chapter page. */
 async function startAct1(page: Page): Promise<void> {
   await page.goto('/')
   await page.getByRole('button', { name: 'Start', exact: true }).click()
-  await expect(page.locator('.lq-chapter-title.lq-speaking')).toHaveCount(1)
-  await page.locator('.lq-chapter-button').click()
+  await beginActOnceRecorded(page)
 }
 
 /** Bring the typing box up again if it is not (F1). */

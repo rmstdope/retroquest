@@ -4,6 +4,7 @@
  * plate and never overlap the speech, also in a window about 1060 px wide.
  */
 import {
+  beginActOnceRecorded,
   test,
   expect,
   type Page,
@@ -15,7 +16,7 @@ import {
 async function start(page: Page): Promise<void> {
   await page.goto('/')
   await page.getByRole('button', { name: 'Start', exact: true }).click()
-  await page.locator('.lq-chapter-button').click()
+  await beginActOnceRecorded(page)
 }
 
 for (const width of [1440]) {
