@@ -190,7 +190,7 @@ describe('LanternLayout: leaving by pressing a way out in the picture', () => {
     expect(log.closest('.lq-story-wrap')).toBeNull()
   })
 
-  it('goes nowhere from a press on the bare way just as the arrival went by itself, nor from its name the player could see (rq-v29l.4, rq-r6xn)', async () => {
+  it('walks out from a press on the bare way, or on its name, the moment the arrival has gone by itself (rq-ir2c)', async () => {
     const store = await cottage()
     for (const command of [
       'use lantern',
@@ -204,28 +204,34 @@ describe('LanternLayout: leaving by pressing a way out in the picture', () => {
     }
     store.releasePanels(store.turns.at(-1)!.id, [...PANEL_GROUPS], false)
     await w.vm.$nextTick()
-    const submit = vi.spyOn(store, 'submitCommand')
-    // The names were up while the room's words were told: the player could see them.
-    useAreaNamesStore().showing = true
-    await w.vm.$nextTick()
-    // The room's words went by themselves a moment ago: a press was meant for them.
-    useArrivalStore().lingering = true
+    // Heard, not played: the player stays in the cottage for the second press.
+    const submit = vi.spyOn(store, 'submitCommand').mockImplementation(() => {})
+    /** An arrival nobody speaks is read for its time and goes. */
+    const goesByItself = async (id: number): Promise<void> => {
+      vi.useFakeTimers()
+      useArrivalStore().show(
+        id,
+        [{ kind: 'events', lines: [{ unit: 0, markup: 'x' }], voiced: false }],
+        false,
+      )
+      await vi.advanceTimersByTimeAsync(6000)
+      vi.useRealTimers()
+      expect(useArrivalStore().active).toBe(false)
+      useAreaNamesStore().showing = true
+      await w.vm.$nextTick()
+    }
+    await goesByItself(90)
     await press(600, 100)
-    expect(submit).not.toHaveBeenCalled()
-    // Even a press landing on a way's name was meant for the card.
-    w.get('[data-area-name="exit-east"]').element.dispatchEvent(
-      new MouseEvent('click', { bubbles: true }),
-    )
-    expect(submit).not.toHaveBeenCalled()
-    // Once the linger is over, the name walks.
-    useArrivalStore().lingering = false
+    expect(submit).toHaveBeenCalledWith('go east')
+    submit.mockClear()
+    await goesByItself(91)
     w.get('[data-area-name="exit-east"]').element.dispatchEvent(
       new MouseEvent('click', { bubbles: true }),
     )
     expect(submit).toHaveBeenCalledWith('go east')
   })
 
-  it("goes nowhere from a way's dot pressed through the words just as the arrival went by itself (rq-r6xn)", async () => {
+  it("goes through a way's dot pressed through the words the moment the arrival has gone by itself (rq-ir2c)", async () => {
     const store = await cottage()
     for (const command of [
       'use lantern',
@@ -252,10 +258,16 @@ describe('LanternLayout: leaving by pressing a way out in the picture', () => {
         }),
       )
     }
-    useArrivalStore().lingering = true
-    pressThroughWords()
-    expect(submit).not.toHaveBeenCalled()
-    useArrivalStore().lingering = false
+    vi.useFakeTimers()
+    useArrivalStore().show(
+      90,
+      [{ kind: 'events', lines: [{ unit: 0, markup: 'x' }], voiced: false }],
+      false,
+    )
+    await vi.advanceTimersByTimeAsync(6000)
+    vi.useRealTimers()
+    expect(useArrivalStore().active).toBe(false)
+    await w.vm.$nextTick()
     pressThroughWords()
     expect(submit).toHaveBeenCalledWith('go east')
   })

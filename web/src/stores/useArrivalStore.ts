@@ -5,7 +5,6 @@ import { useStageSpeechStore } from './useStageSpeechStore'
 import { useSceneStore } from './useSceneStore'
 import {
   ARRIVAL_CLEAR_AFTER_MS,
-  ARRIVAL_LINGER_MS,
   readingTimeMs,
   type ArrivalPart,
 } from '@/lantern/stageArrival'
@@ -29,10 +28,14 @@ export interface PageStart {
  * recording, events that are not voiced) is read for its reading time, which
  * `barMs` gives for the bar that empties. `next` (a click, Enter or Space)
  * goes on a page, then a part, and on the last one clears; `clear` ends it all
- * at once and stops the narrator. An arrival that goes by itself (its time
- * up) is `lingering` for `ARRIVAL_LINGER_MS`: the layout then takes a press on
- * the picture, a mark or name included, as one aimed at its words as they
- * went, and does nothing.
+ * at once and stops the narrator.
+ *
+ * A card under the mouse pointer (`hold`, which the view reports) waits: it
+ * does not go on to the next part or leave by itself. A reading time stands
+ * still and runs on from there; the pause after a narrated line is waited in
+ * full once the pointer has left. The line being spoken plays on and the pages
+ * turn with it, but the narrator does not go into the next part
+ * (`useNarrationStore.holdBefore`). `next` and `clear` act as ever.
  *
  * A part too tall for the picture is shown in pages. The view cuts them (it
  * needs layout) and reports where each starts (`setPages`); the store only
@@ -83,15 +86,40 @@ export const useArrivalStore = defineStore('arrival', () => {
   const newsTurns = ref<number[]>([])
   /** Waiting news whose turn's words are told, held while the lines a skip showed unspoken are read. */
   const holding = ref(false)
-  /**
-   * The arrival went by itself a moment ago (`ARRIVAL_LINGER_MS`): a press on
-   * the picture (a mark or name too) was meant for its words as they went, and
-   * the layout lets it do nothing rather than open a ring or walk out
-   * (rq-v29l.4, rq-r6xn).
-   */
-  const lingering = ref(false)
+  /** How many cards are fading from the picture (the view counts them). */
+  const fading = ref(0)
+  /** Whether a card that has gone on, or gone, is still fading from the picture. */
+  const leaving = computed(() => fading.value > 0)
+
+  /** A card has started to fade from the picture. */
+  function cardLeaves(): void {
+    fading.value++
+  }
+
+  /** A fading card has gone, or its fade was given up. */
+  function cardGone(): void {
+    fading.value = Math.max(0, fading.value - 1)
+  }
+
+  /** The view is taken down, and any fading card with it. */
+  function cardsGone(): void {
+    fading.value = 0
+  }
+
+  /** Whether the mouse pointer is on the card (`hold`). */
+  const held = ref(false)
+  /** The move on that is counting down, or standing still under the pointer; null when none is. */
+  let pending: {
+    /** The time left (ms), as counted when it last started. */
+    left: number
+    then: () => void
+    /** Whether it is waited in full again after the pointer has been on the card. */
+    afresh: boolean
+    /** When it last started counting (`Date.now()`). */
+    since: number
+  } | null = null
+  /** The timer counting `pending` down; undefined while it stands still. */
   let timer: ReturnType<typeof setTimeout> | undefined
-  let lingerTimer: ReturnType<typeof setTimeout> | undefined
 
   /** Whether an arrival is on the picture. */
   const active = computed(() => !!current.value?.shown)
@@ -157,6 +185,7 @@ export const useArrivalStore = defineStore('arrival', () => {
   /** Forget everything told (a new game, a load). */
   function reset(): void {
     clear()
+    held.value = false
     newsTurns.value = []
   }
 
@@ -169,36 +198,50 @@ export const useArrivalStore = defineStore('arrival', () => {
   function stopTimer(): void {
     clearTimeout(timer)
     timer = undefined
+    pending = null
   }
 
-  /** Forget that the arrival just went by itself. */
-  function stopLingering(): void {
-    clearTimeout(lingerTimer)
-    lingerTimer = undefined
-    lingering.value = false
-  }
-
-  /** The arrival goes by itself (its time is up): it clears, and lingers for a press for a moment. */
-  function goByItself(): void {
-    clear(true)
-    lingering.value = true
-    lingerTimer = setTimeout(stopLingering, ARRIVAL_LINGER_MS)
-  }
-
-  // The store's own timers end with its scope; no caller has to clear them.
+  // The store's own timer ends with its scope; no caller has to clear it.
   onScopeDispose(stopTimer)
-  onScopeDispose(stopLingering)
 
-  /** Move on after `ms`. */
-  function later(ms: number, then: () => void): void {
-    stopTimer()
-    timer = setTimeout(then, ms)
+  /** Count the pending move on down, unless it already counts or the card up is under the pointer. */
+  function run(): void {
+    if (!pending || timer !== undefined) return
+    if (held.value && current.value?.shown) return
+    const due = pending
+    due.since = Date.now()
+    timer = setTimeout(() => {
+      stopTimer()
+      due.then()
+    }, due.left)
   }
 
-  /** Read the part up for its reading time, then go on. */
+  /** Stand the pending move on still, keeping the time left (all of it, when it is waited `afresh`). */
+  function standStill(): void {
+    if (!pending || timer === undefined) return
+    clearTimeout(timer)
+    timer = undefined
+    if (!pending.afresh) pending.left -= Date.now() - pending.since
+  }
+
+  /** Move on after `ms` off the card. */
+  function later(ms: number, then: () => void, afresh = false): void {
+    stopTimer()
+    pending = { left: ms, then, afresh, since: 0 }
+    run()
+  }
+
+  /**
+   * Count the reading time of the page up, when nobody speaks it: then go on,
+   * or, while the narrator tells the arrival and the part is not news, let it
+   * go on (it waits at a hold if the pointer was on the card).
+   */
   function readPart(): void {
-    if (barMs.value) later(barMs.value, advance)
-    else stopTimer()
+    const now = current.value
+    if (!now || !barMs.value) return stopTimer()
+    if (!now.narrated || now.ended || silentNews())
+      return later(barMs.value, advance)
+    later(barMs.value, () => narration.releaseHold(now.turnId))
   }
 
   /** Whether the part up has a page after the one up. */
@@ -214,13 +257,54 @@ export const useArrivalStore = defineStore('arrival', () => {
     if (morePages()) {
       now.page++
       readPart()
-    } else if (now.index < now.parts.length - 1) {
-      now.index++
-      now.page = 0
-      now.pages = []
-      if (!now.narrated || now.ended || silentNews()) readPart()
-    } else goByItself()
+    } else if (now.index < now.parts.length - 1) nextPart()
+    else clear(true)
   }
+
+  /** Bring the next part up; a narrator waiting for the card to go on does. */
+  function nextPart(): void {
+    const now = current.value
+    if (!now) return
+    now.index++
+    now.page = 0
+    now.pages = []
+    if (now.narrated) narration.releaseHold(now.turnId)
+    readPart()
+  }
+
+  /** Ask the narrator, while the pointer is on the card, not to go into the next part. */
+  function holdNarrator(): void {
+    const now = current.value
+    if (!held.value || !now?.narrated || !now.shown || now.ended) return
+    const following = now.parts[now.index + 1]
+    if (following) narration.holdBefore(now.turnId, following.lines[0].unit)
+  }
+
+  /**
+   * The mouse pointer comes onto the card (`on`) or leaves it. On it, the time
+   * stands still and the next part waits; off it, the time left runs on, and a
+   * narrator that waited goes on after the pause that follows its voice.
+   */
+  function hold(on: boolean): void {
+    if (held.value === on) return
+    held.value = on
+    const now = current.value
+    if (!now?.shown) return
+    if (on) {
+      standStill()
+      holdNarrator()
+    } else if (pending) run()
+    else if (now.narrated && narration.atHold(now.turnId))
+      later(ARRIVAL_CLEAR_AFTER_MS, nextPart, true)
+    else if (now.narrated) narration.releaseHold(now.turnId)
+  }
+
+  // The part up changes under the pointer: the one after it waits.
+  watch(
+    () =>
+      `${current.value?.turnId}-${current.value?.index}-${current.value?.shown}`,
+    holdNarrator,
+  )
 
   /**
    * The view reports where the pages of the part up start. The page up stays
@@ -244,7 +328,8 @@ export const useArrivalStore = defineStore('arrival', () => {
     const changed = fresh || page !== now.page
     now.pages = starts
     now.page = page
-    if (changed && (!now.narrated || now.ended || silentNews())) readPart()
+    // A spoken part has no reading time: the move on it waits for stands.
+    if (changed && barMs.value) readPart()
   }
 
   /** Turn to the next page of the part up; the narrator jumps to it. False when there is none. */
@@ -292,7 +377,6 @@ export const useArrivalStore = defineStore('arrival', () => {
   /** Tell `parts` now (see `show`). */
   function showNow(id: number, parts: ArrivalPart[], narrated: boolean): void {
     if (!parts.length) return
-    stopLingering()
     // Nobody speaks the parts of an arrival that is not narrated.
     const told = narrated
       ? parts
@@ -316,8 +400,7 @@ export const useArrivalStore = defineStore('arrival', () => {
       return
     }
     markTold(current.value)
-    const up = current.value.parts[0]
-    if (!narrated || (up.kind === 'news' && !up.voiced)) readPart()
+    readPart()
   }
 
   /** Remember that the turn's news is told: it came up, or it was cut short (see `clear`). Its card then keeps slim lines. */
@@ -355,7 +438,7 @@ export const useArrivalStore = defineStore('arrival', () => {
       now.pages = []
       stopTimer()
       narration.skipTo(now.parts[now.index].lines[0].unit)
-      if (silentNews()) readPart()
+      readPart()
     } else advance()
   }
 
@@ -367,7 +450,6 @@ export const useArrivalStore = defineStore('arrival', () => {
    */
   function clear(keepNews = false): void {
     stopTimer()
-    stopLingering()
     holding.value = false
     const now = current.value
     current.value = null
@@ -414,7 +496,7 @@ export const useArrivalStore = defineStore('arrival', () => {
     if (now.narrated && !narration.narrates(now.turnId))
       now.parts = now.parts.map((each) => ({ ...each, voiced: false }))
     markTold(now)
-    if (!now.narrated || silentNews()) readPart()
+    readPart()
   }
 
   // Each narrated part comes up when the narrator reaches it: the first one
@@ -440,7 +522,7 @@ export const useArrivalStore = defineStore('arrival', () => {
       now.index = reached
       now.page = 0
       now.pages = []
-      if (silentNews()) readPart()
+      readPart()
     },
   )
 
@@ -493,10 +575,7 @@ export const useArrivalStore = defineStore('arrival', () => {
       )
       if (part.value?.voiced) {
         now.page = Math.max(0, now.pages.length - 1)
-        later(
-          ARRIVAL_CLEAR_AFTER_MS,
-          now.index < now.parts.length - 1 ? advance : goByItself,
-        )
+        later(ARRIVAL_CLEAR_AFTER_MS, advance, true)
       } else readPart()
     },
   )
@@ -512,7 +591,12 @@ export const useArrivalStore = defineStore('arrival', () => {
     barKey,
     newsUp,
     holding,
-    lingering,
+    held,
+    hold,
+    leaving,
+    cardLeaves,
+    cardGone,
+    cardsGone,
     told: newsTurns,
     newsPending,
     reset,

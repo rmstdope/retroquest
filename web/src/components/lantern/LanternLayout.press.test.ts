@@ -266,26 +266,35 @@ describe('LanternLayout: pressing a thing on the picture', () => {
     expect(ring().exists()).toBe(true)
   })
 
-  it('opens no ring from a press on a thing just as the arrival went by itself, nor from its mark the player could see (rq-v29l.4, rq-r6xn)', async () => {
+  it('opens the ring from a press on a thing, or on its mark, the moment the arrival has gone by itself (rq-ir2c)', async () => {
     await cottage()
-    // The marks were up while the room's words were told: the player could see them.
     useAreaNamesStore().showing = true
     await flushPromises()
-    useArrivalStore().lingering = true
-    await press('bread')
-    expect(ring().exists()).toBe(false)
-    // The click was meant for the card, even where it lands on a mark.
-    const pressMark = async (): Promise<void> => {
-      w.get('[data-area-mark="bread"]').element.dispatchEvent(
-        new MouseEvent('click', { bubbles: true, clientX: 400, clientY: 300 }),
+    /** An arrival nobody speaks is read for its time and goes. */
+    const goesByItself = async (id: number): Promise<void> => {
+      vi.useFakeTimers()
+      useArrivalStore().show(
+        id,
+        [{ kind: 'events', lines: [{ unit: 0, markup: 'x' }], voiced: false }],
+        false,
       )
+      await vi.advanceTimersByTimeAsync(6000)
+      vi.useRealTimers()
+      expect(useArrivalStore().active).toBe(false)
       await flushPromises()
     }
-    await pressMark()
+    await goesByItself(90)
+    await press('bread')
+    expect(ring().exists()).toBe(true)
+    await key('Escape')
     expect(ring().exists()).toBe(false)
-    // Once the linger is over, the mark opens its ring.
-    useArrivalStore().lingering = false
-    await pressMark()
+    await goesByItself(91)
+    useAreaNamesStore().showing = true
+    await flushPromises()
+    w.get('[data-area-mark="bread"]').element.dispatchEvent(
+      new MouseEvent('click', { bubbles: true, clientX: 400, clientY: 300 }),
+    )
+    await flushPromises()
     expect(ring().exists()).toBe(true)
   })
 

@@ -170,30 +170,24 @@ describe('ci.yml', () => {
   it('has no job that the skip tests do not know about', () => {
     expect([...jobs().keys()]).toEqual([
       'changes',
-      'web-lint',
-      'web-typecheck',
+      'web-check',
       'web-test',
       'web-e2e',
       'web-e2e-quarantine',
-      'web-build',
       'container-smoke',
       'publish-image',
     ])
   })
 
-  it.each([
-    'web-lint',
-    'web-typecheck',
-    'web-test',
-    'web-e2e-quarantine',
-    'web-build',
-    'container-smoke',
-  ])('runs %s unless the answer was to skip', (name) => {
-    expect(job(name)).toContain('needs: changes\n')
-    expect(job(name)).toContain(
-      `\n        if: \${{ !cancelled() && ${CONDITION} }}\n`,
-    )
-  })
+  it.each(['web-check', 'web-test', 'web-e2e-quarantine', 'container-smoke'])(
+    'runs %s unless the answer was to skip',
+    (name) => {
+      expect(job(name)).toContain('needs: changes\n')
+      expect(job(name)).toContain(
+        `\n        if: \${{ !cancelled() && ${CONDITION} }}\n`,
+      )
+    },
+  )
 
   it('runs web-e2e for every shard, so each check reports under its own name', () => {
     expect(job('web-e2e')).toContain('needs: changes\n')

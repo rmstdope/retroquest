@@ -36,6 +36,10 @@ import { readingPauseMs } from '@/lantern/stageSpeech'
  * - A turn can have a gate (`begin`'s `gateAt`): the narrator stops before that
  *   unit (`atGate`) until `passGate`, so a learnt spell's name can fly before
  *   the quest news after it is told.
+ * - `holdBefore` keeps it from going into a unit (`atHold` once it waits
+ *   there) until `releaseHold`: the card of that unit's predecessor is under
+ *   the mouse pointer. A line already being spoken plays to its end, and a
+ *   held turn does not end. Going on to a unit (`skipTo`) lifts the hold.
  * - Words of the turn shown unspoken (by a skip, or a block with no voice,
  *   such as an event line) are owed their reading time
  *   (`readingPauseMs` per paragraph): news after them (a spell or quest unit)
@@ -111,6 +115,10 @@ interface ActiveNarration {
   gateAt: number
   /** Whether the narrator has stopped at the gate. */
   atGate: boolean
+  /** The unit the narrator does not go into until `releaseHold` (`holdBefore`), or -1. */
+  holdAt: number
+  /** Whether the narrator is waiting there. */
+  atHold: boolean
   /** Until when (`Date.now()`) the event lines shown unspoken are read: news waits for it. */
   owedUntil: number
   /** Elior's own words of a say command, still to be spoken before the turn's units, or null. */
@@ -416,6 +424,11 @@ export const useNarrationStore = defineStore('narration', () => {
         now.atGate = true
         return
       }
+      // A card under the pointer: its successor waits until `releaseHold`.
+      if (now.holdAt >= 0 && now.unit >= now.holdAt) {
+        now.atHold = true
+        return
+      }
       const unit = now.units[now.unit]
       const index = unit.parts.findIndex((p, i) => i >= now.part && !!p.clip)
       // A unit that asks for a longer breath (a room, a chapter's text after
@@ -557,8 +570,8 @@ export const useNarrationStore = defineStore('narration', () => {
     const more = hurried
       ? voicedAfter(now, unit, Number.POSITIVE_INFINITY)
       : voicedAfter(now, unit, part)
-    // With nothing voiced left the turn ends, unless its scene is still to change.
-    if (!more && now.sceneAt < 0) return finish()
+    // With nothing voiced left the turn ends, unless its scene is still to change or it is held.
+    if (!more && now.sceneAt < 0 && now.holdAt < 0) return finish()
     const mine = generation
     const gap = hurried ? HURRIED_GAP_MS : GAP_MS
     now.waited = gap
@@ -620,6 +633,8 @@ export const useNarrationStore = defineStore('narration', () => {
       atScene: false,
       gateAt,
       atGate: false,
+      holdAt: -1,
+      atHold: false,
       owedUntil: 0,
       own,
       owning: false,
@@ -673,6 +688,54 @@ export const useNarrationStore = defineStore('narration', () => {
     step()
   }
 
+  /** Whether everything before unit `unit` is shown and spoken, so only that unit is waited for. */
+  function doneBefore(now: ActiveNarration, unit: number): boolean {
+    for (let u = now.unit; u < unit; u++) {
+      const from = u === now.unit ? now.part : 0
+      const left = now.units[u]?.parts.slice(from).some((p) => !!p.clip)
+      if (u >= now.revealed || left) return false
+    }
+    return true
+  }
+
+  /**
+   * Keep the narrator of turn `turnId` from going into unit `unit` until
+   * `releaseHold`. A line being spoken plays on; a wait before that unit stops
+   * where it is, and its length is not waited again. A narrator already in
+   * that unit, or past it, is held before the first unit he has not shown, so
+   * the one in hand is spoken to its end.
+   */
+  function holdBefore(turnId: number, unit: number): void {
+    const now = active.value
+    if (now?.turnId !== turnId) return
+    now.holdAt = Math.max(unit, now.revealed)
+    if (now.speaking || !doneBefore(now, now.holdAt)) return
+    timers.forEach(clearTimeout)
+    timers = []
+    now.atHold = true
+  }
+
+  /** Whether the narrator of turn `turnId` is waiting at a hold. */
+  function atHold(turnId: number): boolean {
+    const now = active.value
+    return now?.turnId === turnId && now.atHold
+  }
+
+  /**
+   * Lift the hold on turn `turnId`: a narrator waiting there goes on at once
+   * (a paused one, when it is resumed); any other goes on as it was.
+   */
+  function releaseHold(turnId: number): void {
+    const now = active.value
+    if (now?.turnId !== turnId || now.holdAt < 0) return
+    const waiting = now.atHold
+    now.holdAt = -1
+    now.atHold = false
+    if (!waiting) return
+    now.waited = Infinity
+    if (!resumeFrom) step()
+  }
+
   /** Complete the block being spoken (or, in a pause, bring the next one now). */
   function hurry(): void {
     const now = active.value
@@ -688,13 +751,15 @@ export const useNarrationStore = defineStore('narration', () => {
 
   /**
    * Go on at unit `unit` now: the voice in hand is cut, the units between are
-   * passed over and the unit is read without its pause. Nothing voiced from
-   * there on ends the turn.
+   * passed over and the unit is read without its pause. A hold is lifted.
+   * Nothing voiced from there on ends the turn.
    */
   function skipTo(unit: number): void {
     const now = active.value
     if (!now) return
     stopVoice()
+    now.holdAt = -1
+    now.atHold = false
     now.unit = Math.max(now.unit, unit)
     now.part = 0
     now.waited = Infinity
@@ -771,6 +836,9 @@ export const useNarrationStore = defineStore('narration', () => {
     passSceneChange,
     atGate,
     passGate,
+    holdBefore,
+    atHold,
+    releaseHold,
     hurry,
     pause,
     resume,

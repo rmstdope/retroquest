@@ -1,8 +1,7 @@
 /**
- * The click that goes on a card told over the room's picture is the card's
- * (rq-r6xn), even when the card goes by itself just as the player clicks: the
- * click must not open the ring of a thing whose mark showed through the card
- * under the pointer.
+ * Whose click is it, when a story card told over the room's picture leaves by
+ * itself (rq-ir2c)? A card under the mouse waits, so a click aimed at it lands
+ * on it; once it has gone, a click does what it lands on, at once.
  */
 import { test, expect, type Page, toTheCottage, withMotion } from './fixtures'
 
@@ -43,85 +42,34 @@ async function pushNews(page: Page): Promise<void> {
   })
 }
 
-test('a click on a card just as it goes by itself opens no ring on the thing under it', async ({
+test('a card waits under the mouse, and the click right after it has gone opens the ring on the thing there', async ({
   page,
 }): Promise<void> => {
-  test.setTimeout(60_000)
   await page.setViewportSize({ width: 1280, height: 800 })
+  // The card's reading time is stepped through on the page's clock.
+  await page.clock.install()
   await toGrandmother(page)
-  // The card is read for its time and goes by itself over the drifting picture: motion.
+  // The card fades as it leaves: motion.
   await withMotion(page)
+  // The mouse rests in the middle of the picture, where the card comes up under it.
+  await page.mouse.move(640, 360)
   await pushNews(page)
-  await expect(page.locator('.lq-arrival-stage.lq-on')).toHaveCount(1)
-  // A key now and then keeps the marks up while the card is read: Grandmother's shows through it.
-  const keys = await page.evaluateHandle(() =>
-    setInterval(
-      () =>
-        document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Shift' })),
-      500,
-    ),
-  )
-  const mark = page.locator('[data-area-mark="grandmother"]')
-  // Its place once the card has made room for it: it comes in at its own
-  // place, steps aside for the card, and then holds, give or take the
-  // picture's slow drift.
-  const first = await mark.boundingBox()
-  if (!first) throw new Error('Grandmother has no mark')
-  let spot: typeof first | null = first
-  await expect
-    .poll(
-      async () => {
-        const before = spot
-        spot = await mark.boundingBox()
-        if (!before || !spot) return false
-        const aside = Math.hypot(spot.x - first.x, spot.y - first.y) > 10
-        return aside && Math.hypot(spot.x - before.x, spot.y - before.y) < 2
-      },
-      { intervals: [100] },
-    )
-    .toBe(true)
-  if (!spot) throw new Error('Grandmother has no mark')
-  const x = spot.x + spot.width / 2
-  const y = spot.y + spot.height / 2
-  // The pointer rests on the card, just off the mark the click will land on.
-  await page.mouse.move(x + 3, y + 3)
-  // Whether the card's linger still held when the click reached the page (what the game decides on).
-  await page.evaluate(() => {
-    const root = document.querySelector('#app') as unknown as {
-      __vue_app__: {
-        config: {
-          globalProperties: {
-            $pinia: { _s: Map<string, { lingering?: boolean }> }
-          }
-        }
-      }
-    }
-    const arrival =
-      root.__vue_app__.config.globalProperties.$pinia._s.get('arrival')
-    document.addEventListener(
-      'click',
-      () => {
-        document.body.dataset.lingered = String(!!arrival?.lingering)
-      },
-      { capture: true, once: true },
-    )
-  })
-  // The card is read for its time and goes by itself; the player clicks it at that moment.
-  await page.waitForFunction(
-    () => document.querySelectorAll('.lq-arrival-stage.lq-on').length === 0,
-    null,
-    { timeout: 30_000, polling: 'raf' },
-  )
-  await page.mouse.click(x, y)
-  await page.evaluate((id) => clearInterval(id), keys)
-  // A click that came after the linger tests nothing: the setup was too slow, not the game wrong.
-  await expect(
-    page.locator('body'),
-    'the click came within the linger',
-  ).toHaveAttribute('data-lingered', 'true')
-  // The ring would open on the click itself; one frame later there is none.
-  await page.evaluate(
-    () => new Promise((done) => requestAnimationFrame(() => done(null))),
-  )
-  await expect(page.getByRole('menu')).toHaveCount(0)
+  const layer = page.locator('.lq-arrival-stage.lq-on')
+  const bar = page.locator('.lq-arrival-bar i')
+  await expect(layer).toHaveCount(1)
+  await expect(bar).toHaveCSS('animation-play-state', 'paused')
+  // Far past its reading time (6 s) it is still there.
+  await page.clock.runFor(30_000)
+  await expect(layer).toHaveCount(1)
+  // Off the card, on the picture beside it, its time runs on and it leaves.
+  await page.mouse.move(60, 400)
+  await expect(bar).toHaveCSS('animation-play-state', 'running')
+  await page.clock.runFor(7_000)
+  await expect(layer).toHaveCount(0)
+  const thing = await page
+    .locator('[data-area-press="grandmother"]')
+    .boundingBox()
+  if (!thing) throw new Error('Grandmother cannot be pressed')
+  await page.mouse.click(thing.x + thing.width / 2, thing.y + thing.height / 2)
+  await expect(page.getByRole('menu')).toBeVisible()
 })

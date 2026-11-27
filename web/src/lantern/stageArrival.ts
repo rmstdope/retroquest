@@ -22,13 +22,6 @@ export const ARRIVAL_WORDS_PER_SECOND = 4
 export const ARRIVAL_MIN_SECONDS = 6
 /** How long the arrival stays after the narrator has finished its last part (ms). */
 export const ARRIVAL_CLEAR_AFTER_MS = 1500
-/**
- * How long after an arrival went by itself a press on the picture (a mark or
- * name too) is taken as one meant for its words, and does nothing (ms): long
- * enough for a click aimed at a card that went just as the player moved to it
- * (rq-6sfp, seen landing 1.3 s after).
- */
-export const ARRIVAL_LINGER_MS = 1500
 
 /** One line of an arrival part, the narration unit it is spoken as, and its markup. */
 export interface ArrivalLine {

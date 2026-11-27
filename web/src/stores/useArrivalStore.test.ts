@@ -8,7 +8,6 @@ import { useSceneStore } from './useSceneStore'
 import type { NarrationUnit } from '@/lantern/narrationUnits'
 import {
   ARRIVAL_CLEAR_AFTER_MS,
-  ARRIVAL_LINGER_MS,
   type ArrivalPart,
 } from '@/lantern/stageArrival'
 import { readingPauseMs } from '@/lantern/stageSpeech'
@@ -116,6 +115,15 @@ describe('useArrivalStore', () => {
     expect(arrival.tellsRoom).toBe(false)
   })
 
+  /** A piece of spoken quest news at `unit`. */
+  function quest(unit: number): ArrivalPart {
+    return {
+      kind: 'news',
+      lines: [{ unit, markup: 'Go.' }],
+      voiced: true,
+    }
+  }
+
   describe('when nobody narrates it', () => {
     it('stays for its reading time, shown by the bar, then clears', () => {
       arrival.show(1, parts(false, false), false)
@@ -125,35 +133,6 @@ describe('useArrivalStore', () => {
       expect(arrival.active).toBe(true)
       vi.advanceTimersByTime(1)
       expect(arrival.active).toBe(false)
-    })
-
-    it('still lingers 1.3 s after it goes by itself, where a click aimed at the card was seen to land (rq-6sfp)', () => {
-      arrival.show(1, parts(false, false), false)
-      vi.advanceTimersByTime(12000)
-      expect(arrival.active).toBe(false)
-      vi.advanceTimersByTime(1300)
-      expect(arrival.lingering).toBe(true)
-    })
-
-    it('lingers for a press a moment after it goes by itself, and not after a press or a clear (rq-v29l.4)', () => {
-      arrival.show(1, parts(false, false), false)
-      vi.advanceTimersByTime(12000)
-      expect(arrival.active).toBe(false)
-      expect(arrival.lingering).toBe(true)
-      vi.advanceTimersByTime(ARRIVAL_LINGER_MS)
-      expect(arrival.lingering).toBe(false)
-      // A new arrival, or a clear, ends the linger at once.
-      arrival.show(2, parts(false, false), false)
-      vi.advanceTimersByTime(12000)
-      arrival.show(3, parts(false, false), false)
-      expect(arrival.lingering).toBe(false)
-      vi.advanceTimersByTime(12000)
-      arrival.clear()
-      expect(arrival.lingering).toBe(false)
-      arrival.show(4, parts(false, false), false)
-      arrival.next()
-      expect(arrival.active).toBe(false)
-      expect(arrival.lingering).toBe(false)
     })
 
     it('tells the events first, each for its own reading time', () => {
@@ -264,6 +243,237 @@ describe('useArrivalStore', () => {
     it('a silent events part shows its bar while the narrator waits', () => {
       narrate([silent, voiced], parts(true, true))
       expect(arrival.barMs).toBe(6000)
+    })
+  })
+
+  describe('under the mouse pointer', () => {
+    it('a part nobody speaks stops its reading time, and the time left runs on after', () => {
+      arrival.show(1, parts(false, false), false)
+      vi.advanceTimersByTime(4000)
+      arrival.hold(true)
+      expect(arrival.held).toBe(true)
+      vi.advanceTimersByTime(600_000)
+      expect(arrival.active).toBe(true)
+      arrival.hold(false)
+      vi.advanceTimersByTime(7999)
+      expect(arrival.active).toBe(true)
+      vi.advanceTimersByTime(1)
+      expect(arrival.active).toBe(false)
+    })
+
+    it('counts only the time off the card over several visits', () => {
+      arrival.show(1, parts(false, false), false)
+      for (let i = 0; i < 3; i++) {
+        vi.advanceTimersByTime(3000)
+        arrival.hold(true)
+        vi.advanceTimersByTime(5000)
+        arrival.hold(false)
+      }
+      vi.advanceTimersByTime(2999)
+      expect(arrival.active).toBe(true)
+      vi.advanceTimersByTime(1)
+      expect(arrival.active).toBe(false)
+    })
+
+    it('holds a page nobody speaks as it does a part', () => {
+      arrival.show(1, parts(false, false), false)
+      arrival.setPages([
+        { unit: 0, word: 0, text: 'a b' },
+        { unit: 0, word: 20, text: 'c d' },
+      ])
+      arrival.hold(true)
+      vi.advanceTimersByTime(60000)
+      expect(arrival.page).toBe(0)
+      arrival.hold(false)
+      vi.advanceTimersByTime(6000)
+      expect(arrival.page).toBe(1)
+    })
+
+    it('goes on at once on a next, and the next part waits too', () => {
+      arrival.show(1, parts(true, false), false)
+      arrival.hold(true)
+      arrival.next()
+      expect(arrival.part?.kind).toBe('description')
+      vi.advanceTimersByTime(60000)
+      expect(arrival.active).toBe(true)
+      arrival.next()
+      expect(arrival.active).toBe(false)
+    })
+
+    it('starts its time stopped for a card that comes up under a held pointer', () => {
+      arrival.hold(true)
+      arrival.show(1, parts(false, false), false)
+      vi.advanceTimersByTime(60000)
+      expect(arrival.active).toBe(true)
+    })
+
+    it('is let go by a reset', () => {
+      arrival.hold(true)
+      arrival.reset()
+      expect(arrival.held).toBe(false)
+    })
+
+    describe('narrated', () => {
+      /** Narrate the events (spoken) and then the description (spoken). */
+      function twoSpoken(): void {
+        narration.begin(1, [voiced, voiced], 'act1')
+        arrival.show(
+          1,
+          [
+            { kind: 'events', lines: [{ unit: 0, markup: 'x' }], voiced: true },
+            {
+              kind: 'description',
+              lines: [{ unit: 1, markup: 'y' }],
+              voiced: true,
+            },
+          ],
+          true,
+        )
+      }
+
+      /** The voice in hand ends, and the narrator has had every chance to go on. */
+      async function lineEnds(): Promise<void> {
+        last().onended?.()
+        await vi.advanceTimersByTimeAsync(60000)
+      }
+
+      it('keeps the next part and its line back until 1½ s after the pointer leaves', async () => {
+        twoSpoken()
+        arrival.hold(true)
+        await nextTick()
+        // The line plays on.
+        expect(narration.speaking(1)?.unit).toBe(0)
+        await lineEnds()
+        expect(arrival.part?.kind).toBe('events')
+        expect(FakeAudio.all).toHaveLength(1)
+        arrival.hold(false)
+        await vi.advanceTimersByTimeAsync(ARRIVAL_CLEAR_AFTER_MS - 1)
+        expect(arrival.part?.kind).toBe('events')
+        expect(FakeAudio.all).toHaveLength(1)
+        await vi.advanceTimersByTimeAsync(1)
+        expect(arrival.part?.kind).toBe('description')
+        expect(narration.speaking(1)?.unit).toBe(1)
+      })
+
+      it('holds again when the pointer comes back within that moment, and counts it in full after', async () => {
+        twoSpoken()
+        arrival.hold(true)
+        await lineEnds()
+        arrival.hold(false)
+        await vi.advanceTimersByTimeAsync(1000)
+        arrival.hold(true)
+        await vi.advanceTimersByTimeAsync(60000)
+        expect(arrival.part?.kind).toBe('events')
+        arrival.hold(false)
+        await vi.advanceTimersByTimeAsync(ARRIVAL_CLEAR_AFTER_MS - 1)
+        expect(arrival.part?.kind).toBe('events')
+        await vi.advanceTimersByTimeAsync(1)
+        expect(arrival.part?.kind).toBe('description')
+      })
+
+      it('goes on as ever when the pointer leaves while the line still plays', async () => {
+        twoSpoken()
+        arrival.hold(true)
+        await nextTick()
+        arrival.hold(false)
+        last().onended?.()
+        await vi.advanceTimersByTimeAsync(400)
+        expect(arrival.part?.kind).toBe('description')
+      })
+
+      it('keeps the next line back for a part the pointer reached through a next', async () => {
+        narration.begin(1, [voiced, voiced, voiced], 'act1')
+        arrival.show(1, [quest(0), quest(1), quest(2)], true)
+        arrival.hold(true)
+        await nextTick()
+        arrival.next()
+        await nextTick()
+        expect(narration.speaking(1)?.unit).toBe(1)
+        await lineEnds()
+        expect(arrival.newsUp?.index).toBe(1)
+        expect(FakeAudio.all).toHaveLength(2)
+      })
+
+      it('keeps the last part up while held, and clears it 1½ s after the pointer leaves', async () => {
+        narration.begin(1, [voiced], 'act1')
+        arrival.show(1, parts(false, true), true)
+        arrival.hold(true)
+        await lineEnds()
+        expect(arrival.active).toBe(true)
+        arrival.hold(false)
+        await vi.advanceTimersByTimeAsync(ARRIVAL_CLEAR_AFTER_MS - 1)
+        expect(arrival.active).toBe(true)
+        await vi.advanceTimersByTimeAsync(1)
+        expect(arrival.active).toBe(false)
+      })
+
+      it('still goes on when a spoken part is cut into pages again in that moment', async () => {
+        twoSpoken()
+        arrival.hold(true)
+        await lineEnds()
+        arrival.hold(false)
+        arrival.setPages([{ unit: 0, word: 0, text: 'x' }])
+        await vi.advanceTimersByTimeAsync(ARRIVAL_CLEAR_AFTER_MS)
+        expect(arrival.part?.kind).toBe('description')
+      })
+
+      it('holds a card the pointer reaches in the 1½ s after the narrator finished', async () => {
+        narration.begin(1, [voiced], 'act1')
+        arrival.show(1, parts(false, true), true)
+        last().onended?.()
+        await vi.advanceTimersByTimeAsync(1000)
+        arrival.hold(true)
+        await vi.advanceTimersByTimeAsync(60000)
+        expect(arrival.active).toBe(true)
+      })
+
+      it('stops the time of events nobody speaks, and starts the next line only once it has run', async () => {
+        const waits: NarrationUnit = { ...voiced, pauseBefore: 6000 }
+        narration.begin(1, [silent, waits], 'act1')
+        arrival.show(1, parts(true, true), true)
+        await vi.advanceTimersByTimeAsync(2000)
+        arrival.hold(true)
+        await vi.advanceTimersByTimeAsync(60000)
+        expect(arrival.part?.kind).toBe('events')
+        expect(FakeAudio.all).toHaveLength(0)
+        arrival.hold(false)
+        await vi.advanceTimersByTimeAsync(3999)
+        expect(arrival.part?.kind).toBe('events')
+        expect(FakeAudio.all).toHaveLength(0)
+        await vi.advanceTimersByTimeAsync(1)
+        expect(arrival.part?.kind).toBe('description')
+        expect(FakeAudio.all).toHaveLength(1)
+      })
+
+      it('turns a spoken page with the voice, even under the pointer', async () => {
+        const long: NarrationUnit = {
+          kind: 'block',
+          parts: [
+            {
+              markup: 'a b',
+              clip: {
+                file: 'x.mp3',
+                speaker: 'narrator',
+                duration: 2,
+                words: [
+                  { word: 'a', start: 0, end: 0.5 },
+                  { word: 'b', start: 1, end: 1.5 },
+                ],
+              },
+            },
+          ],
+        }
+        narration.begin(1, [long], 'act1')
+        arrival.show(1, parts(false, true), true)
+        arrival.setPages([
+          { unit: 0, word: 0, text: 'a' },
+          { unit: 0, word: 1, text: 'b' },
+        ])
+        arrival.hold(true)
+        last().currentTime = 1.2
+        await vi.advanceTimersByTimeAsync(100)
+        expect(arrival.page).toBe(1)
+      })
     })
   })
 

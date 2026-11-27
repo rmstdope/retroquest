@@ -44,7 +44,9 @@ jobs:
                   EVENT: ${{ github.event_name }}
               run: bash .github/scripts/ci-needed.sh "$EVENT" >> "$GITHUB_OUTPUT"
 
-    web-lint:
+    # One runner and one setup for the checks that take seconds each (rq-pjqg). The first
+    # step that fails stops the job and is the one the run names.
+    web-check:
         needs: changes
         if: ${{ !cancelled() && needs.changes.outputs.run != 'false' }}
         runs-on: ubuntu-latest
@@ -70,28 +72,11 @@ jobs:
             - name: Format check
               run: npx prettier --check "src/**/*.{ts,vue}" "*.config.*"
 
-    web-typecheck:
-        needs: changes
-        if: ${{ !cancelled() && needs.changes.outputs.run != 'false' }}
-        runs-on: ubuntu-latest
-        defaults:
-            run:
-                working-directory: web
-        steps:
-            - uses: actions/checkout@v7
-
-            - name: Set up Node.js
-              uses: actions/setup-node@v7
-              with:
-                  node-version: "26"
-                  cache: npm
-                  cache-dependency-path: web/package-lock.json
-
-            - name: Install dependencies
-              run: npm ci
-
             - name: Type check
               run: npx vue-tsc --noEmit
+
+            - name: Build
+              run: npm run build
 
     web-test:
         needs: changes
@@ -116,6 +101,12 @@ jobs:
             - name: Run unit tests
               run: npm run test
 
+    # The e2e jobs run in the Playwright image, which holds the browser and its system
+    # packages, so neither installs anything from a mirror (rq-2ram). The image tag must be the
+    # `@playwright/test` version in web/package-lock.json: web/ciFlakes.config.test.ts fails
+    # web-test when they differ, so a Dependabot bump of that package stays red until both tags
+    # here are changed in the same pull request. Nothing downloads a browser to cover a mismatch; the e2e tests
+    # fail too. `--user 1001` is the runner's own user, which owns the checkout.
     web-e2e:
         name: web-e2e (${{ matrix.shard }})
         needs: changes
@@ -123,6 +114,10 @@ jobs:
         # name, and the three shard checks would never arrive.
         if: ${{ !cancelled() }}
         runs-on: ubuntu-latest
+        # An empty image is no container: a run that skips the checks pulls nothing.
+        container:
+            image: ${{ needs.changes.outputs.run != 'false' && 'mcr.microsoft.com/playwright:v1.65.1-noble' || '' }}
+            options: --user 1001 --init --ipc=host
         strategy:
             fail-fast: false
             matrix:
@@ -146,10 +141,6 @@ jobs:
               if: needs.changes.outputs.run != 'false'
               run: npm ci
 
-            - name: Install Playwright browsers
-              if: needs.changes.outputs.run != 'false'
-              run: bash ../.github/scripts/install-playwright.sh
-
             - name: Run E2E tests (shard ${{ matrix.shard }})
               if: needs.changes.outputs.run != 'false'
               run: npx playwright test --shard=${{ matrix.shard }} --grep-invert @quarantine
@@ -162,6 +153,9 @@ jobs:
         needs: changes
         if: ${{ !cancelled() && needs.changes.outputs.run != 'false' }}
         runs-on: ubuntu-latest
+        container:
+            image: mcr.microsoft.com/playwright:v1.65.1-noble
+            options: --user 1001 --init --ipc=host
         defaults:
             run:
                 working-directory: web
@@ -177,10 +171,6 @@ jobs:
 
             - name: Install dependencies
               run: npm ci
-
-            - name: Install Playwright browsers
-              continue-on-error: true
-              run: bash ../.github/scripts/install-playwright.sh
 
             - name: Run quarantined E2E tests
               continue-on-error: true
@@ -193,29 +183,6 @@ jobs:
                   name: quarantine-traces
                   path: web/test-results/
                   if-no-files-found: ignore
-
-    web-build:
-        needs: changes
-        if: ${{ !cancelled() && needs.changes.outputs.run != 'false' }}
-        runs-on: ubuntu-latest
-        defaults:
-            run:
-                working-directory: web
-        steps:
-            - uses: actions/checkout@v7
-
-            - name: Set up Node.js
-              uses: actions/setup-node@v7
-              with:
-                  node-version: "26"
-                  cache: npm
-                  cache-dependency-path: web/package-lock.json
-
-            - name: Install dependencies
-              run: npm ci
-
-            - name: Build
-              run: npm run build
 
     container-smoke:
         needs: changes
@@ -245,7 +212,7 @@ jobs:
 
     publish-image:
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        needs: [web-lint, web-typecheck, web-test, web-e2e, web-build, container-smoke]
+        needs: [web-check, web-test, web-e2e, container-smoke]
         runs-on: ubuntu-latest
         permissions:
             contents: read
