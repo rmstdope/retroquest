@@ -68,6 +68,9 @@ function createRepository(): string {
   return repo
 }
 
+/** How one run of the script ended and what it reported. */
+type Run = { status: number | null; stderr: string }
+
 describe('formatStaged', { timeout: 120_000 }, () => {
   const outOfScope = [
     'web/other.ts',
@@ -75,7 +78,8 @@ describe('formatStaged', { timeout: 120_000 }, () => {
     'web/src/unstaged.ts',
   ]
   let repo: string
-  let run: { status: number | null; stderr: string }
+  let quietRun: Run
+  let run: Run
 
   /** Runs git in the temporary repository and answers what it prints. */
   function git(...args: string[]): string {
@@ -103,7 +107,17 @@ describe('formatStaged', { timeout: 120_000 }, () => {
     return git('show', `:${file}`)
   }
 
-  // One run of the script serves every case: each stages files of its own.
+  /** Runs the script in the temporary repository. */
+  function formatStaged(): Run {
+    return spawnSync(process.execPath, [SCRIPT], {
+      cwd: repo,
+      env: ENV,
+      encoding: 'utf8',
+    })
+  }
+
+  // The cases share two runs: one with nothing in scope staged, then one with
+  // the files in scope staged as well. Each case reads files of its own.
   beforeAll(() => {
     repo = createRepository()
     write('web/src/answer.ts', UNTIDY)
@@ -111,22 +125,18 @@ describe('formatStaged', { timeout: 120_000 }, () => {
     write('web/src/partial.ts', UNTIDY)
     write('web/src/broken.ts', 'export const = (\n')
     for (const file of outOfScope) write(file, UNTIDY)
+    git('add', 'web/other.ts', 'web/src/data.json')
+    quietRun = formatStaged()
+
     git(
       'add',
       'web/src/answer.ts',
       'web/src/components/Answer.vue',
       'web/src/partial.ts',
       'web/src/broken.ts',
-      'web/other.ts',
-      'web/src/data.json',
     )
     write('web/src/partial.ts', `${UNTIDY}// not staged\n`)
-
-    run = spawnSync(process.execPath, [SCRIPT], {
-      cwd: repo,
-      env: ENV,
-      encoding: 'utf8',
-    })
+    run = formatStaged()
   }, 120_000)
 
   afterAll(() => {
@@ -147,6 +157,8 @@ describe('formatStaged', { timeout: 120_000 }, () => {
   })
 
   it('leaves unstaged files and files outside its scope alone', () => {
+    expect(quietRun.status, quietRun.stderr).toBe(0)
+    expect(quietRun.stderr).toBe('')
     // The whole report: it names no file but the staged ones in scope.
     expect(run.stderr.trimEnd().split('\n')).toEqual([
       expect.stringContaining('format-staged: web/src/broken.ts:'),
