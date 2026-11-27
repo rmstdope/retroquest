@@ -14,7 +14,7 @@ STY-2  A player plays by typing commands. A command the game does not understand
 STY-3  An act's main quest can be finished only when all its side quests are done.
        The journal shows each quest's log as it moves on, and hint gives a nudge in
        the game's own voice.
-       Proven by: nothing yet
+       Proven by: web/e2e/mainQuest.spec.ts
 STY-4  A player learns spells from people and places as the story allows, and can
        cast a spell once it is learned.
        Proven by: web/e2e/spells.spec.ts
