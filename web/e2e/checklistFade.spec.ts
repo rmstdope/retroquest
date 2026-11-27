@@ -1,4 +1,11 @@
-import { test, expect, type Locator, type Page, skipTelling } from './fixtures'
+import {
+  test,
+  expect,
+  openJournal,
+  skipTelling,
+  type Locator,
+  type Page,
+} from './fixtures'
 
 /**
  * In a checklist quest's log, what is still to do stands out and what is done
@@ -167,5 +174,12 @@ test.describe('a checklist fades what is done (rq-3t6a)', () => {
       turn.locator('.lq-check-done'),
       turn.locator('.lq-check-pending'),
     )
+    // Off the picture, on the Journal's quest news, a ticked place keeps the stronger fade.
+    await openJournal(page)
+    const journal = page.locator('.lq-story-drawer')
+    await journal.locator('.lq-update').last().click()
+    await expect(
+      journal.locator('.lq-update-body .lq-check-done').last(),
+    ).toHaveCSS('opacity', '0.6')
   })
 })
