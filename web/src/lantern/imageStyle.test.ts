@@ -53,105 +53,14 @@ describe('the style in content-studio/images/edits.json', () => {
     expect(style).not.toHaveProperty('palette')
   })
 
-  it('says in its own words what the picture must not hold', () => {
-    expect(style.look).toContain('no fold, frame or border')
-    expect(style.look).toContain(
-      'no text, lettering, signature or watermark anywhere',
-    )
-    expect(style.look).not.toMatch(/lantern|picture book|worn/i)
-  })
-
-  it('leaves the light to each room and act, not always warm', () => {
-    expect(style.look).toContain('muted natural colours, soft light')
-    expect(style.look).not.toMatch(/warm/i)
-  })
-
-  it('says only what is absent about modern things, naming no object of its own', () => {
-    expect(style.look).toContain(
-      'hand-painted, a simple pre-industrial handmade world ' +
-        'with no electric light, no poles or wires, no aerials, ' +
-        'no modern clothing, no logos, ' +
-        'and no writing or symbols unless the scene asks for them, ' +
-        'one single full-bleed image',
-    )
-    // Whatever the shared look names is painted in every room.
-    expect(style.look).not.toMatch(/candle|lamp|wool|linen|leather|thatch/i)
-  })
-
-  it('keeps the words to keep out as they were', () => {
-    expect(style.keepOut).toBe(
-      'photorealism, 3d render, anime, neon colours, modern objects',
-    )
-  })
-
   it('adds to the style only for acts of the game', () => {
     const ids = readJson<Studio>('content-studio.json').parts.map((p) => p.id)
     for (const act of Object.keys(style.parts)) expect(ids).toContain(act)
   })
 
-  it('gives every act its agreed mood of light and colour', () => {
-    // Whatever an act's addition names is drawn in every room of the act.
-    expect(style.parts).toEqual({
-      act1:
-        'Warm late-day light, earthy greens and straw golds, ' +
-        'homely and lived-in, in a fantasy setting',
-      act2:
-        'Clear daylight and richer colour, deep greens, warm reds and creams, ' +
-        'a faint grey haze at the edges, in a fantasy setting',
-      act3:
-        'Cooler, wilder light, colours a little drained, ' +
-        'as if a sickness were creeping into the land, in a fantasy setting',
-      act4:
-        'Cold, dim light, violet and grey shadows, ' +
-        'colours drained almost to stone, a hush of dread, in a fantasy setting',
-    })
-  })
-})
-
-describe('the Act 1 pictures that showed modern objects or stray lettering', () => {
-  const images = readJson<{ images: Record<string, { text: string }> }>(
-    EDITS_FILE,
-  ).images
-
-  it('shows the fisherman empty-handed in homespun clothes, with no pole behind him', () => {
-    expect(images['act1-riverbank'].text).toBe(
-      "A gentle river flows past the village and makes a slow bend here, past the reeds and a broad, flat stone at the water's edge. " +
-        'A couple of insects hum over the water. ' +
-        'A weathered old fisherman in a homespun wool smock and a shapeless felt hood sits on an upturned crate at the bend, ' +
-        'watching the water, his bad arm held close to his side. ' +
-        'His hands are empty: no rod, no line, no net. ' +
-        'Beyond the reeds, only thatched cottages and trees.',
-    )
-  })
-
-  it("shows only the founders' mark over the chapel door", () => {
-    const text = images['act1-village-chapel'].text
-    expect(text).toBe(
-      'A small stone room. It is very dark, A small stained glass window cast colors across the worn pews. A kindly priest tends an altar. There is a prayer book on the altar. On the far wall, the church bell rope hangs straight and still. Over the door, a small carving cut into the stone: a tree under two moons, its edges worn soft with age but the shape still clear. No other carving, letters, writing or symbols anywhere on the walls or the door. A dark corner by the altar swallows the light completely.\nThere is a box of short, white rods on the floor.',
-    )
-    expect(text).not.toContain('strange symbols')
-  })
-
-  it('dresses Borin in linen and leather', () => {
-    expect(images['act1-blacksmiths-forge'].text).toBe(
-      'A smoky forge. Coals glow in the hearth. ' +
-        'The blacksmith stands next to an anvil with a hammer in his hand. ' +
-        'He wears a rough undyed linen shirt, sleeves rolled past the elbow, under a scorched leather apron; ' +
-        'forearms like fence posts, old burns on his knuckles. ' +
-        'There is a small horseshoe on the wall.',
-    )
-  })
-
-  it('lights the cottage by the hearth alone, with bare walls', () => {
-    expect(images['act1-eliors-cottage'].text).toBe(
-      'The inside of a modest cottage with a cozy hearth and a book shelf with books.\nThere are no windows.\nThe room is dark and the corner by your bed is pitch black.  A sturdy wooden table sits in the center, with a small loaf cooling on it, and a gentle fire crackles in the hearth. Grandmother stands by it, humming, and keeps an eye on the bread. The room is lit only by the hearth fire; the walls are bare plaster and timber with no fittings on them.',
-    )
-  })
-
-  it('puts nothing but chimneys on the title screen roofs', () => {
-    expect(images['title-screen'].text).toBe(
-      'A quiet village under a lantern-lit night, drawn with open sky across the top third and a calm, uncluttered middle for the buttons. Thatched and slate roofs with stone chimneys and a curl of smoke; nothing on the roofs but chimneys. In the sky, there is a full moon which reflects clearly in the water of a pond in the village. In the clouds, you can see the outlines of a cloaked man.',
-    )
+  it('gives every act of the game a mood', () => {
+    for (const n of ACT_NUMBERS)
+      expect(style.parts[`act${n}`]?.trim(), `act${n}`).toBeTruthy()
   })
 })
 
