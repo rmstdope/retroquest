@@ -70,3 +70,4 @@ export {
   writing,
 } from './markup'
 export { nameInSentence, type NameKind, type NameOptions } from './names'
+export { joinPaths, markedPath, type MarkedPath } from './pathMarks'
