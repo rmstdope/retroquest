@@ -51,8 +51,8 @@ test('RDG-3: the text size, the look and less motion are chosen in Settings and 
   await still.click()
   await expect(still).toHaveAttribute('aria-checked', 'true')
 
-  // The next visit loads the page afresh and walks on until there is a story
-  // in the journal to look at.
+  await page.reload()
+  // Walk on (from a fresh load) until there is a story in the journal to look at.
   await toTheCottage(page)
   await openJournal(page)
 
