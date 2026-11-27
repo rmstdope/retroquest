@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { onScopeDispose, ref } from 'vue'
+import { typedAs } from '@/engine'
 
 /** One half of the passage into a started or loaded game (the old screen out, or the new one in), in ms. */
 export const PASSAGE_HALF_MS = 1500
@@ -11,12 +12,35 @@ export const PASSAGE_WAIT_MS = 1000
 export type PassagePhase = 'idle' | 'out' | 'dark' | 'in'
 
 /**
+ * What becomes of a typed command: it just runs; it is dropped; the new screen
+ * comes up and then it runs; or the new screen comes up holding its `up`, which
+ * runs after the command unless the command began a passage of its own.
+ */
+export type PassageAnswer = 'run' | 'drop' | 'raiseThenRun' | 'runThenRise'
+
+/**
+ * What a command typed in `phase` does: the one statement of that rule. With a
+ * passage under way a load may begin its own, so it is taken in every phase and
+ * holds the risen screen's words until it has run. Any other command is not run
+ * in the new game while the old screen fades out, and afterwards brings the new
+ * screen up first.
+ */
+export function passageAnswer(
+  phase: PassagePhase,
+  line: string,
+): PassageAnswer {
+  if (phase === 'idle') return 'run'
+  if (typedAs(line, 'load') !== null) return 'runThenRise'
+  return phase === 'out' ? 'drop' : 'raiseThenRun'
+}
+
+/**
  * The passage "through the dark" into a started or loaded game: the whole
  * screen fades out (`PASSAGE_HALF_MS`), `apply` swaps in the new game while it
  * is dark, and the new screen rises (`PASSAGE_HALF_MS`); `up` runs once it is
  * fully up, by time or by `skip`, and is where the words, narrator, notice and
- * focus come (`skipThen` holds it until a command has run, and drops it when
- * that command begins a passage of its own). A picture slow to load keeps the dark for at most
+ * focus come. A typed command goes through `typed`, which carries out
+ * `passageAnswer`. A picture slow to load keeps the dark for at most
  * `PASSAGE_WAIT_MS` more (`pictureReady` ends the wait). The layout draws the
  * phases as a dark overlay; this keeps the clock. Nothing here is saved.
  */
@@ -105,17 +129,26 @@ export const usePassageStore = defineStore('passage', () => {
   }
 
   /**
-   * A typed command that may begin a passage (a load) while the new screen
-   * rises: bring it up at once, then run the command. The passage's `up` comes after the command, unless the
-   * command began a passage of its own (a load), whose `up` replaces it, so
-   * the old one's words never show over the new dark.
+   * Bring the new screen up at once, then run the command. The passage's `up`
+   * comes after the command, unless the command began a passage of its own (a
+   * load), whose `up` replaces it, so the old one's words never show over the
+   * new dark.
    */
-  function skipThen(run: () => void): void {
+  function runThenRise(run: () => void): void {
     const up = upNow
     upNow = null
     skip()
     run()
     if (phase.value === 'idle') up?.()
+  }
+
+  /** A typed command: do with it what `passageAnswer` says for this phase. */
+  function typed(line: string, run: () => void): void {
+    const answer = passageAnswer(phase.value, line)
+    if (answer === 'drop') return
+    if (answer === 'runThenRise') return runThenRise(run)
+    if (answer === 'raiseThenRun') skip()
+    run()
   }
 
   /** Forget a passage without running anything (the game is being torn down). */
@@ -130,5 +163,5 @@ export const usePassageStore = defineStore('passage', () => {
   // The store's own timer ends with its scope.
   onScopeDispose(stopTimer)
 
-  return { phase, begin, pictureReady, skip, skipThen, reset }
+  return { phase, begin, pictureReady, skip, typed, reset }
 })

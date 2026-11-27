@@ -20,7 +20,11 @@ import { useArrivalStore } from '@/stores/useArrivalStore'
 import { useCommandBox } from '@/composables/useCommandBox'
 import { useRoomTitleStore } from '@/stores/useRoomTitleStore'
 import { useSceneStore } from '@/stores/useSceneStore'
-import { usePassageStore, PASSAGE_HALF_MS } from '@/stores/usePassageStore'
+import {
+  passageAnswer,
+  usePassageStore,
+  PASSAGE_HALF_MS,
+} from '@/stores/usePassageStore'
 import { useAreaNamesStore } from '@/stores/useAreaNamesStore'
 import { useFlightStore } from '@/stores/useFlightStore'
 import { useBeltStore } from '@/stores/useBeltStore'
@@ -2858,22 +2862,20 @@ function onPassageClick(event: MouseEvent): void {
 
 /**
  * Enter while the screen is fading into a game brings the new one up at once
- * and does nothing else. A typed command rising with the new screen goes on,
- * and so does a load typed in the typing box while the old one fades out (it
- * starts its own fade).
+ * and does nothing else, unless it sends something typed that the passage does
+ * not drop (`passageAnswer`): that goes on to its field. Only the typing box
+ * sends a command; any other field counts as an empty line.
  */
 function onPassageKey(event: KeyboardEvent): void {
   if (event.key !== 'Enter') return
   const target = event.target instanceof Element ? event.target : null
-  const fadingOut = passage.phase === 'out'
-  const typing = !!target?.closest('input, textarea, select, [contenteditable]')
-  if (typing && !fadingOut) return
-  if (
-    target instanceof HTMLInputElement &&
-    target.matches('.lq-type-input') &&
-    game.takesDuringFadeOut(target.value)
-  )
-    return
+  if (target?.closest('input, textarea, select, [contenteditable]')) {
+    const line =
+      target instanceof HTMLInputElement && target.matches(COMMAND_BOX)
+        ? target.value
+        : ''
+    if (passageAnswer(passage.phase, line) !== 'drop') return
+  }
   if (passage.skip()) swallow(event)
 }
 

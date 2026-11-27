@@ -17,6 +17,8 @@ import { declaredAreas } from '@/lantern/roomAreas'
 import type { PictureState, useBridge } from '@/composables/useBridge'
 import {
   formOf,
+  debugScriptName,
+  typedAs,
   LOADED_ROOM,
   normalizeSaveName,
   type RoomDescription,
@@ -243,9 +245,6 @@ type CommandPlace = Pick<
   PanelSnapshot['place'],
   'roomName' | 'characters' | 'items' | 'exits' | 'roomWares' | 'completions'
 >
-
-/** A typed load (`load`, or `load <name>`), told apart before it runs. */
-const LOAD_COMMAND = /^load(?:\s|$)/i
 
 export const useGameStore = defineStore('game', () => {
   // --- Bridge reference ---
@@ -1407,20 +1406,12 @@ export const useGameStore = defineStore('game', () => {
     openFirstAct(b)
   }
 
-  /**
-   * Whether a typed command is taken while the old screen fades out: only a
-   * load is, which skips that fade and starts its own; any other command is not
-   * run in the new game.
-   */
-  function takesDuringFadeOut(cmd: string): boolean {
-    return LOAD_COMMAND.test(cmd.trim())
-  }
-
+  /** A command typed or pressed: it goes once no gain is left to fly. */
   function submitCommand(cmd: string): void {
     // Gained things still to fly (their narration is cut short) go first; a
     // load replaces the game they belong to, so it does not wait for them.
-    if (!LOAD_COMMAND.test(cmd.trim()) && gainFlusher?.(() => submitNow(cmd)))
-      return
+    const isLoad = typedAs(cmd, 'load') !== null
+    if (!isLoad && gainFlusher?.(() => submitNow(cmd))) return
     submitNow(cmd)
   }
 
@@ -1453,18 +1444,9 @@ export const useGameStore = defineStore('game', () => {
       }
   }
 
-  /** Run a typed command now, whatever is still told. */
+  /** Run a typed command now, whatever is still told, as the passage allows. */
   function submitNow(cmd: string): void {
-    // The old screen's command is not run in the new game: while it fades out, only a load goes.
-    if (passage.phase === 'out' && !takesDuringFadeOut(cmd)) return
-    // A command during a passage brings the new screen up first, then goes on. A
-    // load holds the risen game's notice until it has run: one that begins its
-    // own passage drops it, so it never shows over the new dark.
-    if (LOAD_COMMAND.test(cmd.trim())) passage.skipThen(() => runCommand(cmd))
-    else {
-      passage.skip()
-      runCommand(cmd)
-    }
+    passage.typed(cmd, () => runCommand(cmd))
   }
 
   /** Run a typed command once no passage holds it back. */
@@ -1476,14 +1458,14 @@ export const useGameStore = defineStore('game', () => {
     const command = cmd.trim()
     if (routeSaveOrLoad(command)) return
     if (routeLook(command)) return
-    if (/^(quit|exit)$/i.test(command)) {
+    if (typedAs(command, 'quit') !== null) {
       quitAsked.value = true
       return
     }
     if (import.meta.env.DEV) {
-      const script = /^debug\s+(\S+)$/i.exec(command)
-      if (script) {
-        void runDebugScript(script[1].toLowerCase())
+      const script = debugScriptName(command)
+      if (script !== null) {
+        void runDebugScript(script)
         return
       }
     }
@@ -1737,12 +1719,12 @@ export const useGameStore = defineStore('game', () => {
    * error. Returns true when the command was handled here.
    */
   function routeSaveOrLoad(command: string): boolean {
-    const match = /^(save|load)(?:\s+(\S.*))?$/i.exec(command)
-    if (!match) return false
-    const [, verb, rawName] = match
-    const name = rawName === undefined ? null : normalizeSaveName(rawName)
-    if (rawName !== undefined && name === null) return false
-    const isSave = verb.toLowerCase() === 'save'
+    const saveName = typedAs(command, 'save')
+    const rawName = saveName ?? typedAs(command, 'load')
+    if (rawName === null) return false
+    const name = rawName === '' ? null : normalizeSaveName(rawName)
+    if (rawName !== '' && name === null) return false
+    const isSave = saveName !== null
     if (isSave && name) saveNamedGame(name, command)
     else if (isSave) saveGame(command)
     else if (name) loadNamedGame(name, command)
@@ -2250,7 +2232,6 @@ export const useGameStore = defineStore('game', () => {
     loadFromTitle,
     startFromTitle,
     passageThrough,
-    takesDuringFadeOut,
     dismissTitle,
     gameNumber,
     loadNumber,
