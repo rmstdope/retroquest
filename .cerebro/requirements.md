@@ -76,7 +76,7 @@ RDG-2  The journal and the quest log open as drawers that nothing from the stage
        Proven by: web/e2e/storyDrawerCover.spec.ts, web/e2e/checklistFade.spec.ts
 RDG-3  A player can choose the text size, a light or dark look (or the device's), and
        less motion. The choices are kept between visits.
-       Proven by: nothing yet
+       Proven by: web/e2e/settingsKept.spec.ts
 
 ## Sound (SND)
 
