@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs'
-import { beforeAll, describe, expect, it } from 'vitest'
-import { Game, GameController, markedPath } from '@/engine'
+import { describe, expect, it } from 'vitest'
+import { Game, GameController, markedPath, type Act } from '@/engine'
 import { Act1 } from '@/act1/Act1'
 import { Act2 } from '@/act2/Act2'
 import { ACT2_GOLDEN_PATH } from '@/act2/Act2GoldenPath'
@@ -42,6 +42,37 @@ const WRITERS: WriterRule[] = [
   { opening: 'My dearest', speaker: 'mother' },
   { opening: 'What a night', speaker: 'elior' },
 ]
+
+/** The committed script of an act, which the narrationScriptFresh tests pin to the extractor. */
+function committedScript(number: string): ScriptLine[] {
+  return JSON.parse(
+    readFileSync(
+      new URL(`../../../tts/act${number}/script.json`, import.meta.url),
+      'utf8',
+    ),
+  ) as ScriptLine[]
+}
+
+/**
+ * A maker of games of an act that stand where `commands` leave it, so that
+ * `actScript` can read a short path from there instead of the whole act. The
+ * commands are played on the engine alone, without the extractor's probes.
+ */
+function startingAfter(act: () => Act, commands: string[]): () => Game {
+  const game = new Game([act()])
+  const play = new GameController(game)
+  play.advanceToRunning()
+  for (const command of commands) {
+    play.takeTurn(command)
+    play.settleQuests()
+  }
+  const save = game.toSaveData()
+  return () => {
+    const started = new Game([act()])
+    started.loadSaveData(save)
+    return started
+  }
+}
 
 describe('blockVoice', () => {
   it('voices text as the narrator and speech as its speaker, unsigned writing as UNSIGNED', () => {
@@ -227,18 +258,15 @@ describe('the voiced blocks a surface shows', () => {
   })
 })
 
-describe('actScript for Act I', () => {
-  const script = actScript(
-    () => new Game([new Act1()]),
-    ACT_SOURCES['1'].commands,
-    WRITERS,
-    SILENT,
-  )
+describe('the script of Act I', () => {
+  const script = committedScript('1')
   const find = (text: string): { speaker: string } | undefined =>
     script.find((line) => line.text === text)
 
   it('starts with the chapter page, title first', () => {
-    expect(script[0]).toMatchObject({
+    // The committed list is sorted by id, so order is read from the extractor.
+    const [first] = actScript(() => new Game([new Act1()]), [], WRITERS, SILENT)
+    expect(first).toMatchObject({
       speaker: 'narrator',
       text: 'Act I: The Call to Adventure',
     })
@@ -299,7 +327,7 @@ describe('actScript for Act I', () => {
     expect(letter?.id).toBe(narrationKey(UNSIGNED, letter?.text ?? ''))
   })
 
-  it('reads the act-complete heading before the closing page', () => {
+  it('shows the act-complete heading', () => {
     expect(
       chapterHeading('complete', 'Act I', 'The Call to Adventure'),
     ).toEqual({
@@ -311,10 +339,9 @@ describe('actScript for Act I', () => {
       markup: 'Act I: The Call to Adventure',
     })
     expect(chapterHeading('complete', '', 'x')).toBeNull()
-    const lines = script.map((line) => line.text)
-    const heading = lines.indexOf('Act I complete. The Call to Adventure.')
-    expect(heading).toBeGreaterThan(-1)
-    expect(lines[heading + 1]).toMatch(/^The amulet was your parents'\./)
+    expect(find('Act I complete. The Call to Adventure.')?.speaker).toBe(
+      'narrator',
+    )
   })
 
   it('reads the act-complete chapter page', () => {
@@ -332,15 +359,6 @@ describe('actScript for Act I', () => {
       )?.speaker,
     ).toBe('narrator')
     expect(find('Warm clothing')?.speaker).toBe('narrator')
-  })
-
-  it('leaves the closing page’s shared words silent', () => {
-    expect(script.some((line) => line.text.startsWith('Congratulations'))).toBe(
-      false,
-    )
-    expect(script.some((line) => line.text.startsWith('Act I ends here'))).toBe(
-      false,
-    )
   })
 
   it('reads each room’s name on arrival, the opening room too', () => {
@@ -433,21 +451,40 @@ describe('actScript for Act I', () => {
   })
 })
 
+describe('actScript closing an act', () => {
+  const { commands } = ACT_SOURCES['1']
+  const lines = actScript(
+    startingAfter(() => new Act1(), commands.slice(0, -1)),
+    commands.slice(-1),
+    WRITERS,
+    SILENT,
+  ).map((line) => line.text)
+
+  it('reads the act-complete heading before the closing page', () => {
+    const heading = lines.indexOf('Act I complete. The Call to Adventure.')
+    expect(heading).toBeGreaterThan(-1)
+    expect(lines[heading + 1]).toMatch(/^The amulet was your parents'\./)
+  })
+
+  it('leaves the closing page’s shared words silent', () => {
+    expect(lines.some((text) => text.startsWith('Congratulations'))).toBe(false)
+    expect(lines.some((text) => text.startsWith('Act I ends here'))).toBe(false)
+  })
+})
+
 describe('actScript branches', () => {
-  const make = (): Game => new Game([new Act2()])
   const marcusIndex = ACT2_GOLDEN_PATH.lastIndexOf('talk to innkeeper marcus')
+  const make = startingAfter(
+    () => new Act2(),
+    ACT2_GOLDEN_PATH.slice(0, marcusIndex),
+  )
+  const path = [ACT2_GOLDEN_PATH[marcusIndex]]
   const truth: ScriptBranch = {
-    after: marcusIndex,
+    after: 0,
     commands: ['say truth to innkeeper marcus'],
   }
-  /** Act II is played twice; that is slow under a loaded machine. */
-  const SLOW = 60_000
-  let plain: ScriptLine[] = []
-  let branched: ScriptLine[] = []
-  beforeAll(() => {
-    plain = actScript(make, ACT2_GOLDEN_PATH, [])
-    branched = actScript(make, ACT2_GOLDEN_PATH, [], [], [truth])
-  }, SLOW)
+  const plain = actScript(make, path, [])
+  const branched = actScript(make, path, [], [], [truth])
 
   it('reads an optional scene the golden path does not take, played on a copy', () => {
     const onPurpose = (line: { text: string }): boolean =>
@@ -463,17 +500,8 @@ describe('actScript branches', () => {
 })
 
 describe('actScript branches of Act I', () => {
-  /** Reads a file of `tts/act1/`, which the extractor reads and writes. */
-  const act1 = <T>(file: string): T =>
-    JSON.parse(
-      readFileSync(
-        new URL(`../../../tts/act1/${file}`, import.meta.url),
-        'utf8',
-      ),
-    ) as T
   const branches = actBranches('1')
-  // The committed script, which narrationScriptFresh.test.ts pins to the extractor.
-  const keys = new Set(act1<ScriptLine[]>('script.json').map((line) => line.id))
+  const keys = new Set(committedScript('1').map((line) => line.id))
   /** Act I is played with every branch; that is slow under a loaded machine. */
   const SLOW = 60_000
 
@@ -683,41 +711,23 @@ describe('actScript branches with story flags cleared', () => {
   const QUIET =
     'You rest a while. Birds, the grey grass, a stone you cannot read. Nothing comes. You catch yourself watching the brambles for it, whatever it is.'
   const glade = ACT1_GOLDEN_PATH.indexOf('rest')
-  const branch: ScriptBranch = {
-    after: glade,
-    commands: ['rest'],
-    unset: ['deer_can_be_observed'],
-  }
-  /** Act I is played twice; that is slow under a loaded machine. */
-  const SLOW = 60_000
-  let script: ScriptLine[] = []
-  beforeAll(() => {
-    script = actScript(
-      () => new Game([new Act1()]),
-      ACT1_GOLDEN_PATH,
-      WRITERS,
-      SILENT,
-      [branch],
-    )
-  }, SLOW)
+  const make = startingAfter(
+    () => new Act1(),
+    ACT1_GOLDEN_PATH.slice(0, glade + 1),
+  )
+  const rest: ScriptBranch = { after: -1, commands: ['rest'] }
+  const cleared = { ...rest, unset: ['deer_can_be_observed'] }
 
   it('reads a scene as it plays before a story flag is set', () => {
-    expect(script.find((line) => line.text === QUIET)?.speaker).toBe('narrator')
+    const set = actScript(make, [], WRITERS, SILENT, [rest])
+    const unset = actScript(make, [], WRITERS, SILENT, [cleared])
+    expect(set.some((line) => line.text === QUIET)).toBe(false)
+    expect(unset.find((line) => line.text === QUIET)?.speaker).toBe('narrator')
   })
 })
 
-describe('actScript hints', () => {
-  /** Act I is played with its probes; that is slow under a loaded machine. */
-  const SLOW = 60_000
-  let script: ScriptLine[] = []
-  beforeAll(() => {
-    script = actScript(
-      () => new Game([new Act1()]),
-      ACT_SOURCES['1'].commands,
-      WRITERS,
-      SILENT,
-    )
-  }, SLOW)
+describe('the hints in the script of Act I', () => {
+  const script = committedScript('1')
 
   it('reads the opening line of a hint', () => {
     const line = script.find(
@@ -749,38 +759,28 @@ describe('actScript hints', () => {
 })
 
 describe('actScript branches with virtues', () => {
-  const make = (): Game => new Game([new Act4()])
   const amulet = ACT4_GOLDEN_PATH.indexOf('use ancient amulet')
-  const sacrifice = [
-    'use lifelight elixir on prison',
-    'say sacrifice to malakar',
-    'use ancient amulet on wound',
-  ]
+  const make = startingAfter(
+    () => new Act4(),
+    ACT4_GOLDEN_PATH.slice(0, amulet + 1),
+  )
+  const sacrifice: ScriptBranch = {
+    after: -1,
+    commands: [
+      'use lifelight elixir on prison',
+      'say sacrifice to malakar',
+      'use ancient amulet on wound',
+    ],
+  }
   const ARENS_LINE = 'We watched you give, again and again'
-  let without: ScriptLine[] = []
-  let withVirtues: ScriptLine[] = []
-  beforeAll(() => {
-    without = actScript(
-      make,
-      ACT4_GOLDEN_PATH,
-      [],
-      [],
-      [{ after: amulet, commands: sacrifice }],
-    )
-    withVirtues = actScript(
-      make,
-      ACT4_GOLDEN_PATH,
-      [],
-      [],
-      [
-        {
-          after: amulet,
-          commands: sacrifice,
-          virtues: ['selfless', 'selfless'],
-        },
-      ],
-    )
-  }, 120_000)
+  const without = actScript(make, [], [], [], [sacrifice])
+  const withVirtues = actScript(
+    make,
+    [],
+    [],
+    [],
+    [{ ...sacrifice, virtues: ['selfless', 'selfless'] }],
+  )
 
   it('plays the colour lines only for the virtues the branch earned', () => {
     const arens = (line: ScriptLine): boolean => line.text.includes(ARENS_LINE)
