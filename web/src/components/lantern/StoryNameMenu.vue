@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
+import { useFocusReturn } from '@/composables/useFocusReturn'
 import type { NameAction } from '@/lantern/nameActions'
 
 /**
@@ -17,8 +18,8 @@ const props = defineProps<{
   top: number
   bottom: number
 }>()
-/** `close` says whether a key (Escape, Tab) closed it. */
-const emit = defineEmits<{ pick: [command: string]; close: [byKey: boolean] }>()
+const emit = defineEmits<{ pick: [command: string]; close: [] }>()
+useFocusReturn({ passing: true })
 const menu = ref<HTMLElement | null>(null)
 /** The action whose choices are shown, if one was picked. */
 const opened = ref<NameAction | null>(null)
@@ -80,7 +81,7 @@ function onKeydown(event: KeyboardEvent): void {
   } else if (event.key === 'Escape' || event.key === 'Tab') {
     event.preventDefault()
     event.stopPropagation()
-    emit('close', true)
+    emit('close')
   } else if (event.key === 'ArrowDown') {
     event.preventDefault()
     list[(index + 1) % list.length]?.focus()
@@ -91,12 +92,12 @@ function onKeydown(event: KeyboardEvent): void {
 }
 
 function onPointerDown(event: PointerEvent): void {
-  if (!menu.value?.contains(event.target as Node)) emit('close', false)
+  if (!menu.value?.contains(event.target as Node)) emit('close')
 }
 
 /** The story scrolling closes it; its own long list scrolling does not. */
 function onScroll(event: Event): void {
-  if (!menu.value?.contains(event.target as Node)) emit('close', false)
+  if (!menu.value?.contains(event.target as Node)) emit('close')
 }
 
 /** The frame that starts listening for scrolls, until it has run. */

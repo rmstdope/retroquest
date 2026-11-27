@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useFocusReturn } from '@/composables/useFocusReturn'
 import { useSceneStore } from '@/stores/useSceneStore'
 import { useReadAlong } from '@/composables/useReadAlong'
 
@@ -16,6 +17,7 @@ import { useReadAlong } from '@/composables/useReadAlong'
  */
 const props = defineProps<{ phone?: boolean }>()
 const scene = useSceneStore()
+useFocusReturn({ up: () => scene.turn !== null })
 const root = ref<HTMLElement | null>(null)
 const { html } = useReadAlong(() => scene.interlude?.turn ?? 0, root)
 </script>

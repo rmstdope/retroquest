@@ -473,6 +473,43 @@ describe('LanternLayout', () => {
       expect(document.activeElement).toBe(before)
     })
 
+    it('goes back to what had focus, else to the typing box when it is up', async () => {
+      const w = await storyWith('You see a [item_name]bucket[/item_name].')
+      window.dispatchEvent(new KeyboardEvent('keydown', { key: 'F1' }))
+      await flushPromises()
+      const box = w.get('.lq-type-input').element
+      const name = w.get('.lq-story .theme-item_name')
+      const before = w.get('button[aria-label="Menu"]').element as HTMLElement
+      before.focus()
+      await name.trigger('click')
+      await flushPromises()
+      await w.get('[role="menu"]').trigger('keydown', { key: 'Escape' })
+      await flushPromises()
+      expect(document.activeElement).toBe(before)
+
+      // A mouse click on text leaves focus on the page.
+      before.blur()
+      await name.trigger('click')
+      await flushPromises()
+      await w.get('[role="menu"]').trigger('keydown', { key: 'Escape' })
+      await flushPromises()
+      expect(document.activeElement).toBe(box)
+    })
+
+    it('gives the typing box the cursor after a picked action', async () => {
+      const w = await storyWith('You see a [item_name]bucket[/item_name].')
+      window.dispatchEvent(new KeyboardEvent('keydown', { key: 'F1' }))
+      await flushPromises()
+      vi.spyOn(useGameStore(), 'submitCommand').mockImplementation(() => {})
+      const before = w.get('button[aria-label="Menu"]').element as HTMLElement
+      before.focus()
+      await w.get('.lq-story .theme-item_name').trigger('click')
+      await flushPromises()
+      await w.findAll('[role="menuitem"]')[0].trigger('click')
+      await flushPromises()
+      expect(document.activeElement).toBe(w.get('.lq-type-input').element)
+    })
+
     it('leaves focus be when a scroll closes the menu', async () => {
       const w = await storyWith('You see a [item_name]bucket[/item_name].')
       ;(document.activeElement as HTMLElement | null)?.blur()

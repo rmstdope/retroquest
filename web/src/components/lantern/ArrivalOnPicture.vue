@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
+import { useFocusReturn } from '@/composables/useFocusReturn'
 import { useSizeWatch } from '@/composables/useSizeWatch'
 import { useArrivalStore } from '@/stores/useArrivalStore'
 import { useReadAlong } from '@/composables/useReadAlong'
@@ -62,6 +63,7 @@ const props = defineProps<{
   lift?: number
 }>()
 const arrival = useArrivalStore()
+useFocusReturn({ up: () => arrival.active })
 const root = ref<HTMLElement | null>(null)
 const { html, mark } = useReadAlong(() => arrival.turnId ?? 0, root)
 

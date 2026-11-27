@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { nextTick, onBeforeUnmount, onMounted, ref, useId } from 'vue'
+import { nextTick, onMounted, ref, useId } from 'vue'
+import { useFocusReturn } from '@/composables/useFocusReturn'
 import { useFocusTrap } from '@/composables/useFocusTrap'
 import KeyLine, { type KeyHint } from './KeyLine.vue'
 
@@ -14,8 +15,8 @@ import KeyLine, { type KeyHint } from './KeyLine.vue'
  * `data-autofocus`, else on the first focusable one, else on the dialog
  * itself (it takes focus when its text is clicked, so Escape and Tab keep
  * working). On close it gives focus back to what had it when it opened,
- * unless `restoreFocus` is off (the game's own pop-ups send it to the
- * actions instead). `wide` gives a body that needs room, like the map, a
+ * unless `restoreFocus` is off; the typing box takes over when it is up and
+ * this was the last window over the game (`useFocusReturn`). `wide` gives a body that needs room, like the map, a
  * panel at least 680px wide that grows to fit its body, up to the window
  * (on a phone it is the full-width sheet like any other). `centered` keeps
  * the panel in the middle of the screen on a phone too, as the pause menu
@@ -111,9 +112,7 @@ onMounted(() => {
       : trap.focusFirst(),
   )
 })
-onBeforeUnmount(() => {
-  if (props.restoreFocus && opener?.isConnected) opener.focus()
-})
+useFocusReturn({ opener: () => (props.restoreFocus ? opener : null) })
 
 defineExpose({ focusFirst: trap.focusFirst })
 </script>
