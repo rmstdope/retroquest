@@ -52,6 +52,20 @@ describe('StoryDrawer', () => {
     ).toEqual(['› look', '› take bread'])
   })
 
+  it("keeps a learned spell's line, which the card leaves out", () => {
+    useGameStore().turns = [
+      {
+        ...TURN,
+        id: 1,
+        text: 'She nods.',
+        fullText:
+          'She nods.\nYou have learned [spell_name]Revive[/spell_name].',
+        spells: [{ name: 'Revive', text: 'Calls back.' }],
+      },
+    ]
+    expect(open().text()).toContain('You have learned Revive.')
+  })
+
   it('opens at the newest and moves focus into the story', async () => {
     const drawer = open()
     await nextTick()

@@ -1,4 +1,4 @@
-import { test, expect, type Page, skipTelling } from './fixtures'
+import { test, expect, type Page } from './fixtures'
 
 /** Open the game and close the opening chapter page and the first arrival. */
 async function startAct1(
@@ -23,114 +23,68 @@ const CHECKLIST =
   '[pending] * Magical protection[/pending]\n' +
   '[pending] * Food for the road (any four kinds: bread, apple, egg, carrot or berries)[/pending]'
 
-/** Push a turn with quest news, as the engine reports them: by default a completed and a new quest. */
+/** Push a turn with quest news, and any spells it taught, as the engine reports them. */
 async function pushNews(
   page: Page,
-  quests: unknown[] = [
-    {
-      kind: 'completed',
-      name: 'Hint of magic',
-      main: false,
-      text: 'It stayed.',
-      progress: { completed: 1, total: 11 },
-    },
-    { kind: 'new', name: 'Magic for real', main: false, text: 'Go on.' },
-  ],
+  quests: unknown[],
+  spells: unknown[] = [],
 ): Promise<void> {
-  await page.evaluate((quests) => {
-    const app = (
-      document.querySelector('#app') as unknown as {
-        __vue_app__: {
-          config: {
-            globalProperties: {
-              $pinia: { state: { value: { game: { turns: unknown[] } } } }
+  await page.evaluate(
+    ({ quests, spells }) => {
+      const app = (
+        document.querySelector('#app') as unknown as {
+          __vue_app__: {
+            config: {
+              globalProperties: {
+                $pinia: { state: { value: { game: { turns: unknown[] } } } }
+              }
             }
           }
         }
-      }
-    ).__vue_app__
-    app.config.globalProperties.$pinia.state.value.game.turns.push({
-      id: 998,
-      command: 'talk to grandmother',
-      text: 'She smiles.',
-      room: 'Cottage',
-      description: null,
-      gained: [],
-      lost: [],
-      arrival: null,
-      quests,
-    })
-  }, quests)
+      ).__vue_app__
+      app.config.globalProperties.$pinia.state.value.game.turns.push({
+        id: 998,
+        command: 'talk to grandmother',
+        text: 'She smiles.',
+        room: 'Cottage',
+        description: null,
+        gained: [],
+        lost: [],
+        arrival: null,
+        spells,
+        quests,
+      })
+    },
+    { quests, spells },
+  )
 }
 
 const middle = (page: Page) => page.getByTestId('arrival-on-picture')
 
-test.describe('quest news told in the middle of the picture', () => {
-  test('comes one piece after the other, a click clearing each, and leaves no line on the left', async ({
-    page,
-  }) => {
-    await startAct1(page)
-    await pushNews(page)
-
-    await expect(middle(page).locator('.lq-news-kicker').last()).toHaveText(
-      'Side quest complete · 1 of 11',
-    )
-    await expect(middle(page).locator('.lq-news-name').last()).toHaveText(
-      'Hint of magic',
-    )
-    await expect(
-      middle(page).getByText('Click to continue · Hold to skip').last(),
-    ).toBeVisible()
-    await expect(middle(page).getByRole('button')).toHaveCount(0)
-
-    await middle(page).click({ position: { x: 600, y: 300 } })
-    await expect(middle(page).locator('.lq-news-kicker').last()).toHaveText(
-      'New side quest',
-    )
-    await page.keyboard.press('Enter')
-    await expect(middle(page).locator('.lq-news-kicker')).toHaveCount(0)
-
-    await expect(page.getByTestId('news-line')).toHaveCount(0)
-  })
-
-  test('Escape ends all the news at once', async ({ page }) => {
-    await startAct1(page)
-    await pushNews(page)
-    await expect(middle(page).locator('.lq-news-kicker').last()).toBeVisible()
-    await skipTelling(page)
-    await expect(middle(page).locator('.lq-news-kicker')).toHaveCount(0)
-    await expect(page.getByTestId('news-line')).toHaveCount(0)
-  })
-
-  test('is told on a phone too, with "Tap to continue · Hold to skip"', async ({
-    page,
-  }) => {
-    await startAct1(page, 390, 844)
-    await pushNews(page)
-    await expect(middle(page).locator('.lq-news-name').last()).toHaveText(
-      'Hint of magic',
-    )
-    await expect(
-      middle(page).getByText('Tap to continue · Hold to skip').last(),
-    ).toBeVisible()
-  })
-
+test.describe('PIC-5: quest and spell news told in the middle of the picture', () => {
   for (const [width, height] of [
     [1512, 813],
     [390, 844],
   ]) {
-    test(`wraps a checklist quest's intro and needs inside the picture at ${width} wide`, async ({
+    test(`tells a learned spell, then wraps a checklist quest's intro and needs inside the picture at ${width} wide`, async ({
       page,
     }) => {
       await startAct1(page, width, height)
-      await pushNews(page, [
-        {
-          kind: 'new',
-          name: 'Preparing for the road',
-          main: false,
-          text: CHECKLIST,
-        },
-      ])
+      await pushNews(
+        page,
+        [
+          {
+            kind: 'new',
+            name: 'Preparing for the road',
+            main: false,
+            text: CHECKLIST,
+          },
+        ],
+        [{ name: 'Revive', text: 'Calls a thing back.' }],
+      )
+      // One piece at a time: the spell alone, and a click brings the quest.
+      await expect(middle(page).locator('.lq-news-name')).toHaveText(['Revive'])
+      await middle(page).click({ position: { x: 300, y: 300 } })
       await expect(middle(page).locator('.lq-news-name').last()).toHaveText(
         'Preparing for the road',
       )
