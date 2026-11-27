@@ -9,10 +9,10 @@ import {
   expect,
   enterCommand,
   type Page,
-  skipTelling,
   showNames,
-  closeTypingBox,
   keepWords,
+  toTheCottage,
+  withMotion,
 } from './fixtures'
 
 /** A placed area, in fractions of the picture. */
@@ -23,61 +23,11 @@ interface AreaFractions {
   height: number
 }
 
-/** A one-pixel transparent PNG, standing for a picture the studio made. */
-const PIXEL = Buffer.from(
-  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==',
-  'base64',
-)
-
 /** Where the things of the cottage are placed on its picture, by default. */
 const COTTAGE_AREAS: Record<string, AreaFractions> = {
   hearth: { x: 0.1, y: 0.4, width: 0.15, height: 0.3 },
   bread: { x: 0.5, y: 0.6, width: 0.1, height: 0.1 },
   grandmother: { x: 0.8, y: 0.3, width: 0.1, height: 0.3 },
-}
-
-/** Open the game in the cottage with its picture up and a few things placed on it. */
-async function toTheCottage(
-  page: Page,
-  areas: Record<string, AreaFractions> = COTTAGE_AREAS,
-): Promise<void> {
-  await page.route('**/images/generated/manifest.json', (route) =>
-    route.fulfill({
-      json: {
-        'act1-eliors-cottage': {
-          file: 'act1-eliors-cottage.png',
-          width: 1920,
-          height: 1080,
-          areas,
-        },
-      },
-    }),
-  )
-  await page.route('**/images/generated/*.png', (route) =>
-    route.fulfill({ contentType: 'image/png', body: PIXEL }),
-  )
-  await page.goto('/')
-  await page.getByRole('button', { name: 'Start', exact: true }).click()
-  // The title's opening is skipped by the suite's reduced motion; this spec needs the motion back.
-  await page.emulateMedia({ reducedMotion: 'no-preference' })
-  await page.locator('.lq-chapter-button').click()
-  // The dream is told a few lines at a time on a small screen.
-  const arrival = page.getByTestId('arrival-on-picture')
-  for (let turn = 0; turn < 8 && (await arrival.isVisible()); turn++)
-    await page.keyboard.press('Enter')
-  // The voice wakes Elior in his cottage.
-  await enterCommand(page, 'say hello to voice')
-  await closeTypingBox(page)
-  // The waking is told in the middle of the dark first; Enter brings the cottage up.
-  await page.getByTestId('scene-interlude').waitFor()
-  await page.keyboard.press('Enter')
-  await expect(page.locator('.lq-stage-picture.lq-scene-idle')).toHaveCount(1)
-  // Then the cottage's name and description are told in the middle; Escape sends them away.
-  const told = page.locator('[data-testid="arrival-on-picture"].lq-on')
-  await told.waitFor()
-  await skipTelling(page)
-  await expect(told).toHaveCount(0)
-  await expect(page.locator('.lq-name-text')).toHaveText("Elior's Cottage")
 }
 
 // Quarantined (rq-vjbs): the marks once stayed up past the wait on CI.
@@ -89,7 +39,8 @@ test(
   },
   async ({ page }): Promise<void> => {
     await page.setViewportSize({ width: 1280, height: 800 })
-    await toTheCottage(page)
+    await toTheCottage(page, { areas: COTTAGE_AREAS })
+    await withMotion(page)
     await expect(
       page.getByRole('button', { name: /Show what's here/ }),
     ).toHaveCount(0)
@@ -116,8 +67,7 @@ test('with reduced motion the marks vanish at once when the 4 seconds are up', a
   page,
 }): Promise<void> => {
   await page.setViewportSize({ width: 1280, height: 800 })
-  await toTheCottage(page)
-  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await toTheCottage(page, { areas: COTTAGE_AREAS })
   await showNames(page)
   await expect(page.locator('[data-area-mark]')).toHaveCount(3)
   // No leave fade: gone right after the wait (4 s), well before a 1.5 s fade would end.
@@ -130,7 +80,7 @@ test('the name follows the mouse over a thing, and no name shows over nothing', 
   page,
 }): Promise<void> => {
   await page.setViewportSize({ width: 1280, height: 800 })
-  await toTheCottage(page)
+  await toTheCottage(page, { areas: COTTAGE_AREAS })
   const stage = await page.locator('.lq-stage').boundingBox()
   // The bread sits at 55% across and 65% down of the 16:9 picture trimmed to the stage.
   const scale = Math.max(stage!.width / 1920, stage!.height / 1080)
@@ -170,7 +120,7 @@ test.describe('at the edges of a laptop picture (rq-5hs1)', () => {
     page,
   }): Promise<void> => {
     await page.setViewportSize({ width: 1842, height: 580 })
-    await toTheCottage(page, AT_THE_EDGES)
+    await toTheCottage(page, { areas: AT_THE_EDGES })
     // The belt covers the very foot of the picture while it is up.
     await page.locator('[data-belt-switch="bag"]').click()
     await expect(page.locator('[data-belt-pic]')).toHaveCount(0)
@@ -188,10 +138,11 @@ test.describe('at the edges of a laptop picture (rq-5hs1)', () => {
     page,
   }): Promise<void> => {
     await page.setViewportSize({ width: 1842, height: 580 })
-    await toTheCottage(page, AT_THE_EDGES)
+    await toTheCottage(page, { areas: AT_THE_EDGES })
     // The belt covers the very foot of the picture while it is up (belt.spec.ts); put away, the picture's foot is the floor.
     await page.locator('[data-belt-switch="bag"]').click()
     await expect(page.locator('[data-belt-pic]')).toHaveCount(0)
+    await withMotion(page)
     await holdDriftAtPeak(page)
     await showNames(page)
     const marks = page.locator('[data-area-mark]')
@@ -241,7 +192,7 @@ test.describe('at the foot of a laptop picture beside the belt (rq-v29l.11)', ()
     page,
   }): Promise<void> => {
     await page.setViewportSize({ width: 1512, height: 806 })
-    await toTheCottage(page, AT_THE_FOOT)
+    await toTheCottage(page, { areas: AT_THE_FOOT })
     await showNames(page)
     await expect(page.locator('[data-area-mark]')).toHaveCount(3)
     await expect(
@@ -272,7 +223,7 @@ test.describe('at the foot of a laptop picture beside the belt (rq-v29l.11)', ()
     page,
   }): Promise<void> => {
     await page.setViewportSize({ width: 1512, height: 806 })
-    await toTheCottage(page, AT_THE_FOOT)
+    await toTheCottage(page, { areas: AT_THE_FOOT })
     const stage = await page.locator('.lq-stage').boundingBox()
     // The bread's middle, at 57.4% across and 91.35% down of the 16:9 picture trimmed to the stage.
     const scale = Math.max(stage!.width / 1920, stage!.height / 1080)
@@ -290,8 +241,11 @@ test.describe('on the smallest sideways phone', () => {
     page,
   }): Promise<void> => {
     await page.setViewportSize({ width: 568, height: 320 })
-    await toTheCottage(page)
-    await showNames(page)
+    await toTheCottage(page, { areas: COTTAGE_AREAS })
+    // A tap on the bare painting at the left edge, halfway down: on this phone
+    // a tap in the top corner reaches the room's name, which opens its actions.
+    const painting = (await page.locator('.lq-stage').boundingBox())!
+    await page.touchscreen.tap(painting.x + 6, painting.y + painting.height / 2)
     await expect(page.locator('[data-area-name]')).toHaveCount(3)
     const stage = await page.locator('.lq-stage').boundingBox()
     for (const name of await page.locator('[data-area-name]').all()) {
@@ -312,7 +266,7 @@ test('the marks and names come back with the picture after a layout without one 
   page,
 }): Promise<void> => {
   await page.setViewportSize({ width: 1000, height: 700 })
-  await toTheCottage(page)
+  await toTheCottage(page, { areas: COTTAGE_AREAS })
   await showNames(page)
   await expect(page.locator('[data-area-mark]')).toHaveCount(3)
   // A short window has no picture: the text page.
@@ -385,11 +339,10 @@ test.describe('a dot under the faded edge of a card (rq-riv9)', () => {
     page: Page,
   ): Promise<{ id: string; x: number; y: number }> {
     await page.setViewportSize({ width: 1000, height: 700 })
-    await toTheCottage(page, PLACED)
+    await toTheCottage(page, { areas: PLACED })
     // The dot's place is read, then pointed at: the picture must not drift nor
-    // the dots glide in between, and the words must not fade under the scan,
-    // which takes seconds on a slow runner (rq-vjbs).
-    await page.emulateMedia({ reducedMotion: 'reduce' })
+    // the dots glide in between (motion stays reduced), and the words must not
+    // fade under the scan, which takes seconds on a slow runner (rq-vjbs).
     await keepWords(page)
     await command(page, 'talk to grandmother')
     await command(page, 'talk to grandmother')
