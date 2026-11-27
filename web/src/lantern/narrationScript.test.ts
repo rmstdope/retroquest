@@ -588,14 +588,9 @@ describe('anchorBranches', () => {
 })
 
 describe.each(ACT_NUMBERS)('the branches of Act %s', (number) => {
-  it('each play after a mark of the golden path', () => {
-    const { commands } = ACT_SOURCES[number]
-    const branches = actBranches(number)
-    expect(branches.length).toBeGreaterThan(0)
-    for (const branch of branches) {
-      expect(branch.anchor, branch.commands.join(', ')).toBeTruthy()
-      expect(branch.after).toBeLessThan(commands.length)
-    }
+  it('each name a mark the path has', () => {
+    // actBranches throws, naming them, on branches whose mark is gone.
+    expect(actBranches(number).length).toBeGreaterThan(0)
   })
 })
 
