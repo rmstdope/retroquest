@@ -3,6 +3,7 @@ import {
   expect,
   enterCommand,
   gameKey,
+  holdFilledAtOnce,
   type Locator,
   type Page,
   skipTelling,
@@ -73,7 +74,7 @@ async function turnCount(page: Page): Promise<number> {
 const lastTurnBlocks = (page: Page) =>
   page.getByTestId('turn').last().locator('.lq-block-text')
 
-/** Press and hold the mouse at `position` in `locator` long enough to skip (0.7 s), then let go. */
+/** Press and hold the mouse at `position` in `locator` until it skips (here at once), then let go. */
 async function holdToSkip(
   page: Page,
   locator: Locator,
@@ -82,9 +83,11 @@ async function holdToSkip(
   const box = await locator.boundingBox()
   if (!box) throw new Error('nothing to hold')
   await page.mouse.move(box.x + position.x, box.y + position.y)
-  await page.mouse.down()
-  await page.waitForTimeout(900)
-  await page.mouse.up()
+  await holdFilledAtOnce(
+    page,
+    () => page.mouse.down(),
+    () => page.mouse.up(),
+  )
 }
 
 test('tells an answer block by block, a tap hurries and a hold shows the rest', async ({
@@ -114,9 +117,9 @@ test('tells an answer block by block, a tap hurries and a hold shows the rest', 
   await page.mouse.move(box.x + 5, box.y + 5)
   await page.mouse.down()
   await expect(page.getByTestId('hold-ring')).toBeVisible()
-  await page.waitForTimeout(800)
-  await page.mouse.up()
+  // The ring goes by itself once it is full, the press still down.
   await expect(page.getByTestId('hold-ring')).toHaveCount(0)
+  await page.mouse.up()
   await expect(page.locator('.lq-speaking')).toHaveCount(0)
 })
 
@@ -437,6 +440,8 @@ for (const { name, width, height } of [
       page,
     }): Promise<void> => {
       await page.setViewportSize({ width, height })
+      // A tap's spacing is stepped on the page's clock, not slept.
+      await page.clock.install()
       await slowNarrationClips(page)
       await startAct1(page)
 
@@ -466,7 +471,7 @@ for (const { name, width, height } of [
           await page.keyboard.press(' ')
           return
         }
-        await page.waitForTimeout(400)
+        await page.clock.runFor(400)
         await page.locator(target).first().dispatchEvent('click')
       }
       await expect(speaking).toContainText('The ink is slightly')

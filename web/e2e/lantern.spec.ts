@@ -54,6 +54,30 @@ async function injectMockState(page: Page) {
   })
 }
 
+/**
+ * Wait until the story has been drawn and has stopped scrolling: its scroll
+ * position the same over three frames in a row.
+ */
+async function storyAtRest(page: Page): Promise<void> {
+  await page.evaluate(
+    () =>
+      new Promise<void>((resolve) => {
+        const story = (): number =>
+          document.querySelector('section[aria-label="Story"]')?.scrollTop ?? 0
+        let last = story()
+        let still = 0
+        const frame = (): void => {
+          const now = story()
+          still = now === last ? still + 1 : 0
+          last = now
+          if (still >= 3) resolve()
+          else requestAnimationFrame(frame)
+        }
+        requestAnimationFrame(frame)
+      }),
+  )
+}
+
 test.describe('Lantern UI (the default)', () => {
   test('shows the Lantern shell with story and command box, and no top bar', async ({
     page,
@@ -280,7 +304,10 @@ test.describe('Lantern UI (the default)', () => {
       }))
       /* eslint-enable @typescript-eslint/no-explicit-any */
     })
-    await page.waitForTimeout(300)
+    await expect(page.getByTestId('turn').last()).toContainText(
+      'The wind howls',
+    )
+    await storyAtRest(page)
 
     const layout = await page.evaluate(() => ({
       pageHeight: document.documentElement.scrollHeight,
@@ -799,7 +826,7 @@ test.describe('Lantern UI (the default)', () => {
       expect(hit).toBe(true)
       for (let i = 0; i < 40 && (await pill.isVisible()); i++) {
         await pill.click()
-        await page.waitForTimeout(400)
+        await storyAtRest(page)
       }
       await expect(pill).toBeHidden()
       await expect(newest.getByText(/tells its tale\.\s*$/)).toBeInViewport()

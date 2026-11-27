@@ -69,7 +69,7 @@ async function turnCount(page: Page): Promise<number> {
   })
 }
 
-/** Long enough for a press, had there been one, to reach the game. */
+/** Long enough for a press, had there been one, to reach the game (stepped on the page's clock). */
 const PRESS_SETTLES_MS = 300
 
 const arrival = (page: Page) => page.getByTestId('arrival-on-picture')
@@ -101,38 +101,42 @@ test.describe('the arrival told on the picture', () => {
   })
 
   test('goes on with Enter', async ({ page }) => {
+    await page.clock.install()
     await startAct1(page)
     await expect(arrival(page).locator('.lq-arrival-line')).toBeVisible()
     const before = await turnCount(page)
     await page.keyboard.press('Enter')
     await expect(arrival(page).locator('.lq-arrival-line')).toHaveCount(0)
     // Enter went on; it did not press the focused verb.
-    await page.waitForTimeout(PRESS_SETTLES_MS)
+    await page.clock.runFor(PRESS_SETTLES_MS)
     expect(await turnCount(page)).toBe(before)
   })
 
   test('a held Enter sends no command (rq-6koz)', async ({ page }) => {
+    await page.clock.install()
     await startAct1(page)
     await page.keyboard.down('Enter')
     await expect(arrival(page).locator('.lq-arrival-card')).toHaveCount(1)
     for (let i = 0; i < 5; i++) await page.keyboard.down('Enter')
     await page.keyboard.up('Enter')
-    await page.waitForTimeout(PRESS_SETTLES_MS)
+    await page.clock.runFor(PRESS_SETTLES_MS)
     expect(await turnCount(page)).toBe(1)
   })
 
   test('four paced Enters from Begin tell the dream once (rq-6koz)', async ({
     page,
   }) => {
+    await page.clock.install()
     await startAct1(page)
     for (let i = 0; i < 4; i++) {
       await page.keyboard.press('Enter')
-      await page.waitForTimeout(PRESS_SETTLES_MS)
+      await page.clock.runFor(PRESS_SETTLES_MS)
     }
     expect(await turnCount(page)).toBe(1)
   })
 
   test('goes on with Enter in the empty command box', async ({ page }) => {
+    await page.clock.install()
     await startAct1(page)
     await page.keyboard.press('F1')
     await pushArrival(page)
@@ -142,7 +146,7 @@ test.describe('the arrival told on the picture', () => {
     await page.getByLabel('Command').focus()
     await page.keyboard.press('Enter')
     await expect(line).toHaveCount(0)
-    await page.waitForTimeout(PRESS_SETTLES_MS)
+    await page.clock.runFor(PRESS_SETTLES_MS)
     expect(await turnCount(page)).toBe(before)
   })
 
