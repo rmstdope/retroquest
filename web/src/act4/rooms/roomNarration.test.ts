@@ -208,7 +208,7 @@ describe('Act IV rooms narrate their effect', () => {
       const vault = act.rooms.MemoryVault as MemoryVault
       const out = vault.mendOrbs(game.state)
       expect(out).toMatch(
-        /^You raise the echo stone\. The voices inside it pour out/,
+        /^You raise the echo stone\. The voices inside it pour out into the vault/,
       )
       expect(shape(out)).not.toContain('event')
     })
