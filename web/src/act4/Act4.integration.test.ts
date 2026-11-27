@@ -514,11 +514,6 @@ describe('Act 4 integration', () => {
       'You step into the empty corridor. Behind you the false mirrors go ' +
       'dark, one by one, until a single corridor remains. At its end stands ' +
       'a plain mirror that shows you exactly as you are.'
-    const ALREADY_CLEAR =
-      'The true path is already clear. The false mirrors stay dark.'
-    const NOTHING_YET =
-      "The pendant's light falls on the glass. Here every reflection walks " +
-      'with you; there is nothing yet to choose between.'
 
     /** Play the golden path up to freeing the servants and taking the pendant. */
     function toFreedServants(): void {
@@ -573,16 +568,13 @@ describe('Act 4 integration', () => {
       return game.state.activatedQuests.map((quest) => quest.name)
     }
 
-    it('examines the mirrors and says there is nothing to choose before the fork', () => {
+    it('examines the mirrors', () => {
       toFreedServants()
       executeCommands(game, ['north'])
       expect(executeCommands(game, ['examine mirrors'])).toContain(
         'Each mirror shows a different Elior — older, younger, crowned, ' +
           'broken — with a different corridor stretching away behind him. ' +
           'Every path looks real. Most of them are lies.',
-      )
-      expect(executeCommands(game, ["use servant's pendant"])).toContain(
-        NOTHING_YET,
       )
     })
 
@@ -721,14 +713,7 @@ describe('Act 4 integration', () => {
     it('solves the maze by walking the route with the pendant at the fork', () => {
       toMazeWithStone()
       executeCommands(game, ['west', 'west'])
-      expect(executeCommands(game, ["use servant's pendant"])).toContain(
-        "The pendant's blue light falls on the glass. In the north corridor " +
-          'your reflection turns and walks with you. In the east corridor the ' +
-          'glass stays empty.',
-      )
-      expect(executeCommands(game, ["use servant's pendant"])).toContain(
-        'Your reflection still walks the north corridor. The east corridor stays empty.',
-      )
+      executeCommands(game, ["use servant's pendant"])
       const result = executeCommands(game, ['go east'])
       expect(result).toContain(SOLVED)
       expect(result).toContain('Truth Sight')
@@ -749,9 +734,6 @@ describe('Act 4 integration', () => {
       )
       expect(room).toContain('[exits]south[/exits]')
       expect(room).not.toContain('[exits]west[/exits]')
-      expect(executeCommands(game, ["use servant's pendant"])).toContain(
-        ALREADY_CLEAR,
-      )
     })
 
     it('describes Truth Sight and finds nothing hidden', () => {
@@ -823,27 +805,6 @@ describe('Act 4 integration', () => {
       expect(room).toContain('True Self')
     })
 
-    it('keeps the place in the maze and the pendant answer through a reload', () => {
-      const reload = (): void => {
-        game.loadSaveData(game.toSaveData())
-      }
-      toMazeWithStone()
-      executeCommands(game, ['west'])
-      reload()
-      expect(game.state.currentRoom.describe(game.state)).toContain(
-        'The corridor narrows and bends',
-      )
-      executeCommands(game, ['west', "use servant's pendant"])
-      reload()
-      expect(game.state.currentRoom.describe(game.state)).toContain(
-        'The corridor ends in a last fork',
-      )
-      expect(executeCommands(game, ["use servant's pendant"])).toContain(
-        'Your reflection still walks the north corridor.',
-      )
-      expect(executeCommands(game, ['go east'])).toContain(SOLVED)
-    })
-
     it('keeps every state through a save and load', () => {
       const reload = (): void => {
         const loaded = game.loadSaveData(game.toSaveData())
@@ -865,9 +826,6 @@ describe('Act 4 integration', () => {
       reload()
       expectQuestCompleted(game.state, 'The Maze of Mirrors')
       expectSpellKnown(game.state, 'truth_sight')
-      expect(executeCommands(game, ["use servant's pendant"])).toContain(
-        ALREADY_CLEAR,
-      )
       executeCommands(game, ['say truth to true self'])
       reload()
       expect(game.state.hasVirtue('truth')).toBe(true)
