@@ -175,31 +175,38 @@ function committed<T>(path: string): T {
 }
 
 /**
- * The files an Act I room should loop on being entered, whatever the navigator
- * has chosen: its mix's music and the looping effects that play in every state.
+ * The files an Act I room should loop on being entered: its mix's music and the
+ * looping effects that play in every state and have a chosen take (an effect
+ * may ship without one). The room picked must keep, in the navigator's mix, a
+ * music track and at least one such effect, neither at level 0.
  */
 function loopsOf(room: string): string[] {
   const scene = committed<{ scenes: Record<string, Scene> }>(
     'src/lantern/scenes/act1.mix.json',
   ).scenes[room]
-  const take = (kind: string, id: string): string => {
+  /** The files of those of `ids` that have a chosen take of this `kind`. */
+  const takes = (kind: string, ids: string[]): string[] => {
     const folder = `/audio/${kind}/generated/`
     const manifest = committed<Record<string, { file: string }>>(
       `public${folder}manifest.json`,
     )
-    expect(manifest[id], `a chosen take of ${id}`).toBeDefined()
-    return folder + manifest[id].file
+    return ids
+      .filter((id) => id in manifest)
+      .map((id) => folder + manifest[id].file)
   }
   const track = scene.music?.track
-  const effects = scene.effects.filter(
-    (effect) => effect.play.mode === 'loop' && effect.state === undefined,
+  const music = takes('music', track ? [track] : [])
+  const effects = takes(
+    'soundeffects',
+    scene.effects
+      .filter(
+        (effect) => effect.play.mode === 'loop' && effect.state === undefined,
+      )
+      .map((effect) => effect.id),
   )
-  expect(track, `music in the mix of ${room}`).toBeTruthy()
+  expect(music, `music in the mix of ${room}`).toHaveLength(1)
   expect(effects, `a looping effect in the mix of ${room}`).not.toHaveLength(0)
-  return [
-    take('music', track!),
-    ...effects.map((effect) => take('soundeffects', effect.id)),
-  ]
+  return [...music, ...effects]
 }
 
 /** Which of the files in `among` can be heard looping now. */

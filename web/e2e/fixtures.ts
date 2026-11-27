@@ -208,7 +208,7 @@ export interface CottagePicture {
  * runs with, the suite's reduced motion unless it says otherwise, so a spec
  * whose own assertion needs motion switches it on once it has arrived.
  * `inTheDream` runs once the game stands in the dream, before the voice wakes
- * Elior, for a spec that has something to see there too.
+ * Elior, for a spec that has something to check there too.
  */
 export async function toTheCottage(
   page: Page,
